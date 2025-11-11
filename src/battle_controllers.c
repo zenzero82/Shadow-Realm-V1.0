@@ -3197,11 +3197,15 @@ static u32 ReturnAnimIdForBattler(bool32 wasPlayerSideKnockedOut, u32 specificBa
 
 void TrySetBattlerShadowSpriteCallback(u32 battler)
 {
-    if (gSprites[gBattleSpritesDataPtr->healthBoxesData[battler].shadowSpriteIdPrimary].callback == SpriteCallbackDummy
-     && (B_ENEMY_MON_SHADOW_STYLE <= GEN_3 || P_GBA_STYLE_SPECIES_GFX == TRUE
-      || gSprites[gBattleSpritesDataPtr->healthBoxesData[battler].shadowSpriteIdSecondary].callback == SpriteCallbackDummy))
-        SetBattlerShadowSpriteCallback(battler, GetMonData(GetBattlerMon(battler), MON_DATA_SPECIES));
+    if (gBattleSpritesDataPtr->healthBoxesData[battler].shadowSpriteIdPrimary   < MAX_SPRITES)
+        gSprites[gBattleSpritesDataPtr->healthBoxesData[battler].shadowSpriteIdPrimary].callback   = SpriteCB_SetInvisible;
+    if (gBattleSpritesDataPtr->healthBoxesData[battler].shadowSpriteIdSecondary < MAX_SPRITES)
+        gSprites[gBattleSpritesDataPtr->healthBoxesData[battler].shadowSpriteIdSecondary].callback = SpriteCB_SetInvisible;
+
+    SetBattlerShadowSpriteCallback(battler, gBattleMons[battler].species);
 }
+
+
 
 bool32 TryShinyAnimAfterMonAnimUtil(u32 battler)
 {

@@ -3284,6 +3284,9 @@ void SwitchInClearSetData(u32 battler)
 
 const u8* FaintClearSetData(u32 battler)
 {
+    extern void ShadowHud_Clear(u8 battler);
+    ShadowHud_Clear(battler);
+
     s32 i;
     const u8 *result = NULL;
 

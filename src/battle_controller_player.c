@@ -48,6 +48,10 @@
 #include "type_icons.h"
 #include "pokedex.h"
 
+void ShadowHud_Clear(u8 battler);
+void ShadowHud_SyncForBattler(u8 battler);
+void BattleHud_ApplyHealthboxPalette(u8 battler, bool8 isShadowNow);
+
 static void PlayerBufferExecCompleted(u32 battler);
 static void PlayerHandleLoadMonSprite(u32 battler);
 static void PlayerHandleSwitchInAnim(u32 battler);
@@ -1307,10 +1311,14 @@ static void Intro_TryShinyAnimShowHealthbox(u32 battler)
             if (TwoPlayerIntroMons(battler) && !(gBattleTypeFlags & BATTLE_TYPE_MULTI))
             {
                 UpdateHealthboxAttribute(gHealthboxSpriteIds[BATTLE_PARTNER(battler)], GetBattlerMon(BATTLE_PARTNER(battler)), HEALTHBOX_ALL);
+                ShadowHud_Clear(BATTLE_PARTNER(battler));
+                ShadowHud_SyncForBattler(BATTLE_PARTNER(battler));
                 StartHealthboxSlideIn(BATTLE_PARTNER(battler));
                 SetHealthboxSpriteVisible(gHealthboxSpriteIds[BATTLE_PARTNER(battler)]);
             }
             UpdateHealthboxAttribute(gHealthboxSpriteIds[battler], GetBattlerMon(battler), HEALTHBOX_ALL);
+            ShadowHud_Clear(battler);
+            ShadowHud_SyncForBattler(battler);
             StartHealthboxSlideIn(battler);
             SetHealthboxSpriteVisible(gHealthboxSpriteIds[battler]);
         }
@@ -1405,6 +1413,8 @@ static void SwitchIn_TryShinyAnimShowHealthbox(u32 battler)
     if (SwitchIn_TryShinyAnimUtil(battler))
     {
         UpdateHealthboxAttribute(gHealthboxSpriteIds[battler], GetBattlerMon(battler), HEALTHBOX_ALL);
+        ShadowHud_Clear(battler);
+        ShadowHud_SyncForBattler(battler);
         StartHealthboxSlideIn(battler);
         SetHealthboxSpriteVisible(gHealthboxSpriteIds[battler]);
         gBattlerControllerFuncs[battler] = SwitchIn_CleanShinyAnimShowSubstitute;

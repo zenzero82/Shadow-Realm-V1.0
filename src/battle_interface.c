@@ -35,6 +35,74 @@
 #include "constants/items.h"
 #include "caps.h"
 
+// --- SHADOW FIX HELPERS (global) ---
+void ShadowHud_Clear(u8 battler);
+void ShadowHud_SyncForBattler(u8 battler);
+void BattleHud_ApplyHealthboxPalette(u8 battler, bool8 isShadowNow);
+extern const struct SpritePalette gSpritePalettes_HealthBoxHealthBar[10];
+u32 IndexOfSpritePaletteTag(u16 tag);  // correct return type
+
+static u8 GetHealthbarSpriteIdFromBattler(u8 battler);
+
+void ShadowHud_Clear(u8 battler)
+{
+    // existing overlay cleanup...
+    if (gBattleSpritesDataPtr->healthBoxesData[battler].shadowSpriteIdPrimary < MAX_SPRITES)
+        gSprites[gBattleSpritesDataPtr->healthBoxesData[battler].shadowSpriteIdPrimary].callback = SpriteCB_SetInvisible;
+    if (gBattleSpritesDataPtr->healthBoxesData[battler].shadowSpriteIdSecondary < MAX_SPRITES)
+        gSprites[gBattleSpritesDataPtr->healthBoxesData[battler].shadowSpriteIdSecondary].callback = SpriteCB_SetInvisible;
+
+    // Hide HUD when a catch/snAG just happened for the opponent
+    if (GetBattlerSide(battler) == B_SIDE_OPPONENT && gBattleScripting.monCaught)
+    {
+        if (gHealthboxSpriteIds[battler] < MAX_SPRITES)
+        {
+            u8 leftId  = gHealthboxSpriteIds[battler];
+            u8 rightId = gSprites[leftId].oam.affineParam;
+            gSprites[leftId].invisible = TRUE;
+            if (rightId < MAX_SPRITES)
+                gSprites[rightId].invisible = TRUE;
+
+            // ✅ use helper instead of touching the alias directly
+            {
+                u8 hbId = GetHealthbarSpriteIdFromBattler(battler);
+                if (hbId < MAX_SPRITES)
+                    gSprites[hbId].invisible = TRUE;
+            }
+        }
+    }
+}
+
+
+void ShadowHud_SyncForBattler(u8 battler)
+{
+    // Ensure battler’s OBJ sprite is visible (menus/snags sometimes hide it)
+    if (gBattlerSpriteIds[battler] < MAX_SPRITES)
+        gSprites[gBattlerSpriteIds[battler]].invisible = FALSE;
+
+    // Optional: keep this if you want an extra-safe HUD refresh on resume
+    // UpdateHealthboxAttribute(gHealthboxSpriteIds[battler], GetBattlerMon(battler), HEALTHBOX_ALL);
+}
+// --- end SHADOW FIX HELPERS ---
+
+// battle_interface.c (top of file, after includes)
+static bool8 IsOpponentShadowNow(u8 battler)
+{
+    u16 species = gBattleMons[battler].species;
+    if (gBattleSpritesDataPtr->battlerData[battler].transformSpecies != SPECIES_NONE)
+        species = gBattleSpritesDataPtr->battlerData[battler].transformSpecies;
+
+    if (GetBattlerSide(battler) != B_SIDE_OPPONENT)
+        return FALSE;
+
+#if (B_ENEMY_MON_SHADOW_STYLE >= GEN_4) && (P_GBA_STYLE_SPECIES_GFX == FALSE)
+    // Same predicate PR #4128 uses for enemy shadow floor
+    return (gSpeciesInfo[SanitizeSpeciesId(species)].suppressEnemyShadow == FALSE);
+#else
+    return (gSpeciesInfo[SanitizeSpeciesId(species)].enemyMonElevation != 0);
+#endif
+}
+
 enum
 {   // Corresponds to gHealthboxElementsGfxTable (and the tables after it) in graphics.c
     // These are indexes into the tables, which are filled with 8x8 square pixel data.
@@ -649,6 +717,99 @@ static const struct WindowTemplate sHealthboxWindowTemplate = {
 // data fields for healthbar
 #define hBar_HealthBoxSpriteId      data[5]
 #define hBar_Data6                  data[6]
+
+static u8 GetHealthbarSpriteIdFromBattler(u8 battler)
+{
+    u8 hbId = MAX_SPRITES;
+    u8 hboxId = gHealthboxSpriteIds[battler];
+    if (hboxId < MAX_SPRITES)
+        hbId = gSprites[hboxId].hMain_HealthBarSpriteId; // relies on alias macros in this file
+    return hbId;
+}
+
+// --- Shadow HUD palette helpers (kept in battle_interface.c) ---
+extern const struct SpritePalette gSpritePalettes_HealthBoxHealthBar[10];
+u32 IndexOfSpritePaletteTag(u16 tag); // from include/sprite.h
+
+static u16 GetHealthboxPalTagForBattler(u8 battler)
+{
+    if (IsOnPlayerSide(battler))
+    {
+        return (GetBattlerAtPosition(B_POSITION_PLAYER_LEFT) == battler)
+             ? TAG_HEALTHBOX_PLAYER1_PAL
+             : TAG_HEALTHBOX_PLAYER2_PAL;
+    }
+    else
+    {
+        return (GetBattlerAtPosition(B_POSITION_OPPONENT_LEFT) == battler)
+             ? TAG_HEALTHBOX_OPPONENT1_PAL
+             : TAG_HEALTHBOX_OPPONENT2_PAL;
+    }
+}
+
+void BattleHud_ApplyHealthboxPalette(u8 battler, bool8 isShadowNow)
+{
+    // 2..5 = normal (P1,P2,O1,O2) / 6..9 = shadow (P1,P2,O1,O2)
+    u8 tableIdx;
+    if (IsOnPlayerSide(battler))
+    {
+        const bool8 left = (GetBattlerAtPosition(B_POSITION_PLAYER_LEFT) == battler);
+        tableIdx = left ? (isShadowNow ? 6 : 2) : (isShadowNow ? 7 : 3);
+    }
+    else
+    {
+        const bool8 left = (GetBattlerAtPosition(B_POSITION_OPPONENT_LEFT) == battler);
+        tableIdx = left ? (isShadowNow ? 8 : 4) : (isShadowNow ? 9 : 5);
+    }
+
+    const struct SpritePalette *palEntry = &gSpritePalettes_HealthBoxHealthBar[tableIdx];
+    const u16 tag          = GetHealthboxPalTagForBattler(battler);
+    const u16 *src         = isShadowNow ? gBattleInterface_ShadowMenuPal
+                                         : gBattleInterface_BallStatusBarPal;
+
+    // Find (or allocate) the OBJ palette slot for THIS battler's FRAME palette tag.
+    u32 palIndex = IndexOfSpritePaletteTag(tag);
+    if (palIndex == 0xFFFFFFFF)
+    {
+        palIndex = LoadSpritePalette(palEntry);
+        if (palIndex == 0xFFFFFFFF)
+            return;
+    }
+
+    // Overwrite the FRAME palette bank (no leakage). Write at 16-color boundary.
+    {
+        const u8 slot = (u8)palIndex;               // 0..15
+        FillPalette(RGB_BLACK, OBJ_PLTT_ID(slot * 16), 32);
+        LoadPalette(src,       OBJ_PLTT_ID(slot * 16), 32);
+    }
+
+    // Apply this palette ONLY to frame sprites (left/right)
+    if (gHealthboxSpriteIds[battler] < MAX_SPRITES)
+    {
+        u8 leftId  = gHealthboxSpriteIds[battler];
+        u8 rightId = gSprites[leftId].oam.affineParam;
+
+        gSprites[leftId].oam.paletteNum = (u8)palIndex;
+        if (rightId < MAX_SPRITES)
+            gSprites[rightId].oam.paletteNum = (u8)palIndex;
+
+        // --- IMPORTANT: DO NOT retag the healthbar palette here ---
+        // Ensure the healthbar keeps using TAG_HEALTHBAR_PAL (the gradient).
+        {
+            u32 barPalIdx = IndexOfSpritePaletteTag(TAG_HEALTHBAR_PAL);
+            if (barPalIdx != 0xFFFFFFFF)
+            {
+                u8 hbId = GetHealthbarSpriteIdFromBattler(battler);
+                if (hbId < MAX_SPRITES)
+                    gSprites[hbId].oam.paletteNum = (u8)barPalIdx;
+            }
+        }
+    }
+
+    SetHealthboxSpriteVisible(gHealthboxSpriteIds[battler]);
+}
+
+
 
 // This function is here to cover a specific case - one player's mon in a 2 vs 1 double battle. In this scenario - display singles layout.
 // The same goes for a 2 vs 1 where opponent has only one pokemon.
@@ -2064,9 +2225,19 @@ void UpdateHealthboxAttribute(u8 healthboxSpriteId, struct Pokemon *mon, u8 elem
             UpdateLeftNoOfBallsTextOnHealthbox(healthboxSpriteId);
     }
     else
-    {
-        if (elementId == HEALTHBOX_LEVEL || elementId == HEALTHBOX_ALL)
-            UpdateLvlInHealthbox(healthboxSpriteId, GetMonData(mon, MON_DATA_LEVEL));
+{
+    const bool8 isShadowNow = IsOpponentShadowNow(battler);
+
+    if (elementId == HEALTHBOX_LEVEL || elementId == HEALTHBOX_ALL)
+        UpdateLvlInHealthbox(healthboxSpriteId, GetMonData(mon, MON_DATA_LEVEL));
+
+    // ✅ On a full redraw, apply the correct opponent palette immediately
+    if (elementId == HEALTHBOX_ALL)
+        BattleHud_ApplyHealthboxPalette(battler, isShadowNow);
+
+    // ... (rest of your opponent healthbox text/bars/nick/status updates) ...
+}
+
         if (gBattleSpritesDataPtr->battlerData[battler].hpNumbersNoBars)
         {
             if (elementId == HEALTHBOX_ALL)
@@ -2087,7 +2258,6 @@ void UpdateHealthboxAttribute(u8 healthboxSpriteId, struct Pokemon *mon, u8 elem
         if (elementId == HEALTHBOX_STATUS_ICON || elementId == HEALTHBOX_ALL)
             UpdateStatusIconInHealthbox(healthboxSpriteId);
     }
-}
 
 #define B_EXPBAR_PIXELS 64
 #define B_HEALTHBAR_PIXELS 48

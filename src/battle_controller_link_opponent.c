@@ -29,6 +29,9 @@
 #include "constants/trainers.h"
 #include "recorded_battle.h"
 #include "random.h"
+#include "battle_interface.h"  
+
+void BattleHud_ApplyHealthboxPalette(u8 battler, bool8 isShadowNow);
 
 static void LinkOpponentHandleLoadMonSprite(u32 battler);
 static void LinkOpponentHandleSwitchInAnim(u32 battler);
@@ -300,8 +303,51 @@ static void SwitchIn_HandleSoundAndEnd(u32 battler)
 static void SwitchIn_ShowHealthbox(u32 battler)
 {
     if (SwitchIn_ShowHealthboxUtil(battler))
+    {
+        // Ensure sprite + healthbox are visible
+        if (gBattlerSpriteIds[battler] < MAX_SPRITES)
+            gSprites[gBattlerSpriteIds[battler]].invisible = FALSE;
+        if (gHealthboxSpriteIds[battler] < MAX_SPRITES)
+            SetHealthboxSpriteVisible(gHealthboxSpriteIds[battler]);
+
+        // Clear “caught” carryover just in case
+        gBattleScripting.monCaught = FALSE;
+
+        // Reset any lingering shadow overlays to invisible
+        if (gBattleSpritesDataPtr->healthBoxesData[battler].shadowSpriteIdPrimary   < MAX_SPRITES)
+            gSprites[gBattleSpritesDataPtr->healthBoxesData[battler].shadowSpriteIdPrimary].callback   = SpriteCB_SetInvisible;
+        if (gBattleSpritesDataPtr->healthBoxesData[battler].shadowSpriteIdSecondary < MAX_SPRITES)
+            gSprites[gBattleSpritesDataPtr->healthBoxesData[battler].shadowSpriteIdSecondary].callback = SpriteCB_SetInvisible;
+
+        // Force overlay to match the current species
+        SetBattlerShadowSpriteCallback(battler, gBattleMons[battler].species);
+
+        // Choose & apply the correct HUD palette now
+        {
+            u16 species = gBattleMons[battler].species;
+            if (gBattleSpritesDataPtr->battlerData[battler].transformSpecies != SPECIES_NONE)
+                species = gBattleSpritesDataPtr->battlerData[battler].transformSpecies;
+
+        #if (B_ENEMY_MON_SHADOW_STYLE >= GEN_4) && (P_GBA_STYLE_SPECIES_GFX == FALSE)
+            const bool8 isShadow = (GetBattlerSide(battler) == B_SIDE_OPPONENT)
+                                && (gSpeciesInfo[SanitizeSpeciesId(species)].suppressEnemyShadow == FALSE);
+        #else
+            const bool8 isShadow = (GetBattlerSide(battler) == B_SIDE_OPPONENT)
+                                && (gSpeciesInfo[SanitizeSpeciesId(species)].enemyMonElevation != 0);
+        #endif
+
+            BattleHud_ApplyHealthboxPalette(battler, isShadow);
+        }
+
+        // Full HUD refresh
+        UpdateHealthboxAttribute(gHealthboxSpriteIds[battler], GetBattlerMon(battler), HEALTHBOX_ALL);
+
+
         gBattlerControllerFuncs[battler] = SwitchIn_ShowSubstitute;
+    }
 }
+
+
 
 static void SwitchIn_TryShinyAnim(u32 battler)
 {

@@ -48,6 +48,31 @@ LittlerootTown_OnTransition:
 	call_if_eq VAR_DEX_UPGRADE_JOHTO_STARTER_STATE, 2, LittlerootTown_EventScript_LeftLabAfterDexUpgrade
 	end
 
+    .global LittlerootTown_EventScript_GiveSnagMachine
+
+LittlerootTown_EventScript_GiveSnagMachineAndBalls::
+    lock
+    faceplayer
+    goto_if_set FLAG_HAS_SNAG_MACHINE, LittlerootTown_SnagAlreadySet
+
+    // Give the Snag Machine (flag) and 10 Master Balls, then hide this object (it vanishes because its Event Flag is this same flag)
+    setflag FLAG_HAS_SNAG_MACHINE
+    giveitem ITEM_MASTER_BALL, 10
+    msgbox LittlerootTown_Text_SnagOnBallsGiven, MSGBOX_DEFAULT
+    release
+    end
+
+LittlerootTown_SnagAlreadySet:
+    msgbox LittlerootTown_Text_SnagAlready, MSGBOX_DEFAULT
+    release
+    end
+
+LittlerootTown_Text_SnagOnBallsGiven::
+    .string "Snag Machine enabled.\n10 MASTER BALLS received!$"
+
+LittlerootTown_Text_SnagAlready::
+    .string "Snag Machine already enabled.$"
+
 LittlerootTown_EventScript_LeftLabAfterDexUpgrade::
 	setvar VAR_DEX_UPGRADE_JOHTO_STARTER_STATE, 3
 	return

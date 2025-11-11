@@ -7657,6 +7657,10 @@ static void Cmd_switchindataupdate(void)
         gBattleMons[battler].status2 = oldData.status2;
     }
 
+    extern void ShadowHud_Clear(u8 battler);
+    ShadowHud_Clear(battler);
+    
+    gBattleScripting.monCaught = FALSE;
     SwitchInClearSetData(battler);
 
     if (gBattleTypeFlags & BATTLE_TYPE_PALACE
@@ -15982,6 +15986,8 @@ static void Cmd_handleballthrow(void)
                 SetMonData(&gEnemyParty[gBattlerPartyIndexes[gBattlerTarget]], MON_DATA_SNAGGED, &snagFlag);
                 SetMonData(&gEnemyParty[gBattlerPartyIndexes[gBattlerTarget]], MON_DATA_HP, &gBattleMons[gBattlerTarget].hp);
                 SetHealthboxSpriteInvisible(gHealthboxSpriteIds[gBattlerTarget]);
+                extern void ShadowHud_Clear(u8 battler);
+                ShadowHud_Clear(gBattlerTarget);
                 gBattlescriptCurrInstr = BattleScript_SuccessBallThrowShadow;
             }
             else
@@ -16054,6 +16060,8 @@ static void Cmd_handleballthrow(void)
                     SetMonData(&gEnemyParty[gBattlerPartyIndexes[gBattlerTarget]], MON_DATA_SNAGGED, &snagFlag);
                     SetMonData(&gEnemyParty[gBattlerPartyIndexes[gBattlerTarget]], MON_DATA_HP, &gBattleMons[gBattlerTarget].hp);
                     SetHealthboxSpriteInvisible(gHealthboxSpriteIds[gBattlerTarget]);
+                    extern void ShadowHud_Clear(u8 battler);
+                    ShadowHud_Clear(gBattlerTarget);
                     gBattlescriptCurrInstr = BattleScript_SuccessBallThrowShadow;
                 }
                 else

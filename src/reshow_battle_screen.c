@@ -15,6 +15,12 @@
 #include "battle_interface.h"
 #include "battle_anim.h"
 #include "data.h"
+#include "battle.h"
+void ShadowHud_SyncForBattler(u8 battler);
+void CreateBattlerSprite(u32 battler);
+// These two exist in the PR’s resume case 19:
+void LoadAndCreateEnemyShadowSprites(void);
+void SetBattlerShadowSpriteCallback(u8 battler, u16 species);
 
 // this file's functions
 static void CB2_ReshowBattleScreenAfterMenu(void);
@@ -158,13 +164,55 @@ static void CB2_ReshowBattleScreenAfterMenu(void)
         }
         break;
     default:
-        SetVBlankCallback(VBlankCB_Battle);
-        ClearBattleBgCntBaseBlocks();
-        BeginHardwarePaletteFade(0xFF, 0, 0x10, 0, 1);
-        gPaletteFade.bufferTransferDisabled = 0;
-        SetMainCallback2(BattleMainCB2);
-        FillAroundBattleWindows();
-        break;
+    SetVBlankCallback(VBlankCB_Battle);
+    ClearBattleBgCntBaseBlocks();
+    BeginHardwarePaletteFade(0xFF, 0, 0x10, 0, 1);
+    gPaletteFade.bufferTransferDisabled = 0;
+    // --- Ensure battler sprites exist and are visible, and shadow overlay matches current species ---
+    {
+        gBattleScripting.monCaught = FALSE;
+        u8 b;
+
+        // If a battler sprite ID is invalid, recreate it now (belt-and-suspenders)
+        for (b = 0; b < gBattlersCount; b++)
+        {
+            if (gBattlerSpriteIds[b] >= MAX_SPRITES)
+                CreateBattlerSprite(b);
+        }
+
+        // Re-apply correct shadow overlays for the current opponent(s)
+        {
+            u8 opp = GetBattlerAtPosition(B_POSITION_OPPONENT_LEFT);
+            SetBattlerShadowSpriteCallback(opp, gBattleMons[opp].species);
+
+            if (IsDoubleBattle())
+            {
+                opp = GetBattlerAtPosition(B_POSITION_OPPONENT_RIGHT);
+                SetBattlerShadowSpriteCallback(opp, gBattleMons[opp].species);
+            }
+        }
+
+        // Make sure every battler’s OBJ sprite is visible
+        for (b = 0; b < gBattlersCount; b++)
+            ShadowHud_SyncForBattler(b);
+
+        // --- EXTRA HARD RESET on resume: clear any stale overlay callbacks on ALL battlers ---
+        for (b = 0; b < gBattlersCount; b++)
+        {
+            if (gBattleSpritesDataPtr->healthBoxesData[b].shadowSpriteIdPrimary < MAX_SPRITES)
+                gSprites[gBattleSpritesDataPtr->healthBoxesData[b].shadowSpriteIdPrimary].callback = SpriteCB_SetInvisible;
+            if (gBattleSpritesDataPtr->healthBoxesData[b].shadowSpriteIdSecondary < MAX_SPRITES)
+                gSprites[gBattleSpritesDataPtr->healthBoxesData[b].shadowSpriteIdSecondary].callback = SpriteCB_SetInvisible;
+        }
+        // -------------------------------------------------------------------------------------
+
+    }
+    // -----------------------------------------------------------------------
+
+    SetMainCallback2(BattleMainCB2);
+    FillAroundBattleWindows();
+    break;
+
     }
 
     gBattleScripting.reshowMainState++;

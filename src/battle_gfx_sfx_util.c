@@ -28,6 +28,13 @@
 #include "constants/battle_palace.h"
 #include "constants/battle_move_effects.h"
 #include "constants/event_objects.h" // only for SHADOW_SIZE constants
+// --- BEGIN: Shadow HUD palette helpers ---
+
+#include "battle_interface.h"
+#include "gpu_regs.h"
+
+extern const struct SpritePalette gSpritePalettes_HealthBoxHealthBar[10];
+extern void SetHealthboxSpriteVisible(u8 healthboxId);
 
 // this file's functions
 static u8 GetBattlePalaceMoveGroup(u8 battler, u16 move);
@@ -1368,53 +1375,54 @@ void SpriteCB_SetInvisible(struct Sprite *sprite)
 
 void SetBattlerShadowSpriteCallback(u8 battler, u16 species)
 {
-    if (B_ENEMY_MON_SHADOW_STYLE >= GEN_4 && P_GBA_STYLE_SPECIES_GFX == FALSE)
+    // Ensure we never write invalid sprite entries
+    u8 idP = gBattleSpritesDataPtr->healthBoxesData[battler].shadowSpriteIdPrimary;
+    u8 idS = gBattleSpritesDataPtr->healthBoxesData[battler].shadowSpriteIdSecondary;
+
+    // Use the live battler species (send-out/resume safe); override if transformed
+    species = gBattleMons[battler].species;
+    if (gBattleSpritesDataPtr->battlerData[battler].transformSpecies != SPECIES_NONE)
+        species = gBattleSpritesDataPtr->battlerData[battler].transformSpecies;
+
+#if (B_ENEMY_MON_SHADOW_STYLE >= GEN_4) && (P_GBA_STYLE_SPECIES_GFX == FALSE)
+    // For the dual-sprite style, both IDs must be valid before we touch them
+    if (IsOnPlayerSide(battler) || gBattleScripting.monCaught)
     {
-        if (IsOnPlayerSide(battler) || gBattleScripting.monCaught)
-        {
-            gSprites[gBattleSpritesDataPtr->healthBoxesData[battler].shadowSpriteIdPrimary].callback = SpriteCB_SetInvisible;
-            gSprites[gBattleSpritesDataPtr->healthBoxesData[battler].shadowSpriteIdSecondary].callback = SpriteCB_SetInvisible;
-            return;
-        }
+        if (idP < MAX_SPRITES) gSprites[idP].callback = SpriteCB_SetInvisible;
+        if (idS < MAX_SPRITES) gSprites[idS].callback = SpriteCB_SetInvisible;
+        return;
+    }
 
-        if (gBattleSpritesDataPtr->healthBoxesData[battler].shadowSpriteIdPrimary >= MAX_SPRITES
-            || gBattleSpritesDataPtr->healthBoxesData[battler].shadowSpriteIdSecondary >= MAX_SPRITES)
-            return;
+    if (idP >= MAX_SPRITES || idS >= MAX_SPRITES)
+        return;
 
-        if (gBattleSpritesDataPtr->battlerData[battler].transformSpecies != SPECIES_NONE)
-            species = gBattleSpritesDataPtr->battlerData[battler].transformSpecies;
-
-        if (gSpeciesInfo[SanitizeSpeciesId(species)].suppressEnemyShadow == FALSE)
-        {
-            gSprites[gBattleSpritesDataPtr->healthBoxesData[battler].shadowSpriteIdPrimary].callback = SpriteCB_EnemyShadow;
-            gSprites[gBattleSpritesDataPtr->healthBoxesData[battler].shadowSpriteIdSecondary].callback = SpriteCB_EnemyShadow;
-        }
-        else
-        {
-            gSprites[gBattleSpritesDataPtr->healthBoxesData[battler].shadowSpriteIdPrimary].callback = SpriteCB_SetInvisible;
-            gSprites[gBattleSpritesDataPtr->healthBoxesData[battler].shadowSpriteIdSecondary].callback = SpriteCB_SetInvisible;
-        }
+    if (gSpeciesInfo[SanitizeSpeciesId(species)].suppressEnemyShadow == FALSE)
+    {
+        gSprites[idP].callback = SpriteCB_EnemyShadow;
+        gSprites[idS].callback = SpriteCB_EnemyShadow;
     }
     else
     {
-        if (IsOnPlayerSide(battler) || gBattleScripting.monCaught)
-        {
-            gSprites[gBattleSpritesDataPtr->healthBoxesData[battler].shadowSpriteIdPrimary].callback = SpriteCB_SetInvisible;
-            return;
-        }
-
-        if (gBattleSpritesDataPtr->healthBoxesData[battler].shadowSpriteIdPrimary >= MAX_SPRITES)
-            return;
-
-        if (gBattleSpritesDataPtr->battlerData[battler].transformSpecies != SPECIES_NONE)
-            species = gBattleSpritesDataPtr->battlerData[battler].transformSpecies;
-
-        if (gSpeciesInfo[SanitizeSpeciesId(species)].enemyMonElevation != 0)
-            gSprites[gBattleSpritesDataPtr->healthBoxesData[battler].shadowSpriteIdPrimary].callback = SpriteCB_EnemyShadow;
-        else
-            gSprites[gBattleSpritesDataPtr->healthBoxesData[battler].shadowSpriteIdPrimary].callback = SpriteCB_SetInvisible;
+        gSprites[idP].callback = SpriteCB_SetInvisible;
+        gSprites[idS].callback = SpriteCB_SetInvisible;
     }
+#else
+    if (IsOnPlayerSide(battler) || gBattleScripting.monCaught)
+    {
+        if (idP < MAX_SPRITES) gSprites[idP].callback = SpriteCB_SetInvisible;
+        return;
+    }
+
+    if (idP >= MAX_SPRITES)
+        return;
+
+    if (gSpeciesInfo[SanitizeSpeciesId(species)].enemyMonElevation != 0)
+        gSprites[idP].callback = SpriteCB_EnemyShadow;
+    else
+        gSprites[idP].callback = SpriteCB_SetInvisible;
+#endif
 }
+
 
 void HideBattlerShadowSprite(u8 battler)
 {
