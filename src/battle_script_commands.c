@@ -66,6 +66,8 @@
 #include "constants/pokemon.h"
 #include "config/battle.h"
 #include "data/battle_move_effects.h"
+#include "pokemon.h"
+
 
 // table to avoid ugly powing on gba (courtesy of doesnt)
 // this returns (i^2.5)/4
@@ -7510,7 +7512,7 @@ static void Cmd_moveend(void)
 
                 if (roll < chance)
                 {
-                    gBattleMons[gBattlerAttacker].isReverse = FALSE;
+                    gBattleMons[gBattlerAttacker].isReverse = TRUE;
                     BtlController_EmitSetMonData(gBattlerAttacker, B_COMM_TO_CONTROLLER, REQUEST_STATUS_BATTLE, 0, sizeof(gBattleMons[gBattlerAttacker].status1), &gBattleMons[gBattlerAttacker].status1);
                     UpdateHealthboxAttribute(gHealthboxSpriteIds[gBattlerAttacker], &gPlayerParty[gBattlerPartyIndexes[gBattlerAttacker]], HEALTHBOX_ALL);
                     PrepareStringBattle(STRINGID_REVERSEMODE_ENTER, gBattlerAttacker);
@@ -11675,6 +11677,7 @@ static void Cmd_various(void)
         {
             if (GetMonData(&gEnemyParty[i], MON_DATA_SNAGGED))
             {
+                
                 if (GiveMonToPlayer(&gEnemyParty[i]) != MON_GIVEN_TO_PARTY)
                 {
                     if (!ShouldShowBoxWasFullMessage())
@@ -15981,10 +15984,15 @@ static void Cmd_handleballthrow(void)
             if (gBattleTypeFlags & BATTLE_TYPE_TRAINER)
             {
                 bool8 snagFlag = TRUE;
+                struct Pokemon *mon = &gEnemyParty[gBattlerPartyIndexes[gBattlerTarget]];
+
                 gBattleMons[gBattlerTarget].snagged = TRUE;
                 gBattleMons[gBattlerTarget].hp = 0;
-                SetMonData(&gEnemyParty[gBattlerPartyIndexes[gBattlerTarget]], MON_DATA_SNAGGED, &snagFlag);
-                SetMonData(&gEnemyParty[gBattlerPartyIndexes[gBattlerTarget]], MON_DATA_HP, &gBattleMons[gBattlerTarget].hp);
+
+                SetMonData(mon, MON_DATA_SNAGGED, &snagFlag);
+                Shdw_OnSnagMon(mon); // <-- update shadow registry (shadowMonStates[shadowId] = SNAGGED)
+                SetMonData(mon, MON_DATA_HP, &gBattleMons[gBattlerTarget].hp);
+
                 SetHealthboxSpriteInvisible(gHealthboxSpriteIds[gBattlerTarget]);
                 extern void ShadowHud_Clear(u8 battler);
                 ShadowHud_Clear(gBattlerTarget);
@@ -16055,10 +16063,15 @@ static void Cmd_handleballthrow(void)
                 if (gBattleTypeFlags & BATTLE_TYPE_TRAINER)
                 {
                     bool8 snagFlag = TRUE;
+                    struct Pokemon *mon = &gEnemyParty[gBattlerPartyIndexes[gBattlerTarget]];
+
                     gBattleMons[gBattlerTarget].snagged = TRUE;
                     gBattleMons[gBattlerTarget].hp = 0;
-                    SetMonData(&gEnemyParty[gBattlerPartyIndexes[gBattlerTarget]], MON_DATA_SNAGGED, &snagFlag);
-                    SetMonData(&gEnemyParty[gBattlerPartyIndexes[gBattlerTarget]], MON_DATA_HP, &gBattleMons[gBattlerTarget].hp);
+
+                    SetMonData(mon, MON_DATA_SNAGGED, &snagFlag);
+                    Shdw_OnSnagMon(mon); // <-- update shadow registry (shadowMonStates[shadowId] = SNAGGED)
+                    SetMonData(mon, MON_DATA_HP, &gBattleMons[gBattlerTarget].hp);
+
                     SetHealthboxSpriteInvisible(gHealthboxSpriteIds[gBattlerTarget]);
                     extern void ShadowHud_Clear(u8 battler);
                     ShadowHud_Clear(gBattlerTarget);

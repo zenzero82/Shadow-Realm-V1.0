@@ -76,6 +76,8 @@
 #include "constants/trainers.h"
 #include "constants/weather.h"
 #include "cable_club.h"
+#include "constants/shadow.h"
+
 
 extern const struct BgTemplate gBattleBgTemplates[];
 extern const struct WindowTemplate *const gBattleWindowTemplates[];
@@ -378,6 +380,7 @@ static void (*const sTurnActionsFuncsTable[])(void) =
     [B_ACTION_USE_ITEM]               = HandleAction_UseItem,
     [B_ACTION_SWITCH]                 = HandleAction_Switch,
     [B_ACTION_RUN]                    = HandleAction_Run,
+    [B_ACTION_CALL]                   = HandleAction_Call,
     [B_ACTION_SAFARI_WATCH_CAREFULLY] = HandleAction_WatchesCarefully,
     [B_ACTION_SAFARI_BALL]            = HandleAction_SafariZoneBallThrow,
     [B_ACTION_SAFARI_POKEBLOCK]       = HandleAction_ThrowPokeblock,
@@ -1880,6 +1883,45 @@ void CustomTrainerPartyAssignMoves(struct Pokemon *mon, const struct TrainerMon 
     }
 }
 
+bool8 TrainerHasUnsnaggedShadow(const struct Trainer *trainer)
+{
+    s32 i;
+
+    // In your setup, trainer->party is an array of TrainerMon-style structs
+    const struct TrainerMon *party = (const struct TrainerMon *)trainer->party;
+
+    for (i = 0; i < trainer->partySize; i++)
+    {
+        const struct TrainerMon *tMon = &party[i];
+
+        if (tMon->isShadow && tMon->shadowID != 0)
+        {
+            if (!PlayerOwnsShadowId(tMon->shadowID))
+                return TRUE;    // Found at least one shadow we don't own yet
+        }
+    }
+
+    return FALSE;
+}
+
+// shadow.c or battle_shadow.c or wherever you're putting the helper
+bool8 TrainerHasUnsnaggedShadowById(u16 trainerId, u8 difficulty)
+{
+    const struct Trainer *trainer;
+
+    // Clamp difficulty to something sane
+    if (difficulty >= DIFFICULTY_COUNT)
+        difficulty = DIFFICULTY_NORMAL;
+
+    if (trainerId >= TRAINERS_COUNT)
+        return FALSE;
+
+    trainer = &gTrainers[difficulty][trainerId];
+
+    return TrainerHasUnsnaggedShadow(trainer);
+}
+
+
 u8 CreateNPCTrainerPartyFromTrainer(struct Pokemon *party, const struct Trainer *trainer, bool32 firstTrainer, u32 battleTypeFlags)
 {
     u32 personalityValue;
@@ -1989,7 +2031,23 @@ u8 CreateNPCTrainerPartyFromTrainer(struct Pokemon *party, const struct Trainer 
                 bool8 shad = TRUE;
                 SetMonData(&party[i], MON_DATA_IS_SHADOW, &shad);
                 SetMonData(&party[i], MON_DATA_SHADOW_ID, &partyData[monIndex].shadowID);
-                SetMonData(&party[i], MON_DATA_SHADOW_AGGRO, &partyData[monIndex].shadowAggro);
+
+                // Aggro by nature, unless trainer explicitly overrides
+                u8 aggro;
+                if (partyData[monIndex].shadowAggro != SHADOW_AGGRO_NONE)
+                {
+                    // Trainer override from trainers.h
+                    aggro = partyData[monIndex].shadowAggro;
+                }
+                else
+                {
+                    // Default behavior: derive from nature
+                    u8 nature = GetNature(&party[i]);
+                    aggro = Shdw_GetAggroForNature(nature);
+
+                }
+                SetMonData(&party[i], MON_DATA_SHADOW_AGGRO, &aggro);
+
                 levelBoost = partyData[monIndex].boostLevel;
                 SetMonData(&party[i], MON_DATA_HEART_VALUE, &partyData[monIndex].heartGauge);
                 SetMonData(&party[i], MON_DATA_HEART_MAX, &partyData[monIndex].heartGauge);
@@ -4217,6 +4275,10 @@ static void HandleTurnActionSelectionState(void)
                         gChosenActionByBattler[battler] = B_ACTION_USE_MOVE;
                         gBattleCommunication[battler] = STATE_WAIT_ACTION_CONFIRMED_STANDBY;
                     }
+                    else if (gChosenActionByBattler[GetPartnerBattler(battler)] == B_ACTION_CALL)
+                    {
+                        RecordedBattle_ClearBattlerAction(GetPartnerBattler(battler), 1);
+                    }
                     else
                     {
                         gBattleStruct->itemPartyIndex[battler] = PARTY_SIZE;
@@ -4235,6 +4297,10 @@ static void HandleTurnActionSelectionState(void)
 
                 switch (gBattleResources->bufferB[battler][1])
                 {
+                case B_ACTION_CALL:  // NEW
+                    // Nothing special to validate here; just advance like simple actions.
+                    gBattleCommunication[battler]++;
+                    break;
                 case B_ACTION_USE_MOVE:
                     if (AreAllMovesUnusable(battler))
                     {
@@ -4359,7 +4425,8 @@ static void HandleTurnActionSelectionState(void)
                     {
                         RecordedBattle_ClearBattlerAction(GetPartnerBattler(battler), 2);
                     }
-                    else if (gChosenActionByBattler[GetPartnerBattler(battler)] == B_ACTION_RUN)
+                    else if (gChosenActionByBattler[GetPartnerBattler(battler)] == B_ACTION_CALL)
+                         //&& (gChosenActionByBattler[GetPartnerBattler(battler)] == B_ACTION_CALL) // NEW
                     {
                         RecordedBattle_ClearBattlerAction(GetPartnerBattler(battler), 1);
                     }
@@ -4528,6 +4595,10 @@ static void HandleTurnActionSelectionState(void)
                     break;
                 case B_ACTION_RUN:
                     gHitMarker |= HITMARKER_RUN;
+                    gBattleCommunication[battler]++;
+                    break;
+                case B_ACTION_CALL:  // NEW
+                    // No run hitmarker or storage flags—just advance to be picked up by the turn action table.
                     gBattleCommunication[battler]++;
                     break;
                 case B_ACTION_SAFARI_WATCH_CAREFULLY:

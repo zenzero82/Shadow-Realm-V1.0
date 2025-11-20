@@ -462,3 +462,19 @@ const u16 gObjectEventPal_StrangeBall[] = INCBIN_U16("graphics/object_events/pic
 
 const u32 gFieldEffectObjectPic_CaveDust[] = INCBIN_U32("graphics/field_effects/pics/cave_dust.4bpp");
 const u16 gFieldEffectObjectPalette_CaveDust[] = INCBIN_U16("graphics/field_effects/palettes/cave_dust.gbapal");
+
+//Kanto Trainers
+const u16 gObjectEventPal_BrockGen1[] = INCBIN_U16("graphics/object_events/pics/gen1/brock.gbapal");
+const u32 gObjectEventPic_BrockGen1[] = INCBIN_U32("graphics/object_events/pics/gen1/brock.4bpp");
+
+//Johto Trainers
+
+//Sinnoh Trainers
+
+//Unova Trainers
+
+//Kalos Trainers 
+
+//XD(Orre) Trainers
+const u16 gObjectEventPal_RedHex[] = INCBIN_U16("graphics/object_events/pics/xd/red_hex.gbapal");
+const u32 gObjectEventPic_RedHex[] = INCBIN_U32("graphics/object_events/pics/xd/red_hex.4bpp");

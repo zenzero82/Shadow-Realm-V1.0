@@ -274,6 +274,12 @@ extern const u8 gText_WhatWillWallyDo[];
 extern const u8 gText_LinkStandby[];
 extern const u8 gText_BattleMenu[];
 extern const u8 gText_BattleMenuTrainer[];
+extern const u8 gText_BattleMenuTrainerCall[];
+extern const u8 gText_TrainerCalledToMon[];
+extern const u8 gText_ShadowCalmedSlightly[];
+extern const u8 gText_ShadowCameToSenses[];
+extern const u8 gText_TrainerEncouragedMon[];
+
 extern const u8 gText_SafariZoneMenu[];
 extern const u8 gText_MoveInterfacePP[];
 extern const u8 gText_MoveInterfaceType[];

@@ -68,6 +68,55 @@ static bool32 CanBeInfinitelyConfused(u32 battler);
 static bool32 IsAnyTargetAffected(u32 battlerAtk);
 static bool32 IsNonVolatileStatusBlocked(u32 battlerDef, u32 abilityDef, u32 abilityAffected, const u8 *battleScript, enum NonVolatileStatus option);
 static bool32 CanSleepDueToSleepClause(u32 battlerAtk, u32 battlerDef, enum NonVolatileStatus option);
+#ifndef SHADOW_AGGRO_MAX_DEFAULT
+#define SHADOW_AGGRO_MAX_DEFAULT 255
+#endif
+
+bool32 IsBattlerShadow(u32 battler)
+{
+    return gBattleMons[battler].isShadow;
+}
+
+bool32 GetBattlerShadowReverse(u32 battler)
+{
+    return gBattleMons[battler].isReverse;
+}
+
+void ClearBattlerReverse(u32 battler)
+{
+    gBattleMons[battler].isReverse = FALSE;
+}
+
+// Read / write aggro directly from BattlePokemon
+static inline s32 GetAggro(u32 battler)
+{
+    return (s32)gBattleMons[battler].shadowAggro;
+}
+
+static inline s32 GetAggroMax(u32 battler)
+{
+    return SHADOW_AGGRO_MAX_DEFAULT;
+}
+
+void ModifyBattlerAggro(u32 battler, s32 delta)
+{
+    s32 cur = GetAggro(battler);
+    s32 max = GetAggroMax(battler);
+
+    cur += delta;
+    if (cur < 0)
+        cur = 0;
+    if (cur > max)
+        cur = max;
+
+    gBattleMons[battler].shadowAggro = (u8)cur;
+}
+
+
+static inline struct Pokemon *GetPartyMonFromBattler(u32 battler) {
+    u32 partyIndex = gBattlerPartyIndexes[battler];
+    return &gPlayerParty[partyIndex]; // works for player side; extend for partner/multi if needed
+}
 
 ARM_FUNC NOINLINE static uq4_12_t PercentToUQ4_12(u32 percent);
 ARM_FUNC NOINLINE static uq4_12_t PercentToUQ4_12_Floored(u32 percent);
@@ -701,30 +750,6 @@ void HandleAction_Run(void)
         gBattleOutcome |= B_OUTCOME_LINK_BATTLE_RAN;
         gSaveBlock2Ptr->frontier.disableRecordBattle = TRUE;
     }
-    else if (gBattleTypeFlags & BATTLE_TYPE_TRAINER)
-    {
-        if (gBattleMons[gBattlerAttacker].isReverse)
-        {
-            gBattleMons[gBattlerAttacker].isReverse = FALSE;
-            gBattlescriptCurrInstr = BattleScript_TrainerCallToMonReverse;
-            gCurrentActionFuncId = B_ACTION_EXEC_SCRIPT;
-        }
-        else
-        {
-            if (gBattleMons[gBattlerAttacker].statStages[STAT_ACC] < MAX_STAT_STAGE)
-            {
-                if (B_X_ITEMS_BUFF >= GEN_7)
-                    gBattleMons[gBattlerAttacker].statStages[STAT_ACC] += 2;
-                else
-                    gBattleMons[gBattlerAttacker].statStages[STAT_ACC] += 1;
-                if (gBattleMons[gBattlerAttacker].statStages[STAT_ACC] > MAX_STAT_STAGE)
-                    gBattleMons[gBattlerAttacker].statStages[STAT_ACC] = MAX_STAT_STAGE;
-            }
-
-            gBattlescriptCurrInstr = BattleScript_TrainerCallToMonNormal;
-            gCurrentActionFuncId = B_ACTION_EXEC_SCRIPT;
-        }
-    }
     else
     {
         if (IsOnPlayerSide(gBattlerAttacker))
@@ -753,6 +778,68 @@ void HandleAction_Run(void)
         }
     }
 }
+
+
+// Declared in your .inc
+extern const u8 gBattleScript_PlayerCall_NonShadow[];
+extern const u8 gBattleScript_PlayerCall_Shadow_Normal[];
+extern const u8 gBattleScript_PlayerCall_Shadow_ReverseEnded[];
+
+// Somewhere near the top of battle_util.c
+extern const u8 BattleScript_TrainerCallToMonNormal[];  // existing vanilla script
+
+u16 ModifyHeartValueInBattle(u8 battlerId, u16 amount);
+
+// Tunable values for how much CALL changes the heart
+#define HEART_STEP_CALL_NORMAL   100   // normal shadow call
+#define HEART_STEP_CALL_REVERSE  400   // reverse-mode call
+
+void HandleAction_Call(void)
+{
+    u32 battler = gBattlerByTurnOrder[gCurrentTurnActionNumber];
+
+    gBattlerAttacker         = battler;
+    gBattlerTarget           = battler;
+    gBattleScripting.battler = battler;
+
+    if (!gBattleMons[battler].isShadow)
+    {
+        // ✅ Non-shadow: use the known-good stock script with accuracy boost + anim
+        gBattlescriptCurrInstr = BattleScript_TrainerCallToMonNormal;
+    }
+    else
+    {
+        // Shadow mon: adjust heart in C, then run a *simple* text script
+
+        if (gBattleMons[battler].heartMax != 0)
+        {
+            if (gBattleMons[battler].isReverse)
+            {
+                // Bigger drop when calming reverse mode
+                ModifyHeartValueInBattle((u8)battler, HEART_STEP_CALL_REVERSE);
+            }
+            else
+            {
+                // Small drop for a normal CALL on a shadow mon
+                ModifyHeartValueInBattle((u8)battler, HEART_STEP_CALL_NORMAL);
+            }
+        }
+
+        if (gBattleMons[battler].isReverse)
+        {
+            // Clear reverse flag here in C
+            gBattleMons[battler].isReverse = FALSE;
+            gBattlescriptCurrInstr = gBattleScript_PlayerCall_Shadow_ReverseEnded;
+        }
+        else
+        {
+            gBattlescriptCurrInstr = gBattleScript_PlayerCall_Shadow_Normal;
+        }
+    }
+
+    gCurrentActionFuncId = B_ACTION_EXEC_SCRIPT;
+}
+
 
 void HandleAction_WatchesCarefully(void)
 {

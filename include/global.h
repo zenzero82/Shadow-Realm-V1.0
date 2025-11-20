@@ -20,6 +20,8 @@
 #include "constants/trainer_hill.h"
 #include "constants/items.h"
 #include "config/save.h"
+#include "constants/shadow.h"
+
 
 // Prevent cross-jump optimization.
 #define BLOCK_CROSS_JUMP asm("");
@@ -1130,6 +1132,8 @@ struct SaveBlock1
     /*0x31B3*/ struct ExternalEventData externalEventData;
     /*0x31C7*/ struct ExternalEventFlags externalEventFlags;
     /*0x31DC*/ struct Roamer roamer[ROAMER_COUNT];
+    // Shadow Pokémon registry: indexed by shadowID (1..MAX_SHADOW_MON_IDS)
+    /*0x31F8*/ u8 shadowMonStates[MAX_SHADOW_MON_IDS + 1];
 #if FREE_ENIGMA_BERRY == FALSE
     /*0x31F8*/ struct EnigmaBerry enigmaBerry;
 #endif //FREE_ENIGMA_BERRY

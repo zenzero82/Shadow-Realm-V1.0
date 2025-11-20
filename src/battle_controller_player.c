@@ -260,6 +260,8 @@ static u32 GetNextBall(u32 ballId)
         return ballNext;
 }
 
+extern const u8 BattleScript_PlayerCall[]; // defined below in step 3
+
 static void HandleInputChooseAction(u32 battler)
 {
     u16 itemId = gBattleResources->bufferA[battler][2] | (gBattleResources->bufferA[battler][3] << 8);
@@ -347,7 +349,10 @@ static void HandleInputChooseAction(u32 battler)
             BtlController_EmitTwoReturnValues(battler, B_COMM_TO_ENGINE, B_ACTION_SWITCH, 0);
             break;
         case 3: // Bottom right
-            BtlController_EmitTwoReturnValues(battler, B_COMM_TO_ENGINE, B_ACTION_RUN, 0);
+            if (gBattleTypeFlags & BATTLE_TYPE_TRAINER)
+                BtlController_EmitTwoReturnValues(battler, B_COMM_TO_ENGINE, B_ACTION_CALL, 0);  // NEW
+            else
+                BtlController_EmitTwoReturnValues(battler, B_COMM_TO_ENGINE, B_ACTION_RUN, 0);
             break;
         }
         PlayerBufferExecCompleted(battler);
@@ -2079,7 +2084,7 @@ static void PlayerHandleChooseAction(u32 battler)
     gBattlerControllerFuncs[battler] = HandleChooseActionAfterDma3;
     BattleTv_ClearExplosionFaintCause();
     if (gBattleTypeFlags & BATTLE_TYPE_TRAINER)
-        BattlePutTextOnWindow(gText_BattleMenuTrainer, B_WIN_ACTION_MENU);
+        BattlePutTextOnWindow(gText_BattleMenuTrainerCall, B_WIN_ACTION_MENU);
     else
         BattlePutTextOnWindow(gText_BattleMenu, B_WIN_ACTION_MENU);
 
@@ -2432,8 +2437,23 @@ static void Controller_WaitForDebug(u32 battler)
 
 static void PlayerHandleBattleDebug(u32 battler)
 {
-    BeginNormalPaletteFade(-1, 0, 0, 0x10, 0);
-    SetMainCallback2(CB2_BattleDebugMenu);
+    // 1) Give balls for testing snag / catching
+    AddBagItem(ITEM_POKE_BALL, 50);
+    AddBagItem(ITEM_MASTER_BALL, 50);
+
+    // 2) Toggle Reverse Mode on the active player mon if it's a Shadow mon
+    //    (relies on the Shadow fields we pulled in from the Shadow PR)
+    if (gBattleMons[battler].isShadow)
+    {
+        // Flip the reverse flag
+        gBattleMons[battler].isReverse ^= 1;
+
+        // Optional: if you want a message or animation later, you can hook it via battle script,
+        // but for now this is enough to trigger the end-turn Reverse Mode damage handler.
+    }
+
+    // 3) Immediately finish the debug action back to the battle engine
+    // We keep using Controller_WaitForDebug so the function isn't unused.
     gBattlerControllerFuncs[battler] = Controller_WaitForDebug;
 }
 

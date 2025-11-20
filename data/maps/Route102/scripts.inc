@@ -69,9 +69,21 @@ Route102_EventScript_Tiana::
 	end
 
 Route102_EventScript_Allen::
-	trainerbattle_single TRAINER_ALLEN, Route102_Text_AllenIntro, Route102_Text_AllenDefeated
-	msgbox Route102_Text_AllenPostBattle, MSGBOX_AUTOCLOSE
-	end
+    lock
+    faceplayer
+    callnative TrainerHasUnsnaggedShadow_Native
+    compare VAR_RESULT, TRUE
+    goto_if_eq Route102_EventScript_Allen_DoShadowRematch
+    msgbox Route102_Text_AllenPostBattle, MSGBOX_DEFAULT
+    release
+    end
+
+Route102_EventScript_Allen_DoShadowRematch:
+    trainerbattle_rematch TRAINER_ALLEN, Route102_Text_AllenIntro, Route102_Text_AllenDefeated
+    msgbox Route102_Text_AllenPostBattle, MSGBOX_AUTOCLOSE
+    release
+    end
+
 
 Route102_Text_WatchMeCatchPokemon:
 	.string "WALLY: {PLAYER}…\n"

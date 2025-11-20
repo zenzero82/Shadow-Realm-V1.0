@@ -66,6 +66,7 @@
 #define B_ACTION_NOTHING_FAINTED        13 // when choosing an action
 #define B_ACTION_DEBUG                  20
 #define B_ACTION_THROW_BALL             21 // R to throw last used ball
+#define B_ACTION_CALL                   22
 #define B_ACTION_NONE                   0xFF
 
 #define BATTLE_BUFFER_LINK_SIZE 0x1000
@@ -971,10 +972,9 @@ struct BattleHealthboxInfo
     u8 animationState;
     u8 partyStatusDelayTimer;
     u8 matrixNum;
-
+    // Shadow HUD overlay sprite ids for this battler's healthbox
     u8 shadowSpriteIdPrimary;
     u8 shadowSpriteIdSecondary;
-
     u8 soundTimer;
     u8 introEndDelay;
     u8 field_A;

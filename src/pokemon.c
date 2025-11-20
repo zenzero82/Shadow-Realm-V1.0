@@ -66,6 +66,7 @@
 #include "constants/union_room.h"
 #include "constants/weather.h"
 #include "wild_encounter.h"
+#include "constants/shadow.h"
 
 #define FRIENDSHIP_EVO_THRESHOLD ((P_FRIENDSHIP_EVO_THRESHOLD >= GEN_8) ? 160 : 220)
 
@@ -3762,6 +3763,12 @@ void RemoveBattleMonPPBonus(struct BattlePokemon *mon, u8 moveIndex)
     mon->ppBonuses &= gPPUpClearMask[moveIndex];
 }
 
+// Heart gauge helpers (local to this file)
+u16 GetMonHeartValue(struct Pokemon *mon);
+u16 GetMonHeartMax(struct Pokemon *mon);
+void SetMonHeartValue(struct Pokemon *mon, u16 val);
+void SetMonHeartMax(struct Pokemon *mon, u16 val);
+
 void PokemonToBattleMon(struct Pokemon *src, struct BattlePokemon *dst)
 {
     s32 i;
@@ -3802,9 +3809,15 @@ void PokemonToBattleMon(struct Pokemon *src, struct BattlePokemon *dst)
     dst->isShiny = IsMonShiny(src);
     dst->ability = GetAbilityBySpecies(dst->species, dst->abilityNum);
     dst->isShadow = GetMonData(src, MON_DATA_IS_SHADOW, NULL);
-    dst->isReverse = GetMonData(src, MON_DATA_REVERSE_MODE, NULL);
+    // Always start calm: Reverse Mode is battle-only and triggered by RNG.
+    dst->isReverse   = FALSE;
     dst->shadowAggro = GetMonData(src, MON_DATA_SHADOW_AGGRO, NULL);
     dst->shadowID = GetMonData(src, MON_DATA_SHADOW_ID, NULL);
+        // Heart gauge values
+    dst->heartVal    = GetMonHeartValue(src);
+    dst->heartMax    = GetMonHeartMax(src);
+        // Shadow system: mark this Shadow as SEEN the first time it is used in battle.
+    Shdw_OnEncounterMon(src);
     GetMonData(src, MON_DATA_NICKNAME, nickname);
     StringCopy_Nickname(dst->nickname, nickname);
     GetMonData(src, MON_DATA_OT_NAME, dst->otName);
@@ -7286,6 +7299,29 @@ u32 GetTeraTypeFromPersonality(struct Pokemon *mon)
 }
 
 // * Shadow Pokemon
+// ===============================
+
+u16 GetMonHeartValue(struct Pokemon *mon)
+{
+    return GetMonData(mon, MON_DATA_HEART_VALUE, NULL);
+}
+
+u16 GetMonHeartMax(struct Pokemon *mon)
+{
+    return GetMonData(mon, MON_DATA_HEART_MAX, NULL);
+}
+
+void SetMonHeartValue(struct Pokemon *mon, u16 val)
+{
+    SetMonData(mon, MON_DATA_HEART_VALUE, &val);
+}
+
+void SetMonHeartMax(struct Pokemon *mon, u16 val)
+{
+    SetMonData(mon, MON_DATA_HEART_MAX, &val);
+}
+
+
 
 // Test function for wild mon, not really useful
 void SetShadowEnemyMon(void)
@@ -7315,7 +7351,7 @@ u8 GetHeartGaugeSection(u16 heartVal, u16 heartMax)
 }
 #undef h25 
 #undef h50 
-#undef h77
+#undef h75
 
 u8 GetReverseModeChance(struct BattlePokemon *mon)
 {
@@ -7347,18 +7383,199 @@ u8 ShdwCanMonGainEXP(struct Pokemon *mon)
 
 u16 ModifyHeartValueInBattle(u8 battlerId, u16 amount)
 {
-    u16 hVal, hMax, newVal;
+    u16 oldVal = gBattleMons[battlerId].heartVal;
+    u16 maxVal = gBattleMons[battlerId].heartMax;
 
-    hVal = gBattleMons[battlerId].heartVal;
-    hMax = gBattleMons[battlerId].heartMax;
-    newVal = min(max(hVal - amount, 0), hMax);
+    // Clamp new value
+    s32 newVal = (s32)oldVal - (s32)amount;
+    if (newVal < 0)
+        newVal = 0;
+    if (newVal > maxVal)
+        newVal = maxVal;
 
     if (gBattleMons[battlerId].isShadow)
     {
-        gBattleMons[battlerId].heartVal = newVal;
+        gBattleMons[battlerId].heartVal = (u16)newVal;
+
+        // Persist to party immediately (no controller / UI)
+        struct Pokemon *party = GetBattlerParty(battlerId);
+        struct Pokemon *mon   = &party[gBattlerPartyIndexes[battlerId]];
+        SetMonHeartValue(mon, (u16)newVal);
     }
-    
-    // SetMonData(&gPlayerParty[gBattlerPartyIndexes[battlerId]], MON_DATA_HEART_VALUE, &newVal);
-    
-    return amount;
+
+    return (u16)newVal;
+}
+
+// ===============================
+// SHADOW AGGRO BY NATURE
+// ===============================
+
+u8 Shdw_GetAggroForNature(u8 nature)
+{
+    switch (nature)
+    {
+    // Very aggressive / reckless
+    case NATURE_ADAMANT:
+    case NATURE_LONELY:
+    case NATURE_NAUGHTY:
+    case NATURE_BRAVE:
+    case NATURE_JOLLY:
+    case NATURE_HASTY:
+    case NATURE_NAIVE:
+    case NATURE_RASH:
+        return SHADOW_AGGRO_VERY_HIGH;
+
+    // High but not completely insane
+    case NATURE_MODEST:
+    case NATURE_MILD:
+    case NATURE_QUIET:
+    case NATURE_SASSY:
+    case NATURE_IMPISH:
+    case NATURE_LAX:
+        return SHADOW_AGGRO_HIGH;
+
+    // Middle / defensive
+    case NATURE_BOLD:
+    case NATURE_CALM:
+    case NATURE_GENTLE:
+    case NATURE_CAREFUL:
+    case NATURE_RELAXED:
+        return SHADOW_AGGRO_MEDIUM;
+
+    // Neutral-ish
+    case NATURE_HARDY:
+    case NATURE_DOCILE:
+    case NATURE_SERIOUS:
+    case NATURE_BASHFUL:
+    case NATURE_QUIRKY:
+    default:
+        return SHADOW_AGGRO_LOW;
+    }
+}
+
+// ===============================
+// SHADOW PURIFICATION HELPERS
+// ===============================
+
+bool8 Shdw_IsPurificationReady(const struct Pokemon *mon)
+{
+    if (mon == NULL)
+        return FALSE;
+
+    // Must be a Shadow Pokémon
+    if (!GetMonData((struct Pokemon *)mon, MON_DATA_IS_SHADOW, NULL))
+        return FALSE;
+
+    // Must have been snagged (belongs to player)
+    if (!GetMonData((struct Pokemon *)mon, MON_DATA_SNAGGED, NULL))
+        return FALSE;
+
+    // Heart gauge must be empty
+    u16 heartVal = GetMonData((struct Pokemon *)mon, MON_DATA_HEART_VALUE, NULL);
+    if (heartVal != 0)
+        return FALSE;
+
+    return TRUE;
+}
+
+bool8 Shdw_AnyPartyMonPurificationReady(void)
+{
+    s32 i;
+
+    for (i = 0; i < PARTY_SIZE; i++)
+    {
+        if (GetMonData(&gPlayerParty[i], MON_DATA_SPECIES, NULL) != SPECIES_NONE
+            && Shdw_IsPurificationReady(&gPlayerParty[i]))
+        {
+            return TRUE;
+        }
+    }
+    return FALSE;
+}
+
+// Keep a global flag in sync that scripts can check
+void Shdw_UpdatePurifyReadyFlag(void)
+{
+    if (Shdw_AnyPartyMonPurificationReady())
+        FlagSet(FLAG_SHADOW_MON_READY_TO_PURIFY);
+    else
+        FlagClear(FLAG_SHADOW_MON_READY_TO_PURIFY);
+}
+
+
+//Shadow ID Helpers 
+ 
+static inline bool32 IsValidShadowID(u16 shadowId)
+{
+    return shadowId > 0 && shadowId <= MAX_SHADOW_MON_IDS;
+}
+
+u8 Shdw_GetState(u16 shadowId)
+{
+    if (!IsValidShadowID(shadowId))
+        return SHDW_STATE_NEVER_SEEN;
+    return gSaveBlock1Ptr->shadowMonStates[shadowId];
+}
+
+void Shdw_SetState(u16 shadowId, u8 state)
+{
+    if (!IsValidShadowID(shadowId))
+        return;
+    gSaveBlock1Ptr->shadowMonStates[shadowId] = state;
+}
+
+void Shdw_OnEncounterMon(struct Pokemon *mon)
+{
+    u16 shadowId;
+    if (!GetMonData(mon, MON_DATA_IS_SHADOW, NULL))
+        return;
+
+    shadowId = GetMonData(mon, MON_DATA_SHADOW_ID, NULL);
+    if (!IsValidShadowID(shadowId))
+        return;
+
+    u8 state = Shdw_GetState(shadowId);
+    if (state == SHDW_STATE_NEVER_SEEN)
+        Shdw_SetState(shadowId, SHDW_STATE_SEEN);
+}
+
+void Shdw_OnSnagMon(struct Pokemon *mon)
+{
+    u16 shadowId;
+    if (!GetMonData(mon, MON_DATA_IS_SHADOW, NULL))
+        return;
+
+    shadowId = GetMonData(mon, MON_DATA_SHADOW_ID, NULL);
+    if (!IsValidShadowID(shadowId))
+        return;
+
+    Shdw_SetState(shadowId, SHDW_STATE_SNAGGED);
+
+    // Make sure MON_DATA_SNAGGED stays in sync too
+    u8 snagged = TRUE;
+    SetMonData(mon, MON_DATA_SNAGGED, &snagged);
+}
+
+// Returns TRUE if any mon in party/PC has this shadowId
+bool8 PlayerOwnsShadowId(u8 shadowId)
+{
+    s32 i;
+    u16 monShadowId;
+
+    if (shadowId == 0)
+        return FALSE;
+
+    // Check player party only for now
+    for (i = 0; i < PARTY_SIZE; i++)
+    {
+        if (GetMonData(&gPlayerParty[i], MON_DATA_IS_SHADOW, NULL))
+        {
+            monShadowId = GetMonData(&gPlayerParty[i], MON_DATA_SHADOW_ID, NULL);
+            if (monShadowId == shadowId)
+                return TRUE;
+        }
+    }
+
+    // TODO: later we can also scan PC boxes
+    return FALSE;
 }

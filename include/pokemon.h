@@ -658,6 +658,9 @@ struct Fusion
     u16 unfuseForgetMove;
 };
 
+// Forward declarations
+struct Trainer;
+
 extern const struct Fusion *const gFusionTablePointers[NUM_SPECIES];
 
 #define NUM_UNOWN_FORMS 28
@@ -715,6 +718,19 @@ void CreateBattleTowerMon(struct Pokemon *mon, struct BattleTowerPokemon *src);
 void CreateBattleTowerMon_HandleLevel(struct Pokemon *mon, struct BattleTowerPokemon *src, bool8 lvl50);
 void CreateApprenticeMon(struct Pokemon *mon, const struct Apprentice *src, u8 monId);
 void CreateMonWithEVSpreadNatureOTID(struct Pokemon *mon, u16 species, u8 level, u8 nature, u8 fixedIV, u8 evSpread, u32 otId);
+u8 Shdw_GetAggroForNature(u8 nature);
+bool8 Shdw_IsPurificationReady(const struct Pokemon *mon);
+bool8 Shdw_AnyPartyMonPurificationReady(void);
+void Shdw_UpdatePurifyReadyFlag(void);
+u8  Shdw_GetState(u16 shadowId);
+void Shdw_SetState(u16 shadowId, u8 state);
+void Shdw_OnEncounterMon(struct Pokemon *mon);
+void Shdw_OnSnagMon(struct Pokemon *mon);
+bool8 PlayerOwnsShadowId(u8 shadowId);
+bool8 TrainerHasUnsnaggedShadow(const struct Trainer *trainer);
+bool8 TrainerHasUnsnaggedShadowById(u16 trainerId, u8 difficulty);
+bool8 TrainerHasUnsnaggedShadow_Native(void);
+
 void ConvertPokemonToBattleTowerPokemon(struct Pokemon *mon, struct BattleTowerPokemon *dest);
 bool8 ShouldIgnoreDeoxysForm(u8 caseId, u8 battler);
 u16 GetUnionRoomTrainerPic(void);

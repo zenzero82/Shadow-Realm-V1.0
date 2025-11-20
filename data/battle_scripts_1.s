@@ -17,6 +17,8 @@
 	.include "asm/macros.inc"
 	.include "asm/macros/battle_script.inc"
 	.include "constants/constants.inc"
+	.include "data/battle_scripts_call.inc"
+
 
 	.section script_data, "aw", %progbits
 
@@ -10105,14 +10107,18 @@ BattleScript_TrainerCallToMonNormal::
 	stattextbuffer BS_ATTACKER
 	printstring STRINGID_ATTACKERSSTATROSE
 	waitmessage B_WAIT_TIME_LONG
+	printstring STRINGID_TRAINERENCOURAGEDMON
+    waitmessage B_WAIT_TIME_SHORT
 	end2
+
 BattleScript_TrainerCallToMonReverse::
-	printstring STRINGID_TRAINERCALLTOMON
-	waitmessage B_WAIT_TIME_SHORTEST
-	playanimation BS_ATTACKER B_ANIM_CALL_REVERSE_MODE
-	setbyte sHEARTVALUE_STATE, 0
-	modifyheartvalue BS_ATTACKER
-	end2
+    printstring STRINGID_TRAINERCALLTOMON
+    waitmessage B_WAIT_TIME_SHORTEST
+    playanimation BS_ATTACKER B_ANIM_CALL_REVERSE_MODE
+    printstring STRINGID_SHADOWCAMETOSENSES
+    waitmessage B_WAIT_TIME_SHORT
+    end2
+	
 BattleScript_TrainerCallToMonEnd::
 	pause B_WAIT_TIME_SHORTEST
 	printstring STRINGID_STATSWONTINCREASE

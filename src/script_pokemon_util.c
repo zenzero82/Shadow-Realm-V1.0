@@ -27,6 +27,8 @@
 #include "constants/abilities.h"
 #include "constants/items.h"
 #include "constants/battle_frontier.h"
+#include "constants/vars.h"
+
 
 static void CB2_ReturnFromChooseHalfParty(void);
 static void CB2_ReturnFromChooseBattleFrontierParty(void);
@@ -60,6 +62,18 @@ static void HealPlayerBoxes(void)
         }
     }
 }
+
+bool8 TrainerHasUnsnaggedShadow_Native(void)
+{
+    // For now, hard-code Allen with difficulty 0
+    if (TrainerHasUnsnaggedShadowById(TRAINER_ALLEN, 0))
+        gSpecialVar_Result = TRUE;
+    else
+        gSpecialVar_Result = FALSE;
+
+    return FALSE; // standard for callnative
+}
+
 
 u8 ScriptGiveEgg(u16 species)
 {

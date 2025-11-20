@@ -1103,6 +1103,16 @@ EventScript_VsSeekerChargingDone::
 	releaseall
 	end
 
+EventScript_ShadowPurifyReady::
+    lockall
+    msgbox gText_ShadowPurifyReady, MSGBOX_DEFAULT
+    clearflag FLAG_SHADOW_MON_READY_TO_PURIFY
+    releaseall
+    end
+
+gText_ShadowPurifyReady::
+    .string "One of your Pokémon is ready to open\nthe door to its heart!\p$"
+
 	.include "data/scripts/pc_transfer.inc"
 	.include "data/scripts/questionnaire.inc"
 	.include "data/scripts/abnormal_weather.inc"

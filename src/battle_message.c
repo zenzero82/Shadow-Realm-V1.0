@@ -913,6 +913,11 @@ const u8 *const gBattleStringsTable[STRINGID_COUNT] =
     [STRINGID_REVERSEMODE_DAMAGE]                   = COMPOUND_STRING("{B_ATK_NAME_WITH_PREFIX} is hurt by Reverse Mode!"),
     [STRINGID_REVERSEMODE_CALLED]                   = COMPOUND_STRING("{B_ATK_NAME_WITH_PREFIX} came to its senses!"),
     [STRINGID_GOTCHAPKMNCAUGHTTRAINER]              = COMPOUND_STRING("Gotcha! {B_DEF_NAME} was caught!{WAIT_SE}\p"),
+    [STRINGID_TRAINERCALLEDTOMON]                   = COMPOUND_STRING("{B_PLAYER_NAME} called to {B_ATK_NAME_WITH_PREFIX}!\p"),
+    [STRINGID_SHADOWCALMEDSLIGHTLY]                 = COMPOUND_STRING("The Shadow Pokémon calmed down a little!\p"),
+    [STRINGID_SHADOWCAMETOSENSES]                   = COMPOUND_STRING("{B_ATK_NAME_WITH_PREFIX} came to its senses!\p"),
+    [STRINGID_TRAINERENCOURAGEDMON]                 = COMPOUND_STRING("{B_ATK_NAME_WITH_PREFIX} was encouraged!\p"),
+
 };
 
 const u16 gTrainerUsedItemStringIds[] =
@@ -1428,6 +1433,14 @@ const u8 gText_WhatWillWallyDo[] = _("What will\nWALLY do?");
 const u8 gText_LinkStandby[] = _("{PAUSE 16}Link standby…");
 const u8 gText_BattleMenu[] = _("Battle{CLEAR_TO 56}Bag\nPokémon{CLEAR_TO 56}Run");
 const u8 gText_BattleMenuTrainer[] = _("Battle{CLEAR_TO 56}Bag\nPokémon{CLEAR_TO 56}Run");
+// Same layout as gText_BattleMenu/gText_BattleMenuTrainer: 4 lines (Battle/Pokémon/Bag/Run)
+// Call action message lines
+//const u8 gText_TrainerCalledToMon[]     = _("{B_PLAYER_NAME} called to {B_ATK_NAME_WITH_PREFIX}!");
+//const u8 gText_ShadowCalmedSlightly[]   = _("The Shadow Pokémon calmed down a little!");
+//const u8 gText_ShadowCameToSenses[]     = _("{B_ATK_NAME_WITH_PREFIX} came to its senses!");
+//const u8 gText_TrainerEncouragedMon[]   = _("{B_ATK_NAME_WITH_PREFIX} was encouraged!");
+
+const u8 gText_BattleMenuTrainerCall[] = _("Battle{CLEAR_TO 56}Bag\nPokémon{CLEAR_TO 56}Call");
 const u8 gText_SafariZoneMenu[] = _("Ball{CLEAR_TO 56}{POKEBLOCK}\nGo Near{CLEAR_TO 56}Run");
 const u8 gText_MoveInterfacePP[] = _("PP ");
 const u8 gText_MoveInterfaceType[] = _("TYPE/");

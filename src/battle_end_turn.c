@@ -13,6 +13,11 @@
 #include "constants/items.h"
 #include "constants/moves.h"
 
+// at top of file or in a header:
+#ifndef HEART_STEP_REVERSE_TICK
+#define HEART_STEP_REVERSE_TICK 8   // tweak as you like
+#endif
+
 // General End Turn Effects based on research from smogon from vanilla games:
 // https://www.smogon.com/forums/threads/sword-shield-battle-mechanics-research.3655528/page-64#post-9244179
 enum EndTurnResolutionOrder
@@ -689,6 +694,8 @@ static bool32 HandleEndTurnBurn(u32 battler)
 
     return effect;
 }
+
+// src/battle_end_turn.c
 
 static bool32 HandleEndTurnFrostbite(u32 battler)
 {
@@ -1537,16 +1544,26 @@ static bool32 HandleEndTurnReverseMode(u32 battler)
         && IsBattlerAlive(battler)
         && !IsBattlerProtectedByMagicGuard(battler, ability))
     {
+        // 1) HP chip damage, exactly as before
         gBattleStruct->moveDamage[battler] = (GetNonDynamaxMaxHP(battler) / 16) + (Random() % 3) - 1;
         if (gBattleStruct->moveDamage[battler] == 0)
             gBattleStruct->moveDamage[battler] = 1;
         BattleScriptExecute(BattleScript_ReverseModeTurnDmg);
         LaunchStatusAnimation(battler, B_ANIM_STATUS_REVERSE_MODE);
         effect = TRUE;
+
+        // 2) Heart value tick – done purely in C
+        if (gBattleMons[battler].isShadow)
+        {
+            // Reuse the helper from pokemon.c
+            ModifyHeartValueInBattle(battler, HEART_STEP_REVERSE_TICK);
+            // If you want, you can also adjust shadowAggro here similarly.
+        }
     }
 
     return effect;
 }
+
 
 static bool32 (*const sEndTurnEffectHandlers[])(u32 battler) =
 {

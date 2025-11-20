@@ -39,6 +39,7 @@
 void ShadowHud_Clear(u8 battler);
 void ShadowHud_SyncForBattler(u8 battler);
 void BattleHud_ApplyHealthboxPalette(u8 battler, bool8 isShadowNow);
+static void MoveBattleBarGraphically(u8 battler, u8 whichBar);
 extern const struct SpritePalette gSpritePalettes_HealthBoxHealthBar[10];
 u32 IndexOfSpritePaletteTag(u16 tag);  // correct return type
 
@@ -83,6 +84,7 @@ void ShadowHud_SyncForBattler(u8 battler)
     // Optional: keep this if you want an extra-safe HUD refresh on resume
     // UpdateHealthboxAttribute(gHealthboxSpriteIds[battler], GetBattlerMon(battler), HEALTHBOX_ALL);
 }
+
 // --- end SHADOW FIX HELPERS ---
 
 // battle_interface.c (top of file, after includes)

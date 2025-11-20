@@ -107,6 +107,7 @@ struct CableClubPlayer
 
 extern const struct MapLayout *const gMapLayouts[];
 extern const struct MapHeader *const *const gMapGroups[];
+extern const u8 EventScript_ShadowPurifyReady[];
 
 static void Overworld_ResetStateAfterWhiteOut(void);
 static void CB2_ReturnToFieldLocal(void);
@@ -1939,8 +1940,16 @@ void CB2_ReturnToFieldContinueScriptPlayMapMusic(void)
 {
     FieldClearVBlankHBlankCallbacks();
     gFieldCallback = FieldCB_ContinueScriptHandleMusic;
+
+    // Re-evaluate the purification flag when returning to the field
+    Shdw_UpdatePurifyReadyFlag();
+
+    if (FlagGet(FLAG_SHADOW_MON_READY_TO_PURIFY))
+        ScriptContext_SetupScript(EventScript_ShadowPurifyReady);
+
     CB2_ReturnToField();
 }
+
 
 void CB2_ReturnToFieldFadeFromBlack(void)
 {
