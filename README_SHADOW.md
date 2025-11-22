@@ -116,3 +116,87 @@ also here's a very basic test script for wild shadow mon:
 setwildshadowbattle SPECIES_ZIGZAGOON, 10, 0, 1000
 dowildbattle
 releaseall```
+
+=================ZENZERO82=======================
+
+---
+
+## Shadow Realm V1.0 Fork – Additional Changes
+
+This fork is based on AsparagusEduardo’s Shadow Pokémon PR (#4128) for pokeemerald-expansion.  
+All notes above this section belong to the original authors. The sections below document **fork-specific changes**.
+
+### High-level features added in this fork
+
+- **Heart Gauge backend integration**
+  - Added heart value/max value to party → battle conversion so the gauge is available in-battle.
+  - Implemented `GetMonHeartValue` / `GetMonHeartMax` helpers hooked into `PokemonToBattleMon`.
+  - Shadow Pokémon caught via Snag now start with **full Heart Gauge** (e.g. 5000) for testing.
+
+- **Heart Gauge behavior in battle**
+  - Implemented a new `VARIOUS_MODIFY_HEART_VALUE` case so that **Call** reduces the Heart Gauge.
+  - After a successful Call, the heart value is updated on the Pokémon and the Shadow HUD is synced.
+  - Shadow string `"PKMN's heart gauge fell!"` (or equivalent) is shown when the gauge changes.
+  - Currently the visual shadow bar fully refreshes when opening/closing a menu (bag/party); live animation refresh is WIP.
+
+- **Shadow HUD / healthbox integration**
+  - Added `ShadowHud_RefreshHeartGauge` to re-sync the gauge to the underlying heart value.
+  - Hooked Shadow HUD clear/sync into ball throw and faint logic so snagged shadows clear their HUD state correctly.
+
+- **Reverse Mode & aggression by nature**
+  - Implemented an aggression value derived from **nature**; higher aggression increases the chance to enter Reverse Mode.
+  - Auto-enter Reverse Mode when the internal “fever pitch” condition triggers (instead of only doing visuals).
+  - Once Called, the mon leaves Reverse Mode, and it can re-enter only via the normal random rolls.
+  - Known quirk: some high-aggro shadows may still start in Reverse Mode – to be tuned later.
+
+- **Purification ready flag**
+  - At the end of battle / return to field, the game scans the player’s party for shadows with **empty Heart Gauge**.
+  - If any are ready, it sets a new flag and runs a global event script (no per-map scripting needed) to show a message like  
+    “A Pokémon is ready to open the door to its heart!”
+  - This is a temporary implementation pending full purification flow + animations.
+
+- **Trainer shadow ownership / rematch scaffolding**
+  - Added helper logic to determine whether a **trainer still owns an unsnagged Shadow Pokémon**, using:
+    - Shadow IDs on trainer party entries.
+    - `PlayerOwnsShadowId(shadowId)` to scan all player storage and ensure the mon was actually snagged.
+  - Created temporary helper(s) to allow:
+    - Re-battling a trainer that still has an unsnagged Shadow.
+    - Treating trainers as “cleared” once all of their shadow IDs are in the player’s possession.
+  - Long-term plan: replace this with a proper “Shadow Monitor” / Pokédex upgrade that tracks shadows globally and swaps defeated / unsnagged shadows out of trainer parties.
+
+### Files touched in this fork (summary)
+
+> **Note:** This is *only* a summary of additional fork changes, not a full diff vs. pokeemerald-expansion.
+
+- `include/pokemon.h`
+  - Added function prototypes for heart gauge accessors and shadow-related helpers.
+- `src/pokemon.c`
+  - Implemented heart gauge getters.
+  - Added `PlayerOwnsShadowId` for scan across party/boxes for a given Shadow ID.
+- `include/battle_interface.h`
+  - Declared Shadow HUD helper functions.
+- `src/battle_interface.c`
+  - Implemented `ShadowHud_RefreshHeartGauge` and related HUD wiring.
+- `src/battle_script_commands.c`
+  - Extended `Cmd_various` with a `VARIOUS_MODIFY_HEART_VALUE` handler for the Call action.
+- `src/battle_main.c`
+  - Snag logic: mark trainer’s shadow as snagged, zero HP, clear healthbox & HUD.
+  - Added Trainer/Shadow helper routines (unsnagged check, etc.).
+  - Integrated aggression-based Reverse Mode behavior.
+- `src/overworld.c`
+  - Hooked into `CB2_ReturnToFieldContinueScriptPlayMapMusic` to trigger the global “purification ready” event script if any party shadow is fully opened.
+- `src/script_pokemon_util.c`
+  - Added native script function(s) to expose “trainer has unsnagged shadow” logic to events.
+- `data/event_scripts.s` / `data/maps/.../scripts.inc`
+  - Added temporary global event script and a test trainer behavior for shadow rematches.
+
+### Known issues / TODO
+
+- Live animation of the Heart Gauge bar during Call is still flaky; currently reliable after opening a menu.
+- Shadow trainer rematch rules are temporary; trainers aren’t yet auto-rebalanced with replacement non-shadow mons.
+- Full purification flow (animation, location logic, move learning, ribbon, etc.) still to be implemented.
+- Some high-aggression shadows may enter Reverse Mode at battle start more often than intended.
+
+---
+
+_Last updated: 2025-11-21._
