@@ -33,7 +33,11 @@
     "gMapGroup_IndoorRoute113",
     "gMapGroup_IndoorRoute123",
     "gMapGroup_IndoorRoute119",
-    "gMapGroup_IndoorRoute124"
+    "gMapGroup_IndoorRoute124",
+    "gMapGroup_Kanto",
+    "gMapGroup_Johto",
+    "gMapGroup_Kanto_Routes",
+    "gMapGroup_Kanto_Indoors"
   ],
   "gMapGroup_TownsAndRoutes": [
     "PetalburgCity",
@@ -620,5 +624,40 @@
   ],
   "gMapGroup_IndoorRoute124": [
     "Route124_DivingTreasureHuntersHouse"
+  ],
+  "gMapGroup_Kanto": [
+    "Pallet_Town",
+    "Pallet_Town_Western_Forest",
+    "Oaks_Lab",
+    "Viridian_City",
+    "Pewter_City"
+  ],
+  "gMapGroup_Johto": [
+    "Azalea_Town"
+  ],
+  "gMapGroup_Kanto_Routes": [
+    "Route1",
+    "Route21_North",
+    "Route22",
+    "Route2"
+  ],
+  "gMapGroup_Kanto_Indoors": [
+    "Reds_House",
+    "Reds_House_2ndFL",
+    "Blues_House",
+    "Blues_House2fl",
+    "viridian_pokecenter",
+    "viridian_pokemart",
+    "viridian_house1",
+    "viridian_house2",
+    "viridian_gym",
+    "route2_entrance1",
+    "route2_entrance2",
+    "route2_entrance3",
+    "route2_house",
+    "pewter_pokecenter",
+    "pewter_pokemart",
+    "pewter_house1",
+    "pewter_gym"
   ]
 }

@@ -1,0 +1,65 @@
+mapscripts Route1_MapScripts {
+}
+
+// Route 1 — Cypher agent shadow scene (minimal, no battle, no sounds)
+
+#include "constants/flags.h"
+#include "constants/items.h"
+#include "constants/pokemon.h"
+#include "constants/vars.h"
+
+// -------- TEXT --------
+text T_R1_Spy1   { "A strange figure is standing ahead..." }
+text T_R1_Agent1 { "Heh... perfect timing. Watch closely, rookie." }
+text T_R1_Agent2 { "The trainer injects a dark aura into Pikachu." }
+text T_R1_Agent3 { "Now... let us test my new Shadow Pokemon." }
+text T_R1_After1 { "Stay away from Pewter City if you know what is good for you." }
+text T_R1_Drop   { "He drops something and vanishes..." }
+text T_R1_GetDex { "You obtained a Pokedex." }
+text T_R1_Idle   { "..." }
+
+// Idle talk (attach to agent NPC if you have one)
+script Route1_ShadowAgent_Idle {
+    msgbox (T_R1_Idle, MSGBOX_DEFAULT)
+    end
+}
+
+// Coord event: triggers when entering Route 1
+script Route1_ShadowScene {
+    lockall
+
+    // Require a starter
+    checkflag (FLAG_GOT_STARTER)
+    goto_if_eq (VAR_RESULT, 0, Route1_End)
+
+    msgbox (T_R1_Spy1,   MSGBOX_DEFAULT)
+    msgbox (T_R1_Agent1, MSGBOX_DEFAULT)
+    msgbox (T_R1_Agent2, MSGBOX_DEFAULT)
+    msgbox (T_R1_Agent3, MSGBOX_DEFAULT)
+
+    // After scene (no battle yet)
+    call (Route1_AfterScene)
+    releaseall
+    end
+}
+
+script Route1_AfterScene {
+    msgbox (T_R1_After1, MSGBOX_DEFAULT)
+    msgbox (T_R1_Drop,   MSGBOX_DEFAULT)
+
+    // Give Pokedex if not already obtained
+    checkflag (FLAG_SYS_POKEDEX_GET)
+    goto_if_ne (VAR_RESULT, 0, Route1_SkipDex)
+
+    setflag (FLAG_SYS_POKEDEX_GET)
+    msgbox (T_R1_GetDex, MSGBOX_DEFAULT)
+
+Route1_SkipDex:
+    end
+}
+
+// Safe exit
+script Route1_End {
+    releaseall
+    end
+}

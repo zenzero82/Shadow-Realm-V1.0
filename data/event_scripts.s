@@ -1168,3 +1168,46 @@ gText_ShadowPurifyReady::
 	.include "data/text/save.inc"
 	.include "data/text/birch_speech.inc"
 	.include "data/scripts/dexnav.inc"
+	
+	.include "data/maps/Pallet_Town/scripts.inc"
+	.include "data/maps/Pallet_Town_Western_Forest/scripts.inc"
+	.include "data/maps/Oaks_Lab/scripts.inc"
+	.include "data/maps/Azalea_Town/scripts.inc"
+	.include "data/maps/Route1/scripts.inc"
+	.include "data/maps/Viridian_City/scripts.inc"
+	.include "data/maps/Route21_North/scripts.inc"
+	.include "data/maps/Reds_House/scripts.inc"
+	.include "data/maps/Reds_House_2ndFL/scripts.inc"
+	.include "data/maps/Route22/scripts.inc"
+	.include "data/maps/Route2/scripts.inc"
+	.include "data/maps/Pewter_City/scripts.inc"
+
+	.include "data/maps/Blues_House2fl/scripts.inc"
+
+	.include "data/maps/viridian_house2/scripts.inc"
+
+	.include "data/maps/viridian_gym/scripts.inc"
+
+	.include "data/maps/route2_entrance1/scripts.inc"
+
+	.include "data/maps/route2_house/scripts.inc"
+
+	.include "data/maps/pewter_pokecenter/scripts.inc"
+
+	.include "data/maps/pewter_pokemart/scripts.inc"
+
+	.include "data/maps/pewter_gym/scripts.inc"
+
+	.include "data/maps/route2_entrance2/scripts.inc"
+
+	.include "data/maps/viridian_house1/scripts.inc"
+
+	.include "data/maps/viridian_pokecenter/scripts.inc"
+
+	.include "data/maps/Blues_House/scripts.inc"
+
+	.include "data/maps/viridian_pokemart/scripts.inc"
+
+	.include "data/maps/pewter_house1/scripts.inc"
+
+	.include "data/maps/route2_entrance3/scripts.inc"

@@ -467,6 +467,21 @@ const u16 gFieldEffectObjectPalette_CaveDust[] = INCBIN_U16("graphics/field_effe
 const u16 gObjectEventPal_BrockGen1[] = INCBIN_U16("graphics/object_events/pics/gen1/brock.gbapal");
 const u32 gObjectEventPic_BrockGen1[] = INCBIN_U32("graphics/object_events/pics/gen1/brock.4bpp");
 
+const u16 gObjectEventPal_RocketGruntMGen1[] = INCBIN_U16("graphics/object_events/pics/gen1/rocketgruntm.gbapal");
+const u32 gObjectEventPic_RocketGruntMGen1[] = INCBIN_U32("graphics/object_events/pics/gen1/rocketgruntm.4bpp");
+
+const u16 gObjectEventPal_RocketGruntFGen1[] = INCBIN_U16("graphics/object_events/pics/gen1/rocketgruntf.gbapal");
+const u32 gObjectEventPic_RocketGruntFGen1[] = INCBIN_U32("graphics/object_events/pics/gen1/rocketgruntf.4bpp");
+
+const u16 gObjectEventPal_GymGuy[] = INCBIN_U16("graphics/object_events/pics/gen1/gym_guy.gbapal");
+const u32 gObjectEventPic_GymGuy[] = INCBIN_U32("graphics/object_events/pics/gen1/gym_guy.4bpp");
+
+const u16 gObjectEventPal_Camperg1[] = INCBIN_U16("graphics/object_events/pics/gen1/camper.gbapal");
+const u32 gObjectEventPic_Camperg1[] = INCBIN_U32("graphics/object_events/pics/gen1/camper.4bpp");
+
+const u16 gObjectEventPal_CuttableTreeG1[] = INCBIN_U16("graphics/object_events/pics/gen1/cuttable_tree_g1.gbapal");
+const u32 gObjectEventPic_CuttableTreeG1[] = INCBIN_U32("graphics/object_events/pics/gen1/cuttable_tree_g1.4bpp");
+
 //Johto Trainers
 
 //Sinnoh Trainers
@@ -476,5 +491,5 @@ const u32 gObjectEventPic_BrockGen1[] = INCBIN_U32("graphics/object_events/pics/
 //Kalos Trainers 
 
 //XD(Orre) Trainers
-const u16 gObjectEventPal_RedHex[] = INCBIN_U16("graphics/object_events/pics/xd/red_hex.gbapal");
-const u32 gObjectEventPic_RedHex[] = INCBIN_U32("graphics/object_events/pics/xd/red_hex.4bpp");
+const u16 gObjectEventPal_Wes[] = INCBIN_U16("graphics/object_events/pics/xd/wes.gbapal");
+const u32 gObjectEventPic_Wes[] = INCBIN_U32("graphics/object_events/pics/xd/wes.4bpp");

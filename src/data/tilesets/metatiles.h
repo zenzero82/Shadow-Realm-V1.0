@@ -207,3 +207,48 @@ const u16 gMetatileAttributes_MysteryEventsHouse[] = INCBIN_U16("data/tilesets/s
 
 const u16 gMetatiles_UnionRoom[] = INCBIN_U16("data/tilesets/secondary/union_room/metatiles.bin");
 const u16 gMetatileAttributes_UnionRoom[] = INCBIN_U16("data/tilesets/secondary/union_room/metatile_attributes.bin");
+
+const u16 gMetatiles_FRLG_Town[] = INCBIN_U16("data/tilesets/primary/frlg_town/metatiles.bin");
+const u16 gMetatileAttributes_FRLG_Town[] = INCBIN_U16("data/tilesets/primary/frlg_town/metatile_attributes.bin");
+
+const u16 gMetatiles_kanto_inside[] = INCBIN_U16("data/tilesets/primary/kanto_inside/metatiles.bin");
+const u16 gMetatileAttributes_kanto_inside[] = INCBIN_U16("data/tilesets/primary/kanto_inside/metatile_attributes.bin");
+
+const u16 gMetatiles_viridian[] = INCBIN_U16("data/tilesets/secondary/viridian/metatiles.bin");
+const u16 gMetatileAttributes_viridian[] = INCBIN_U16("data/tilesets/secondary/viridian/metatile_attributes.bin");
+
+const u16 gMetatiles_reds[] = INCBIN_U16("data/tilesets/secondary/reds/metatiles.bin");
+const u16 gMetatileAttributes_reds[] = INCBIN_U16("data/tilesets/secondary/reds/metatile_attributes.bin");
+
+const u16 gMetatiles_oaks_lab[] = INCBIN_U16("data/tilesets/secondary/oaks_lab/metatiles.bin");
+const u16 gMetatileAttributes_oaks_lab[] = INCBIN_U16("data/tilesets/secondary/oaks_lab/metatile_attributes.bin");
+
+const u16 gMetatiles_kanto_lab[] = INCBIN_U16("data/tilesets/secondary/kanto_lab/metatiles.bin");
+const u16 gMetatileAttributes_kanto_lab[] = INCBIN_U16("data/tilesets/secondary/kanto_lab/metatile_attributes.bin");
+
+const u16 gMetatiles_frlg_pallet[] = INCBIN_U16("data/tilesets/secondary/frlg_pallet/metatiles.bin");
+const u16 gMetatileAttributes_frlg_pallet[] = INCBIN_U16("data/tilesets/secondary/frlg_pallet/metatile_attributes.bin");
+
+const u16 gMetatiles_Reds[] = INCBIN_U16("data/tilesets/secondary/reds/metatiles.bin");
+const u16 gMetatileAttributes_Reds[] = INCBIN_U16("data/tilesets/secondary/reds/metatile_attributes.bin");
+
+const u16 gMetatiles_FRLG_Pallet[] = INCBIN_U16("data/tilesets/secondary/frlg_pallet/metatiles.bin");
+const u16 gMetatileAttributes_FRLG_Pallet[] = INCBIN_U16("data/tilesets/secondary/frlg_pallet/metatile_attributes.bin");
+
+const u16 gMetatiles_johto_general[] = INCBIN_U16("data/tilesets/primary/johto_general/metatiles.bin");
+const u16 gMetatileAttributes_johto_general[] = INCBIN_U16("data/tilesets/primary/johto_general/metatile_attributes.bin");
+
+const u16 gMetatiles_azalea[] = INCBIN_U16("data/tilesets/secondary/azalea/metatiles.bin");
+const u16 gMetatileAttributes_azalea[] = INCBIN_U16("data/tilesets/secondary/azalea/metatile_attributes.bin");
+
+const u16 gMetatiles_pewter_gym[] = INCBIN_U16("data/tilesets/secondary/pewter_gym/metatiles.bin");
+const u16 gMetatileAttributes_pewter_gym[] = INCBIN_U16("data/tilesets/secondary/pewter_gym/metatile_attributes.bin");
+
+const u16 gMetatiles_celadon_gym[] = INCBIN_U16("data/tilesets/secondary/celadon_gym/metatiles.bin");
+const u16 gMetatileAttributes_celadon_gym[] = INCBIN_U16("data/tilesets/secondary/celadon_gym/metatile_attributes.bin");
+
+const u16 gMetatiles_cerulean_gym[] = INCBIN_U16("data/tilesets/secondary/cerulean_gym/metatiles.bin");
+const u16 gMetatileAttributes_cerulean_gym[] = INCBIN_U16("data/tilesets/secondary/cerulean_gym/metatile_attributes.bin");
+
+const u16 gMetatiles_vermilion_gym[] = INCBIN_U16("data/tilesets/secondary/vermilion_gym/metatiles.bin");
+const u16 gMetatileAttributes_vermilion_gym[] = INCBIN_U16("data/tilesets/secondary/vermilion_gym/metatile_attributes.bin");

@@ -247,11 +247,16 @@
 #define OBJ_EVENT_GFX_OW_MON                     240
 #define OBJ_EVENT_GFX_LIGHT_SPRITE               241
 #define OBJ_EVENT_GFX_BROCK_GEN1                 242
-
+#define OBJ_EVENT_GFX_WES                        243  // use next free
+#define OBJ_EVENT_GFX_ROCKET_GRUNT_M_GEN1        244
+#define OBJ_EVENT_GFX_ROCKET_GRUNT_F_GEN1        245
+#define OBJ_EVENT_GFX_GYM_GUY                    246
+#define OBJ_EVENT_GFX_CAMPERG1                   247
+#define OBJ_EVENT_GFX_CUTTABLE_TREE_G1           248
 // NOTE: The maximum amount of object events has been expanded from 255 to 65535.
 // Since dynamic graphics ids still require at least 16 free values, the actual limit
 // is 65519, but even considering follower Pokémon, this should be more than enough :)
-#define NUM_OBJ_EVENT_GFX                        243
+#define NUM_OBJ_EVENT_GFX                        300
 
 
 // These are dynamic object gfx ids.
@@ -380,6 +385,12 @@
 #define OBJ_EVENT_PAL_TAG_DYNAMIC                 0x1124
 //Kanto
 #define OBJ_EVENT_PAL_TAG_BROCK_GEN1              0x1125
+#define OBJ_EVENT_PAL_TAG_CUTTABLE_TREE_G1        0x1126  // or next free
+#define OBJ_EVENT_PAL_TAG_ROCKET_GRUNT_M_GEN1     0x1127
+#define OBJ_EVENT_PAL_TAG_ROCKET_GRUNT_F_GEN1     0x1128
+#define OBJ_EVENT_PAL_TAG_GYM_GUY                 0x1129
+#define OBJ_EVENT_PAL_TAG_CAMPERG1                0x1130
+
 //Johto
 
 //Sinnoh
@@ -389,6 +400,7 @@
 //Kalos 
 
 //XD(Orre)
+#define OBJ_EVENT_PAL_TAG_WES                     0x1126   // next free after your customs
 
 #if OW_FOLLOWERS_POKEBALLS
 // Vanilla

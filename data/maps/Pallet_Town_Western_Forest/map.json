@@ -1,0 +1,26 @@
+{
+  "id": "MAP_PALLET_TOWN_WESTERN_FOREST",
+  "name": "Pallet_Town_Western_Forest",
+  "layout": "LAYOUT_PALLET_TOWN_WESTERN_FOREST",
+  "music": "MUS_RG_PALLET",
+  "region_map_section": "MAPSEC_PALLET_TOWN",
+  "requires_flash": false,
+  "weather": "WEATHER_FOG_DIAGONAL",
+  "map_type": "MAP_TYPE_NONE",
+  "allow_cycling": false,
+  "allow_escaping": false,
+  "allow_running": false,
+  "show_map_name": true,
+  "battle_scene": "MAP_BATTLE_SCENE_NORMAL",
+  "connections": [
+    {
+      "map": "MAP_PALLET_TOWN",
+      "offset": -6,
+      "direction": "right"
+    }
+  ],
+  "object_events": [],
+  "warp_events": [],
+  "coord_events": [],
+  "bg_events": []
+}

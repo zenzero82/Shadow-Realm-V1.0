@@ -1363,6 +1363,26 @@ static const struct SpriteFrameImage sPicTable_BrockGen1[] = {
 
 };
 
+static const struct SpriteFrameImage sPicTable_RocketGruntMGen1[] = {
+    overworld_ascending_frames(gObjectEventPic_RocketGruntMGen1, 4, 4),
+};
+
+static const struct SpriteFrameImage sPicTable_RocketGruntFGen1[] = {
+    overworld_ascending_frames(gObjectEventPic_RocketGruntFGen1, 4, 4),
+};
+
+static const struct SpriteFrameImage sPicTable_GymGuy[] = {
+    overworld_ascending_frames(gObjectEventPic_GymGuy, 2, 4),
+};
+
+static const struct SpriteFrameImage sPicTable_Camperg1[] = {
+    overworld_ascending_frames(gObjectEventPic_Camper, 2, 4),
+};
+
+static const struct SpriteFrameImage sPicTable_CuttableTreeG1[] = {
+    overworld_ascending_frames(gObjectEventPic_CuttableTreeG1, 2, 2),
+};
+
 //Johto
 
 //Sinnoh
@@ -1372,3 +1392,6 @@ static const struct SpriteFrameImage sPicTable_BrockGen1[] = {
 //Kalos 
 
 //XD(Orre)
+static const struct SpriteFrameImage sPicTable_Wes[] = {
+    overworld_ascending_frames(gObjectEventPic_Wes, 2, 4),
+};

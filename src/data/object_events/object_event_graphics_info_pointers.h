@@ -250,6 +250,11 @@ extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_UnusedMauvi
 extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_UnusedMauvilleOldMan2;
 //Kanto
 extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_BrockGen1;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_RocketGruntMGen1;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_RocketGruntFGen1;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_GymGuy;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_Camperg1;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_CuttableTreeG1;
 
 //Johto
 
@@ -260,6 +265,7 @@ extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_BrockGen1;
 //Kalos 
 
 //XD(Orre)
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_Wes;
 
 const struct ObjectEventGraphicsInfo *const gObjectEventGraphicsInfoPointers[NUM_OBJ_EVENT_GFX] = {
     [OBJ_EVENT_GFX_BRENDAN_NORMAL] =           &gObjectEventGraphicsInfo_BrendanNormal,
@@ -506,6 +512,11 @@ const struct ObjectEventGraphicsInfo *const gObjectEventGraphicsInfoPointers[NUM
     [OBJ_EVENT_GFX_LIGHT_SPRITE] =             &gObjectEventGraphicsInfo_BallLight,
     //Kanto
     [OBJ_EVENT_GFX_BROCK_GEN1]   =             &gObjectEventGraphicsInfo_BrockGen1,
+    [OBJ_EVENT_GFX_ROCKET_GRUNT_M_GEN1] =       &gObjectEventGraphicsInfo_RocketGruntMGen1,
+    [OBJ_EVENT_GFX_ROCKET_GRUNT_F_GEN1] =       &gObjectEventGraphicsInfo_RocketGruntFGen1,
+    [OBJ_EVENT_GFX_GYM_GUY] =                   &gObjectEventGraphicsInfo_GymGuy,
+    [OBJ_EVENT_GFX_CAMPERG1]  =                 &gObjectEventGraphicsInfo_Camperg1,
+    [OBJ_EVENT_GFX_CUTTABLE_TREE_G1] =          &gObjectEventGraphicsInfo_CuttableTreeG1,
 
     //Johto
 
@@ -516,6 +527,7 @@ const struct ObjectEventGraphicsInfo *const gObjectEventGraphicsInfoPointers[NUM
     //Kalos 
 
     //XD(Orre)
+    [OBJ_EVENT_GFX_WES]   =                    &gObjectEventGraphicsInfo_Wes,
 
 };
 

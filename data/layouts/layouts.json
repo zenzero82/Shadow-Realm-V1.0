@@ -4410,6 +4410,276 @@
       "secondary_tileset": "gTileset_MysteryEventsHouse",
       "border_filepath": "data/layouts/SootopolisCity_MysteryEventsHouse_1F_StairsUnblocked/border.bin",
       "blockdata_filepath": "data/layouts/SootopolisCity_MysteryEventsHouse_1F_StairsUnblocked/map.bin"
+    },
+    {
+      "id": "LAYOUT_PALLET_TOWN",
+      "name": "Pallet_Town_Layout",
+      "width": 24,
+      "height": 20,
+      "primary_tileset": "gTileset_FRLG_Town",
+      "secondary_tileset": "gTileset_FRLG_Pallet",
+      "border_filepath": "data/layouts/Pallet_Town/border.bin",
+      "blockdata_filepath": "data/layouts/Pallet_Town/map.bin"
+    },
+    {
+      "id": "LAYOUT_PALLET_TOWN_WESTERN_FOREST",
+      "name": "Pallet_Town_Western_Forest_Layout",
+      "width": 10,
+      "height": 10,
+      "primary_tileset": "gTileset_FRLG_Town",
+      "secondary_tileset": "gTileset_FRLG_Pallet",
+      "border_filepath": "data/layouts/Pallet_Town_Western_Forest/border.bin",
+      "blockdata_filepath": "data/layouts/Pallet_Town_Western_Forest/map.bin"
+    },
+    {
+      "id": "LAYOUT_OAKS_LAB",
+      "name": "Oaks_Lab_Layout",
+      "width": 13,
+      "height": 14,
+      "primary_tileset": "gTileset_kanto_inside",
+      "secondary_tileset": "gTileset_Lab",
+      "border_filepath": "data/layouts/Oaks_Lab/border.bin",
+      "blockdata_filepath": "data/layouts/Oaks_Lab/map.bin"
+    },
+    {
+      "id": "LAYOUT_AZALEA_TOWN",
+      "name": "Azalea_Town_Layout",
+      "width": 24,
+      "height": 20,
+      "primary_tileset": "gTileset_johto_general",
+      "secondary_tileset": "gTileset_azalea",
+      "border_filepath": "data/layouts/Azalea_Town/border.bin",
+      "blockdata_filepath": "data/layouts/Azalea_Town/map.bin"
+    },
+    {
+      "id": "LAYOUT_ROUTE1",
+      "name": "Route1_Layout",
+      "width": 20,
+      "height": 40,
+      "primary_tileset": "gTileset_FRLG_Town",
+      "secondary_tileset": "gTileset_FRLG_Pallet",
+      "border_filepath": "data/layouts/Route1/border.bin",
+      "blockdata_filepath": "data/layouts/Route1/map.bin"
+    },
+    {
+      "id": "LAYOUT_VIRIDIAN_CITY",
+      "name": "Viridian_City_Layout",
+      "width": 36,
+      "height": 40,
+      "primary_tileset": "gTileset_FRLG_Town",
+      "secondary_tileset": "gTileset_viridian",
+      "border_filepath": "data/layouts/Viridian_City/border.bin",
+      "blockdata_filepath": "data/layouts/Viridian_City/map.bin"
+    },
+    {
+      "id": "LAYOUT_ROUTE21_NORTH",
+      "name": "Route21_North_Layout",
+      "width": 24,
+      "height": 50,
+      "primary_tileset": "gTileset_FRLG_Town",
+      "secondary_tileset": "gTileset_FRLG_Pallet",
+      "border_filepath": "data/layouts/Route21_North/border.bin",
+      "blockdata_filepath": "data/layouts/Route21_North/map.bin"
+    },
+    {
+      "id": "LAYOUT_REDS_HOUSE",
+      "name": "Reds_House_Layout",
+      "width": 13,
+      "height": 10,
+      "primary_tileset": "gTileset_kanto_inside",
+      "secondary_tileset": "gTileset_FRLG_Pallet",
+      "border_filepath": "data/layouts/Reds_House/border.bin",
+      "blockdata_filepath": "data/layouts/Reds_House/map.bin"
+    },
+    {
+      "id": "LAYOUT_REDS_HOUSE_2ND_FL",
+      "name": "Reds_House_2ndFL_Layout",
+      "width": 12,
+      "height": 9,
+      "primary_tileset": "gTileset_kanto_inside",
+      "secondary_tileset": "gTileset_Reds",
+      "border_filepath": "data/layouts/Reds_House_2ndFL/border.bin",
+      "blockdata_filepath": "data/layouts/Reds_House_2ndFL/map.bin"
+    },
+    {
+      "id": "LAYOUT_ROUTE22",
+      "name": "Route22_Layout",
+      "width": 48,
+      "height": 24,
+      "primary_tileset": "gTileset_FRLG_Town",
+      "secondary_tileset": "gTileset_viridian",
+      "border_filepath": "data/layouts/Route22/border.bin",
+      "blockdata_filepath": "data/layouts/Route22/map.bin"
+    },
+    {
+      "id": "LAYOUT_ROUTE2",
+      "name": "Route2_Layout",
+      "width": 20,
+      "height": 80,
+      "primary_tileset": "gTileset_FRLG_Town",
+      "secondary_tileset": "gTileset_viridian",
+      "border_filepath": "data/layouts/Route2/border.bin",
+      "blockdata_filepath": "data/layouts/Route2/map.bin"
+    },
+    {
+      "id": "LAYOUT_PEWTER_CITY",
+      "name": "Pewter_City_Layout",
+      "width": 48,
+      "height": 40,
+      "primary_tileset": "gTileset_FRLG_Town",
+      "secondary_tileset": "gTileset_viridian",
+      "border_filepath": "data/layouts/Pewter_City/border.bin",
+      "blockdata_filepath": "data/layouts/Pewter_City/map.bin"
+    },
+    {
+      "id": "LAYOUT_BLUES_HOUSE2FL",
+      "name": "Blues_House2fl_Layout",
+      "width": 20,
+      "height": 20,
+      "primary_tileset": "gTileset_General",
+      "secondary_tileset": "gTileset_Petalburg",
+      "border_filepath": "data/layouts/Blues_House2fl/border.bin",
+      "blockdata_filepath": "data/layouts/Blues_House2fl/map.bin"
+    },
+    {
+      "id": "LAYOUT_VIRIDIAN_HOUSE2",
+      "name": "viridian_house2_Layout",
+      "width": 20,
+      "height": 20,
+      "primary_tileset": "gTileset_General",
+      "secondary_tileset": "gTileset_Petalburg",
+      "border_filepath": "data/layouts/viridian_house2/border.bin",
+      "blockdata_filepath": "data/layouts/viridian_house2/map.bin"
+    },
+    {
+      "id": "LAYOUT_VIRIDIAN_GYM",
+      "name": "viridian_gym_Layout",
+      "width": 20,
+      "height": 20,
+      "primary_tileset": "gTileset_General",
+      "secondary_tileset": "gTileset_Petalburg",
+      "border_filepath": "data/layouts/viridian_gym/border.bin",
+      "blockdata_filepath": "data/layouts/viridian_gym/map.bin"
+    },
+    {
+      "id": "LAYOUT_ROUTE2_ENTRANCE1",
+      "name": "route2_entrance1_Layout",
+      "width": 15,
+      "height": 12,
+      "primary_tileset": "gTileset_kanto_inside",
+      "secondary_tileset": "gTileset_viridian",
+      "border_filepath": "data/layouts/route2_entrance1/border.bin",
+      "blockdata_filepath": "data/layouts/route2_entrance1/map.bin"
+    },
+    {
+      "id": "LAYOUT_ROUTE2_HOUSE",
+      "name": "route2_house_Layout",
+      "width": 15,
+      "height": 12,
+      "primary_tileset": "gTileset_kanto_inside",
+      "secondary_tileset": "gTileset_viridian",
+      "border_filepath": "data/layouts/route2_house/border.bin",
+      "blockdata_filepath": "data/layouts/route2_house/map.bin"
+    },
+    {
+      "id": "LAYOUT_PEWTER_POKECENTER",
+      "name": "pewter_pokecenter_Layout",
+      "width": 15,
+      "height": 10,
+      "primary_tileset": "gTileset_General",
+      "secondary_tileset": "gTileset_PokemonCenter",
+      "border_filepath": "data/layouts/pewter_pokecenter/border.bin",
+      "blockdata_filepath": "data/layouts/pewter_pokecenter/map.bin"
+    },
+    {
+      "id": "LAYOUT_PEWTER_POKEMART",
+      "name": "pewter_pokemart_Layout",
+      "width": 11,
+      "height": 9,
+      "primary_tileset": "gTileset_kanto_inside",
+      "secondary_tileset": "gTileset_viridian",
+      "border_filepath": "data/layouts/pewter_pokemart/border.bin",
+      "blockdata_filepath": "data/layouts/pewter_pokemart/map.bin"
+    },
+    {
+      "id": "LAYOUT_PEWTER_GYM",
+      "name": "pewter_gym_Layout",
+      "width": 13,
+      "height": 16,
+      "primary_tileset": "gTileset_kanto_inside",
+      "secondary_tileset": "gTileset_pewter_gym",
+      "border_filepath": "data/layouts/pewter_gym/border.bin",
+      "blockdata_filepath": "data/layouts/pewter_gym/map.bin"
+    },
+    {
+      "id": "LAYOUT_BLUES_HOUSE",
+      "name": "Blues_House_Layout",
+      "width": 20,
+      "height": 20,
+      "primary_tileset": "gTileset_General",
+      "secondary_tileset": "gTileset_Petalburg",
+      "border_filepath": "data/layouts/Blues_House/border.bin",
+      "blockdata_filepath": "data/layouts/Blues_House/map.bin"
+    },
+    {
+      "id": "LAYOUT_VIRIDIAN_POKEMART",
+      "name": "viridian_pokemart_Layout",
+      "width": 20,
+      "height": 20,
+      "primary_tileset": "gTileset_General",
+      "secondary_tileset": "gTileset_Petalburg",
+      "border_filepath": "data/layouts/viridian_pokemart/border.bin",
+      "blockdata_filepath": "data/layouts/viridian_pokemart/map.bin"
+    },
+    {
+      "id": "LAYOUT_ROUTE2_ENTRANCE2",
+      "name": "route2_entrance2_Layout",
+      "width": 15,
+      "height": 12,
+      "primary_tileset": "gTileset_kanto_inside",
+      "secondary_tileset": "gTileset_viridian",
+      "border_filepath": "data/layouts/route2_entrance2/border.bin",
+      "blockdata_filepath": "data/layouts/route2_entrance2/map.bin"
+    },
+    {
+      "id": "LAYOUT_ROUTE2_ENTRANCE3",
+      "name": "route2_entrance3_Layout",
+      "width": 15,
+      "height": 12,
+      "primary_tileset": "gTileset_kanto_inside",
+      "secondary_tileset": "gTileset_viridian",
+      "border_filepath": "data/layouts/route2_entrance3/border.bin",
+      "blockdata_filepath": "data/layouts/route2_entrance3/map.bin"
+    },
+    {
+      "id": "LAYOUT_PEWTER_HOUSE1",
+      "name": "pewter_house1_Layout",
+      "width": 11,
+      "height": 9,
+      "primary_tileset": "gTileset_kanto_inside",
+      "secondary_tileset": "gTileset_viridian",
+      "border_filepath": "data/layouts/pewter_house1/border.bin",
+      "blockdata_filepath": "data/layouts/pewter_house1/map.bin"
+    },
+    {
+      "id": "LAYOUT_VIRIDIAN_HOUSE1",
+      "name": "viridian_house1_Layout",
+      "width": 20,
+      "height": 20,
+      "primary_tileset": "gTileset_General",
+      "secondary_tileset": "gTileset_Petalburg",
+      "border_filepath": "data/layouts/viridian_house1/border.bin",
+      "blockdata_filepath": "data/layouts/viridian_house1/map.bin"
+    },
+    {
+      "id": "LAYOUT_VIRIDIAN_POKECENTER",
+      "name": "viridian_pokecenter_Layout",
+      "width": 20,
+      "height": 20,
+      "primary_tileset": "gTileset_General",
+      "secondary_tileset": "gTileset_Petalburg",
+      "border_filepath": "data/layouts/viridian_pokecenter/border.bin",
+      "blockdata_filepath": "data/layouts/viridian_pokecenter/map.bin"
     }
   ]
 }

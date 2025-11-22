@@ -4929,6 +4929,24 @@ graphics/door_anims/battle_tower_multi_corridor.4bpp: %.4bpp: %.png
 #Kanto
 $(OBJEVENTGFXDIR)/gen1/brock.4bpp: %.4bpp: %.png
 	$(GFX) $< $@ -mwidth 2 -mheight 4
+
+# 32x32 Gen 1 Rocket grunts (9 frames in a 288x32 strip)
+$(OBJEVENTGFXDIR)/gen1/rocketgruntm.4bpp: graphics/object_events/pics/gen1/rocketgruntm.png
+	$(GFX) $< $@ -mwidth 4 -mheight 4
+
+$(OBJEVENTGFXDIR)/gen1/rocketgruntf.4bpp: graphics/object_events/pics/gen1/rocketgruntf.png
+	$(GFX) $< $@ -mwidth 4 -mheight 4
+
+$(OBJEVENTGFXDIR)/gen1/gym_guy.4bpp: %.4bpp: %.png
+	$(GFX) $< $@ -mwidth 2 -mheight 4
+	
+$(OBJEVENTGFXDIR)/gen1/camper.4bpp: %.4bpp: %.png
+	$(GFX) $< $@ -mwidth 2 -mheight 4
+
+# Example – match the existing cut tree rule
+$(OBJEVENTGFXDIR)/gen1/cuttable_tree_g1.4bpp: graphics/object_events/pics/gen1/cuttable_tree_g1.png
+	$(GFX) $< $@ -mwidth 2 -mheight 2
+
 #Johto
 
 #Sinnoh
@@ -4938,3 +4956,5 @@ $(OBJEVENTGFXDIR)/gen1/brock.4bpp: %.4bpp: %.png
 #Kalos 
 
 #XD(Orre)
+$(OBJEVENTGFXDIR)/xd/wes.4bpp: %.4bpp: %.png
+	$(GFX) $< $@ -mwidth 2 -mheight 4

@@ -527,6 +527,10 @@ static const struct SpritePalette sObjectEventSpritePalettes[] = {
     {gObjectEventPal_RubySapphireMay,       OBJ_EVENT_PAL_TAG_RS_MAY},
     //Kanto
     {gObjectEventPal_BrockGen1,             OBJ_EVENT_PAL_TAG_BROCK_GEN1},
+    {gObjectEventPal_RocketGruntMGen1,      OBJ_EVENT_PAL_TAG_ROCKET_GRUNT_M_GEN1},
+    {gObjectEventPal_RocketGruntFGen1,      OBJ_EVENT_PAL_TAG_ROCKET_GRUNT_F_GEN1},
+    {gObjectEventPal_GymGuy,                OBJ_EVENT_PAL_TAG_GYM_GUY},
+    {gObjectEventPal_Camperg1,              OBJ_EVENT_PAL_TAG_CAMPERG1},
     //Johto
 
     //Sinnoh
@@ -536,7 +540,8 @@ static const struct SpritePalette sObjectEventSpritePalettes[] = {
     //Kalos 
 
     //XD(Orre)
-    
+    {gObjectEventPal_Wes,                   OBJ_EVENT_PAL_TAG_WES},
+
 #if OW_FOLLOWERS_POKEBALLS
     {gObjectEventPal_MasterBall,            OBJ_EVENT_PAL_TAG_BALL_MASTER},
     {gObjectEventPal_UltraBall,             OBJ_EVENT_PAL_TAG_BALL_ULTRA},
