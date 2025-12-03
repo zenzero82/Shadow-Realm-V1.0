@@ -6005,6 +6005,8 @@ u16 GetBattleBGM(void)
         case TRAINER_CLASS_PIKE_QUEEN:
         case TRAINER_CLASS_PYRAMID_KING:
             return MUS_VS_FRONTIER_BRAIN;
+        case TRAINER_CLASS_CIPHER_PEON:
+            return MUS_CIPHER_PEON_BATTLE;
         default:
             return MUS_VS_TRAINER;
         }
@@ -7556,26 +7558,4 @@ void Shdw_OnSnagMon(struct Pokemon *mon)
     SetMonData(mon, MON_DATA_SNAGGED, &snagged);
 }
 
-// Returns TRUE if any mon in party/PC has this shadowId
-bool8 PlayerOwnsShadowId(u8 shadowId)
-{
-    s32 i;
-    u16 monShadowId;
 
-    if (shadowId == 0)
-        return FALSE;
-
-    // Check player party only for now
-    for (i = 0; i < PARTY_SIZE; i++)
-    {
-        if (GetMonData(&gPlayerParty[i], MON_DATA_IS_SHADOW, NULL))
-        {
-            monShadowId = GetMonData(&gPlayerParty[i], MON_DATA_SHADOW_ID, NULL);
-            if (monShadowId == shadowId)
-                return TRUE;
-        }
-    }
-
-    // TODO: later we can also scan PC boxes
-    return FALSE;
-}

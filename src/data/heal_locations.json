@@ -131,6 +131,18 @@
       "map": "MAP_BATTLE_FRONTIER_OUTSIDE_EAST",
       "x": 3,
       "y": 52
+    },
+    {
+      "id": "HEAL_LOCATION_PEWTER_CITY",
+      "map": "MAP_PEWTER_CITY",
+      "x": 18,
+      "y": 18
+    },
+    {
+      "id": "HEAL_LOCATION_CERULEAN_CITY",
+      "map": "MAP_CERULEAN_CITY",
+      "x": 28,
+      "y": 20
     }
   ]
 }

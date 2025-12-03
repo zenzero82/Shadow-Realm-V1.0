@@ -19405,6 +19405,7 @@ Move_SHADOW_RUSH::
 	restorebg
 	waitbgfadein
 	clearmonbg ANIM_TARGET
+	clearmonbg ANIM_ATTACKER
 	blendoff
 	end
 

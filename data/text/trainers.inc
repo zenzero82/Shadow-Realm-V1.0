@@ -4794,3 +4794,15 @@ VSSeeker_Text_TrainersNotReady::
 	.string "The other Trainers don't appear\n"
 	.string "to be ready for battle.\p"
 	.string "Let's wait till later.{PAUSE_UNTIL_PRESS}$"
+
+Route1_Text_TorkinIntro:
+	.string "So, you tracked me down...\n"
+	.string "Cipher's reach goes far beyond KANTO!$"
+
+Route1_Text_TorkinDefeated:
+	.string "Tch... You’re stronger than I expected.$"
+
+Route1_Text_TorkinPostBattle:
+	.string "Enjoy this little victory.\p"
+	.string "The Shadow Realm is already seeping\n"
+	.string "into this world...$"

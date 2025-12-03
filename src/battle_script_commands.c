@@ -7661,7 +7661,8 @@ static void Cmd_switchindataupdate(void)
 
     extern void ShadowHud_Clear(u8 battler);
     ShadowHud_Clear(battler);
-    
+    extern void LaunchStatusAnimation(u8 battler, u8 animId);
+
     gBattleScripting.monCaught = FALSE;
     SwitchInClearSetData(battler);
 
@@ -7676,7 +7677,18 @@ static void Cmd_switchindataupdate(void)
     gBattleScripting.battler = battler;
 
     PREPARE_MON_NICK_BUFFER(gBattleTextBuff1, battler, gBattlerPartyIndexes[battler]);
+    // ⭐ NEW: Shadow send-out particles (now that gBattleScripting.battler is set)
+    {
+        struct Pokemon *party = GetBattlerParty(battler);
+        struct Pokemon *mon   = &party[gBattlerPartyIndexes[battler]];
+        u8 isShadowMon        = GetMonData(mon, MON_DATA_IS_SHADOW, NULL);
 
+        // Only flare for enemy Shadow Pokémon; drop the side check if you want it on your own too
+        if (GetBattlerSide(battler) == B_SIDE_OPPONENT && isShadowMon)
+        {
+            LaunchStatusAnimation(battler, B_ANIM_STATUS_SHADOW);
+        }
+    }
     gBattlescriptCurrInstr = cmd->nextInstr;
 }
 

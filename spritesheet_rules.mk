@@ -4926,6 +4926,9 @@ $(OBJEVENTGFXDIR)/misc/ball_%.4bpp: $(OBJEVENTGFXDIR)/misc/ball_%.png ; $(GFX) $
 graphics/door_anims/battle_tower_multi_corridor.4bpp: %.4bpp: %.png
 	$(GFX) $< $@ -mwidth 2 -mheight 4
 
+$(OBJEVENTGFXDIR)/misc/hoopa_ring.4bpp: %.4bpp: %.png
+	$(GFX) $< $@ -mwidth 8 -mheight 8
+
 #Kanto
 $(OBJEVENTGFXDIR)/gen1/brock.4bpp: %.4bpp: %.png
 	$(GFX) $< $@ -mwidth 2 -mheight 4
@@ -4957,4 +4960,7 @@ $(OBJEVENTGFXDIR)/gen1/cuttable_tree_g1.4bpp: graphics/object_events/pics/gen1/c
 
 #XD(Orre)
 $(OBJEVENTGFXDIR)/xd/wes.4bpp: %.4bpp: %.png
+	$(GFX) $< $@ -mwidth 2 -mheight 4
+
+$(OBJEVENTGFXDIR)/xd/cipher_peonm.4bpp: %.4bpp: %.png
 	$(GFX) $< $@ -mwidth 2 -mheight 4

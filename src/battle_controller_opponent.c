@@ -45,6 +45,7 @@ void ShadowHud_Clear(u8 battler);
 void ShadowHud_SyncForBattler(u8 battler);
 void SetBattlerShadowSpriteCallback(u8 battler, u16 species);
 void BattleHud_ApplyHealthboxPalette(u8 battler, bool8 isShadowNow);
+extern void LaunchStatusAnimation(u8 battler, u8 animId);
 
 static void OpponentHandleLoadMonSprite(u32 battler);
 static void OpponentHandleSwitchInAnim(u32 battler);
@@ -418,11 +419,19 @@ static void SwitchIn_ShowHealthbox(u32 battler)
         // Full HUD refresh
         UpdateHealthboxAttribute(gHealthboxSpriteIds[battler], GetBattlerMon(battler), HEALTHBOX_ALL);
 
+        // ⭐ NEW: play shadowparticles when a *real* Shadow Pokémon is sent out
+        {
+            struct Pokemon *party = GetBattlerParty(battler);
+            struct Pokemon *mon   = &party[gBattlerPartyIndexes[battler]];
+            u8 isShadowMon        = GetMonData(mon, MON_DATA_IS_SHADOW, NULL);
+
+            if (isShadowMon)
+                LaunchStatusAnimation(battler, B_ANIM_STATUS_SHADOW);
+        }
 
         gBattlerControllerFuncs[battler] = SwitchIn_ShowSubstitute;
     }
 }
-
 
 
 static void SwitchIn_TryShinyAnim(u32 battler)

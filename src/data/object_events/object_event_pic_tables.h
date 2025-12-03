@@ -1357,6 +1357,12 @@ static const struct SpriteFrameImage sPicTable_RubySapphireMay[] = {
     overworld_ascending_frames(gObjectEventPic_RubySapphireMayNormal, 2, 4),
 };
 
+//misc (NEW)
+static const struct SpriteFrameImage sPicTable_HoopaRing[] =
+{
+    overworld_ascending_frames(gObjectEventPic_HoopaRing, 4, 4),
+};
+
 //Kanto
 static const struct SpriteFrameImage sPicTable_BrockGen1[] = {
     overworld_ascending_frames(gObjectEventPic_BrockGen1, 2, 4),
@@ -1394,4 +1400,8 @@ static const struct SpriteFrameImage sPicTable_CuttableTreeG1[] = {
 //XD(Orre)
 static const struct SpriteFrameImage sPicTable_Wes[] = {
     overworld_ascending_frames(gObjectEventPic_Wes, 2, 4),
+};
+
+static const struct SpriteFrameImage sPicTable_CipherPeonM[] = {
+    overworld_ascending_frames(gObjectEventPic_CipherPeonM, 2, 4),
 };

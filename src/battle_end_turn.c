@@ -220,12 +220,12 @@ static bool32 HandleEndTurnWeatherDamage(u32 battler)
     if (!IsBattlerAlive(battler) || !HasWeatherEffect())
         return effect;
 
-
     switch (currBattleWeather)
     {
     case BATTLE_WEATHER_FOG:
     case BATTLE_WEATHER_STRONG_WINDS:
         break;
+
     case BATTLE_WEATHER_RAIN:
     case BATTLE_WEATHER_RAIN_PRIMAL:
     case BATTLE_WEATHER_RAIN_DOWNPOUR:
@@ -235,6 +235,7 @@ static bool32 HandleEndTurnWeatherDamage(u32 battler)
                 effect = TRUE;
         }
         break;
+
     case BATTLE_WEATHER_SUN:
     case BATTLE_WEATHER_SUN_PRIMAL:
         if (ability == ABILITY_DRY_SKIN || ability == ABILITY_SOLAR_POWER)
@@ -243,6 +244,7 @@ static bool32 HandleEndTurnWeatherDamage(u32 battler)
                 effect = TRUE;
         }
         break;
+
     case BATTLE_WEATHER_SANDSTORM:
         if (ability != ABILITY_SAND_VEIL
          && ability != ABILITY_SAND_FORCE
@@ -261,6 +263,7 @@ static bool32 HandleEndTurnWeatherDamage(u32 battler)
             effect = TRUE;
         }
         break;
+
     case BATTLE_WEATHER_HAIL:
     case BATTLE_WEATHER_SNOW:
         if (ability == ABILITY_ICE_BODY)
@@ -284,6 +287,30 @@ static bool32 HandleEndTurnWeatherDamage(u32 battler)
                 BattleScriptExecute(BattleScript_DamagingWeather);
                 effect = TRUE;
             }
+        }
+        break;
+
+    // ⭐ NEW: Shadow Sky – damage non-shadow mons only
+    case BATTLE_WEATHER_SHADOW_SKY:
+        if (
+            // must be alive (already checked above, but harmless)
+            IsBattlerAlive(battler)
+            // shadow mons are IMMUNE
+            && !gBattleMons[battler].isShadow
+            // same general protections as other weathers
+            && ability != ABILITY_OVERCOAT
+            && !(gStatuses3[battler] & (STATUS3_UNDERGROUND | STATUS3_UNDERWATER))
+            && GetBattlerHoldEffect(battler, TRUE) != HOLD_EFFECT_SAFETY_GOGGLES
+            && !IsBattlerProtectedByMagicGuard(battler, ability)
+        )
+        {
+            gBattleStruct->moveDamage[battler] = GetNonDynamaxMaxHP(battler) / 16;
+            if (gBattleStruct->moveDamage[battler] == 0)
+                gBattleStruct->moveDamage[battler] = 1;
+
+            gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_SHADOW_SKY;
+            BattleScriptExecute(BattleScript_DamagingWeather);
+            effect = TRUE;
         }
         break;
     }

@@ -1182,8 +1182,6 @@ gText_ShadowPurifyReady::
 	.include "data/maps/Route2/scripts.inc"
 	.include "data/maps/Pewter_City/scripts.inc"
 
-	.include "data/maps/Blues_House2fl/scripts.inc"
-
 	.include "data/maps/viridian_house2/scripts.inc"
 
 	.include "data/maps/viridian_gym/scripts.inc"
@@ -1211,3 +1209,33 @@ gText_ShadowPurifyReady::
 	.include "data/maps/pewter_house1/scripts.inc"
 
 	.include "data/maps/route2_entrance3/scripts.inc"
+
+	.include "data/maps/viridian_pokecenter_2fl/scripts.inc"
+
+	.include "data/maps/pewter_pokecenter_2fl/scripts.inc"
+
+	.include "data/maps/pewter_museum/scripts.inc"
+
+	.include "data/maps/pewter_museum2fl/scripts.inc"
+
+	.include "data/maps/viridian_forest/scripts.inc"
+
+	.include "data/maps/New_Bark_Town/scripts.inc"
+
+	.include "data/maps/pewter_house2/scripts.inc"
+
+	.include "data/maps/Route3/scripts.inc"
+
+	.include "data/maps/Cerulean_City/scripts.inc"
+
+	.include "data/maps/Route4/scripts.inc"
+
+	.include "data/maps/MtMoon_Cave/scripts.inc"
+
+	.include "data/maps/Route4_Pokecenter/scripts.inc"
+
+	.include "data/maps/Cerulean_Pokecenter/scripts.inc"
+
+	.include "data/maps/cerulean_pokemart/scripts.inc"
+
+	.include "data/maps/cerulean_gym/scripts.inc"

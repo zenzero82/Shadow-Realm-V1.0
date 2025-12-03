@@ -244,6 +244,9 @@ static void MainMenu_FormatSavegamePokedex(void);
 static void MainMenu_FormatSavegameTime(void);
 static void MainMenu_FormatSavegameBadges(void);
 static void NewGameBirchSpeech_CreateDialogueWindowBorder(u8, u8, u8, u8, u8, u8);
+// add these near the other forward declarations
+static void CB2_NewGame_GenderName(void);
+static void Task_GenderThenName(u8 taskId);
 
 // .rodata
 
@@ -478,49 +481,11 @@ static const struct MenuAction sMenuActions_Gender[] = {
 };
 
 static const u8 *const sMalePresetNames[] = {
-    COMPOUND_STRING("STU"),
-    COMPOUND_STRING("MILTON"),
-    COMPOUND_STRING("TOM"),
-    COMPOUND_STRING("KENNY"),
-    COMPOUND_STRING("REID"),
-    COMPOUND_STRING("JUDE"),
-    COMPOUND_STRING("JAXSON"),
-    COMPOUND_STRING("EASTON"),
-    COMPOUND_STRING("WALKER"),
-    COMPOUND_STRING("TERU"),
-    COMPOUND_STRING("JOHNNY"),
-    COMPOUND_STRING("BRETT"),
-    COMPOUND_STRING("SETH"),
-    COMPOUND_STRING("TERRY"),
-    COMPOUND_STRING("CASEY"),
-    COMPOUND_STRING("DARREN"),
-    COMPOUND_STRING("LANDON"),
-    COMPOUND_STRING("COLLIN"),
-    COMPOUND_STRING("STANLEY"),
-    COMPOUND_STRING("QUINCY")
+    COMPOUND_STRING("ZEN"),
 };
 
 static const u8 *const sFemalePresetNames[] = {
     COMPOUND_STRING("KIMMY"),
-    COMPOUND_STRING("TIARA"),
-    COMPOUND_STRING("BELLA"),
-    COMPOUND_STRING("JAYLA"),
-    COMPOUND_STRING("ALLIE"),
-    COMPOUND_STRING("LIANNA"),
-    COMPOUND_STRING("SARA"),
-    COMPOUND_STRING("MONICA"),
-    COMPOUND_STRING("CAMILA"),
-    COMPOUND_STRING("AUBREE"),
-    COMPOUND_STRING("RUTHIE"),
-    COMPOUND_STRING("HAZEL"),
-    COMPOUND_STRING("NADINE"),
-    COMPOUND_STRING("TANJA"),
-    COMPOUND_STRING("YASMIN"),
-    COMPOUND_STRING("NICOLA"),
-    COMPOUND_STRING("LILLIE"),
-    COMPOUND_STRING("TERRA"),
-    COMPOUND_STRING("LUCY"),
-    COMPOUND_STRING("HALIE")
 };
 
 // The number of male vs. female names is assumed to be the same.
@@ -1079,7 +1044,7 @@ static void Task_HandleMainMenuAPressed(u8 taskId)
             default:
                 gPlttBufferUnfaded[0] = RGB_BLACK;
                 gPlttBufferFaded[0] = RGB_BLACK;
-                gTasks[taskId].func = Task_NewGameBirchSpeech_Init;
+                SetMainCallback2(CB2_NewGame_GenderName);
                 break;
             case ACTION_CONTINUE:
                 gPlttBufferUnfaded[0] = RGB_BLACK;
@@ -2322,5 +2287,79 @@ static void Task_NewGameBirchSpeech_ReturnFromNamingScreenShowTextbox(u8 taskId)
         gTasks[taskId].func = Task_NewGameBirchSpeech_SoItsPlayerName;
     }
 }
+// --- Minimal gender -> naming screen (no Birch scene) ---
+
+#define tWindowInitDone data[0]
+
+static void CB2_NewGame_GenderName(void)
+{
+    // Basic UI reset (same pattern used elsewhere in this file)
+    ResetBgsAndClearDma3BusyFlags(0);
+    SetGpuReg(REG_OFFSET_DISPCNT, 0);
+    ResetTasks();
+    ResetSpriteData();
+    FreeAllSpritePalettes();
+    ResetAllPicSprites();
+
+    // Reuse main menu BG/window helpers already defined in this file
+    InitBgsFromTemplates(0, sMainMenuBgTemplates, ARRAY_COUNT(sMainMenuBgTemplates));
+    ShowBg(0);
+    HideBg(1);
+    InitWindows(sNewGameBirchSpeechTextWindows);
+    LoadMainMenuWindowFrameTiles(0, 0xF3);
+    LoadMessageBoxGfx(0, BIRCH_DLG_BASE_TILE_NUM, BG_PLTT_ID(15));
+    BeginNormalPaletteFade(PALETTES_ALL, 0, 16, 0, RGB_BLACK);
+
+    {
+        u8 taskId = CreateTask(Task_GenderThenName, 0);
+        gTasks[taskId].tWindowInitDone = 0;
+    }
+
+    SetVBlankCallback(VBlankCB_MainMenu);
+    SetMainCallback2(CB2_MainMenu); // run tasks & fades as usual
+}
+
+static void Task_GenderThenName(u8 taskId)
+{
+    // Step 1: prompt + show Boy/Girl menu once
+    if (!gTasks[taskId].tWindowInitDone && !gPaletteFade.active)
+    {
+        NewGameBirchSpeech_ShowDialogueWindow(0, 1);
+        NewGameBirchSpeech_ClearWindow(0);
+        StringCopy(gStringVar4, (const u8 *)"Boy or Girl?");
+        AddTextPrinterForMessage(TRUE);
+
+        NewGameBirchSpeech_ShowGenderMenu();  // draws the list
+        gTasks[taskId].tWindowInitDone = 1;
+        return;
+    }
+
+    if (!gTasks[taskId].tWindowInitDone)
+        return;
+
+    // Step 2: read input; MALE/FEMALE or -1 if none
+    {
+        s8 input = NewGameBirchSpeech_ProcessGenderMenuInput();
+        if (input == MALE || input == FEMALE)
+        {
+            PlaySE(SE_SELECT);
+            gSaveBlock2Ptr->playerGender = input;
+
+            // Step 3: go straight to player naming, then into CB2_NewGame
+            DoNamingScreen(
+                0,                               // 0 = player (use numeric to avoid missing macros)
+                gSaveBlock2Ptr->playerName,
+                0,                               // species (unused for player)
+                gSaveBlock2Ptr->playerGender,    // for the UI
+                0,                               // initial page
+                CB2_NewGame                      // return callback -> your existing New Game flow
+            );
+
+            DestroyTask(taskId); // naming screen owns the flow now
+        }
+    }
+}
+
+#undef tWindowInitDone
 
 #undef tTimer

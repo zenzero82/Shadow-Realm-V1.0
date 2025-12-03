@@ -2,11 +2,11 @@
   "id": "MAP_PEWTER_GYM",
   "name": "pewter_gym",
   "layout": "LAYOUT_PEWTER_GYM",
-  "music": "MUS_RG_PEWTER",
+  "music": "MUS_RG_GYM",
   "region_map_section": "MAPSEC_PEWTER_CITY",
   "requires_flash": false,
   "weather": "WEATHER_NONE",
-  "map_type": "MAP_TYPE_NONE",
+  "map_type": "MAP_TYPE_INDOOR",
   "allow_cycling": false,
   "allow_escaping": false,
   "allow_running": true,
@@ -57,20 +57,6 @@
   "warp_events": [
     {
       "x": 6,
-      "y": 14,
-      "elevation": 0,
-      "dest_map": "MAP_PEWTER_CITY",
-      "dest_warp_id": "3"
-    },
-    {
-      "x": 5,
-      "y": 14,
-      "elevation": 0,
-      "dest_map": "MAP_PEWTER_CITY",
-      "dest_warp_id": "3"
-    },
-    {
-      "x": 7,
       "y": 14,
       "elevation": 0,
       "dest_map": "MAP_PEWTER_CITY",

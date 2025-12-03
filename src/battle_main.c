@@ -372,6 +372,8 @@ const struct TrainerClass gTrainerClasses[TRAINER_CLASS_COUNT] =
     [TRAINER_CLASS_PIKE_QUEEN] = { _("PIKE QUEEN") },
     [TRAINER_CLASS_PYRAMID_KING] = { _("PYRAMID KING") },
     [TRAINER_CLASS_RS_PROTAG] = { _("{PKMN} TRAINER") },
+    [TRAINER_CLASS_CIPHER_PEON] = { _("CIPHER PEON") },
+
 };
 
 static void (*const sTurnActionsFuncsTable[])(void) =
@@ -1882,45 +1884,6 @@ void CustomTrainerPartyAssignMoves(struct Pokemon *mon, const struct TrainerMon 
         SetMonData(mon, MON_DATA_PP1 + j, &pp);
     }
 }
-
-bool8 TrainerHasUnsnaggedShadow(const struct Trainer *trainer)
-{
-    s32 i;
-
-    // In your setup, trainer->party is an array of TrainerMon-style structs
-    const struct TrainerMon *party = (const struct TrainerMon *)trainer->party;
-
-    for (i = 0; i < trainer->partySize; i++)
-    {
-        const struct TrainerMon *tMon = &party[i];
-
-        if (tMon->isShadow && tMon->shadowID != 0)
-        {
-            if (!PlayerOwnsShadowId(tMon->shadowID))
-                return TRUE;    // Found at least one shadow we don't own yet
-        }
-    }
-
-    return FALSE;
-}
-
-// shadow.c or battle_shadow.c or wherever you're putting the helper
-bool8 TrainerHasUnsnaggedShadowById(u16 trainerId, u8 difficulty)
-{
-    const struct Trainer *trainer;
-
-    // Clamp difficulty to something sane
-    if (difficulty >= DIFFICULTY_COUNT)
-        difficulty = DIFFICULTY_NORMAL;
-
-    if (trainerId >= TRAINERS_COUNT)
-        return FALSE;
-
-    trainer = &gTrainers[difficulty][trainerId];
-
-    return TrainerHasUnsnaggedShadow(trainer);
-}
-
 
 u8 CreateNPCTrainerPartyFromTrainer(struct Pokemon *party, const struct Trainer *trainer, bool32 firstTrainer, u32 battleTypeFlags)
 {
@@ -5629,7 +5592,7 @@ static void HandleEndTurn_FinishBattle(void)
                     HandleSetPokedexFlag(SpeciesToNationalPokedexNum(gBattleMons[battler].species), FLAG_SET_SEEN, gBattleMons[battler].personality);
                     if (gBattleMons[battler].isShadow)
                     {
-                        LaunchStatusAnimation(battler, B_ANIM_STATUS_SHADOW);
+                        //LaunchStatusAnimation(battler, B_ANIM_STATUS_SHADOW);
                         PrepareStringBattle(STRINGID_SHADOWPKMNNOTICE, GetBattlerAtPosition(B_POSITION_OPPONENT_LEFT));
                     }
                 }

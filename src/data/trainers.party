@@ -16875,3 +16875,20 @@ Double Battle: No
 Kyogre
 Level: 5
 IVs: 0 HP / 0 Atk / 0 Def / 0 SpA / 0 SpD / 0 Spe
+
+=== TRAINER_TORKIN ===
+Name: TORKIN
+Class: TRAINER_CLASS_CIPHER_PEON       
+Pic: CIPHER_PEON_M      
+Gender: Male
+Music: TRAINER_ENCOUNTER_MUSIC_MALE
+Double Battle: No
+
+pikachu
+Level: 4
+IVs: 0 HP / 0 Atk / 0 Def / 0 SpA / 0 SpD / 0 Spe
+Shadow: Yes
+- Shadow Rush
+- Shadow Sky
+- Shadow Wave
+- Shadow Rave

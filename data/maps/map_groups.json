@@ -433,7 +433,8 @@
     "TerraCave_Entrance",
     "TerraCave_End",
     "AlteringCave",
-    "MeteorFalls_StevensCave"
+    "MeteorFalls_StevensCave",
+    "MtMoon_Cave"
   ],
   "gMapGroup_IndoorDynamic": [
     "SecretBase_RedCave1",
@@ -630,23 +631,28 @@
     "Pallet_Town_Western_Forest",
     "Oaks_Lab",
     "Viridian_City",
-    "Pewter_City"
+    "Pewter_City",
+    "Cerulean_City"
   ],
   "gMapGroup_Johto": [
-    "Azalea_Town"
+    "Azalea_Town",
+    "New_Bark_Town"
   ],
   "gMapGroup_Kanto_Routes": [
     "Route1",
     "Route21_North",
     "Route22",
-    "Route2"
+    "Route2",
+    "viridian_forest",
+    "Route3",
+    "Route4"
   ],
   "gMapGroup_Kanto_Indoors": [
     "Reds_House",
     "Reds_House_2ndFL",
     "Blues_House",
-    "Blues_House2fl",
     "viridian_pokecenter",
+    "viridian_pokecenter_2fl",
     "viridian_pokemart",
     "viridian_house1",
     "viridian_house2",
@@ -656,8 +662,16 @@
     "route2_entrance3",
     "route2_house",
     "pewter_pokecenter",
+    "pewter_pokecenter_2fl",
     "pewter_pokemart",
     "pewter_house1",
-    "pewter_gym"
+    "pewter_gym",
+    "pewter_museum",
+    "pewter_museum2fl",
+    "pewter_house2",
+    "Route4_Pokecenter",
+    "Cerulean_Pokecenter",
+    "cerulean_pokemart",
+    "cerulean_gym"
   ]
 }

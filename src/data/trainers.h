@@ -15401,14 +15401,10 @@ F_TRAINER_FEMALE |
             .iv = TRAINER_PARTY_IVS(0, 0, 0, 0, 0, 0),
 #line 6219
             .lvl = 4,
-            .nature = NATURE_ADAMANT,
+            .nature = NATURE_HARDY,
             .dynamaxLevel = MAX_DYNAMAX_LEVEL,
 #line 6221
- // Shadow info
-            .isShadow    = TRUE,
-            .boostLevel  = 0,                       // optional level boost system
-            .shadowID    = 1,                       // any ID you want to track this mon
-            .heartGauge  = 1000,                    // 👈 FULL heart/lock gauge
+            .isShadow = TRUE,
             .moves = {
 #line 6222
                 MOVE_SHADOW_RUSH,
@@ -42181,6 +42177,45 @@ F_TRAINER_FEMALE |
             .lvl = 5,
             .nature = NATURE_HARDY,
             .dynamaxLevel = MAX_DYNAMAX_LEVEL,
+            },
+        },
+    },
+#line 16879
+    [DIFFICULTY_NORMAL][TRAINER_TORKIN] =
+    {
+#line 16880
+        .trainerName = _("TORKIN"),
+#line 16881
+        .trainerClass = TRAINER_CLASS_CIPHER_PEON,
+#line 16882
+        .trainerPic = TRAINER_PIC_CIPHER_PEON_M,
+        .encounterMusic_gender =
+#line 16884
+            TRAINER_ENCOUNTER_MUSIC_CIPHER_PEON,
+#line 16885
+        .battleType = TRAINER_BATTLE_TYPE_SINGLES,
+        .partySize = 1,
+        .party = (const struct TrainerMon[])
+        {
+            {
+#line 16887
+            .species = SPECIES_PIKACHU,
+            .gender = TRAINER_MON_RANDOM_GENDER,
+#line 16889
+            .iv = TRAINER_PARTY_IVS(0, 0, 0, 0, 0, 0),
+#line 16888
+            .lvl = 4,
+            .nature = NATURE_HARDY,
+            .dynamaxLevel = MAX_DYNAMAX_LEVEL,
+#line 16890
+            .isShadow = TRUE,
+            .moves = {
+#line 16891
+                MOVE_SHADOW_RUSH,
+                MOVE_SHADOW_SKY,
+                MOVE_SHADOW_WAVE,
+                MOVE_SHADOW_RAVE,
+            },
             },
         },
     },

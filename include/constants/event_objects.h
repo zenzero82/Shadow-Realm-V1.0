@@ -253,6 +253,9 @@
 #define OBJ_EVENT_GFX_GYM_GUY                    246
 #define OBJ_EVENT_GFX_CAMPERG1                   247
 #define OBJ_EVENT_GFX_CUTTABLE_TREE_G1           248
+#define OBJ_EVENT_GFX_CIPHER_PEON_M              249
+#define OBJ_EVENT_GFX_HOOPA_RING                 250
+
 // NOTE: The maximum amount of object events has been expanded from 255 to 65535.
 // Since dynamic graphics ids still require at least 16 free values, the actual limit
 // is 65519, but even considering follower Pokémon, this should be more than enough :)
@@ -383,6 +386,8 @@
 #define OBJ_EVENT_PAL_TAG_RS_BRENDAN              0x1122
 #define OBJ_EVENT_PAL_TAG_RS_MAY                  0x1123
 #define OBJ_EVENT_PAL_TAG_DYNAMIC                 0x1124
+//misc (NEW)
+#define OBJ_EVENT_PAL_TAG_HOOPA_RING              0x1132
 //Kanto
 #define OBJ_EVENT_PAL_TAG_BROCK_GEN1              0x1125
 #define OBJ_EVENT_PAL_TAG_CUTTABLE_TREE_G1        0x1126  // or next free
@@ -401,6 +406,7 @@
 
 //XD(Orre)
 #define OBJ_EVENT_PAL_TAG_WES                     0x1126   // next free after your customs
+#define OBJ_EVENT_PAL_TAG_CIPHER_PEON_M           0x1131
 
 #if OW_FOLLOWERS_POKEBALLS
 // Vanilla

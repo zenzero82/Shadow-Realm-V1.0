@@ -490,7 +490,7 @@
     },
     {
       "id": "MAPSEC_ABANDONED_SHIP",
-      "name": "ABANDONED SHIP",
+      "name": "viri",
       "x": 6,
       "y": 14,
       "width": 1,
@@ -1702,6 +1702,14 @@
       "y": 4,
       "width": 1,
       "height": 1
+    },
+    {
+      "id": "MAPSEC_AZALEA_TOWN",
+      "name": "AZALEA TOWN"
+    },
+    {
+      "id": "MAPSEC_NEW_BARK_TOWN",
+      "name": "NEW BARK TOWN"
     }
   ]
 }

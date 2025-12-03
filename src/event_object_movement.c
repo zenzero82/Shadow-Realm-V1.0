@@ -525,6 +525,9 @@ static const struct SpritePalette sObjectEventSpritePalettes[] = {
     {gObjectEventPal_Lugia,                 OBJ_EVENT_PAL_TAG_LUGIA},
     {gObjectEventPal_RubySapphireBrendan,   OBJ_EVENT_PAL_TAG_RS_BRENDAN},
     {gObjectEventPal_RubySapphireMay,       OBJ_EVENT_PAL_TAG_RS_MAY},
+    //misc(NEW)
+    {gObjectEventPal_HoopaRing,             OBJ_EVENT_PAL_TAG_HOOPA_RING},
+
     //Kanto
     {gObjectEventPal_BrockGen1,             OBJ_EVENT_PAL_TAG_BROCK_GEN1},
     {gObjectEventPal_RocketGruntMGen1,      OBJ_EVENT_PAL_TAG_ROCKET_GRUNT_M_GEN1},
@@ -541,6 +544,7 @@ static const struct SpritePalette sObjectEventSpritePalettes[] = {
 
     //XD(Orre)
     {gObjectEventPal_Wes,                   OBJ_EVENT_PAL_TAG_WES},
+    {gObjectEventPal_CipherPeonM,           OBJ_EVENT_PAL_TAG_CIPHER_PEON_M},
 
 #if OW_FOLLOWERS_POKEBALLS
     {gObjectEventPal_MasterBall,            OBJ_EVENT_PAL_TAG_BALL_MASTER},

@@ -5,7 +5,7 @@
   "music": "MUS_RG_PALLET",
   "region_map_section": "MAPSEC_PALLET_TOWN",
   "requires_flash": false,
-  "weather": "WEATHER_FOG_DIAGONAL",
+  "weather": "WEATHER_NONE",
   "map_type": "MAP_TYPE_TOWN",
   "allow_cycling": true,
   "allow_escaping": true,
@@ -15,12 +15,12 @@
   "connections": [
     {
       "map": "MAP_PALLET_TOWN_WESTERN_FOREST",
-      "offset": 6,
+      "offset": 4,
       "direction": "left"
     },
     {
       "map": "MAP_ROUTE1",
-      "offset": 0,
+      "offset": 2,
       "direction": "up"
     },
     {
@@ -39,10 +39,17 @@
       "dest_warp_id": "0"
     },
     {
-      "x": 5,
-      "y": 6,
+      "x": 6,
+      "y": 7,
       "elevation": 0,
       "dest_map": "MAP_REDS_HOUSE",
+      "dest_warp_id": "0"
+    },
+    {
+      "x": 15,
+      "y": 7,
+      "elevation": 0,
+      "dest_map": "MAP_BLUES_HOUSE",
       "dest_warp_id": "0"
     }
   ],
@@ -50,15 +57,7 @@
   "bg_events": [
     {
       "type": "sign",
-      "x": 4,
-      "y": 14,
-      "elevation": 0,
-      "player_facing_dir": "BG_EVENT_PLAYER_FACING_ANY",
-      "script": "NULL"
-    },
-    {
-      "type": "sign",
-      "x": 8,
+      "x": 9,
       "y": 11,
       "elevation": 0,
       "player_facing_dir": "BG_EVENT_PLAYER_FACING_ANY",
@@ -74,8 +73,8 @@
     },
     {
       "type": "sign",
-      "x": 3,
-      "y": 6,
+      "x": 4,
+      "y": 7,
       "elevation": 0,
       "player_facing_dir": "BG_EVENT_PLAYER_FACING_ANY",
       "script": "NULL"
@@ -83,7 +82,7 @@
     {
       "type": "sign",
       "x": 13,
-      "y": 6,
+      "y": 7,
       "elevation": 0,
       "player_facing_dir": "BG_EVENT_PLAYER_FACING_ANY",
       "script": "NULL"

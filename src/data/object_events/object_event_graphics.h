@@ -463,6 +463,10 @@ const u16 gObjectEventPal_StrangeBall[] = INCBIN_U16("graphics/object_events/pic
 const u32 gFieldEffectObjectPic_CaveDust[] = INCBIN_U32("graphics/field_effects/pics/cave_dust.4bpp");
 const u16 gFieldEffectObjectPalette_CaveDust[] = INCBIN_U16("graphics/field_effects/palettes/cave_dust.gbapal");
 
+//misc (NEW)
+const u32 gObjectEventPic_HoopaRing[] = INCBIN_U32("graphics/object_events/pics/misc/hoopa_ring.4bpp");
+const u16 gObjectEventPal_HoopaRing[] = INCBIN_U16("graphics/object_events/pics/misc/hoopa_ring.gbapal");
+
 //Kanto Trainers
 const u16 gObjectEventPal_BrockGen1[] = INCBIN_U16("graphics/object_events/pics/gen1/brock.gbapal");
 const u32 gObjectEventPic_BrockGen1[] = INCBIN_U32("graphics/object_events/pics/gen1/brock.4bpp");
@@ -493,3 +497,6 @@ const u32 gObjectEventPic_CuttableTreeG1[] = INCBIN_U32("graphics/object_events/
 //XD(Orre) Trainers
 const u16 gObjectEventPal_Wes[] = INCBIN_U16("graphics/object_events/pics/xd/wes.gbapal");
 const u32 gObjectEventPic_Wes[] = INCBIN_U32("graphics/object_events/pics/xd/wes.4bpp");
+
+const u16 gObjectEventPal_CipherPeonM[] = INCBIN_U16("graphics/object_events/pics/xd/cipher_peonm.gbapal");
+const u32 gObjectEventPic_CipherPeonM[] = INCBIN_U32("graphics/object_events/pics/xd/cipher_peonm.4bpp");

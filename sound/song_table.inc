@@ -560,7 +560,6 @@ gSongTable::
 	song mus_rg_trainer_tower, 0, 0
 	song mus_rg_slow_pallet, 0, 0
 	song mus_rg_teachy_tv_menu, 0, 0
-	song mus_cipher_peon_battle, 0, 0
 	song ph_trap_blend, 2, 2
 	song ph_trap_held, 2, 2
 	song ph_trap_solo, 2, 2
@@ -612,6 +611,11 @@ gSongTable::
 	song ph_nurse_blend, 2, 2
 	song ph_nurse_held, 2, 2
 	song ph_nurse_solo, 2, 2
+	song mus_cipher_peon_battle, 0, 0
+	song mus_newsorre, 0, 0
+	song mus_mirrorb, 0, 0
+	song mus_orretrainer, 0, 0
+
 
 	.align 2
 dummy_song_header:

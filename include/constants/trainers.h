@@ -108,7 +108,8 @@
 #define TRAINER_PIC_LEAF                  90
 #define TRAINER_PIC_RS_BRENDAN            91
 #define TRAINER_PIC_RS_MAY                92
-#define TRAINER_PIC_COUNT                 93
+#define TRAINER_PIC_CIPHER_PEON_M         93
+#define TRAINER_PIC_COUNT                 94
 
 // The player back pics are assumed to alternate according to the gender values (MALE/FEMALE)
 #define TRAINER_BACK_PIC_BRENDAN                0
@@ -202,8 +203,9 @@
 #define FACILITY_CLASS_LEAF                  0x4f
 #define FACILITY_CLASS_RS_BRENDAN            0x50
 #define FACILITY_CLASS_RS_MAY                0x51
+#define FACILITY_CLASS_CIPHER_PEON           0x52
 
-#define FACILITY_CLASSES_COUNT               0x52
+#define FACILITY_CLASSES_COUNT               0x53
 
 #define RS_FACILITY_CLASS_AQUA_LEADER_ARCHIE    0x0
 #define RS_FACILITY_CLASS_AQUA_GRUNT_M          0x1
@@ -351,7 +353,8 @@
 #define TRAINER_CLASS_PIKE_QUEEN     0x3f
 #define TRAINER_CLASS_PYRAMID_KING   0x40
 #define TRAINER_CLASS_RS_PROTAG      0x41
-#define TRAINER_CLASS_COUNT          0x42
+#define TRAINER_CLASS_CIPHER_PEON    0x42
+#define TRAINER_CLASS_COUNT          0x44
 
 #define TRAINER_ENCOUNTER_MUSIC_MALE         0 // standard male encounter music
 #define TRAINER_ENCOUNTER_MUSIC_FEMALE       1 // standard female encounter music
@@ -367,7 +370,7 @@
 #define TRAINER_ENCOUNTER_MUSIC_HIKER       11 // used for other trainer classes too
 #define TRAINER_ENCOUNTER_MUSIC_INTERVIEWER 12
 #define TRAINER_ENCOUNTER_MUSIC_RICH        13 // Rich Boys and Gentlemen
-
+#define TRAINER_ENCOUNTER_MUSIC_CIPHER_PEON 14
 #define F_TRAINER_FEMALE (1 << 7)
 
 // Trainer party defines

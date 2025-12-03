@@ -63,15 +63,6 @@ static void HealPlayerBoxes(void)
     }
 }
 
-bool8 TrainerHasUnsnaggedShadow_Native(void)
-{
-    // For now, hard-code Allen with difficulty 0
-    if (TrainerHasUnsnaggedShadowById(TRAINER_ALLEN, 0))
-      gSpecialVar_Result = TRUE;
-    return FALSE; // standard for callnative
-}
-
-
 u8 ScriptGiveEgg(u16 species)
 {
     struct Pokemon mon;

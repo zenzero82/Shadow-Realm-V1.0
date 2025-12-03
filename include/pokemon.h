@@ -726,11 +726,6 @@ u8  Shdw_GetState(u16 shadowId);
 void Shdw_SetState(u16 shadowId, u8 state);
 void Shdw_OnEncounterMon(struct Pokemon *mon);
 void Shdw_OnSnagMon(struct Pokemon *mon);
-bool8 PlayerOwnsShadowId(u8 shadowId);
-bool8 TrainerHasUnsnaggedShadow(const struct Trainer *trainer);
-bool8 TrainerHasUnsnaggedShadowById(u16 trainerId, u8 difficulty);
-bool8 TrainerHasUnsnaggedShadow_Native(void);
-
 void ConvertPokemonToBattleTowerPokemon(struct Pokemon *mon, struct BattleTowerPokemon *dest);
 bool8 ShouldIgnoreDeoxysForm(u8 caseId, u8 battler);
 u16 GetUnionRoomTrainerPic(void);
