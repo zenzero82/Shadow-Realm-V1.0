@@ -43,24 +43,31 @@
 #define TEMP_FLAGS_END   FLAG_TEMP_1F
 #define NUM_TEMP_FLAGS   (TEMP_FLAGS_END - TEMP_FLAGS_START + 1)
 
+//Shadow Flags Only
 #define FLAG_HAS_SNAG_MACHINE  0x20 // Unused Flag
 #define FLAG_SHADOW_MON_READY_TO_PURIFY    0x21 // Unused Flag
-#define FLAG_UNUSED_0x022    0x22 // Unused Flag
-#define FLAG_UNUSED_0x023    0x23 // Unused Flag
-#define FLAG_UNUSED_0x024    0x24 // Unused Flag
-#define FLAG_UNUSED_0x025    0x25 // Unused Flag
-#define FLAG_UNUSED_0x026    0x26 // Unused Flag
-#define FLAG_UNUSED_0x027    0x27 // Unused Flag
-#define FLAG_UNUSED_0x028    0x28 // Unused Flag
-#define FLAG_UNUSED_0x029    0x29 // Unused Flag
-#define FLAG_UNUSED_0x02A    0x2A // Unused Flag
-#define FLAG_UNUSED_0x02B    0x2B // Unused Flag
-#define FLAG_UNUSED_0x02C    0x2C // Unused Flag
-#define FLAG_UNUSED_0x02D    0x2D // Unused Flag
-#define FLAG_UNUSED_0x02E    0x2E // Unused Flag
-#define FLAG_UNUSED_0x02F    0x2F // Unused Flag
-#define FLAG_UNUSED_0x030    0x30 // Unused Flag
-#define FLAG_UNUSED_0x031    0x31 // Unused Flag
+
+//Pallet & Route 1
+#define FLAG_MET_ROUTE1_AIDE 0x022
+#define FLAG_HIDE_PALLET_LEO          0x023  // hides Leo near Route 1 in Pallet
+#define FLAG_HIDE_OAKS_LAB_LEO        0x024  // hides Leo inside Oak's Lab (object 6)
+#define FLAG_OAKS_LAB_LEO_SCENE_DONE  0x025
+#define FLAG_WEST_FOREST_INTRO_DONE  0x026
+#define FLAG_HIDE_OAKS_LAB_RALTSBALL    0x027
+#define FLAG_HIDE_OAKS_LAB_HONEDGEBALL  0x028
+#define FLAG_HIDE_OAKS_LAB_ZORUABALL    0x029
+#define FLAG_HIDE_ROUTE1_TORKIN  0x02A  // pick any free unused flag slot
+
+//Viridian Flags
+#define FLAG_VIRIDIAN_JJ_BATTLE_DONE    0x2B // Unused Flag
+#define FLAG_VIRIDIAN_GONZAP_SCENE_DONE    0x2C // Unused Flag
+#define FLAG_HIDE_VIRIDIAN_GONZAP    0x2D // Unused Flag
+#define FLAG_HIDE_VIRIDIAN_JJ_GROUP  0x02E  // hides Jessie, James, Meowth in Viridian
+
+//Pewter Flags
+#define FLAG_PEWTER_BROCK_WES_SCENE_DONE    0x2F // Unused Flag
+#define FLAG_HIDE_PEWTER_CITY_BROCK    0x30 // Unused Flag
+#define FLAG_HIDE_PEWTER_CITY_WES   0x31 // Unused Flag
 #define FLAG_UNUSED_0x032    0x32 // Unused Flag
 #define FLAG_UNUSED_0x033    0x33 // Unused Flag
 #define FLAG_UNUSED_0x034    0x34 // Unused Flag
@@ -1364,7 +1371,24 @@
 #define FLAG_BADGE06_GET                             (SYSTEM_FLAGS + 0xC)
 #define FLAG_BADGE07_GET                             (SYSTEM_FLAGS + 0xD)
 #define FLAG_BADGE08_GET                             (SYSTEM_FLAGS + 0xE)
-#define NUM_BADGES                                   (1 + FLAG_BADGE08_GET - FLAG_BADGE01_GET)
+//Start Kanto & Johto Badges
+#define FLAG_BADGE09_GET                           (SYSTEM_FLAGS + 0x85) // kanto 1
+#define FLAG_BADGE10_GET                           (SYSTEM_FLAGS + 0x86) // kanto 2
+#define FLAG_BADGE11_GET                           (SYSTEM_FLAGS + 0x87) // kanto 3
+#define FLAG_BADGE12_GET                           (SYSTEM_FLAGS + 0x88) // kanto 4
+#define FLAG_BADGE13_GET                           (SYSTEM_FLAGS + 0x89) // kanto 5
+#define FLAG_BADGE14_GET                           (SYSTEM_FLAGS + 0x8A) // kanto 6
+#define FLAG_BADGE15_GET                           (SYSTEM_FLAGS + 0x8B) // kanto 7
+#define FLAG_BADGE16_GET                           (SYSTEM_FLAGS + 0x8C) // kanto 8
+#define FLAG_BADGE17_GET                           (SYSTEM_FLAGS + 0x8D) // johto 1
+#define FLAG_BADGE18_GET                           (SYSTEM_FLAGS + 0x8E) // johto 2
+#define FLAG_BADGE19_GET                           (SYSTEM_FLAGS + 0x8F) // johto 3
+#define FLAG_BADGE20_GET                           (SYSTEM_FLAGS + 0x90) // johto 4
+#define FLAG_BADGE21_GET                           (SYSTEM_FLAGS + 0x91) // johto 5
+#define FLAG_BADGE22_GET                           (SYSTEM_FLAGS + 0x92) // johto 6
+#define FLAG_BADGE23_GET                           (SYSTEM_FLAGS + 0x93) // johto 7
+#define FLAG_BADGE24_GET                           (SYSTEM_FLAGS + 0x94) // johto 8
+#define NUM_BADGES 24
 
 // Towns and Cities
 #define FLAG_VISITED_LITTLEROOT_TOWN                (SYSTEM_FLAGS + 0xF)
@@ -1387,10 +1411,11 @@
 #define FLAG_IS_CHAMPION                            (SYSTEM_FLAGS + 0x1F) // Seems to be related to linking.
 #define FLAG_NURSE_UNION_ROOM_REMINDER              (SYSTEM_FLAGS + 0x20)
 
-#define FLAG_UNUSED_0x881                           (SYSTEM_FLAGS + 0x21) // Unused Flag
-#define FLAG_UNUSED_0x882                           (SYSTEM_FLAGS + 0x22) // Unused Flag
-#define FLAG_UNUSED_0x883                           (SYSTEM_FLAGS + 0x23) // Unused Flag
-#define FLAG_UNUSED_0x884                           (SYSTEM_FLAGS + 0x24) // Unused Flag
+// Kanto/Johto Towns and Cities
+#define FLAG_VISITED_PALLET_TOWN                    (SYSTEM_FLAGS + 0x21) 
+#define FLAG_VISITED_VIRIDIAN_CITY                  (SYSTEM_FLAGS + 0x22) // Unused Flag
+#define FLAG_VISITED_PEWTER_CITY                    (SYSTEM_FLAGS + 0x23) // Unused Flag
+#define FLAG_VISITED_CERULEAN_CITY                  (SYSTEM_FLAGS + 0x24) // Unused Flag
 #define FLAG_UNUSED_0x885                           (SYSTEM_FLAGS + 0x25) // Unused Flag
 #define FLAG_UNUSED_0x886                           (SYSTEM_FLAGS + 0x26) // Unused Flag
 #define FLAG_UNUSED_0x887                           (SYSTEM_FLAGS + 0x27) // Unused Flag
@@ -1506,22 +1531,7 @@
 
 #define FLAG_RECEIVED_POKEDEX_FROM_BIRCH            (SYSTEM_FLAGS + 0x84)
 
-#define FLAG_UNUSED_0x8E5                           (SYSTEM_FLAGS + 0x85) // Unused Flag
-#define FLAG_UNUSED_0x8E6                           (SYSTEM_FLAGS + 0x86) // Unused Flag
-#define FLAG_UNUSED_0x8E7                           (SYSTEM_FLAGS + 0x87) // Unused Flag
-#define FLAG_UNUSED_0x8E8                           (SYSTEM_FLAGS + 0x88) // Unused Flag
-#define FLAG_UNUSED_0x8E9                           (SYSTEM_FLAGS + 0x89) // Unused Flag
-#define FLAG_UNUSED_0x8EA                           (SYSTEM_FLAGS + 0x8A) // Unused Flag
-#define FLAG_UNUSED_0x8EB                           (SYSTEM_FLAGS + 0x8B) // Unused Flag
-#define FLAG_UNUSED_0x8EC                           (SYSTEM_FLAGS + 0x8C) // Unused Flag
-#define FLAG_UNUSED_0x8ED                           (SYSTEM_FLAGS + 0x8D) // Unused Flag
-#define FLAG_UNUSED_0x8EE                           (SYSTEM_FLAGS + 0x8E) // Unused Flag
-#define FLAG_UNUSED_0x8EF                           (SYSTEM_FLAGS + 0x8F) // Unused Flag
-#define FLAG_UNUSED_0x8F0                           (SYSTEM_FLAGS + 0x90) // Unused Flag
-#define FLAG_UNUSED_0x8F1                           (SYSTEM_FLAGS + 0x91) // Unused Flag
-#define FLAG_UNUSED_0x8F2                           (SYSTEM_FLAGS + 0x92) // Unused Flag
-#define FLAG_UNUSED_0x8F3                           (SYSTEM_FLAGS + 0x93) // Unused Flag
-#define FLAG_UNUSED_0x8F4                           (SYSTEM_FLAGS + 0x94) // Unused Flag
+
 #define FLAG_UNUSED_0x8F5                           (SYSTEM_FLAGS + 0x95) // Unused Flag
 #define FLAG_UNUSED_0x8F6                           (SYSTEM_FLAGS + 0x96) // Unused Flag
 #define FLAG_UNUSED_0x8F7                           (SYSTEM_FLAGS + 0x97) // Unused Flag

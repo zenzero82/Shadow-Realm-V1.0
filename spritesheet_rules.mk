@@ -4927,13 +4927,12 @@ graphics/door_anims/battle_tower_multi_corridor.4bpp: %.4bpp: %.png
 	$(GFX) $< $@ -mwidth 2 -mheight 4
 
 $(OBJEVENTGFXDIR)/misc/hoopa_ring.4bpp: %.4bpp: %.png
-	$(GFX) $< $@ -mwidth 8 -mheight 8
+	$(GFX) $< $@ -mwidth 4 -mheight 4
 
 #Kanto
 $(OBJEVENTGFXDIR)/gen1/brock.4bpp: %.4bpp: %.png
 	$(GFX) $< $@ -mwidth 2 -mheight 4
 
-# 32x32 Gen 1 Rocket grunts (9 frames in a 288x32 strip)
 $(OBJEVENTGFXDIR)/gen1/rocketgruntm.4bpp: graphics/object_events/pics/gen1/rocketgruntm.png
 	$(GFX) $< $@ -mwidth 4 -mheight 4
 
@@ -4949,6 +4948,45 @@ $(OBJEVENTGFXDIR)/gen1/camper.4bpp: %.4bpp: %.png
 # Example – match the existing cut tree rule
 $(OBJEVENTGFXDIR)/gen1/cuttable_tree_g1.4bpp: graphics/object_events/pics/gen1/cuttable_tree_g1.png
 	$(GFX) $< $@ -mwidth 2 -mheight 2
+
+$(OBJEVENTGFXDIR)/gen1/gary_oak.4bpp: graphics/object_events/pics/gen1/gary_oak.png
+	$(GFX) $< $@ -mwidth 2 -mheight 4
+
+$(OBJEVENTGFXDIR)/gen1/giovanni.4bpp: graphics/object_events/pics/gen1/giovanni.png
+	$(GFX) $< $@ -mwidth 2 -mheight 4
+
+$(OBJEVENTGFXDIR)/gen1/misty.4bpp: graphics/object_events/pics/gen1/misty.png
+	$(GFX) $< $@ -mwidth 2 -mheight 4
+
+$(OBJEVENTGFXDIR)/gen1/petrel.4bpp: graphics/object_events/pics/gen1/petrel.png
+	$(GFX) $< $@ -mwidth 2 -mheight 4
+
+$(OBJEVENTGFXDIR)/gen1/scientist_m.4bpp: graphics/object_events/pics/gen1/scientist_m.png
+	$(GFX) $< $@ -mwidth 2 -mheight 4
+
+$(OBJEVENTGFXDIR)/gen1/scientist_f.4bpp: graphics/object_events/pics/gen1/scientist_f.png
+	$(GFX) $< $@ -mwidth 2 -mheight 4
+
+$(OBJEVENTGFXDIR)/gen1/woman_5.4bpp: graphics/object_events/pics/gen1/woman_5.png
+	$(GFX) $< $@ -mwidth 2 -mheight 4
+
+$(OBJEVENTGFXDIR)/gen1/beauty2.4bpp: graphics/object_events/pics/gen1/beauty2.png
+	$(GFX) $< $@ -mwidth 2 -mheight 4
+
+$(OBJEVENTGFXDIR)/gen1/fat_man2.4bpp: graphics/object_events/pics/gen1/fat_man2.png
+	$(GFX) $< $@ -mwidth 2 -mheight 4
+
+$(OBJEVENTGFXDIR)/gen1/blue_mom.4bpp: graphics/object_events/pics/gen1/blue_mom.png
+	$(GFX) $< $@ -mwidth 2 -mheight 4
+
+$(OBJEVENTGFXDIR)/gen1/jessie.4bpp: graphics/object_events/pics/gen1/jessie.png
+	$(GFX) $< $@ -mwidth 2 -mheight 4
+
+$(OBJEVENTGFXDIR)/gen1/james.4bpp: graphics/object_events/pics/gen1/james.png
+	$(GFX) $< $@ -mwidth 2 -mheight 4
+
+$(OBJEVENTGFXDIR)/gen1/meowth.4bpp: graphics/object_events/pics/gen1/meowth.png
+	$(GFX) $< $@ -mwidth 2 -mheight 4
 
 #Johto
 

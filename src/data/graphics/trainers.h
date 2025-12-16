@@ -281,7 +281,23 @@ const u32 gTrainerFrontPic_RubySapphireMay[] = INCBIN_U32("graphics/trainers/fro
 const u16 gTrainerPalette_RubySapphireMay[] = INCBIN_U16("graphics/trainers/palettes/may_rs.gbapal");
 
 //Kanto
+const u32 gTrainerFrontPic_Giovanni[]      = INCBIN_U32("graphics/trainers/front_pics/giovanni.4bpp.lz");
+const u16 gTrainerPalette_Giovanni[]       = INCBIN_U16("graphics/trainers/front_pics/giovanni.gbapal");
 
+const u32 gTrainerFrontPic_JessieJames[]   = INCBIN_U32("graphics/trainers/front_pics/jj.4bpp.lz");
+const u16 gTrainerPalette_JessieJames[]    = INCBIN_U16("graphics/trainers/front_pics/jj.gbapal");
+
+const u32 gTrainerFrontPic_RocketGruntM[]  = INCBIN_U32("graphics/trainers/front_pics/rocket_grunt_m.4bpp.lz");
+const u16 gTrainerPalette_RocketGruntM[]   = INCBIN_U16("graphics/trainers/front_pics/rocket_grunt_m.gbapal");
+
+const u32 gTrainerFrontPic_RocketGruntF[]  = INCBIN_U32("graphics/trainers/front_pics/rocket_grunt_f.4bpp.lz");
+const u16 gTrainerPalette_RocketGruntF[]   = INCBIN_U16("graphics/trainers/front_pics/rocket_grunt_f.gbapal");
+
+const u32 gTrainerFrontPic_BrockKanto[]    = INCBIN_U32("graphics/trainers/front_pics/brock.4bpp.lz");
+const u16 gTrainerPalette_BrockKanto[]     = INCBIN_U16("graphics/trainers/front_pics/brock.gbapal");
+
+const u32 gTrainerFrontPic_CamperKanto[]   = INCBIN_U32("graphics/trainers/front_pics/camper_kanto.4bpp.lz");
+const u16 gTrainerPalette_CamperKanto[]    = INCBIN_U16("graphics/trainers/front_pics/camper_kanto.gbapal");
 //Johto
 
 //Hoenn
@@ -419,7 +435,12 @@ const struct TrainerSprite gTrainerSprites[] =
     TRAINER_SPRITE(TRAINER_PIC_RS_MAY, gTrainerFrontPic_RubySapphireMay, gTrainerPalette_RubySapphireMay),
     
     //Kanto
-
+    TRAINER_SPRITE(TRAINER_PIC_GIOVANNI, gTrainerFrontPic_Giovanni, gTrainerPalette_Giovanni),
+    TRAINER_SPRITE(TRAINER_PIC_JESSIE_JAMES, gTrainerFrontPic_JessieJames, gTrainerPalette_JessieJames),
+    TRAINER_SPRITE(TRAINER_PIC_ROCKET_GRUNT_M, gTrainerFrontPic_RocketGruntM, gTrainerPalette_RocketGruntM),
+    TRAINER_SPRITE(TRAINER_PIC_ROCKET_GRUNT_F, gTrainerFrontPic_RocketGruntF, gTrainerPalette_RocketGruntF),
+        TRAINER_SPRITE(TRAINER_PIC_BROCK_KANTO, gTrainerFrontPic_BrockKanto, gTrainerPalette_BrockKanto),
+    TRAINER_SPRITE(TRAINER_PIC_CAMPER_KANTO, gTrainerFrontPic_CamperKanto, gTrainerPalette_CamperKanto),
     //XD
     TRAINER_SPRITE(TRAINER_PIC_CIPHER_PEON_M, gTrainerFrontPic_CipherPeonM, gTrainerPalette_CipherPeonM),
 

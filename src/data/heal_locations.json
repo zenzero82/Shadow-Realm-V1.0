@@ -135,14 +135,110 @@
     {
       "id": "HEAL_LOCATION_PEWTER_CITY",
       "map": "MAP_PEWTER_CITY",
-      "x": 18,
-      "y": 18
+      "x": 19,
+      "y": 30
     },
     {
       "id": "HEAL_LOCATION_CERULEAN_CITY",
       "map": "MAP_CERULEAN_CITY",
-      "x": 28,
+      "x": 30,
       "y": 20
+    },
+    {
+      "id": "HEAL_LOCATION_PALLET_TOWN",
+      "map": "MAP_PALLET_TOWN",
+      "x": 11,
+      "y": 9
+    },
+    {
+      "id": "HEAL_LOCATION_CELADON_CITY",
+      "map": "MAP_CELADON_CITY",
+      "x": 48,
+      "y": 12
+    },
+    {
+      "id": "HEAL_LOCATION_CHERRYGROVE_CITY",
+      "map": "MAP_CHERRYGROVE_CITY",
+      "x": 13,
+      "y": 11
+    },
+    {
+      "id": "HEAL_LOCATION_CINNABAR_ISLAND",
+      "map": "MAP_CINNABAR_ISLAND",
+      "x": 45,
+      "y": 30
+    },
+    {
+      "id": "HEAL_LOCATION_ECRUTEAK_CITY",
+      "map": "MAP_ECRUTEAK_CITY",
+      "x": 13,
+      "y": 11
+    },
+    {
+      "id": "HEAL_LOCATION_FUCHSIA_CITY",
+      "map": "MAP_FUCHSIA_CITY",
+      "x": 25,
+      "y": 32
+    },
+    {
+      "id": "HEAL_LOCATION_GOLDENROD_CITY",
+      "map": "MAP_GOLDENROD_CITY",
+      "x": 13,
+      "y": 11
+    },
+    {
+      "id": "HEAL_LOCATION_LAVENDER_TOWN",
+      "map": "MAP_LAVENDER_TOWN",
+      "x": 10,
+      "y": 6
+    },
+    {
+      "id": "HEAL_LOCATION_MAHOGANY_TOWN",
+      "map": "MAP_MAHOGANY_TOWN",
+      "x": 13,
+      "y": 19
+    },
+    {
+      "id": "HEAL_LOCATION_OLIVINE_CITY",
+      "map": "MAP_OLIVINE_CITY",
+      "x": 13,
+      "y": 11
+    },
+    {
+      "id": "HEAL_LOCATION_SAFFRON_CITY",
+      "map": "MAP_SAFFRON_CITY",
+      "x": 16,
+      "y": 39
+    },
+    {
+      "id": "HEAL_LOCATION_VERMILION_CITY",
+      "map": "MAP_VERMILION_CITY",
+      "x": 22,
+      "y": 5
+    },
+    {
+      "id": "HEAL_LOCATION_VIOLET_CITY",
+      "map": "MAP_VIOLET_CITY",
+      "x": 13,
+      "y": 11
+    },
+    {
+      "id": "HEAL_LOCATION_VIRIDIAN_CITY",
+      "map": "MAP_VIRIDIAN_CITY",
+      "x": 26,
+      "y": 27
+    },
+    {
+      "id": "HEAL_LOCATION_ROUTE4",
+      "map": "MAP_ROUTE4",
+      "x": 12,
+      "y": 6
+    },
+    {
+      "id": "HEAL_LOCATION_ROUTE10",
+      "map": "MAP_ROUTE10",
+      "x": 21,
+      "y": 21
     }
   ]
 }

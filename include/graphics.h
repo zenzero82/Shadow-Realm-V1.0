@@ -3284,6 +3284,7 @@ extern const u16 gContestResultsTitle_Tilemap[];
 extern const u16 gHoennTrainerCardGreen_Pal[];
 extern const u32 gHoennTrainerCard_Gfx[];
 extern const u16 gKantoTrainerCardBlue_Pal[];
+extern const u16 gJohtoTrainerCardGold_Pal[];
 extern const u32 gKantoTrainerCard_Gfx[];
 extern const u32 gKantoTrainerCardBg_Tilemap[];
 extern const u32 gHoennTrainerCardBack_Tilemap[];

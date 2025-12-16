@@ -67,6 +67,10 @@
 #include "constants/weather.h"
 #include "wild_encounter.h"
 #include "constants/shadow.h"
+#include "script.h"
+#include "constants/vars.h"
+#include "constants/species.h"
+
 
 #define FRIENDSHIP_EVO_THRESHOLD ((P_FRIENDSHIP_EVO_THRESHOLD >= GEN_8) ? 160 : 220)
 
@@ -7559,3 +7563,27 @@ void Shdw_OnSnagMon(struct Pokemon *mon)
 }
 
 
+//Get Starter
+void GiveStarterMon(void)
+{
+    struct Pokemon mon;
+    u16 species;
+
+    /* Read the species from script var 0x8004 */
+    species = VarGet(VAR_0x8004);
+
+    if (species == SPECIES_NONE)
+        return;
+
+    /* Create a level 5 Pokemon with no fixed IVs or personality */
+    CreateMon(&mon,
+              species,
+              5,                  /* level */
+              0,                  /* fixedIV */
+              FALSE,              /* hasFixedPersonality */
+              0,                  /* fixedPersonality */
+              OT_ID_PLAYER_ID,    /* OT id type */
+              0);                 /* fixedOtId */
+
+    GiveMonToPlayer(&mon);
+}

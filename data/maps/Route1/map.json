@@ -15,40 +15,68 @@
   "connections": [
     {
       "map": "MAP_PALLET_TOWN",
-      "offset": -2,
+      "offset": 0,
       "direction": "down"
     },
     {
       "map": "MAP_VIRIDIAN_CITY",
-      "offset": -14,
+      "offset": -12,
       "direction": "up"
     }
   ],
   "object_events": [
     {
       "graphics_id": "OBJ_EVENT_GFX_CIPHER_PEON_M",
-      "x": 9,
+      "x": 11,
       "y": 33,
       "elevation": 0,
-      "movement_type": "MOVEMENT_TYPE_WANDER_LEFT_AND_RIGHT",
+      "movement_type": "MOVEMENT_TYPE_FACE_LEFT",
       "movement_range_x": 0,
       "movement_range_y": 0,
       "trainer_type": "TRAINER_TYPE_NONE",
       "trainer_sight_or_berry_tree_id": "0",
       "script": "Route1_EventScript_Torkin",
-      "flag": "0"
+      "flag": "FLAG_HIDE_ROUTE1_TORKIN"
     }
   ],
   "warp_events": [],
-  "coord_events": [],
+  "coord_events": [
+    {
+      "type": "trigger",
+      "x": 12,
+      "y": 34,
+      "elevation": 0,
+      "var": "VAR_TEMP_0",
+      "var_value": "0",
+      "script": "Route1_EventScript_TorkinTrigger0"
+    },
+    {
+      "type": "trigger",
+      "x": 12,
+      "y": 33,
+      "elevation": 0,
+      "var": "VAR_TEMP_0",
+      "var_value": "0",
+      "script": "Route1_EventScript_TorkinTrigger1"
+    },
+    {
+      "type": "trigger",
+      "x": 12,
+      "y": 32,
+      "elevation": 0,
+      "var": "VAR_TEMP_0",
+      "var_value": "0",
+      "script": "Route1_EventScript_TorkinTrigger2"
+    }
+  ],
   "bg_events": [
     {
       "type": "sign",
-      "x": 7,
+      "x": 9,
       "y": 31,
       "elevation": 0,
       "player_facing_dir": "BG_EVENT_PLAYER_FACING_ANY",
-      "script": "NULL"
+      "script": "Route1_EventScript_Sign"
     }
   ]
 }

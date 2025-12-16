@@ -6,7 +6,7 @@
   "region_map_section": "MAPSEC_ROUTE_3",
   "requires_flash": false,
   "weather": "WEATHER_NONE",
-  "map_type": "MAP_TYPE_NONE",
+  "map_type": "MAP_TYPE_ROUTE",
   "allow_cycling": true,
   "allow_escaping": true,
   "allow_running": true,
@@ -15,7 +15,7 @@
   "connections": [
     {
       "map": "MAP_PEWTER_CITY",
-      "offset": -15,
+      "offset": -16,
       "direction": "left"
     },
     {

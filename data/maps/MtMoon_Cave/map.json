@@ -7,7 +7,7 @@
   "requires_flash": false,
   "weather": "WEATHER_NONE",
   "map_type": "MAP_TYPE_UNDERGROUND",
-  "allow_cycling": false,
+  "allow_cycling": true,
   "allow_escaping": true,
   "allow_running": true,
   "show_map_name": true,
@@ -26,15 +26,15 @@
       "x": 24,
       "y": 10,
       "elevation": 0,
-      "dest_map": "MAP_MT_MOON_CAVE",
+      "dest_map": "MAP_MT_MOON_OUTSIDE",
       "dest_warp_id": "0"
     },
     {
       "x": 32,
       "y": 21,
       "elevation": 0,
-      "dest_map": "MAP_MT_MOON_CAVE",
-      "dest_warp_id": "0"
+      "dest_map": "MAP_MT_MOON_OUTSIDE",
+      "dest_warp_id": "2"
     },
     {
       "x": 46,

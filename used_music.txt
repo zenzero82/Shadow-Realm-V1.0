@@ -1,0 +1,1980 @@
+src/frontier_pass.c:        PlayBGM(MUS_B_PYRAMID);
+src/frontier_pass.c:        PlayBGM(MUS_B_PYRAMID_TOP);
+src/strings.c:ALIGNED(4) const u8 gText_EndedWithXUnitsPowder[] = _("{PAUSE_MUSIC}{PLAY_BGM MUS_LEVEL_UP}You ended up with {STR_VAR_1} units of\nsilky-smooth BERRY POWDER.{RESUME_MUSIC}\pYour total amount of BERRY POWDER\nis {STR_VAR_2}.\p");
+src/trade.c:        PlayBGM(MUS_SCHOOL);
+src/trade.c:        PlayNewMapMusic(MUS_EVOLUTION);
+src/trade.c:            PlayFanfare(MUS_EVOLVED);
+src/trade.c:        PlayNewMapMusic(MUS_EVOLUTION);
+src/trade.c:            PlayFanfare(MUS_EVOLVED);
+src/main_menu.c:    PlayBGM(MUS_ROUTE122);
+src/contest.c:            PlayFanfare(MUS_TOO_BAD);
+src/cable_club.c:            PlayMapChosenOrBattleBGM(MUS_VS_GYM_LEADER);
+src/cable_club.c:            PlayMapChosenOrBattleBGM(MUS_VS_TRAINER);
+src/cable_club.c:            PlayMapChosenOrBattleBGM(MUS_VS_GYM_LEADER);
+src/cable_club.c:            PlayMapChosenOrBattleBGM(MUS_VS_TRAINER);
+src/field_specials.c:        Overworld_SetSavedMusic(MUS_DUMMY);
+src/mystery_gift_menu.c:        PlayBGM(MUS_RG_MYSTERY_GIFT);
+src/mystery_gift_menu.c:        PlayFanfare(MUS_OBTAIN_ITEM);
+src/roulette.c:            PlayFanfare(MUS_SLOTS_JACKPOT);
+src/roulette.c:            PlayFanfare(MUS_SLOTS_WIN);
+src/sound.c:    [FANFARE_LEVEL_UP]            = { MUS_LEVEL_UP,             80 },
+src/sound.c:    [FANFARE_OBTAIN_ITEM]         = { MUS_OBTAIN_ITEM,         160 },
+src/sound.c:    [FANFARE_EVOLVED]             = { MUS_EVOLVED,             220 },
+src/sound.c:    [FANFARE_OBTAIN_TMHM]         = { MUS_OBTAIN_TMHM,         220 },
+src/sound.c:    [FANFARE_HEAL]                = { MUS_HEAL,                160 },
+src/sound.c:    [FANFARE_OBTAIN_BADGE]        = { MUS_OBTAIN_BADGE,        340 },
+src/sound.c:    [FANFARE_MOVE_DELETED]        = { MUS_MOVE_DELETED,        180 },
+src/sound.c:    [FANFARE_OBTAIN_BERRY]        = { MUS_OBTAIN_BERRY,        120 },
+src/sound.c:    [FANFARE_AWAKEN_LEGEND]       = { MUS_AWAKEN_LEGEND,       710 },
+src/sound.c:    [FANFARE_SLOTS_JACKPOT]       = { MUS_SLOTS_JACKPOT,       250 },
+src/sound.c:    [FANFARE_SLOTS_WIN]           = { MUS_SLOTS_WIN,           150 },
+src/sound.c:    [FANFARE_TOO_BAD]             = { MUS_TOO_BAD,             160 },
+src/sound.c:    [FANFARE_RG_POKE_FLUTE]       = { MUS_RG_POKE_FLUTE,       450 },
+src/sound.c:    [FANFARE_RG_OBTAIN_KEY_ITEM]  = { MUS_RG_OBTAIN_KEY_ITEM,  170 },
+src/sound.c:    [FANFARE_RG_DEX_RATING]       = { MUS_RG_DEX_RATING,       196 },
+src/sound.c:    [FANFARE_OBTAIN_B_POINTS]     = { MUS_OBTAIN_B_POINTS,     313 },
+src/sound.c:    [FANFARE_OBTAIN_SYMBOL]       = { MUS_OBTAIN_SYMBOL,       318 },
+src/sound.c:    [FANFARE_REGISTER_MATCH_CALL] = { MUS_REGISTER_MATCH_CALL, 135 },
+src/sound.c:            m4aSongNumStart(MUS_DUMMY);
+src/sound.c:    if (songNum == MUS_NONE)
+src/sound.c:    if (songNum == MUS_NONE)
+src/move_relearner.c:            PlayFanfare(MUS_LEVEL_UP);
+src/move_relearner.c:            PlayFanfare(MUS_LEVEL_UP);
+src/event_object_movement.c:    if (GetCurrentMapMusic() == MUS_GYM || GetCurrentMapMusic() == MUS_RG_GYM)
+src/bike.c:        Overworld_SetSavedMusic(MUS_CYCLING);
+src/bike.c:        Overworld_ChangeMusicTo(MUS_CYCLING);
+src/party_menu.c:        PlayFanfare(MUS_LEVEL_UP);
+src/follower_helper.c:            MATCH_MUSIC(MUS_POKE_MART)
+src/follower_helper.c:            MATCH_MUSIC(MUS_VICTORY_ROAD)
+src/follower_helper.c:            MATCH_MUSIC(MUS_SAILING),
+src/follower_helper.c:            MATCH_MUSIC(MUS_MT_PYRE),
+src/evolution_scene.c:            PlaySE(MUS_EVOLUTION_INTRO);
+src/evolution_scene.c:            PlayNewMapMusic(MUS_EVOLUTION);
+src/evolution_scene.c:            PlayBGM(MUS_EVOLVED);
+src/evolution_scene.c:            PlayFanfare(MUS_LEVEL_UP);
+src/evolution_scene.c:            m4aSongNumStop(MUS_EVOLUTION);
+src/evolution_scene.c:            PlaySE(MUS_EVOLUTION_INTRO);
+src/evolution_scene.c:            PlayBGM(MUS_EVOLUTION);
+src/evolution_scene.c:            PlayFanfare(MUS_EVOLVED);
+src/evolution_scene.c:                PlayBGM(MUS_EVOLUTION);
+src/evolution_scene.c:            PlayFanfare(MUS_LEVEL_UP);
+src/battle_script_commands.c:                    PlayBGM(MUS_VICTORY_WILD);
+src/battle_script_commands.c:        BtlController_EmitPlayFanfareOrBGM(battler, B_COMM_TO_CONTROLLER, MUS_VICTORY_TRAINER, TRUE);
+src/pokeball.c:        PlaySE(MUS_EVOLVED);
+src/battle_anim_throw.c:        PlaySE(MUS_RG_CAUGHT_INTRO);
+src/title_screen.c:        m4aSongNumStart(MUS_TITLE);
+src/battle_main.c:            PlayBGM(MUS_VICTORY_GYM_LEADER);
+src/battle_main.c:            PlayBGM(MUS_VICTORY_TRAINER);
+src/battle_main.c:            PlayBGM(MUS_VICTORY_LEAGUE);
+src/battle_main.c:            PlayBGM(MUS_VICTORY_AQUA_MAGMA);
+src/battle_main.c:            PlayBGM(MUS_VICTORY_GYM_LEADER);
+src/battle_main.c:            PlayBGM(MUS_VICTORY_TRAINER);
+src/debug.c:static void DebugAction_Sound_MUS_SelectId(u8 taskId);
+src/debug.c:        PlaySE(MUS_LEVEL_UP);
+src/debug.c:            PlaySE(MUS_LEVEL_UP);
+src/debug.c:            PlaySE(MUS_LEVEL_UP);
+src/debug.c:                    PlayBGM(MUS_RG_MYSTERY_GIFT);
+src/debug.c:    PlaySE(MUS_LEVEL_UP);
+src/debug.c:    gTasks[taskId].func = DebugAction_Sound_MUS_SelectId;
+src/debug.c:static void DebugAction_Sound_MUS_SelectId(u8 taskId)
+src/debug.c:    X(MUS_LITTLEROOT_TEST) \
+src/debug.c:    X(MUS_GSC_ROUTE38) \
+src/debug.c:    X(MUS_CAUGHT) \
+src/debug.c:    X(MUS_VICTORY_WILD) \
+src/debug.c:    X(MUS_VICTORY_GYM_LEADER) \
+src/debug.c:    X(MUS_VICTORY_LEAGUE) \
+src/debug.c:    X(MUS_C_COMM_CENTER) \
+src/debug.c:    X(MUS_GSC_PEWTER) \
+src/debug.c:    X(MUS_C_VS_LEGEND_BEAST) \
+src/debug.c:    X(MUS_ROUTE101) \
+src/debug.c:    X(MUS_ROUTE110) \
+src/debug.c:    X(MUS_ROUTE120) \
+src/debug.c:    X(MUS_PETALBURG) \
+src/debug.c:    X(MUS_OLDALE) \
+src/debug.c:    X(MUS_GYM) \
+src/debug.c:    X(MUS_SURF) \
+src/debug.c:    X(MUS_PETALBURG_WOODS) \
+src/debug.c:    X(MUS_LEVEL_UP) \
+src/debug.c:    X(MUS_HEAL) \
+src/debug.c:    X(MUS_OBTAIN_BADGE) \
+src/debug.c:    X(MUS_OBTAIN_ITEM) \
+src/debug.c:    X(MUS_EVOLVED) \
+src/debug.c:    X(MUS_OBTAIN_TMHM) \
+src/debug.c:    X(MUS_LILYCOVE_MUSEUM) \
+src/debug.c:    X(MUS_ROUTE122) \
+src/debug.c:    X(MUS_OCEANIC_MUSEUM) \
+src/debug.c:    X(MUS_EVOLUTION_INTRO) \
+src/debug.c:    X(MUS_EVOLUTION) \
+src/debug.c:    X(MUS_MOVE_DELETED) \
+src/debug.c:    X(MUS_ENCOUNTER_GIRL) \
+src/debug.c:    X(MUS_ENCOUNTER_MALE) \
+src/debug.c:    X(MUS_ABANDONED_SHIP) \
+src/debug.c:    X(MUS_FORTREE) \
+src/debug.c:    X(MUS_BIRCH_LAB) \
+src/debug.c:    X(MUS_B_TOWER_RS) \
+src/debug.c:    X(MUS_ENCOUNTER_SWIMMER) \
+src/debug.c:    X(MUS_CAVE_OF_ORIGIN) \
+src/debug.c:    X(MUS_OBTAIN_BERRY) \
+src/debug.c:    X(MUS_AWAKEN_LEGEND) \
+src/debug.c:    X(MUS_SLOTS_JACKPOT) \
+src/debug.c:    X(MUS_SLOTS_WIN) \
+src/debug.c:    X(MUS_TOO_BAD) \
+src/debug.c:    X(MUS_ROULETTE) \
+src/debug.c:    X(MUS_LINK_CONTEST_P1) \
+src/debug.c:    X(MUS_LINK_CONTEST_P2) \
+src/debug.c:    X(MUS_LINK_CONTEST_P3) \
+src/debug.c:    X(MUS_LINK_CONTEST_P4) \
+src/debug.c:    X(MUS_ENCOUNTER_RICH) \
+src/debug.c:    X(MUS_VERDANTURF) \
+src/debug.c:    X(MUS_RUSTBORO) \
+src/debug.c:    X(MUS_POKE_CENTER) \
+src/debug.c:    X(MUS_ROUTE104) \
+src/debug.c:    X(MUS_ROUTE119) \
+src/debug.c:    X(MUS_CYCLING) \
+src/debug.c:    X(MUS_POKE_MART) \
+src/debug.c:    X(MUS_LITTLEROOT) \
+src/debug.c:    X(MUS_MT_CHIMNEY) \
+src/debug.c:    X(MUS_ENCOUNTER_FEMALE) \
+src/debug.c:    X(MUS_LILYCOVE) \
+src/debug.c:    X(MUS_ROUTE111) \
+src/debug.c:    X(MUS_HELP) \
+src/debug.c:    X(MUS_UNDERWATER) \
+src/debug.c:    X(MUS_VICTORY_TRAINER) \
+src/debug.c:    X(MUS_TITLE) \
+src/debug.c:    X(MUS_INTRO) \
+src/debug.c:    X(MUS_ENCOUNTER_MAY) \
+src/debug.c:    X(MUS_ENCOUNTER_INTENSE) \
+src/debug.c:    X(MUS_ENCOUNTER_COOL) \
+src/debug.c:    X(MUS_ROUTE113) \
+src/debug.c:    X(MUS_ENCOUNTER_AQUA) \
+src/debug.c:    X(MUS_FOLLOW_ME) \
+src/debug.c:    X(MUS_ENCOUNTER_BRENDAN) \
+src/debug.c:    X(MUS_EVER_GRANDE) \
+src/debug.c:    X(MUS_ENCOUNTER_SUSPICIOUS) \
+src/debug.c:    X(MUS_VICTORY_AQUA_MAGMA) \
+src/debug.c:    X(MUS_CABLE_CAR) \
+src/debug.c:    X(MUS_GAME_CORNER) \
+src/debug.c:    X(MUS_DEWFORD) \
+src/debug.c:    X(MUS_SAFARI_ZONE) \
+src/debug.c:    X(MUS_VICTORY_ROAD) \
+src/debug.c:    X(MUS_AQUA_MAGMA_HIDEOUT) \
+src/debug.c:    X(MUS_SAILING) \
+src/debug.c:    X(MUS_MT_PYRE) \
+src/debug.c:    X(MUS_SLATEPORT) \
+src/debug.c:    X(MUS_MT_PYRE_EXTERIOR) \
+src/debug.c:    X(MUS_SCHOOL) \
+src/debug.c:    X(MUS_HALL_OF_FAME) \
+src/debug.c:    X(MUS_FALLARBOR) \
+src/debug.c:    X(MUS_SEALED_CHAMBER) \
+src/debug.c:    X(MUS_CONTEST_WINNER) \
+src/debug.c:    X(MUS_CONTEST) \
+src/debug.c:    X(MUS_ENCOUNTER_MAGMA) \
+src/debug.c:    X(MUS_INTRO_BATTLE) \
+src/debug.c:    X(MUS_WEATHER_KYOGRE) \
+src/debug.c:    X(MUS_WEATHER_GROUDON) \
+src/debug.c:    X(MUS_SOOTOPOLIS) \
+src/debug.c:    X(MUS_CONTEST_RESULTS) \
+src/debug.c:    X(MUS_HALL_OF_FAME_ROOM) \
+src/debug.c:    X(MUS_TRICK_HOUSE) \
+src/debug.c:    X(MUS_ENCOUNTER_TWINS) \
+src/debug.c:    X(MUS_ENCOUNTER_ELITE_FOUR) \
+src/debug.c:    X(MUS_ENCOUNTER_HIKER) \
+src/debug.c:    X(MUS_CONTEST_LOBBY) \
+src/debug.c:    X(MUS_ENCOUNTER_INTERVIEWER) \
+src/debug.c:    X(MUS_ENCOUNTER_CHAMPION) \
+src/debug.c:    X(MUS_CREDITS) \
+src/debug.c:    X(MUS_END) \
+src/debug.c:    X(MUS_B_FRONTIER) \
+src/debug.c:    X(MUS_B_ARENA) \
+src/debug.c:    X(MUS_OBTAIN_B_POINTS) \
+src/debug.c:    X(MUS_REGISTER_MATCH_CALL) \
+src/debug.c:    X(MUS_B_PYRAMID) \
+src/debug.c:    X(MUS_B_PYRAMID_TOP) \
+src/debug.c:    X(MUS_B_PALACE) \
+src/debug.c:    X(MUS_RAYQUAZA_APPEARS) \
+src/debug.c:    X(MUS_B_TOWER) \
+src/debug.c:    X(MUS_OBTAIN_SYMBOL) \
+src/debug.c:    X(MUS_B_DOME) \
+src/debug.c:    X(MUS_B_PIKE) \
+src/debug.c:    X(MUS_B_FACTORY) \
+src/debug.c:    X(MUS_VS_RAYQUAZA) \
+src/debug.c:    X(MUS_VS_FRONTIER_BRAIN) \
+src/debug.c:    X(MUS_VS_MEW) \
+src/debug.c:    X(MUS_B_DOME_LOBBY) \
+src/debug.c:    X(MUS_VS_WILD) \
+src/debug.c:    X(MUS_VS_AQUA_MAGMA) \
+src/debug.c:    X(MUS_VS_TRAINER) \
+src/debug.c:    X(MUS_VS_GYM_LEADER) \
+src/debug.c:    X(MUS_VS_CHAMPION) \
+src/debug.c:    X(MUS_VS_REGI) \
+src/debug.c:    X(MUS_VS_KYOGRE_GROUDON) \
+src/debug.c:    X(MUS_VS_RIVAL) \
+src/debug.c:    X(MUS_VS_ELITE_FOUR) \
+src/debug.c:    X(MUS_VS_AQUA_MAGMA_LEADER) \
+src/debug.c:    X(MUS_RG_FOLLOW_ME) \
+src/debug.c:    X(MUS_RG_GAME_CORNER) \
+src/debug.c:    X(MUS_RG_ROCKET_HIDEOUT) \
+src/debug.c:    X(MUS_RG_GYM) \
+src/debug.c:    X(MUS_RG_JIGGLYPUFF) \
+src/debug.c:    X(MUS_RG_INTRO_FIGHT) \
+src/debug.c:    X(MUS_RG_TITLE) \
+src/debug.c:    X(MUS_RG_CINNABAR) \
+src/debug.c:    X(MUS_RG_LAVENDER) \
+src/debug.c:    X(MUS_RG_HEAL) \
+src/debug.c:    X(MUS_RG_CYCLING) \
+src/debug.c:    X(MUS_RG_ENCOUNTER_ROCKET) \
+src/debug.c:    X(MUS_RG_ENCOUNTER_GIRL) \
+src/debug.c:    X(MUS_RG_ENCOUNTER_BOY) \
+src/debug.c:    X(MUS_RG_HALL_OF_FAME) \
+src/debug.c:    X(MUS_RG_VIRIDIAN_FOREST) \
+src/debug.c:    X(MUS_RG_MT_MOON) \
+src/debug.c:    X(MUS_RG_POKE_MANSION) \
+src/debug.c:    X(MUS_RG_CREDITS) \
+src/debug.c:    X(MUS_RG_ROUTE1) \
+src/debug.c:    X(MUS_RG_ROUTE24) \
+src/debug.c:    X(MUS_RG_ROUTE3) \
+src/debug.c:    X(MUS_RG_ROUTE11) \
+src/debug.c:    X(MUS_RG_VICTORY_ROAD) \
+src/debug.c:    X(MUS_RG_VS_GYM_LEADER) \
+src/debug.c:    X(MUS_RG_VS_TRAINER) \
+src/debug.c:    X(MUS_RG_VS_WILD) \
+src/debug.c:    X(MUS_RG_VS_CHAMPION) \
+src/debug.c:    X(MUS_RG_PALLET) \
+src/debug.c:    X(MUS_RG_OAK_LAB) \
+src/debug.c:    X(MUS_RG_OAK) \
+src/debug.c:    X(MUS_RG_POKE_CENTER) \
+src/debug.c:    X(MUS_RG_SS_ANNE) \
+src/debug.c:    X(MUS_RG_SURF) \
+src/debug.c:    X(MUS_RG_POKE_TOWER) \
+src/debug.c:    X(MUS_RG_SILPH) \
+src/debug.c:    X(MUS_RG_FUCHSIA) \
+src/debug.c:    X(MUS_RG_CELADON) \
+src/debug.c:    X(MUS_RG_VICTORY_TRAINER) \
+src/debug.c:    X(MUS_RG_VICTORY_WILD) \
+src/debug.c:    X(MUS_RG_VICTORY_GYM_LEADER) \
+src/debug.c:    X(MUS_RG_VERMILLION) \
+src/debug.c:    X(MUS_RG_PEWTER) \
+src/debug.c:    X(MUS_RG_ENCOUNTER_RIVAL) \
+src/debug.c:    X(MUS_RG_RIVAL_EXIT) \
+src/debug.c:    X(MUS_RG_DEX_RATING) \
+src/debug.c:    X(MUS_RG_OBTAIN_KEY_ITEM) \
+src/debug.c:    X(MUS_RG_CAUGHT_INTRO) \
+src/debug.c:    X(MUS_RG_PHOTO) \
+src/debug.c:    X(MUS_RG_GAME_FREAK) \
+src/debug.c:    X(MUS_RG_CAUGHT) \
+src/debug.c:    X(MUS_RG_NEW_GAME_INSTRUCT) \
+src/debug.c:    X(MUS_RG_NEW_GAME_INTRO) \
+src/debug.c:    X(MUS_RG_NEW_GAME_EXIT) \
+src/debug.c:    X(MUS_RG_POKE_JUMP) \
+src/debug.c:    X(MUS_RG_UNION_ROOM) \
+src/debug.c:    X(MUS_RG_NET_CENTER) \
+src/debug.c:    X(MUS_RG_MYSTERY_GIFT) \
+src/debug.c:    X(MUS_RG_BERRY_PICK) \
+src/debug.c:    X(MUS_RG_SEVII_CAVE) \
+src/debug.c:    X(MUS_RG_TEACHY_TV_SHOW) \
+src/debug.c:    X(MUS_RG_SEVII_ROUTE) \
+src/debug.c:    X(MUS_RG_SEVII_DUNGEON) \
+src/debug.c:    X(MUS_RG_SEVII_123) \
+src/debug.c:    X(MUS_RG_SEVII_45) \
+src/debug.c:    X(MUS_RG_SEVII_67) \
+src/debug.c:    X(MUS_RG_POKE_FLUTE) \
+src/debug.c:    X(MUS_RG_VS_DEOXYS) \
+src/debug.c:    X(MUS_RG_VS_MEWTWO) \
+src/debug.c:    X(MUS_RG_VS_LEGEND) \
+src/debug.c:    X(MUS_RG_ENCOUNTER_GYM_LEADER) \
+src/debug.c:    X(MUS_RG_ENCOUNTER_DEOXYS) \
+src/debug.c:    X(MUS_RG_TRAINER_TOWER) \
+src/debug.c:    X(MUS_RG_SLOW_PALLET) \
+src/debug.c:    X(MUS_RG_TEACHY_TV_MENU) \
+src/rayquaza_scene.c:    PlayNewMapMusic(MUS_RAYQUAZA_APPEARS);
+src/egg_hatch.c:        PlayBGM(MUS_EVOLUTION_INTRO);
+src/egg_hatch.c:        PlayBGM(MUS_EVOLUTION);
+src/egg_hatch.c:        PlayFanfare(MUS_EVOLVED);
+src/dodrio_berry_picking.c:        PlayNewMapMusic(MUS_RG_BERRY_PICK);
+src/dodrio_berry_picking.c:            FadeOutAndPlayNewMapMusic(MUS_RG_VICTORY_WILD, 4);
+src/dodrio_berry_picking.c:            FadeOutAndPlayNewMapMusic(MUS_RG_VICTORY_WILD, 4);
+src/dodrio_berry_picking.c:        PlayNewMapMusic(MUS_RG_BERRY_PICK);
+src/dodrio_berry_picking.c:        PlayNewMapMusic(MUS_LEVEL_UP);
+src/dodrio_berry_picking.c:        FadeOutAndFadeInNewMapMusic(MUS_RG_VICTORY_WILD, 20, 10);
+src/pokemon_jump.c:            FadeOutAndPlayNewMapMusic(MUS_RG_POKE_JUMP, 8);
+src/pokemon_jump.c:    sPokemonJumpGfx->fanfare = MUS_LEVEL_UP;
+src/pokemon_jump.c:    sPokemonJumpGfx->fanfare = MUS_DUMMY;
+src/pokemon_jump.c:    sPokemonJumpGfx->fanfare = MUS_DUMMY;
+src/pokemon_jump.c:        if (sPokemonJumpGfx->fanfare == MUS_DUMMY)
+src/overworld.c:        return MUS_NONE;
+src/overworld.c:        return MUS_ABNORMAL_WEATHER;
+src/overworld.c:        return MUS_ENCOUNTER_MAGMA;
+src/overworld.c:        return MUS_MT_CHIMNEY;
+src/overworld.c:        return MUS_DESERT;
+src/overworld.c:    if (music != MUS_ROUTE118)
+src/overworld.c:            return MUS_ROUTE110;
+src/overworld.c:            return MUS_ROUTE119;
+src/overworld.c:    if (music != MUS_ROUTE118)
+src/overworld.c:            return MUS_ROUTE110;
+src/overworld.c:            return MUS_ROUTE119;
+src/overworld.c:    if (music != MUS_ABNORMAL_WEATHER && music != MUS_NONE)
+src/overworld.c:            music = MUS_UNDERWATER;
+src/overworld.c:            music = MUS_SURF;
+src/overworld.c:    gSaveBlock1Ptr->savedMusic = MUS_DUMMY;
+src/overworld.c:        if (newMusic != MUS_ABNORMAL_WEATHER && newMusic != MUS_NONE)
+src/overworld.c:            if (currentMusic == MUS_UNDERWATER || currentMusic == MUS_SURF)
+src/overworld.c:                newMusic = MUS_SURF;
+src/overworld.c:    if (currentMusic != newMusic && currentMusic != MUS_ABNORMAL_WEATHER)
+src/overworld.c:        if (currentMusic == MUS_SURF
+src/battle_message.c:    [STRINGID_GOTCHAPKMNCAUGHTPLAYER]               = COMPOUND_STRING("Gotcha! {B_DEF_NAME} was caught!{WAIT_SE}{PLAY_BGM MUS_CAUGHT}\p"),
+src/battle_message.c:    [STRINGID_GOTCHAPKMNCAUGHTWALLY]                = COMPOUND_STRING("Gotcha! {B_DEF_NAME} was caught!{WAIT_SE}{PLAY_BGM MUS_CAUGHT}{PAUSE 127}"),
+src/contest_util.c:        PlayBGM(MUS_CONTEST_RESULTS);
+src/contest_util.c:                PlayBGM(MUS_CONTEST_RESULTS);
+src/pokemon.c:            return MUS_VS_RAYQUAZA;
+src/pokemon.c:            return MUS_VS_KYOGRE_GROUDON;
+src/pokemon.c:            return MUS_VS_REGI;
+src/pokemon.c:            return MUS_RG_VS_LEGEND;
+src/pokemon.c:        return MUS_VS_TRAINER;
+src/pokemon.c:            return MUS_VS_AQUA_MAGMA_LEADER;
+src/pokemon.c:            return MUS_VS_AQUA_MAGMA;
+src/pokemon.c:            return MUS_VS_GYM_LEADER;
+src/pokemon.c:            return MUS_VS_CHAMPION;
+src/pokemon.c:                return MUS_VS_RIVAL;
+src/pokemon.c:                return MUS_VS_TRAINER;
+src/pokemon.c:            return MUS_VS_RIVAL;
+src/pokemon.c:            return MUS_VS_ELITE_FOUR;
+src/pokemon.c:            return MUS_VS_FRONTIER_BRAIN;
+src/pokemon.c:            return MUS_CIPHER_PEON_BATTLE;
+src/pokemon.c:            return MUS_VS_TRAINER;
+src/pokemon.c:        return MUS_VS_WILD;
+src/berry_blender.c:        if (GetCurrentMapMusic() != MUS_CYCLING)
+src/berry_blender.c:        PlayBGM(MUS_CYCLING);
+src/berry_blender.c:        if (GetCurrentMapMusic() != MUS_CYCLING)
+src/berry_blender.c:        PlayBGM(MUS_CYCLING);
+src/berry_blender.c:        PlayFanfare(MUS_LEVEL_UP);
+src/ereader_screen.c:            PlayFanfare(MUS_OBTAIN_ITEM);
+src/hall_of_fame.c:            PlayBGM(MUS_HALL_OF_FAME);
+src/battle_setup.c:        CreateBattleStartTask(B_TRANSITION_GROUDON, MUS_VS_KYOGRE_GROUDON);
+src/battle_setup.c:        CreateBattleStartTask(B_TRANSITION_KYOGRE, MUS_VS_KYOGRE_GROUDON);
+src/battle_setup.c:        CreateBattleStartTask(B_TRANSITION_RAYQUAZA, MUS_VS_RAYQUAZA);
+src/battle_setup.c:        CreateBattleStartTask(B_TRANSITION_BLUR, MUS_RG_VS_DEOXYS);
+src/battle_setup.c:        CreateBattleStartTask(B_TRANSITION_BLUR, MUS_RG_VS_LEGEND);
+src/battle_setup.c:        CreateBattleStartTask(B_TRANSITION_GRID_SQUARES, MUS_VS_MEW);
+src/battle_setup.c:        CreateBattleStartTask(B_TRANSITION_ANGLED_WIPES, MUS_VS_KYOGRE_GROUDON); // GROUDON
+src/battle_setup.c:        CreateBattleStartTask(B_TRANSITION_RIPPLE, MUS_VS_KYOGRE_GROUDON); // KYOGRE
+src/battle_setup.c:    CreateBattleStartTask(transitionId, MUS_VS_REGI);
+src/battle_setup.c:            music = MUS_ENCOUNTER_MALE;
+src/battle_setup.c:            music = MUS_ENCOUNTER_FEMALE;
+src/battle_setup.c:            music = MUS_ENCOUNTER_GIRL;
+src/battle_setup.c:            music = MUS_ENCOUNTER_INTENSE;
+src/battle_setup.c:            music = MUS_ENCOUNTER_COOL;
+src/battle_setup.c:            music = MUS_ENCOUNTER_AQUA;
+src/battle_setup.c:            music = MUS_ENCOUNTER_MAGMA;
+src/battle_setup.c:            music = MUS_ENCOUNTER_SWIMMER;
+src/battle_setup.c:            music = MUS_ENCOUNTER_TWINS;
+src/battle_setup.c:            music = MUS_ENCOUNTER_ELITE_FOUR;
+src/battle_setup.c:            music = MUS_ENCOUNTER_HIKER;
+src/battle_setup.c:            music = MUS_ENCOUNTER_INTERVIEWER;
+src/battle_setup.c:            music = MUS_ENCOUNTER_RICH;
+src/battle_setup.c:            music = MUS_ENCOUNTER_SUSPICIOUS;
+src/battle_setup.c:            music = MUS_ENCOUNTER_SUSPICIOUS;
+src/intro.c:    m4aSongNumStart(MUS_INTRO);
+src/intro.c:    m4aSongNumStart(MUS_INTRO_BATTLE);
+src/credits.c:    m4aSongNumStart(MUS_CREDITS);
+src/credits.c:            m4aSongNumStart(MUS_END);
+src/cable_car.c:        FadeInNewBGM(MUS_CABLE_CAR, 1);
+src/field_effect.c:            PlayFanfare(MUS_HEAL);
+src/field_effect.c:    Overworld_ChangeMusicTo(MUS_SURF);
+src/berry_crush.c:        PlayNewMapMusic(MUS_POKE_CENTER);
+src/berry_crush.c:            PlayNewMapMusic(MUS_RG_GAME_CORNER);
+src/slot_machine.c:            PlayFanfare(MUS_SLOTS_JACKPOT);
+src/slot_machine.c:            PlayFanfare(MUS_SLOTS_JACKPOT);
+src/slot_machine.c:            PlayFanfare(MUS_SLOTS_WIN);
+src/slot_machine.c:    PlayNewMapMusic(MUS_ROULETTE);
+src/slot_machine.c:            PlayFanfare(MUS_TOO_BAD);
+src/slot_machine.c:            PlayFanfare(MUS_SLOTS_WIN);
+src/slot_machine.c:    PlayFanfare(MUS_TOO_BAD);
+data/maps/BattleFrontier_Lounge4/header.inc:	.2byte MUS_B_TOWER_RS
+data/maps/BattleFrontier_Lounge4/map.json:  "music": "MUS_B_TOWER_RS",
+data/maps/OldaleTown_PokemonCenter_2F/header.inc:	.2byte MUS_POKE_CENTER
+data/maps/OldaleTown_PokemonCenter_2F/map.json:  "music": "MUS_POKE_CENTER",
+data/maps/Route48/header.inc:	.2byte MUS_DUMMY
+data/maps/Route48/map.json:  "music": "MUS_DUMMY",
+data/maps/BattleFrontier_BattleTowerCorridor/header.inc:	.2byte MUS_B_TOWER
+data/maps/BattleFrontier_BattleTowerCorridor/map.json:  "music": "MUS_B_TOWER",
+data/maps/MagmaHideout_3F_3R/header.inc:	.2byte MUS_AQUA_MAGMA_HIDEOUT
+data/maps/MagmaHideout_3F_3R/map.json:  "music": "MUS_AQUA_MAGMA_HIDEOUT",
+data/maps/fuchsia_gateroute18/header.inc:	.2byte MUS_DUMMY
+data/maps/fuchsia_gateroute18/map.json:  "music": "MUS_DUMMY",
+data/maps/cerulean_gym/header.inc:	.2byte MUS_RG_GYM
+data/maps/cerulean_gym/map.json:  "music": "MUS_RG_GYM",
+data/maps/MtPyre_3F/header.inc:	.2byte MUS_MT_PYRE
+data/maps/MtPyre_3F/map.json:  "music": "MUS_MT_PYRE",
+data/maps/SootopolisCity_House6/header.inc:	.2byte MUS_SOOTOPOLIS
+data/maps/SootopolisCity_House6/map.json:  "music": "MUS_SOOTOPOLIS",
+data/maps/Route25/header.inc:	.2byte MUS_DUMMY
+data/maps/Route25/map.json:  "music": "MUS_DUMMY",
+data/maps/Route123/header.inc:	.2byte MUS_ROUTE122
+data/maps/Route123/map.json:  "music": "MUS_ROUTE122",
+data/maps/RustboroCity_PokemonCenter_2F/header.inc:	.2byte MUS_POKE_CENTER
+data/maps/RustboroCity_PokemonCenter_2F/map.json:  "music": "MUS_POKE_CENTER",
+data/maps/SecretBase_Shrub2/header.inc:	.2byte MUS_FORTREE
+data/maps/SecretBase_Shrub2/map.json:  "music": "MUS_FORTREE",
+data/maps/vermilion_portinside/header.inc:	.2byte MUS_DUMMY
+data/maps/vermilion_portinside/map.json:  "music": "MUS_DUMMY",
+data/maps/InsideOfTruck/header.inc:	.2byte MUS_NONE
+data/maps/InsideOfTruck/map.json:  "music": "MUS_NONE",
+data/maps/Route114_LanettesHouse/header.inc:	.2byte MUS_FALLARBOR
+data/maps/Route114_LanettesHouse/map.json:  "music": "MUS_FALLARBOR",
+data/maps/ArtisanCave_1F/header.inc:	.2byte MUS_PETALBURG_WOODS
+data/maps/ArtisanCave_1F/map.json:  "music": "MUS_PETALBURG_WOODS",
+data/maps/TerraCave_Entrance/header.inc:	.2byte MUS_PETALBURG_WOODS
+data/maps/TerraCave_Entrance/map.json:  "music": "MUS_PETALBURG_WOODS",
+data/maps/UnusedContestHall1/header.inc:	.2byte MUS_GSC_PEWTER
+data/maps/UnusedContestHall1/map.json:  "music": "MUS_GSC_PEWTER",
+data/maps/fuchsia_safarizonebrush/header.inc:	.2byte MUS_DUMMY
+data/maps/fuchsia_safarizonebrush/map.json:  "music": "MUS_DUMMY",
+data/maps/SecretBase_BrownCave1/header.inc:	.2byte MUS_FORTREE
+data/maps/SecretBase_BrownCave1/map.json:  "music": "MUS_FORTREE",
+data/maps/NavelRock_Fork/header.inc:	.2byte MUS_RG_SEVII_CAVE
+data/maps/NavelRock_Fork/map.json:  "music": "MUS_RG_SEVII_CAVE",
+data/maps/PetalburgCity/header.inc:	.2byte MUS_PETALBURG
+data/maps/PetalburgCity/map.json:  "music": "MUS_PETALBURG",
+data/maps/PetalburgCity/scripts.inc:	savebgm MUS_FOLLOW_ME
+data/maps/PetalburgCity/scripts.inc:	playbgm MUS_FOLLOW_ME, FALSE
+data/maps/FallarborTown_MoveRelearnersHouse/header.inc:	.2byte MUS_FALLARBOR
+data/maps/FallarborTown_MoveRelearnersHouse/map.json:  "music": "MUS_FALLARBOR",
+data/maps/SSTidalCorridor/header.inc:	.2byte MUS_SAILING
+data/maps/SSTidalCorridor/map.json:  "music": "MUS_SAILING",
+data/maps/VictoryRoad_B1F/header.inc:	.2byte MUS_VICTORY_ROAD
+data/maps/VictoryRoad_B1F/map.json:  "music": "MUS_VICTORY_ROAD",
+data/maps/SlateportCity_NameRatersHouse/header.inc:	.2byte MUS_SLATEPORT
+data/maps/SlateportCity_NameRatersHouse/map.json:  "music": "MUS_SLATEPORT",
+data/maps/celadon_department3f/header.inc:	.2byte MUS_DUMMY
+data/maps/celadon_department3f/map.json:  "music": "MUS_DUMMY",
+data/maps/saffron_tunnel/header.inc:	.2byte MUS_DUMMY
+data/maps/saffron_tunnel/map.json:  "music": "MUS_DUMMY",
+data/maps/SkyPillar_3F/header.inc:	.2byte MUS_MT_CHIMNEY
+data/maps/SkyPillar_3F/map.json:  "music": "MUS_MT_CHIMNEY",
+data/maps/MtPyre_1F/header.inc:	.2byte MUS_MT_PYRE
+data/maps/MtPyre_1F/map.json:  "music": "MUS_MT_PYRE",
+data/maps/RustboroCity_House2/header.inc:	.2byte MUS_RUSTBORO
+data/maps/RustboroCity_House2/map.json:  "music": "MUS_RUSTBORO",
+data/maps/TrainerHill_3F/header.inc:	.2byte MUS_B_TOWER_RS
+data/maps/TrainerHill_3F/map.json:  "music": "MUS_B_TOWER_RS",
+data/maps/SootopolisCity_House3/header.inc:	.2byte MUS_SOOTOPOLIS
+data/maps/SootopolisCity_House3/map.json:  "music": "MUS_SOOTOPOLIS",
+data/maps/EverGrandeCity_PhoebesRoom/header.inc:	.2byte MUS_VICTORY_ROAD
+data/maps/EverGrandeCity_PhoebesRoom/map.json:  "music": "MUS_VICTORY_ROAD",
+data/maps/EverGrandeCity_PhoebesRoom/scripts.inc:	playbgm MUS_ENCOUNTER_ELITE_FOUR, FALSE
+data/maps/viridian_gym/header.inc:	.2byte MUS_RG_GYM
+data/maps/viridian_gym/map.json:  "music": "MUS_RG_GYM",
+data/maps/UnusedContestHall3/header.inc:	.2byte MUS_GSC_PEWTER
+data/maps/UnusedContestHall3/map.json:  "music": "MUS_GSC_PEWTER",
+data/maps/MirageTower_2F/header.inc:	.2byte MUS_MT_CHIMNEY
+data/maps/MirageTower_2F/map.json:  "music": "MUS_MT_CHIMNEY",
+data/maps/SealedChamber_OuterRoom/header.inc:	.2byte MUS_SEALED_CHAMBER
+data/maps/SealedChamber_OuterRoom/map.json:  "music": "MUS_SEALED_CHAMBER",
+data/maps/DesertUnderpass/header.inc:	.2byte MUS_MT_CHIMNEY
+data/maps/DesertUnderpass/map.json:  "music": "MUS_MT_CHIMNEY",
+data/maps/SecretBase_RedCave3/header.inc:	.2byte MUS_FORTREE
+data/maps/SecretBase_RedCave3/map.json:  "music": "MUS_FORTREE",
+data/maps/VictoryRoad_1F/header.inc:	.2byte MUS_VICTORY_ROAD
+data/maps/VictoryRoad_1F/map.json:  "music": "MUS_VICTORY_ROAD",
+data/maps/SecretBase_Shrub3/header.inc:	.2byte MUS_FORTREE
+data/maps/SecretBase_Shrub3/map.json:  "music": "MUS_FORTREE",
+data/maps/DewfordTown_Gym/header.inc:	.2byte MUS_GYM
+data/maps/DewfordTown_Gym/map.json:  "music": "MUS_GYM",
+data/maps/DewfordTown_Gym/scripts.inc:	playfanfare MUS_REGISTER_MATCH_CALL
+data/maps/LavaridgeTown_PokemonCenter_1F/header.inc:	.2byte MUS_POKE_CENTER
+data/maps/LavaridgeTown_PokemonCenter_1F/map.json:  "music": "MUS_POKE_CENTER",
+data/maps/Underwater_MarineCave/header.inc:	.2byte MUS_PETALBURG_WOODS
+data/maps/Underwater_MarineCave/map.json:  "music": "MUS_PETALBURG_WOODS",
+data/maps/celadon_house1/header.inc:	.2byte MUS_DUMMY
+data/maps/celadon_house1/map.json:  "music": "MUS_DUMMY",
+data/maps/MtMoon_Outside/header.inc:	.2byte MUS_DUMMY
+data/maps/MtMoon_Outside/map.json:  "music": "MUS_DUMMY",
+data/maps/Route102/header.inc:	.2byte MUS_ROUTE101
+data/maps/Route102/map.json:  "music": "MUS_ROUTE101",
+data/maps/MauvilleCity_GameCorner/header.inc:	.2byte MUS_GAME_CORNER
+data/maps/MauvilleCity_GameCorner/map.json:  "music": "MUS_GAME_CORNER",
+data/maps/TrainerHill_Elevator/header.inc:	.2byte MUS_B_TOWER_RS
+data/maps/TrainerHill_Elevator/map.json:  "music": "MUS_B_TOWER_RS",
+data/maps/Route3/header.inc:	.2byte MUS_RG_ROUTE3
+data/maps/Route3/map.json:  "music": "MUS_RG_ROUTE3",
+data/maps/indigoplateau_champion/header.inc:	.2byte MUS_DUMMY
+data/maps/indigoplateau_champion/map.json:  "music": "MUS_DUMMY",
+data/maps/Underwater_SootopolisCity/header.inc:	.2byte MUS_UNDERWATER
+data/maps/Underwater_SootopolisCity/map.json:  "music": "MUS_UNDERWATER",
+data/maps/Route26/header.inc:	.2byte MUS_DUMMY
+data/maps/Route26/map.json:  "music": "MUS_DUMMY",
+data/maps/SeafloorCavern_Room8/header.inc:	.2byte MUS_MT_CHIMNEY
+data/maps/SeafloorCavern_Room8/map.json:  "music": "MUS_MT_CHIMNEY",
+data/maps/LilycoveCity_ContestHall/header.inc:	.2byte MUS_CONTEST_LOBBY
+data/maps/LilycoveCity_ContestHall/map.json:  "music": "MUS_CONTEST_LOBBY",
+data/maps/Route17/header.inc:	.2byte MUS_DUMMY
+data/maps/Route17/map.json:  "music": "MUS_DUMMY",
+data/maps/route25_billshouse/header.inc:	.2byte MUS_DUMMY
+data/maps/route25_billshouse/map.json:  "music": "MUS_DUMMY",
+data/maps/pewter_pokemart/header.inc:	.2byte MUS_POKE_MART
+data/maps/pewter_pokemart/map.json:  "music": "MUS_POKE_MART",
+data/maps/NavelRock_Down02/header.inc:	.2byte MUS_RG_SEVII_CAVE
+data/maps/NavelRock_Down02/map.json:  "music": "MUS_RG_SEVII_CAVE",
+data/maps/Route8/header.inc:	.2byte MUS_DUMMY
+data/maps/Route8/map.json:  "music": "MUS_DUMMY",
+data/maps/FallarborTown_PokemonCenter_2F/header.inc:	.2byte MUS_POKE_CENTER
+data/maps/FallarborTown_PokemonCenter_2F/map.json:  "music": "MUS_POKE_CENTER",
+data/maps/celadon_apartmentroofnight/header.inc:	.2byte MUS_DUMMY
+data/maps/celadon_apartmentroofnight/map.json:  "music": "MUS_DUMMY",
+data/maps/Route119_WeatherInstitute_2F/header.inc:	.2byte MUS_RUSTBORO
+data/maps/Route119_WeatherInstitute_2F/map.json:  "music": "MUS_RUSTBORO",
+data/maps/Route119_WeatherInstitute_2F/scripts.inc:	playfanfare MUS_OBTAIN_ITEM
+data/maps/SecretBase_BrownCave4/header.inc:	.2byte MUS_FORTREE
+data/maps/SecretBase_BrownCave4/map.json:  "music": "MUS_FORTREE",
+data/maps/SootopolisCity_MysteryEventsHouse_1F/header.inc:	.2byte MUS_SOOTOPOLIS
+data/maps/SootopolisCity_MysteryEventsHouse_1F/map.json:  "music": "MUS_SOOTOPOLIS",
+data/maps/viridian_pokecenter_2fl/header.inc:	.2byte MUS_DUMMY
+data/maps/viridian_pokecenter_2fl/map.json:  "music": "MUS_DUMMY",
+data/maps/SecretBase_BlueCave3/header.inc:	.2byte MUS_FORTREE
+data/maps/SecretBase_BlueCave3/map.json:  "music": "MUS_FORTREE",
+data/maps/SafariZone_Northeast/header.inc:	.2byte MUS_SAFARI_ZONE
+data/maps/SafariZone_Northeast/map.json:  "music": "MUS_SAFARI_ZONE",
+data/maps/ShoalCave_HighTideEntranceRoom/header.inc:	.2byte MUS_MT_PYRE
+data/maps/ShoalCave_HighTideEntranceRoom/map.json:  "music": "MUS_MT_PYRE",
+data/maps/Route129/header.inc:	.2byte MUS_ROUTE119
+data/maps/Route129/map.json:  "music": "MUS_ROUTE119",
+data/maps/saffron_copycatshouse1f/header.inc:	.2byte MUS_DUMMY
+data/maps/saffron_copycatshouse1f/map.json:  "music": "MUS_DUMMY",
+data/maps/UnusedContestHall2/header.inc:	.2byte MUS_GSC_PEWTER
+data/maps/UnusedContestHall2/map.json:  "music": "MUS_GSC_PEWTER",
+data/maps/viridian_forest/header.inc:	.2byte MUS_RG_VIRIDIAN_FOREST
+data/maps/viridian_forest/map.json:  "music": "MUS_RG_VIRIDIAN_FOREST",
+data/maps/DiglettsCave_North/header.inc:	.2byte MUS_DUMMY
+data/maps/DiglettsCave_North/map.json:  "music": "MUS_DUMMY",
+data/maps/BattleFrontier_Lounge6/header.inc:	.2byte MUS_B_TOWER_RS
+data/maps/BattleFrontier_Lounge6/map.json:  "music": "MUS_B_TOWER_RS",
+data/maps/SafariZone_Southeast/header.inc:	.2byte MUS_SAFARI_ZONE
+data/maps/SafariZone_Southeast/map.json:  "music": "MUS_SAFARI_ZONE",
+data/maps/AquaHideout_B2F/header.inc:	.2byte MUS_AQUA_MAGMA_HIDEOUT
+data/maps/AquaHideout_B2F/map.json:  "music": "MUS_AQUA_MAGMA_HIDEOUT",
+data/maps/SecretBase_BrownCave2/header.inc:	.2byte MUS_FORTREE
+data/maps/SecretBase_BrownCave2/map.json:  "music": "MUS_FORTREE",
+data/maps/route6_tunnel/header.inc:	.2byte MUS_DUMMY
+data/maps/route6_tunnel/map.json:  "music": "MUS_DUMMY",
+data/maps/FortreeCity_House4/header.inc:	.2byte MUS_FORTREE
+data/maps/FortreeCity_House4/map.json:  "music": "MUS_FORTREE",
+data/maps/SlateportCity_BattleTentBattleRoom/header.inc:	.2byte MUS_B_TOWER_RS
+data/maps/SlateportCity_BattleTentBattleRoom/map.json:  "music": "MUS_B_TOWER_RS",
+data/maps/NavelRock_Up3/header.inc:	.2byte MUS_RG_SEVII_CAVE
+data/maps/NavelRock_Up3/map.json:  "music": "MUS_RG_SEVII_CAVE",
+data/maps/MossdeepCity_Gym/header.inc:	.2byte MUS_GYM
+data/maps/MossdeepCity_Gym/map.json:  "music": "MUS_GYM",
+data/maps/MossdeepCity_Gym/scripts.inc:	playfanfare MUS_REGISTER_MATCH_CALL
+data/maps/Route124_DivingTreasureHuntersHouse/header.inc:	.2byte MUS_LILYCOVE
+data/maps/Route124_DivingTreasureHuntersHouse/map.json:  "music": "MUS_LILYCOVE",
+data/maps/TrainerHill_1F/header.inc:	.2byte MUS_B_TOWER_RS
+data/maps/TrainerHill_1F/map.json:  "music": "MUS_B_TOWER_RS",
+data/maps/cerulean_pokemart/header.inc:	.2byte MUS_POKE_MART
+data/maps/cerulean_pokemart/map.json:  "music": "MUS_POKE_MART",
+data/maps/ContestHallCool/header.inc:	.2byte MUS_CONTEST
+data/maps/ContestHallCool/map.json:  "music": "MUS_CONTEST",
+data/maps/indigoplateau_bruno/header.inc:	.2byte MUS_DUMMY
+data/maps/indigoplateau_bruno/map.json:  "music": "MUS_DUMMY",
+data/maps/fuchsia_safarizonebeach/header.inc:	.2byte MUS_DUMMY
+data/maps/fuchsia_safarizonebeach/map.json:  "music": "MUS_DUMMY",
+data/maps/LilycoveCity_UnusedMart/header.inc:	.2byte MUS_POKE_MART
+data/maps/LilycoveCity_UnusedMart/map.json:  "music": "MUS_POKE_MART",
+data/maps/Route117_PokemonDayCare/header.inc:	.2byte MUS_RUSTBORO
+data/maps/Route117_PokemonDayCare/map.json:  "music": "MUS_RUSTBORO",
+data/maps/route7_tunnel/header.inc:	.2byte MUS_DUMMY
+data/maps/route7_tunnel/map.json:  "music": "MUS_DUMMY",
+data/maps/Route22/header.inc:	.2byte MUS_RG_ROUTE3
+data/maps/Route22/map.json:  "music": "MUS_RG_ROUTE3",
+data/maps/Route110_SeasideCyclingRoadNorthEntrance/header.inc:	.2byte MUS_SLATEPORT
+data/maps/Route110_SeasideCyclingRoadNorthEntrance/map.json:  "music": "MUS_SLATEPORT",
+data/maps/BattlePyramidSquare10/header.inc:	.2byte MUS_NONE
+data/maps/BattlePyramidSquare10/map.json:  "music": "MUS_NONE",
+data/maps/SecretBase_Shrub4/header.inc:	.2byte MUS_FORTREE
+data/maps/SecretBase_Shrub4/map.json:  "music": "MUS_FORTREE",
+data/maps/BattleFrontier_BattlePikeRoomFinal/header.inc:	.2byte MUS_B_PIKE
+data/maps/BattleFrontier_BattlePikeRoomFinal/map.json:  "music": "MUS_B_PIKE",
+data/maps/SouthernIsland_Interior/header.inc:	.2byte MUS_ABANDONED_SHIP
+data/maps/SouthernIsland_Interior/map.json:  "music": "MUS_ABANDONED_SHIP",
+data/maps/vermilion_house1/header.inc:	.2byte MUS_DUMMY
+data/maps/vermilion_house1/map.json:  "music": "MUS_DUMMY",
+data/maps/DesertRuins/header.inc:	.2byte MUS_SEALED_CHAMBER
+data/maps/DesertRuins/map.json:  "music": "MUS_SEALED_CHAMBER",
+data/maps/CaveOfOrigin_UnusedRubySapphireMap2/header.inc:	.2byte MUS_CAVE_OF_ORIGIN
+data/maps/CaveOfOrigin_UnusedRubySapphireMap2/map.json:  "music": "MUS_CAVE_OF_ORIGIN",
+data/maps/Route110_TrickHouseEntrance/header.inc:	.2byte MUS_TRICK_HOUSE
+data/maps/Route110_TrickHouseEntrance/map.json:  "music": "MUS_TRICK_HOUSE",
+data/maps/Route110_TrickHouseEntrance/scripts.inc:	playfanfare MUS_OBTAIN_ITEM
+data/maps/lavender_soulhouse/header.inc:	.2byte MUS_DUMMY
+data/maps/lavender_soulhouse/map.json:  "music": "MUS_DUMMY",
+data/maps/Route121_SafariZoneEntrance/header.inc:	.2byte MUS_FORTREE
+data/maps/Route121_SafariZoneEntrance/map.json:  "music": "MUS_FORTREE",
+data/maps/Route121_SafariZoneEntrance/scripts.inc:	playfanfare MUS_OBTAIN_ITEM
+data/maps/MossdeepCity_House3/header.inc:	.2byte MUS_RUSTBORO
+data/maps/MossdeepCity_House3/map.json:  "music": "MUS_RUSTBORO",
+data/maps/Route128/header.inc:	.2byte MUS_ROUTE120
+data/maps/Route128/map.json:  "music": "MUS_ROUTE120",
+data/maps/BattleFrontier_BattleDomeLobby/header.inc:	.2byte MUS_B_DOME_LOBBY
+data/maps/BattleFrontier_BattleDomeLobby/map.json:  "music": "MUS_B_DOME_LOBBY",
+data/maps/SlateportCity_PokemonCenter_2F/header.inc:	.2byte MUS_POKE_CENTER
+data/maps/SlateportCity_PokemonCenter_2F/map.json:  "music": "MUS_POKE_CENTER",
+data/maps/celadon_gym/header.inc:	.2byte MUS_DUMMY
+data/maps/celadon_gym/map.json:  "music": "MUS_DUMMY",
+data/maps/Route124/header.inc:	.2byte MUS_ROUTE120
+data/maps/Route124/map.json:  "music": "MUS_ROUTE120",
+data/maps/LavaridgeTown_HerbShop/header.inc:	.2byte MUS_OLDALE
+data/maps/LavaridgeTown_HerbShop/map.json:  "music": "MUS_OLDALE",
+data/maps/SlateportCity_SternsShipyard_2F/header.inc:	.2byte MUS_SLATEPORT
+data/maps/SlateportCity_SternsShipyard_2F/map.json:  "music": "MUS_SLATEPORT",
+data/maps/Route15/header.inc:	.2byte MUS_DUMMY
+data/maps/Route15/map.json:  "music": "MUS_DUMMY",
+data/maps/CaveOfOrigin_Entrance/header.inc:	.2byte MUS_CAVE_OF_ORIGIN
+data/maps/CaveOfOrigin_Entrance/map.json:  "music": "MUS_CAVE_OF_ORIGIN",
+data/maps/MtPyre_6F/header.inc:	.2byte MUS_MT_PYRE
+data/maps/MtPyre_6F/map.json:  "music": "MUS_MT_PYRE",
+data/maps/MauvilleCity_PokemonCenter_2F/header.inc:	.2byte MUS_POKE_CENTER
+data/maps/MauvilleCity_PokemonCenter_2F/map.json:  "music": "MUS_POKE_CENTER",
+data/maps/Underwater_SeafloorCavern/header.inc:	.2byte MUS_UNDERWATER
+data/maps/Underwater_SeafloorCavern/map.json:  "music": "MUS_UNDERWATER",
+data/maps/BattleFrontier_BattleTowerElevator/header.inc:	.2byte MUS_B_TOWER
+data/maps/BattleFrontier_BattleTowerElevator/map.json:  "music": "MUS_B_TOWER",
+data/maps/Route134/header.inc:	.2byte MUS_ROUTE119
+data/maps/Route134/map.json:  "music": "MUS_ROUTE119",
+data/maps/MossdeepCity_Mart/header.inc:	.2byte MUS_POKE_MART
+data/maps/MossdeepCity_Mart/map.json:  "music": "MUS_POKE_MART",
+data/maps/FallarborTown_BattleTentLobby/header.inc:	.2byte MUS_B_TOWER_RS
+data/maps/FallarborTown_BattleTentLobby/map.json:  "music": "MUS_B_TOWER_RS",
+data/maps/FallarborTown_BattleTentLobby/scripts.inc:	playfanfare MUS_OBTAIN_ITEM
+data/maps/FieryPath/header.inc:	.2byte MUS_PETALBURG_WOODS
+data/maps/FieryPath/map.json:  "music": "MUS_PETALBURG_WOODS",
+data/maps/LilycoveCity_LilycoveMuseum_2F/header.inc:	.2byte MUS_LILYCOVE_MUSEUM
+data/maps/LilycoveCity_LilycoveMuseum_2F/map.json:  "music": "MUS_LILYCOVE_MUSEUM",
+data/maps/Route123_BerryMastersHouse/header.inc:	.2byte MUS_RUSTBORO
+data/maps/Route123_BerryMastersHouse/map.json:  "music": "MUS_RUSTBORO",
+data/maps/Route28/header.inc:	.2byte MUS_DUMMY
+data/maps/Route28/map.json:  "music": "MUS_DUMMY",
+data/maps/RustboroCity/header.inc:	.2byte MUS_RUSTBORO
+data/maps/RustboroCity/map.json:  "music": "MUS_RUSTBORO",
+data/maps/RustboroCity/scripts.inc:	playbgm MUS_ENCOUNTER_AQUA, FALSE
+data/maps/RustboroCity/scripts.inc:	playbgm MUS_ENCOUNTER_MAY, TRUE
+data/maps/RustboroCity/scripts.inc:	playbgm MUS_ENCOUNTER_BRENDAN, TRUE
+data/maps/RustboroCity/scripts.inc:	playfanfare MUS_REGISTER_MATCH_CALL
+data/maps/RustboroCity/scripts.inc:	savebgm MUS_DUMMY
+data/maps/RustboroCity/scripts.inc:	playfanfare MUS_REGISTER_MATCH_CALL
+data/maps/PetalburgWoods/header.inc:	.2byte MUS_PETALBURG_WOODS
+data/maps/PetalburgWoods/map.json:  "music": "MUS_PETALBURG_WOODS",
+data/maps/PetalburgWoods/scripts.inc:	playbgm MUS_ENCOUNTER_AQUA, FALSE
+data/maps/PetalburgWoods/scripts.inc:	playbgm MUS_ENCOUNTER_AQUA, FALSE
+data/maps/NavelRock_Top/header.inc:	.2byte MUS_RG_SEVII_CAVE
+data/maps/NavelRock_Top/map.json:  "music": "MUS_RG_SEVII_CAVE",
+data/maps/SecretBase_RedCave1/header.inc:	.2byte MUS_FORTREE
+data/maps/SecretBase_RedCave1/map.json:  "music": "MUS_FORTREE",
+data/maps/LilycoveCity_DepartmentStore_5F/header.inc:	.2byte MUS_POKE_MART
+data/maps/LilycoveCity_DepartmentStore_5F/map.json:  "music": "MUS_POKE_MART",
+data/maps/VerdanturfTown_House/header.inc:	.2byte MUS_VERDANTURF
+data/maps/VerdanturfTown_House/map.json:  "music": "MUS_VERDANTURF",
+data/maps/BattlePyramidSquare09/header.inc:	.2byte MUS_NONE
+data/maps/BattlePyramidSquare09/map.json:  "music": "MUS_NONE",
+data/maps/VerdanturfTown_BattleTentLobby/header.inc:	.2byte MUS_B_TOWER_RS
+data/maps/VerdanturfTown_BattleTentLobby/map.json:  "music": "MUS_B_TOWER_RS",
+data/maps/VerdanturfTown_BattleTentLobby/scripts.inc:	playfanfare MUS_OBTAIN_ITEM
+data/maps/BattleFrontier_BattleArenaLobby/header.inc:	.2byte MUS_B_ARENA
+data/maps/BattleFrontier_BattleArenaLobby/map.json:  "music": "MUS_B_ARENA",
+data/maps/TrainerHill_Entrance/header.inc:	.2byte MUS_B_TOWER_RS
+data/maps/TrainerHill_Entrance/map.json:  "music": "MUS_B_TOWER_RS",
+data/maps/ShoalCave_LowTideEntranceRoom/header.inc:	.2byte MUS_MT_PYRE
+data/maps/ShoalCave_LowTideEntranceRoom/map.json:  "music": "MUS_MT_PYRE",
+data/maps/Reds_House/header.inc:	.2byte MUS_HG_PALLET
+data/maps/Reds_House/map.json:  "music": "MUS_HG_PALLET",
+data/maps/SeafloorCavern_Entrance/header.inc:	.2byte MUS_MT_CHIMNEY
+data/maps/SeafloorCavern_Entrance/map.json:  "music": "MUS_MT_CHIMNEY",
+data/maps/SouthernIsland_Exterior/header.inc:	.2byte MUS_ABANDONED_SHIP
+data/maps/SouthernIsland_Exterior/map.json:  "music": "MUS_ABANDONED_SHIP",
+data/maps/RustboroCity_DevonCorp_2F/header.inc:	.2byte MUS_RUSTBORO
+data/maps/RustboroCity_DevonCorp_2F/map.json:  "music": "MUS_RUSTBORO",
+data/maps/RustboroCity_DevonCorp_2F/scripts.inc:	playfanfare MUS_OBTAIN_ITEM
+data/maps/RustboroCity_DevonCorp_2F/scripts.inc:	playfanfare MUS_OBTAIN_ITEM
+data/maps/BattleFrontier_BattlePalaceLobby/header.inc:	.2byte MUS_B_PALACE
+data/maps/BattleFrontier_BattlePalaceLobby/map.json:  "music": "MUS_B_PALACE",
+data/maps/SlateportCity/header.inc:	.2byte MUS_SLATEPORT
+data/maps/SlateportCity/map.json:  "music": "MUS_SLATEPORT",
+data/maps/SlateportCity/scripts.inc:	playfanfare MUS_REGISTER_MATCH_CALL
+data/maps/SlateportCity/scripts.inc:	playfanfare MUS_OBTAIN_ITEM
+data/maps/SlateportCity/scripts.inc:	playbgm MUS_ENCOUNTER_AQUA, FALSE
+data/maps/NavelRock_Down07/header.inc:	.2byte MUS_RG_SEVII_CAVE
+data/maps/NavelRock_Down07/map.json:  "music": "MUS_RG_SEVII_CAVE",
+data/maps/LilycoveCity_DepartmentStoreElevator/header.inc:	.2byte MUS_LILYCOVE
+data/maps/LilycoveCity_DepartmentStoreElevator/map.json:  "music": "MUS_LILYCOVE",
+data/maps/ShoalCave_LowTideIceRoom/header.inc:	.2byte MUS_MT_PYRE
+data/maps/ShoalCave_LowTideIceRoom/map.json:  "music": "MUS_MT_PYRE",
+data/maps/saffron_fightingdojo/header.inc:	.2byte MUS_DUMMY
+data/maps/saffron_fightingdojo/map.json:  "music": "MUS_DUMMY",
+data/maps/Ecruteak_City/header.inc:	.2byte MUS_DUMMY
+data/maps/Ecruteak_City/map.json:  "music": "MUS_DUMMY",
+data/maps/route2_entrance1/header.inc:	.2byte MUS_RG_ROUTE1
+data/maps/route2_entrance1/map.json:  "music": "MUS_RG_ROUTE1",
+data/maps/Route104/header.inc:	.2byte MUS_ROUTE104
+data/maps/Route104/map.json:  "music": "MUS_ROUTE104",
+data/maps/Route104/scripts.inc:	playbgm MUS_ENCOUNTER_MAY, TRUE
+data/maps/Route104/scripts.inc:	playbgm MUS_ENCOUNTER_BRENDAN, TRUE
+data/maps/Route104/scripts.inc:	playfanfare MUS_REGISTER_MATCH_CALL
+data/maps/Route104/scripts.inc:	savebgm MUS_DUMMY
+data/maps/Route104/scripts.inc:	playfanfare MUS_REGISTER_MATCH_CALL
+data/maps/Route104/scripts.inc:	playfanfare MUS_REGISTER_MATCH_CALL
+data/maps/BattleFrontier_OutsideEast/header.inc:	.2byte MUS_B_FRONTIER
+data/maps/BattleFrontier_OutsideEast/map.json:  "music": "MUS_B_FRONTIER",
+data/maps/BattleFrontier_BattleTowerMultiCorridor/header.inc:	.2byte MUS_B_TOWER
+data/maps/BattleFrontier_BattleTowerMultiCorridor/map.json:  "music": "MUS_B_TOWER",
+data/maps/route10_powerplantback/header.inc:	.2byte MUS_DUMMY
+data/maps/route10_powerplantback/map.json:  "music": "MUS_DUMMY",
+data/maps/BattlePyramidSquare16/header.inc:	.2byte MUS_NONE
+data/maps/BattlePyramidSquare16/map.json:  "music": "MUS_NONE",
+data/maps/BattleFrontier_BattlePyramidLobby/header.inc:	.2byte MUS_B_PYRAMID
+data/maps/BattleFrontier_BattlePyramidLobby/map.json:  "music": "MUS_B_PYRAMID",
+data/maps/AbandonedShip_Deck/header.inc:	.2byte MUS_ABANDONED_SHIP
+data/maps/AbandonedShip_Deck/map.json:  "music": "MUS_ABANDONED_SHIP",
+data/maps/Route4_Pokecenter/header.inc:	.2byte MUS_RG_ROUTE3
+data/maps/Route4_Pokecenter/map.json:  "music": "MUS_RG_ROUTE3",
+data/maps/DewfordTown_House2/header.inc:	.2byte MUS_DEWFORD
+data/maps/DewfordTown_House2/map.json:  "music": "MUS_DEWFORD",
+data/maps/ArtisanCave_B1F/header.inc:	.2byte MUS_PETALBURG_WOODS
+data/maps/ArtisanCave_B1F/map.json:  "music": "MUS_PETALBURG_WOODS",
+data/maps/BattleFrontier_Lounge3/header.inc:	.2byte MUS_B_TOWER_RS
+data/maps/BattleFrontier_Lounge3/map.json:  "music": "MUS_B_TOWER_RS",
+data/maps/SlateportCity_OceanicMuseum_2F/header.inc:	.2byte MUS_OCEANIC_MUSEUM
+data/maps/SlateportCity_OceanicMuseum_2F/map.json:  "music": "MUS_OCEANIC_MUSEUM",
+data/maps/SlateportCity_OceanicMuseum_2F/scripts.inc:	playbgm MUS_ENCOUNTER_AQUA, TRUE
+data/maps/SlateportCity_OceanicMuseum_2F/scripts.inc:	savebgm MUS_DUMMY
+data/maps/SlateportCity_OceanicMuseum_2F/scripts.inc:	playfanfare MUS_HEAL
+data/maps/SootopolisCity_House5/header.inc:	.2byte MUS_SOOTOPOLIS
+data/maps/SootopolisCity_House5/map.json:  "music": "MUS_SOOTOPOLIS",
+data/maps/AquaHideout_UnusedRubyMap2/header.inc:	.2byte MUS_AQUA_MAGMA_HIDEOUT
+data/maps/AquaHideout_UnusedRubyMap2/map.json:  "music": "MUS_AQUA_MAGMA_HIDEOUT",
+data/maps/NavelRock_Down10/header.inc:	.2byte MUS_RG_SEVII_CAVE
+data/maps/NavelRock_Down10/map.json:  "music": "MUS_RG_SEVII_CAVE",
+data/maps/Route110_TrickHousePuzzle7/header.inc:	.2byte MUS_TRICK_HOUSE
+data/maps/Route110_TrickHousePuzzle7/map.json:  "music": "MUS_TRICK_HOUSE",
+data/maps/VerdanturfTown_WandasHouse/header.inc:	.2byte MUS_VERDANTURF
+data/maps/VerdanturfTown_WandasHouse/map.json:  "music": "MUS_VERDANTURF",
+data/maps/MagmaHideout_1F/header.inc:	.2byte MUS_AQUA_MAGMA_HIDEOUT
+data/maps/MagmaHideout_1F/map.json:  "music": "MUS_AQUA_MAGMA_HIDEOUT",
+data/maps/NavelRock_Down03/header.inc:	.2byte MUS_RG_SEVII_CAVE
+data/maps/NavelRock_Down03/map.json:  "music": "MUS_RG_SEVII_CAVE",
+data/maps/LilycoveCity/header.inc:	.2byte MUS_LILYCOVE
+data/maps/LilycoveCity/map.json:  "music": "MUS_LILYCOVE",
+data/maps/LilycoveCity/scripts.inc:	playbgm MUS_ENCOUNTER_MAY, TRUE
+data/maps/LilycoveCity/scripts.inc:	savebgm MUS_DUMMY
+data/maps/LilycoveCity/scripts.inc:	playbgm MUS_ENCOUNTER_BRENDAN, TRUE
+data/maps/LilycoveCity/scripts.inc:	savebgm MUS_DUMMY
+data/maps/LilycoveCity/scripts.inc:	savebgm MUS_DUMMY
+data/maps/Route110_TrickHouseCorridor/header.inc:	.2byte MUS_TRICK_HOUSE
+data/maps/Route110_TrickHouseCorridor/map.json:  "music": "MUS_TRICK_HOUSE",
+data/maps/LilycoveCity_House1/header.inc:	.2byte MUS_LILYCOVE
+data/maps/LilycoveCity_House1/map.json:  "music": "MUS_LILYCOVE",
+data/maps/LilycoveCity_LilycoveMuseum_1F/header.inc:	.2byte MUS_LILYCOVE_MUSEUM
+data/maps/LilycoveCity_LilycoveMuseum_1F/map.json:  "music": "MUS_LILYCOVE_MUSEUM",
+data/maps/SootopolisCity_PokemonCenter_1F/header.inc:	.2byte MUS_POKE_CENTER
+data/maps/SootopolisCity_PokemonCenter_1F/map.json:  "music": "MUS_POKE_CENTER",
+data/maps/Underwater_Route129/header.inc:	.2byte MUS_UNDERWATER
+data/maps/Underwater_Route129/map.json:  "music": "MUS_UNDERWATER",
+data/maps/SootopolisCity_House2/header.inc:	.2byte MUS_SOOTOPOLIS
+data/maps/SootopolisCity_House2/map.json:  "music": "MUS_SOOTOPOLIS",
+data/maps/SeafloorCavern_Room3/header.inc:	.2byte MUS_MT_CHIMNEY
+data/maps/SeafloorCavern_Room3/map.json:  "music": "MUS_MT_CHIMNEY",
+data/maps/Route110_TrickHousePuzzle8/header.inc:	.2byte MUS_TRICK_HOUSE
+data/maps/Route110_TrickHousePuzzle8/map.json:  "music": "MUS_TRICK_HOUSE",
+data/maps/AquaHideout_UnusedRubyMap1/header.inc:	.2byte MUS_AQUA_MAGMA_HIDEOUT
+data/maps/AquaHideout_UnusedRubyMap1/map.json:  "music": "MUS_AQUA_MAGMA_HIDEOUT",
+data/maps/Route118/header.inc:	.2byte MUS_ROUTE118
+data/maps/Route118/map.json:  "music": "MUS_ROUTE118",
+data/maps/MossdeepCity_SpaceCenter_1F/header.inc:	.2byte MUS_RUSTBORO
+data/maps/MossdeepCity_SpaceCenter_1F/map.json:  "music": "MUS_RUSTBORO",
+data/maps/MtPyre_Exterior/header.inc:	.2byte MUS_MT_PYRE_EXTERIOR
+data/maps/MtPyre_Exterior/map.json:  "music": "MUS_MT_PYRE_EXTERIOR",
+data/maps/Cherrygrove_City/header.inc:	.2byte MUS_DUMMY
+data/maps/Cherrygrove_City/map.json:  "music": "MUS_DUMMY",
+data/maps/BattleFrontier_BattleDomeBattleRoom/header.inc:	.2byte MUS_B_DOME
+data/maps/BattleFrontier_BattleDomeBattleRoom/map.json:  "music": "MUS_B_DOME",
+data/maps/BattleFrontier_BattleDomeBattleRoom/scripts.inc:	playfanfare MUS_OBTAIN_SYMBOL
+data/maps/BattleFrontier_BattleDomeBattleRoom/scripts.inc:	playfanfare MUS_OBTAIN_SYMBOL
+data/maps/Route38/header.inc:	.2byte MUS_DUMMY
+data/maps/Route38/map.json:  "music": "MUS_DUMMY",
+data/maps/MauvilleCity_Gym/header.inc:	.2byte MUS_GYM
+data/maps/MauvilleCity_Gym/map.json:  "music": "MUS_GYM",
+data/maps/MauvilleCity_Gym/scripts.inc:	playfanfare MUS_REGISTER_MATCH_CALL
+data/maps/NewMauville_Inside/header.inc:	.2byte MUS_MT_PYRE
+data/maps/NewMauville_Inside/map.json:  "music": "MUS_MT_PYRE",
+data/maps/SecretBase_BrownCave3/header.inc:	.2byte MUS_FORTREE
+data/maps/SecretBase_BrownCave3/map.json:  "music": "MUS_FORTREE",
+data/maps/Route45/header.inc:	.2byte MUS_DUMMY
+data/maps/Route45/map.json:  "music": "MUS_DUMMY",
+data/maps/SecretBase_RedCave4/header.inc:	.2byte MUS_FORTREE
+data/maps/SecretBase_RedCave4/map.json:  "music": "MUS_FORTREE",
+data/maps/LilycoveCity_MoveDeletersHouse/header.inc:	.2byte MUS_LILYCOVE
+data/maps/LilycoveCity_MoveDeletersHouse/map.json:  "music": "MUS_LILYCOVE",
+data/maps/LilycoveCity_MoveDeletersHouse/scripts.inc:	playfanfare MUS_MOVE_DELETED
+data/maps/Cerulean_City/header.inc:	.2byte MUS_RG_CELADON
+data/maps/Cerulean_City/map.json:  "music": "MUS_RG_CELADON",
+data/maps/Cinnabar_Island/header.inc:	.2byte MUS_RG_CINNABAR
+data/maps/Cinnabar_Island/map.json:  "music": "MUS_RG_CINNABAR",
+data/maps/MeteorFalls_StevensCave/header.inc:	.2byte MUS_CAVE_OF_ORIGIN
+data/maps/MeteorFalls_StevensCave/map.json:  "music": "MUS_CAVE_OF_ORIGIN",
+data/maps/BattleFrontier_BattlePyramidFloor/header.inc:	.2byte MUS_NONE
+data/maps/BattleFrontier_BattlePyramidFloor/map.json:  "music": "MUS_NONE",
+data/maps/BattleFrontier_BattlePyramidFloor/scripts.inc:	playbgm MUS_B_PYRAMID, FALSE
+data/maps/BattlePyramidSquare01/header.inc:	.2byte MUS_NONE
+data/maps/BattlePyramidSquare01/map.json:  "music": "MUS_NONE",
+data/maps/SecretBase_Tree1/header.inc:	.2byte MUS_FORTREE
+data/maps/SecretBase_Tree1/map.json:  "music": "MUS_FORTREE",
+data/maps/RustboroCity_Flat2_2F/header.inc:	.2byte MUS_RUSTBORO
+data/maps/RustboroCity_Flat2_2F/map.json:  "music": "MUS_RUSTBORO",
+data/maps/Indigo_Plateau/header.inc:	.2byte MUS_DUMMY
+data/maps/Indigo_Plateau/map.json:  "music": "MUS_DUMMY",
+data/maps/Route116_TunnelersRestHouse/header.inc:	.2byte MUS_RUSTBORO
+data/maps/Route116_TunnelersRestHouse/map.json:  "music": "MUS_RUSTBORO",
+data/maps/celadon_apartment3f/header.inc:	.2byte MUS_DUMMY
+data/maps/celadon_apartment3f/map.json:  "music": "MUS_DUMMY",
+data/maps/LilycoveCity_DepartmentStore_1F/header.inc:	.2byte MUS_LILYCOVE
+data/maps/LilycoveCity_DepartmentStore_1F/map.json:  "music": "MUS_LILYCOVE",
+data/maps/saffron_gateroute7/header.inc:	.2byte MUS_DUMMY
+data/maps/saffron_gateroute7/map.json:  "music": "MUS_DUMMY",
+data/maps/Violet_City/header.inc:	.2byte MUS_DUMMY
+data/maps/Violet_City/map.json:  "music": "MUS_DUMMY",
+data/maps/Viridian_City/header.inc:	.2byte MUS_RG_PEWTER
+data/maps/Viridian_City/map.json:  "music": "MUS_RG_PEWTER",
+data/maps/FortreeCity_DecorationShop/header.inc:	.2byte MUS_FORTREE
+data/maps/FortreeCity_DecorationShop/map.json:  "music": "MUS_FORTREE",
+data/maps/BattlePyramidSquare15/header.inc:	.2byte MUS_NONE
+data/maps/BattlePyramidSquare15/map.json:  "music": "MUS_NONE",
+data/maps/NavelRock_Bottom/header.inc:	.2byte MUS_RG_SEVII_CAVE
+data/maps/NavelRock_Bottom/map.json:  "music": "MUS_RG_SEVII_CAVE",
+data/maps/Route32/header.inc:	.2byte MUS_DUMMY
+data/maps/Route32/map.json:  "music": "MUS_DUMMY",
+data/maps/NavelRock_Down05/header.inc:	.2byte MUS_RG_SEVII_CAVE
+data/maps/NavelRock_Down05/map.json:  "music": "MUS_RG_SEVII_CAVE",
+data/maps/ContestHallTough/header.inc:	.2byte MUS_CONTEST
+data/maps/ContestHallTough/map.json:  "music": "MUS_CONTEST",
+data/maps/Blackthorn_City/header.inc:	.2byte MUS_DUMMY
+data/maps/Blackthorn_City/map.json:  "music": "MUS_DUMMY",
+data/maps/fuchsia_safarizoneentrance/header.inc:	.2byte MUS_DUMMY
+data/maps/fuchsia_safarizoneentrance/map.json:  "music": "MUS_DUMMY",
+data/maps/PetalburgCity_Gym/header.inc:	.2byte MUS_GYM
+data/maps/PetalburgCity_Gym/map.json:  "music": "MUS_GYM",
+data/maps/PetalburgCity_Gym/scripts.inc:	playbgm MUS_FOLLOW_ME, FALSE
+data/maps/PetalburgCity_Gym/scripts.inc:	playbgm MUS_FOLLOW_ME, FALSE
+data/maps/EverGrandeCity_Hall2/header.inc:	.2byte MUS_VICTORY_ROAD
+data/maps/EverGrandeCity_Hall2/map.json:  "music": "MUS_VICTORY_ROAD",
+data/maps/BattleFrontier_Lounge8/header.inc:	.2byte MUS_B_TOWER_RS
+data/maps/BattleFrontier_Lounge8/map.json:  "music": "MUS_B_TOWER_RS",
+data/maps/LilycoveCity_CoveLilyMotel_1F/header.inc:	.2byte MUS_LILYCOVE
+data/maps/LilycoveCity_CoveLilyMotel_1F/map.json:  "music": "MUS_LILYCOVE",
+data/maps/EverGrandeCity_SidneysRoom/header.inc:	.2byte MUS_VICTORY_ROAD
+data/maps/EverGrandeCity_SidneysRoom/map.json:  "music": "MUS_VICTORY_ROAD",
+data/maps/EverGrandeCity_SidneysRoom/scripts.inc:	playbgm MUS_ENCOUNTER_ELITE_FOUR, FALSE
+data/maps/EverGrandeCity_PokemonLeague_2F/header.inc:	.2byte MUS_POKE_CENTER
+data/maps/EverGrandeCity_PokemonLeague_2F/map.json:  "music": "MUS_POKE_CENTER",
+data/maps/route12_house/header.inc:	.2byte MUS_DUMMY
+data/maps/route12_house/map.json:  "music": "MUS_DUMMY",
+data/maps/LavaridgeTown_PokemonCenter_2F/header.inc:	.2byte MUS_POKE_CENTER
+data/maps/LavaridgeTown_PokemonCenter_2F/map.json:  "music": "MUS_POKE_CENTER",
+data/maps/BirthIsland_Harbor/header.inc:	.2byte MUS_NONE
+data/maps/BirthIsland_Harbor/map.json:  "music": "MUS_NONE",
+data/maps/LilycoveCity_ContestLobby/header.inc:	.2byte MUS_CONTEST_LOBBY
+data/maps/LilycoveCity_ContestLobby/map.json:  "music": "MUS_CONTEST_LOBBY",
+data/maps/LilycoveCity_ContestLobby/scripts.inc:	playfanfare MUS_OBTAIN_ITEM
+data/maps/LilycoveCity_ContestLobby/scripts.inc:	playfanfare MUS_OBTAIN_ITEM
+data/maps/Route43/header.inc:	.2byte MUS_DUMMY
+data/maps/Route43/map.json:  "music": "MUS_DUMMY",
+data/maps/cerulean_house2/header.inc:	.2byte MUS_DUMMY
+data/maps/cerulean_house2/map.json:  "music": "MUS_DUMMY",
+data/maps/DewfordTown_Hall/header.inc:	.2byte MUS_DEWFORD
+data/maps/DewfordTown_Hall/map.json:  "music": "MUS_DEWFORD",
+data/maps/Route47/header.inc:	.2byte MUS_DUMMY
+data/maps/Route47/map.json:  "music": "MUS_DUMMY",
+data/maps/OldaleTown_House2/header.inc:	.2byte MUS_OLDALE
+data/maps/OldaleTown_House2/map.json:  "music": "MUS_OLDALE",
+data/maps/FarawayIsland_Entrance/header.inc:	.2byte MUS_ABANDONED_SHIP
+data/maps/FarawayIsland_Entrance/map.json:  "music": "MUS_ABANDONED_SHIP",
+data/maps/saffron_gateroute6/header.inc:	.2byte MUS_DUMMY
+data/maps/saffron_gateroute6/map.json:  "music": "MUS_DUMMY",
+data/maps/pewter_house1/header.inc:	.2byte MUS_RG_PEWTER
+data/maps/pewter_house1/map.json:  "music": "MUS_RG_PEWTER",
+data/maps/RustboroCity_Flat1_1F/header.inc:	.2byte MUS_RUSTBORO
+data/maps/RustboroCity_Flat1_1F/map.json:  "music": "MUS_RUSTBORO",
+data/maps/RustboroCity_House3/header.inc:	.2byte MUS_RUSTBORO
+data/maps/RustboroCity_House3/map.json:  "music": "MUS_RUSTBORO",
+data/maps/Route14/header.inc:	.2byte MUS_DUMMY
+data/maps/Route14/map.json:  "music": "MUS_DUMMY",
+data/maps/NewMauville_Entrance/header.inc:	.2byte MUS_MT_PYRE
+data/maps/NewMauville_Entrance/map.json:  "music": "MUS_MT_PYRE",
+data/maps/Route112_CableCarStation/header.inc:	.2byte MUS_ROUTE110
+data/maps/Route112_CableCarStation/map.json:  "music": "MUS_ROUTE110",
+data/maps/ShoalCave_HighTideInnerRoom/header.inc:	.2byte MUS_MT_PYRE
+data/maps/ShoalCave_HighTideInnerRoom/map.json:  "music": "MUS_MT_PYRE",
+data/maps/PetalburgCity_Mart/header.inc:	.2byte MUS_POKE_MART
+data/maps/PetalburgCity_Mart/map.json:  "music": "MUS_POKE_MART",
+data/maps/BattleColosseum_2P/header.inc:	.2byte MUS_EVER_GRANDE
+data/maps/BattleColosseum_2P/map.json:  "music": "MUS_EVER_GRANDE",
+data/maps/Route29/header.inc:	.2byte MUS_DUMMY
+data/maps/Route29/map.json:  "music": "MUS_DUMMY",
+data/maps/fuchsia_house2/header.inc:	.2byte MUS_DUMMY
+data/maps/fuchsia_house2/map.json:  "music": "MUS_DUMMY",
+data/maps/LavaridgeTown_Mart/header.inc:	.2byte MUS_POKE_MART
+data/maps/LavaridgeTown_Mart/map.json:  "music": "MUS_POKE_MART",
+data/maps/AlteringCave/header.inc:	.2byte MUS_RG_SEVII_CAVE
+data/maps/AlteringCave/map.json:  "music": "MUS_RG_SEVII_CAVE",
+data/maps/saffron_tunnelSW/header.inc:	.2byte MUS_DUMMY
+data/maps/saffron_tunnelSW/map.json:  "music": "MUS_DUMMY",
+data/maps/MagmaHideout_4F/header.inc:	.2byte MUS_AQUA_MAGMA_HIDEOUT
+data/maps/MagmaHideout_4F/map.json:  "music": "MUS_AQUA_MAGMA_HIDEOUT",
+data/maps/MagmaHideout_4F/scripts.inc:	playbgm MUS_ENCOUNTER_MAGMA, FALSE
+data/maps/MagmaHideout_4F/scripts.inc:	playfanfare MUS_AWAKEN_LEGEND
+data/maps/Fuchsia_City/header.inc:	.2byte MUS_RG_FUCHSIA
+data/maps/Fuchsia_City/map.json:  "music": "MUS_RG_FUCHSIA",
+data/maps/Route12/header.inc:	.2byte MUS_DUMMY
+data/maps/Route12/map.json:  "music": "MUS_DUMMY",
+data/maps/EverGrandeCity_GlaciasRoom/header.inc:	.2byte MUS_VICTORY_ROAD
+data/maps/EverGrandeCity_GlaciasRoom/map.json:  "music": "MUS_VICTORY_ROAD",
+data/maps/EverGrandeCity_GlaciasRoom/scripts.inc:	playbgm MUS_ENCOUNTER_ELITE_FOUR, FALSE
+data/maps/LavaridgeTown_Gym_B1F/header.inc:	.2byte MUS_GYM
+data/maps/LavaridgeTown_Gym_B1F/map.json:  "music": "MUS_GYM",
+data/maps/LilycoveCity_House4/header.inc:	.2byte MUS_LILYCOVE
+data/maps/LilycoveCity_House4/map.json:  "music": "MUS_LILYCOVE",
+data/maps/indigoplateau_koga/header.inc:	.2byte MUS_DUMMY
+data/maps/indigoplateau_koga/map.json:  "music": "MUS_DUMMY",
+data/maps/Route113_GlassWorkshop/header.inc:	.2byte MUS_RUSTBORO
+data/maps/Route113_GlassWorkshop/map.json:  "music": "MUS_RUSTBORO",
+data/maps/SlateportCity_Mart/header.inc:	.2byte MUS_POKE_MART
+data/maps/SlateportCity_Mart/map.json:  "music": "MUS_POKE_MART",
+data/maps/AbandonedShip_Room_B1F/header.inc:	.2byte MUS_ABANDONED_SHIP
+data/maps/AbandonedShip_Room_B1F/map.json:  "music": "MUS_ABANDONED_SHIP",
+data/maps/AbandonedShip_HiddenFloorCorridors/header.inc:	.2byte MUS_ABANDONED_SHIP
+data/maps/AbandonedShip_HiddenFloorCorridors/map.json:  "music": "MUS_ABANDONED_SHIP",
+data/maps/cerulean_bikeshop/header.inc:	.2byte MUS_DUMMY
+data/maps/cerulean_bikeshop/map.json:  "music": "MUS_DUMMY",
+data/maps/route5_tunnel/header.inc:	.2byte MUS_DUMMY
+data/maps/route5_tunnel/map.json:  "music": "MUS_DUMMY",
+data/maps/SeafloorCavern_Room4/header.inc:	.2byte MUS_MT_CHIMNEY
+data/maps/SeafloorCavern_Room4/map.json:  "music": "MUS_MT_CHIMNEY",
+data/maps/LittlerootTown_MaysHouse_1F/header.inc:	.2byte MUS_LITTLEROOT
+data/maps/LittlerootTown_MaysHouse_1F/map.json:  "music": "MUS_LITTLEROOT",
+data/maps/LittlerootTown_MaysHouse_1F/scripts.inc:	playbgm MUS_ENCOUNTER_MAY, TRUE
+data/maps/LittlerootTown_MaysHouse_1F/scripts.inc:	savebgm MUS_DUMMY
+data/maps/viridian_pokecenter/header.inc:	.2byte MUS_RG_POKE_CENTER
+data/maps/viridian_pokecenter/map.json:  "music": "MUS_RG_POKE_CENTER",
+data/maps/VerdanturfTown_PokemonCenter_2F/header.inc:	.2byte MUS_POKE_CENTER
+data/maps/VerdanturfTown_PokemonCenter_2F/map.json:  "music": "MUS_POKE_CENTER",
+data/maps/vermilion_outside/header.inc:	.2byte MUS_DUMMY
+data/maps/vermilion_outside/map.json:  "music": "MUS_DUMMY",
+data/maps/Route111/header.inc:	.2byte MUS_ROUTE110
+data/maps/Route111/map.json:  "music": "MUS_ROUTE110",
+data/maps/Route111/scripts.inc:	fadenewbgm MUS_ROUTE110
+data/maps/Route111/scripts.inc:	fadenewbgm MUS_DESERT
+data/maps/LavaridgeTown/header.inc:	.2byte MUS_OLDALE
+data/maps/LavaridgeTown/map.json:  "music": "MUS_OLDALE",
+data/maps/LavaridgeTown/scripts.inc:	savebgm MUS_DUMMY
+data/maps/LavaridgeTown/scripts.inc:	playbgm MUS_ENCOUNTER_MAY, TRUE
+data/maps/LavaridgeTown/scripts.inc:	playbgm MUS_ENCOUNTER_BRENDAN, TRUE
+data/maps/LavaridgeTown/scripts.inc:	playfanfare MUS_OBTAIN_ITEM
+data/maps/FallarborTown_PokemonCenter_1F/header.inc:	.2byte MUS_POKE_CENTER
+data/maps/FallarborTown_PokemonCenter_1F/map.json:  "music": "MUS_POKE_CENTER",
+data/maps/route10_powerplant/header.inc:	.2byte MUS_DUMMY
+data/maps/route10_powerplant/map.json:  "music": "MUS_DUMMY",
+data/maps/TrainerHill_Roof/header.inc:	.2byte MUS_B_TOWER_RS
+data/maps/TrainerHill_Roof/map.json:  "music": "MUS_B_TOWER_RS",
+data/maps/TrainerHill_Roof/scripts.inc:	playfanfare MUS_LEVEL_UP
+data/maps/MirageTower_1F/header.inc:	.2byte MUS_MT_CHIMNEY
+data/maps/MirageTower_1F/map.json:  "music": "MUS_MT_CHIMNEY",
+data/maps/BattleFrontier_ExchangeServiceCorner/header.inc:	.2byte MUS_B_TOWER_RS
+data/maps/BattleFrontier_ExchangeServiceCorner/map.json:  "music": "MUS_B_TOWER_RS",
+data/maps/MtPyre_Summit/header.inc:	.2byte MUS_MT_PYRE_EXTERIOR
+data/maps/MtPyre_Summit/map.json:  "music": "MUS_MT_PYRE_EXTERIOR",
+data/maps/MtPyre_Summit/scripts.inc:	playbgm MUS_ENCOUNTER_AQUA, FALSE
+data/maps/EverGrandeCity_ChampionsRoom/header.inc:	.2byte MUS_VICTORY_ROAD
+data/maps/EverGrandeCity_ChampionsRoom/map.json:  "music": "MUS_VICTORY_ROAD",
+data/maps/EverGrandeCity_ChampionsRoom/scripts.inc:	playbgm MUS_ENCOUNTER_CHAMPION, FALSE
+data/maps/EverGrandeCity_ChampionsRoom/scripts.inc:	playbgm MUS_ENCOUNTER_MAY, FALSE
+data/maps/EverGrandeCity_ChampionsRoom/scripts.inc:	playbgm MUS_ENCOUNTER_BRENDAN, FALSE
+data/maps/MauvilleCity/header.inc:	.2byte MUS_RUSTBORO
+data/maps/MauvilleCity/map.json:  "music": "MUS_RUSTBORO",
+data/maps/MauvilleCity/scripts.inc:	playfanfare MUS_REGISTER_MATCH_CALL
+data/maps/saffron_pokecenter/header.inc:	.2byte MUS_DUMMY
+data/maps/saffron_pokecenter/map.json:  "music": "MUS_DUMMY",
+data/maps/BattleFrontier_BattlePikeCorridor/header.inc:	.2byte MUS_B_PIKE
+data/maps/BattleFrontier_BattlePikeCorridor/map.json:  "music": "MUS_B_PIKE",
+data/maps/TrainerHill_4F/header.inc:	.2byte MUS_B_TOWER_RS
+data/maps/TrainerHill_4F/map.json:  "music": "MUS_B_TOWER_RS",
+data/maps/SeafloorCavern_Room7/header.inc:	.2byte MUS_MT_CHIMNEY
+data/maps/SeafloorCavern_Room7/map.json:  "music": "MUS_MT_CHIMNEY",
+data/maps/BattleFrontier_Lounge2/header.inc:	.2byte MUS_B_TOWER_RS
+data/maps/BattleFrontier_Lounge2/map.json:  "music": "MUS_B_TOWER_RS",
+data/maps/SafariZone_North/header.inc:	.2byte MUS_SAFARI_ZONE
+data/maps/SafariZone_North/map.json:  "music": "MUS_SAFARI_ZONE",
+data/maps/NavelRock_Up4/header.inc:	.2byte MUS_RG_SEVII_CAVE
+data/maps/NavelRock_Up4/map.json:  "music": "MUS_RG_SEVII_CAVE",
+data/maps/OldaleTown_PokemonCenter_1F/header.inc:	.2byte MUS_POKE_CENTER
+data/maps/OldaleTown_PokemonCenter_1F/map.json:  "music": "MUS_POKE_CENTER",
+data/maps/Underwater_Route125/header.inc:	.2byte MUS_UNDERWATER
+data/maps/Underwater_Route125/map.json:  "music": "MUS_UNDERWATER",
+data/maps/vermilion_house2/header.inc:	.2byte MUS_DUMMY
+data/maps/vermilion_house2/map.json:  "music": "MUS_DUMMY",
+data/maps/lavender_radiostation/header.inc:	.2byte MUS_DUMMY
+data/maps/lavender_radiostation/map.json:  "music": "MUS_DUMMY",
+data/maps/SeafloorCavern_Room5/header.inc:	.2byte MUS_MT_CHIMNEY
+data/maps/SeafloorCavern_Room5/map.json:  "music": "MUS_MT_CHIMNEY",
+data/maps/NavelRock_Up2/header.inc:	.2byte MUS_RG_SEVII_CAVE
+data/maps/NavelRock_Up2/map.json:  "music": "MUS_RG_SEVII_CAVE",
+data/maps/RecordCorner/header.inc:	.2byte MUS_EVER_GRANDE
+data/maps/RecordCorner/map.json:  "music": "MUS_EVER_GRANDE",
+data/maps/AbandonedShip_Rooms_1F/header.inc:	.2byte MUS_ABANDONED_SHIP
+data/maps/AbandonedShip_Rooms_1F/map.json:  "music": "MUS_ABANDONED_SHIP",
+data/maps/CaveOfOrigin_UnusedRubySapphireMap1/header.inc:	.2byte MUS_CAVE_OF_ORIGIN
+data/maps/CaveOfOrigin_UnusedRubySapphireMap1/map.json:  "music": "MUS_CAVE_OF_ORIGIN",
+data/maps/SkyPillar_Outside/header.inc:	.2byte MUS_MT_CHIMNEY
+data/maps/SkyPillar_Outside/map.json:  "music": "MUS_MT_CHIMNEY",
+data/maps/PetalburgCity_PokemonCenter_1F/header.inc:	.2byte MUS_POKE_CENTER
+data/maps/PetalburgCity_PokemonCenter_1F/map.json:  "music": "MUS_POKE_CENTER",
+data/maps/celadon_department5f/header.inc:	.2byte MUS_DUMMY
+data/maps/celadon_department5f/map.json:  "music": "MUS_DUMMY",
+data/maps/BattlePyramidSquare07/header.inc:	.2byte MUS_NONE
+data/maps/BattlePyramidSquare07/map.json:  "music": "MUS_NONE",
+data/maps/Route110_TrickHousePuzzle5/header.inc:	.2byte MUS_TRICK_HOUSE
+data/maps/Route110_TrickHousePuzzle5/map.json:  "music": "MUS_TRICK_HOUSE",
+data/maps/lavender_house2/header.inc:	.2byte MUS_DUMMY
+data/maps/lavender_house2/map.json:  "music": "MUS_DUMMY",
+data/maps/LilycoveCity_CoveLilyMotel_2F/header.inc:	.2byte MUS_LILYCOVE
+data/maps/LilycoveCity_CoveLilyMotel_2F/map.json:  "music": "MUS_LILYCOVE",
+data/maps/LilycoveCity_CoveLilyMotel_2F/scripts.inc:	playfanfare MUS_OBTAIN_ITEM
+data/maps/FallarborTown_Mart/header.inc:	.2byte MUS_POKE_MART
+data/maps/FallarborTown_Mart/map.json:  "music": "MUS_POKE_MART",
+data/maps/AbandonedShip_Underwater1/header.inc:	.2byte MUS_UNDERWATER
+data/maps/AbandonedShip_Underwater1/map.json:  "music": "MUS_UNDERWATER",
+data/maps/Route111_OldLadysRestStop/header.inc:	.2byte MUS_RUSTBORO
+data/maps/Route111_OldLadysRestStop/map.json:  "music": "MUS_RUSTBORO",
+data/maps/PacifidlogTown_House2/header.inc:	.2byte MUS_LILYCOVE
+data/maps/PacifidlogTown_House2/map.json:  "music": "MUS_LILYCOVE",
+data/maps/MtPyre_2F/header.inc:	.2byte MUS_MT_PYRE
+data/maps/MtPyre_2F/map.json:  "music": "MUS_MT_PYRE",
+data/maps/Route110/header.inc:	.2byte MUS_ROUTE110
+data/maps/Route110/map.json:  "music": "MUS_ROUTE110",
+data/maps/Route110/scripts.inc:	savebgm MUS_CYCLING
+data/maps/Route110/scripts.inc:	savebgm MUS_DUMMY
+data/maps/Route110/scripts.inc:	playbgm MUS_ENCOUNTER_MAY, TRUE
+data/maps/Route110/scripts.inc:	playbgm MUS_ENCOUNTER_BRENDAN, TRUE
+data/maps/Route110/scripts.inc:	savebgm MUS_DUMMY
+data/maps/Route110/scripts.inc:	playfanfare MUS_REGISTER_MATCH_CALL
+data/maps/MirageTower_3F/header.inc:	.2byte MUS_MT_CHIMNEY
+data/maps/MirageTower_3F/map.json:  "music": "MUS_MT_CHIMNEY",
+data/maps/SecretBase_YellowCave1/header.inc:	.2byte MUS_FORTREE
+data/maps/SecretBase_YellowCave1/map.json:  "music": "MUS_FORTREE",
+data/maps/RustboroCity_Gym/header.inc:	.2byte MUS_GYM
+data/maps/RustboroCity_Gym/map.json:  "music": "MUS_GYM",
+data/maps/RustboroCity_Gym/scripts.inc:	playfanfare MUS_REGISTER_MATCH_CALL
+data/maps/ContestHallCute/header.inc:	.2byte MUS_CONTEST
+data/maps/ContestHallCute/map.json:  "music": "MUS_CONTEST",
+data/maps/NavelRock_Harbor/header.inc:	.2byte MUS_RG_SEVII_ROUTE
+data/maps/NavelRock_Harbor/map.json:  "music": "MUS_RG_SEVII_ROUTE",
+data/maps/SecretBase_YellowCave2/header.inc:	.2byte MUS_FORTREE
+data/maps/SecretBase_YellowCave2/map.json:  "music": "MUS_FORTREE",
+data/maps/SootopolisCity_Mart/header.inc:	.2byte MUS_POKE_MART
+data/maps/SootopolisCity_Mart/map.json:  "music": "MUS_POKE_MART",
+data/maps/Route39/header.inc:	.2byte MUS_DUMMY
+data/maps/Route39/map.json:  "music": "MUS_DUMMY",
+data/maps/Route46/header.inc:	.2byte MUS_DUMMY
+data/maps/Route46/map.json:  "music": "MUS_DUMMY",
+data/maps/Route104_Prototype/header.inc:	.2byte MUS_ROUTE104
+data/maps/Route104_Prototype/map.json:  "music": "MUS_ROUTE104",
+data/maps/celadon_gateroute16/header.inc:	.2byte MUS_DUMMY
+data/maps/celadon_gateroute16/map.json:  "music": "MUS_DUMMY",
+data/maps/MeteorFalls_1F_2R/header.inc:	.2byte MUS_CAVE_OF_ORIGIN
+data/maps/MeteorFalls_1F_2R/map.json:  "music": "MUS_CAVE_OF_ORIGIN",
+data/maps/LilycoveCity_PokemonCenter_2F/header.inc:	.2byte MUS_POKE_CENTER
+data/maps/LilycoveCity_PokemonCenter_2F/map.json:  "music": "MUS_POKE_CENTER",
+data/maps/DiglettsCave_Tunnel/header.inc:	.2byte MUS_DUMMY
+data/maps/DiglettsCave_Tunnel/map.json:  "music": "MUS_DUMMY",
+data/maps/SecretBase_Tree2/header.inc:	.2byte MUS_FORTREE
+data/maps/SecretBase_Tree2/map.json:  "music": "MUS_FORTREE",
+data/maps/SSTidalRooms/header.inc:	.2byte MUS_SAILING
+data/maps/SSTidalRooms/map.json:  "music": "MUS_SAILING",
+data/maps/BattleFrontier_BattleFactoryLobby/header.inc:	.2byte MUS_B_FACTORY
+data/maps/BattleFrontier_BattleFactoryLobby/map.json:  "music": "MUS_B_FACTORY",
+data/maps/PacifidlogTown_House4/header.inc:	.2byte MUS_LILYCOVE
+data/maps/PacifidlogTown_House4/map.json:  "music": "MUS_LILYCOVE",
+data/maps/MauvilleCity_PokemonCenter_1F/header.inc:	.2byte MUS_POKE_CENTER
+data/maps/MauvilleCity_PokemonCenter_1F/map.json:  "music": "MUS_POKE_CENTER",
+data/maps/BattlePyramidSquare08/header.inc:	.2byte MUS_NONE
+data/maps/BattlePyramidSquare08/map.json:  "music": "MUS_NONE",
+data/maps/Oaks_Lab/header.inc:	.2byte MUS_RG_OAK_LAB
+data/maps/Oaks_Lab/map.json:  "music": "MUS_RG_OAK_LAB",
+data/maps/TrainerHill_2F/header.inc:	.2byte MUS_B_TOWER_RS
+data/maps/TrainerHill_2F/map.json:  "music": "MUS_B_TOWER_RS",
+data/maps/SkyPillar_5F/header.inc:	.2byte MUS_MT_CHIMNEY
+data/maps/SkyPillar_5F/map.json:  "music": "MUS_MT_CHIMNEY",
+data/maps/LilycoveCity_Harbor/header.inc:	.2byte MUS_LILYCOVE
+data/maps/LilycoveCity_Harbor/map.json:  "music": "MUS_LILYCOVE",
+data/maps/Route130/header.inc:	.2byte MUS_ROUTE119
+data/maps/Route130/map.json:  "music": "MUS_ROUTE119",
+data/maps/MossdeepCity_SpaceCenter_2F/header.inc:	.2byte MUS_RUSTBORO
+data/maps/MossdeepCity_SpaceCenter_2F/map.json:  "music": "MUS_RUSTBORO",
+data/maps/Pewter_City/header.inc:	.2byte MUS_RG_PEWTER
+data/maps/Pewter_City/map.json:  "music": "MUS_RG_PEWTER",
+data/maps/SecretBase_YellowCave4/header.inc:	.2byte MUS_FORTREE
+data/maps/SecretBase_YellowCave4/map.json:  "music": "MUS_FORTREE",
+data/maps/SootopolisCity/header.inc:	.2byte MUS_SOOTOPOLIS
+data/maps/SootopolisCity/map.json:  "music": "MUS_SOOTOPOLIS",
+data/maps/SootopolisCity/scripts.inc:	fadenewbgm MUS_SOOTOPOLIS
+data/maps/SootopolisCity/scripts.inc:	fadenewbgm MUS_SURF
+data/maps/DewfordTown_PokemonCenter_1F/header.inc:	.2byte MUS_POKE_CENTER
+data/maps/DewfordTown_PokemonCenter_1F/map.json:  "music": "MUS_POKE_CENTER",
+data/maps/BattleFrontier_BattleTowerBattleRoom/header.inc:	.2byte MUS_B_TOWER
+data/maps/BattleFrontier_BattleTowerBattleRoom/map.json:  "music": "MUS_B_TOWER",
+data/maps/BattleFrontier_BattleTowerBattleRoom/scripts.inc:	playfanfare MUS_HEAL
+data/maps/BattleFrontier_BattleTowerBattleRoom/scripts.inc:	playfanfare MUS_OBTAIN_SYMBOL
+data/maps/BattleFrontier_BattleTowerBattleRoom/scripts.inc:	playfanfare MUS_OBTAIN_SYMBOL
+data/maps/SeafloorCavern_Room6/header.inc:	.2byte MUS_MT_CHIMNEY
+data/maps/SeafloorCavern_Room6/map.json:  "music": "MUS_MT_CHIMNEY",
+data/maps/PetalburgCity_House1/header.inc:	.2byte MUS_PETALBURG
+data/maps/PetalburgCity_House1/map.json:  "music": "MUS_PETALBURG",
+data/maps/cerulean_house1/header.inc:	.2byte MUS_DUMMY
+data/maps/cerulean_house1/map.json:  "music": "MUS_DUMMY",
+data/maps/RustboroCity_DevonCorp_3F/header.inc:	.2byte MUS_RUSTBORO
+data/maps/RustboroCity_DevonCorp_3F/map.json:  "music": "MUS_RUSTBORO",
+data/maps/RustboroCity_DevonCorp_3F/scripts.inc:	playbgm MUS_FOLLOW_ME, FALSE
+data/maps/RustboroCity_DevonCorp_3F/scripts.inc:	playfanfare MUS_OBTAIN_ITEM
+data/maps/LittlerootTown_BrendansHouse_1F/header.inc:	.2byte MUS_LITTLEROOT
+data/maps/LittlerootTown_BrendansHouse_1F/map.json:  "music": "MUS_LITTLEROOT",
+data/maps/LittlerootTown_BrendansHouse_1F/scripts.inc:	playbgm MUS_ENCOUNTER_BRENDAN, TRUE
+data/maps/LittlerootTown_BrendansHouse_1F/scripts.inc:	savebgm MUS_DUMMY
+data/maps/Route11/header.inc:	.2byte MUS_DUMMY
+data/maps/Route11/map.json:  "music": "MUS_DUMMY",
+data/maps/Route119_WeatherInstitute_1F/header.inc:	.2byte MUS_RUSTBORO
+data/maps/Route119_WeatherInstitute_1F/map.json:  "music": "MUS_RUSTBORO",
+data/maps/TerraCave_End/header.inc:	.2byte MUS_PETALBURG_WOODS
+data/maps/TerraCave_End/map.json:  "music": "MUS_PETALBURG_WOODS",
+data/maps/BattleFrontier_BattleDomePreBattleRoom/header.inc:	.2byte MUS_B_DOME
+data/maps/BattleFrontier_BattleDomePreBattleRoom/map.json:  "music": "MUS_B_DOME",
+data/maps/BattleFrontier_BattleDomePreBattleRoom/scripts.inc:	playfanfare MUS_HEAL
+data/maps/MossdeepCity_GameCorner_1F/header.inc:	.2byte MUS_RUSTBORO
+data/maps/MossdeepCity_GameCorner_1F/map.json:  "music": "MUS_RUSTBORO",
+data/maps/Cianwood_City/header.inc:	.2byte MUS_DUMMY
+data/maps/Cianwood_City/map.json:  "music": "MUS_DUMMY",
+data/maps/vermilion_fanclub/header.inc:	.2byte MUS_DUMMY
+data/maps/vermilion_fanclub/map.json:  "music": "MUS_DUMMY",
+data/maps/fuchsia_safarizonemountain/header.inc:	.2byte MUS_DUMMY
+data/maps/fuchsia_safarizonemountain/map.json:  "music": "MUS_DUMMY",
+data/maps/Route26_North/header.inc:	.2byte MUS_DUMMY
+data/maps/Route26_North/map.json:  "music": "MUS_DUMMY",
+data/maps/SafariZone_Southwest/header.inc:	.2byte MUS_SAFARI_ZONE
+data/maps/SafariZone_Southwest/map.json:  "music": "MUS_SAFARI_ZONE",
+data/maps/PacifidlogTown_PokemonCenter_2F/header.inc:	.2byte MUS_POKE_CENTER
+data/maps/PacifidlogTown_PokemonCenter_2F/map.json:  "music": "MUS_POKE_CENTER",
+data/maps/AbandonedShip_Rooms2_1F/header.inc:	.2byte MUS_ABANDONED_SHIP
+data/maps/AbandonedShip_Rooms2_1F/map.json:  "music": "MUS_ABANDONED_SHIP",
+data/maps/vermilion_gym/header.inc:	.2byte MUS_DUMMY
+data/maps/vermilion_gym/map.json:  "music": "MUS_DUMMY",
+data/maps/MossdeepCity_StevensHouse/header.inc:	.2byte MUS_RUSTBORO
+data/maps/MossdeepCity_StevensHouse/map.json:  "music": "MUS_RUSTBORO",
+data/maps/MossdeepCity_StevensHouse/scripts.inc:	playfanfare MUS_OBTAIN_ITEM
+data/maps/BattlePyramidSquare11/header.inc:	.2byte MUS_NONE
+data/maps/BattlePyramidSquare11/map.json:  "music": "MUS_NONE",
+data/maps/viridian_pokemart/header.inc:	.2byte MUS_POKE_MART
+data/maps/viridian_pokemart/map.json:  "music": "MUS_POKE_MART",
+data/maps/NavelRock_Entrance/header.inc:	.2byte MUS_RG_SEVII_CAVE
+data/maps/NavelRock_Entrance/map.json:  "music": "MUS_RG_SEVII_CAVE",
+data/maps/Route126/header.inc:	.2byte MUS_ROUTE120
+data/maps/Route126/map.json:  "music": "MUS_ROUTE120",
+data/maps/celadon_apartmentroofday/header.inc:	.2byte MUS_DUMMY
+data/maps/celadon_apartmentroofday/map.json:  "music": "MUS_DUMMY",
+data/maps/SlateportCity_PokemonFanClub/header.inc:	.2byte MUS_SLATEPORT
+data/maps/SlateportCity_PokemonFanClub/map.json:  "music": "MUS_SLATEPORT",
+data/maps/NavelRock_Up1/header.inc:	.2byte MUS_RG_SEVII_CAVE
+data/maps/NavelRock_Up1/map.json:  "music": "MUS_RG_SEVII_CAVE",
+data/maps/PacifidlogTown_House1/header.inc:	.2byte MUS_LILYCOVE
+data/maps/PacifidlogTown_House1/map.json:  "music": "MUS_LILYCOVE",
+data/maps/MauvilleCity_Mart/header.inc:	.2byte MUS_POKE_MART
+data/maps/MauvilleCity_Mart/map.json:  "music": "MUS_POKE_MART",
+data/maps/Route27/header.inc:	.2byte MUS_DUMMY
+data/maps/Route27/map.json:  "music": "MUS_DUMMY",
+data/maps/Route121/header.inc:	.2byte MUS_ROUTE120
+data/maps/Route121/map.json:  "music": "MUS_ROUTE120",
+data/maps/Route121/scripts.inc:	playbgm MUS_ENCOUNTER_AQUA, FALSE
+data/maps/BattlePyramidSquare06/header.inc:	.2byte MUS_NONE
+data/maps/BattlePyramidSquare06/map.json:  "music": "MUS_NONE",
+data/maps/BattleFrontier_RankingHall/header.inc:	.2byte MUS_LILYCOVE_MUSEUM
+data/maps/BattleFrontier_RankingHall/map.json:  "music": "MUS_LILYCOVE_MUSEUM",
+data/maps/LilycoveCity_DepartmentStore_2F/header.inc:	.2byte MUS_POKE_MART
+data/maps/LilycoveCity_DepartmentStore_2F/map.json:  "music": "MUS_POKE_MART",
+data/maps/GraniteCave_StevensRoom/header.inc:	.2byte MUS_PETALBURG_WOODS
+data/maps/GraniteCave_StevensRoom/map.json:  "music": "MUS_PETALBURG_WOODS",
+data/maps/GraniteCave_StevensRoom/scripts.inc:	playfanfare MUS_REGISTER_MATCH_CALL
+data/maps/VerdanturfTown_BattleTentCorridor/header.inc:	.2byte MUS_B_TOWER_RS
+data/maps/VerdanturfTown_BattleTentCorridor/map.json:  "music": "MUS_B_TOWER_RS",
+data/maps/Olivine_City/header.inc:	.2byte MUS_DUMMY
+data/maps/Olivine_City/map.json:  "music": "MUS_DUMMY",
+data/maps/DewfordTown/header.inc:	.2byte MUS_DEWFORD
+data/maps/DewfordTown/map.json:  "music": "MUS_DEWFORD",
+data/maps/Underwater_Route127/header.inc:	.2byte MUS_UNDERWATER
+data/maps/Underwater_Route127/map.json:  "music": "MUS_UNDERWATER",
+data/maps/Route1/header.inc:	.2byte MUS_RG_ROUTE1
+data/maps/Route1/map.json:  "music": "MUS_RG_ROUTE1",
+data/maps/UnusedContestHall4/header.inc:	.2byte MUS_GSC_PEWTER
+data/maps/UnusedContestHall4/map.json:  "music": "MUS_GSC_PEWTER",
+data/maps/RustboroCity_CuttersHouse/header.inc:	.2byte MUS_RUSTBORO
+data/maps/RustboroCity_CuttersHouse/map.json:  "music": "MUS_RUSTBORO",
+data/maps/fuchsia_pokecenter/header.inc:	.2byte MUS_DUMMY
+data/maps/fuchsia_pokecenter/map.json:  "music": "MUS_DUMMY",
+data/maps/MauvilleCity_House1/header.inc:	.2byte MUS_RUSTBORO
+data/maps/MauvilleCity_House1/map.json:  "music": "MUS_RUSTBORO",
+data/maps/SafariZone_RestHouse/header.inc:	.2byte MUS_SAFARI_ZONE
+data/maps/SafariZone_RestHouse/map.json:  "music": "MUS_SAFARI_ZONE",
+data/maps/BattleFrontier_Lounge7/header.inc:	.2byte MUS_B_TOWER_RS
+data/maps/BattleFrontier_Lounge7/map.json:  "music": "MUS_B_TOWER_RS",
+data/maps/NavelRock_Down09/header.inc:	.2byte MUS_RG_SEVII_CAVE
+data/maps/NavelRock_Down09/map.json:  "music": "MUS_RG_SEVII_CAVE",
+data/maps/NavelRock_Down06/header.inc:	.2byte MUS_RG_SEVII_CAVE
+data/maps/NavelRock_Down06/map.json:  "music": "MUS_RG_SEVII_CAVE",
+data/maps/EverGrandeCity_Hall4/header.inc:	.2byte MUS_VICTORY_ROAD
+data/maps/EverGrandeCity_Hall4/map.json:  "music": "MUS_VICTORY_ROAD",
+data/maps/BattlePyramidSquare12/header.inc:	.2byte MUS_NONE
+data/maps/BattlePyramidSquare12/map.json:  "music": "MUS_NONE",
+data/maps/Route21_North/header.inc:	.2byte MUS_RG_ROUTE11
+data/maps/Route21_North/map.json:  "music": "MUS_RG_ROUTE11",
+data/maps/route2_house/header.inc:	.2byte MUS_RG_ROUTE1
+data/maps/route2_house/map.json:  "music": "MUS_RG_ROUTE1",
+data/maps/saffron_gym/header.inc:	.2byte MUS_DUMMY
+data/maps/saffron_gym/map.json:  "music": "MUS_DUMMY",
+data/maps/MossdeepCity_House2/header.inc:	.2byte MUS_RUSTBORO
+data/maps/MossdeepCity_House2/map.json:  "music": "MUS_RUSTBORO",
+data/maps/celadon_house2/header.inc:	.2byte MUS_DUMMY
+data/maps/celadon_house2/map.json:  "music": "MUS_DUMMY",
+data/maps/SeafloorCavern_Room9/header.inc:	.2byte MUS_MT_CHIMNEY
+data/maps/SeafloorCavern_Room9/map.json:  "music": "MUS_MT_CHIMNEY",
+data/maps/SeafloorCavern_Room9/scripts.inc:	playbgm MUS_ENCOUNTER_AQUA, FALSE
+data/maps/SeafloorCavern_Room9/scripts.inc:	playfanfare MUS_AWAKEN_LEGEND
+data/maps/SafariZone_South/header.inc:	.2byte MUS_SAFARI_ZONE
+data/maps/SafariZone_South/map.json:  "music": "MUS_SAFARI_ZONE",
+data/maps/Mahogany_Town/header.inc:	.2byte MUS_DUMMY
+data/maps/Mahogany_Town/map.json:  "music": "MUS_DUMMY",
+data/maps/FortreeCity_House1/header.inc:	.2byte MUS_FORTREE
+data/maps/FortreeCity_House1/map.json:  "music": "MUS_FORTREE",
+data/maps/GraniteCave_B1F/header.inc:	.2byte MUS_PETALBURG_WOODS
+data/maps/GraniteCave_B1F/map.json:  "music": "MUS_PETALBURG_WOODS",
+data/maps/JaggedPass/header.inc:	.2byte MUS_PETALBURG_WOODS
+data/maps/JaggedPass/map.json:  "music": "MUS_PETALBURG_WOODS",
+data/maps/LittlerootTown/header.inc:	.2byte MUS_LITTLEROOT
+data/maps/LittlerootTown/map.json:  "music": "MUS_LITTLEROOT",
+data/maps/LittlerootTown/scripts.inc:	playfanfare MUS_OBTAIN_ITEM
+data/maps/SootopolisCity_House1/header.inc:	.2byte MUS_SOOTOPOLIS
+data/maps/SootopolisCity_House1/map.json:  "music": "MUS_SOOTOPOLIS",
+data/maps/Celadon_City/header.inc:	.2byte MUS_RG_CELADON
+data/maps/Celadon_City/map.json:  "music": "MUS_RG_CELADON",
+data/maps/route8_tunnel/header.inc:	.2byte MUS_DUMMY
+data/maps/route8_tunnel/map.json:  "music": "MUS_DUMMY",
+data/maps/VerdanturfTown/header.inc:	.2byte MUS_VERDANTURF
+data/maps/VerdanturfTown/map.json:  "music": "MUS_VERDANTURF",
+data/maps/BattlePyramidSquare13/header.inc:	.2byte MUS_NONE
+data/maps/BattlePyramidSquare13/map.json:  "music": "MUS_NONE",
+data/maps/fuchsia_mart/header.inc:	.2byte MUS_DUMMY
+data/maps/fuchsia_mart/map.json:  "music": "MUS_DUMMY",
+data/maps/RusturfTunnel/header.inc:	.2byte MUS_PETALBURG_WOODS
+data/maps/RusturfTunnel/map.json:  "music": "MUS_PETALBURG_WOODS",
+data/maps/RusturfTunnel/scripts.inc:	playbgm MUS_ENCOUNTER_AQUA, FALSE
+data/maps/Route108/header.inc:	.2byte MUS_ROUTE104
+data/maps/Route108/map.json:  "music": "MUS_ROUTE104",
+data/maps/BirthIsland_Exterior/header.inc:	.2byte MUS_NONE
+data/maps/BirthIsland_Exterior/map.json:  "music": "MUS_NONE",
+data/maps/BirthIsland_Exterior/scripts.inc:	playbgm MUS_RG_ENCOUNTER_DEOXYS, FALSE
+data/maps/LilycoveCity_DepartmentStoreRooftop/header.inc:	.2byte MUS_LILYCOVE
+data/maps/LilycoveCity_DepartmentStoreRooftop/map.json:  "music": "MUS_LILYCOVE",
+data/maps/RustboroCity_Flat1_2F/header.inc:	.2byte MUS_RUSTBORO
+data/maps/RustboroCity_Flat1_2F/map.json:  "music": "MUS_RUSTBORO",
+data/maps/Route104_MrBrineysHouse/header.inc:	.2byte MUS_PETALBURG
+data/maps/Route104_MrBrineysHouse/map.json:  "music": "MUS_PETALBURG",
+data/maps/Route24/header.inc:	.2byte MUS_DUMMY
+data/maps/Route24/map.json:  "music": "MUS_DUMMY",
+data/maps/Route110_TrickHouseEnd/header.inc:	.2byte MUS_TRICK_HOUSE
+data/maps/Route110_TrickHouseEnd/map.json:  "music": "MUS_TRICK_HOUSE",
+data/maps/vermilion_mart/header.inc:	.2byte MUS_DUMMY
+data/maps/vermilion_mart/map.json:  "music": "MUS_DUMMY",
+data/maps/route16_house/header.inc:	.2byte MUS_DUMMY
+data/maps/route16_house/map.json:  "music": "MUS_DUMMY",
+data/maps/Pallet_Town/header.inc:	.2byte MUS_HG_PALLET
+data/maps/Pallet_Town/map.json:  "music": "MUS_HG_PALLET",
+data/maps/viridian_house2/header.inc:	.2byte MUS_RG_PEWTER
+data/maps/viridian_house2/map.json:  "music": "MUS_RG_PEWTER",
+data/maps/vermilion_pokecenter/header.inc:	.2byte MUS_DUMMY
+data/maps/vermilion_pokecenter/map.json:  "music": "MUS_DUMMY",
+data/maps/vermilion_house3/header.inc:	.2byte MUS_DUMMY
+data/maps/vermilion_house3/map.json:  "music": "MUS_DUMMY",
+data/maps/cinnabar_pokecenter/header.inc:	.2byte MUS_DUMMY
+data/maps/cinnabar_pokecenter/map.json:  "music": "MUS_DUMMY",
+data/maps/Route33/header.inc:	.2byte MUS_DUMMY
+data/maps/Route33/map.json:  "music": "MUS_DUMMY",
+data/maps/CaveOfOrigin_UnusedRubySapphireMap3/header.inc:	.2byte MUS_CAVE_OF_ORIGIN
+data/maps/CaveOfOrigin_UnusedRubySapphireMap3/map.json:  "music": "MUS_CAVE_OF_ORIGIN",
+data/maps/Route114_FossilManiacsTunnel/header.inc:	.2byte MUS_FALLARBOR
+data/maps/Route114_FossilManiacsTunnel/map.json:  "music": "MUS_FALLARBOR",
+data/maps/SlateportCity_Harbor/header.inc:	.2byte MUS_SLATEPORT
+data/maps/SlateportCity_Harbor/map.json:  "music": "MUS_SLATEPORT",
+data/maps/SlateportCity_Harbor/scripts.inc:	savebgm MUS_ENCOUNTER_AQUA
+data/maps/Route110_TrickHousePuzzle3/header.inc:	.2byte MUS_TRICK_HOUSE
+data/maps/Route110_TrickHousePuzzle3/map.json:  "music": "MUS_TRICK_HOUSE",
+data/maps/BattleFrontier_BattleFactoryPreBattleRoom/header.inc:	.2byte MUS_B_FACTORY
+data/maps/BattleFrontier_BattleFactoryPreBattleRoom/map.json:  "music": "MUS_B_FACTORY",
+data/maps/BattleFrontier_BattleFactoryPreBattleRoom/scripts.inc:	playfanfare MUS_HEAL
+data/maps/MauvilleCity_House2/header.inc:	.2byte MUS_RUSTBORO
+data/maps/MauvilleCity_House2/map.json:  "music": "MUS_RUSTBORO",
+data/maps/LittlerootTown_MaysHouse_2F/header.inc:	.2byte MUS_LITTLEROOT
+data/maps/LittlerootTown_MaysHouse_2F/map.json:  "music": "MUS_LITTLEROOT",
+data/maps/LittlerootTown_MaysHouse_2F/scripts.inc:	playbgm MUS_ENCOUNTER_MAY, TRUE
+data/maps/LittlerootTown_MaysHouse_2F/scripts.inc:	savebgm MUS_DUMMY
+data/maps/Route114_FossilManiacsHouse/header.inc:	.2byte MUS_FALLARBOR
+data/maps/Route114_FossilManiacsHouse/map.json:  "music": "MUS_FALLARBOR",
+data/maps/PacifidlogTown/header.inc:	.2byte MUS_LILYCOVE
+data/maps/PacifidlogTown/map.json:  "music": "MUS_LILYCOVE",
+data/maps/BattleFrontier_BattlePikeRoomNormal/header.inc:	.2byte MUS_B_PIKE
+data/maps/BattleFrontier_BattlePikeRoomNormal/map.json:  "music": "MUS_B_PIKE",
+data/maps/BattleFrontier_BattlePikeRoomNormal/scripts.inc:	playfanfare MUS_HEAL
+data/maps/BattleFrontier_BattlePikeRoomNormal/scripts.inc:	playfanfare MUS_OBTAIN_SYMBOL
+data/maps/BattleFrontier_BattlePikeRoomNormal/scripts.inc:	playfanfare MUS_OBTAIN_SYMBOL
+data/maps/BattleFrontier_BattlePikeRoomNormal/scripts.inc:	playfanfare MUS_HEAL
+data/maps/BattleFrontier_BattlePikeRoomNormal/scripts.inc:	playfanfare MUS_HEAL
+data/maps/BattleFrontier_BattlePikeRoomNormal/scripts.inc:	playfanfare MUS_HEAL
+data/maps/BattleFrontier_BattlePikeRoomNormal/scripts.inc:	playfanfare MUS_HEAL
+data/maps/GraniteCave_1F/header.inc:	.2byte MUS_PETALBURG_WOODS
+data/maps/GraniteCave_1F/map.json:  "music": "MUS_PETALBURG_WOODS",
+data/maps/SecretBase_Tree3/header.inc:	.2byte MUS_FORTREE
+data/maps/SecretBase_Tree3/map.json:  "music": "MUS_FORTREE",
+data/maps/BattlePyramidSquare14/header.inc:	.2byte MUS_NONE
+data/maps/BattlePyramidSquare14/map.json:  "music": "MUS_NONE",
+data/maps/Route2/header.inc:	.2byte MUS_RG_ROUTE1
+data/maps/Route2/map.json:  "music": "MUS_RG_ROUTE1",
+data/maps/pewter_museum2fl/header.inc:	.2byte MUS_RG_PEWTER
+data/maps/pewter_museum2fl/map.json:  "music": "MUS_RG_PEWTER",
+data/maps/BattleFrontier_BattleTowerLobby/header.inc:	.2byte MUS_B_TOWER
+data/maps/BattleFrontier_BattleTowerLobby/map.json:  "music": "MUS_B_TOWER",
+data/maps/BattleFrontier_BattleTowerLobby/scripts.inc:	playfanfare MUS_OBTAIN_ITEM
+data/maps/saffron_copycatshouse2f/header.inc:	.2byte MUS_DUMMY
+data/maps/saffron_copycatshouse2f/map.json:  "music": "MUS_DUMMY",
+data/maps/EverGrandeCity_PokemonCenter_1F/header.inc:	.2byte MUS_POKE_CENTER
+data/maps/EverGrandeCity_PokemonCenter_1F/map.json:  "music": "MUS_POKE_CENTER",
+data/maps/Route44/header.inc:	.2byte MUS_DUMMY
+data/maps/Route44/map.json:  "music": "MUS_DUMMY",
+data/maps/Route119/header.inc:	.2byte MUS_ROUTE119
+data/maps/Route119/map.json:  "music": "MUS_ROUTE119",
+data/maps/Route119/scripts.inc:	playbgm MUS_ENCOUNTER_MAY, TRUE
+data/maps/Route119/scripts.inc:	playbgm MUS_ENCOUNTER_BRENDAN, TRUE
+data/maps/Route119/scripts.inc:	savebgm MUS_DUMMY
+data/maps/celadon_gamecorner/header.inc:	.2byte MUS_DUMMY
+data/maps/celadon_gamecorner/map.json:  "music": "MUS_DUMMY",
+data/maps/NavelRock_Down11/header.inc:	.2byte MUS_RG_SEVII_CAVE
+data/maps/NavelRock_Down11/map.json:  "music": "MUS_RG_SEVII_CAVE",
+data/maps/AbandonedShip_Rooms2_B1F/header.inc:	.2byte MUS_ABANDONED_SHIP
+data/maps/AbandonedShip_Rooms2_B1F/map.json:  "music": "MUS_ABANDONED_SHIP",
+data/maps/Route105/header.inc:	.2byte MUS_ROUTE104
+data/maps/Route105/map.json:  "music": "MUS_ROUTE104",
+data/maps/BattleFrontier_BattleArenaCorridor/header.inc:	.2byte MUS_B_ARENA
+data/maps/BattleFrontier_BattleArenaCorridor/map.json:  "music": "MUS_B_ARENA",
+data/maps/celadon_pokecenter/header.inc:	.2byte MUS_DUMMY
+data/maps/celadon_pokecenter/map.json:  "music": "MUS_DUMMY",
+data/maps/AbandonedShip_HiddenFloorRooms/header.inc:	.2byte MUS_ABANDONED_SHIP
+data/maps/AbandonedShip_HiddenFloorRooms/map.json:  "music": "MUS_ABANDONED_SHIP",
+data/maps/UnusedContestHall6/header.inc:	.2byte MUS_GSC_PEWTER
+data/maps/UnusedContestHall6/map.json:  "music": "MUS_GSC_PEWTER",
+data/maps/BattleFrontier_ReceptionGate/header.inc:	.2byte MUS_B_TOWER_RS
+data/maps/BattleFrontier_ReceptionGate/map.json:  "music": "MUS_B_TOWER_RS",
+data/maps/BattleFrontier_ReceptionGate/scripts.inc:	playfanfare MUS_OBTAIN_ITEM
+data/maps/celadon_apartmentroofhouse/header.inc:	.2byte MUS_DUMMY
+data/maps/celadon_apartmentroofhouse/map.json:  "music": "MUS_DUMMY",
+data/maps/Underwater_Route105/header.inc:	.2byte MUS_UNDERWATER
+data/maps/Underwater_Route105/map.json:  "music": "MUS_UNDERWATER",
+data/maps/lavender_mart/header.inc:	.2byte MUS_DUMMY
+data/maps/lavender_mart/map.json:  "music": "MUS_DUMMY",
+data/maps/saffron_house1/header.inc:	.2byte MUS_DUMMY
+data/maps/saffron_house1/map.json:  "music": "MUS_DUMMY",
+data/maps/UnusedContestHall5/header.inc:	.2byte MUS_GSC_PEWTER
+data/maps/UnusedContestHall5/map.json:  "music": "MUS_GSC_PEWTER",
+data/maps/Route104_PrettyPetalFlowerShop/header.inc:	.2byte MUS_PETALBURG
+data/maps/Route104_PrettyPetalFlowerShop/map.json:  "music": "MUS_PETALBURG",
+data/maps/MagmaHideout_2F_2R/header.inc:	.2byte MUS_AQUA_MAGMA_HIDEOUT
+data/maps/MagmaHideout_2F_2R/map.json:  "music": "MUS_AQUA_MAGMA_HIDEOUT",
+data/maps/FallarborTown/header.inc:	.2byte MUS_FALLARBOR
+data/maps/FallarborTown/map.json:  "music": "MUS_FALLARBOR",
+data/maps/RustboroCity_PokemonCenter_1F/header.inc:	.2byte MUS_POKE_CENTER
+data/maps/RustboroCity_PokemonCenter_1F/map.json:  "music": "MUS_POKE_CENTER",
+data/maps/pewter_pokecenter_2fl/header.inc:	.2byte MUS_DUMMY
+data/maps/pewter_pokecenter_2fl/map.json:  "music": "MUS_DUMMY",
+data/maps/BattleColosseum_4P/header.inc:	.2byte MUS_EVER_GRANDE
+data/maps/BattleColosseum_4P/map.json:  "music": "MUS_EVER_GRANDE",
+data/maps/BattleFrontier_Lounge5/header.inc:	.2byte MUS_B_TOWER_RS
+data/maps/BattleFrontier_Lounge5/map.json:  "music": "MUS_B_TOWER_RS",
+data/maps/indigoplateau_karen/header.inc:	.2byte MUS_DUMMY
+data/maps/indigoplateau_karen/map.json:  "music": "MUS_DUMMY",
+data/maps/PacifidlogTown_House3/header.inc:	.2byte MUS_LILYCOVE
+data/maps/PacifidlogTown_House3/map.json:  "music": "MUS_LILYCOVE",
+data/maps/SootopolisCity_PokemonCenter_2F/header.inc:	.2byte MUS_POKE_CENTER
+data/maps/SootopolisCity_PokemonCenter_2F/map.json:  "music": "MUS_POKE_CENTER",
+data/maps/celadon_department1f/header.inc:	.2byte MUS_DUMMY
+data/maps/celadon_department1f/map.json:  "music": "MUS_DUMMY",
+data/maps/Route36/header.inc:	.2byte MUS_DUMMY
+data/maps/Route36/map.json:  "music": "MUS_DUMMY",
+data/maps/SkyPillar_Top/header.inc:	.2byte MUS_MT_CHIMNEY
+data/maps/SkyPillar_Top/map.json:  "music": "MUS_MT_CHIMNEY",
+data/maps/RustboroCity_Flat2_3F/header.inc:	.2byte MUS_RUSTBORO
+data/maps/RustboroCity_Flat2_3F/map.json:  "music": "MUS_RUSTBORO",
+data/maps/pewter_gym/header.inc:	.2byte MUS_RG_GYM
+data/maps/pewter_gym/map.json:  "music": "MUS_RG_GYM",
+data/maps/Reds_House_2ndFL/header.inc:	.2byte MUS_HG_PALLET
+data/maps/Reds_House_2ndFL/map.json:  "music": "MUS_HG_PALLET",
+data/maps/celadon_department4f/header.inc:	.2byte MUS_DUMMY
+data/maps/celadon_department4f/map.json:  "music": "MUS_DUMMY",
+data/maps/MtChimney/header.inc:	.2byte MUS_MT_CHIMNEY
+data/maps/MtChimney/map.json:  "music": "MUS_MT_CHIMNEY",
+data/maps/MtChimney/scripts.inc:	playbgm MUS_ENCOUNTER_MAGMA, FALSE
+data/maps/SecretBase_Tree4/header.inc:	.2byte MUS_FORTREE
+data/maps/SecretBase_Tree4/map.json:  "music": "MUS_FORTREE",
+data/maps/pewter_museum/header.inc:	.2byte MUS_RG_PEWTER
+data/maps/pewter_museum/map.json:  "music": "MUS_RG_PEWTER",
+data/maps/Route107/header.inc:	.2byte MUS_ROUTE104
+data/maps/Route107/map.json:  "music": "MUS_ROUTE104",
+data/maps/Route18/header.inc:	.2byte MUS_DUMMY
+data/maps/Route18/map.json:  "music": "MUS_DUMMY",
+data/maps/FortreeCity_Mart/header.inc:	.2byte MUS_POKE_MART
+data/maps/FortreeCity_Mart/map.json:  "music": "MUS_POKE_MART",
+data/maps/MtMoon_Cave/header.inc:	.2byte MUS_DUMMY
+data/maps/MtMoon_Cave/map.json:  "music": "MUS_DUMMY",
+data/maps/Azalea_Town/header.inc:	.2byte MUS_DUMMY
+data/maps/Azalea_Town/map.json:  "music": "MUS_DUMMY",
+data/maps/Route110_TrickHousePuzzle6/header.inc:	.2byte MUS_TRICK_HOUSE
+data/maps/Route110_TrickHousePuzzle6/map.json:  "music": "MUS_TRICK_HOUSE",
+data/maps/FortreeCity/header.inc:	.2byte MUS_FORTREE
+data/maps/FortreeCity/map.json:  "music": "MUS_FORTREE",
+data/maps/VerdanturfTown_Mart/header.inc:	.2byte MUS_POKE_MART
+data/maps/VerdanturfTown_Mart/map.json:  "music": "MUS_POKE_MART",
+data/maps/Goldenrod_City/header.inc:	.2byte MUS_DUMMY
+data/maps/Goldenrod_City/map.json:  "music": "MUS_DUMMY",
+data/maps/BattleFrontier_BattleArenaBattleRoom/header.inc:	.2byte MUS_B_ARENA
+data/maps/BattleFrontier_BattleArenaBattleRoom/map.json:  "music": "MUS_B_ARENA",
+data/maps/BattleFrontier_BattleArenaBattleRoom/scripts.inc:	playfanfare MUS_HEAL
+data/maps/BattleFrontier_BattleArenaBattleRoom/scripts.inc:	playfanfare MUS_OBTAIN_SYMBOL
+data/maps/BattleFrontier_BattleArenaBattleRoom/scripts.inc:	playfanfare MUS_OBTAIN_SYMBOL
+data/maps/SkyPillar_Entrance/header.inc:	.2byte MUS_MT_CHIMNEY
+data/maps/SkyPillar_Entrance/map.json:  "music": "MUS_MT_CHIMNEY",
+data/maps/Route110_TrickHousePuzzle2/header.inc:	.2byte MUS_TRICK_HOUSE
+data/maps/Route110_TrickHousePuzzle2/map.json:  "music": "MUS_TRICK_HOUSE",
+data/maps/AbandonedShip_CaptainsOffice/header.inc:	.2byte MUS_ABANDONED_SHIP
+data/maps/AbandonedShip_CaptainsOffice/map.json:  "music": "MUS_ABANDONED_SHIP",
+data/maps/EverGrandeCity_DrakesRoom/header.inc:	.2byte MUS_VICTORY_ROAD
+data/maps/EverGrandeCity_DrakesRoom/map.json:  "music": "MUS_VICTORY_ROAD",
+data/maps/EverGrandeCity_DrakesRoom/scripts.inc:	playbgm MUS_ENCOUNTER_ELITE_FOUR, FALSE
+data/maps/indigoplateau_halloffame/header.inc:	.2byte MUS_DUMMY
+data/maps/indigoplateau_halloffame/map.json:  "music": "MUS_DUMMY",
+data/maps/CaveOfOrigin_B1F/header.inc:	.2byte MUS_NONE
+data/maps/CaveOfOrigin_B1F/map.json:  "music": "MUS_NONE",
+data/maps/SecretBase_BlueCave2/header.inc:	.2byte MUS_FORTREE
+data/maps/SecretBase_BlueCave2/map.json:  "music": "MUS_FORTREE",
+data/maps/ShoalCave_LowTideLowerRoom/header.inc:	.2byte MUS_MT_PYRE
+data/maps/ShoalCave_LowTideLowerRoom/map.json:  "music": "MUS_MT_PYRE",
+data/maps/Route30/header.inc:	.2byte MUS_DUMMY
+data/maps/Route30/map.json:  "music": "MUS_DUMMY",
+data/maps/FarawayIsland_Interior/header.inc:	.2byte MUS_ABANDONED_SHIP
+data/maps/FarawayIsland_Interior/map.json:  "music": "MUS_ABANDONED_SHIP",
+data/maps/Route116/header.inc:	.2byte MUS_ROUTE104
+data/maps/Route116/map.json:  "music": "MUS_ROUTE104",
+data/maps/fuchsia_gym/header.inc:	.2byte MUS_DUMMY
+data/maps/fuchsia_gym/map.json:  "music": "MUS_DUMMY",
+data/maps/FortreeCity_PokemonCenter_1F/header.inc:	.2byte MUS_POKE_CENTER
+data/maps/FortreeCity_PokemonCenter_1F/map.json:  "music": "MUS_POKE_CENTER",
+data/maps/BattlePyramidSquare03/header.inc:	.2byte MUS_NONE
+data/maps/BattlePyramidSquare03/map.json:  "music": "MUS_NONE",
+data/maps/Vermilion_City/header.inc:	.2byte MUS_RG_VERMILLION
+data/maps/Vermilion_City/map.json:  "music": "MUS_RG_VERMILLION",
+data/maps/MagmaHideout_3F_1R/header.inc:	.2byte MUS_AQUA_MAGMA_HIDEOUT
+data/maps/MagmaHideout_3F_1R/map.json:  "music": "MUS_AQUA_MAGMA_HIDEOUT",
+data/maps/MeteorFalls_B1F_2R/header.inc:	.2byte MUS_CAVE_OF_ORIGIN
+data/maps/MeteorFalls_B1F_2R/map.json:  "music": "MUS_CAVE_OF_ORIGIN",
+data/maps/Route109_SeashoreHouse/header.inc:	.2byte MUS_DEWFORD
+data/maps/Route109_SeashoreHouse/map.json:  "music": "MUS_DEWFORD",
+data/maps/ContestHallSmart/header.inc:	.2byte MUS_CONTEST
+data/maps/ContestHallSmart/map.json:  "music": "MUS_CONTEST",
+data/maps/AbandonedShip_Corridors_1F/header.inc:	.2byte MUS_ABANDONED_SHIP
+data/maps/AbandonedShip_Corridors_1F/map.json:  "music": "MUS_ABANDONED_SHIP",
+data/maps/MossdeepCity_PokemonCenter_2F/header.inc:	.2byte MUS_POKE_CENTER
+data/maps/MossdeepCity_PokemonCenter_2F/map.json:  "music": "MUS_POKE_CENTER",
+data/maps/VictoryRoad_B2F/header.inc:	.2byte MUS_VICTORY_ROAD
+data/maps/VictoryRoad_B2F/map.json:  "music": "MUS_VICTORY_ROAD",
+data/maps/LilycoveCity_DepartmentStore_3F/header.inc:	.2byte MUS_POKE_MART
+data/maps/LilycoveCity_DepartmentStore_3F/map.json:  "music": "MUS_POKE_MART",
+data/maps/cerulean_house3/header.inc:	.2byte MUS_DUMMY
+data/maps/cerulean_house3/map.json:  "music": "MUS_DUMMY",
+data/maps/MossdeepCity/header.inc:	.2byte MUS_RUSTBORO
+data/maps/MossdeepCity/map.json:  "music": "MUS_RUSTBORO",
+data/maps/New_Bark_Town/header.inc:	.2byte MUS_DUMMY
+data/maps/New_Bark_Town/map.json:  "music": "MUS_DUMMY",
+data/maps/NavelRock_B1F/header.inc:	.2byte MUS_RG_SEVII_CAVE
+data/maps/NavelRock_B1F/map.json:  "music": "MUS_RG_SEVII_CAVE",
+data/maps/SecretBase_BlueCave1/header.inc:	.2byte MUS_FORTREE
+data/maps/SecretBase_BlueCave1/map.json:  "music": "MUS_FORTREE",
+data/maps/SeafloorCavern_Room2/header.inc:	.2byte MUS_MT_CHIMNEY
+data/maps/SeafloorCavern_Room2/map.json:  "music": "MUS_MT_CHIMNEY",
+data/maps/SootopolisCity_Gym_B1F/header.inc:	.2byte MUS_GYM
+data/maps/SootopolisCity_Gym_B1F/map.json:  "music": "MUS_GYM",
+data/maps/RustboroCity_DevonCorp_1F/header.inc:	.2byte MUS_RUSTBORO
+data/maps/RustboroCity_DevonCorp_1F/map.json:  "music": "MUS_RUSTBORO",
+data/maps/BattleFrontier_BattlePikeLobby/header.inc:	.2byte MUS_B_PIKE
+data/maps/BattleFrontier_BattlePikeLobby/map.json:  "music": "MUS_B_PIKE",
+data/maps/indigoplateau_pokecenter/header.inc:	.2byte MUS_DUMMY
+data/maps/indigoplateau_pokecenter/map.json:  "music": "MUS_DUMMY",
+data/maps/SootopolisCity_Gym_1F/header.inc:	.2byte MUS_GYM
+data/maps/SootopolisCity_Gym_1F/map.json:  "music": "MUS_GYM",
+data/maps/SootopolisCity_Gym_1F/scripts.inc:	playfanfare MUS_REGISTER_MATCH_CALL
+data/maps/SkyPillar_4F/header.inc:	.2byte MUS_MT_CHIMNEY
+data/maps/SkyPillar_4F/map.json:  "music": "MUS_MT_CHIMNEY",
+data/maps/IslandCave/header.inc:	.2byte MUS_SEALED_CHAMBER
+data/maps/IslandCave/map.json:  "music": "MUS_SEALED_CHAMBER",
+data/maps/Blues_House/header.inc:	.2byte MUS_HG_PALLET
+data/maps/Blues_House/map.json:  "music": "MUS_HG_PALLET",
+data/maps/BattleFrontier_BattleTowerMultiPartnerRoom/header.inc:	.2byte MUS_B_TOWER
+data/maps/BattleFrontier_BattleTowerMultiPartnerRoom/map.json:  "music": "MUS_B_TOWER",
+data/maps/LilycoveCity_DepartmentStore_4F/header.inc:	.2byte MUS_POKE_MART
+data/maps/LilycoveCity_DepartmentStore_4F/map.json:  "music": "MUS_POKE_MART",
+data/maps/Cerulean_Pokecenter/header.inc:	.2byte MUS_RG_POKE_CENTER
+data/maps/Cerulean_Pokecenter/map.json:  "music": "MUS_RG_POKE_CENTER",
+data/maps/AquaHideout_B1F/header.inc:	.2byte MUS_AQUA_MAGMA_HIDEOUT
+data/maps/AquaHideout_B1F/map.json:  "music": "MUS_AQUA_MAGMA_HIDEOUT",
+data/maps/lavender_pokecenter/header.inc:	.2byte MUS_DUMMY
+data/maps/lavender_pokecenter/map.json:  "music": "MUS_DUMMY",
+data/maps/FortreeCity_PokemonCenter_2F/header.inc:	.2byte MUS_POKE_CENTER
+data/maps/FortreeCity_PokemonCenter_2F/map.json:  "music": "MUS_POKE_CENTER",
+data/maps/VerdanturfTown_PokemonCenter_1F/header.inc:	.2byte MUS_POKE_CENTER
+data/maps/VerdanturfTown_PokemonCenter_1F/map.json:  "music": "MUS_POKE_CENTER",
+data/maps/VerdanturfTown_BattleTentBattleRoom/header.inc:	.2byte MUS_B_TOWER_RS
+data/maps/VerdanturfTown_BattleTentBattleRoom/map.json:  "music": "MUS_B_TOWER_RS",
+data/maps/VerdanturfTown_BattleTentBattleRoom/scripts.inc:	playfanfare MUS_HEAL
+data/maps/LavaridgeTown_House/header.inc:	.2byte MUS_OLDALE
+data/maps/LavaridgeTown_House/map.json:  "music": "MUS_OLDALE",
+data/maps/MossdeepCity_PokemonCenter_1F/header.inc:	.2byte MUS_POKE_CENTER
+data/maps/MossdeepCity_PokemonCenter_1F/map.json:  "music": "MUS_POKE_CENTER",
+data/maps/Underwater_Route134/header.inc:	.2byte MUS_UNDERWATER
+data/maps/Underwater_Route134/map.json:  "music": "MUS_UNDERWATER",
+data/maps/Route131/header.inc:	.2byte MUS_ROUTE119
+data/maps/Route131/map.json:  "music": "MUS_ROUTE119",
+data/maps/Underwater_Route124/header.inc:	.2byte MUS_UNDERWATER
+data/maps/Underwater_Route124/map.json:  "music": "MUS_UNDERWATER",
+data/maps/RustboroCity_Flat2_1F/header.inc:	.2byte MUS_RUSTBORO
+data/maps/RustboroCity_Flat2_1F/map.json:  "music": "MUS_RUSTBORO",
+data/maps/BattlePyramidSquare05/header.inc:	.2byte MUS_NONE
+data/maps/BattlePyramidSquare05/map.json:  "music": "MUS_NONE",
+data/maps/AbandonedShip_Corridors_B1F/header.inc:	.2byte MUS_ABANDONED_SHIP
+data/maps/AbandonedShip_Corridors_B1F/map.json:  "music": "MUS_ABANDONED_SHIP",
+data/maps/LittlerootTown_ProfessorBirchsLab/header.inc:	.2byte MUS_BIRCH_LAB
+data/maps/LittlerootTown_ProfessorBirchsLab/map.json:  "music": "MUS_BIRCH_LAB",
+data/maps/LittlerootTown_ProfessorBirchsLab/scripts.inc:	playfanfare MUS_OBTAIN_ITEM
+data/maps/LittlerootTown_ProfessorBirchsLab/scripts.inc:	playfanfare MUS_OBTAIN_ITEM
+data/maps/LittlerootTown_ProfessorBirchsLab/scripts.inc:	playfanfare MUS_OBTAIN_ITEM
+data/maps/LittlerootTown_ProfessorBirchsLab/scripts.inc:	playfanfare MUS_REGISTER_MATCH_CALL
+data/maps/LittlerootTown_ProfessorBirchsLab/scripts.inc:	playfanfare MUS_OBTAIN_ITEM
+data/maps/celadon_department2f/header.inc:	.2byte MUS_DUMMY
+data/maps/celadon_department2f/map.json:  "music": "MUS_DUMMY",
+data/maps/BattleFrontier_ScottsHouse/header.inc:	.2byte MUS_B_TOWER_RS
+data/maps/BattleFrontier_ScottsHouse/map.json:  "music": "MUS_B_TOWER_RS",
+data/maps/Lavender_Town/header.inc:	.2byte MUS_RG_LAVENDER
+data/maps/Lavender_Town/map.json:  "music": "MUS_RG_LAVENDER",
+data/maps/Underwater_Route128/header.inc:	.2byte MUS_UNDERWATER
+data/maps/Underwater_Route128/map.json:  "music": "MUS_UNDERWATER",
+data/maps/BattleFrontier_BattlePalaceCorridor/header.inc:	.2byte MUS_B_PALACE
+data/maps/BattleFrontier_BattlePalaceCorridor/map.json:  "music": "MUS_B_PALACE",
+data/maps/SkyPillar_2F/header.inc:	.2byte MUS_MT_CHIMNEY
+data/maps/SkyPillar_2F/map.json:  "music": "MUS_MT_CHIMNEY",
+data/maps/Route109/header.inc:	.2byte MUS_ROUTE104
+data/maps/Route109/map.json:  "music": "MUS_ROUTE104",
+data/maps/MeteorFalls_1F_1R/header.inc:	.2byte MUS_CAVE_OF_ORIGIN
+data/maps/MeteorFalls_1F_1R/map.json:  "music": "MUS_CAVE_OF_ORIGIN",
+data/maps/MeteorFalls_1F_1R/scripts.inc:	playbgm MUS_ENCOUNTER_MAGMA, FALSE
+data/maps/MeteorFalls_1F_1R/scripts.inc:	playbgm MUS_ENCOUNTER_AQUA, FALSE
+data/maps/Route112/header.inc:	.2byte MUS_ROUTE110
+data/maps/Route112/map.json:  "music": "MUS_ROUTE110",
+data/maps/Route40/header.inc:	.2byte MUS_DUMMY
+data/maps/Route40/map.json:  "music": "MUS_DUMMY",
+data/maps/AquaHideout_1F/header.inc:	.2byte MUS_AQUA_MAGMA_HIDEOUT
+data/maps/AquaHideout_1F/map.json:  "music": "MUS_AQUA_MAGMA_HIDEOUT",
+data/maps/LilycoveCity_House3/header.inc:	.2byte MUS_LILYCOVE
+data/maps/LilycoveCity_House3/map.json:  "music": "MUS_LILYCOVE",
+data/maps/DiglettsCave_South/header.inc:	.2byte MUS_DUMMY
+data/maps/DiglettsCave_South/map.json:  "music": "MUS_DUMMY",
+data/maps/EverGrandeCity_PokemonCenter_2F/header.inc:	.2byte MUS_POKE_CENTER
+data/maps/EverGrandeCity_PokemonCenter_2F/map.json:  "music": "MUS_POKE_CENTER",
+data/maps/Route133/header.inc:	.2byte MUS_ROUTE119
+data/maps/Route133/map.json:  "music": "MUS_ROUTE119",
+data/maps/Route101/header.inc:	.2byte MUS_ROUTE101
+data/maps/Route101/map.json:  "music": "MUS_ROUTE101",
+data/maps/Route101/scripts.inc:	playbgm MUS_HELP, TRUE
+data/maps/Route10/header.inc:	.2byte MUS_DUMMY
+data/maps/Route10/map.json:  "music": "MUS_DUMMY",
+data/maps/FortreeCity_Gym/header.inc:	.2byte MUS_GYM
+data/maps/FortreeCity_Gym/map.json:  "music": "MUS_GYM",
+data/maps/FortreeCity_Gym/scripts.inc:	playfanfare MUS_REGISTER_MATCH_CALL
+data/maps/LilycoveCity_PokemonCenter_1F/header.inc:	.2byte MUS_POKE_CENTER
+data/maps/LilycoveCity_PokemonCenter_1F/map.json:  "music": "MUS_POKE_CENTER",
+data/maps/Route114/header.inc:	.2byte MUS_ROUTE110
+data/maps/Route114/map.json:  "music": "MUS_ROUTE110",
+data/maps/Route19/header.inc:	.2byte MUS_DUMMY
+data/maps/Route19/map.json:  "music": "MUS_DUMMY",
+data/maps/Route34/header.inc:	.2byte MUS_DUMMY
+data/maps/Route34/map.json:  "music": "MUS_DUMMY",
+data/maps/SootopolisCity_LotadAndSeedotHouse/header.inc:	.2byte MUS_SOOTOPOLIS
+data/maps/SootopolisCity_LotadAndSeedotHouse/map.json:  "music": "MUS_SOOTOPOLIS",
+data/maps/Route110_TrickHousePuzzle4/header.inc:	.2byte MUS_TRICK_HOUSE
+data/maps/Route110_TrickHousePuzzle4/map.json:  "music": "MUS_TRICK_HOUSE",
+data/maps/BattlePyramidSquare04/header.inc:	.2byte MUS_NONE
+data/maps/BattlePyramidSquare04/map.json:  "music": "MUS_NONE",
+data/maps/BattleFrontier_Mart/header.inc:	.2byte MUS_POKE_MART
+data/maps/BattleFrontier_Mart/map.json:  "music": "MUS_POKE_MART",
+data/maps/SlateportCity_BattleTentLobby/header.inc:	.2byte MUS_B_TOWER_RS
+data/maps/SlateportCity_BattleTentLobby/map.json:  "music": "MUS_B_TOWER_RS",
+data/maps/SlateportCity_BattleTentLobby/scripts.inc:	playfanfare MUS_OBTAIN_ITEM
+data/maps/LittlerootTown_BrendansHouse_2F/header.inc:	.2byte MUS_LITTLEROOT
+data/maps/LittlerootTown_BrendansHouse_2F/map.json:  "music": "MUS_LITTLEROOT",
+data/maps/LittlerootTown_BrendansHouse_2F/scripts.inc:	playbgm MUS_ENCOUNTER_BRENDAN, TRUE
+data/maps/LittlerootTown_BrendansHouse_2F/scripts.inc:	savebgm MUS_DUMMY
+data/maps/mtmoon_shop/header.inc:	.2byte MUS_DUMMY
+data/maps/mtmoon_shop/map.json:  "music": "MUS_DUMMY",
+data/maps/FortreeCity_House2/header.inc:	.2byte MUS_FORTREE
+data/maps/FortreeCity_House2/map.json:  "music": "MUS_FORTREE",
+data/maps/NavelRock_Down08/header.inc:	.2byte MUS_RG_SEVII_CAVE
+data/maps/NavelRock_Down08/map.json:  "music": "MUS_RG_SEVII_CAVE",
+data/maps/PetalburgCity_PokemonCenter_2F/header.inc:	.2byte MUS_POKE_CENTER
+data/maps/PetalburgCity_PokemonCenter_2F/map.json:  "music": "MUS_POKE_CENTER",
+data/maps/GraniteCave_B2F/header.inc:	.2byte MUS_PETALBURG_WOODS
+data/maps/GraniteCave_B2F/map.json:  "music": "MUS_PETALBURG_WOODS",
+data/maps/Route41/header.inc:	.2byte MUS_DUMMY
+data/maps/Route41/map.json:  "music": "MUS_DUMMY",
+data/maps/DewfordTown_PokemonCenter_2F/header.inc:	.2byte MUS_POKE_CENTER
+data/maps/DewfordTown_PokemonCenter_2F/map.json:  "music": "MUS_POKE_CENTER",
+data/maps/Route31/header.inc:	.2byte MUS_DUMMY
+data/maps/Route31/map.json:  "music": "MUS_DUMMY",
+data/maps/saffron_silphco/header.inc:	.2byte MUS_DUMMY
+data/maps/saffron_silphco/map.json:  "music": "MUS_DUMMY",
+data/maps/SSTidalLowerDeck/header.inc:	.2byte MUS_SAILING
+data/maps/SSTidalLowerDeck/map.json:  "music": "MUS_SAILING",
+data/maps/route5_house/header.inc:	.2byte MUS_DUMMY
+data/maps/route5_house/map.json:  "music": "MUS_DUMMY",
+data/maps/FallarborTown_BattleTentBattleRoom/header.inc:	.2byte MUS_B_TOWER_RS
+data/maps/FallarborTown_BattleTentBattleRoom/map.json:  "music": "MUS_B_TOWER_RS",
+data/maps/FallarborTown_BattleTentBattleRoom/scripts.inc:	playfanfare MUS_HEAL
+data/maps/route2_entrance2/header.inc:	.2byte MUS_RG_ROUTE1
+data/maps/route2_entrance2/map.json:  "music": "MUS_RG_ROUTE1",
+data/maps/AquaHideout_UnusedRubyMap3/header.inc:	.2byte MUS_AQUA_MAGMA_HIDEOUT
+data/maps/AquaHideout_UnusedRubyMap3/map.json:  "music": "MUS_AQUA_MAGMA_HIDEOUT",
+data/maps/Underwater_Route126/header.inc:	.2byte MUS_UNDERWATER
+data/maps/Underwater_Route126/map.json:  "music": "MUS_UNDERWATER",
+data/maps/Route110_TrickHousePuzzle1/header.inc:	.2byte MUS_TRICK_HOUSE
+data/maps/Route110_TrickHousePuzzle1/map.json:  "music": "MUS_TRICK_HOUSE",
+data/maps/Route7/header.inc:	.2byte MUS_DUMMY
+data/maps/Route7/map.json:  "music": "MUS_DUMMY",
+data/maps/FortreeCity_House5/header.inc:	.2byte MUS_FORTREE
+data/maps/FortreeCity_House5/map.json:  "music": "MUS_FORTREE",
+data/maps/SeafloorCavern_Room1/header.inc:	.2byte MUS_MT_CHIMNEY
+data/maps/SeafloorCavern_Room1/map.json:  "music": "MUS_MT_CHIMNEY",
+data/maps/Route9/header.inc:	.2byte MUS_DUMMY
+data/maps/Route9/map.json:  "music": "MUS_DUMMY",
+data/maps/Pallet_Town_Western_Forest/header.inc:	.2byte MUS_HG_PALLET
+data/maps/Pallet_Town_Western_Forest/map.json:  "music": "MUS_HG_PALLET",
+data/maps/TradeCenter/header.inc:	.2byte MUS_EVER_GRANDE
+data/maps/TradeCenter/map.json:  "music": "MUS_EVER_GRANDE",
+data/maps/PacifidlogTown_House5/header.inc:	.2byte MUS_LILYCOVE
+data/maps/PacifidlogTown_House5/map.json:  "music": "MUS_LILYCOVE",
+data/maps/LavaridgeTown_Gym_1F/header.inc:	.2byte MUS_GYM
+data/maps/LavaridgeTown_Gym_1F/map.json:  "music": "MUS_GYM",
+data/maps/LavaridgeTown_Gym_1F/scripts.inc:	playfanfare MUS_REGISTER_MATCH_CALL
+data/maps/MtPyre_5F/header.inc:	.2byte MUS_MT_PYRE
+data/maps/MtPyre_5F/map.json:  "music": "MUS_MT_PYRE",
+data/maps/BattleFrontier_BattlePalaceBattleRoom/header.inc:	.2byte MUS_B_PALACE
+data/maps/BattleFrontier_BattlePalaceBattleRoom/map.json:  "music": "MUS_B_PALACE",
+data/maps/BattleFrontier_BattlePalaceBattleRoom/scripts.inc:	playfanfare MUS_HEAL
+data/maps/BattleFrontier_BattlePalaceBattleRoom/scripts.inc:	playfanfare MUS_OBTAIN_SYMBOL
+data/maps/BattleFrontier_BattlePalaceBattleRoom/scripts.inc:	playfanfare MUS_OBTAIN_SYMBOL
+data/maps/Route35/header.inc:	.2byte MUS_DUMMY
+data/maps/Route35/map.json:  "music": "MUS_DUMMY",
+data/maps/SlateportCity_OceanicMuseum_1F/header.inc:	.2byte MUS_OCEANIC_MUSEUM
+data/maps/SlateportCity_OceanicMuseum_1F/map.json:  "music": "MUS_OCEANIC_MUSEUM",
+data/maps/MagmaHideout_3F_2R/header.inc:	.2byte MUS_AQUA_MAGMA_HIDEOUT
+data/maps/MagmaHideout_3F_2R/map.json:  "music": "MUS_AQUA_MAGMA_HIDEOUT",
+data/maps/Route113/header.inc:	.2byte MUS_ROUTE113
+data/maps/Route113/map.json:  "music": "MUS_ROUTE113",
+data/maps/Route115/header.inc:	.2byte MUS_ROUTE104
+data/maps/Route115/map.json:  "music": "MUS_ROUTE104",
+data/maps/MauvilleCity_BikeShop/header.inc:	.2byte MUS_RUSTBORO
+data/maps/MauvilleCity_BikeShop/map.json:  "music": "MUS_RUSTBORO",
+data/maps/RustboroCity_Mart/header.inc:	.2byte MUS_POKE_MART
+data/maps/RustboroCity_Mart/map.json:  "music": "MUS_POKE_MART",
+data/maps/lavender_house1/header.inc:	.2byte MUS_DUMMY
+data/maps/lavender_house1/map.json:  "music": "MUS_DUMMY",
+data/maps/SlateportCity_House/header.inc:	.2byte MUS_SLATEPORT
+data/maps/SlateportCity_House/map.json:  "music": "MUS_SLATEPORT",
+data/maps/Route106/header.inc:	.2byte MUS_ROUTE104
+data/maps/Route106/map.json:  "music": "MUS_ROUTE104",
+data/maps/ScorchedSlab/header.inc:	.2byte MUS_PETALBURG_WOODS
+data/maps/ScorchedSlab/map.json:  "music": "MUS_PETALBURG_WOODS",
+data/maps/Route119_House/header.inc:	.2byte MUS_RUSTBORO
+data/maps/Route119_House/map.json:  "music": "MUS_RUSTBORO",
+data/maps/Route16/header.inc:	.2byte MUS_DUMMY
+data/maps/Route16/map.json:  "music": "MUS_DUMMY",
+data/maps/EverGrandeCity/header.inc:	.2byte MUS_EVER_GRANDE
+data/maps/EverGrandeCity/map.json:  "music": "MUS_EVER_GRANDE",
+data/maps/AbandonedShip_Rooms_B1F/header.inc:	.2byte MUS_ABANDONED_SHIP
+data/maps/AbandonedShip_Rooms_B1F/map.json:  "music": "MUS_ABANDONED_SHIP",
+data/maps/OldaleTown_House1/header.inc:	.2byte MUS_OLDALE
+data/maps/OldaleTown_House1/map.json:  "music": "MUS_OLDALE",
+data/maps/SlateportCity_SternsShipyard_1F/header.inc:	.2byte MUS_SLATEPORT
+data/maps/SlateportCity_SternsShipyard_1F/map.json:  "music": "MUS_SLATEPORT",
+data/maps/fuchsia_safarizonecave/header.inc:	.2byte MUS_DUMMY
+data/maps/fuchsia_safarizonecave/map.json:  "music": "MUS_DUMMY",
+data/maps/Route4/header.inc:	.2byte MUS_RG_ROUTE3
+data/maps/Route4/map.json:  "music": "MUS_RG_ROUTE3",
+data/maps/BattleFrontier_BattleTowerMultiBattleRoom/header.inc:	.2byte MUS_B_TOWER
+data/maps/BattleFrontier_BattleTowerMultiBattleRoom/map.json:  "music": "MUS_B_TOWER",
+data/maps/BattleFrontier_BattleTowerMultiBattleRoom/scripts.inc:	playfanfare MUS_HEAL
+data/maps/OldaleTown/header.inc:	.2byte MUS_OLDALE
+data/maps/OldaleTown/map.json:  "music": "MUS_OLDALE",
+data/maps/OldaleTown/scripts.inc:	playbgm MUS_FOLLOW_ME, FALSE
+data/maps/EverGrandeCity_HallOfFame/header.inc:	.2byte MUS_HALL_OF_FAME_ROOM
+data/maps/EverGrandeCity_HallOfFame/map.json:  "music": "MUS_HALL_OF_FAME_ROOM",
+data/maps/Route110_SeasideCyclingRoadSouthEntrance/header.inc:	.2byte MUS_SLATEPORT
+data/maps/Route110_SeasideCyclingRoadSouthEntrance/map.json:  "music": "MUS_SLATEPORT",
+data/maps/SecretBase_BlueCave4/header.inc:	.2byte MUS_FORTREE
+data/maps/SecretBase_BlueCave4/map.json:  "music": "MUS_FORTREE",
+data/maps/BattleFrontier_BattlePikeRoomWildMons/header.inc:	.2byte MUS_B_PIKE
+data/maps/BattleFrontier_BattlePikeRoomWildMons/map.json:  "music": "MUS_B_PIKE",
+data/maps/pewter_pokecenter/header.inc:	.2byte MUS_RG_POKE_CENTER
+data/maps/pewter_pokecenter/map.json:  "music": "MUS_RG_POKE_CENTER",
+data/maps/pewter_house2/header.inc:	.2byte MUS_RG_PEWTER
+data/maps/pewter_house2/map.json:  "music": "MUS_RG_PEWTER",
+data/maps/FortreeCity_House3/header.inc:	.2byte MUS_FORTREE
+data/maps/FortreeCity_House3/map.json:  "music": "MUS_FORTREE",
+data/maps/Saffron_City/header.inc:	.2byte MUS_HG_PALLET
+data/maps/Saffron_City/map.json:  "music": "MUS_HG_PALLET",
+data/maps/BattleFrontier_PokemonCenter_2F/header.inc:	.2byte MUS_POKE_CENTER
+data/maps/BattleFrontier_PokemonCenter_2F/map.json:  "music": "MUS_POKE_CENTER",
+data/maps/Route13/header.inc:	.2byte MUS_DUMMY
+data/maps/Route13/map.json:  "music": "MUS_DUMMY",
+data/maps/MossdeepCity_House1/header.inc:	.2byte MUS_RUSTBORO
+data/maps/MossdeepCity_House1/map.json:  "music": "MUS_RUSTBORO",
+data/maps/BattleFrontier_BattlePikeThreePathRoom/header.inc:	.2byte MUS_B_PIKE
+data/maps/BattleFrontier_BattlePikeThreePathRoom/map.json:  "music": "MUS_B_PIKE",
+data/maps/BattleFrontier_Lounge9/header.inc:	.2byte MUS_B_TOWER_RS
+data/maps/BattleFrontier_Lounge9/map.json:  "music": "MUS_B_TOWER_RS",
+data/maps/MagmaHideout_2F_1R/header.inc:	.2byte MUS_AQUA_MAGMA_HIDEOUT
+data/maps/MagmaHideout_2F_1R/map.json:  "music": "MUS_AQUA_MAGMA_HIDEOUT",
+data/maps/SkyPillar_1F/header.inc:	.2byte MUS_MT_CHIMNEY
+data/maps/SkyPillar_1F/map.json:  "music": "MUS_MT_CHIMNEY",
+data/maps/Route127/header.inc:	.2byte MUS_ROUTE120
+data/maps/Route127/map.json:  "music": "MUS_ROUTE120",
+data/maps/ContestHall/header.inc:	.2byte MUS_CONTEST
+data/maps/ContestHall/map.json:  "music": "MUS_CONTEST",
+data/maps/ContestHall/scripts.inc:	savebgm MUS_LINK_CONTEST_P1
+data/maps/ContestHall/scripts.inc:	savebgm MUS_LINK_CONTEST_P2
+data/maps/ContestHall/scripts.inc:	savebgm MUS_LINK_CONTEST_P3
+data/maps/ContestHall/scripts.inc:	savebgm MUS_LINK_CONTEST_P4
+data/maps/ContestHall/scripts.inc:	savebgm MUS_CONTEST
+data/maps/MirageTower_4F/header.inc:	.2byte MUS_MT_CHIMNEY
+data/maps/MirageTower_4F/map.json:  "music": "MUS_MT_CHIMNEY",
+data/maps/CaveOfOrigin_1F/header.inc:	.2byte MUS_CAVE_OF_ORIGIN
+data/maps/CaveOfOrigin_1F/map.json:  "music": "MUS_CAVE_OF_ORIGIN",
+data/maps/viridian_house1/header.inc:	.2byte MUS_RG_PEWTER
+data/maps/viridian_house1/map.json:  "music": "MUS_RG_PEWTER",
+data/maps/NavelRock_Exterior/header.inc:	.2byte MUS_RG_SEVII_ROUTE
+data/maps/NavelRock_Exterior/map.json:  "music": "MUS_RG_SEVII_ROUTE",
+data/maps/VerdanturfTown_FriendshipRatersHouse/header.inc:	.2byte MUS_VERDANTURF
+data/maps/VerdanturfTown_FriendshipRatersHouse/map.json:  "music": "MUS_VERDANTURF",
+data/maps/UnionRoom/header.inc:	.2byte MUS_EVER_GRANDE
+data/maps/UnionRoom/map.json:  "music": "MUS_EVER_GRANDE",
+data/maps/SootopolisCity_House4/header.inc:	.2byte MUS_SOOTOPOLIS
+data/maps/SootopolisCity_House4/map.json:  "music": "MUS_SOOTOPOLIS",
+data/maps/ShoalCave_LowTideStairsRoom/header.inc:	.2byte MUS_MT_PYRE
+data/maps/ShoalCave_LowTideStairsRoom/map.json:  "music": "MUS_MT_PYRE",
+data/maps/Underwater_SealedChamber/header.inc:	.2byte MUS_UNDERWATER
+data/maps/Underwater_SealedChamber/map.json:  "music": "MUS_UNDERWATER",
+data/maps/celadon_departmentroofnight/header.inc:	.2byte MUS_DUMMY
+data/maps/celadon_departmentroofnight/map.json:  "music": "MUS_DUMMY",
+data/maps/SlateportCity_PokemonCenter_1F/header.inc:	.2byte MUS_POKE_CENTER
+data/maps/SlateportCity_PokemonCenter_1F/map.json:  "music": "MUS_POKE_CENTER",
+data/maps/MagmaHideout_2F_3R/header.inc:	.2byte MUS_AQUA_MAGMA_HIDEOUT
+data/maps/MagmaHideout_2F_3R/map.json:  "music": "MUS_AQUA_MAGMA_HIDEOUT",
+data/maps/FallarborTown_BattleTentCorridor/header.inc:	.2byte MUS_B_TOWER_RS
+data/maps/FallarborTown_BattleTentCorridor/map.json:  "music": "MUS_B_TOWER_RS",
+data/maps/ShoalCave_LowTideInnerRoom/header.inc:	.2byte MUS_MT_PYRE
+data/maps/ShoalCave_LowTideInnerRoom/map.json:  "music": "MUS_MT_PYRE",
+data/maps/SootopolisCity_House7/header.inc:	.2byte MUS_SOOTOPOLIS
+data/maps/SootopolisCity_House7/map.json:  "music": "MUS_SOOTOPOLIS",
+data/maps/Route37/header.inc:	.2byte MUS_DUMMY
+data/maps/Route37/map.json:  "music": "MUS_DUMMY",
+data/maps/SecretBase_YellowCave3/header.inc:	.2byte MUS_FORTREE
+data/maps/SecretBase_YellowCave3/map.json:  "music": "MUS_FORTREE",
+data/maps/saffron_fightingdojovip/header.inc:	.2byte MUS_DUMMY
+data/maps/saffron_fightingdojovip/map.json:  "music": "MUS_DUMMY",
+data/maps/LilycoveCity_House2/header.inc:	.2byte MUS_LILYCOVE
+data/maps/LilycoveCity_House2/map.json:  "music": "MUS_LILYCOVE",
+data/maps/MeteorFalls_B1F_1R/header.inc:	.2byte MUS_CAVE_OF_ORIGIN
+data/maps/MeteorFalls_B1F_1R/map.json:  "music": "MUS_CAVE_OF_ORIGIN",
+data/maps/Route120/header.inc:	.2byte MUS_ROUTE120
+data/maps/Route120/map.json:  "music": "MUS_ROUTE120",
+data/maps/fuchsia_house1/header.inc:	.2byte MUS_DUMMY
+data/maps/fuchsia_house1/map.json:  "music": "MUS_DUMMY",
+data/maps/DewfordTown_House1/header.inc:	.2byte MUS_DEWFORD
+data/maps/DewfordTown_House1/map.json:  "music": "MUS_DEWFORD",
+data/maps/Route111_WinstrateFamilysHouse/header.inc:	.2byte MUS_RUSTBORO
+data/maps/Route111_WinstrateFamilysHouse/map.json:  "music": "MUS_RUSTBORO",
+data/maps/PetalburgCity_House2/header.inc:	.2byte MUS_PETALBURG
+data/maps/PetalburgCity_House2/map.json:  "music": "MUS_PETALBURG",
+data/maps/viridian_contesthall/header.inc:	.2byte MUS_DUMMY
+data/maps/viridian_contesthall/map.json:  "music": "MUS_DUMMY",
+data/maps/BattleFrontier_BattlePyramidTop/header.inc:	.2byte MUS_NONE
+data/maps/BattleFrontier_BattlePyramidTop/map.json:  "music": "MUS_NONE",
+data/maps/BattleFrontier_BattlePyramidTop/scripts.inc:	playbgm MUS_B_PYRAMID_TOP, FALSE
+data/maps/BattleFrontier_BattlePyramidTop/scripts.inc:	playfanfare MUS_OBTAIN_B_POINTS
+data/maps/BattleFrontier_BattlePyramidTop/scripts.inc:	playbgm MUS_B_PYRAMID_TOP, FALSE
+data/maps/BattleFrontier_BattlePyramidTop/scripts.inc:	playfanfare MUS_OBTAIN_SYMBOL
+data/maps/BattleFrontier_BattlePyramidTop/scripts.inc:	playbgm MUS_B_PYRAMID_TOP, FALSE
+data/maps/BattleFrontier_BattlePyramidTop/scripts.inc:	playfanfare MUS_OBTAIN_SYMBOL
+data/maps/Route20/header.inc:	.2byte MUS_DUMMY
+data/maps/Route20/map.json:  "music": "MUS_DUMMY",
+data/maps/celadon_apartment2f/header.inc:	.2byte MUS_DUMMY
+data/maps/celadon_apartment2f/map.json:  "music": "MUS_DUMMY",
+data/maps/SafariZoneGate_Johto/header.inc:	.2byte MUS_DUMMY
+data/maps/SafariZoneGate_Johto/map.json:  "music": "MUS_DUMMY",
+data/maps/PetalburgCity_WallysHouse/header.inc:	.2byte MUS_PETALBURG
+data/maps/PetalburgCity_WallysHouse/map.json:  "music": "MUS_PETALBURG",
+data/maps/Route125/header.inc:	.2byte MUS_ROUTE120
+data/maps/Route125/map.json:  "music": "MUS_ROUTE120",
+data/maps/route9_pokecenter/header.inc:	.2byte MUS_DUMMY
+data/maps/route9_pokecenter/map.json:  "music": "MUS_DUMMY",
+data/maps/MossdeepCity_House4/header.inc:	.2byte MUS_RUSTBORO
+data/maps/MossdeepCity_House4/map.json:  "music": "MUS_RUSTBORO",
+data/maps/MarineCave_Entrance/header.inc:	.2byte MUS_PETALBURG_WOODS
+data/maps/MarineCave_Entrance/map.json:  "music": "MUS_PETALBURG_WOODS",
+data/maps/Route42/header.inc:	.2byte MUS_DUMMY
+data/maps/Route42/map.json:  "music": "MUS_DUMMY",
+data/maps/saffron_gateroute8/header.inc:	.2byte MUS_DUMMY
+data/maps/saffron_gateroute8/map.json:  "music": "MUS_DUMMY",
+data/maps/EverGrandeCity_Hall3/header.inc:	.2byte MUS_VICTORY_ROAD
+data/maps/EverGrandeCity_Hall3/map.json:  "music": "MUS_VICTORY_ROAD",
+data/maps/SecretBase_RedCave2/header.inc:	.2byte MUS_FORTREE
+data/maps/SecretBase_RedCave2/map.json:  "music": "MUS_FORTREE",
+data/maps/MtPyre_4F/header.inc:	.2byte MUS_MT_PYRE
+data/maps/MtPyre_4F/map.json:  "music": "MUS_MT_PYRE",
+data/maps/BattleFrontier_BattleFactoryBattleRoom/header.inc:	.2byte MUS_B_FACTORY
+data/maps/BattleFrontier_BattleFactoryBattleRoom/map.json:  "music": "MUS_B_FACTORY",
+data/maps/BattleFrontier_BattleFactoryBattleRoom/scripts.inc:	playfanfare MUS_OBTAIN_SYMBOL
+data/maps/BattleFrontier_BattleFactoryBattleRoom/scripts.inc:	playfanfare MUS_OBTAIN_SYMBOL
+data/maps/AbandonedShip_Underwater2/header.inc:	.2byte MUS_UNDERWATER
+data/maps/AbandonedShip_Underwater2/map.json:  "music": "MUS_UNDERWATER",
+data/maps/SlateportCity_BattleTentCorridor/header.inc:	.2byte MUS_B_TOWER_RS
+data/maps/SlateportCity_BattleTentCorridor/map.json:  "music": "MUS_B_TOWER_RS",
+data/maps/SlateportCity_BattleTentCorridor/scripts.inc:	playfanfare MUS_HEAL
+data/maps/Route6/header.inc:	.2byte MUS_DUMMY
+data/maps/Route6/map.json:  "music": "MUS_DUMMY",
+data/maps/MarineCave_End/header.inc:	.2byte MUS_PETALBURG_WOODS
+data/maps/MarineCave_End/map.json:  "music": "MUS_PETALBURG_WOODS",
+data/maps/route2_entrance3/header.inc:	.2byte MUS_RG_ROUTE1
+data/maps/route2_entrance3/map.json:  "music": "MUS_RG_ROUTE1",
+data/maps/EverGrandeCity_PokemonLeague_1F/header.inc:	.2byte MUS_POKE_CENTER
+data/maps/EverGrandeCity_PokemonLeague_1F/map.json:  "music": "MUS_POKE_CENTER",
+data/maps/EverGrandeCity_PokemonLeague_1F/scripts.inc:	playfanfare MUS_OBTAIN_BADGE
+data/maps/SealedChamber_InnerRoom/header.inc:	.2byte MUS_SEALED_CHAMBER
+data/maps/SealedChamber_InnerRoom/map.json:  "music": "MUS_SEALED_CHAMBER",
+data/maps/BattleFrontier_BattleDomeCorridor/header.inc:	.2byte MUS_B_DOME_LOBBY
+data/maps/BattleFrontier_BattleDomeCorridor/map.json:  "music": "MUS_B_DOME_LOBBY",
+data/maps/lavender_house3/header.inc:	.2byte MUS_DUMMY
+data/maps/lavender_house3/map.json:  "music": "MUS_DUMMY",
+data/maps/Route122/header.inc:	.2byte MUS_ROUTE122
+data/maps/Route122/map.json:  "music": "MUS_ROUTE122",
+data/maps/Route103/header.inc:	.2byte MUS_ROUTE101
+data/maps/Route103/map.json:  "music": "MUS_ROUTE101",
+data/maps/Route103/scripts.inc:	playbgm MUS_ENCOUNTER_MAY, TRUE
+data/maps/Route103/scripts.inc:	playbgm MUS_ENCOUNTER_BRENDAN, TRUE
+data/maps/Route103/scripts.inc:	savebgm MUS_DUMMY
+data/maps/AncientTomb/header.inc:	.2byte MUS_SEALED_CHAMBER
+data/maps/AncientTomb/map.json:  "music": "MUS_SEALED_CHAMBER",
+data/maps/BattlePyramidSquare02/header.inc:	.2byte MUS_NONE
+data/maps/BattlePyramidSquare02/map.json:  "music": "MUS_NONE",
+data/maps/FallarborTown_CozmosHouse/header.inc:	.2byte MUS_FALLARBOR
+data/maps/FallarborTown_CozmosHouse/map.json:  "music": "MUS_FALLARBOR",
+data/maps/SafariZone_Northwest/header.inc:	.2byte MUS_SAFARI_ZONE
+data/maps/SafariZone_Northwest/map.json:  "music": "MUS_SAFARI_ZONE",
+data/maps/Route23/header.inc:	.2byte MUS_DUMMY
+data/maps/Route23/map.json:  "music": "MUS_DUMMY",
+data/maps/Route132/header.inc:	.2byte MUS_ROUTE119
+data/maps/Route132/map.json:  "music": "MUS_ROUTE119",
+data/maps/MtChimney_CableCarStation/header.inc:	.2byte MUS_ROUTE110
+data/maps/MtChimney_CableCarStation/map.json:  "music": "MUS_ROUTE110",
+data/maps/SecretBase_Shrub1/header.inc:	.2byte MUS_FORTREE
+data/maps/SecretBase_Shrub1/map.json:  "music": "MUS_FORTREE",
+data/maps/indigoplateau_will/header.inc:	.2byte MUS_DUMMY
+data/maps/indigoplateau_will/map.json:  "music": "MUS_DUMMY",
+data/maps/BattleFrontier_OutsideWest/header.inc:	.2byte MUS_B_FRONTIER
+data/maps/BattleFrontier_OutsideWest/map.json:  "music": "MUS_B_FRONTIER",
+data/maps/celadon_apartment1f/header.inc:	.2byte MUS_DUMMY
+data/maps/celadon_apartment1f/map.json:  "music": "MUS_DUMMY",
+data/maps/Route5/header.inc:	.2byte MUS_DUMMY
+data/maps/Route5/map.json:  "music": "MUS_DUMMY",
+data/maps/Route117/header.inc:	.2byte MUS_ROUTE110
+data/maps/Route117/map.json:  "music": "MUS_ROUTE110",
+data/maps/PacifidlogTown_PokemonCenter_1F/header.inc:	.2byte MUS_POKE_CENTER
+data/maps/PacifidlogTown_PokemonCenter_1F/map.json:  "music": "MUS_POKE_CENTER",
+data/maps/NavelRock_Down01/header.inc:	.2byte MUS_RG_SEVII_CAVE
+data/maps/NavelRock_Down01/map.json:  "music": "MUS_RG_SEVII_CAVE",
+data/maps/celadon_departmentroofday/header.inc:	.2byte MUS_DUMMY
+data/maps/celadon_departmentroofday/map.json:  "music": "MUS_DUMMY",
+data/maps/EverGrandeCity_Hall1/header.inc:	.2byte MUS_VICTORY_ROAD
+data/maps/EverGrandeCity_Hall1/map.json:  "music": "MUS_VICTORY_ROAD",
+data/maps/MossdeepCity_GameCorner_B1F/header.inc:	.2byte MUS_RUSTBORO
+data/maps/MossdeepCity_GameCorner_B1F/map.json:  "music": "MUS_RUSTBORO",
+data/maps/RustboroCity_PokemonSchool/header.inc:	.2byte MUS_SCHOOL
+data/maps/RustboroCity_PokemonSchool/map.json:  "music": "MUS_SCHOOL",
+data/maps/Route104_PrototypePrettyPetalFlowerShop/header.inc:	.2byte MUS_ROUTE104
+data/maps/Route104_PrototypePrettyPetalFlowerShop/map.json:  "music": "MUS_ROUTE104",
+data/maps/route5_gate/header.inc:	.2byte MUS_DUMMY
+data/maps/route5_gate/map.json:  "music": "MUS_DUMMY",
+data/maps/RustboroCity_House1/header.inc:	.2byte MUS_RUSTBORO
+data/maps/RustboroCity_House1/map.json:  "music": "MUS_RUSTBORO",
+data/maps/ContestHallBeauty/header.inc:	.2byte MUS_CONTEST
+data/maps/ContestHallBeauty/map.json:  "music": "MUS_CONTEST",
+data/maps/saffron_mart/header.inc:	.2byte MUS_DUMMY
+data/maps/saffron_mart/map.json:  "music": "MUS_DUMMY",
+data/maps/NavelRock_Down04/header.inc:	.2byte MUS_RG_SEVII_CAVE
+data/maps/NavelRock_Down04/map.json:  "music": "MUS_RG_SEVII_CAVE",
+data/maps/OldaleTown_Mart/header.inc:	.2byte MUS_POKE_MART
+data/maps/OldaleTown_Mart/map.json:  "music": "MUS_POKE_MART",
+data/maps/BattleFrontier_PokemonCenter_1F/header.inc:	.2byte MUS_POKE_CENTER
+data/maps/BattleFrontier_PokemonCenter_1F/map.json:  "music": "MUS_POKE_CENTER",
+data/maps/EverGrandeCity_Hall5/header.inc:	.2byte MUS_VICTORY_ROAD
+data/maps/EverGrandeCity_Hall5/map.json:  "music": "MUS_VICTORY_ROAD",
+data/maps/BattleFrontier_Lounge1/header.inc:	.2byte MUS_B_TOWER_RS
+data/maps/BattleFrontier_Lounge1/map.json:  "music": "MUS_B_TOWER_RS",
+data/maps/SootopolisCity_MysteryEventsHouse_B1F/header.inc:	.2byte MUS_SOOTOPOLIS
+data/maps/SootopolisCity_MysteryEventsHouse_B1F/map.json:  "music": "MUS_SOOTOPOLIS",
+data/maps/LilycoveCity_PokemonTrainerFanClub/header.inc:	.2byte MUS_LILYCOVE
+data/maps/LilycoveCity_PokemonTrainerFanClub/map.json:  "music": "MUS_LILYCOVE",
+data/maps/saffron_trainstation/header.inc:	.2byte MUS_DUMMY
+data/maps/saffron_trainstation/map.json:  "music": "MUS_DUMMY",
+data/event_scripts.s:	playfanfare MUS_OBTAIN_BADGE
+data/event_scripts.s:	playfanfare MUS_HEAL
+data/event_scripts.s:	playbgm MUS_SAILING, FALSE
+data/event_scripts.s:	playfanfare MUS_OBTAIN_TMHM
+data/battle_scripts_2.s:	fanfare MUS_RG_POKE_FLUTE
+data/battle_scripts_1.s:	fanfare MUS_LEVEL_UP
+data/battle_scripts_1.s:	fanfare MUS_LEVEL_UP
+data/scripts/berry_tree.inc:	playfanfare MUS_OBTAIN_BERRY
+data/scripts/berry_tree.inc:	playfanfare MUS_OBTAIN_BERRY
+data/scripts/std_msgbox.inc:	playfanfare MUS_OBTAIN_B_POINTS
+data/scripts/day_care.inc:	playfanfare MUS_LEVEL_UP
+data/scripts/players_house.inc:	playbgm MUS_ENCOUNTER_INTERVIEWER, FALSE
+data/scripts/players_house.inc:	playbgm MUS_ENCOUNTER_INTERVIEWER, FALSE
+data/scripts/players_house.inc:	playfanfare MUS_REGISTER_MATCH_CALL
+data/scripts/trainer_script.inc:	playfanfare MUS_REGISTER_MATCH_CALL
+data/scripts/obtain_item.inc:	playfanfare MUS_OBTAIN_ITEM
+data/scripts/obtain_item.inc:	playfanfare MUS_OBTAIN_TMHM
+data/scripts/obtain_item.inc:	playfanfare MUS_OBTAIN_ITEM
+data/scripts/gift_pichu.inc:	playfanfare MUS_OBTAIN_ITEM
+data/scripts/contest_hall.inc:	playbgm MUS_CONTEST_WINNER, FALSE
+data/scripts/contest_hall.inc:	playfanfare MUS_OBTAIN_ITEM

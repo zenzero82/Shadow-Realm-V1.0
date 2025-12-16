@@ -4796,13 +4796,25 @@ VSSeeker_Text_TrainersNotReady::
 	.string "Let's wait till later.{PAUSE_UNTIL_PRESS}$"
 
 Route1_Text_TorkinIntro:
-	.string "So, you tracked me down...\n"
-	.string "Cipher's reach goes far beyond KANTO!$"
+    .string "…Tch. You weren't supposed to see that.\p"
+    .string "That Pokemon was just a test subject.\p"
+    .string "Cipher has perfected a way to lock a\n"
+    .string "Pokemon's heart.\p"
+    .string "You're just catching a glimpse of it.$"
 
 Route1_Text_TorkinDefeated:
-	.string "Tch... You’re stronger than I expected.$"
+    .string "Even with its heart sealed, I still lost…$"
 
 Route1_Text_TorkinPostBattle:
-	.string "Enjoy this little victory.\p"
-	.string "The Shadow Realm is already seeping\n"
-	.string "into this world...$"
+    .string "Don't get excited, kid.\p"
+    .string "That was only an early-stage shadow\n"
+    .string "conversion.\p"
+    .string "Once the real process is complete, a\n"
+    .string "shadow Pokemon won't flinch, or feel\l"
+    .string "anything at all.\p"
+    .string "That darn OAK stuck his nose into this\n"
+    .string "long before you showed up.\p"
+    .string "Keep chasing me if you want.\n"
+	.string "By the time you understand what's\p"
+    .string "happening, the timelines will already be\n"
+    .string "beyond repair.$"

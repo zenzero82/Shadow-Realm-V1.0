@@ -1,0 +1,216 @@
+include/constants/songs.h:#define MUS_DUMMY                   0 // MUS_DUMMY
+include/constants/songs.h:#define MUS_LITTLEROOT_TEST         350 // MUS_TETSUJI          // Unused, likely a test track.
+include/constants/songs.h:#define MUS_GSC_ROUTE38             351 // MUS_FIELD13          // Unused, likely a test track.
+include/constants/songs.h:#define MUS_CAUGHT                  352 // MUS_KACHI22
+include/constants/songs.h:#define MUS_VICTORY_WILD            353 // MUS_KACHI2
+include/constants/songs.h:#define MUS_VICTORY_GYM_LEADER      354 // MUS_KACHI3           // Also used in Frontier Brain victories.
+include/constants/songs.h:#define MUS_VICTORY_LEAGUE          355 // MUS_KACHI5
+include/constants/songs.h:#define MUS_C_COMM_CENTER           356 // MUS_PCC              // Unused, likely a test track.
+include/constants/songs.h:#define MUS_GSC_PEWTER              357 // MUS_NIBI             // Used in unused Contest Halls.
+include/constants/songs.h:#define MUS_C_VS_LEGEND_BEAST       358 // MUS_SUIKUN           // Unused, likely a test track.
+include/constants/songs.h:#define MUS_ROUTE101                359 // MUS_DOORO1           // Also used in Routes 102 and 103.
+include/constants/songs.h:#define MUS_ROUTE110                360 // MUS_DOORO_X1         // Also used in Routes 112, 114, 117, 111's non-desert section and 118's west half.
+include/constants/songs.h:#define MUS_ROUTE120                361 // MUS_DOORO_X3         // Also used in Routes 121, 124, 125, 126, 127 and 128.
+include/constants/songs.h:#define MUS_PETALBURG               362 // MUS_MACHI_S2         // Also used in Mr. Briney's House and Pretty Petal Flower Shop.
+include/constants/songs.h:#define MUS_OLDALE                  363 // MUS_MACHI_S4         // Also used in Lavaridge Town.
+include/constants/songs.h:#define MUS_GYM                     364 // MUS_GIM
+include/constants/songs.h:#define MUS_SURF                    365 // MUS_NAMINORI
+include/constants/songs.h:#define MUS_PETALBURG_WOODS         366 // MUS_DAN01            // Also used in Artisan Cave, Fiery Path, Granite Cave, Jagged Pass, Marine Cave, Rusturf Tunnel, Scorched Slab and Terra Cave.
+include/constants/songs.h:#define MUS_LEVEL_UP                367 // MUS_FANFA1
+include/constants/songs.h:#define MUS_HEAL                    368 // MUS_ME_ASA
+include/constants/songs.h:#define MUS_OBTAIN_BADGE            369 // MUS_ME_BACHI
+include/constants/songs.h:#define MUS_OBTAIN_ITEM             370 // MUS_FANFA4
+include/constants/songs.h:#define MUS_EVOLVED                 371 // MUS_FANFA5           // Also used in egg hatching, trades and upon catching.
+include/constants/songs.h:#define MUS_OBTAIN_TMHM             372 // MUS_ME_WAZA
+include/constants/songs.h:#define MUS_LILYCOVE_MUSEUM         373 // MUS_BIJYUTU          // Also used in the Battle Frontier's Ranking Hall.
+include/constants/songs.h:#define MUS_ROUTE122                374 // MUS_DOORO_X4         // Also used in Route 123 and Birch's intro speech.
+include/constants/songs.h:#define MUS_OCEANIC_MUSEUM          375 // MUS_FUNE_KAN
+include/constants/songs.h:#define MUS_EVOLUTION_INTRO         376 // MUS_ME_SHINKA        // Also used in egg hatching.
+include/constants/songs.h:#define MUS_EVOLUTION               377 // MUS_SHINKA           // Also used in egg hatching and trades.
+include/constants/songs.h:#define MUS_MOVE_DELETED            378 // MUS_ME_WASURE
+include/constants/songs.h:#define MUS_ENCOUNTER_GIRL          379 // MUS_SYOUJOEYE
+include/constants/songs.h:#define MUS_ENCOUNTER_MALE          380 // MUS_BOYEYE
+include/constants/songs.h:#define MUS_ABANDONED_SHIP          381 // MUS_DAN02            // Also used in Faraway and Southern Islands.
+include/constants/songs.h:#define MUS_FORTREE                 382 // MUS_MACHI_S3         // Also used in Secret Bases and the Safari Zone's entrance.
+include/constants/songs.h:#define MUS_BIRCH_LAB               383 // MUS_ODAMAKI
+include/constants/songs.h:#define MUS_B_TOWER_RS              384 // MUS_B_TOWER          // Used in Battle Tents, Trainer Hill and Battle Frontier's lounges and Exchange Service Corner.
+include/constants/songs.h:#define MUS_ENCOUNTER_SWIMMER       385 // MUS_SWIMEYE
+include/constants/songs.h:#define MUS_CAVE_OF_ORIGIN          386 // MUS_DAN03            // Also used in Meteor Falls.
+include/constants/songs.h:#define MUS_OBTAIN_BERRY            387 // MUS_ME_KINOMI
+include/constants/songs.h:#define MUS_AWAKEN_LEGEND           388 // MUS_ME_TAMA
+include/constants/songs.h:#define MUS_SLOTS_JACKPOT           389 // MUS_ME_B_BIG         // Also used in the Roulette.
+include/constants/songs.h:#define MUS_SLOTS_WIN               390 // MUS_ME_B_SMALL       // Also used in the Roulette.
+include/constants/songs.h:#define MUS_TOO_BAD                 391 // MUS_ME_ZANNEN
+include/constants/songs.h:#define MUS_ROULETTE                392 // MUS_BD_TIME
+include/constants/songs.h:#define MUS_LINK_CONTEST_P1         393 // MUS_TEST1
+include/constants/songs.h:#define MUS_LINK_CONTEST_P2         394 // MUS_TEST2
+include/constants/songs.h:#define MUS_LINK_CONTEST_P3         395 // MUS_TEST3
+include/constants/songs.h:#define MUS_LINK_CONTEST_P4         396 // MUS_TEST4
+include/constants/songs.h:#define MUS_ENCOUNTER_RICH          397 // MUS_TEST
+include/constants/songs.h:#define MUS_VERDANTURF              398 // MUS_GOMACHI0
+include/constants/songs.h:#define MUS_RUSTBORO                399 // MUS_GOTOWN           // Also used in Mauville City, Mossdeep City, Daycare, Weather Institute and several Route houses.
+include/constants/songs.h:#define MUS_POKE_CENTER             400 // MUS_POKECEN          // Also used in the Pokémon League's lobby.
+include/constants/songs.h:#define MUS_ROUTE104                401 // MUS_NEXTROAD         // Also used in Routes 105, 106, 107, 108, 109, 115 and 116.
+include/constants/songs.h:#define MUS_ROUTE119                402 // MUS_GRANROAD         // Also used in Routes 129, 130, 131, 132, 133, 134 and 118's east half.
+include/constants/songs.h:#define MUS_CYCLING                 403 // MUS_CYCLING
+include/constants/songs.h:#define MUS_POKE_MART               404 // MUS_FRIENDLY         // Also used in Lilycove's Department Store.
+include/constants/songs.h:#define MUS_LITTLEROOT              405 // MUS_MISHIRO
+include/constants/songs.h:#define MUS_MT_CHIMNEY              406 // MUS_TOZAN            // Also used in Desert Underpass, Mirage Tower, Seafloor Cavern and Sky Pillar.
+include/constants/songs.h:#define MUS_ENCOUNTER_FEMALE        407 // MUS_GIRLEYE
+include/constants/songs.h:#define MUS_LILYCOVE                408 // MUS_MINAMO           // Also used in Pacifidlog Town and the Diving Treasure Hunter's house.
+include/constants/songs.h:#define MUS_DESERT                  409 // MUS_ASHROAD
+include/constants/songs.h:#define MUS_HELP                    410 // MUS_EVENT0
+include/constants/songs.h:#define MUS_UNDERWATER              411 // MUS_DEEPDEEP
+include/constants/songs.h:#define MUS_VICTORY_TRAINER         412 // MUS_KACHI1
+include/constants/songs.h:#define MUS_TITLE                   413 // MUS_TITLE3
+include/constants/songs.h:#define MUS_INTRO                   414 // MUS_DEMO1
+include/constants/songs.h:#define MUS_ENCOUNTER_MAY           415 // MUS_GIRL_SUP
+include/constants/songs.h:#define MUS_ENCOUNTER_INTENSE       416 // MUS_HAGESHII
+include/constants/songs.h:#define MUS_ENCOUNTER_COOL          417 // MUS_KAKKOII
+include/constants/songs.h:#define MUS_ROUTE113                418 // MUS_KAZANBAI
+include/constants/songs.h:#define MUS_ENCOUNTER_AQUA          419 // MUS_AQA_0
+include/constants/songs.h:#define MUS_FOLLOW_ME               420 // MUS_TSURETEK
+include/constants/songs.h:#define MUS_ENCOUNTER_BRENDAN       421 // MUS_BOY_SUP
+include/constants/songs.h:#define MUS_EVER_GRANDE             422 // MUS_RAINBOW          // Also used in link rooms.
+include/constants/songs.h:#define MUS_ENCOUNTER_SUSPICIOUS    423 // MUS_AYASII
+include/constants/songs.h:#define MUS_VICTORY_AQUA_MAGMA      424 // MUS_KACHI4
+include/constants/songs.h:#define MUS_CABLE_CAR               425 // MUS_ROPEWAY
+include/constants/songs.h:#define MUS_GAME_CORNER             426 // MUS_CASINO
+include/constants/songs.h:#define MUS_DEWFORD                 427 // MUS_HIGHTOWN         // Also used in Route 109's Seashore house.
+include/constants/songs.h:#define MUS_SAFARI_ZONE             428 // MUS_SAFARI
+include/constants/songs.h:#define MUS_VICTORY_ROAD            429 // MUS_C_ROAD           // Also used in Pokémon League's E4/Champion rooms and halls.
+include/constants/songs.h:#define MUS_AQUA_MAGMA_HIDEOUT      430 // MUS_AJITO
+include/constants/songs.h:#define MUS_SAILING                 431 // MUS_M_BOAT
+include/constants/songs.h:#define MUS_MT_PYRE                 432 // MUS_M_DUNGON         // Also used in New Mauville and Shoal Cave.
+include/constants/songs.h:#define MUS_SLATEPORT               433 // MUS_FINECITY         // Also used in Cycling Road's entrances.
+include/constants/songs.h:#define MUS_MT_PYRE_EXTERIOR        434 // MUS_MACHUPI
+include/constants/songs.h:#define MUS_SCHOOL                  435 // MUS_P_SCHOOL
+include/constants/songs.h:#define MUS_HALL_OF_FAME            436 // MUS_DENDOU
+include/constants/songs.h:#define MUS_FALLARBOR               437 // MUS_TONEKUSA         // Also used in Route 114's houses.
+include/constants/songs.h:#define MUS_SEALED_CHAMBER          438 // MUS_MABOROSI         // Also used in Ancient Tomb, Desert Ruins and Island Cave.
+include/constants/songs.h:#define MUS_CONTEST_WINNER          439 // MUS_CON_FAN
+include/constants/songs.h:#define MUS_CONTEST                 440 // MUS_CONTEST0
+include/constants/songs.h:#define MUS_ENCOUNTER_MAGMA         441 // MUS_MGM0
+include/constants/songs.h:#define MUS_INTRO_BATTLE            442 // MUS_T_BATTLE
+include/constants/songs.h:#define MUS_ABNORMAL_WEATHER        443 // MUS_OOAME            // Replaces MUS_WEATHER_KYOGRE from R/S.
+include/constants/songs.h:#define MUS_WEATHER_GROUDON         444 // MUS_HIDERI           // Unused, from R/S.
+include/constants/songs.h:#define MUS_SOOTOPOLIS              445 // MUS_RUNECITY
+include/constants/songs.h:#define MUS_CONTEST_RESULTS         446 // MUS_CON_K
+include/constants/songs.h:#define MUS_HALL_OF_FAME_ROOM       447 // MUS_EIKOU_R
+include/constants/songs.h:#define MUS_TRICK_HOUSE             448 // MUS_KARAKURI
+include/constants/songs.h:#define MUS_ENCOUNTER_TWINS         449 // MUS_HUTAGO
+include/constants/songs.h:#define MUS_ENCOUNTER_ELITE_FOUR    450 // MUS_SITENNOU
+include/constants/songs.h:#define MUS_ENCOUNTER_HIKER         451 // MUS_YAMA_EYE
+include/constants/songs.h:#define MUS_CONTEST_LOBBY           452 // MUS_CONLOBBY
+include/constants/songs.h:#define MUS_ENCOUNTER_INTERVIEWER   453 // MUS_INTER_V          // Also used during Petalburg City report at the beginning of the game.
+include/constants/songs.h:#define MUS_ENCOUNTER_CHAMPION      454 // MUS_DAIGO
+include/constants/songs.h:#define MUS_CREDITS                 455 // MUS_THANKFOR
+include/constants/songs.h:#define MUS_END                     456 // MUS_END
+include/constants/songs.h:#define MUS_B_FRONTIER              457 // MUS_B_FRONTIER
+include/constants/songs.h:#define MUS_B_ARENA                 458 // MUS_B_ARENA
+include/constants/songs.h:#define MUS_OBTAIN_B_POINTS         459 // MUS_ME_POINTGET
+include/constants/songs.h:#define MUS_REGISTER_MATCH_CALL     460 // MUS_ME_TORE_EYE
+include/constants/songs.h:#define MUS_B_PYRAMID               461 // MUS_PYRAMID
+include/constants/songs.h:#define MUS_B_PYRAMID_TOP           462 // MUS_PYRAMID_TOP
+include/constants/songs.h:#define MUS_B_PALACE                463 // MUS_B_PALACE
+include/constants/songs.h:#define MUS_RAYQUAZA_APPEARS        464 // MUS_REKKUU_KOURIN
+include/constants/songs.h:#define MUS_B_TOWER                 465 // MUS_SATTOWER
+include/constants/songs.h:#define MUS_OBTAIN_SYMBOL           466 // MUS_ME_SYMBOLGET
+include/constants/songs.h:#define MUS_B_DOME                  467 // MUS_B_DOME
+include/constants/songs.h:#define MUS_B_PIKE                  468 // MUS_B_TUBE
+include/constants/songs.h:#define MUS_B_FACTORY               469 // MUS_B_FACTORY
+include/constants/songs.h:#define MUS_VS_RAYQUAZA             470 // MUS_VS_REKKU         // Identical to MUS_VS_KYOGRE_GROUDON.
+include/constants/songs.h:#define MUS_VS_FRONTIER_BRAIN       471 // MUS_VS_FRONT
+include/constants/songs.h:#define MUS_VS_MEW                  472 // MUS_VS_MEW
+include/constants/songs.h:#define MUS_B_DOME_LOBBY            473 // MUS_B_DOME1
+include/constants/songs.h:#define MUS_VS_WILD                 474 // MUS_BATTLE27
+include/constants/songs.h:#define MUS_VS_AQUA_MAGMA           475 // MUS_BATTLE31
+include/constants/songs.h:#define MUS_VS_TRAINER              476 // MUS_BATTLE20
+include/constants/songs.h:#define MUS_VS_GYM_LEADER           477 // MUS_BATTLE32
+include/constants/songs.h:#define MUS_VS_CHAMPION             478 // MUS_BATTLE33
+include/constants/songs.h:#define MUS_VS_REGI                 479 // MUS_BATTLE36
+include/constants/songs.h:#define MUS_VS_KYOGRE_GROUDON       480 // MUS_BATTLE34
+include/constants/songs.h:#define MUS_VS_RIVAL                481 // MUS_BATTLE35
+include/constants/songs.h:#define MUS_VS_ELITE_FOUR           482 // MUS_BATTLE38
+include/constants/songs.h:#define MUS_VS_AQUA_MAGMA_LEADER    483 // MUS_BATTLE30
+include/constants/songs.h:#define MUS_RG_FOLLOW_ME            484 // MUS_RG_ANNAI
+include/constants/songs.h:#define MUS_RG_GAME_CORNER          485 // MUS_RG_SLOT
+include/constants/songs.h:#define MUS_RG_ROCKET_HIDEOUT       486 // MUS_RG_AJITO
+include/constants/songs.h:#define MUS_RG_GYM                  487 // MUS_RG_GYM
+include/constants/songs.h:#define MUS_RG_JIGGLYPUFF           488 // MUS_RG_PURIN
+include/constants/songs.h:#define MUS_RG_INTRO_FIGHT          489 // MUS_RG_DEMO
+include/constants/songs.h:#define MUS_RG_TITLE                490 // MUS_RG_TITLE
+include/constants/songs.h:#define MUS_RG_CINNABAR             491 // MUS_RG_GUREN
+include/constants/songs.h:#define MUS_RG_LAVENDER             492 // MUS_RG_SHION
+include/constants/songs.h:#define MUS_RG_HEAL                 493 // MUS_RG_KAIHUKU
+include/constants/songs.h:#define MUS_RG_CYCLING              494 // MUS_RG_CYCLING
+include/constants/songs.h:#define MUS_RG_ENCOUNTER_ROCKET     495 // MUS_RG_ROCKET
+include/constants/songs.h:#define MUS_RG_ENCOUNTER_GIRL       496 // MUS_RG_SHOUJO
+include/constants/songs.h:#define MUS_RG_ENCOUNTER_BOY        497 // MUS_RG_SHOUNEN
+include/constants/songs.h:#define MUS_RG_HALL_OF_FAME         498 // MUS_RG_DENDOU
+include/constants/songs.h:#define MUS_RG_VIRIDIAN_FOREST      499 // MUS_RG_T_MORI
+include/constants/songs.h:#define MUS_RG_MT_MOON              500 // MUS_RG_OTSUKIMI
+include/constants/songs.h:#define MUS_RG_POKE_MANSION         501 // MUS_RG_POKEYASHI
+include/constants/songs.h:#define MUS_RG_CREDITS              502 // MUS_RG_ENDING
+include/constants/songs.h:#define MUS_RG_ROUTE1               503 // MUS_RG_LOAD01
+include/constants/songs.h:#define MUS_RG_ROUTE24              504 // MUS_RG_OPENING
+include/constants/songs.h:#define MUS_RG_ROUTE3               505 // MUS_RG_LOAD02
+include/constants/songs.h:#define MUS_RG_ROUTE11              506 // MUS_RG_LOAD03
+include/constants/songs.h:#define MUS_RG_VICTORY_ROAD         507 // MUS_RG_CHAMP_R
+include/constants/songs.h:#define MUS_RG_VS_GYM_LEADER        508 // MUS_RG_VS_GYM
+include/constants/songs.h:#define MUS_RG_VS_TRAINER           509 // MUS_RG_VS_TORE
+include/constants/songs.h:#define MUS_RG_VS_WILD              510 // MUS_RG_VS_YASEI
+include/constants/songs.h:#define MUS_RG_VS_CHAMPION          511 // MUS_RG_VS_LAST
+include/constants/songs.h:#define MUS_HG_PALLET               512 // MUS_RG_MASARA
+include/constants/songs.h:#define MUS_RG_OAK_LAB              513 // MUS_RG_KENKYU
+include/constants/songs.h:#define MUS_RG_OAK                  514 // MUS_RG_OHKIDO
+include/constants/songs.h:#define MUS_RG_POKE_CENTER          515 // MUS_RG_POKECEN
+include/constants/songs.h:#define MUS_RG_SS_ANNE              516 // MUS_RG_SANTOAN
+include/constants/songs.h:#define MUS_RG_SURF                 517 // MUS_RG_NAMINORI
+include/constants/songs.h:#define MUS_RG_POKE_TOWER           518 // MUS_RG_P_TOWER
+include/constants/songs.h:#define MUS_RG_SILPH                519 // MUS_RG_SHIRUHU
+include/constants/songs.h:#define MUS_RG_FUCHSIA              520 // MUS_RG_HANADA
+include/constants/songs.h:#define MUS_RG_CELADON              521 // MUS_RG_TAMAMUSI
+include/constants/songs.h:#define MUS_RG_VICTORY_TRAINER      522 // MUS_RG_WIN_TRE       // Identical to MUS_VICTORY_TRAINER.
+include/constants/songs.h:#define MUS_RG_VICTORY_WILD         523 // MUS_RG_WIN_YASEI     // Identical to MUS_VICTORY_WILD.
+include/constants/songs.h:#define MUS_RG_VICTORY_GYM_LEADER   524 // MUS_RG_WIN_GYM       // Identical to MUS_VICTORY_GYM_LEADER.
+include/constants/songs.h:#define MUS_RG_VERMILLION           525 // MUS_RG_KUCHIBA
+include/constants/songs.h:#define MUS_RG_PEWTER               526 // MUS_RG_NIBI
+include/constants/songs.h:#define MUS_RG_ENCOUNTER_RIVAL      527 // MUS_RG_RIVAL1
+include/constants/songs.h:#define MUS_RG_RIVAL_EXIT           528 // MUS_RG_RIVAL2
+include/constants/songs.h:#define MUS_RG_DEX_RATING           529 // MUS_RG_FAN2
+include/constants/songs.h:#define MUS_RG_OBTAIN_KEY_ITEM      530 // MUS_RG_FAN5
+include/constants/songs.h:#define MUS_RG_CAUGHT_INTRO         531 // MUS_RG_FAN6
+include/constants/songs.h:#define MUS_RG_PHOTO                532 // MUS_ME_RG_PHOTO
+include/constants/songs.h:#define MUS_RG_GAME_FREAK           533 // MUS_RG_TITLEROG
+include/constants/songs.h:#define MUS_RG_CAUGHT               534 // MUS_RG_GET_YASEI
+include/constants/songs.h:#define MUS_RG_NEW_GAME_INSTRUCT    535 // MUS_RG_SOUSA
+include/constants/songs.h:#define MUS_RG_NEW_GAME_INTRO       536 // MUS_RG_SEKAIKAN
+include/constants/songs.h:#define MUS_RG_NEW_GAME_EXIT        537 // MUS_RG_SEIBETU
+include/constants/songs.h:#define MUS_RG_POKE_JUMP            538 // MUS_RG_JUMP
+include/constants/songs.h:#define MUS_RG_UNION_ROOM           539 // MUS_RG_UNION
+include/constants/songs.h:#define MUS_RG_NET_CENTER           540 // MUS_RG_NETWORK
+include/constants/songs.h:#define MUS_RG_MYSTERY_GIFT         541 // MUS_RG_OKURIMONO
+include/constants/songs.h:#define MUS_RG_BERRY_PICK           542 // MUS_RG_KINOMIKUI
+include/constants/songs.h:#define MUS_RG_SEVII_CAVE           543 // MUS_RG_NANADUNGEON   // Identical to MUS_RG_MT_MOON.
+include/constants/songs.h:#define MUS_RG_TEACHY_TV_SHOW       544 // MUS_RG_OSHIE_TV      // Identical to MUS_RG_FOLLOW_ME.
+include/constants/songs.h:#define MUS_RG_SEVII_ROUTE          545 // MUS_RG_NANASHIMA
+include/constants/songs.h:#define MUS_RG_SEVII_DUNGEON        546 // MUS_RG_NANAISEKI     // Identical to MUS_RG_VIRIDIAN_FOREST.
+include/constants/songs.h:#define MUS_RG_SEVII_123            547 // MUS_RG_NANA123       // Identical to MUS_RG_PEWTER
+include/constants/songs.h:#define MUS_RG_SEVII_45             548 // MUS_RG_NANA45
+include/constants/songs.h:#define MUS_RG_SEVII_67             549 // MUS_RG_NANA67
+include/constants/songs.h:#define MUS_RG_POKE_FLUTE           550 // MUS_RG_POKEFUE
+include/constants/songs.h:#define MUS_RG_VS_DEOXYS            551 // MUS_RG_VS_DEO
+include/constants/songs.h:#define MUS_RG_VS_MEWTWO            552 // MUS_RG_VS_MYU2
+include/constants/songs.h:#define MUS_RG_VS_LEGEND            553 // MUS_RG_VS_DEN
+include/constants/songs.h:#define MUS_RG_ENCOUNTER_GYM_LEADER 554 // MUS_RG_EXEYE
+include/constants/songs.h:#define MUS_RG_ENCOUNTER_DEOXYS     555 // MUS_RG_DEOEYE
+include/constants/songs.h:#define MUS_RG_TRAINER_TOWER        556 // MUS_RG_T_TOWER
+include/constants/songs.h:#define MUS_RG_SLOW_PALLET          557 // MUS_RG_SLOWMASARA
+include/constants/songs.h:#define MUS_RG_TEACHY_TV_MENU       558 // MUS_RG_TVNOIZE
+include/constants/songs.h:#define MUS_CIPHER_PEON_BATTLE      610  // or whatever ID you picked
+include/constants/songs.h:#define MUS_NEWSORRE                611
+include/constants/songs.h:#define MUS_MIRRORB                 612
+include/constants/songs.h:#define MUS_ORRETRAINER             613
+include/constants/songs.h:#define MUS_ROUTE118                0x7FFF  // Map is split into 2 music sections. controlled by GetCurrLocationDefaultMusic().
+include/constants/songs.h:#define MUS_NONE                    0xFFFF

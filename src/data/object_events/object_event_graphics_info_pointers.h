@@ -257,6 +257,20 @@ extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_RocketGrunt
 extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_GymGuy;
 extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_Camperg1;
 extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_CuttableTreeG1;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_GaryOakGen1;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_GiovanniGen1;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_MistyGen1;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_PetrelGen1;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_ScientistMGen1;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_ScientistFGen1;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_Woman5Gen1;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_Beauty2Gen1;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_FatMan2Gen1;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_BlueMomGen1;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_JessieGen1;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_JamesGen1;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_MeowthGen1;
+
 
 //Johto
 
@@ -523,6 +537,19 @@ const struct ObjectEventGraphicsInfo *const gObjectEventGraphicsInfoPointers[NUM
     [OBJ_EVENT_GFX_GYM_GUY] =                   &gObjectEventGraphicsInfo_GymGuy,
     [OBJ_EVENT_GFX_CAMPERG1]  =                 &gObjectEventGraphicsInfo_Camperg1,
     [OBJ_EVENT_GFX_CUTTABLE_TREE_G1] =          &gObjectEventGraphicsInfo_CuttableTreeG1,
+    [OBJ_EVENT_GFX_GARY_OAK_GEN1]    = &gObjectEventGraphicsInfo_GaryOakGen1,
+    [OBJ_EVENT_GFX_GIOVANNI_GEN1]    = &gObjectEventGraphicsInfo_GiovanniGen1,
+    [OBJ_EVENT_GFX_MISTY_GEN1]       = &gObjectEventGraphicsInfo_MistyGen1,
+    [OBJ_EVENT_GFX_PETREL_GEN1]      = &gObjectEventGraphicsInfo_PetrelGen1,
+    [OBJ_EVENT_GFX_SCIENTIST_M_GEN1] = &gObjectEventGraphicsInfo_ScientistMGen1,
+    [OBJ_EVENT_GFX_SCIENTIST_F_GEN1] = &gObjectEventGraphicsInfo_ScientistFGen1,
+    [OBJ_EVENT_GFX_WOMAN_5_GEN1]     = &gObjectEventGraphicsInfo_Woman5Gen1,
+    [OBJ_EVENT_GFX_BEAUTY2_GEN1]   = &gObjectEventGraphicsInfo_Beauty2Gen1,
+    [OBJ_EVENT_GFX_FAT_MAN2_GEN1]  = &gObjectEventGraphicsInfo_FatMan2Gen1,
+    [OBJ_EVENT_GFX_BLUE_MOM_GEN1]  = &gObjectEventGraphicsInfo_BlueMomGen1,
+    [OBJ_EVENT_GFX_JESSIE_GEN1]  = &gObjectEventGraphicsInfo_JessieGen1,
+    [OBJ_EVENT_GFX_JAMES_GEN1]   = &gObjectEventGraphicsInfo_JamesGen1,
+    [OBJ_EVENT_GFX_MEOWTH_GEN1]  = &gObjectEventGraphicsInfo_MeowthGen1,
 
     //Johto
 

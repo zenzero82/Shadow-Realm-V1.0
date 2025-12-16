@@ -16,22 +16,50 @@
   "object_events": [],
   "warp_events": [
     {
-      "x": 29,
-      "y": 61,
+      "x": 39,
+      "y": 62,
       "elevation": 0,
       "dest_map": "MAP_ROUTE2_ENTRANCE1",
       "dest_warp_id": "1"
     },
     {
-      "x": 5,
-      "y": 7,
+      "x": 15,
+      "y": 9,
       "elevation": 0,
       "dest_map": "MAP_ROUTE2_ENTRANCE3",
       "dest_warp_id": "0"
     },
     {
-      "x": 6,
-      "y": 7,
+      "x": 16,
+      "y": 9,
+      "elevation": 0,
+      "dest_map": "MAP_ROUTE2_ENTRANCE3",
+      "dest_warp_id": "0"
+    },
+    {
+      "x": 40,
+      "y": 62,
+      "elevation": 0,
+      "dest_map": "MAP_ROUTE2_ENTRANCE1",
+      "dest_warp_id": "1"
+    },
+    {
+      "x": 38,
+      "y": 62,
+      "elevation": 0,
+      "dest_map": "MAP_ROUTE2_ENTRANCE1",
+      "dest_warp_id": "1"
+    },
+    {
+      "x": 41,
+      "y": 62,
+      "elevation": 0,
+      "dest_map": "MAP_ROUTE2_ENTRANCE1",
+      "dest_warp_id": "1"
+    },
+    {
+      "x": 14,
+      "y": 9,
       "elevation": 0,
       "dest_map": "MAP_ROUTE2_ENTRANCE3",
       "dest_warp_id": "0"

@@ -490,7 +490,7 @@
     },
     {
       "id": "MAPSEC_ABANDONED_SHIP",
-      "name": "viri",
+      "name": "Vermillion City",
       "x": 6,
       "y": 14,
       "width": 1,
@@ -1710,6 +1710,126 @@
     {
       "id": "MAPSEC_NEW_BARK_TOWN",
       "name": "NEW BARK TOWN"
+    },
+    {
+      "id": "MAPSEC_Pallet_Town_Western_Forest",
+      "name": "Pallet Town Western Forest"
+    },
+    {
+      "id": "MAPSEC_CHERRYGROVE_CITY",
+      "name": "CHERRYGROVE CITY"
+    },
+    {
+      "id": "MAPSEC_VIOLET_CITY",
+      "name": "VIOLET CITY"
+    },
+    {
+      "id": "MAPSEC_GOLDENROD_CITY",
+      "name": "GOLDENROD CITY"
+    },
+    {
+      "id": "MAPSEC_ECRUTEAK_CITY",
+      "name": "ECRUTEAK CITY"
+    },
+    {
+      "id": "MAPSEC_OLIVINE_CITY",
+      "name": "OLIVINE CITY"
+    },
+    {
+      "id": "MAPSEC_CIANWOOD_CITY",
+      "name": "CIANWOOD CITY"
+    },
+    {
+      "id": "MAPSEC_SAFARIZONEGATE_JOHTO",
+      "name": "SAFARIZONEGATE JOHTO"
+    },
+    {
+      "id": "MAPSEC_MAHOGANY_TOWN",
+      "name": "MAHOGANY TOWN"
+    },
+    {
+      "id": "MAPSEC_BLACKTHORN_CITY",
+      "name": "BLACKTHORN CITY"
+    },
+    {
+      "id": "MAPSEC_ROUTE_26",
+      "name": "ROUTE 26"
+    },
+    {
+      "id": "MAPSEC_ROUTE_26_NORTH",
+      "name": "ROUTE 26 NORTH"
+    },
+    {
+      "id": "MAPSEC_ROUTE_27",
+      "name": "ROUTE 27"
+    },
+    {
+      "id": "MAPSEC_ROUTE_28",
+      "name": "ROUTE 28"
+    },
+    {
+      "id": "MAPSEC_ROUTE29",
+      "name": "Route 29"
+    },
+    {
+      "id": "MAPSEC_ROUTE31",
+      "name": "Route 31"
+    },
+    {
+      "id": "MAPSEC_RUINS_OF_ALPH",
+      "name": "RUINS OF ALPH"
+    },
+    {
+      "id": "MAPSEC_ROUTE36",
+      "name": "Route 36"
+    },
+    {
+      "id": "MAPSEC_ROUTE34",
+      "name": "ROUTE 34"
+    },
+    {
+      "id": "MAPSEC_ROUTE35",
+      "name": "Route 35"
+    },
+    {
+      "id": "MAPSEC_NATIONAL_PARK",
+      "name": "National Park"
+    },
+    {
+      "id": "MAPSEC_ROUTE38",
+      "name": "Route 38"
+    },
+    {
+      "id": "MAPSEC_ROUTE42",
+      "name": "Route 42"
+    },
+    {
+      "id": "MAPSEC_ROUTE43",
+      "name": "Route 43"
+    },
+    {
+      "id": "MAPSEC_ROUTE40",
+      "name": "Route 40"
+    },
+    {
+      "id": "MAPSEC_ROUTE_39",
+      "name": "ROUTE 39"
+    },
+    {
+      "id": "MAPSEC_ROUTE_30",
+      "name": "ROUTE 30"
+    },
+    {
+      "id": "MAPSEC_ROUTE_32",
+      "name": "ROUTE 32"
+    },
+    {
+      "id": "MAPSEC_ROUTE28",
+      "name": "ROUTE 28"
+    },
+    {
+      "id": "MAPSEC_MT_SILVER",
+      "name": "MT SILVER"
     }
   ]
 }

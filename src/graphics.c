@@ -1966,6 +1966,14 @@ const u32 gKantoTrainerCardFront_Tilemap[] = INCBIN_U32("graphics/trainer_card/f
 const u32 gKantoTrainerCardBack_Tilemap[] = INCBIN_U32("graphics/trainer_card/frlg/back.bin.lz");
 const u32 gKantoTrainerCardFrontLink_Tilemap[] = INCBIN_U32("graphics/trainer_card/frlg/front_link.bin.lz");
 
+// Johto trainer card (new)
+const u16 gJohtoTrainerCardGold_Pal[]      = INCBIN_U16("graphics/trainer_card/johto/gold.gbapal");
+const u32 gJohtoTrainerCard_Gfx[]            = INCBIN_U32("graphics/trainer_card/johto/tiles.4bpp.lz");
+const u32 gJohtoTrainerCardBg_Tilemap[]      = INCBIN_U32("graphics/trainer_card/johto/bg.bin.lz");
+const u32 gJohtoTrainerCardFront_Tilemap[]   = INCBIN_U32("graphics/trainer_card/johto/front.bin.lz");
+const u32 gJohtoTrainerCardBack_Tilemap[]    = INCBIN_U32("graphics/trainer_card/johto/back.bin.lz");
+const u32 gJohtoTrainerCardFrontLink_Tilemap[] = INCBIN_U32("graphics/trainer_card/johto/front_link.bin.lz");
+
 // Pokémon storage system
 
 const u32 gStorageSystemMenu_Gfx[] = INCBIN_U32("graphics/pokemon_storage/menu.4bpp.lz");

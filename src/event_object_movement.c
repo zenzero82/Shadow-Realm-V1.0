@@ -534,6 +534,20 @@ static const struct SpritePalette sObjectEventSpritePalettes[] = {
     {gObjectEventPal_RocketGruntFGen1,      OBJ_EVENT_PAL_TAG_ROCKET_GRUNT_F_GEN1},
     {gObjectEventPal_GymGuy,                OBJ_EVENT_PAL_TAG_GYM_GUY},
     {gObjectEventPal_Camperg1,              OBJ_EVENT_PAL_TAG_CAMPERG1},
+    {gObjectEventPal_CuttableTreeG1, OBJ_EVENT_PAL_TAG_CUTTABLE_TREE_G1},
+    {gObjectEventPal_GaryOakGen1,    OBJ_EVENT_PAL_TAG_GARY_OAK_GEN1},
+    {gObjectEventPal_GiovanniGen1,   OBJ_EVENT_PAL_TAG_GIOVANNI_GEN1},
+    {gObjectEventPal_MistyGen1,      OBJ_EVENT_PAL_TAG_MISTY_GEN1},
+    {gObjectEventPal_PetrelGen1,     OBJ_EVENT_PAL_TAG_PETREL_GEN1},
+    {gObjectEventPal_ScientistMGen1, OBJ_EVENT_PAL_TAG_SCIENTIST_M_GEN1},
+    {gObjectEventPal_ScientistFGen1, OBJ_EVENT_PAL_TAG_SCIENTIST_F_GEN1},
+    {gObjectEventPal_Woman5Gen1,     OBJ_EVENT_PAL_TAG_WOMAN_5_GEN1},
+    {gObjectEventPal_Beauty2Gen1,  OBJ_EVENT_PAL_TAG_BEAUTY2_GEN1},
+    {gObjectEventPal_FatMan2Gen1,  OBJ_EVENT_PAL_TAG_FAT_MAN2_GEN1},
+    {gObjectEventPal_BlueMomGen1,  OBJ_EVENT_PAL_TAG_BLUE_MOM_GEN1},
+    {gObjectEventPal_JessieGen1,  OBJ_EVENT_PAL_TAG_JESSIE_GEN1},
+    {gObjectEventPal_JamesGen1,   OBJ_EVENT_PAL_TAG_JAMES_GEN1},
+    {gObjectEventPal_MeowthGen1,   OBJ_EVENT_PAL_TAG_MEOWTH_GEN1},
     //Johto
 
     //Sinnoh

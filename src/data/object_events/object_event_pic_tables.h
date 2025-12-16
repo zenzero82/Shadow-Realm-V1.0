@@ -1389,6 +1389,71 @@ static const struct SpriteFrameImage sPicTable_CuttableTreeG1[] = {
     overworld_ascending_frames(gObjectEventPic_CuttableTreeG1, 2, 2),
 };
 
+static const struct SpriteFrameImage sPicTable_GaryOakGen1[] =
+{
+    overworld_ascending_frames(gObjectEventPic_GaryOakGen1, 2, 4),
+};
+
+static const struct SpriteFrameImage sPicTable_GiovanniGen1[] =
+{
+    overworld_ascending_frames(gObjectEventPic_GiovanniGen1, 2, 4),
+};
+
+static const struct SpriteFrameImage sPicTable_MistyGen1[] =
+{
+    overworld_ascending_frames(gObjectEventPic_MistyGen1, 2, 4),
+};
+
+static const struct SpriteFrameImage sPicTable_PetrelGen1[] =
+{
+    overworld_ascending_frames(gObjectEventPic_PetrelGen1, 2, 4),
+};
+
+static const struct SpriteFrameImage sPicTable_ScientistMGen1[] =
+{
+    overworld_ascending_frames(gObjectEventPic_ScientistMGen1, 2, 4),
+};
+
+static const struct SpriteFrameImage sPicTable_ScientistFGen1[] =
+{
+    overworld_ascending_frames(gObjectEventPic_ScientistFGen1, 2, 4),
+};
+
+static const struct SpriteFrameImage sPicTable_Woman5Gen1[] =
+{
+    overworld_ascending_frames(gObjectEventPic_Woman5Gen1, 2, 4),
+};
+
+static const struct SpriteFrameImage sPicTable_Beauty2Gen1[] =
+{
+    overworld_ascending_frames(gObjectEventPic_Beauty2Gen1, 2, 4),
+};
+
+static const struct SpriteFrameImage sPicTable_FatMan2Gen1[] =
+{
+    overworld_ascending_frames(gObjectEventPic_FatMan2Gen1, 2, 4),
+};
+
+static const struct SpriteFrameImage sPicTable_BlueMomGen1[] =
+{
+    overworld_ascending_frames(gObjectEventPic_BlueMomGen1, 2, 4),
+};
+
+static const struct SpriteFrameImage sPicTable_JessieGen1[] =
+{
+     overworld_ascending_frames(gObjectEventPic_JessieGen1, 2, 4),
+};
+
+static const struct SpriteFrameImage sPicTable_JamesGen1[] =
+{
+     overworld_ascending_frames(gObjectEventPic_JamesGen1, 2, 4),
+};
+
+static const struct SpriteFrameImage sPicTable_MeowthGen1[] =
+{
+     overworld_ascending_frames(gObjectEventPic_MeowthGen1, 2, 4),
+};
+
 //Johto
 
 //Sinnoh
@@ -1405,3 +1470,4 @@ static const struct SpriteFrameImage sPicTable_Wes[] = {
 static const struct SpriteFrameImage sPicTable_CipherPeonM[] = {
     overworld_ascending_frames(gObjectEventPic_CipherPeonM, 2, 4),
 };
+

@@ -1239,3 +1239,456 @@ gText_ShadowPurifyReady::
 	.include "data/maps/cerulean_pokemart/scripts.inc"
 
 	.include "data/maps/cerulean_gym/scripts.inc"
+
+	.include "data/maps/Saffron_City/scripts.inc"
+
+	.include "data/maps/Fuchsia_City/scripts.inc"
+
+	.include "data/maps/Cherrygrove_City/scripts.inc"
+
+	.include "data/maps/Goldenrod_City/scripts.inc"
+
+	.include "data/maps/Blackthorn_City/scripts.inc"
+
+	.include "data/maps/Route19/scripts.inc"
+
+	.include "data/maps/Indigo_Plateau/scripts.inc"
+
+	.include "data/maps/Route24/scripts.inc"
+
+	.include "data/maps/Route28/scripts.inc"
+
+	.include "data/maps/Route6/scripts.inc"
+
+	.include "data/maps/Route10/scripts.inc"
+
+	.include "data/maps/Route25/scripts.inc"
+
+	.include "data/maps/Route5/scripts.inc"
+
+	.include "data/maps/Route13/scripts.inc"
+
+	.include "data/maps/Route9/scripts.inc"
+
+	.include "data/maps/Route39/scripts.inc"
+
+	.include "data/maps/Ecruteak_City/scripts.inc"
+
+	.include "data/maps/Route33/scripts.inc"
+
+	.include "data/maps/Celadon_City/scripts.inc"
+
+	.include "data/maps/Route16/scripts.inc"
+
+	.include "data/maps/Violet_City/scripts.inc"
+
+	.include "data/maps/Route36/scripts.inc"
+
+	.include "data/maps/Route40/scripts.inc"
+
+	.include "data/maps/Route31/scripts.inc"
+
+	.include "data/maps/Route7/scripts.inc"
+
+	.include "data/maps/Route44/scripts.inc"
+
+	.include "data/maps/Mahogany_Town/scripts.inc"
+
+	.include "data/maps/Cianwood_City/scripts.inc"
+
+	.include "data/maps/Route11/scripts.inc"
+
+	.include "data/maps/Olivine_City/scripts.inc"
+
+	.include "data/maps/Route46/scripts.inc"
+
+	.include "data/maps/Route37/scripts.inc"
+
+	.include "data/maps/Route14/scripts.inc"
+
+	.include "data/maps/Route43/scripts.inc"
+
+	.include "data/maps/Route30/scripts.inc"
+
+	.include "data/maps/Route41/scripts.inc"
+
+	.include "data/maps/Route26/scripts.inc"
+
+	.include "data/maps/Route47/scripts.inc"
+
+	.include "data/maps/Route17/scripts.inc"
+
+	.include "data/maps/Route23/scripts.inc"
+
+	.include "data/maps/Route20/scripts.inc"
+
+	.include "data/maps/Route34/scripts.inc"
+
+	.include "data/maps/Route29/scripts.inc"
+
+	.include "data/maps/Route45/scripts.inc"
+
+	.include "data/maps/Route15/scripts.inc"
+
+	.include "data/maps/Route38/scripts.inc"
+
+	.include "data/maps/Lavender_Town/scripts.inc"
+
+	.include "data/maps/Route27/scripts.inc"
+
+	.include "data/maps/Cinnabar_Island/scripts.inc"
+
+	.include "data/maps/Route12/scripts.inc"
+
+	.include "data/maps/Route35/scripts.inc"
+
+	.include "data/maps/Vermilion_City/scripts.inc"
+
+	.include "data/maps/Route42/scripts.inc"
+
+	.include "data/maps/Route18/scripts.inc"
+
+	.include "data/maps/Route26_North/scripts.inc"
+
+	.include "data/maps/SafariZoneGate_Johto/scripts.inc"
+
+	.include "data/maps/Route32/scripts.inc"
+
+	.include "data/maps/Route48/scripts.inc"
+
+	.include "data/maps/Route8/scripts.inc"
+
+	.include "data/maps/cerulean_house1/scripts.inc"
+
+	.include "data/maps/cerulean_bikeshop/scripts.inc"
+
+	.include "data/maps/cerulean_house2/scripts.inc"
+
+	.include "data/maps/cerulean_house3/scripts.inc"
+
+	.include "data/maps/vermilion_portinside/scripts.inc"
+
+	.include "data/maps/vermilion_fanclub/scripts.inc"
+
+	.include "data/maps/vermilion_house3/scripts.inc"
+
+	.include "data/maps/vermilion_pokecenter/scripts.inc"
+
+	.include "data/maps/vermilion_mart/scripts.inc"
+
+	.include "data/maps/vermilion_gym/scripts.inc"
+
+	.include "data/maps/vermilion_house1/scripts.inc"
+
+	.include "data/maps/vermilion_house2/scripts.inc"
+
+	.include "data/maps/vermilion_outside/scripts.inc"
+
+	.include "data/maps/lavender_mart/scripts.inc"
+
+	.include "data/maps/lavender_house1/scripts.inc"
+
+	.include "data/maps/lavender_pokecenter/scripts.inc"
+
+	.include "data/maps/lavender_house3/scripts.inc"
+
+	.include "data/maps/lavender_house2/scripts.inc"
+
+	.include "data/maps/lavender_radiostation/scripts.inc"
+
+	.include "data/maps/lavender_soulhouse/scripts.inc"
+
+	.include "data/maps/celadon_pokecenter/scripts.inc"
+
+	.include "data/maps/celadon_house2/scripts.inc"
+
+	.include "data/maps/celadon_house1/scripts.inc"
+
+	.include "data/maps/celadon_apartmentroofday/scripts.inc"
+
+	.include "data/maps/celadon_apartment3f/scripts.inc"
+
+	.include "data/maps/celadon_apartmentroofnight/scripts.inc"
+
+	.include "data/maps/celadon_apartment1f/scripts.inc"
+
+	.include "data/maps/celadon_apartmentroofhouse/scripts.inc"
+
+	.include "data/maps/celadon_apartment2f/scripts.inc"
+
+	.include "data/maps/celadon_gamecorner/scripts.inc"
+
+	.include "data/maps/celadon_department1f/scripts.inc"
+
+	.include "data/maps/celadon_department3f/scripts.inc"
+
+	.include "data/maps/celadon_department4f/scripts.inc"
+
+	.include "data/maps/celadon_department2f/scripts.inc"
+
+	.include "data/maps/celadon_department5f/scripts.inc"
+
+	.include "data/maps/celadon_departmentroofday/scripts.inc"
+
+	.include "data/maps/celadon_departmentroofnight/scripts.inc"
+
+	.include "data/maps/celadon_gym/scripts.inc"
+
+	.include "data/maps/saffron_trainstation/scripts.inc"
+
+	.include "data/maps/saffron_mart/scripts.inc"
+
+	.include "data/maps/saffron_pokecenter/scripts.inc"
+
+	.include "data/maps/saffron_fightingdojovip/scripts.inc"
+
+	.include "data/maps/saffron_fightingdojo/scripts.inc"
+
+	.include "data/maps/saffron_gym/scripts.inc"
+
+	.include "data/maps/saffron_silphco/scripts.inc"
+
+	.include "data/maps/saffron_copycatshouse1f/scripts.inc"
+
+	.include "data/maps/saffron_house1/scripts.inc"
+
+	.include "data/maps/saffron_copycatshouse2f/scripts.inc"
+
+	.include "data/maps/fuchsia_pokecenter/scripts.inc"
+
+	.include "data/maps/fuchsia_mart/scripts.inc"
+
+	.include "data/maps/fuchsia_house2/scripts.inc"
+
+	.include "data/maps/fuchsia_house1/scripts.inc"
+
+	.include "data/maps/fuchsia_gym/scripts.inc"
+
+	.include "data/maps/fuchsia_safarizoneentrance/scripts.inc"
+
+	.include "data/maps/fuchsia_safarizonebeach/scripts.inc"
+
+	.include "data/maps/fuchsia_safarizonebrush/scripts.inc"
+
+	.include "data/maps/fuchsia_safarizonemountain/scripts.inc"
+
+	.include "data/maps/fuchsia_safarizonecave/scripts.inc"
+
+	.include "data/maps/cinnabar_pokecenter/scripts.inc"
+
+	.include "data/maps/indigoplateau_pokecenter/scripts.inc"
+
+	.include "data/maps/indigoplateau_bruno/scripts.inc"
+
+	.include "data/maps/indigoplateau_koga/scripts.inc"
+
+	.include "data/maps/indigoplateau_will/scripts.inc"
+
+	.include "data/maps/indigoplateau_karen/scripts.inc"
+
+	.include "data/maps/indigoplateau_champion/scripts.inc"
+
+	.include "data/maps/indigoplateau_halloffame/scripts.inc"
+
+	.include "data/maps/viridian_contesthall/scripts.inc"
+
+	.include "data/maps/MtMoon_Outside/scripts.inc"
+
+	.include "data/maps/DiglettsCave_South/scripts.inc"
+
+	.include "data/maps/DiglettsCave_North/scripts.inc"
+
+	.include "data/maps/DiglettsCave_Tunnel/scripts.inc"
+
+	.include "data/maps/route5_house/scripts.inc"
+
+	.include "data/maps/route5_tunnel/scripts.inc"
+
+	.include "data/maps/route5_gate/scripts.inc"
+
+	.include "data/maps/saffron_tunnel/scripts.inc"
+
+	.include "data/maps/route6_tunnel/scripts.inc"
+
+	.include "data/maps/mtmoon_shop/scripts.inc"
+
+	.include "data/maps/saffron_gateroute6/scripts.inc"
+
+	.include "data/maps/saffron_gateroute7/scripts.inc"
+
+	.include "data/maps/saffron_tunnelSW/scripts.inc"
+
+	.include "data/maps/route8_tunnel/scripts.inc"
+
+	.include "data/maps/route7_tunnel/scripts.inc"
+
+	.include "data/maps/saffron_gateroute8/scripts.inc"
+
+	.include "data/maps/route9_pokecenter/scripts.inc"
+
+	.include "data/maps/route10_powerplant/scripts.inc"
+
+	.include "data/maps/route10_powerplantback/scripts.inc"
+
+	.include "data/maps/route16_house/scripts.inc"
+
+	.include "data/maps/celadon_gateroute16/scripts.inc"
+
+	.include "data/maps/fuchsia_gateroute18/scripts.inc"
+
+	.include "data/maps/route12_house/scripts.inc"
+
+	.include "data/maps/route25_billshouse/scripts.inc"
+
+	.include "data/maps/CeruleanCave_B2F/scripts.inc"
+
+	.include "data/maps/CeruleanCave_B1F/scripts.inc"
+
+	.include "data/maps/RockTunnel_B1F/scripts.inc"
+
+	.include "data/maps/RockTunnel_1F/scripts.inc"
+
+	.include "data/maps/CeruleanCave_1F/scripts.inc"
+
+	.include "data/maps/SeafoamIslands_B1F/scripts.inc"
+
+	.include "data/maps/SeafoamIslands_Gym/scripts.inc"
+
+	.include "data/maps/SeafoamIslands_SecretCave/scripts.inc"
+
+	.include "data/maps/SeafoamIslands_1F/scripts.inc"
+
+	.include "data/maps/ReceptionGate/scripts.inc"
+
+	.include "data/maps/Gate_Route29_Route46/scripts.inc"
+
+	.include "data/maps/Gate_Route31_VioletCity/scripts.inc"
+
+	.include "data/maps/Gate_RuinsOfAlph_Route32/scripts.inc"
+
+	.include "data/maps/Gate_RuinsOfAlph_Route36/scripts.inc"
+
+	.include "data/maps/Gate_AzaleaTown_IlexForest/scripts.inc"
+
+	.include "data/maps/Gate_IlexForest_Route34/scripts.inc"
+
+	.include "data/maps/Gate_GoldenrodCity_Route35/scripts.inc"
+
+	.include "data/maps/Gate_NationalPark/scripts.inc"
+
+	.include "data/maps/Gate_EcruteakCity_Route38/scripts.inc"
+
+	.include "data/maps/Gate_EcruteakCity_Route42/scripts.inc"
+
+	.include "data/maps/Gate_MahoganyTown_Route43/scripts.inc"
+
+	.include "data/maps/Gate_Route43/scripts.inc"
+
+	.include "data/maps/Gate_Route40_TrainerHill_Courtyard/scripts.inc"
+
+	.include "data/maps/TrainerHill_Courtyard/scripts.inc"
+
+	.include "data/maps/Route39_FarmHouse/scripts.inc"
+
+	.include "data/maps/Route39_Barn/scripts.inc"
+
+	.include "data/maps/Route30_House/scripts.inc"
+
+	.include "data/maps/Route30_MrPokemonsHouse/scripts.inc"
+
+	.include "data/maps/Route32_PokemonCenter/scripts.inc"
+
+	.include "data/maps/RuinsOfAlph_Lab/scripts.inc"
+
+	.include "data/maps/Route34_DayCare/scripts.inc"
+
+	.include "data/maps/Route28_House/scripts.inc"
+
+	.include "data/maps/SafariZoneGate_PokemonCenter/scripts.inc"
+
+	.include "data/maps/SafariZoneGate_SafariZoneEntrance/scripts.inc"
+
+	.include "data/maps/Route27_House/scripts.inc"
+
+	.include "data/maps/MtSilver_PokemonCenter/scripts.inc"
+
+	.include "data/maps/NewBarkTown_Lab/scripts.inc"
+
+	.include "data/maps/NewBarkTown_House1/scripts.inc"
+
+	.include "data/maps/NewBarkTown_House2/scripts.inc"
+
+	.include "data/maps/NewBarkTown_PlayersHouse_1F/scripts.inc"
+
+	.include "data/maps/NewBarkTown_PlayersHouse_2F/scripts.inc"
+
+	.include "data/maps/CherrygroveCity_PokemonCenter/scripts.inc"
+
+	.include "data/maps/CherrygroveCity_Mart/scripts.inc"
+
+	.include "data/maps/CherrygroveCity_House2/scripts.inc"
+
+	.include "data/maps/CherrygroveCity_House1/scripts.inc"
+
+	.include "data/maps/CherrygroveCity_House3/scripts.inc"
+
+	.include "data/maps/VioletCity_PokemonCenter/scripts.inc"
+
+	.include "data/maps/VioletCity_Mart/scripts.inc"
+
+	.include "data/maps/VioletCity_TrainerSchool/scripts.inc"
+
+	.include "data/maps/VioletCity_House1/scripts.inc"
+
+	.include "data/maps/VioletCity_House2/scripts.inc"
+
+	.include "data/maps/VioletCity_Gym/scripts.inc"
+
+	.include "data/maps/AzaleaTown_PokemonCenter/scripts.inc"
+
+	.include "data/maps/AzaleaTown_Mart/scripts.inc"
+
+	.include "data/maps/AzaleaTown_KurtsHouse/scripts.inc"
+
+	.include "data/maps/AzaleaTown_House1/scripts.inc"
+
+	.include "data/maps/AzaleaTown_Gym/scripts.inc"
+
+	.include "data/maps/EcruteakCity_PokemonCenter/scripts.inc"
+
+	.include "data/maps/EcruteakCity_Theater/scripts.inc"
+
+	.include "data/maps/EcruteakCity_Mart/scripts.inc"
+
+	.include "data/maps/EcruteakCity_House1/scripts.inc"
+
+	.include "data/maps/EcruteakCity_House2/scripts.inc"
+
+	.include "data/maps/EcruteakCity_SageOffice1/scripts.inc"
+
+	.include "data/maps/EcruteakCity_SageOffice2/scripts.inc"
+
+	.include "data/maps/BellchimeTrail/scripts.inc"
+
+	.include "data/maps/EcruteakCity_Gym/scripts.inc"
+
+	.include "data/maps/GoldenrodCity_PokemonCenter/scripts.inc"
+
+	.include "data/maps/GoldenrodCity_UndergroundEntrance/scripts.inc"
+
+	.include "data/maps/GoldenrodCity_UndergroundTunnel/scripts.inc"
+
+	.include "data/maps/GoldenrodCity_UndergroundSwitches/scripts.inc"
+
+	.include "data/maps/GoldenrodCity_UndergroundStorage/scripts.inc"
+
+	.include "data/maps/GoldenrodCity_DepartmentStoreBasement/scripts.inc"
+
+	.include "data/maps/GoldenrodCity_Gym/scripts.inc"
+
+	.include "data/maps/GoldenrodCity_FlowerShop/scripts.inc"
+
+	.include "data/maps/route15_gate/scripts.inc"
+
+	.include "data/maps/route10_pokecenter/scripts.inc"
+

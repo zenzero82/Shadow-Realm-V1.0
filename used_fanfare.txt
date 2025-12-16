@@ -1,0 +1,28 @@
+src/sound.c:    [FANFARE_LEVEL_UP]            = { MUS_LEVEL_UP,             80 },
+src/sound.c:    [FANFARE_OBTAIN_ITEM]         = { MUS_OBTAIN_ITEM,         160 },
+src/sound.c:    [FANFARE_EVOLVED]             = { MUS_EVOLVED,             220 },
+src/sound.c:    [FANFARE_OBTAIN_TMHM]         = { MUS_OBTAIN_TMHM,         220 },
+src/sound.c:    [FANFARE_HEAL]                = { MUS_HEAL,                160 },
+src/sound.c:    [FANFARE_OBTAIN_BADGE]        = { MUS_OBTAIN_BADGE,        340 },
+src/sound.c:    [FANFARE_MOVE_DELETED]        = { MUS_MOVE_DELETED,        180 },
+src/sound.c:    [FANFARE_OBTAIN_BERRY]        = { MUS_OBTAIN_BERRY,        120 },
+src/sound.c:    [FANFARE_AWAKEN_LEGEND]       = { MUS_AWAKEN_LEGEND,       710 },
+src/sound.c:    [FANFARE_SLOTS_JACKPOT]       = { MUS_SLOTS_JACKPOT,       250 },
+src/sound.c:    [FANFARE_SLOTS_WIN]           = { MUS_SLOTS_WIN,           150 },
+src/sound.c:    [FANFARE_TOO_BAD]             = { MUS_TOO_BAD,             160 },
+src/sound.c:    [FANFARE_RG_POKE_FLUTE]       = { MUS_RG_POKE_FLUTE,       450 },
+src/sound.c:    [FANFARE_RG_OBTAIN_KEY_ITEM]  = { MUS_RG_OBTAIN_KEY_ITEM,  170 },
+src/sound.c:    [FANFARE_RG_DEX_RATING]       = { MUS_RG_DEX_RATING,       196 },
+src/sound.c:    [FANFARE_OBTAIN_B_POINTS]     = { MUS_OBTAIN_B_POINTS,     313 },
+src/sound.c:    [FANFARE_OBTAIN_SYMBOL]       = { MUS_OBTAIN_SYMBOL,       318 },
+src/sound.c:    [FANFARE_REGISTER_MATCH_CALL] = { MUS_REGISTER_MATCH_CALL, 135 },
+src/move_relearner.c: * DoMoveRelearnerMain: MENU_STATE_DOUBLE_FANFARE_FORGOT_MOVE
+src/move_relearner.c: *     go to MENU_STATE_DOUBLE_FANFARE_FORGOT_MOVE and set VAR_0x8004 to TRUE.
+src/move_relearner.c:#define MENU_STATE_DOUBLE_FANFARE_FORGOT_MOVE 30
+src/move_relearner.c:                sMoveRelearnerStruct->state = MENU_STATE_DOUBLE_FANFARE_FORGOT_MOVE;
+src/move_relearner.c:    case MENU_STATE_DOUBLE_FANFARE_FORGOT_MOVE:
+src/party_menu.c:            PlayFanfareByFanfareNum(FANFARE_LEVEL_UP);
+src/item_use.c:    PlayFanfareByFanfareNum(FANFARE_RG_POKE_FLUTE);
+src/dodrio_berry_picking.c:        PlayFanfareByFanfareNum(FANFARE_TOO_BAD);
+src/dodrio_berry_picking.c:        PlayFanfareByFanfareNum(FANFARE_TOO_BAD);
+data/maps/Oaks_Lab/scripts.inc:    playfanfare FANFARE_OBTAIN_ITEM

@@ -513,7 +513,7 @@ gSongTable::
 	song mus_rg_vs_trainer, 0, 0
 	song mus_rg_vs_wild, 0, 0
 	song mus_rg_vs_champion, 0, 0
-	song mus_rg_pallet, 0, 0
+	song mus_hg_pallet, 0, 0
 	song mus_rg_oak_lab, 0, 0
 	song mus_rg_oak, 0, 0
 	song mus_rg_poke_center, 0, 0

@@ -2,7 +2,7 @@
   "id": "MAP_BLUES_HOUSE",
   "name": "Blues_House",
   "layout": "LAYOUT_BLUES_HOUSE",
-  "music": "MUS_RG_PALLET",
+  "music": "MUS_HG_PALLET",
   "region_map_section": "MAPSEC_PALLET_TOWN",
   "requires_flash": false,
   "weather": "WEATHER_NONE",
@@ -15,7 +15,7 @@
   "connections": null,
   "object_events": [
     {
-      "graphics_id": "OBJ_EVENT_GFX_GIRL_1",
+      "graphics_id": "OBJ_EVENT_GFX_BLUE_MOM_GEN1",
       "x": 6,
       "y": 4,
       "elevation": 0,
@@ -24,7 +24,7 @@
       "movement_range_y": 0,
       "trainer_type": "TRAINER_TYPE_NONE",
       "trainer_sight_or_berry_tree_id": "0",
-      "script": "NULL",
+      "script": "PalletTown_House2_EventScript_Blue",
       "flag": "0"
     }
   ],

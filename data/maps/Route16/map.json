@@ -1,0 +1,58 @@
+{
+  "id": "MAP_ROUTE16",
+  "name": "Route16",
+  "layout": "LAYOUT_ROUTE16",
+  "music": "MUS_DUMMY",
+  "region_map_section": "MAPSEC_ROUTE_16",
+  "requires_flash": false,
+  "weather": "WEATHER_NONE",
+  "map_type": "MAP_TYPE_ROUTE",
+  "allow_cycling": true,
+  "allow_escaping": true,
+  "allow_running": true,
+  "show_map_name": true,
+  "battle_scene": "MAP_BATTLE_SCENE_NORMAL",
+  "connections": [
+    {
+      "map": "MAP_CELADON_CITY",
+      "offset": -10,
+      "direction": "right"
+    },
+    {
+      "map": "MAP_ROUTE17",
+      "offset": 0,
+      "direction": "down"
+    },
+    {
+      "map": "MAP_CELADON_CITY",
+      "offset": -10,
+      "direction": "right"
+    }
+  ],
+  "object_events": [],
+  "warp_events": [
+    {
+      "x": 27,
+      "y": 13,
+      "elevation": 0,
+      "dest_map": "MAP_CELADON_GATEROUTE16",
+      "dest_warp_id": "1"
+    },
+    {
+      "x": 20,
+      "y": 13,
+      "elevation": 0,
+      "dest_map": "MAP_CELADON_GATEROUTE16",
+      "dest_warp_id": "0"
+    },
+    {
+      "x": 10,
+      "y": 5,
+      "elevation": 0,
+      "dest_map": "MAP_ROUTE16_HOUSE",
+      "dest_warp_id": "0"
+    }
+  ],
+  "coord_events": [],
+  "bg_events": []
+}

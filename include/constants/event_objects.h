@@ -255,6 +255,20 @@
 #define OBJ_EVENT_GFX_CUTTABLE_TREE_G1           248
 #define OBJ_EVENT_GFX_CIPHER_PEON_M              249
 #define OBJ_EVENT_GFX_HOOPA_RING                 250
+#define OBJ_EVENT_GFX_GARY_OAK_GEN1              251
+#define OBJ_EVENT_GFX_GIOVANNI_GEN1              252
+#define OBJ_EVENT_GFX_MISTY_GEN1                 253
+#define OBJ_EVENT_GFX_PETREL_GEN1                254
+#define OBJ_EVENT_GFX_SCIENTIST_M_GEN1           255
+#define OBJ_EVENT_GFX_SCIENTIST_F_GEN1           256
+#define OBJ_EVENT_GFX_WOMAN_5_GEN1               257
+#define OBJ_EVENT_GFX_BEAUTY2_GEN1    258
+#define OBJ_EVENT_GFX_FAT_MAN2_GEN1   259
+#define OBJ_EVENT_GFX_BLUE_MOM_GEN1   260
+#define OBJ_EVENT_GFX_JESSIE_GEN1      261  // <-- use next free ID in your list
+#define OBJ_EVENT_GFX_JAMES_GEN1       262
+#define OBJ_EVENT_GFX_MEOWTH_GEN1      263
+
 
 // NOTE: The maximum amount of object events has been expanded from 255 to 65535.
 // Since dynamic graphics ids still require at least 16 free values, the actual limit
@@ -387,14 +401,27 @@
 #define OBJ_EVENT_PAL_TAG_RS_MAY                  0x1123
 #define OBJ_EVENT_PAL_TAG_DYNAMIC                 0x1124
 //misc (NEW)
-#define OBJ_EVENT_PAL_TAG_HOOPA_RING              0x1132
+#define OBJ_EVENT_PAL_TAG_HOOPA_RING              0x1125
 //Kanto
-#define OBJ_EVENT_PAL_TAG_BROCK_GEN1              0x1125
-#define OBJ_EVENT_PAL_TAG_CUTTABLE_TREE_G1        0x1126  // or next free
-#define OBJ_EVENT_PAL_TAG_ROCKET_GRUNT_M_GEN1     0x1127
-#define OBJ_EVENT_PAL_TAG_ROCKET_GRUNT_F_GEN1     0x1128
-#define OBJ_EVENT_PAL_TAG_GYM_GUY                 0x1129
-#define OBJ_EVENT_PAL_TAG_CAMPERG1                0x1130
+#define OBJ_EVENT_PAL_TAG_BROCK_GEN1              0x1126
+#define OBJ_EVENT_PAL_TAG_CUTTABLE_TREE_G1        0x1127  
+#define OBJ_EVENT_PAL_TAG_ROCKET_GRUNT_M_GEN1     0x1128
+#define OBJ_EVENT_PAL_TAG_ROCKET_GRUNT_F_GEN1     0x1129
+#define OBJ_EVENT_PAL_TAG_GYM_GUY                 0x1130
+#define OBJ_EVENT_PAL_TAG_CAMPERG1                0x1131
+#define OBJ_EVENT_PAL_TAG_GARY_OAK_GEN1           0x1132
+#define OBJ_EVENT_PAL_TAG_GIOVANNI_GEN1           0x1133
+#define OBJ_EVENT_PAL_TAG_MISTY_GEN1              0x1134
+#define OBJ_EVENT_PAL_TAG_PETREL_GEN1             0x1135
+#define OBJ_EVENT_PAL_TAG_SCIENTIST_M_GEN1        0x1136
+#define OBJ_EVENT_PAL_TAG_SCIENTIST_F_GEN1        0x1137
+#define OBJ_EVENT_PAL_TAG_WOMAN_5_GEN1            0x1138
+#define OBJ_EVENT_PAL_TAG_BEAUTY2_GEN1            0x1141
+#define OBJ_EVENT_PAL_TAG_FAT_MAN2_GEN1           0x1142
+#define OBJ_EVENT_PAL_TAG_BLUE_MOM_GEN1           0x1143
+#define OBJ_EVENT_PAL_TAG_JESSIE_GEN1             0x1144  
+#define OBJ_EVENT_PAL_TAG_JAMES_GEN1              0x1145
+#define OBJ_EVENT_PAL_TAG_MEOWTH_GEN1             0x1146
 
 //Johto
 
@@ -405,8 +432,8 @@
 //Kalos 
 
 //XD(Orre)
-#define OBJ_EVENT_PAL_TAG_WES                     0x1126   // next free after your customs
-#define OBJ_EVENT_PAL_TAG_CIPHER_PEON_M           0x1131
+#define OBJ_EVENT_PAL_TAG_WES                     0x1139   
+#define OBJ_EVENT_PAL_TAG_CIPHER_PEON_M           0x1140
 
 #if OW_FOLLOWERS_POKEBALLS
 // Vanilla

@@ -16892,3 +16892,51 @@ Shadow: Yes
 - Shadow Sky
 - Shadow Wave
 - Shadow Rave
+
+=== TRAINER_JESSIE_AND_JAMES ===
+Name: JESSIE
+Class: Team Rocket
+Pic: JESSIE_JAMES
+
+Meowth
+Level: 1
+
+=== TRAINER_BROCK_KANTO ===
+Name: BROCK
+Class: LEADER
+Pic: BROCK_KANTO
+Gender: Male
+
+Geodude 
+Level: 10
+Nature: HARDY
+- Tackle
+- Defense Curl
+- Rock Throw
+- Sand Attack
+
+Onix 
+Level: 12
+Nature: HARDY
+- Tackle
+- Bind
+- Rock Throw
+- Screech
+
+=== TRAINER_CAMPER_KANTO ===
+Name: JERRY
+Class: CAMPER
+Pic: CAMPER_KANTO
+Gender: Male
+
+Rattata 
+Level: 7
+Nature: HARDY
+- Tackle
+- Tail Whip
+
+Geodude
+Level: 7
+Nature: HARDY
+- Peck
+- Growl
