@@ -2,8 +2,8 @@
   "id": "MAP_ROUTE30",
   "name": "Route30",
   "layout": "LAYOUT_ROUTE30",
-  "music": "MUS_DUMMY",
-  "region_map_section": "MAPSEC_ROUTE_28",
+  "music": "MUS_HG_ROUTE30",
+  "region_map_section": "MAPSEC_ROUTE_30",
   "requires_flash": false,
   "weather": "WEATHER_NONE",
   "map_type": "MAP_TYPE_ROUTE",
@@ -17,10 +17,55 @@
       "map": "MAP_CHERRYGROVE_CITY",
       "offset": -9,
       "direction": "down"
+    },
+    {
+      "map": "MAP_ROUTE31",
+      "offset": -10,
+      "direction": "up"
     }
   ],
   "object_events": [],
-  "warp_events": [],
+  "warp_events": [
+    {
+      "x": 26,
+      "y": 39,
+      "elevation": 0,
+      "dest_map": "MAP_ROUTE30",
+      "dest_warp_id": "0"
+    },
+    {
+      "x": 35,
+      "y": 4,
+      "elevation": 0,
+      "dest_map": "MAP_ROUTE30",
+      "dest_warp_id": "0"
+    }
+  ],
   "coord_events": [],
-  "bg_events": []
+  "bg_events": [
+    {
+      "type": "sign",
+      "x": 31,
+      "y": 29,
+      "elevation": 0,
+      "player_facing_dir": "BG_EVENT_PLAYER_FACING_ANY",
+      "script": "NULL"
+    },
+    {
+      "type": "sign",
+      "x": 20,
+      "y": 19,
+      "elevation": 0,
+      "player_facing_dir": "BG_EVENT_PLAYER_FACING_ANY",
+      "script": "NULL"
+    },
+    {
+      "type": "sign",
+      "x": 32,
+      "y": 4,
+      "elevation": 0,
+      "player_facing_dir": "BG_EVENT_PLAYER_FACING_ANY",
+      "script": "NULL"
+    }
+  ]
 }

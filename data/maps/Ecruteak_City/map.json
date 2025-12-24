@@ -2,7 +2,7 @@
   "id": "MAP_ECRUTEAK_CITY",
   "name": "Ecruteak_City",
   "layout": "LAYOUT_ECRUTEAK_CITY",
-  "music": "MUS_DUMMY",
+  "music": "MUS_HG_ECRUTEAK",
   "region_map_section": "MAPSEC_ECRUTEAK_CITY",
   "requires_flash": false,
   "weather": "WEATHER_NONE",
@@ -12,7 +12,28 @@
   "allow_running": true,
   "show_map_name": true,
   "battle_scene": "MAP_BATTLE_SCENE_NORMAL",
-  "connections": null,
+  "connections": [
+    {
+      "map": "MAP_ROUTE37",
+      "offset": 16,
+      "direction": "down"
+    },
+    {
+      "map": "MAP_ROUTE42",
+      "offset": 32,
+      "direction": "right"
+    },
+    {
+      "map": "MAP_ROUTE38",
+      "offset": 19,
+      "direction": "left"
+    },
+    {
+      "map": "MAP_BELLCHIME_TRAIL",
+      "offset": 34,
+      "direction": "up"
+    }
+  ],
   "object_events": [],
   "warp_events": [],
   "coord_events": [],

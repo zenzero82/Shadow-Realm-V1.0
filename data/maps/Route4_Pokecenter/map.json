@@ -2,7 +2,7 @@
   "id": "MAP_ROUTE4_POKECENTER",
   "name": "Route4_Pokecenter",
   "layout": "LAYOUT_PEWTER_POKECENTER",
-  "music": "MUS_RG_ROUTE3",
+  "music": "MUS_POKE_CENTER",
   "region_map_section": "MAPSEC_ROUTE_4",
   "requires_flash": false,
   "weather": "WEATHER_NONE",

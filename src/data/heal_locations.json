@@ -159,8 +159,8 @@
     {
       "id": "HEAL_LOCATION_CHERRYGROVE_CITY",
       "map": "MAP_CHERRYGROVE_CITY",
-      "x": 13,
-      "y": 11
+      "x": 47,
+      "y": 8
     },
     {
       "id": "HEAL_LOCATION_CINNABAR_ISLAND",
@@ -183,8 +183,8 @@
     {
       "id": "HEAL_LOCATION_GOLDENROD_CITY",
       "map": "MAP_GOLDENROD_CITY",
-      "x": 13,
-      "y": 11
+      "x": 28,
+      "y": 37
     },
     {
       "id": "HEAL_LOCATION_LAVENDER_TOWN",
@@ -195,14 +195,14 @@
     {
       "id": "HEAL_LOCATION_MAHOGANY_TOWN",
       "map": "MAP_MAHOGANY_TOWN",
-      "x": 13,
-      "y": 19
+      "x": 21,
+      "y": 20
     },
     {
       "id": "HEAL_LOCATION_OLIVINE_CITY",
       "map": "MAP_OLIVINE_CITY",
-      "x": 13,
-      "y": 11
+      "x": 15,
+      "y": 44
     },
     {
       "id": "HEAL_LOCATION_SAFFRON_CITY",
@@ -219,8 +219,8 @@
     {
       "id": "HEAL_LOCATION_VIOLET_CITY",
       "map": "MAP_VIOLET_CITY",
-      "x": 13,
-      "y": 11
+      "x": 39,
+      "y": 46
     },
     {
       "id": "HEAL_LOCATION_VIRIDIAN_CITY",
@@ -239,6 +239,36 @@
       "map": "MAP_ROUTE10",
       "x": 21,
       "y": 21
+    },
+    {
+      "id": "HEAL_LOCATION_NEW_BARK_TOWN",
+      "map": "MAP_NEW_BARK_TOWN",
+      "x": 20,
+      "y": 12
+    },
+    {
+      "id": "HEAL_LOCATION_SAFARI_ZONE_GATE_JOHTO",
+      "map": "MAP_SAFARI_ZONE_GATE_JOHTO",
+      "x": 11,
+      "y": 16
+    },
+    {
+      "id": "HEAL_LOCATION_AZALEA_TOWN",
+      "map": "MAP_AZALEA_TOWN",
+      "x": 31,
+      "y": 16
+    },
+    {
+      "id": "HEAL_LOCATION_BLACKTHORN_CITY",
+      "map": "MAP_BLACKTHORN_CITY",
+      "x": 27,
+      "y": 49
+    },
+    {
+      "id": "HEAL_LOCATION_ROUTE32",
+      "map": "MAP_ROUTE32",
+      "x": 25,
+      "y": 85
     }
   ]
 }

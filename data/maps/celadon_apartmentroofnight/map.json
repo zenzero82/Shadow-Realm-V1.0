@@ -2,7 +2,7 @@
   "id": "MAP_CELADON_APARTMENTROOFNIGHT",
   "name": "celadon_apartmentroofnight",
   "layout": "LAYOUT_CELADON_APARTMENTROOFNIGHT",
-  "music": "MUS_DUMMY",
+  "music": "MUS_HG_CELADON",
   "region_map_section": "MAPSEC_CELADON_CITY",
   "requires_flash": false,
   "weather": "WEATHER_NONE",

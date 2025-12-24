@@ -525,7 +525,265 @@ const u16 gObjectEventPal_JamesGen1[]   = INCBIN_U16("graphics/object_events/pic
 const u32 gObjectEventPic_MeowthGen1[]  = INCBIN_U32("graphics/object_events/pics/gen1/meowth.4bpp");
 const u16 gObjectEventPal_MeowthGen1[]  = INCBIN_U16("graphics/object_events/pics/gen1/meowth.gbapal");
 
+const u32 gObjectEventPic_ArcherGen1[]  = INCBIN_U32("graphics/object_events/pics/gen1/archer.4bpp");
+const u16 gObjectEventPal_ArcherGen1[]  = INCBIN_U16("graphics/object_events/pics/gen1/archer.gbapal");
+
+const u32 gObjectEventPic_ArianaGen1[]  = INCBIN_U32("graphics/object_events/pics/gen1/ariana.4bpp");
+const u16 gObjectEventPal_ArianaGen1[]  = INCBIN_U16("graphics/object_events/pics/gen1/ariana.gbapal");
+
+const u32 gObjectEventPic_BillGen1[]  = INCBIN_U32("graphics/object_events/pics/gen1/bill.4bpp");
+const u16 gObjectEventPal_BillGen1[]  = INCBIN_U16("graphics/object_events/pics/gen1/bill.gbapal");
+
+const u32 gObjectEventPic_BlaineGen1[]  = INCBIN_U32("graphics/object_events/pics/gen1/blaine.4bpp");
+const u16 gObjectEventPal_BlaineGen1[]  = INCBIN_U16("graphics/object_events/pics/gen1/blaine.gbapal");
+
+const u32 gObjectEventPic_ErikaGen1[]  = INCBIN_U32("graphics/object_events/pics/gen1/erika.4bpp");
+const u16 gObjectEventPal_ErikaGen1[]  = INCBIN_U16("graphics/object_events/pics/gen1/erika.gbapal");
+
+const u32 gObjectEventPic_JanineGen1[]  = INCBIN_U32("graphics/object_events/pics/gen1/janine.4bpp");
+const u16 gObjectEventPal_JanineGen1[]  = INCBIN_U16("graphics/object_events/pics/gen1/janine.gbapal");
+
+const u32 gObjectEventPic_ProfOakGen1[]  = INCBIN_U32("graphics/object_events/pics/gen1/prof_oak.4bpp");
+const u16 gObjectEventPal_ProfOakGen1[]  = INCBIN_U16("graphics/object_events/pics/gen1/prof_oak.gbapal");
+
+const u32 gObjectEventPic_ProtonGen1[]  = INCBIN_U32("graphics/object_events/pics/gen1/proton.4bpp");
+const u16 gObjectEventPal_ProtonGen1[]  = INCBIN_U16("graphics/object_events/pics/gen1/proton.gbapal");
+
+const u32 gObjectEventPic_SabrinaGen1[]  = INCBIN_U32("graphics/object_events/pics/gen1/sabrina.4bpp");
+const u16 gObjectEventPal_SabrinaGen1[]  = INCBIN_U16("graphics/object_events/pics/gen1/sabrina.gbapal");
+
+const u32 gObjectEventPic_SurgeGen1[]  = INCBIN_U32("graphics/object_events/pics/gen1/surge.4bpp");
+const u16 gObjectEventPal_SurgeGen1[]  = INCBIN_U16("graphics/object_events/pics/gen1/surge.gbapal");
+
 //Johto Trainers
+
+const u32 gObjectEventPic_ArtistGen2[] = INCBIN_U32("graphics/object_events/pics/gen2/artist_gen2.4bpp");
+const u16 gObjectEventPal_ArtistGen2[] = INCBIN_U16("graphics/object_events/pics/gen2/artist_gen2.gbapal");
+
+const u32 gObjectEventPic_AttendantFGen2[] = INCBIN_U32("graphics/object_events/pics/gen2/attendant_f.4bpp");
+const u16 gObjectEventPal_AttendantFGen2[] = INCBIN_U16("graphics/object_events/pics/gen2/attendant_f.gbapal");
+
+const u32 gObjectEventPic_AttendantMGen2[] = INCBIN_U32("graphics/object_events/pics/gen2/attendant_m.4bpp");
+const u16 gObjectEventPal_AttendantMGen2[] = INCBIN_U16("graphics/object_events/pics/gen2/attendant_m.gbapal");
+
+const u32 gObjectEventPic_BaldingManGen2[] = INCBIN_U32("graphics/object_events/pics/gen2/balding_man.4bpp");
+const u16 gObjectEventPal_BaldingManGen2[] = INCBIN_U16("graphics/object_events/pics/gen2/balding_man.gbapal");
+
+const u32 gObjectEventPic_BattleGirlGen2[] = INCBIN_U32("graphics/object_events/pics/gen2/battle_girl.4bpp");
+const u16 gObjectEventPal_BattleGirlGen2[] = INCBIN_U16("graphics/object_events/pics/gen2/battle_girl.gbapal");
+
+const u32 gObjectEventPic_BattleTowerTrainerDudeGen2[] = INCBIN_U32("graphics/object_events/pics/gen2/battle_tower_trainer_dude.4bpp");
+const u16 gObjectEventPal_BattleTowerTrainerDudeGen2[] = INCBIN_U16("graphics/object_events/pics/gen2/battle_tower_trainer_dude.gbapal");
+
+const u32 gObjectEventPic_BikerGen2[] = INCBIN_U32("graphics/object_events/pics/gen2/biker.4bpp");
+const u16 gObjectEventPal_BikerGen2[] = INCBIN_U16("graphics/object_events/pics/gen2/biker.gbapal");
+
+const u32 gObjectEventPic_BlackBeltGen2[] = INCBIN_U32("graphics/object_events/pics/gen2/black_belt_gen2.4bpp");
+const u16 gObjectEventPal_BlackBeltGen2[] = INCBIN_U16("graphics/object_events/pics/gen2/black_belt_gen2.gbapal");
+
+const u32 gObjectEventPic_Boy2Gen2[] = INCBIN_U32("graphics/object_events/pics/gen2/boy_2_gen2.4bpp");
+const u16 gObjectEventPal_Boy2Gen2[] = INCBIN_U16("graphics/object_events/pics/gen2/boy_2_gen2.gbapal");
+
+const u32 gObjectEventPic_BrunoGen2[] = INCBIN_U32("graphics/object_events/pics/gen2/bruno.4bpp");
+const u16 gObjectEventPal_BrunoGen2[] = INCBIN_U16("graphics/object_events/pics/gen2/bruno.gbapal");
+
+const u32 gObjectEventPic_BugCatcherGen2[] = INCBIN_U32("graphics/object_events/pics/gen2/bug_catcher_gen2.4bpp");
+const u16 gObjectEventPal_BugCatcherGen2[] = INCBIN_U16("graphics/object_events/pics/gen2/bug_catcher_gen2.gbapal");
+
+const u32 gObjectEventPic_BugsyGen2[] = INCBIN_U32("graphics/object_events/pics/gen2/bugsy.4bpp");
+const u16 gObjectEventPal_BugsyGen2[] = INCBIN_U16("graphics/object_events/pics/gen2/bugsy.gbapal");
+
+const u32 gObjectEventPic_BurglarGen2[] = INCBIN_U32("graphics/object_events/pics/gen2/burglar.4bpp");
+const u16 gObjectEventPal_BurglarGen2[] = INCBIN_U16("graphics/object_events/pics/gen2/burglar.gbapal");
+
+const u32 gObjectEventPic_CamperFGen2[] = INCBIN_U32("graphics/object_events/pics/gen2/camper_f.4bpp");
+const u16 gObjectEventPal_CamperFGen2[] = INCBIN_U16("graphics/object_events/pics/gen2/camper_f.gbapal");
+
+const u32 gObjectEventPic_CaptGen2[] = INCBIN_U32("graphics/object_events/pics/gen2/capt.4bpp");
+const u16 gObjectEventPal_CaptGen2[] = INCBIN_U16("graphics/object_events/pics/gen2/capt.gbapal");
+
+const u32 gObjectEventPic_ChannelerGen2[] = INCBIN_U32("graphics/object_events/pics/gen2/channeler.4bpp");
+const u16 gObjectEventPal_ChannelerGen2[] = INCBIN_U16("graphics/object_events/pics/gen2/channeler.gbapal");
+
+const u32 gObjectEventPic_ChuckGen2[] = INCBIN_U32("graphics/object_events/pics/gen2/chuck.4bpp");
+const u16 gObjectEventPal_ChuckGen2[] = INCBIN_U16("graphics/object_events/pics/gen2/chuck.gbapal");
+
+const u32 gObjectEventPic_ClairGen2[] = INCBIN_U32("graphics/object_events/pics/gen2/clair.4bpp");
+const u16 gObjectEventPal_ClairGen2[] = INCBIN_U16("graphics/object_events/pics/gen2/clair.gbapal");
+
+const u32 gObjectEventPic_CookGen2[] = INCBIN_U32("graphics/object_events/pics/gen2/cook_gen2.4bpp");
+const u16 gObjectEventPal_CookGen2[] = INCBIN_U16("graphics/object_events/pics/gen2/cook_gen2.gbapal");
+
+const u32 gObjectEventPic_CooltrainerFGen2[] = INCBIN_U32("graphics/object_events/pics/gen2/cooltrainer_f.4bpp");
+const u16 gObjectEventPal_CooltrainerFGen2[] = INCBIN_U16("graphics/object_events/pics/gen2/cooltrainer_f.gbapal");
+
+const u32 gObjectEventPic_CooltrainerMGen2[] = INCBIN_U32("graphics/object_events/pics/gen2/cooltrainer_m.4bpp");
+const u16 gObjectEventPal_CooltrainerMGen2[] = INCBIN_U16("graphics/object_events/pics/gen2/cooltrainer_m.gbapal");
+
+const u32 gObjectEventPic_ElmGen2[] = INCBIN_U32("graphics/object_events/pics/gen2/elm.4bpp");
+const u16 gObjectEventPal_ElmGen2[] = INCBIN_U16("graphics/object_events/pics/gen2/elm.gbapal");
+
+const u32 gObjectEventPic_EngineerGen2[] = INCBIN_U32("graphics/object_events/pics/gen2/engineer.4bpp");
+const u16 gObjectEventPal_EngineerGen2[] = INCBIN_U16("graphics/object_events/pics/gen2/engineer.gbapal");
+
+const u32 gObjectEventPic_EusineGen2[] = INCBIN_U32("graphics/object_events/pics/gen2/eusine.4bpp");
+const u16 gObjectEventPal_EusineGen2[] = INCBIN_U16("graphics/object_events/pics/gen2/eusine.gbapal");
+
+const u32 gObjectEventPic_FalknerGen2[] = INCBIN_U32("graphics/object_events/pics/gen2/falkner.4bpp");
+const u16 gObjectEventPal_FalknerGen2[] = INCBIN_U16("graphics/object_events/pics/gen2/falkner.gbapal");
+
+const u32 gObjectEventPic_FirebreatherGen2[] = INCBIN_U32("graphics/object_events/pics/gen2/firebreather.4bpp");
+const u16 gObjectEventPal_FirebreatherGen2[] = INCBIN_U16("graphics/object_events/pics/gen2/firebreather.gbapal");
+
+const u32 gObjectEventPic_FishermanGen2[] = INCBIN_U32("graphics/object_events/pics/gen2/fisherman_gen2.4bpp");
+const u16 gObjectEventPal_FishermanGen2[] = INCBIN_U16("graphics/object_events/pics/gen2/fisherman_gen2.gbapal");
+
+const u32 gObjectEventPic_GameboyKidGen2[] = INCBIN_U32("graphics/object_events/pics/gen2/gameboy_kid_gen2.4bpp");
+const u16 gObjectEventPal_GameboyKidGen2[] = INCBIN_U16("graphics/object_events/pics/gen2/gameboy_kid_gen2.gbapal");
+
+const u32 gObjectEventPic_GentlemanGen2[] = INCBIN_U32("graphics/object_events/pics/gen2/gentleman_gen2.4bpp");
+const u16 gObjectEventPal_GentlemanGen2[] = INCBIN_U16("graphics/object_events/pics/gen2/gentleman_gen2.gbapal");
+
+const u32 gObjectEventPic_GoldGen2[] = INCBIN_U32("graphics/object_events/pics/gen2/gold.4bpp");
+const u16 gObjectEventPal_GoldGen2[] = INCBIN_U16("graphics/object_events/pics/gen2/gold.gbapal");
+
+const u32 gObjectEventPic_GreenHairJugglerGen2[] = INCBIN_U32("graphics/object_events/pics/gen2/green_hair_juggler.4bpp");
+const u16 gObjectEventPal_GreenHairJugglerGen2[] = INCBIN_U16("graphics/object_events/pics/gen2/green_hair_juggler.gbapal");
+
+const u32 gObjectEventPic_HikerGen2[] = INCBIN_U32("graphics/object_events/pics/gen2/hiker_gen2.4bpp");
+const u16 gObjectEventPal_HikerGen2[] = INCBIN_U16("graphics/object_events/pics/gen2/hiker_gen2.gbapal");
+
+const u32 gObjectEventPic_JasmineGen2[] = INCBIN_U32("graphics/object_events/pics/gen2/jasmine.4bpp");
+const u16 gObjectEventPal_JasmineGen2[] = INCBIN_U16("graphics/object_events/pics/gen2/jasmine.gbapal");
+
+const u32 gObjectEventPic_KarenGen2[] = INCBIN_U32("graphics/object_events/pics/gen2/karen.4bpp");
+const u16 gObjectEventPal_KarenGen2[] = INCBIN_U16("graphics/object_events/pics/gen2/karen.gbapal");
+
+const u32 gObjectEventPic_KimonoGen2[] = INCBIN_U32("graphics/object_events/pics/gen2/kimono.4bpp");
+const u16 gObjectEventPal_KimonoGen2[] = INCBIN_U16("graphics/object_events/pics/gen2/kimono.gbapal");
+
+const u32 gObjectEventPic_KogaGen2[] = INCBIN_U32("graphics/object_events/pics/gen2/koga.4bpp");
+const u16 gObjectEventPal_KogaGen2[] = INCBIN_U16("graphics/object_events/pics/gen2/koga.gbapal");
+
+const u32 gObjectEventPic_KurtGen2[] = INCBIN_U32("graphics/object_events/pics/gen2/kurt.4bpp");
+const u16 gObjectEventPal_KurtGen2[] = INCBIN_U16("graphics/object_events/pics/gen2/kurt.gbapal");
+
+const u32 gObjectEventPic_KurtLyingDownGen2[] = INCBIN_U32("graphics/object_events/pics/gen2/kurt_lying_down.4bpp");
+const u16 gObjectEventPal_KurtLyingDownGen2[] = INCBIN_U16("graphics/object_events/pics/gen2/kurt_lying_down.gbapal");
+
+const u32 gObjectEventPic_LanceGen2[] = INCBIN_U32("graphics/object_events/pics/gen2/lance.4bpp");
+const u16 gObjectEventPal_LanceGen2[] = INCBIN_U16("graphics/object_events/pics/gen2/lance.gbapal");
+
+const u32 gObjectEventPic_Lass2Gen2[] = INCBIN_U32("graphics/object_events/pics/gen2/lass2.4bpp");
+const u16 gObjectEventPal_Lass2Gen2[] = INCBIN_U16("graphics/object_events/pics/gen2/lass2.gbapal");
+
+const u32 gObjectEventPic_LittleBoy2Gen2[] = INCBIN_U32("graphics/object_events/pics/gen2/little_boy2.4bpp");
+const u16 gObjectEventPal_LittleBoy2Gen2[] = INCBIN_U16("graphics/object_events/pics/gen2/little_boy2.gbapal");
+
+const u32 gObjectEventPic_LittleGirl2Gen2[] = INCBIN_U32("graphics/object_events/pics/gen2/little_girl2.4bpp");
+const u16 gObjectEventPal_LittleGirl2Gen2[] = INCBIN_U16("graphics/object_events/pics/gen2/little_girl2.gbapal");
+
+const u32 gObjectEventPic_Man6Gen2[] = INCBIN_U32("graphics/object_events/pics/gen2/man6.4bpp");
+const u16 gObjectEventPal_Man6Gen2[] = INCBIN_U16("graphics/object_events/pics/gen2/man6.gbapal");
+
+const u32 gObjectEventPic_MartEmployee2Gen2[] = INCBIN_U32("graphics/object_events/pics/gen2/mart_employee2.4bpp");
+const u16 gObjectEventPal_MartEmployee2Gen2[] = INCBIN_U16("graphics/object_events/pics/gen2/mart_employee2.gbapal");
+
+const u32 gObjectEventPic_MauvilleOldMan1Gen2[] = INCBIN_U32("graphics/object_events/pics/gen2/mauville_old_man_1.4bpp");
+const u16 gObjectEventPal_MauvilleOldMan1Gen2[] = INCBIN_U16("graphics/object_events/pics/gen2/mauville_old_man_1.gbapal");
+
+const u32 gObjectEventPic_MauvilleOldMan2Gen2[] = INCBIN_U32("graphics/object_events/pics/gen2/mauville_old_man_2.4bpp");
+const u16 gObjectEventPal_MauvilleOldMan2Gen2[] = INCBIN_U16("graphics/object_events/pics/gen2/mauville_old_man_2.gbapal");
+
+const u32 gObjectEventPic_MomGoldGen2[] = INCBIN_U32("graphics/object_events/pics/gen2/mom_gold.4bpp");
+const u16 gObjectEventPal_MomGoldGen2[] = INCBIN_U16("graphics/object_events/pics/gen2/mom_gold.gbapal");
+
+const u32 gObjectEventPic_MortyGen2[] = INCBIN_U32("graphics/object_events/pics/gen2/morty.4bpp");
+const u16 gObjectEventPal_MortyGen2[] = INCBIN_U16("graphics/object_events/pics/gen2/morty.gbapal");
+
+const u32 gObjectEventPic_MysteryEventDeliverymanGen2[] = INCBIN_U32("graphics/object_events/pics/gen2/mystery_event_deliveryman_gen2.4bpp");
+const u16 gObjectEventPal_MysteryEventDeliverymanGen2[] = INCBIN_U16("graphics/object_events/pics/gen2/mystery_event_deliveryman_gen2.gbapal");
+
+const u32 gObjectEventPic_NurseGen2[] = INCBIN_U32("graphics/object_events/pics/gen2/nurse.4bpp");
+const u16 gObjectEventPal_NurseGen2[] = INCBIN_U16("graphics/object_events/pics/gen2/nurse.gbapal");
+
+const u32 gObjectEventPic_OldMan2Gen2[] = INCBIN_U32("graphics/object_events/pics/gen2/old_man2.4bpp");
+const u16 gObjectEventPal_OldMan2Gen2[] = INCBIN_U16("graphics/object_events/pics/gen2/old_man2.gbapal");
+
+const u32 gObjectEventPic_OldMan_2Gen2[] = INCBIN_U32("graphics/object_events/pics/gen2/old_man_2.4bpp");
+const u16 gObjectEventPal_OldMan_2Gen2[] = INCBIN_U16("graphics/object_events/pics/gen2/old_man_2.gbapal");
+
+const u32 gObjectEventPic_OldMan3Gen2[] = INCBIN_U32("graphics/object_events/pics/gen2/old_man_3.4bpp");
+const u16 gObjectEventPal_OldMan3Gen2[] = INCBIN_U16("graphics/object_events/pics/gen2/old_man_3.gbapal");
+
+const u32 gObjectEventPic_OldWoman2Gen2[] = INCBIN_U32("graphics/object_events/pics/gen2/old_woman_2.4bpp");
+const u16 gObjectEventPal_OldWoman2Gen2[] = INCBIN_U16("graphics/object_events/pics/gen2/old_woman_2.gbapal");
+
+const u32 gObjectEventPic_PolicemanGen2[] = INCBIN_U32("graphics/object_events/pics/gen2/policeman.4bpp");
+const u16 gObjectEventPal_PolicemanGen2[] = INCBIN_U16("graphics/object_events/pics/gen2/policeman.gbapal");
+
+const u32 gObjectEventPic_PryceGen2[] = INCBIN_U32("graphics/object_events/pics/gen2/pryce.4bpp");
+const u16 gObjectEventPal_PryceGen2[] = INCBIN_U16("graphics/object_events/pics/gen2/pryce.gbapal");
+
+const u32 gObjectEventPic_PsychicM2Gen2[] = INCBIN_U32("graphics/object_events/pics/gen2/psychic_m_2.4bpp");
+const u16 gObjectEventPal_PsychicM2Gen2[] = INCBIN_U16("graphics/object_events/pics/gen2/psychic_m_2.gbapal");
+
+const u32 gObjectEventPic_RockerGen2[] = INCBIN_U32("graphics/object_events/pics/gen2/rocker.4bpp");
+const u16 gObjectEventPal_RockerGen2[] = INCBIN_U16("graphics/object_events/pics/gen2/rocker.gbapal");
+
+const u32 gObjectEventPic_RooftopSaleWoman2Gen2[] = INCBIN_U32("graphics/object_events/pics/gen2/rooftop_sale_woman2.4bpp");
+const u16 gObjectEventPal_RooftopSaleWoman2Gen2[] = INCBIN_U16("graphics/object_events/pics/gen2/rooftop_sale_woman2.gbapal");
+
+const u32 gObjectEventPic_SageGen2[] = INCBIN_U32("graphics/object_events/pics/gen2/sage.4bpp");
+const u16 gObjectEventPal_SageGen2[] = INCBIN_U16("graphics/object_events/pics/gen2/sage.gbapal");
+
+const u32 gObjectEventPic_Sailor2Gen2[] = INCBIN_U32("graphics/object_events/pics/gen2/sailor2.4bpp");
+const u16 gObjectEventPal_Sailor2Gen2[] = INCBIN_U16("graphics/object_events/pics/gen2/sailor2.gbapal");
+
+const u32 gObjectEventPic_SilverGen2[] = INCBIN_U32("graphics/object_events/pics/gen2/silver.4bpp");
+const u16 gObjectEventPal_SilverGen2[] = INCBIN_U16("graphics/object_events/pics/gen2/silver.gbapal");
+
+const u32 gObjectEventPic_SuperNerdGen2[] = INCBIN_U32("graphics/object_events/pics/gen2/super_nerd.4bpp");
+const u16 gObjectEventPal_SuperNerdGen2[] = INCBIN_U16("graphics/object_events/pics/gen2/super_nerd.gbapal");
+
+const u32 gObjectEventPic_SwimmerF2Gen2[] = INCBIN_U32("graphics/object_events/pics/gen2/swimmer_f2.4bpp");
+const u16 gObjectEventPal_SwimmerF2Gen2[] = INCBIN_U16("graphics/object_events/pics/gen2/swimmer_f2.gbapal");
+
+const u32 gObjectEventPic_SwimmerFLandGen2[] = INCBIN_U32("graphics/object_events/pics/gen2/swimmer_f_land.4bpp");
+const u16 gObjectEventPal_SwimmerFLandGen2[] = INCBIN_U16("graphics/object_events/pics/gen2/swimmer_f_land.gbapal");
+
+const u32 gObjectEventPic_SwimmerM2Gen2[] = INCBIN_U32("graphics/object_events/pics/gen2/swimmer_m2.4bpp");
+const u16 gObjectEventPal_SwimmerM2Gen2[] = INCBIN_U16("graphics/object_events/pics/gen2/swimmer_m2.gbapal");
+
+const u32 gObjectEventPic_SwimmerMLandGen2[] = INCBIN_U32("graphics/object_events/pics/gen2/swimmer_m_land.4bpp");
+const u16 gObjectEventPal_SwimmerMLandGen2[] = INCBIN_U16("graphics/object_events/pics/gen2/swimmer_m_land.gbapal");
+
+const u32 gObjectEventPic_TuberMSwimmingGen2[] = INCBIN_U32("graphics/object_events/pics/gen2/tuber_m_swimming.4bpp");
+const u16 gObjectEventPal_TuberMSwimmingGen2[] = INCBIN_U16("graphics/object_events/pics/gen2/tuber_m_swimming.gbapal");
+
+const u32 gObjectEventPic_Twin2Gen2[] = INCBIN_U32("graphics/object_events/pics/gen2/twin2.4bpp");
+const u16 gObjectEventPal_Twin2Gen2[] = INCBIN_U16("graphics/object_events/pics/gen2/twin2.gbapal");
+
+const u32 gObjectEventPic_WalkingGen2[] = INCBIN_U32("graphics/object_events/pics/gen2/walking.4bpp");
+const u16 gObjectEventPal_WalkingGen2[] = INCBIN_U16("graphics/object_events/pics/gen2/walking.gbapal");
+
+const u32 gObjectEventPic_WhitneyGen2[] = INCBIN_U32("graphics/object_events/pics/gen2/whitney.4bpp");
+const u16 gObjectEventPal_WhitneyGen2[] = INCBIN_U16("graphics/object_events/pics/gen2/whitney.gbapal");
+
+const u32 gObjectEventPic_WillGen2[] = INCBIN_U32("graphics/object_events/pics/gen2/will.4bpp");
+const u16 gObjectEventPal_WillGen2[] = INCBIN_U16("graphics/object_events/pics/gen2/will.gbapal");
+
+const u32 gObjectEventPic_Woman6Gen2[] = INCBIN_U32("graphics/object_events/pics/gen2/woman_6.4bpp");
+const u16 gObjectEventPal_Woman6Gen2[] = INCBIN_U16("graphics/object_events/pics/gen2/woman_6.gbapal");
+
+const u32 gObjectEventPic_WorkerFGen2[] = INCBIN_U32("graphics/object_events/pics/gen2/worker_f.4bpp");
+const u16 gObjectEventPal_WorkerFGen2[] = INCBIN_U16("graphics/object_events/pics/gen2/worker_f.gbapal");
+
+const u32 gObjectEventPic_WorkerMGen2[] = INCBIN_U32("graphics/object_events/pics/gen2/worker_m.4bpp");
+const u16 gObjectEventPal_WorkerMGen2[] = INCBIN_U16("graphics/object_events/pics/gen2/worker_m.gbapal");
+
+const u32 gObjectEventPic_Youngster2Gen2[] = INCBIN_U32("graphics/object_events/pics/gen2/youngster2.4bpp");
+const u16 gObjectEventPal_Youngster2Gen2[] = INCBIN_U16("graphics/object_events/pics/gen2/youngster2.gbapal");
 
 //Sinnoh Trainers
 

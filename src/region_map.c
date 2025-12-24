@@ -40,7 +40,7 @@
  */
 
 #define MAP_WIDTH 28
-#define MAP_HEIGHT 15
+#define MAP_HEIGHT 17
 #define MAPCURSOR_X_MIN 1
 #define MAPCURSOR_Y_MIN 2
 #define MAPCURSOR_X_MAX (MAPCURSOR_X_MIN + MAP_WIDTH - 1)
@@ -59,6 +59,13 @@ enum {
     WIN_MAPSEC_NAME,
     WIN_MAPSEC_NAME_TALL, // For fly destinations with subtitles (just Ever Grande)
     WIN_FLY_TO_WHERE,
+};
+
+enum RegionMapId
+{
+    REGIONMAP_HOENN,
+    REGIONMAP_KANTO,
+    REGIONMAP_JOHTO,
 };
 
 struct MultiNameFlyDest
@@ -95,7 +102,6 @@ static u8 GetMapsecType(u16 mapSecId);
 static u16 CorrectSpecialMapSecId_Internal(u16 mapSecId);
 static u16 GetTerraOrMarineCaveMapSecId(void);
 static void GetMarineCaveCoords(u16 *x, u16 *y);
-static bool32 IsPlayerInAquaHideout(u8 mapSecId);
 static void GetPositionOfCursorWithinMapSec(void);
 static bool8 RegionMap_IsMapSecIdInNextRow(u16 y);
 static void SpriteCB_CursorMapFull(struct Sprite *sprite);
@@ -116,20 +122,139 @@ static void SpriteCB_FlyDestIcon(struct Sprite *sprite);
 static void CB_FadeInFlyMap(void);
 static void CB_HandleFlyMapInput(void);
 static void CB_ExitFlyMap(void);
+static u8 GetRegionMapIdFromMapSec(u16 mapSecId);
+static void SetRegionMapLayoutFromMapSec(u16 mapSecId);
+
 
 static const u16 sRegionMapCursorPal[] = INCBIN_U16("graphics/pokenav/region_map/cursor.gbapal");
 static const u32 sRegionMapCursorSmallGfxLZ[] = INCBIN_U32("graphics/pokenav/region_map/cursor_small.4bpp.lz");
 static const u32 sRegionMapCursorLargeGfxLZ[] = INCBIN_U32("graphics/pokenav/region_map/cursor_large.4bpp.lz");
-static const u16 sRegionMapBg_Pal[] = INCBIN_U16("graphics/pokenav/region_map/map.gbapal");
-static const u32 sRegionMapBg_GfxLZ[] = INCBIN_U32("graphics/pokenav/region_map/map.8bpp.lz");
-static const u32 sRegionMapBg_TilemapLZ[] = INCBIN_U32("graphics/pokenav/region_map/map.bin.lz");
+// Hoenn
+static const u16 sRegionMapBg_Pal_Hoenn[]       = INCBIN_U16("graphics/pokenav/region_map/map.gbapal");
+static const u32 sRegionMapBg_GfxLZ_Hoenn[]     = INCBIN_U32("graphics/pokenav/region_map/map.8bpp.lz");
+static const u32 sRegionMapBg_TilemapLZ_Hoenn[] = INCBIN_U32("graphics/pokenav/region_map/map.bin.lz");
+
+// Kanto
+static const u16 sRegionMapBg_Pal_Kanto[]       = INCBIN_U16("graphics/pokenav/region_map/kanto_map.gbapal");
+static const u32 sRegionMapBg_GfxLZ_Kanto[]     = INCBIN_U32("graphics/pokenav/region_map/kanto_map.8bpp.lz");
+static const u32 sRegionMapBg_TilemapLZ_Kanto[] = INCBIN_U32("graphics/pokenav/region_map/kanto_map.bin.lz");
+
+// Johto
+static const u16 sRegionMapBg_Pal_Johto[]       = INCBIN_U16("graphics/pokenav/region_map/johtomap.gbapal");
+static const u32 sRegionMapBg_GfxLZ_Johto[]     = INCBIN_U32("graphics/pokenav/region_map/johtomap.8bpp.lz");
+static const u32 sRegionMapBg_TilemapLZ_Johto[] = INCBIN_U32("graphics/pokenav/region_map/johtomap.bin.lz");
+
+// ACTIVE pointers used by the existing code
+static const u16 *sRegionMapBg_Pal;
+static const u32 *sRegionMapBg_GfxLZ;
+static const u32 *sRegionMapBg_TilemapLZ;
+
+static void SetRegionMapBgFromMapSec(u16 mapSecId)
+{
+    switch (GetRegionMapIdFromMapSec(mapSecId))
+    {
+    case REGIONMAP_KANTO:
+        sRegionMapBg_Pal       = sRegionMapBg_Pal_Kanto;
+        sRegionMapBg_GfxLZ     = sRegionMapBg_GfxLZ_Kanto;
+        sRegionMapBg_TilemapLZ = sRegionMapBg_TilemapLZ_Kanto;
+        break;
+
+    case REGIONMAP_JOHTO:
+        sRegionMapBg_Pal       = sRegionMapBg_Pal_Johto;
+        sRegionMapBg_GfxLZ     = sRegionMapBg_GfxLZ_Johto;
+        sRegionMapBg_TilemapLZ = sRegionMapBg_TilemapLZ_Johto;
+        break;
+
+    default:
+        sRegionMapBg_Pal       = sRegionMapBg_Pal_Hoenn;
+        sRegionMapBg_GfxLZ     = sRegionMapBg_GfxLZ_Hoenn;
+        sRegionMapBg_TilemapLZ = sRegionMapBg_TilemapLZ_Hoenn;
+        break;
+    }
+}
+
 static const u16 sRegionMapPlayerIcon_BrendanPal[] = INCBIN_U16("graphics/pokenav/region_map/brendan_icon.gbapal");
 static const u8 sRegionMapPlayerIcon_BrendanGfx[] = INCBIN_U8("graphics/pokenav/region_map/brendan_icon.4bpp");
 static const u16 sRegionMapPlayerIcon_MayPal[] = INCBIN_U16("graphics/pokenav/region_map/may_icon.gbapal");
 static const u8 sRegionMapPlayerIcon_MayGfx[] = INCBIN_U8("graphics/pokenav/region_map/may_icon.4bpp");
 
+static const u16 *sRegionMapLayoutFlat;
+static u16 sRegionMapLayoutWidth;
+static u16 sRegionMapLayoutHeight;
+
 #include "data/region_map/region_map_layout.h"
+#include "data/region_map/region_map_layout_kanto.h"
+#include "data/region_map/region_map_layout_johto.h"
+
 #include "data/region_map/region_map_entries.h"
+
+// Default to Hoenn layout
+static const u16 (*sRegionMapLayout)[MAP_WIDTH] = sRegionMap_MapSectionLayout_Hoenn;
+
+static bool32 IsMapSecInList(u16 mapSecId, const u16 *list)
+{
+    while (*list != MAPSEC_NONE)
+    {
+        if (*list == mapSecId)
+            return TRUE;
+        list++;
+    }
+    return FALSE;
+}
+
+// Kanto map sections
+static const u16 sKantoMapSecList[] =
+{
+    MAPSEC_PALLET_TOWN,
+    MAPSEC_PALLET_TOWN_WESTERN_FOREST,
+    MAPSEC_VIRIDIAN_CITY,
+    MAPSEC_PEWTER_CITY,
+    MAPSEC_CERULEAN_CITY,
+    MAPSEC_VERMILION_CITY,
+    MAPSEC_CELADON_CITY,
+    MAPSEC_FUCHSIA_CITY,
+    MAPSEC_CINNABAR_ISLAND,
+    MAPSEC_INDIGO_PLATEAU,
+    MAPSEC_NONE
+};
+
+// Johto map sections
+static const u16 sJohtoMapSecList[] =
+{
+    MAPSEC_NEW_BARK_TOWN,
+    MAPSEC_CHERRYGROVE_CITY,
+    MAPSEC_VIOLET_CITY,
+    MAPSEC_AZALEA_TOWN,
+    MAPSEC_ECRUTEAK_CITY,
+    MAPSEC_BLACKTHORN_CITY,
+    MAPSEC_NONE
+};
+
+static u8 GetRegionMapIdFromMapSec(u16 mapSecId)
+{
+    if (IsMapSecInList(mapSecId, sKantoMapSecList))
+        return REGIONMAP_KANTO;
+    if (IsMapSecInList(mapSecId, sJohtoMapSecList))
+        return REGIONMAP_JOHTO;
+    return REGIONMAP_HOENN;
+}
+
+static void SetRegionMapLayoutFromMapSec(u16 mapSecId)
+{
+    switch (GetRegionMapIdFromMapSec(mapSecId))
+    {
+    case REGIONMAP_KANTO:
+        sRegionMapLayout = sRegionMap_MapSectionLayout_Kanto;
+        break;
+    case REGIONMAP_JOHTO:
+        sRegionMapLayout = sRegionMap_MapSectionLayout_Johto;
+        break;
+    default:
+        sRegionMapLayout = sRegionMap_MapSectionLayout_Hoenn; // Hoenn
+        break;
+    }
+}
+
 
 static const u16 sRegionMap_SpecialPlaceLocations[][2] =
 {
@@ -147,7 +272,6 @@ static const u16 sRegionMap_SpecialPlaceLocations[][2] =
     {MAPSEC_UNDERWATER_SOOTOPOLIS,      MAPSEC_SOOTOPOLIS_CITY},
     {MAPSEC_UNDERWATER_SEAFLOOR_CAVERN, MAPSEC_ROUTE_128},
     {MAPSEC_AQUA_HIDEOUT,               MAPSEC_LILYCOVE_CITY},
-    {MAPSEC_AQUA_HIDEOUT_OLD,           MAPSEC_LILYCOVE_CITY},
     {MAPSEC_MAGMA_HIDEOUT,              MAPSEC_ROUTE_112},
     {MAPSEC_UNDERWATER_SEALED_CHAMBER,  MAPSEC_ROUTE_134},
     {MAPSEC_PETALBURG_WOODS,            MAPSEC_ROUTE_104},
@@ -204,10 +328,6 @@ static const struct UCoords16 sMarineCaveLocationCoords[MARINE_CAVE_LOCATIONS] =
     [MARINE_CAVE_COORD(ROUTE_129_EAST)]  = {24, 10}
 };
 
-static const u8 sMapSecAquaHideoutOld[] =
-{
-    MAPSEC_AQUA_HIDEOUT_OLD
-};
 
 static const struct OamData sRegionMapCursorOam =
 {
@@ -509,6 +629,8 @@ static const struct SpriteTemplate sFlyDestIconSpriteTemplate =
 void InitRegionMap(struct RegionMap *regionMap, bool8 zoomed)
 {
     InitRegionMapData(regionMap, NULL, zoomed);
+    SetRegionMapLayoutFromMapSec(gMapHeader.regionMapSectionId);
+    SetRegionMapBgFromMapSec(gMapHeader.regionMapSectionId);
     while (LoadRegionMapGfx());
 }
 
@@ -965,14 +1087,12 @@ void PokedexAreaScreen_UpdateRegionMapVariablesAndVideoRegs(s16 x, s16 y)
 
 static u16 GetMapSecIdAt(u16 x, u16 y)
 {
-    if (y < MAPCURSOR_Y_MIN || y > MAPCURSOR_Y_MAX || x < MAPCURSOR_X_MIN || x > MAPCURSOR_X_MAX)
-    {
+    if (x >= sRegionMapLayoutWidth || y >= sRegionMapLayoutHeight)
         return MAPSEC_NONE;
-    }
-    y -= MAPCURSOR_Y_MIN;
-    x -= MAPCURSOR_X_MIN;
-    return sRegionMap_MapSectionLayout[y][x];
+
+    return sRegionMapLayoutFlat[y * sRegionMapLayoutWidth + x];
 }
+
 
 static void InitMapBasedOnPlayerLocation(void)
 {
@@ -1055,11 +1175,6 @@ static void InitMapBasedOnPlayerLocation(void)
             mapHeader = Overworld_GetMapHeaderByGroupAndId(warp->mapGroup, warp->mapNum);
             sRegionMap->mapSecId = mapHeader->regionMapSectionId;
         }
-
-        if (IsPlayerInAquaHideout(sRegionMap->mapSecId))
-            sRegionMap->playerIsInCave = TRUE;
-        else
-            sRegionMap->playerIsInCave = FALSE;
 
         mapWidth = mapHeader->mapLayout->width;
         mapHeight = mapHeader->mapLayout->height;
@@ -1219,7 +1334,6 @@ static u8 GetMapsecType(u16 mapSecId)
         return FlagGet(FLAG_VISITED_SOOTOPOLIS_CITY) ? MAPSECTYPE_CITY_CANFLY : MAPSECTYPE_CITY_CANTFLY;
     case MAPSEC_EVER_GRANDE_CITY:
         return FlagGet(FLAG_VISITED_EVER_GRANDE_CITY) ? MAPSECTYPE_CITY_CANFLY : MAPSECTYPE_CITY_CANTFLY;
-    //insert kanto & johto code
     case MAPSEC_BATTLE_FRONTIER:
         return FlagGet(FLAG_LANDMARK_BATTLE_FRONTIER) ? MAPSECTYPE_BATTLE_FRONTIER : MAPSECTYPE_NONE;
     case MAPSEC_SOUTHERN_ISLAND:
@@ -1280,20 +1394,6 @@ static void GetMarineCaveCoords(u16 *x, u16 *y)
 
     *x = sMarineCaveLocationCoords[idx].x + MAPCURSOR_X_MIN;
     *y = sMarineCaveLocationCoords[idx].y + MAPCURSOR_Y_MIN;
-}
-
-// Probably meant to be an "IsPlayerInIndoorDungeon" function, but in practice it only has the one mapsec
-// Additionally, because the mapsec doesnt exist in Emerald, this function always returns FALSE
-static bool32 IsPlayerInAquaHideout(u8 mapSecId)
-{
-    u32 i;
-
-    for (i = 0; i < ARRAY_COUNT(sMapSecAquaHideoutOld); i++)
-    {
-        if (sMapSecAquaHideoutOld[i] == mapSecId)
-            return TRUE;
-    }
-    return FALSE;
 }
 
 u16 CorrectSpecialMapSecId(u16 mapSecId)
@@ -1621,14 +1721,6 @@ u8 *GetMapNameGeneric(u8 *dest, u16 mapSecId)
     }
 }
 
-u8 *GetMapNameHandleAquaHideout(u8 *dest, u16 mapSecId)
-{
-    if (mapSecId == MAPSEC_AQUA_HIDEOUT_OLD)
-        return StringCopy(dest, gText_Hideout);
-    else
-        return GetMapNameGeneric(dest, mapSecId);
-}
-
 static void GetMapSecDimensions(u16 mapSecId, u16 *x, u16 *y, u16 *width, u16 *height)
 {
     *x = gRegionMapEntries[mapSecId].x;
@@ -1642,7 +1734,7 @@ bool8 IsRegionMapZoomed(void)
     return sRegionMap->zoomed;
 }
 
-bool32 IsEventIslandMapSecId(u8 mapSecId)
+bool32 IsEventIslandMapSecId(u16 mapSecId)
 {
     u32 i;
 

@@ -2,7 +2,7 @@
   "id": "MAP_LAVENDER_HOUSE1",
   "name": "lavender_house1",
   "layout": "LAYOUT_LAVENDER_HOUSE1",
-  "music": "MUS_DUMMY",
+  "music": "MUS_HG_LAVENDER",
   "region_map_section": "MAPSEC_LAVENDER_TOWN",
   "requires_flash": false,
   "weather": "WEATHER_NONE",

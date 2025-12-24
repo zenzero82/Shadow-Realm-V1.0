@@ -453,3 +453,15 @@ const u16 gMetatileAttributes_ecruteak_gym[] = INCBIN_U16("data/tilesets/seconda
 
 const u16 gMetatiles_undergroundstorage[] = INCBIN_U16("data/tilesets/secondary/undergroundstorage/metatiles.bin");
 const u16 gMetatileAttributes_undergroundstorage[] = INCBIN_U16("data/tilesets/secondary/undergroundstorage/metatile_attributes.bin");
+
+const u16 gMetatiles_cave_default[] = INCBIN_U16("data/tilesets/secondary/cave_default/metatiles.bin");
+const u16 gMetatileAttributes_cave_default[] = INCBIN_U16("data/tilesets/secondary/cave_default/metatile_attributes.bin");
+
+const u16 gMetatiles_route32[] = INCBIN_U16("data/tilesets/secondary/route_32/metatiles.bin");
+const u16 gMetatileAttributes_route32[] = INCBIN_U16("data/tilesets/secondary/route_32/metatile_attributes.bin");
+
+const u16 gMetatiles_Route38_Farmland[] = INCBIN_U16("data/tilesets/secondary/route_38_farmland/metatiles.bin");
+const u16 gMetatileAttributes_Route38_Farmland[] = INCBIN_U16("data/tilesets/secondary/route_38_farmland/metatile_attributes.bin");
+
+const u16 gMetatiles_shoprooftop[] = INCBIN_U16("data/tilesets/secondary/shoprooftop/metatiles.bin");
+const u16 gMetatileAttributes_shoprooftop[] = INCBIN_U16("data/tilesets/secondary/shoprooftop/metatile_attributes.bin");

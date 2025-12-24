@@ -2,7 +2,7 @@
   "id": "MAP_CERULEAN_BIKESHOP",
   "name": "cerulean_bikeshop",
   "layout": "LAYOUT_CERULEAN_BIKESHOP",
-  "music": "MUS_DUMMY",
+  "music": "MUS_HG_CERULEAN",
   "region_map_section": "MAPSEC_CERULEAN_CITY",
   "requires_flash": false,
   "weather": "WEATHER_NONE",

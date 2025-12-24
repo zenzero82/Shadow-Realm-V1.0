@@ -2,7 +2,7 @@
   "id": "MAP_CELADON_APARTMENTROOFHOUSE",
   "name": "celadon_apartmentroofhouse",
   "layout": "LAYOUT_VIRIDIAN_HOUSE2",
-  "music": "MUS_DUMMY",
+  "music": "MUS_HG_CELADON",
   "region_map_section": "MAPSEC_CELADON_CITY",
   "requires_flash": false,
   "weather": "WEATHER_NONE",

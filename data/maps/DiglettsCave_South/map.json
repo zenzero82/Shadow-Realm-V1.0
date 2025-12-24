@@ -27,7 +27,7 @@
       "y": 3,
       "elevation": 0,
       "dest_map": "MAP_DIGLETTS_CAVE_TUNNEL",
-      "dest_warp_id": "0"
+      "dest_warp_id": "1"
     }
   ],
   "coord_events": [],

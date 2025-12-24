@@ -2,7 +2,7 @@
   "id": "MAP_ROUTE1",
   "name": "Route1",
   "layout": "LAYOUT_ROUTE1",
-  "music": "MUS_RG_ROUTE1",
+  "music": "MUS_HG_ROUTE1",
   "region_map_section": "MAPSEC_ROUTE_1",
   "requires_flash": false,
   "weather": "WEATHER_NONE",
@@ -37,6 +37,19 @@
       "trainer_sight_or_berry_tree_id": "0",
       "script": "Route1_EventScript_Torkin",
       "flag": "FLAG_HIDE_ROUTE1_TORKIN"
+    },
+    {
+      "graphics_id": "OBJ_EVENT_GFX_BERRY_TREE",
+      "x": 3,
+      "y": 3,
+      "elevation": 0,
+      "movement_type": "MOVEMENT_TYPE_BERRY_TREE_GROWTH",
+      "movement_range_x": 0,
+      "movement_range_y": 0,
+      "trainer_type": "TRAINER_TYPE_NONE",
+      "trainer_sight_or_berry_tree_id": "BERRY_TREE_ROUTE_118_SITRUS_2",
+      "script": "BerryTreeScript",
+      "flag": "0"
     }
   ],
   "warp_events": [],

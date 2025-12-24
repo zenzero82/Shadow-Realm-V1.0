@@ -2,7 +2,7 @@
   "id": "MAP_VERMILION_FANCLUB",
   "name": "vermilion_fanclub",
   "layout": "LAYOUT_VERMILION_FANCLUB",
-  "music": "MUS_DUMMY",
+  "music": "MUS_HG_VERMILLION",
   "region_map_section": "MAPSEC_VERMILION_CITY",
   "requires_flash": false,
   "weather": "WEATHER_NONE",

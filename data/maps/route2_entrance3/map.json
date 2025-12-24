@@ -2,7 +2,7 @@
   "id": "MAP_ROUTE2_ENTRANCE3",
   "name": "route2_entrance3",
   "layout": "LAYOUT_ROUTE2_ENTRANCE1",
-  "music": "MUS_RG_ROUTE1",
+  "music": "MUS_HG_ROUTE1",
   "region_map_section": "MAPSEC_ROUTE_2",
   "requires_flash": false,
   "weather": "WEATHER_NONE",

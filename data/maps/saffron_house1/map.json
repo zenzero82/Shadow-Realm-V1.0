@@ -2,7 +2,7 @@
   "id": "MAP_SAFFRON_HOUSE1",
   "name": "saffron_house1",
   "layout": "LAYOUT_VIRIDIAN_HOUSE1",
-  "music": "MUS_DUMMY",
+  "music": "MUS_HG_GOLDENROD",
   "region_map_section": "MAPSEC_SAFFRON_CITY",
   "requires_flash": false,
   "weather": "WEATHER_NONE",

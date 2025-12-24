@@ -2,7 +2,7 @@
   "id": "MAP_CELADON_DEPARTMENTROOFDAY",
   "name": "celadon_departmentroofday",
   "layout": "LAYOUT_CELADON_DEPARTMENTROOFDAY",
-  "music": "MUS_DUMMY",
+  "music": "MUS_HG_CELADON",
   "region_map_section": "MAPSEC_CELADON_CITY",
   "requires_flash": false,
   "weather": "WEATHER_NONE",

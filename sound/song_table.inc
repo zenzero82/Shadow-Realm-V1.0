@@ -487,27 +487,27 @@ gSongTable::
 	song mus_vs_aqua_magma_leader, 0, 0
 	song mus_rg_follow_me, 0, 0
 	song mus_rg_game_corner, 0, 0
-	song mus_rg_rocket_hideout, 0, 0
+	song mus_hg_team_rocket_hq, 0, 0
 	song mus_rg_gym, 0, 0
 	song mus_rg_jigglypuff, 2, 2
 	song mus_rg_intro_fight, 0, 0
 	song mus_rg_title, 0, 0
-	song mus_rg_cinnabar, 0, 0
-	song mus_rg_lavender, 0, 0
+	song mus_hg_cinnabar, 0, 0
+	song mus_hg_lavender, 0, 0
 	song mus_rg_heal, 0, 0
 	song mus_rg_cycling, 0, 0
-	song mus_rg_encounter_rocket, 0, 0
+	song mus_hg_encounter_rocket, 0, 0
 	song mus_rg_encounter_girl, 0, 0
 	song mus_rg_encounter_boy, 0, 0
 	song mus_rg_hall_of_fame, 0, 0
-	song mus_rg_viridian_forest, 0, 0
-	song mus_rg_mt_moon, 0, 0
+	song mus_hg_viridian_forest, 0, 0
+	song mus_hg_mt_moon_square, 0, 0
 	song mus_rg_poke_mansion, 0, 0
 	song mus_rg_credits, 0, 0
-	song mus_rg_route1, 0, 0
-	song mus_rg_route24, 0, 0
-	song mus_rg_route3, 0, 0
-	song mus_rg_route11, 0, 0
+	song mus_hg_route1, 0, 0
+	song mus_hg_route24, 0, 0
+	song mus_hg_route3, 0, 0
+	song mus_hg_route11, 0, 0
 	song mus_rg_victory_road, 0, 0
 	song mus_rg_vs_gym_leader, 0, 0
 	song mus_rg_vs_trainer, 0, 0
@@ -515,19 +515,19 @@ gSongTable::
 	song mus_rg_vs_champion, 0, 0
 	song mus_hg_pallet, 0, 0
 	song mus_rg_oak_lab, 0, 0
-	song mus_rg_oak, 0, 0
+	song mus_hg_oak, 0, 0
 	song mus_rg_poke_center, 0, 0
 	song mus_rg_ss_anne, 0, 0
 	song mus_rg_surf, 0, 0
 	song mus_rg_poke_tower, 0, 0
 	song mus_rg_silph, 0, 0
-	song mus_rg_fuchsia, 0, 0
-	song mus_rg_celadon, 0, 0
+	song mus_hg_cerulean, 0, 0
+	song mus_hg_celadon, 0, 0
 	song mus_rg_victory_trainer, 0, 0
 	song mus_rg_victory_wild, 0, 0
 	song mus_rg_victory_gym_leader, 0, 0
-	song mus_rg_vermillion, 0, 0
-	song mus_rg_pewter, 0, 0
+	song mus_hg_vermilion, 0, 0
+	song mus_hg_pewter, 0, 0
 	song mus_rg_encounter_rival, 0, 0
 	song mus_rg_rival_exit, 0, 0
 	song mus_rg_dex_rating, 2, 2
@@ -558,7 +558,7 @@ gSongTable::
 	song mus_rg_encounter_gym_leader, 0, 0
 	song mus_rg_encounter_deoxys, 0, 0
 	song mus_rg_trainer_tower, 0, 0
-	song mus_rg_slow_pallet, 0, 0
+	song mus_hg_route26, 0, 0
 	song mus_rg_teachy_tv_menu, 0, 0
 	song ph_trap_blend, 2, 2
 	song ph_trap_held, 2, 2
@@ -615,6 +615,19 @@ gSongTable::
 	song mus_newsorre, 0, 0
 	song mus_mirrorb, 0, 0
 	song mus_orretrainer, 0, 0
+	song mus_hg_new_bark, 0, 0
+	song mus_hg_cherrygrove, 0, 0
+	song mus_hg_violet, 0, 0
+	song mus_hg_azalea, 0, 0
+	song mus_hg_goldenrod, 0, 0
+	song mus_hg_ecruteak, 0, 0
+	song mus_hg_cianwood, 0, 0
+	song mus_hg_route29, 0, 0
+	song mus_hg_route30, 0, 0
+	song mus_hg_route34, 0, 0
+	song mus_hg_route38, 0, 0
+	song mus_hg_route42, 0, 0
+	song mus_hg_route47, 0, 0
 
 
 	.align 2

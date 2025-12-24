@@ -14,7 +14,36 @@
   "battle_scene": "MAP_BATTLE_SCENE_NORMAL",
   "connections": null,
   "object_events": [],
-  "warp_events": [],
+  "warp_events": [
+    {
+      "x": 48,
+      "y": 7,
+      "elevation": 0,
+      "dest_map": "MAP_ROUTE36",
+      "dest_warp_id": "0"
+    },
+    {
+      "x": 34,
+      "y": 7,
+      "elevation": 0,
+      "dest_map": "MAP_NATIONAL_PARK_NORMAL",
+      "dest_warp_id": "0"
+    },
+    {
+      "x": 7,
+      "y": 1,
+      "elevation": 0,
+      "dest_map": "MAP_NATIONAL_PARK_NORMAL",
+      "dest_warp_id": "1"
+    },
+    {
+      "x": 7,
+      "y": 13,
+      "elevation": 0,
+      "dest_map": "MAP_ROUTE35",
+      "dest_warp_id": "2"
+    }
+  ],
   "coord_events": [],
   "bg_events": []
 }

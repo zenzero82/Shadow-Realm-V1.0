@@ -270,10 +270,126 @@ extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_BlueMomGen1
 extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_JessieGen1;
 extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_JamesGen1;
 extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_MeowthGen1;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_ArcherGen1;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_ArianaGen1;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_BillGen1;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_BlaineGen1;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_ErikaGen1;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_JanineGen1;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_ProfOakGen1;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_ProtonGen1;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_SabrinaGen1;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_SurgeGen1;
 
 
 //Johto
-
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_ArtistGen2;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_AttendantFGen2;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_AttendantMGen2;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_BaldingManGen2;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_BattleGirlGen2;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_BattleTowerTrainerDudeGen2;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_BikerGen2;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_BlackBeltGen2;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_Boy2Gen2;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_BrunoGen2;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_BugCatcherGen2;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_BugsyGen2;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_BurglarGen2;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_CamperFGen2;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_CaptGen2;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_ChannelerGen2;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_ChuckGen2;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_ClairGen2;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_CookGen2;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_CooltrainerFGen2;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_CooltrainerMGen2;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_ElmGen2;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_EngineerGen2;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_EusineGen2;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_FalknerGen2;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_FirebreatherGen2;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_FishermanGen2;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_GameboyKidGen2;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_GentlemanGen2;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_GoldGen2;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_GreenHairJugglerGen2;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_Gentleman2Gen2;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_Girl1Gen2;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_Girl2Gen2;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_Girl3Gen2;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_Girl4Gen2;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_Girl5Gen2;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_Girl6Gen2;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_GuitaristGen2;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_HikerGen2;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_HoOhGen2;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_JanineGen2;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_JasmineGen2;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_JessicaGen2;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_JugglerGen2;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_KarenGen2;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_KimonoGen2;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_KimonoGirlGen2;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_KogaGen2;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_KurtGen2;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_KurtLyingDownGen2;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_LanceGen2;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_LassGen2;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_Lass2Gen2;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_LittleBoy2Gen2;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_LittleGirl2Gen2;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_LittleGirlGen2;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_LittleBoyGen2;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_Man6Gen2;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_MartEmployee2Gen2;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_MauvilleOldMan1Gen2;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_MauvilleOldMan2Gen2;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_MomGoldGen2;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_LtSurgeGen2;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_MistyGen2;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_MortyGen2;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_MysteryEventDeliverymanGen2;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_NurseGen2;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_OfficerGen2;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_OldMan2Gen2;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_OldMan_2Gen2;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_OldMan3Gen2;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_OldWoman2Gen2;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_OliviaGen2;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_PicnickerGen2;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_PokeManiacGen2;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_PolicemanGen2;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_PryceGen2;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_ProfessorOakGen2;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_PsychicM2Gen2;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_RocketGruntGen2;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_RockerGen2;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_RooftopSaleWoman2Gen2;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_RuinManiacGen2;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_SageGen2;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_SailorGen2;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_Sailor2Gen2;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_ScientistGen2;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_SilverGen2;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_SkierGen2;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_SuperNerdGen2;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_SwimmerF2Gen2;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_SwimmerFGen2;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_SwimmerFLandGen2;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_SwimmerM2Gen2;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_SwimmerMGen2;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_SwimmerMLandGen2;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_TuberMSwimmingGen2;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_Twin2Gen2;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_TutorGen2;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_WalkingGen2;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_WhitneyGen2;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_WillGen2;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_Woman6Gen2;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_WorkerFGen2;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_WorkerMGen2;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_Youngster2Gen2;
 //Sinnoh
 
 //Unova
@@ -550,8 +666,94 @@ const struct ObjectEventGraphicsInfo *const gObjectEventGraphicsInfoPointers[NUM
     [OBJ_EVENT_GFX_JESSIE_GEN1]  = &gObjectEventGraphicsInfo_JessieGen1,
     [OBJ_EVENT_GFX_JAMES_GEN1]   = &gObjectEventGraphicsInfo_JamesGen1,
     [OBJ_EVENT_GFX_MEOWTH_GEN1]  = &gObjectEventGraphicsInfo_MeowthGen1,
+    [OBJ_EVENT_GFX_ARCHER_GEN1]  = &gObjectEventGraphicsInfo_ArcherGen1,
+    [OBJ_EVENT_GFX_ARIANA_GEN1]  = &gObjectEventGraphicsInfo_ArianaGen1,
+    [OBJ_EVENT_GFX_BILL_GEN1]  = &gObjectEventGraphicsInfo_BillGen1,
+    [OBJ_EVENT_GFX_BLAINE_GEN1]  = &gObjectEventGraphicsInfo_BlaineGen1,
+    [OBJ_EVENT_GFX_ERIKA_GEN1]  = &gObjectEventGraphicsInfo_ErikaGen1,
+    [OBJ_EVENT_GFX_JANINE_GEN1]  = &gObjectEventGraphicsInfo_JanineGen1,
+    [OBJ_EVENT_GFX_PROF_OAK_GEN1]  = &gObjectEventGraphicsInfo_ProfOakGen1,
+    [OBJ_EVENT_GFX_PROTON_GEN1]  = &gObjectEventGraphicsInfo_ProtonGen1,
+    [OBJ_EVENT_GFX_SABRINA_GEN1]  = &gObjectEventGraphicsInfo_SabrinaGen1,
+    [OBJ_EVENT_GFX_SURGE_GEN1]  = &gObjectEventGraphicsInfo_SurgeGen1,
 
     //Johto
+    [OBJ_EVENT_GFX_ARTIST_GEN2]  = &gObjectEventGraphicsInfo_ArtistGen2,
+    [OBJ_EVENT_GFX_ATTENDANT_F_GEN2]  = &gObjectEventGraphicsInfo_AttendantFGen2,
+    [OBJ_EVENT_GFX_ATTENDANT_M_GEN2]  = &gObjectEventGraphicsInfo_AttendantMGen2,
+    [OBJ_EVENT_GFX_BALDING_MAN_GEN2]  = &gObjectEventGraphicsInfo_BaldingManGen2,
+    [OBJ_EVENT_GFX_BATTLE_GIRL_GEN2]  = &gObjectEventGraphicsInfo_BattleGirlGen2,
+    [OBJ_EVENT_GFX_BATTLE_TOWER_TRAINER_DUDE_GEN2]  = &gObjectEventGraphicsInfo_BattleTowerTrainerDudeGen2,
+    [OBJ_EVENT_GFX_BIKER_GEN2]  = &gObjectEventGraphicsInfo_BikerGen2,
+    [OBJ_EVENT_GFX_BLACK_BELT_GEN2]  = &gObjectEventGraphicsInfo_BlackBeltGen2,
+    [OBJ_EVENT_GFX_BOY_2_GEN2]  = &gObjectEventGraphicsInfo_Boy2Gen2,
+    [OBJ_EVENT_GFX_BRUNO_GEN2]  = &gObjectEventGraphicsInfo_BrunoGen2,
+    [OBJ_EVENT_GFX_BUG_CATCHER_GEN2]  = &gObjectEventGraphicsInfo_BugCatcherGen2,
+    [OBJ_EVENT_GFX_BUGSY_GEN2]  = &gObjectEventGraphicsInfo_BugsyGen2,
+    [OBJ_EVENT_GFX_BURGLAR_GEN2]  = &gObjectEventGraphicsInfo_BurglarGen2,
+    [OBJ_EVENT_GFX_CAMPER_F_GEN2]  = &gObjectEventGraphicsInfo_CamperFGen2,
+    [OBJ_EVENT_GFX_CAPT_GEN2]  = &gObjectEventGraphicsInfo_CaptGen2,
+    [OBJ_EVENT_GFX_CHANNELER_GEN2]  = &gObjectEventGraphicsInfo_ChannelerGen2,
+    [OBJ_EVENT_GFX_CHUCK_GEN2]  = &gObjectEventGraphicsInfo_ChuckGen2,
+    [OBJ_EVENT_GFX_CLAIR_GEN2]  = &gObjectEventGraphicsInfo_ClairGen2,
+    [OBJ_EVENT_GFX_COOK_GEN2]  = &gObjectEventGraphicsInfo_CookGen2,
+    [OBJ_EVENT_GFX_COOLTRAINER_F_GEN2]  = &gObjectEventGraphicsInfo_CooltrainerFGen2,
+    [OBJ_EVENT_GFX_COOLTRAINER_M_GEN2]  = &gObjectEventGraphicsInfo_CooltrainerMGen2,
+    [OBJ_EVENT_GFX_ELM_GEN2]  = &gObjectEventGraphicsInfo_ElmGen2,
+    [OBJ_EVENT_GFX_ENGINEER_GEN2]  = &gObjectEventGraphicsInfo_EngineerGen2,
+    [OBJ_EVENT_GFX_EUSINE_GEN2]  = &gObjectEventGraphicsInfo_EusineGen2,
+    [OBJ_EVENT_GFX_FALKNER_GEN2]  = &gObjectEventGraphicsInfo_FalknerGen2,
+    [OBJ_EVENT_GFX_FIREBREATHER_GEN2]  = &gObjectEventGraphicsInfo_FirebreatherGen2,
+    [OBJ_EVENT_GFX_FISHERMAN_GEN2]  = &gObjectEventGraphicsInfo_FishermanGen2,
+    [OBJ_EVENT_GFX_GAMEBOY_KID_GEN2]  = &gObjectEventGraphicsInfo_GameboyKidGen2,
+    [OBJ_EVENT_GFX_GENTLEMAN_GEN2]  = &gObjectEventGraphicsInfo_GentlemanGen2,
+    [OBJ_EVENT_GFX_GOLD_GEN2]  = &gObjectEventGraphicsInfo_GoldGen2,
+    [OBJ_EVENT_GFX_GREEN_HAIR_JUGGLER_GEN2]  = &gObjectEventGraphicsInfo_GreenHairJugglerGen2,
+    [OBJ_EVENT_GFX_HIKER_GEN2]  = &gObjectEventGraphicsInfo_HikerGen2,
+    [OBJ_EVENT_GFX_JASMINE_GEN2]  = &gObjectEventGraphicsInfo_JasmineGen2,
+    [OBJ_EVENT_GFX_KAREN_GEN2]  = &gObjectEventGraphicsInfo_KarenGen2,
+    [OBJ_EVENT_GFX_KIMONO_GEN2]  = &gObjectEventGraphicsInfo_KimonoGen2,
+    [OBJ_EVENT_GFX_KOGA_GEN2]  = &gObjectEventGraphicsInfo_KogaGen2,
+    [OBJ_EVENT_GFX_KURT_GEN2]  = &gObjectEventGraphicsInfo_KurtGen2,
+    [OBJ_EVENT_GFX_KURT_LYING_DOWN_GEN2]  = &gObjectEventGraphicsInfo_KurtLyingDownGen2,
+    [OBJ_EVENT_GFX_LANCE_GEN2]  = &gObjectEventGraphicsInfo_LanceGen2,
+    [OBJ_EVENT_GFX_LASS2_GEN2]  = &gObjectEventGraphicsInfo_Lass2Gen2,
+    [OBJ_EVENT_GFX_LITTLE_BOY2_GEN2]  = &gObjectEventGraphicsInfo_LittleBoy2Gen2,
+    [OBJ_EVENT_GFX_LITTLE_GIRL2_GEN2]  = &gObjectEventGraphicsInfo_LittleGirl2Gen2,
+    [OBJ_EVENT_GFX_MAN6_GEN2]  = &gObjectEventGraphicsInfo_Man6Gen2,
+    [OBJ_EVENT_GFX_MART_EMPLOYEE2_GEN2]  = &gObjectEventGraphicsInfo_MartEmployee2Gen2,
+    [OBJ_EVENT_GFX_MAUVILLE_OLD_MAN_1_GEN2]  = &gObjectEventGraphicsInfo_MauvilleOldMan1Gen2,
+    [OBJ_EVENT_GFX_MAUVILLE_OLD_MAN_2_GEN2]  = &gObjectEventGraphicsInfo_MauvilleOldMan2Gen2,
+    [OBJ_EVENT_GFX_MOM_GOLD_GEN2]  = &gObjectEventGraphicsInfo_MomGoldGen2,
+    [OBJ_EVENT_GFX_MORTY_GEN2]  = &gObjectEventGraphicsInfo_MortyGen2,
+    [OBJ_EVENT_GFX_MYSTERY_EVENT_DELIVERYMAN_GEN2]  = &gObjectEventGraphicsInfo_MysteryEventDeliverymanGen2,
+    [OBJ_EVENT_GFX_NURSE_GEN2]  = &gObjectEventGraphicsInfo_NurseGen2,
+    [OBJ_EVENT_GFX_OLD_MAN2_GEN2]  = &gObjectEventGraphicsInfo_OldMan2Gen2,
+    [OBJ_EVENT_GFX_OLD_MAN_2_GEN2]  = &gObjectEventGraphicsInfo_OldMan_2Gen2,
+    [OBJ_EVENT_GFX_OLD_MAN_3_GEN2]  = &gObjectEventGraphicsInfo_OldMan3Gen2,
+    [OBJ_EVENT_GFX_OLD_WOMAN_2_GEN2]  = &gObjectEventGraphicsInfo_OldWoman2Gen2,
+    [OBJ_EVENT_GFX_POLICEMAN_GEN2]  = &gObjectEventGraphicsInfo_PolicemanGen2,
+    [OBJ_EVENT_GFX_PRYCE_GEN2]  = &gObjectEventGraphicsInfo_PryceGen2,
+    [OBJ_EVENT_GFX_PSYCHIC_M_2_GEN2]  = &gObjectEventGraphicsInfo_PsychicM2Gen2,
+    [OBJ_EVENT_GFX_ROCKER_GEN2]  = &gObjectEventGraphicsInfo_RockerGen2,
+    [OBJ_EVENT_GFX_ROOFTOP_SALE_WOMAN2_GEN2]  = &gObjectEventGraphicsInfo_RooftopSaleWoman2Gen2,
+    [OBJ_EVENT_GFX_SAGE_GEN2]  = &gObjectEventGraphicsInfo_SageGen2,
+    [OBJ_EVENT_GFX_SAILOR2_GEN2]  = &gObjectEventGraphicsInfo_Sailor2Gen2,
+    [OBJ_EVENT_GFX_SILVER_GEN2]  = &gObjectEventGraphicsInfo_SilverGen2,
+    [OBJ_EVENT_GFX_SUPER_NERD_GEN2]  = &gObjectEventGraphicsInfo_SuperNerdGen2,
+    [OBJ_EVENT_GFX_SWIMMER_F2_GEN2]  = &gObjectEventGraphicsInfo_SwimmerF2Gen2,
+    [OBJ_EVENT_GFX_SWIMMER_F_LAND_GEN2]  = &gObjectEventGraphicsInfo_SwimmerFLandGen2,
+    [OBJ_EVENT_GFX_SWIMMER_M2_GEN2]  = &gObjectEventGraphicsInfo_SwimmerM2Gen2,
+    [OBJ_EVENT_GFX_SWIMMER_M_LAND_GEN2]  = &gObjectEventGraphicsInfo_SwimmerMLandGen2,
+    [OBJ_EVENT_GFX_TUBER_M_SWIMMING_GEN2]  = &gObjectEventGraphicsInfo_TuberMSwimmingGen2,
+    [OBJ_EVENT_GFX_TWIN2_GEN2]  = &gObjectEventGraphicsInfo_Twin2Gen2,
+    [OBJ_EVENT_GFX_WALKING_GEN2]  = &gObjectEventGraphicsInfo_WalkingGen2,
+    [OBJ_EVENT_GFX_WHITNEY_GEN2]  = &gObjectEventGraphicsInfo_WhitneyGen2,
+    [OBJ_EVENT_GFX_WILL_GEN2]  = &gObjectEventGraphicsInfo_WillGen2,
+    [OBJ_EVENT_GFX_WOMAN_6_GEN2]  = &gObjectEventGraphicsInfo_Woman6Gen2,
+    [OBJ_EVENT_GFX_WORKER_F_GEN2]  = &gObjectEventGraphicsInfo_WorkerFGen2,
+    [OBJ_EVENT_GFX_WORKER_M_GEN2]  = &gObjectEventGraphicsInfo_WorkerMGen2,
+    [OBJ_EVENT_GFX_YOUNGSTER2_GEN2]  = &gObjectEventGraphicsInfo_Youngster2Gen2,
 
     //Sinnoh
 

@@ -1692,3 +1692,157 @@ gText_ShadowPurifyReady::
 
 	.include "data/maps/route10_pokecenter/scripts.inc"
 
+
+	.include "data/maps/VictoryRoadKanto_1F/scripts.inc"
+
+	.include "data/maps/VictoryRoadKanto_B1F/scripts.inc"
+
+	.include "data/maps/VictoryRoadKanto_B2F/scripts.inc"
+
+	.include "data/maps/DarkCave_NorthSide/scripts.inc"
+
+	.include "data/maps/DarkCave_SouthSide/scripts.inc"
+
+	.include "data/maps/SproutTower_1F/scripts.inc"
+
+	.include "data/maps/SproutTower_3F/scripts.inc"
+
+	.include "data/maps/SproutTower_2F/scripts.inc"
+
+	.include "data/maps/RuinsOfAlph_Outside/scripts.inc"
+
+	.include "data/maps/RuinsOfAlph_B1F/scripts.inc"
+
+	.include "data/maps/RuinsOfAlph_PuzzleAndRewardChambers/scripts.inc"
+
+	.include "data/maps/UnionCave_1F/scripts.inc"
+
+	.include "data/maps/UnionCave_B1F/scripts.inc"
+
+	.include "data/maps/UnionCave_B2F/scripts.inc"
+
+	.include "data/maps/SlowpokeWell_B1F/scripts.inc"
+
+	.include "data/maps/SlowpokeWell_B2F/scripts.inc"
+
+	.include "data/maps/IlexForest/scripts.inc"
+
+	.include "data/maps/NationalPark_Normal/scripts.inc"
+
+	.include "data/maps/NationalPark_BugContest/scripts.inc"
+
+	.include "data/maps/BurnedTower_1F/scripts.inc"
+
+	.include "data/maps/BurnedTower_B1F/scripts.inc"
+
+	.include "data/maps/CliffEdgeGate/scripts.inc"
+
+	.include "data/maps/MtMortar_1F_South/scripts.inc"
+
+	.include "data/maps/MtMortar_1F_North/scripts.inc"
+
+	.include "data/maps/MtMortar_B1F/scripts.inc"
+
+	.include "data/maps/MtMortar_2F/scripts.inc"
+
+	.include "data/maps/LakeOfRageLowTide/scripts.inc"
+
+	.include "data/maps/LakeOfRage/scripts.inc"
+
+	.include "data/maps/IcePath_1F/scripts.inc"
+
+	.include "data/maps/IcePath_B2F/scripts.inc"
+
+	.include "data/maps/IcePath_B1F/scripts.inc"
+
+	.include "data/maps/IcePath_B4F/scripts.inc"
+
+	.include "data/maps/IcePath_B3F/scripts.inc"
+
+	.include "data/maps/DragonsDen_Entrance/scripts.inc"
+
+	.include "data/maps/DragonsDen_Cavern/scripts.inc"
+
+	.include "data/maps/DragonsDen_Shrine/scripts.inc"
+
+	.include "data/maps/WhirlIslands_1F/scripts.inc"
+
+	.include "data/maps/WhirlIslands_B1F/scripts.inc"
+
+	.include "data/maps/WhirlIslands_B1F_Inner/scripts.inc"
+
+	.include "data/maps/WhirlIslands_B3F/scripts.inc"
+
+	.include "data/maps/WhirlIslands_B2F/scripts.inc"
+
+	.include "data/maps/WhirlIslands_Descent/scripts.inc"
+
+	.include "data/maps/WhirlIslands_LugiaChamber/scripts.inc"
+
+	.include "data/maps/TinTower_1F/scripts.inc"
+
+	.include "data/maps/TinTower_2F/scripts.inc"
+
+	.include "data/maps/TinTower_4F/scripts.inc"
+
+	.include "data/maps/TinTower_5F/scripts.inc"
+
+	.include "data/maps/TinTower_3F/scripts.inc"
+
+	.include "data/maps/TinTower_6F/scripts.inc"
+
+	.include "data/maps/TinTower_7F/scripts.inc"
+
+	.include "data/maps/TinTower_8F/scripts.inc"
+
+	.include "data/maps/TinTower_9F/scripts.inc"
+
+	.include "data/maps/TinTower_RoofDay/scripts.inc"
+
+	.include "data/maps/TinTower_RoofNight/scripts.inc"
+
+	.include "data/maps/TohjoFalls_Cavern/scripts.inc"
+
+	.include "data/maps/TohjoFalls_GiovanniRoom/scripts.inc"
+
+	.include "data/maps/GoldenrodCity_House1/scripts.inc"
+
+	.include "data/maps/GoldenrodCity_House2/scripts.inc"
+
+	.include "data/maps/GoldenrodCity_House3/scripts.inc"
+
+	.include "data/maps/GoldenrodCity_RadioTower_1F/scripts.inc"
+
+	.include "data/maps/GoldenrodCity_RadioTower_5F/scripts.inc"
+
+	.include "data/maps/GoldenrodCity_DepartmentStore_1F/scripts.inc"
+
+	.include "data/maps/GoldenrodCity_DepartmentStore_7F/scripts.inc"
+
+	.include "data/maps/TrainStation/scripts.inc"
+
+	.include "data/maps/GoldenrodCity_DepartmentStore_7FNight/scripts.inc"
+
+	.include "data/maps/GoldenrodCity_GameCorner/scripts.inc"
+
+	.include "data/maps/GoldenrodCity_BikeShop/scripts.inc"
+
+	.include "data/maps/GoldenrodCity_RadioTower_3F/scripts.inc"
+
+	.include "data/maps/GoldenrodCity_DepartmentStore_6F/scripts.inc"
+
+	.include "data/maps/GoldenrodCity_DepartmentStore_5F/scripts.inc"
+
+	.include "data/maps/GoldenrodCity_DepartmentStore_3F/scripts.inc"
+
+	.include "data/maps/GoldenrodCity_RadioTower_2F/scripts.inc"
+
+	.include "data/maps/GoldenrodCity_BillsHouse/scripts.inc"
+
+	.include "data/maps/GoldenrodCity_DepartmentStore_2F/scripts.inc"
+
+	.include "data/maps/GoldenrodCity_DepartmentStoreElevator/scripts.inc"
+
+	.include "data/maps/GoldenrodCity_RadioTower_4F/scripts.inc"
+
+	.include "data/maps/GoldenrodCity_DepartmentStore_4F/scripts.inc"

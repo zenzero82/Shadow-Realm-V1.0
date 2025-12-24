@@ -12,7 +12,7 @@ Pallet_Town_Western_Forest_EventScript_Intro::
     goto_if_eq Pallet_Town_Western_Forest_Intro_Done
 
     setflag FLAG_WEST_FOREST_INTRO_DONE
-	setflag FLAG_HIDE_OAKS_LAB_LEO
+    setflag FLAG_HIDE_OAKS_LAB_LEO
     lock
     faceplayer
 
@@ -58,31 +58,46 @@ Pallet_Town_Western_Forest_Text_Player_IntroThought2:
     .string "Well... I guess I can go ask around\n"
     .string "to see if anyone knows anything.$"
 
+
 @ ================================
 @ WEST FOREST – BADGE TEST NPC
 @ ================================
 @ Attach this script to an NPC in Porymap:
 @   Script: WestForest_EventScript_BadgeTester
 @
-@ It will give:
+@ Gives once:
 @   - Hoenn Badge 1  -> FLAG_BADGE01_GET
 @   - Kanto Badge 1  -> FLAG_BADGE09_GET
-@ and only run once, tracked by FLAG_WEST_FOREST_BADGE_TEST_DONE.
+@   - PokéNav unlock -> FLAG_SYS_POKENAV_GET (and friends)
+@ Tracked by:
+@   FLAG_WEST_FOREST_BADGE_TEST_DONE
 
 WestForest_EventScript_BadgeTester::
     lock
     faceplayer
 
-    @ If we've already done the test, just say a short line.
-   
-    @ First time: explain and give badges.
     msgbox WestForest_Text_BadgeTester_Intro, MSGBOX_DEFAULT
     closemessage
 
-    @ Give Hoenn Badge 1 (Stone Badge in most setups)
+    @ Hoenn Badge 1
+    setflag FLAG_BADGE01_GET
+	setflag FLAG_BADGE02_GET
+	setflag FLAG_BADGE03_GET
+	setflag FLAG_BADGE04_GET
+	setflag FLAG_BADGE05_GET
+	setflag FLAG_BADGE06_GET
+    setflag FLAG_BADGE07_GET
+    setflag FLAG_BADGE08_GET
 
-    @ Give Kanto Badge 1 (Boulder Badge – HNS uses FLAG_BADGE09_GET)
+
+    @ Kanto Badge 1
     setflag FLAG_BADGE09_GET
+	setflag FLAG_RECEIVED_HM_FLY 
+    giveitem ITEM_HM02
+
+    @ PokéNav
+	setflag FLAG_SYS_POKENAV_GET
+    setflag FLAG_RECEIVED_POKENAV
 
     msgbox WestForest_Text_BadgeTester_Given, MSGBOX_DEFAULT
     closemessage
@@ -102,18 +117,82 @@ WestForest_Text_BadgeTester_Intro:
     .string "Hey there.\p"
     .string "I'm helping the LEAGUE test how\n"
     .string "BADGES show up on TRAINER CARDS.\p"
-    .string "Here, I'll register the first HOENN\n"
-    .string "BADGE and the first KANTO BADGE for\n"
-    .string "you as a special test.$"
+    .string "I'll also register your POKENAV so\n"
+    .string "you can check things easier.\p"
+    .string "Ready?$"
 
 WestForest_Text_BadgeTester_Given:
-    .string "There.\p"
+    .string "Done.\p"
     .string "Your TRAINER CARD should now show one\n"
     .string "badge from HOENN and one from KANTO.\p"
-    .string "Try flipping between regions and see\n"
-    .string "how it looks.$"
+    .string "And your POKENAV is now active.\p"
+    .string "Try flipping between regions to test\n"
+    .string "the badge display.$"
 
 WestForest_Text_BadgeTester_After:
-    .string "Your BADGE data is already registered.\p"
-    .string "Check your TRAINER CARD if you want to\n"
-    .string "see how the regions rotate.$"
+    .string "Your BADGE data and POKENAV are already\n"
+    .string "registered.\p"
+    .string "Check your TRAINER CARD to see how the\n"
+    .string "regions rotate.$"
+
+
+@ ================================
+@ WEST FOREST – PORTAL WARP (TEMP)
+@ ================================
+@ Attach this script to your portal object in Porymap:
+@   Script: Pallet_Town_Western_Forest_EventScript_Portal_ToNewBark
+
+Pallet_Town_Western_Forest_EventScript_Portal_ToNewBark::
+    lock
+    faceplayer
+    msgbox Pallet_Town_Western_Forest_Text_PortalAsk, MSGBOX_YESNO
+    goto_if_eq VAR_RESULT, FALSE, Pallet_Town_Western_Forest_PortalNo
+
+    closemessage
+    fadescreenswapbuffers FADE_TO_BLACK
+
+    @ REPLACE THIS with the real MAP_* constant you find in maps.h
+    warp MAP_NEW_BARK_TOWN, WARP_ID_NONE, 21, 17
+
+    waitstate
+    end
+
+Pallet_Town_Western_Forest_PortalNo::
+    closemessage
+    release
+    end
+
+Pallet_Town_Western_Forest_Text_PortalAsk:
+    .string "The portal is humming...\p"
+    .string "Warp to NEW BARK TOWN?$"
+
+@ ================================
+@ WEST FOREST – PORTAL WARP (HOENN)
+@ ================================
+@ Attach this script to your 2nd portal object in Porymap:
+@   Script: Pallet_Town_Western_Forest_EventScript_Portal_ToLittleroot
+
+Pallet_Town_Western_Forest_EventScript_Portal_ToLittleroot::
+    lock
+    faceplayer
+    msgbox Pallet_Town_Western_Forest_Text_PortalAsk_Littleroot, MSGBOX_YESNO
+    goto_if_eq VAR_RESULT, FALSE, Pallet_Town_Western_Forest_PortalNo_Littleroot
+
+    closemessage
+    fadescreenswapbuffers FADE_TO_BLACK
+
+    @ Warp to Littleroot Town (Hoenn) at (11, 15)
+    @ If MAP_LITTLEROOT_TOWN isn't your constant name, swap it to your maps.h name.
+    warp MAP_LITTLEROOT_TOWN, WARP_ID_NONE, 11, 15
+
+    waitstate
+    end
+
+Pallet_Town_Western_Forest_PortalNo_Littleroot::
+    closemessage
+    release
+    end
+
+Pallet_Town_Western_Forest_Text_PortalAsk_Littleroot:
+    .string "The portal feels different...\p"
+    .string "Warp to LITTLEROOT TOWN?$"

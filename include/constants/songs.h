@@ -417,27 +417,27 @@
 // FRLG Music
 #define MUS_RG_FOLLOW_ME            484 // MUS_RG_ANNAI
 #define MUS_RG_GAME_CORNER          485 // MUS_RG_SLOT
-#define MUS_RG_ROCKET_HIDEOUT       486 // MUS_RG_AJITO
+#define MUS_HG_TEAM_ROCKET_HQ       486 // MUS_RG_AJITO
 #define MUS_RG_GYM                  487 // MUS_RG_GYM
 #define MUS_RG_JIGGLYPUFF           488 // MUS_RG_PURIN
 #define MUS_RG_INTRO_FIGHT          489 // MUS_RG_DEMO
 #define MUS_RG_TITLE                490 // MUS_RG_TITLE
-#define MUS_RG_CINNABAR             491 // MUS_RG_GUREN
-#define MUS_RG_LAVENDER             492 // MUS_RG_SHION
+#define MUS_HG_CINNABAR             491 // MUS_RG_GUREN
+#define MUS_HG_LAVENDER             492 // MUS_RG_SHION
 #define MUS_RG_HEAL                 493 // MUS_RG_KAIHUKU
 #define MUS_RG_CYCLING              494 // MUS_RG_CYCLING
-#define MUS_RG_ENCOUNTER_ROCKET     495 // MUS_RG_ROCKET
+#define MUS_HG_ENCOUNTER_ROCKET     495 // MUS_RG_ROCKET
 #define MUS_RG_ENCOUNTER_GIRL       496 // MUS_RG_SHOUJO
 #define MUS_RG_ENCOUNTER_BOY        497 // MUS_RG_SHOUNEN
 #define MUS_RG_HALL_OF_FAME         498 // MUS_RG_DENDOU
-#define MUS_RG_VIRIDIAN_FOREST      499 // MUS_RG_T_MORI
-#define MUS_RG_MT_MOON              500 // MUS_RG_OTSUKIMI
+#define MUS_HG_VIRIDIAN_FOREST      499 // MUS_RG_T_MORI
+#define MUS_HG_MT_MOON_SQUARE       500 // MUS_RG_OTSUKIMI
 #define MUS_RG_POKE_MANSION         501 // MUS_RG_POKEYASHI
 #define MUS_RG_CREDITS              502 // MUS_RG_ENDING
-#define MUS_RG_ROUTE1               503 // MUS_RG_LOAD01
-#define MUS_RG_ROUTE24              504 // MUS_RG_OPENING
-#define MUS_RG_ROUTE3               505 // MUS_RG_LOAD02
-#define MUS_RG_ROUTE11              506 // MUS_RG_LOAD03
+#define MUS_HG_ROUTE1               503 // MUS_RG_LOAD01
+#define MUS_HG_ROUTE24              504 // MUS_RG_OPENING
+#define MUS_HG_ROUTE3               505 // MUS_RG_LOAD02
+#define MUS_HG_ROUTE11              506 // MUS_RG_LOAD03
 #define MUS_RG_VICTORY_ROAD         507 // MUS_RG_CHAMP_R
 #define MUS_RG_VS_GYM_LEADER        508 // MUS_RG_VS_GYM
 #define MUS_RG_VS_TRAINER           509 // MUS_RG_VS_TORE
@@ -445,19 +445,19 @@
 #define MUS_RG_VS_CHAMPION          511 // MUS_RG_VS_LAST
 #define MUS_HG_PALLET               512 // MUS_RG_MASARA
 #define MUS_RG_OAK_LAB              513 // MUS_RG_KENKYU
-#define MUS_RG_OAK                  514 // MUS_RG_OHKIDO
+#define MUS_HG_OAK                  514 // MUS_RG_OHKIDO
 #define MUS_RG_POKE_CENTER          515 // MUS_RG_POKECEN
 #define MUS_RG_SS_ANNE              516 // MUS_RG_SANTOAN
 #define MUS_RG_SURF                 517 // MUS_RG_NAMINORI
 #define MUS_RG_POKE_TOWER           518 // MUS_RG_P_TOWER
-#define MUS_RG_SILPH                519 // MUS_RG_SHIRUHU
-#define MUS_RG_FUCHSIA              520 // MUS_RG_HANADA
-#define MUS_RG_CELADON              521 // MUS_RG_TAMAMUSI
+#define MUS_HG_SILPH                519 // MUS_RG_SHIRUHU
+#define MUS_HG_CERULEAN              520 // MUS_RG_HANADA
+#define MUS_HG_CELADON              521 // MUS_RG_TAMAMUSI
 #define MUS_RG_VICTORY_TRAINER      522 // MUS_RG_WIN_TRE       // Identical to MUS_VICTORY_TRAINER.
 #define MUS_RG_VICTORY_WILD         523 // MUS_RG_WIN_YASEI     // Identical to MUS_VICTORY_WILD.
 #define MUS_RG_VICTORY_GYM_LEADER   524 // MUS_RG_WIN_GYM       // Identical to MUS_VICTORY_GYM_LEADER.
-#define MUS_RG_VERMILLION           525 // MUS_RG_KUCHIBA
-#define MUS_RG_PEWTER               526 // MUS_RG_NIBI
+#define MUS_HG_VERMILLION           525 // MUS_RG_KUCHIBA
+#define MUS_HG_PEWTER               526 // MUS_RG_NIBI
 #define MUS_RG_ENCOUNTER_RIVAL      527 // MUS_RG_RIVAL1
 #define MUS_RG_RIVAL_EXIT           528 // MUS_RG_RIVAL2
 #define MUS_RG_DEX_RATING           529 // MUS_RG_FAN2
@@ -488,15 +488,32 @@
 #define MUS_RG_ENCOUNTER_GYM_LEADER 554 // MUS_RG_EXEYE
 #define MUS_RG_ENCOUNTER_DEOXYS     555 // MUS_RG_DEOEYE
 #define MUS_RG_TRAINER_TOWER        556 // MUS_RG_T_TOWER
-#define MUS_RG_SLOW_PALLET          557 // MUS_RG_SLOWMASARA
+#define MUS_HG_ROUTE26              557 // MUS_RG_SLOWMASARA
 #define MUS_RG_TEACHY_TV_MENU       558 // MUS_RG_TVNOIZE
-//oree
-#define MUS_CIPHER_PEON_BATTLE      610  // or whatever ID you picked
+// new
+#define MUS_CIPHER_PEON_BATTLE      610
 #define MUS_NEWSORRE                611
 #define MUS_MIRRORB                 612
 #define MUS_ORRETRAINER             613
 
-#define END_MUS                     MUS_ORRETRAINER
+// HeartGold Johto overworld themes
+#define MUS_HG_NEW_BARK             614  // mus_hg_new_bark.mid
+#define MUS_HG_CHERRYGROVE          615  // mus_hg_cherrygrove.mid
+#define MUS_HG_VIOLET               616  // mus_hg_violet.mid
+#define MUS_HG_AZALEA               617  // mus_hg_azalea.mid
+#define MUS_HG_GOLDENROD            618  // mus_hg_goldenrod.mid
+#define MUS_HG_ECRUTEAK             619  // mus_hg_ecruteak.mid
+#define MUS_HG_CIANWOOD             620  // mus_hg_cianwood.mid
+
+#define MUS_HG_ROUTE29              621  // mus_hg_route29.mid
+#define MUS_HG_ROUTE30              622  // mus_hg_route30.mid
+#define MUS_HG_ROUTE34              623  // mus_hg_route34.mid
+#define MUS_HG_ROUTE38              624  // mus_hg_route38.mid
+#define MUS_HG_ROUTE42              625  // mus_hg_route42.mid
+#define MUS_HG_ROUTE47              626  // mus_hg_route42.mid
+
+
+#define END_MUS                     MUS_HG_ROUTE47
 
 // These PH_* constants are phoneme sounds used by the "bard" NPC (see src/bard_music.c and src/mauville_old_man.c).
 // Each comes in a triplet of PH_*_BLEND, PH_*_HELD, and PH_*_SOLO, and the name of each triplet incorporates the English phonetic sound it represents.

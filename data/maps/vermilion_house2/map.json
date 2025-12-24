@@ -2,7 +2,7 @@
   "id": "MAP_VERMILION_HOUSE2",
   "name": "vermilion_house2",
   "layout": "LAYOUT_VIRIDIAN_HOUSE1",
-  "music": "MUS_DUMMY",
+  "music": "MUS_HG_VERMILLION",
   "region_map_section": "MAPSEC_VERMILION_CITY",
   "requires_flash": false,
   "weather": "WEATHER_NONE",

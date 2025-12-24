@@ -2,7 +2,7 @@
   "id": "MAP_FUCHSIA_HOUSE1",
   "name": "fuchsia_house1",
   "layout": "LAYOUT_VIRIDIAN_HOUSE2",
-  "music": "MUS_DUMMY",
+  "music": "MUS_HG_CERULEAN",
   "region_map_section": "MAPSEC_FUCHSIA_CITY",
   "requires_flash": false,
   "weather": "WEATHER_NONE",

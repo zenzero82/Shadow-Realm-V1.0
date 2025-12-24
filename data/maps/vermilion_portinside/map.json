@@ -2,7 +2,7 @@
   "id": "MAP_VERMILION_PORTINSIDE",
   "name": "vermilion_portinside",
   "layout": "LAYOUT_VERMILION_PORTINSIDE",
-  "music": "MUS_DUMMY",
+  "music": "MUS_HG_VERMILLION",
   "region_map_section": "MAPSEC_VERMILION_CITY",
   "requires_flash": false,
   "weather": "WEATHER_NONE",

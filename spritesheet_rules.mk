@@ -4988,7 +4988,264 @@ $(OBJEVENTGFXDIR)/gen1/james.4bpp: graphics/object_events/pics/gen1/james.png
 $(OBJEVENTGFXDIR)/gen1/meowth.4bpp: graphics/object_events/pics/gen1/meowth.png
 	$(GFX) $< $@ -mwidth 2 -mheight 4
 
+$(OBJEVENTGFXDIR)/gen1/archer.4bpp: graphics/object_events/pics/gen1/archer.png
+	$(GFX) $< $@ -mwidth 2 -mheight 4
+
+$(OBJEVENTGFXDIR)/gen1/ariana.4bpp: graphics/object_events/pics/gen1/ariana.png
+	$(GFX) $< $@ -mwidth 2 -mheight 4
+
+$(OBJEVENTGFXDIR)/gen1/bill.4bpp: graphics/object_events/pics/gen1/bill.png
+	$(GFX) $< $@ -mwidth 2 -mheight 4
+
+$(OBJEVENTGFXDIR)/gen1/blaine.4bpp: graphics/object_events/pics/gen1/blaine.png
+	$(GFX) $< $@ -mwidth 2 -mheight 4
+
+$(OBJEVENTGFXDIR)/gen1/erika.4bpp: graphics/object_events/pics/gen1/erika.png
+	$(GFX) $< $@ -mwidth 2 -mheight 4
+
+$(OBJEVENTGFXDIR)/gen1/janine.4bpp: graphics/object_events/pics/gen1/janine.png
+	$(GFX) $< $@ -mwidth 2 -mheight 4
+
+$(OBJEVENTGFXDIR)/gen1/prof_oak.4bpp: graphics/object_events/pics/gen1/prof_oak.png
+	$(GFX) $< $@ -mwidth 2 -mheight 4
+
+$(OBJEVENTGFXDIR)/gen1/proton.4bpp: graphics/object_events/pics/gen1/proton.png
+	$(GFX) $< $@ -mwidth 2 -mheight 4
+
+$(OBJEVENTGFXDIR)/gen1/sabrina.4bpp: graphics/object_events/pics/gen1/sabrina.png
+	$(GFX) $< $@ -mwidth 2 -mheight 4
+
+$(OBJEVENTGFXDIR)/gen1/surge.4bpp: graphics/object_events/pics/gen1/surge.png
+	$(GFX) $< $@ -mwidth 2 -mheight 4
+
 #Johto
+$(OBJEVENTGFXDIR)/gen2/artist_gen2.4bpp: graphics/object_events/pics/gen2/artist_gen2.png
+	$(GFX) $< $@ -mwidth 2 -mheight 4
+
+$(OBJEVENTGFXDIR)/gen2/attendant_f.4bpp: graphics/object_events/pics/gen2/attendant_f.png
+	$(GFX) $< $@ -mwidth 2 -mheight 4
+
+$(OBJEVENTGFXDIR)/gen2/attendant_m.4bpp: graphics/object_events/pics/gen2/attendant_m.png
+	$(GFX) $< $@ -mwidth 2 -mheight 4
+
+$(OBJEVENTGFXDIR)/gen2/balding_man.4bpp: graphics/object_events/pics/gen2/balding_man.png
+	$(GFX) $< $@ -mwidth 2 -mheight 4
+
+$(OBJEVENTGFXDIR)/gen2/battle_girl.4bpp: graphics/object_events/pics/gen2/battle_girl.png
+	$(GFX) $< $@ -mwidth 2 -mheight 4
+
+$(OBJEVENTGFXDIR)/gen2/battle_tower_trainer_dude.4bpp: graphics/object_events/pics/gen2/battle_tower_trainer_dude.png
+	$(GFX) $< $@ -mwidth 2 -mheight 4
+
+$(OBJEVENTGFXDIR)/gen2/biker.4bpp: graphics/object_events/pics/gen2/biker.png
+	$(GFX) $< $@ -mwidth 2 -mheight 4
+
+$(OBJEVENTGFXDIR)/gen2/black_belt_gen2.4bpp: graphics/object_events/pics/gen2/black_belt_gen2.png
+	$(GFX) $< $@ -mwidth 2 -mheight 4
+
+$(OBJEVENTGFXDIR)/gen2/boy_2_gen2.4bpp: graphics/object_events/pics/gen2/boy_2_gen2.png
+	$(GFX) $< $@ -mwidth 2 -mheight 4
+
+$(OBJEVENTGFXDIR)/gen2/bruno.4bpp: graphics/object_events/pics/gen2/bruno.png
+	$(GFX) $< $@ -mwidth 2 -mheight 4
+
+$(OBJEVENTGFXDIR)/gen2/bug_catcher_gen2.4bpp: graphics/object_events/pics/gen2/bug_catcher_gen2.png
+	$(GFX) $< $@ -mwidth 2 -mheight 4
+
+$(OBJEVENTGFXDIR)/gen2/bugsy.4bpp: graphics/object_events/pics/gen2/bugsy.png
+	$(GFX) $< $@ -mwidth 2 -mheight 4
+
+$(OBJEVENTGFXDIR)/gen2/burglar.4bpp: graphics/object_events/pics/gen2/burglar.png
+	$(GFX) $< $@ -mwidth 2 -mheight 4
+
+$(OBJEVENTGFXDIR)/gen2/camper_f.4bpp: graphics/object_events/pics/gen2/camper_f.png
+	$(GFX) $< $@ -mwidth 2 -mheight 4
+
+$(OBJEVENTGFXDIR)/gen2/capt.4bpp: graphics/object_events/pics/gen2/capt.png
+	$(GFX) $< $@ -mwidth 2 -mheight 4
+
+$(OBJEVENTGFXDIR)/gen2/channeler.4bpp: graphics/object_events/pics/gen2/channeler.png
+	$(GFX) $< $@ -mwidth 2 -mheight 4
+
+$(OBJEVENTGFXDIR)/gen2/chuck.4bpp: graphics/object_events/pics/gen2/chuck.png
+	$(GFX) $< $@ -mwidth 2 -mheight 4
+
+$(OBJEVENTGFXDIR)/gen2/clair.4bpp: graphics/object_events/pics/gen2/clair.png
+	$(GFX) $< $@ -mwidth 2 -mheight 4
+
+$(OBJEVENTGFXDIR)/gen2/cook_gen2.4bpp: graphics/object_events/pics/gen2/cook_gen2.png
+	$(GFX) $< $@ -mwidth 2 -mheight 4
+
+$(OBJEVENTGFXDIR)/gen2/cooltrainer_f.4bpp: graphics/object_events/pics/gen2/cooltrainer_f.png
+	$(GFX) $< $@ -mwidth 2 -mheight 4
+
+$(OBJEVENTGFXDIR)/gen2/cooltrainer_m.4bpp: graphics/object_events/pics/gen2/cooltrainer_m.png
+	$(GFX) $< $@ -mwidth 2 -mheight 4
+
+$(OBJEVENTGFXDIR)/gen2/elm.4bpp: graphics/object_events/pics/gen2/elm.png
+	$(GFX) $< $@ -mwidth 2 -mheight 4
+
+$(OBJEVENTGFXDIR)/gen2/engineer.4bpp: graphics/object_events/pics/gen2/engineer.png
+	$(GFX) $< $@ -mwidth 2 -mheight 4
+
+$(OBJEVENTGFXDIR)/gen2/eusine.4bpp: graphics/object_events/pics/gen2/eusine.png
+	$(GFX) $< $@ -mwidth 2 -mheight 4
+
+$(OBJEVENTGFXDIR)/gen2/falkner.4bpp: graphics/object_events/pics/gen2/falkner.png
+	$(GFX) $< $@ -mwidth 2 -mheight 4
+
+$(OBJEVENTGFXDIR)/gen2/firebreather.4bpp: graphics/object_events/pics/gen2/firebreather.png
+	$(GFX) $< $@ -mwidth 2 -mheight 4
+
+$(OBJEVENTGFXDIR)/gen2/fisherman_gen2.4bpp: graphics/object_events/pics/gen2/fisherman_gen2.png
+	$(GFX) $< $@ -mwidth 2 -mheight 4
+
+$(OBJEVENTGFXDIR)/gen2/gameboy_kid_gen2.4bpp: graphics/object_events/pics/gen2/gameboy_kid_gen2.png
+	$(GFX) $< $@ -mwidth 2 -mheight 4
+
+$(OBJEVENTGFXDIR)/gen2/gentleman_gen2.4bpp: graphics/object_events/pics/gen2/gentleman_gen2.png
+	$(GFX) $< $@ -mwidth 2 -mheight 4
+
+$(OBJEVENTGFXDIR)/gen2/gold.4bpp: graphics/object_events/pics/gen2/gold.png
+	$(GFX) $< $@ -mwidth 2 -mheight 4
+
+$(OBJEVENTGFXDIR)/gen2/green_hair_juggler.4bpp: graphics/object_events/pics/gen2/green_hair_juggler.png
+	$(GFX) $< $@ -mwidth 2 -mheight 4
+
+$(OBJEVENTGFXDIR)/gen2/hiker_gen2.4bpp: graphics/object_events/pics/gen2/hiker_gen2.png
+	$(GFX) $< $@ -mwidth 2 -mheight 4
+
+$(OBJEVENTGFXDIR)/gen2/jasmine.4bpp: graphics/object_events/pics/gen2/jasmine.png
+	$(GFX) $< $@ -mwidth 2 -mheight 4
+
+$(OBJEVENTGFXDIR)/gen2/karen.4bpp: graphics/object_events/pics/gen2/karen.png
+	$(GFX) $< $@ -mwidth 2 -mheight 4
+
+$(OBJEVENTGFXDIR)/gen2/kimono.4bpp: graphics/object_events/pics/gen2/kimono.png
+	$(GFX) $< $@ -mwidth 2 -mheight 4
+
+$(OBJEVENTGFXDIR)/gen2/koga.4bpp: graphics/object_events/pics/gen2/koga.png
+	$(GFX) $< $@ -mwidth 2 -mheight 4
+
+$(OBJEVENTGFXDIR)/gen2/kurt.4bpp: graphics/object_events/pics/gen2/kurt.png
+	$(GFX) $< $@ -mwidth 2 -mheight 4
+
+$(OBJEVENTGFXDIR)/gen2/kurt_lying_down.4bpp: graphics/object_events/pics/gen2/kurt_lying_down.png
+	$(GFX) $< $@ -mwidth 4 -mheight 4
+
+$(OBJEVENTGFXDIR)/gen2/lance.4bpp: graphics/object_events/pics/gen2/lance.png
+	$(GFX) $< $@ -mwidth 2 -mheight 4
+
+$(OBJEVENTGFXDIR)/gen2/lass2.4bpp: graphics/object_events/pics/gen2/lass2.png
+	$(GFX) $< $@ -mwidth 2 -mheight 4
+
+$(OBJEVENTGFXDIR)/gen2/little_boy2.4bpp: graphics/object_events/pics/gen2/little_boy2.png
+	$(GFX) $< $@ -mwidth 2 -mheight 4
+
+$(OBJEVENTGFXDIR)/gen2/little_girl2.4bpp: graphics/object_events/pics/gen2/little_girl2.png
+	$(GFX) $< $@ -mwidth 2 -mheight 2
+
+$(OBJEVENTGFXDIR)/gen2/man6.4bpp: graphics/object_events/pics/gen2/man6.png
+	$(GFX) $< $@ -mwidth 2 -mheight 4
+
+$(OBJEVENTGFXDIR)/gen2/mart_employee2.4bpp: graphics/object_events/pics/gen2/mart_employee2.png
+	$(GFX) $< $@ -mwidth 2 -mheight 4
+
+$(OBJEVENTGFXDIR)/gen2/mauville_old_man_1.4bpp: graphics/object_events/pics/gen2/mauville_old_man_1.png
+	$(GFX) $< $@ -mwidth 2 -mheight 4
+
+$(OBJEVENTGFXDIR)/gen2/mauville_old_man_2.4bpp: graphics/object_events/pics/gen2/mauville_old_man_2.png
+	$(GFX) $< $@ -mwidth 2 -mheight 4
+
+$(OBJEVENTGFXDIR)/gen2/mom_gold.4bpp: graphics/object_events/pics/gen2/mom_gold.png
+	$(GFX) $< $@ -mwidth 2 -mheight 4
+
+$(OBJEVENTGFXDIR)/gen2/morty.4bpp: graphics/object_events/pics/gen2/morty.png
+	$(GFX) $< $@ -mwidth 2 -mheight 4
+
+$(OBJEVENTGFXDIR)/gen2/mystery_event_deliveryman_gen2.4bpp: graphics/object_events/pics/gen2/mystery_event_deliveryman_gen2.png
+	$(GFX) $< $@ -mwidth 2 -mheight 4
+
+$(OBJEVENTGFXDIR)/gen2/nurse.4bpp: graphics/object_events/pics/gen2/nurse.png
+	$(GFX) $< $@ -mwidth 2 -mheight 4
+
+$(OBJEVENTGFXDIR)/gen2/old_man2.4bpp: graphics/object_events/pics/gen2/old_man2.png
+	$(GFX) $< $@ -mwidth 2 -mheight 4
+
+$(OBJEVENTGFXDIR)/gen2/old_man_2.4bpp: graphics/object_events/pics/gen2/old_man_2.png
+	$(GFX) $< $@ -mwidth 2 -mheight 4
+
+$(OBJEVENTGFXDIR)/gen2/old_man_3.4bpp: graphics/object_events/pics/gen2/old_man_3.png
+	$(GFX) $< $@ -mwidth 2 -mheight 4
+
+$(OBJEVENTGFXDIR)/gen2/old_woman_2.4bpp: graphics/object_events/pics/gen2/old_woman_2.png
+	$(GFX) $< $@ -mwidth 2 -mheight 4
+
+$(OBJEVENTGFXDIR)/gen2/policeman.4bpp: graphics/object_events/pics/gen2/policeman.png
+	$(GFX) $< $@ -mwidth 2 -mheight 4
+
+$(OBJEVENTGFXDIR)/gen2/pryce.4bpp: graphics/object_events/pics/gen2/pryce.png
+	$(GFX) $< $@ -mwidth 2 -mheight 4
+
+$(OBJEVENTGFXDIR)/gen2/psychic_m_2.4bpp: graphics/object_events/pics/gen2/psychic_m_2.png
+	$(GFX) $< $@ -mwidth 2 -mheight 4
+
+$(OBJEVENTGFXDIR)/gen2/rocker.4bpp: graphics/object_events/pics/gen2/rocker.png
+	$(GFX) $< $@ -mwidth 2 -mheight 4
+
+$(OBJEVENTGFXDIR)/gen2/rooftop_sale_woman2.4bpp: graphics/object_events/pics/gen2/rooftop_sale_woman2.png
+	$(GFX) $< $@ -mwidth 2 -mheight 4
+
+$(OBJEVENTGFXDIR)/gen2/sage.4bpp: graphics/object_events/pics/gen2/sage.png
+	$(GFX) $< $@ -mwidth 2 -mheight 4
+
+$(OBJEVENTGFXDIR)/gen2/sailor2.4bpp: graphics/object_events/pics/gen2/sailor2.png
+	$(GFX) $< $@ -mwidth 2 -mheight 4
+
+$(OBJEVENTGFXDIR)/gen2/silver.4bpp: graphics/object_events/pics/gen2/silver.png
+	$(GFX) $< $@ -mwidth 2 -mheight 4
+
+$(OBJEVENTGFXDIR)/gen2/super_nerd.4bpp: graphics/object_events/pics/gen2/super_nerd.png
+	$(GFX) $< $@ -mwidth 2 -mheight 4
+
+$(OBJEVENTGFXDIR)/gen2/swimmer_f2.4bpp: graphics/object_events/pics/gen2/swimmer_f2.png
+	$(GFX) $< $@ -mwidth 2 -mheight 4
+
+$(OBJEVENTGFXDIR)/gen2/swimmer_f_land.4bpp: graphics/object_events/pics/gen2/swimmer_f_land.png
+	$(GFX) $< $@ -mwidth 2 -mheight 4
+
+$(OBJEVENTGFXDIR)/gen2/swimmer_m2.4bpp: graphics/object_events/pics/gen2/swimmer_m2.png
+	$(GFX) $< $@ -mwidth 2 -mheight 4
+
+$(OBJEVENTGFXDIR)/gen2/swimmer_m_land.4bpp: graphics/object_events/pics/gen2/swimmer_m_land.png
+	$(GFX) $< $@ -mwidth 2 -mheight 4
+
+$(OBJEVENTGFXDIR)/gen2/tuber_m_swimming.4bpp: graphics/object_events/pics/gen2/tuber_m_swimming.png
+	$(GFX) $< $@ -mwidth 2 -mheight 2
+
+$(OBJEVENTGFXDIR)/gen2/twin2.4bpp: graphics/object_events/pics/gen2/twin2.png
+	$(GFX) $< $@ -mwidth 2 -mheight 4
+
+$(OBJEVENTGFXDIR)/gen2/walking.4bpp: graphics/object_events/pics/gen2/walking.png
+	$(GFX) $< $@ -mwidth 2 -mheight 4
+
+$(OBJEVENTGFXDIR)/gen2/whitney.4bpp: graphics/object_events/pics/gen2/whitney.png
+	$(GFX) $< $@ -mwidth 2 -mheight 4
+
+$(OBJEVENTGFXDIR)/gen2/will.4bpp: graphics/object_events/pics/gen2/will.png
+	$(GFX) $< $@ -mwidth 2 -mheight 4
+
+$(OBJEVENTGFXDIR)/gen2/woman_6.4bpp: graphics/object_events/pics/gen2/woman_6.png
+	$(GFX) $< $@ -mwidth 2 -mheight 4
+
+$(OBJEVENTGFXDIR)/gen2/worker_f.4bpp: graphics/object_events/pics/gen2/worker_f.png
+	$(GFX) $< $@ -mwidth 2 -mheight 4
+
+$(OBJEVENTGFXDIR)/gen2/worker_m.4bpp: graphics/object_events/pics/gen2/worker_m.png
+	$(GFX) $< $@ -mwidth 2 -mheight 4
+
+$(OBJEVENTGFXDIR)/gen2/youngster2.4bpp: graphics/object_events/pics/gen2/youngster2.png
+	$(GFX) $< $@ -mwidth 2 -mheight 4
 
 #Sinnoh
 

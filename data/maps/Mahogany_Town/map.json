@@ -2,7 +2,7 @@
   "id": "MAP_MAHOGANY_TOWN",
   "name": "Mahogany_Town",
   "layout": "LAYOUT_MAHOGANY_TOWN",
-  "music": "MUS_DUMMY",
+  "music": "MUS_HG_CHERRYGROVE",
   "region_map_section": "MAPSEC_MAHOGANY_TOWN",
   "requires_flash": false,
   "weather": "WEATHER_NONE",
@@ -12,9 +12,86 @@
   "allow_running": true,
   "show_map_name": true,
   "battle_scene": "MAP_BATTLE_SCENE_NORMAL",
-  "connections": null,
+  "connections": [
+    {
+      "map": "MAP_ROUTE42",
+      "offset": 1,
+      "direction": "left"
+    },
+    {
+      "map": "MAP_ROUTE43",
+      "offset": 2,
+      "direction": "up"
+    },
+    {
+      "map": "MAP_ROUTE44",
+      "offset": -2,
+      "direction": "right"
+    }
+  ],
   "object_events": [],
-  "warp_events": [],
+  "warp_events": [
+    {
+      "x": 21,
+      "y": 19,
+      "elevation": 0,
+      "dest_map": "MAP_MAHOGANY_TOWN",
+      "dest_warp_id": "0"
+    },
+    {
+      "x": 10,
+      "y": 19,
+      "elevation": 0,
+      "dest_map": "MAP_MAHOGANY_TOWN",
+      "dest_warp_id": "0"
+    },
+    {
+      "x": 15,
+      "y": 10,
+      "elevation": 0,
+      "dest_map": "MAP_MAHOGANY_TOWN",
+      "dest_warp_id": "0"
+    },
+    {
+      "x": 27,
+      "y": 10,
+      "elevation": 0,
+      "dest_map": "MAP_MAHOGANY_TOWN",
+      "dest_warp_id": "0"
+    },
+    {
+      "x": 14,
+      "y": 4,
+      "elevation": 0,
+      "dest_map": "MAP_MAHOGANY_TOWN",
+      "dest_warp_id": "0"
+    }
+  ],
   "coord_events": [],
-  "bg_events": []
+  "bg_events": [
+    {
+      "type": "sign",
+      "x": 5,
+      "y": 8,
+      "elevation": 0,
+      "player_facing_dir": "BG_EVENT_PLAYER_FACING_ANY",
+      "script": "NULL"
+    },
+    {
+      "type": "sign",
+      "x": 13,
+      "y": 10,
+      "elevation": 0,
+      "player_facing_dir": "BG_EVENT_PLAYER_FACING_ANY",
+      "script": "NULL"
+    },
+    {
+      "type": "sign",
+      "x": 12,
+      "y": 19,
+      "elevation": 0,
+      "player_facing_dir": "BG_EVENT_PLAYER_FACING_ANY",
+      "script": "NULL"
+    }
+  ]
 }

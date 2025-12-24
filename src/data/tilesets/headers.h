@@ -1733,3 +1733,47 @@ const struct Tileset gTileset_undergroundstorage =
     .metatileAttributes = gMetatileAttributes_undergroundstorage,
     .callback = NULL,
 };
+
+const struct Tileset gTileset_cave_default =
+{
+    .isCompressed = TRUE,
+    .isSecondary = TRUE,
+    .tiles = gTilesetTiles_cave_default,
+    .palettes = gTilesetPalettes_cave_default,
+    .metatiles = gMetatiles_cave_default,
+    .metatileAttributes = gMetatileAttributes_cave_default,
+    .callback = NULL,
+};
+
+const struct Tileset gTileset_route32 =
+{
+    .isCompressed = TRUE,
+    .isSecondary = TRUE,
+    .tiles = gTilesetTiles_route32,
+    .palettes = gTilesetPalettes_route32,
+    .metatiles = gMetatiles_route32,
+    .metatileAttributes = gMetatileAttributes_route32,
+    .callback = NULL,
+};
+
+const struct Tileset gTileset_Route38_Farmland =
+{
+    .isCompressed = TRUE,
+    .isSecondary = TRUE,
+    .tiles = gTilesetTiles_Route38_Farmland,
+    .palettes = gTilesetPalettes_Route38_Farmland,
+    .metatiles = gMetatiles_Route38_Farmland,
+    .metatileAttributes = gMetatileAttributes_Route38_Farmland,
+    .callback = NULL,
+};
+
+const struct Tileset gTileset_shoprooftop =
+{
+    .isCompressed = TRUE,
+    .isSecondary = TRUE,
+    .tiles = gTilesetTiles_shoprooftop,
+    .palettes = gTilesetPalettes_shoprooftop,
+    .metatiles = gMetatiles_shoprooftop,
+    .metatileAttributes = gMetatileAttributes_shoprooftop,
+    .callback = NULL,
+};

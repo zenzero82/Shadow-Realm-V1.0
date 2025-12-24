@@ -2,7 +2,7 @@
   "id": "MAP_VIOLET_CITY",
   "name": "Violet_City",
   "layout": "LAYOUT_VIOLET_CITY",
-  "music": "MUS_DUMMY",
+  "music": "MUS_HG_VIOLET",
   "region_map_section": "MAPSEC_VIOLET_CITY",
   "requires_flash": false,
   "weather": "WEATHER_NONE",
@@ -12,9 +12,105 @@
   "allow_running": true,
   "show_map_name": true,
   "battle_scene": "MAP_BATTLE_SCENE_NORMAL",
-  "connections": null,
-  "object_events": [],
-  "warp_events": [],
+  "connections": [
+    {
+      "map": "MAP_ROUTE32",
+      "offset": -4,
+      "direction": "down"
+    },
+    {
+      "map": "MAP_ROUTE36",
+      "offset": -2,
+      "direction": "left"
+    },
+    {
+      "map": "MAP_ROUTE31",
+      "offset": 36,
+      "direction": "right"
+    }
+  ],
+  "object_events": [
+    {
+      "graphics_id": "OBJ_EVENT_GFX_CUTTABLE_TREE_G1",
+      "x": 42,
+      "y": 38,
+      "elevation": 0,
+      "movement_type": "MOVEMENT_TYPE_NONE",
+      "movement_range_x": 0,
+      "movement_range_y": 0,
+      "trainer_type": "TRAINER_TYPE_NONE",
+      "trainer_sight_or_berry_tree_id": "0",
+      "script": "NULL",
+      "flag": "0"
+    }
+  ],
+  "warp_events": [
+    {
+      "x": 39,
+      "y": 45,
+      "elevation": 0,
+      "dest_map": "MAP_VIOLET_CITY_GYM",
+      "dest_warp_id": "0"
+    },
+    {
+      "x": 16,
+      "y": 35,
+      "elevation": 0,
+      "dest_map": "MAP_VIOLET_CITY_MART",
+      "dest_warp_id": "0"
+    },
+    {
+      "x": 23,
+      "y": 36,
+      "elevation": 0,
+      "dest_map": "MAP_VIOLET_CITY_GYM",
+      "dest_warp_id": "0"
+    },
+    {
+      "x": 49,
+      "y": 46,
+      "elevation": 0,
+      "dest_map": "MAP_VIOLET_CITY",
+      "dest_warp_id": "0"
+    },
+    {
+      "x": 39,
+      "y": 36,
+      "elevation": 0,
+      "dest_map": "MAP_VIOLET_CITY_TRAINER_SCHOOL",
+      "dest_warp_id": "0"
+    },
+    {
+      "x": 29,
+      "y": 47,
+      "elevation": 0,
+      "dest_map": "MAP_VIOLET_CITY_HOUSE1",
+      "dest_warp_id": "0"
+    },
+    {
+      "x": 30,
+      "y": 13,
+      "elevation": 0,
+      "dest_map": "MAP_SPROUT_TOWER_1F",
+      "dest_warp_id": "0"
+    },
+    {
+      "x": 6,
+      "y": 32,
+      "elevation": 0,
+      "dest_map": "MAP_VIOLET_CITY_HOUSE2",
+      "dest_warp_id": "0"
+    }
+  ],
   "coord_events": [],
-  "bg_events": []
+  "bg_events": [
+    {
+      "type": "sign",
+      "x": 25,
+      "y": 36,
+      "elevation": 0,
+      "player_facing_dir": "BG_EVENT_PLAYER_FACING_ANY",
+      "script": "NULL"
+    }
+  ]
 }

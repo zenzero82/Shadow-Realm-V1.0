@@ -3,7 +3,7 @@
   "name": "Gate_Route40_TrainerHill_Courtyard",
   "layout": "LAYOUT_GATE_ROUTE29_ROUTE46",
   "music": "MUS_DUMMY",
-  "region_map_section": "MAPSEC_ROUTE40",
+  "region_map_section": "MAPSEC_ROUTE_40",
   "requires_flash": false,
   "weather": "WEATHER_NONE",
   "map_type": "MAP_TYPE_INDOOR",

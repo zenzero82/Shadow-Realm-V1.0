@@ -2,8 +2,8 @@
   "id": "MAP_ROUTE32",
   "name": "Route32",
   "layout": "LAYOUT_ROUTE32",
-  "music": "MUS_DUMMY",
-  "region_map_section": "MAPSEC_ROUTE_28",
+  "music": "MUS_HG_ROUTE30",
+  "region_map_section": "MAPSEC_ROUTE_32",
   "requires_flash": false,
   "weather": "WEATHER_NONE",
   "map_type": "MAP_TYPE_ROUTE",
@@ -12,9 +12,67 @@
   "allow_running": true,
   "show_map_name": true,
   "battle_scene": "MAP_BATTLE_SCENE_NORMAL",
-  "connections": null,
+  "connections": [
+    {
+      "map": "MAP_VIOLET_CITY",
+      "offset": 4,
+      "direction": "up"
+    },
+    {
+      "map": "MAP_ROUTE33",
+      "offset": -1,
+      "direction": "down"
+    }
+  ],
   "object_events": [],
-  "warp_events": [],
+  "warp_events": [
+    {
+      "x": 13,
+      "y": 3,
+      "elevation": 0,
+      "dest_map": "MAP_GATE_RUINS_OF_ALPH_ROUTE32",
+      "dest_warp_id": "0"
+    },
+    {
+      "x": 25,
+      "y": 84,
+      "elevation": 0,
+      "dest_map": "MAP_ROUTE32",
+      "dest_warp_id": "0"
+    },
+    {
+      "x": 17,
+      "y": 91,
+      "elevation": 0,
+      "dest_map": "MAP_ROUTE32",
+      "dest_warp_id": "0"
+    }
+  ],
   "coord_events": [],
-  "bg_events": []
+  "bg_events": [
+    {
+      "type": "sign",
+      "x": 17,
+      "y": 1,
+      "elevation": 0,
+      "player_facing_dir": "BG_EVENT_PLAYER_FACING_ANY",
+      "script": "NULL"
+    },
+    {
+      "type": "sign",
+      "x": 22,
+      "y": 5,
+      "elevation": 0,
+      "player_facing_dir": "BG_EVENT_PLAYER_FACING_ANY",
+      "script": "NULL"
+    },
+    {
+      "type": "sign",
+      "x": 20,
+      "y": 96,
+      "elevation": 0,
+      "player_facing_dir": "BG_EVENT_PLAYER_FACING_ANY",
+      "script": "NULL"
+    }
+  ]
 }

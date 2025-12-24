@@ -2,7 +2,7 @@
   "id": "MAP_SAFFRON_COPYCATSHOUSE2F",
   "name": "saffron_copycatshouse2f",
   "layout": "LAYOUT_SAFFRON_COPYCATSHOUSE2F",
-  "music": "MUS_DUMMY",
+  "music": "MUS_HG_GOLDENROD",
   "region_map_section": "MAPSEC_SAFFRON_CITY",
   "requires_flash": false,
   "weather": "WEATHER_NONE",
