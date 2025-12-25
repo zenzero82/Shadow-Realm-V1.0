@@ -7964,8 +7964,8 @@
       "height": 25,
       "border_width": 2,
       "border_height": 2,
-      "primary_tileset": "gTileset_johto_general_og",
-      "secondary_tileset": "gTileset_NationalPark",
+      "primary_tileset": "gTileset_johto_building",
+      "secondary_tileset": "gTileset_burnedtower",
       "border_filepath": "data/layouts/BurnedTower_1F/border.bin",
       "blockdata_filepath": "data/layouts/BurnedTower_1F/map.bin"
     },
@@ -7976,8 +7976,8 @@
       "height": 19,
       "border_width": 2,
       "border_height": 2,
-      "primary_tileset": "gTileset_johto_general_og",
-      "secondary_tileset": "gTileset_NationalPark",
+      "primary_tileset": "gTileset_johto_building",
+      "secondary_tileset": "gTileset_burnedtower",
       "border_filepath": "data/layouts/BurnedTower_B1F/border.bin",
       "blockdata_filepath": "data/layouts/BurnedTower_B1F/map.bin"
     },
@@ -8628,6 +8628,18 @@
       "secondary_tileset": "gTileset_cerulean_bikeshop",
       "border_filepath": "data/layouts/GoldenrodCity_BikeShop/border.bin",
       "blockdata_filepath": "data/layouts/GoldenrodCity_BikeShop/map.bin"
+    },
+    {
+      "id": "LAYOUT_WES_HIDEOUT_ENTRANCE",
+      "name": "WesHideout_Entrance_Layout",
+      "width": 10,
+      "height": 10,
+      "border_width": 2,
+      "border_height": 2,
+      "primary_tileset": "gTileset_johto_general_og",
+      "secondary_tileset": "gTileset_Cave_Green",
+      "border_filepath": "data/layouts/WesHideout_Entrance/border.bin",
+      "blockdata_filepath": "data/layouts/WesHideout_Entrance/map.bin"
     }
   ]
 }

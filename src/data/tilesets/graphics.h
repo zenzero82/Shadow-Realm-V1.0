@@ -3268,3 +3268,22 @@ const u16 gTilesetPalettes_shoprooftop[][16] =
 };
 
 const u32 gTilesetTiles_shoprooftop[] = INCBIN_U32("data/tilesets/secondary/shoprooftop/tiles.4bpp.lz");
+
+const u16 gTilesetPalettes_burnedtower[][16] =
+{
+    INCBIN_U16("data/tilesets/secondary/burnedtower/palettes/00.gbapal"),
+    INCBIN_U16("data/tilesets/secondary/burnedtower/palettes/01.gbapal"),
+    INCBIN_U16("data/tilesets/secondary/burnedtower/palettes/02.gbapal"),
+    INCBIN_U16("data/tilesets/secondary/burnedtower/palettes/03.gbapal"),
+    INCBIN_U16("data/tilesets/secondary/burnedtower/palettes/04.gbapal"),
+    INCBIN_U16("data/tilesets/secondary/burnedtower/palettes/05.gbapal"),
+    INCBIN_U16("data/tilesets/secondary/burnedtower/palettes/06.gbapal"),
+    INCBIN_U16("data/tilesets/secondary/burnedtower/palettes/07.gbapal"),
+    INCBIN_U16("data/tilesets/secondary/burnedtower/palettes/08.gbapal"),
+    INCBIN_U16("data/tilesets/secondary/burnedtower/palettes/09.gbapal"),
+    INCBIN_U16("data/tilesets/secondary/burnedtower/palettes/10.gbapal"),
+    INCBIN_U16("data/tilesets/secondary/burnedtower/palettes/11.gbapal"),
+    INCBIN_U16("data/tilesets/secondary/burnedtower/palettes/12.gbapal"),
+};
+
+const u32 gTilesetTiles_burnedtower[] = INCBIN_U32("data/tilesets/secondary/burnedtower/tiles.4bpp.lz");

@@ -92,6 +92,21 @@ WestForest_EventScript_BadgeTester::
 
     @ Kanto Badge 1
     setflag FLAG_BADGE09_GET
+    setflag FLAG_BADGE10_GET
+    setflag FLAG_BADGE11_GET
+    setflag FLAG_BADGE12_GET
+    setflag FLAG_BADGE13_GET
+    setflag FLAG_BADGE14_GET
+    setflag FLAG_BADGE15_GET
+    setflag FLAG_BADGE16_GET
+    setflag FLAG_BADGE17_GET
+    setflag FLAG_BADGE18_GET
+    setflag FLAG_BADGE19_GET
+    setflag FLAG_BADGE20_GET
+    setflag FLAG_BADGE21_GET
+    setflag FLAG_BADGE22_GET
+    setflag FLAG_BADGE23_GET
+    setflag FLAG_BADGE24_GET
 	setflag FLAG_RECEIVED_HM_FLY 
     giveitem ITEM_HM02
 

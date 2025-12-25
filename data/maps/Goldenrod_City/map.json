@@ -35,14 +35,14 @@
       "x": 28,
       "y": 36,
       "elevation": 0,
-      "dest_map": "MAP_GOLDENROD_CITY",
+      "dest_map": "MAP_GOLDENROD_CITY_POKEMON_CENTER",
       "dest_warp_id": "0"
     },
     {
       "x": 39,
       "y": 36,
       "elevation": 0,
-      "dest_map": "MAP_GOLDENROD_CITY",
+      "dest_map": "MAP_GOLDENROD_CITY_DEPARTMENT_STORE_1F",
       "dest_warp_id": "0"
     },
     {
@@ -98,14 +98,14 @@
       "x": 24,
       "y": 21,
       "elevation": 0,
-      "dest_map": "MAP_GOLDENROD_CITY",
+      "dest_map": "MAP_GOLDENROD_CITY_GAME_CORNER",
       "dest_warp_id": "0"
     },
     {
       "x": 16,
       "y": 22,
       "elevation": 0,
-      "dest_map": "MAP_GOLDENROD_CITY",
+      "dest_map": "MAP_GOLDENROD_CITY_RADIO_TOWER_1F",
       "dest_warp_id": "0"
     },
     {
@@ -126,7 +126,7 @@
       "x": 44,
       "y": 38,
       "elevation": 0,
-      "dest_map": "MAP_GOLDENROD_CITY",
+      "dest_map": "MAP_GOLDENROD_CITY_BIKE_SHOP",
       "dest_warp_id": "0"
     },
     {

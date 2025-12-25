@@ -465,3 +465,6 @@ const u16 gMetatileAttributes_Route38_Farmland[] = INCBIN_U16("data/tilesets/sec
 
 const u16 gMetatiles_shoprooftop[] = INCBIN_U16("data/tilesets/secondary/shoprooftop/metatiles.bin");
 const u16 gMetatileAttributes_shoprooftop[] = INCBIN_U16("data/tilesets/secondary/shoprooftop/metatile_attributes.bin");
+
+const u16 gMetatiles_burnedtower[] = INCBIN_U16("data/tilesets/secondary/burnedtower/metatiles.bin");
+const u16 gMetatileAttributes_burnedtower[] = INCBIN_U16("data/tilesets/secondary/burnedtower/metatile_attributes.bin");

@@ -1777,3 +1777,14 @@ const struct Tileset gTileset_shoprooftop =
     .metatileAttributes = gMetatileAttributes_shoprooftop,
     .callback = NULL,
 };
+
+const struct Tileset gTileset_burnedtower =
+{
+    .isCompressed = TRUE,
+    .isSecondary = TRUE,
+    .tiles = gTilesetTiles_burnedtower,
+    .palettes = gTilesetPalettes_burnedtower,
+    .metatiles = gMetatiles_burnedtower,
+    .metatileAttributes = gMetatileAttributes_burnedtower,
+    .callback = NULL,
+};

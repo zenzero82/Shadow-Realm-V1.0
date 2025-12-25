@@ -1049,5 +1049,7 @@
     "TohjoFalls_Cavern",
     "TohjoFalls_GiovanniRoom"
   ],
-  "gMapGroup_ShadowRealm": []
+  "gMapGroup_ShadowRealm": [
+    "WesHideout_Entrance"
+  ]
 }

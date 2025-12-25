@@ -1846,3 +1846,5 @@ gText_ShadowPurifyReady::
 	.include "data/maps/GoldenrodCity_RadioTower_4F/scripts.inc"
 
 	.include "data/maps/GoldenrodCity_DepartmentStore_4F/scripts.inc"
+
+	.include "data/maps/WesHideout_Entrance/scripts.inc"
