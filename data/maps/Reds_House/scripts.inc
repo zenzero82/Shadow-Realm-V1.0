@@ -1,17 +1,24 @@
 Reds_House_MapScripts::
 	.byte 0
 
+Speaker_RedsMom:
+	.string "Red's Mom$"
+
 PalletTown_RedsHouse_1F_EventScript_Mom::
 	lock
 	faceplayer
 	goto_if_ge VAR_TEMP_0, 1, PalletTown_RedsHouse_1F_EventScript_MomAfter
+
+	setspeaker Speaker_RedsMom
 	msgbox RedsHouse_Text_Mom1, MSGBOX_DEFAULT
 	closemessage
+
 	setvar VAR_TEMP_0, 1
 	release
 	end
 
 PalletTown_RedsHouse_1F_EventScript_MomAfter::
+	setspeaker Speaker_RedsMom
 	msgbox RedsHouse_Text_Mom2, MSGBOX_DEFAULT
 	closemessage
 	release

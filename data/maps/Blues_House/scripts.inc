@@ -1,14 +1,22 @@
 Blues_House_MapScripts:: 
 	.byte 0
 
+Speaker_Daisy:
+	.string "Daisy$"
+
 PalletTown_House2_EventScript_Blue::
+	lock
+	faceplayer
+
+	setspeaker Speaker_Daisy
 	msgbox PalletTown_House2_Text_Hello, MSGBOX_DEFAULT
 	closemessage
+
 	release
 	end
 
 PalletTown_House2_Text_Hello:
-	.string "DAISY: Hi!\p"
+	.string "Hi!\p"
 	.string "My kid brother BLUE is the GYM LEADER\n"
 	.string "in VIRIDIAN CITY.\p"
 	.string "Lately, the news has been talking about\n"

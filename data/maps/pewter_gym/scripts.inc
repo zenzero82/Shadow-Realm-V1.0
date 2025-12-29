@@ -2,39 +2,36 @@
 pewter_gym_MapScripts::
     .byte 0
 
-@ ============================
-@ JERRY (GYM TRAINER)
-@ ============================
+PewterGym_Speaker_Brock:
+    .string "Brock$"
+
+PewterGym_Speaker_Jerry:
+    .string "Camper Jerry$"
+
+PewterGym_Speaker_GymGuy:
+    .string "Gym Guy$"
+
 
 PewterCity_Gym_EventScript_Jerry::
+    setspeaker PewterGym_Speaker_Jerry
     trainerbattle_single TRAINER_CAMPER_KANTO, PewterCity_Gym_Text_CamperJerry_Seen, PewterCity_Gym_Text_CamperJerry_Beaten
     msgbox PewterCity_Gym_Text_CamperJerry_AfterBattle, MSGBOX_AUTOCLOSE
     end
 
-@ ============================
-@ BROCK – REAL GYM BATTLE
-@ ============================
-
 PewterCity_Gym_EventScript_Brock::
     lock
     faceplayer
-    @ If Boulder Badge (Kanto) already obtained, skip straight to “after” text
+    setspeaker PewterGym_Speaker_Brock
     goto_if_set FLAG_BADGE09_GET, PewterCity_Gym_EventScript_Brock_Defeated
 
     msgbox PewterCity_Gym_Text_Brock_Intro, MSGBOX_DEFAULT
-
-    @ Actual gym battle: uses your TRAINER_BROCK_KANTO
     trainerbattle_no_intro TRAINER_BROCK_KANTO, PewterCity_Gym_Text_Brock_WinLoss
 
-    @ Give Boulder Badge + fanfare
     message PewterCity_Gym_Text_ReceivedBoulderBadge
     waitmessage
     call Common_EventScript_PlayGymBadgeFanfare
 
-    @ Post-battle story text
     msgbox PewterCity_Gym_Text_Brock_FightDone, MSGBOX_DEFAULT
-
-    @ Mark Boulder Badge as obtained – this is also our “gym cleared” flag
     setflag FLAG_BADGE09_GET
 
     closemessage
@@ -42,7 +39,7 @@ PewterCity_Gym_EventScript_Brock::
     end
 
 PewterCity_Gym_EventScript_Brock_Defeated::
-    @ Called if FLAG_BADGE09_GET is already set
+    setspeaker PewterGym_Speaker_Brock
     msgbox PewterCity_Gym_Text_Brock_FightDone, MSGBOX_DEFAULT
     closemessage
     release
@@ -53,11 +50,13 @@ PewterCity_Gym_EventScript_Brock_Defeated::
 @ ============================
 
 PewterCity_Gym_EventScript_GymGuy::
+    setspeaker PewterGym_Speaker_GymGuy
     goto_if_set FLAG_BADGE09_GET, PewterCity_Gym_EventScript_GymGuyAfter
     msgbox PewterCity_Gym_Text_Guide, MSGBOX_NPC
     end
 
 PewterCity_Gym_EventScript_GymGuyAfter::
+    setspeaker PewterGym_Speaker_GymGuy
     msgbox PewterCity_Gym_Text_Guide_Win, MSGBOX_NPC
     end
 

@@ -57,6 +57,8 @@
 #define FLAG_HIDE_OAKS_LAB_HONEDGEBALL  0x028
 #define FLAG_HIDE_OAKS_LAB_ZORUABALL    0x029
 #define FLAG_HIDE_ROUTE1_TORKIN  0x02A  // pick any free unused flag slot
+#define FLAG_REDS_HOUSE_MOM_INTRO_DONE                    0xE9 // Unused Flag
+#define FLAG_OAKS_LAB_POST_STARTER_STATE    0x4F // Unused Flag
 
 //Viridian Flags
 #define FLAG_VIRIDIAN_JJ_BATTLE_DONE    0x2B // Unused Flag
@@ -97,7 +99,6 @@
 #define FLAG_UNUSED_0x04C    0x4C // Unused Flag
 #define FLAG_UNUSED_0x04D    0x4D // Unused Flag
 #define FLAG_UNUSED_0x04E    0x4E // Unused Flag
-#define FLAG_UNUSED_0x04F    0x4F // Unused Flag
 
 // Scripts
 #define FLAG_HIDE_SKY_PILLAR_TOP_RAYQUAZA_STILL  0x50
@@ -261,8 +262,6 @@
 #define FLAG_RECEIVED_TM_SLUDGE_BOMB         0xE6
 #define FLAG_RECEIVED_TM_ROAR                0xE7
 #define FLAG_RECEIVED_TM_GIGA_DRAIN          0xE8
-
-#define FLAG_UNUSED_0x0E9                    0xE9 // Unused Flag
 
 #define FLAG_RECEIVED_TM_REST                0xEA
 #define FLAG_RECEIVED_TM_ATTRACT             0xEB

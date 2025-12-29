@@ -130,7 +130,7 @@
       "flag": "0"
     },
     {
-      "graphics_id": "OBJ_EVENT_GFX_PIKACHU",
+      "graphics_id": "OBJ_EVENT_GFX_SPECIES(GEODUDE)",
       "x": 22,
       "y": 37,
       "elevation": 0,
@@ -156,7 +156,7 @@
       "flag": "0"
     },
     {
-      "graphics_id": "OBJ_EVENT_GFX_OLD_MAN",
+      "graphics_id": "OBJ_EVENT_GFX_OLD_MAN_2_GEN2",
       "x": 37,
       "y": 19,
       "elevation": 0,
@@ -169,7 +169,7 @@
       "flag": "0"
     },
     {
-      "graphics_id": "OBJ_EVENT_GFX_LASS",
+      "graphics_id": "OBJ_EVENT_GFX_LASS2_GEN2",
       "x": 10,
       "y": 21,
       "elevation": 0,
@@ -182,7 +182,7 @@
       "flag": "0"
     },
     {
-      "graphics_id": "OBJ_EVENT_GFX_TWIN",
+      "graphics_id": "OBJ_EVENT_GFX_TWIN2_GEN2",
       "x": 17,
       "y": 34,
       "elevation": 0,

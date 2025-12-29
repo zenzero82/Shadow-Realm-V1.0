@@ -2648,6 +2648,20 @@
 	callnative ScriptUpdateFollowingMon
 	.endm
 
+	@ Manually buffer a string as the speaker's name for namebox.
+	@ The next shown message/msgbox will include a namebox, if the provided string is not NULL.
+	@ An SP_NAME_* constant can also be used, it'll take the name from gSpeakerNamesTable instead.
+	.macro setspeaker name:req
+	callnative SetSpeaker
+	.4byte \name
+	.endm
+
+	@ VS Seeker
+	.macro vsseeker_rematchid rematchId:req
+	callnative NativeVsSeekerRematchId, requests_effects=1
+	.2byte \rematchId
+	.endm
+	
 	@ Changes the battle partner of the existing follower NPC.
 	.macro changefollowerbattler battlePartner:req
 	callnative ScriptChangeFollowerNPCBattlePartner

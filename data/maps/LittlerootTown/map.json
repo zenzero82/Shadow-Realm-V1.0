@@ -35,19 +35,6 @@
       "flag": "0"
     },
     {
-      "graphics_id": "OBJ_EVENT_GFX_BROCK_GEN1",
-      "x": 14,
-      "y": 17,
-      "elevation": 3,
-      "movement_type": "MOVEMENT_TYPE_WANDER_AROUND",
-      "movement_range_x": 2,
-      "movement_range_y": 1,
-      "trainer_type": "TRAINER_TYPE_NORMAL",
-      "trainer_sight_or_berry_tree_id": "0",
-      "script": "Route102_EventScript_Allen",
-      "flag": "0"
-    },
-    {
       "local_id": "LOCALID_LITTLEROOT_MOM",
       "graphics_id": "OBJ_EVENT_GFX_MOM",
       "x": 5,
@@ -58,7 +45,7 @@
       "movement_range_y": 0,
       "trainer_type": "TRAINER_TYPE_NONE",
       "trainer_sight_or_berry_tree_id": "0",
-      "script": "LittlerootTown_EventScript_Mom",
+      "script": "NULL",
       "flag": "FLAG_HIDE_LITTLEROOT_TOWN_MOM_OUTSIDE"
     },
     {
@@ -140,11 +127,24 @@
       "trainer_sight_or_berry_tree_id": "0",
       "script": "NULL",
       "flag": "0"
+    },
+    {
+      "graphics_id": "OBJ_EVENT_GFX_BROCK_GEN1",
+      "x": 14,
+      "y": 17,
+      "elevation": 3,
+      "movement_type": "MOVEMENT_TYPE_WANDER_AROUND",
+      "movement_range_x": 2,
+      "movement_range_y": 1,
+      "trainer_type": "TRAINER_TYPE_NORMAL",
+      "trainer_sight_or_berry_tree_id": "0",
+      "script": "Route102_EventScript_Allen",
+      "flag": "0"
     }
   ],
   "warp_events": [
     {
-      "x": 16,
+      "x": 14,
       "y": 8,
       "elevation": 0,
       "dest_map": "MAP_LITTLEROOT_TOWN_MAYS_HOUSE_1F",
@@ -162,13 +162,6 @@
       "y": 16,
       "elevation": 0,
       "dest_map": "MAP_LITTLEROOT_TOWN_PROFESSOR_BIRCHS_LAB",
-      "dest_warp_id": "0"
-    },
-    {
-      "x": 14,
-      "y": 8,
-      "elevation": 0,
-      "dest_map": "MAP_PALLET_TOWN",
       "dest_warp_id": "0"
     }
   ],
@@ -208,24 +201,6 @@
       "var": "VAR_LITTLEROOT_TOWN_STATE",
       "var_value": "3",
       "script": "LittlerootTown_EventScript_GiveRunningShoesTrigger3"
-    },
-    {
-      "type": "trigger",
-      "x": 10,
-      "y": 2,
-      "elevation": 3,
-      "var": "VAR_LITTLEROOT_TOWN_STATE",
-      "var_value": "3",
-      "script": "LittlerootTown_EventScript_GiveRunningShoesTrigger0"
-    },
-    {
-      "type": "trigger",
-      "x": 11,
-      "y": 2,
-      "elevation": 3,
-      "var": "VAR_LITTLEROOT_TOWN_STATE",
-      "var_value": "3",
-      "script": "LittlerootTown_EventScript_GiveRunningShoesTrigger1"
     }
   ],
   "bg_events": [

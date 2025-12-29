@@ -156,6 +156,10 @@
 // gTileset_EverGrande
 #define METATILE_EverGrande_Door_PokemonLeague  0x21D
 
+// gTileset_FRLG_Pallet
+#define METATILE_FRLG_Pallet_Door_Green  0x22C
+#define METATILE_FRLG_Pallet_Door_Red    0x23D
+
 // gTileset_Facility
 #define METATILE_Facility_DataPad                       0x3E4
 #define METATILE_Facility_NewMauvilleDoor_Closed_Tile0  0x314
@@ -778,6 +782,48 @@
 // gTileset_Underwater
 #define METATILE_Underwater_FloorShadow  0x228
 #define METATILE_Underwater_RockWall     0x21E
+
+// gTileset_blackthorn_city
+#define METATILE_blackthorn_city_Door  0x211
+
+// gTileset_cerulean_city
+#define METATILE_cerulean_city_Cerulean  0x218
+
+// gTileset_ecruteak_city
+#define METATILE_ecruteak_city_Door  0x2B3
+
+// gTileset_fuchsia_city
+#define METATILE_fuchsia_city_Fuchsia   0x23F
+#define METATILE_fuchsia_city_Red_Door  0x252
+
+// gTileset_goldenrod_city
+#define METATILE_goldenrod_city_Goldenrod  0x204
+
+// gTileset_johto_general
+#define METATILE_johto_general_og_CalmWater     0x12B
+#define METATILE_johto_general_og_Door          0x03D
+#define METATILE_johto_general_og_Door_Gym      0x15B
+#define METATILE_johto_general_og_Door_Sliding  0x062
+
+// gTileset_johto_general_og
+#define METATILE_johto_general_og_johto_gym   0x15B
+#define METATILE_johto_general_og_johto_shop  0x062
+
+// gTileset_lavender_town
+#define METATILE_lavender_town_Lavender  0x26C
+
+// gTileset_new_bark
+#define METATILE_new_bark_Door_Blue  0x24B
+#define METATILE_new_bark_Door_Red   0x23D
+
+// gTileset_safari_johto
+#define METATILE_safari_johto_Safari  0x252
+
+// gTileset_violet_city
+#define METATILE_violet_city_Dojo_Door  0x2AB
+
+// gTileset_viridian
+#define METATILE_viridian_Viridian_Door  0x29B
 
 // Other
 #define METATILE_RSMossdeepGym_RedArrow_Down   0x205

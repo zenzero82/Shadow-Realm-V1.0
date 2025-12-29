@@ -7,6 +7,7 @@ void UpdateTilesetAnimations(void);
 void TransferTilesetAnimsBuffer(void);
 
 void InitTilesetAnim_General(void);
+void InitTilesetAnim_JohtoGeneral(void);
 void InitTilesetAnim_Petalburg(void);
 void InitTilesetAnim_Rustboro(void);
 void InitTilesetAnim_Dewford(void);
@@ -31,5 +32,8 @@ void InitTilesetAnim_MauvilleGym(void);
 void InitTilesetAnim_EliteFour(void);
 void InitTilesetAnim_BattleDome(void);
 void InitTilesetAnim_BattlePyramid(void);
+void InitTilesetAnim_NationalPark(void);
+void InitTilesetAnim_ecruteak_theater(void);
+void InitTilesetAnim_AzaleaTown_Gym(void);
 
 #endif // GUARD_TILESET_ANIMS_H

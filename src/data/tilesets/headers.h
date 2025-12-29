@@ -938,7 +938,7 @@ const struct Tileset gTileset_johto_general =
     .palettes = gTilesetPalettes_johto_general,
     .metatiles = gMetatiles_johto_general,
     .metatileAttributes = gMetatileAttributes_johto_general,
-    .callback = NULL,
+    .callback = InitTilesetAnim_JohtoGeneral,
 };
 
 const struct Tileset gTileset_azalea =
@@ -971,7 +971,7 @@ const struct Tileset gTileset_celadon_gym =
     .palettes = gTilesetPalettes_celadon_gym,
     .metatiles = gMetatiles_celadon_gym,
     .metatileAttributes = gMetatileAttributes_celadon_gym,
-    .callback = NULL,
+    .callback = InitTilesetAnim_AzaleaTown_Gym,
 };
 
 const struct Tileset gTileset_cerulean_gym =
@@ -1081,7 +1081,7 @@ const struct Tileset gTileset_johto_general_og =
     .palettes = gTilesetPalettes_johto_general_og,
     .metatiles = gMetatiles_johto_general_og,
     .metatileAttributes = gMetatileAttributes_johto_general_og,
-    .callback = NULL,
+    .callback = InitTilesetAnim_JohtoGeneral,
 };
 
 const struct Tileset gTileset_johto_building =
@@ -1246,7 +1246,7 @@ const struct Tileset gTileset_johto_NE =
     .palettes = gTilesetPalettes_johto_NE,
     .metatiles = gMetatiles_johto_NE,
     .metatileAttributes = gMetatileAttributes_johto_NE,
-    .callback = NULL,
+    .callback = InitTilesetAnim_JohtoGeneral,
 };
 
 const struct Tileset gTileset_johto_nw =
@@ -1257,7 +1257,7 @@ const struct Tileset gTileset_johto_nw =
     .palettes = gTilesetPalettes_johto_nw,
     .metatiles = gMetatiles_johto_nw,
     .metatileAttributes = gMetatileAttributes_johto_nw,
-    .callback = NULL,
+    .callback = InitTilesetAnim_JohtoGeneral,
 };
 
 const struct Tileset gTileset_cherrygrove_city =
@@ -1511,7 +1511,7 @@ const struct Tileset gTileset_EcruteakTheater =
     .palettes = gTilesetPalettes_EcruteakTheater,
     .metatiles = gMetatiles_EcruteakTheater,
     .metatileAttributes = gMetatileAttributes_EcruteakTheater,
-    .callback = NULL,
+    .callback = InitTilesetAnim_ecruteak_theater,
 };
 
 const struct Tileset gTileset_FightingDojoVIP =
@@ -1555,7 +1555,7 @@ const struct Tileset gTileset_NationalPark =
     .palettes = gTilesetPalettes_NationalPark,
     .metatiles = gMetatiles_NationalPark,
     .metatileAttributes = gMetatileAttributes_NationalPark,
-    .callback = NULL,
+    .callback = InitTilesetAnim_NationalPark,
 };
 
 const struct Tileset gTileset_WhirlIslands =

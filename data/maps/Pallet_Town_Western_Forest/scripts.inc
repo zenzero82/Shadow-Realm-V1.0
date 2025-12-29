@@ -16,7 +16,8 @@ Pallet_Town_Western_Forest_EventScript_Intro::
     lock
     faceplayer
 
-    @ First bit of inner monologue
+    @ First bit of inner monologue (PLAYER)
+    setspeaker SP_NAME_PLAYER
     msgbox Pallet_Town_Western_Forest_Text_Player_IntroThought1, MSGBOX_DEFAULT
     closemessage
 
@@ -25,7 +26,8 @@ Pallet_Town_Western_Forest_EventScript_Intro::
     applymovement OBJ_EVENT_ID_PLAYER, Pallet_Town_Western_Forest_Mov_Exclaim_FaceUp
     waitmovement 0
 
-    @ Second bit of inner monologue
+    @ Second bit of inner monologue (PLAYER)
+    setspeaker SP_NAME_PLAYER
     msgbox Pallet_Town_Western_Forest_Text_Player_IntroThought2, MSGBOX_DEFAULT
     closemessage
 
@@ -36,6 +38,7 @@ Pallet_Town_Western_Forest_EventScript_Intro::
     release
 Pallet_Town_Western_Forest_Intro_Done:
     end
+
 
 @ ---------------- MOVEMENTS ----------------
 
@@ -211,3 +214,18 @@ Pallet_Town_Western_Forest_PortalNo_Littleroot::
 Pallet_Town_Western_Forest_Text_PortalAsk_Littleroot:
     .string "The portal feels different...\p"
     .string "Warp to LITTLEROOT TOWN?$"
+
+
+@==============================================
+
+Speaker_Jeremy:
+    .string "JEREMY$"
+
+    TestNameboxNPC::
+    setspeaker Speaker_Jeremy
+    msgbox TestText, MSGBOX_NPC
+    end
+
+TestText:
+    .string "Yo wassup!$"
+

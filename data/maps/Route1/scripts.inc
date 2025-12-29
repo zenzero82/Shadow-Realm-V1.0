@@ -1,8 +1,41 @@
 Route1_MapScripts::
     .byte 0
-	
+
+@ =========================================================
+@ SPEAKER DEFINITIONS (Namebox)
+@ =========================================================
+
+Route1_Speaker_Torkin:
+    .string "Cipher Peon Torkin$"
+
+Route1_Speaker_OldMan:
+    .string "Old Man Harland$"
+
+@ =========================================================
+@ Route 1 – Sign
+@ =========================================================
+
+Route1_EventScript_Sign::
+    msgbox Route1_Text_Sign, MSGBOX_SIGN
+    end
+
+@ =========================================================
+@ Route 1 – Old Man driven out of Viridian
+@ (Assign this script to an Old Man NPC object in Porymap)
+@ =========================================================
+
+Route1_EventScript_OldManDrivenOut::
+    lock
+    faceplayer
+    setspeaker Route1_Speaker_OldMan
+    msgbox Route1_Text_OldManDrivenOut, MSGBOX_DEFAULT
+    closemessage
+    release
+    end
+
+@ =========================================================
 @ Route 1 – Cipher Peon Torkin scripted encounter
-@ ---------------------------
+@ ---------------------------------------------------------
 @ Coord events (set these in Porymap):
 @   (10,34) -> Route1_EventScript_TorkinTrigger0
 @   (10,33) -> Route1_EventScript_TorkinTrigger1
@@ -10,10 +43,7 @@ Route1_MapScripts::
 @
 @ Torkin overworld object:
 @   Local ID 1 at (9,33), with flag FLAG_HIDE_ROUTE1_TORKIN
-
-Route1_EventScript_Sign::
-    msgbox Route1_Text_Sign, MSGBOX_SIGN
-    end
+@ =========================================================
 
 Route1_EventScript_TorkinTrigger0::
     checkflag FLAG_HIDE_ROUTE1_TORKIN
@@ -59,7 +89,7 @@ Route1_EventScript_Torkin::
     applymovement 1, Route1_Move_Torkin_ExclaimTurn
     waitmovement 0
 
-    @ Manual intro text (since we're using trainerbattle_no_intro)
+    setspeaker Route1_Speaker_Torkin
     msgbox Route1_Text_TorkinIntro, MSGBOX_DEFAULT
     closemessage
 
@@ -70,7 +100,7 @@ Route1_EventScript_Torkin::
     applymovement OBJ_EVENT_ID_PLAYER, Route1_Move_Player_FaceLeft
     waitmovement 0
 
-    @ Now do your post-battle monologue
+    setspeaker Route1_Speaker_Torkin
     msgbox Route1_Text_TorkinPostBattle, MSGBOX_DEFAULT
     closemessage
 
@@ -83,7 +113,9 @@ Route1_EventScript_Torkin::
     releaseall
     end
 
-@ -------- Movements --------
+@ =========================================================
+@ Movements
+@ =========================================================
 
 Route1_Move_Torkin_ExclaimTurn:
     emote_exclamation_mark
@@ -130,6 +162,21 @@ Route1_Move_Torkin_Leave:
     walk_up
     step_end
 
+@ =========================================================
+@ Text
+@ =========================================================
+
 Route1_Text_Sign:
     .string "ROUTE 1\p"
     .string "PALLET TOWN - VIRIDIAN CITY$"
+
+@ Old Man
+Route1_Text_OldManDrivenOut:
+    .string "I used to live in VIRIDIAN CITY.\p"
+    .string "Then TEAM ROCKET came back... and they\n"
+    .string "didn't come alone.\p"
+    .string "They blocked the streets, pushed folks\n"
+    .string "out, and turned the GYM into a fortress.\p"
+    .string "I grabbed what I could and ran.\p"
+    .string "If you're headed north...\n"
+    .string "keep your eyes open, kid.$"
