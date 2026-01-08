@@ -6206,24 +6206,6 @@ Zigzagoon
 Level: 16
 IVs: 0 HP / 0 Atk / 0 Def / 0 SpA / 0 SpD / 0 Spe
 
-=== TRAINER_ALLEN ===
-Name: ALLEN
-Class: Youngster
-Pic: Youngster
-Gender: Male
-Music: Male
-Double Battle: No
-AI: Check Bad Move
-
-Zigzagoon
-Level: 4
-IVs: 0 HP / 0 Atk / 0 Def / 0 SpA / 0 SpD / 0 Spe
-Shadow: Yes
-- Shadow Rush
-- Shadow Sky
-- Shadow Wave
-- Shadow Rave
-
 === TRAINER_TIMMY ===
 Name: TIMMY
 Class: Youngster
@@ -16888,15 +16870,18 @@ pikachu
 Level: 4
 IVs: 0 HP / 0 Atk / 0 Def / 0 SpA / 0 SpD / 0 Spe
 Shadow: Yes
+Shadow ID: 1
+Heart Gauge: 1000
 - Shadow Rush
 - Shadow Sky
 - Shadow Wave
 - Shadow Rave
 
 === TRAINER_JESSIE_AND_JAMES ===
-Name: JESSIE
+Name: JESS&JAMES
 Class: Team Rocket
 Pic: JESSIE_JAMES
+Music: TRAINER_ENCOUNTER_MUSIC_TEAM_ROCKET
 
 Meowth
 Level: 1
@@ -16940,3 +16925,381 @@ Level: 7
 Nature: HARDY
 - Peck
 - Growl
+
+=== TRAINER_ARCHER ===
+Name: ARCHER
+Class: Team Rocket
+Pic: ARCHER
+Gender: Male
+
+Rattata
+Level: 5
+
+=== TRAINER_ARIANA ===
+Name: ARIANA
+Class: Team Rocket
+Pic: ARIANA
+Gender: Female
+
+Rattata
+Level: 5
+
+=== TRAINER_BIKER ===
+Name: BIKER
+Class: Cooltrainer
+Pic: BIKER
+Gender: Male
+
+Rattata
+Level: 5
+
+=== TRAINER_BLAINE ===
+Name: BLAINE
+Class: LEADER
+Pic: BLAINE
+Gender: Male
+
+Rattata
+Level: 5
+
+=== TRAINER_BURGLAR ===
+Name: BURGLAR
+Class: Cooltrainer
+Pic: BURGLAR
+Gender: Male
+
+Rattata
+Level: 5
+
+=== TRAINER_CHAMPION_LANCE ===
+Name: LANCE
+Class: Champion
+Pic: CHAMPION_LANCE
+Gender: Male
+
+Rattata
+Level: 5
+
+=== TRAINER_ELITE_FOUR_BRUNO ===
+Name: BRUNO
+Class: Elite Four
+Pic: ELITE_FOUR_BRUNO
+Gender: Male
+
+Rattata
+Level: 5
+
+=== TRAINER_ELITE_FOUR_KAREN ===
+Name: KAREN
+Class: Elite Four
+Pic: ELITE_FOUR_KAREN
+Gender: Female
+
+Rattata
+Level: 5
+
+=== TRAINER_ELITE_FOUR_KOGA ===
+Name: KOGA
+Class: Elite Four
+Pic: ELITE_FOUR_KOGA
+Gender: Male
+
+Rattata
+Level: 5
+
+=== TRAINER_ELITE_FOUR_WILL ===
+Name: WILL
+Class: Elite Four
+Pic: ELITE_FOUR_WILL
+Gender: Male
+
+Rattata
+Level: 5
+
+=== TRAINER_ENGINEER ===
+Name: ENGINEER
+Class: Cooltrainer
+Pic: ENGINEER
+Gender: Male
+
+Rattata
+Level: 5
+
+=== TRAINER_ERIKA ===
+Name: ERIKA
+Class: LEADER
+Pic: ERIKA
+Gender: Male
+
+Rattata
+Level: 5
+
+=== TRAINER_EUSINE ===
+Name: EUSINE
+Class: Cooltrainer
+Pic: EUSINE
+Gender: Male
+
+Rattata
+Level: 5
+
+=== TRAINER_FIREBREATHER ===
+Name: KLAY
+Class: Cooltrainer
+Pic: FIREBREATHER
+Gender: Male
+
+Rattata
+Level: 5
+
+=== TRAINER_GOLD ===
+Name: GOLD
+Class: Rival
+Pic: GOLD
+Gender: Male
+
+Rattata
+Level: 5
+
+=== TRAINER_JANINE ===
+Name: JANINE
+Class: LEADER
+Pic: JANINE
+Gender: Male
+
+Rattata
+Level: 5
+
+=== TRAINER_JUGGLER ===
+Name: JUGGLER
+Class: Cooltrainer
+Pic: JUGGLER
+Gender: Male
+
+Rattata
+Level: 5
+
+=== TRAINER_KIMONO_GIRL ===
+Name: JOK
+Class: Cooltrainer
+Pic: KIMONO_GIRL
+Gender: Female
+
+Rattata
+Level: 5
+
+=== TRAINER_LEADER_BLUE ===
+Name: BLUE
+Class: LEADER
+Pic: LEADER_BLUE
+Gender: Male
+
+Rattata
+Level: 5
+
+=== TRAINER_LEADER_BUGSY ===
+Name: BUGSY
+Class: LEADER
+Pic: LEADER_BUGSY
+Gender: Male
+
+Rattata
+Level: 5
+
+=== TRAINER_LEADER_CHUCK ===
+Name: CHUCK
+Class: LEADER
+Pic: LEADER_CHUCK
+Gender: Male
+
+Rattata
+Level: 5
+
+=== TRAINER_LEADER_CLAIR ===
+Name: CLAIR
+Class: LEADER
+Pic: LEADER_CLAIR
+Gender: Male
+
+Rattata
+Level: 5
+
+=== TRAINER_LEADER_FALKNER ===
+Name: FALKNER
+Class: LEADER
+Pic: LEADER_FALKNER
+Gender: Male
+
+Rattata
+Level: 5
+
+=== TRAINER_LEADER_JASMINE ===
+Name: JASMINE
+Class: LEADER
+Pic: LEADER_JASMINE
+Gender: Male
+
+Rattata
+Level: 5
+
+=== TRAINER_LEADER_MORTY ===
+Name: MORTY
+Class: LEADER
+Pic: LEADER_MORTY
+Gender: Male
+
+Rattata
+Level: 5
+
+=== TRAINER_LEADER_PRYCE ===
+Name: PRYCE
+Class: LEADER
+Pic: LEADER_PRYCE
+Gender: Male
+
+Rattata
+Level: 5
+
+=== TRAINER_LEADER_WHITNEY ===
+Name: WHITNEY
+Class: LEADER
+Pic: LEADER_WHITNEY
+Gender: Male
+
+Rattata
+Level: 5
+
+=== TRAINER_LYRA ===
+Name: LYRA
+Class: Cooltrainer
+Pic: LYRA
+Gender: Female
+
+Rattata
+Level: 5
+
+=== TRAINER_MISTY ===
+Name: MISTY
+Class: Cooltrainer
+Pic: MISTY
+Gender: Male
+
+Rattata
+Level: 5
+
+=== TRAINER_NURSE ===
+Name: NURSE
+Class: Cooltrainer
+Pic: NURSE
+Gender: Male
+
+Rattata
+Level: 5
+
+=== TRAINER_OFFICER ===
+Name: OFFICER
+Class: Cooltrainer
+Pic: OFFICER
+Gender: Male
+
+Rattata
+Level: 5
+
+=== TRAINER_PETREL ===
+Name: PETREL
+Class: Team Rocket
+Pic: PETREL
+Gender: Male
+
+Rattata
+Level: 5
+
+=== TRAINER_PROTON ===
+Name: PROTON
+Class: Team Rocket
+Pic: PROTON
+Gender: Male
+
+Rattata
+Level: 5
+
+=== TRAINER_PSYCHIC_M2 ===
+Name: PSYCHIC
+Class: Cooltrainer
+Pic: PSYCHIC_M2
+Gender: Male
+
+Rattata
+Level: 5
+
+=== TRAINER_SABRINA ===
+Name: SABRINA
+Class: LEADER
+Pic: SABRINA
+Gender: Male
+
+Rattata
+Level: 5
+
+=== TRAINER_SAGE ===
+Name: SAGE
+Class: Cooltrainer
+Pic: SAGE
+Gender: Male
+
+Rattata
+Level: 5
+
+=== TRAINER_SAGE_LEADER ===
+Name: SAGE
+Class: Cooltrainer
+Pic: SAGE_LEADER
+Gender: Male
+
+Rattata
+Level: 5
+
+=== TRAINER_SILVER ===
+Name: SILVER
+Class: Rival
+Pic: SILVER
+Gender: Male
+
+Rattata
+Level: 5
+
+=== TRAINER_SUPER_NERD ===
+Name: SUPER NERD
+Class: Cooltrainer
+Pic: SUPER_NERD
+Gender: Male
+
+Rattata
+Level: 5
+
+=== TRAINER_SURGE ===
+Name: LT SURGE
+Class: LEADER
+Pic: SURGE
+Gender: Male
+
+Rattata
+Level: 5
+
+=== TRAINER_TWINS2 ===
+Name: TWINS2
+Class: Cooltrainer
+Pic: TWINS2
+Gender: Male
+
+Rattata
+Level: 5
+
+=== TRAINER_YOUNGSTER2 ===
+Name: YOUNGSTER2
+Class: Cooltrainer
+Pic: YOUNGSTER2
+Gender: Male
+
+Rattata
+Level: 5

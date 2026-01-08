@@ -70,13 +70,30 @@ OaksLab_EventScript_Leo_Talk::
     checkflag FLAG_SYS_POKEMON_GET
     goto_if_eq OaksLab_EventScript_Leo_PostStarter
 
+    checkflag FLAG_SYS_NATIONAL_DEX
+    goto_if_eq OaksLab_EventScript_Leo_Talk_PostDex
+
     @ Repeat until starter is chosen
     setspeaker OaksLab_Speaker_Leo
     msgbox OaksLab_Text_Leo_AfterNia, MSGBOX_DEFAULT
     closemessage
+    msgbox OaksLab_Text_Leo_GrantNationalDex, MSGBOX_DEFAULT
+    closemessage
+    setflag FLAG_SYS_NATIONAL_DEX
+    special EnableNationalPokedex
+    setflag FLAG_SYS_POKEDEX_GET
+    special SetUnlockedPokedexFlags
+    goto OaksLab_EventScript_Leo_Talk_Release
+
+OaksLab_EventScript_Leo_Talk_PostDex::
+    setspeaker OaksLab_Speaker_Leo
+    msgbox OaksLab_Text_Leo_AfterNia, MSGBOX_DEFAULT
+    closemessage
+    goto OaksLab_EventScript_Leo_Talk_Release
+
+OaksLab_EventScript_Leo_Talk_Release::
     release
     end
-
 OaksLab_EventScript_Leo_PostStarter::
     setspeaker OaksLab_Speaker_Leo
     msgbox OaksLab_Text_Leo_PostStarter, MSGBOX_DEFAULT
@@ -346,6 +363,11 @@ OaksLab_Text_Leo_PostStarter:
     .string "I hope the Professor knows what he's\n"
     .string "doing entrusting a partner to a\l"
     .string "stranger.$"
+
+OaksLab_Text_Leo_GrantNationalDex:
+    .string "Take this National Pokédex too.\p"
+    .string "It will help you catalog every Pokemon\n"
+    .string "you encounter out there.$"
 
 OaksLab_Text_Nia_PostStarter:
     .string "The professor disappeared some time back\n"

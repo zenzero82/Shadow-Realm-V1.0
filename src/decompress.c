@@ -4,6 +4,7 @@
 #include "decompress.h"
 #include "decompress_error_handler.h"
 #include "pokemon.h"
+#include "shadow_graphics.h"
 #include "pokemon_sprite_visualizer.h"
 #include "text.h"
 #include "menu.h"
@@ -249,6 +250,45 @@ void DecompressPicFromTable(const struct CompressedSpriteSheet *src, void *buffe
 void HandleLoadSpecialPokePic(bool32 isFrontPic, void *dest, s32 species, u32 personality)
 {
     LoadSpecialPokePic(dest, species, personality, isFrontPic);
+}
+
+// ===== Shadow graphics override (opt-in) =====
+// This swaps graphics for Shadow Pokémon (MON_DATA_IS_SHADOW) without turning
+// them into forms/species. Call sites that should keep normal graphics (e.g.
+// the main Pokédex) continue using HandleLoadSpecialPokePic/LoadSpecialPokePic.
+//
+
+void LoadSpecialPokePic_ShadowAware(void *dest, s32 species, u32 personality, bool8 isFrontPic, bool8 isShadow)
+{
+    if (!isShadow)
+    {
+        LoadSpecialPokePic(dest, species, personality, isFrontPic);
+        return;
+    }
+
+    species = SanitizeSpeciesId(species);
+    if (species == SPECIES_UNOWN)
+        species = GetUnownSpeciesId(personality);
+
+    const u32 *src = GetShadowMonPic(species, personality, isFrontPic);
+    if (src != NULL)
+    {
+        DecompressDataWithHeaderWram(src, dest);
+        if (species == SPECIES_SPINDA && isFrontPic)
+        {
+            DrawSpindaSpots(personality, dest, FALSE);
+            DrawSpindaSpots(personality, dest, TRUE);
+        }
+        return;
+    }
+
+    // Fallback to normal behavior if no shadow override is defined.
+    LoadSpecialPokePic(dest, species, personality, isFrontPic);
+}
+
+void HandleLoadSpecialPokePic_ShadowAware(bool32 isFrontPic, void *dest, s32 species, u32 personality, bool8 isShadow)
+{
+    LoadSpecialPokePic_ShadowAware(dest, species, personality, isFrontPic, isShadow);
 }
 
 //  Wrapper function for all decompression calls using formats with headers

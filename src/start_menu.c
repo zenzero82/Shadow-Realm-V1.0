@@ -47,6 +47,7 @@
 #include "dexnav.h"
 #include "wild_encounter.h"
 #include "constants/battle_frontier.h"
+#include "constants/flags.h"
 #include "constants/rgb.h"
 #include "constants/songs.h"
 
@@ -638,7 +639,7 @@ static bool8 HandleStartMenuInput(void)
         PlaySE(SE_SELECT);
         if (sStartMenuItems[sCurrentStartMenuActions[sStartMenuCursorPos]].func.u8_void == StartMenuPokedexCallback)
         {
-            if (GetNationalPokedexCount(FLAG_GET_SEEN) == 0)
+            if (GetNationalPokedexCount(FLAG_GET_SEEN) == 0 && !FlagGet(FLAG_SYS_POKEDEX_GET))
                 return FALSE;
         }
         if (sCurrentStartMenuActions[sStartMenuCursorPos] == MENU_ACTION_DEXNAV

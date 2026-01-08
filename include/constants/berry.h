@@ -136,6 +136,26 @@
 
 // Remainder are unused
 
+// === KANTO / JOHTO Berry Tree slots (Gen 2-style graphics supported) ===
+// NOTE: These IDs are SaveBlock1 berryTrees[] indices (persistent growth state).
+// Place matching berry tree object events in Porymap and set their Berry Tree ID to these values.
+#define BERRY_TREE_KANTO_ROUTE_1_ORAN_GEN2            90
+#define BERRY_TREE_KANTO_ROUTE_3_CHERI           91
+#define BERRY_TREE_KANTO_ROUTE_4_PECHA           92
+#define BERRY_TREE_KANTO_ROUTE_6_CHESTO          93
+#define BERRY_TREE_KANTO_ROUTE_7_RAWST           94
+#define BERRY_TREE_KANTO_ROUTE_8_ASPEAR          95
+#define BERRY_TREE_KANTO_ROUTE_11_PERSIM         96
+#define BERRY_TREE_KANTO_ROUTE_13_ORAN           97
+#define BERRY_TREE_KANTO_ROUTE_16_LEPPA          98
+#define BERRY_TREE_KANTO_ROUTE_24_LUM            99
+#define BERRY_TREE_KANTO_ROUTE_25_SITRUS         100
+#define BERRY_TREE_KANTO_ROUTE_26_LEPPA          101
+#define BERRY_TREE_KANTO_PEWTER_CITY_CHERI       102
+#define BERRY_TREE_KANTO_CELADON_CITY_SITRUS     103
+#define BERRY_TREE_KANTO_FUCHSIA_CITY_LUM        104
+#define BERRY_TREE_KANTO_FUCHSIA_CITY_PERSIM_2   105
+
 #define BERRY_TREES_COUNT 128
 
 #endif // GUARD_CONSTANTS_BERRY_H

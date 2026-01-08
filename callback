@@ -1,0 +1,422 @@
+1176:    if (sMonSummaryScreen->categoryIconSpriteId == 0xFF)
+1177:        sMonSummaryScreen->categoryIconSpriteId = CreateSprite(&gSpriteTemplate_CategoryIcons, 48, 128, 0);
+1179:    gSprites[sMonSummaryScreen->categoryIconSpriteId].invisible = FALSE;
+1180:    StartSpriteAnim(&gSprites[sMonSummaryScreen->categoryIconSpriteId], category);
+1181:    return sMonSummaryScreen->categoryIconSpriteId;
+1186:    if (sMonSummaryScreen->categoryIconSpriteId != 0xFF)
+1187:        DestroySprite(&gSprites[sMonSummaryScreen->categoryIconSpriteId]);
+1188:    sMonSummaryScreen->categoryIconSpriteId = 0xFF;
+1194:    sMonSummaryScreen->mode = mode;
+1195:    sMonSummaryScreen->monList.mons = mons;
+1196:    sMonSummaryScreen->curMonIndex = monIndex;
+1197:    sMonSummaryScreen->maxMonIndex = maxMonIndex;
+1198:    sMonSummaryScreen->callback = callback;
+1203:        sMonSummaryScreen->isBoxMon = TRUE;
+1205:        sMonSummaryScreen->isBoxMon = FALSE;
+1214:        sMonSummaryScreen->minPageIndex = 0;
+1215:        sMonSummaryScreen->maxPageIndex = PSS_PAGE_COUNT - 1;
+1218:        sMonSummaryScreen->minPageIndex = 0;
+1219:        sMonSummaryScreen->maxPageIndex = PSS_PAGE_COUNT - 1;
+1220:        sMonSummaryScreen->lockMovesFlag = TRUE;
+1223:        sMonSummaryScreen->minPageIndex = PSS_PAGE_BATTLE_MOVES;
+1224:        sMonSummaryScreen->maxPageIndex = PSS_PAGE_COUNT - 1;
+1225:        sMonSummaryScreen->lockMonFlag = TRUE;
+1230:        sMonSummaryScreen->currPageIndex = PSS_PAGE_BATTLE_MOVES;
+1232:        sMonSummaryScreen->currPageIndex = PSS_PAGE_CONTEST_MOVES;
+1234:        sMonSummaryScreen->currPageIndex = sMonSummaryScreen->minPageIndex;
+1236:    sMonSummaryScreen->categoryIconSpriteId = 0xFF;
+1248:    sMonSummaryScreen->newMove = newMove;
+1254:    sMonSummaryScreen->handleDeoxys = TRUE;
+1307:        sMonSummaryScreen->switchCounter = 0;
+1323:        CopyMonToSummaryStruct(&sMonSummaryScreen->currentMon);
+1324:        sMonSummaryScreen->switchCounter = 0;
+1328:        if (ExtractMonDataToSummaryStruct(&sMonSummaryScreen->currentMon) != 0)
+1341:        PrintPageSpecificText(sMonSummaryScreen->currPageIndex);
+1349:        PutPageWindowTilemaps(sMonSummaryScreen->currPageIndex);
+1355:        sMonSummaryScreen->switchCounter = 0;
+1359:        sMonSummaryScreen->spriteIds[SPRITE_ARR_ID_MON] = LoadMonGfxAndSprite(&sMonSummaryScreen->currentMon, &sMonSummaryScreen->switchCounter);
+1360:        if (sMonSummaryScreen->spriteIds[SPRITE_ARR_ID_MON] != SPRITE_NONE)
+1362:            sMonSummaryScreen->switchCounter = 0;
+1367:        CreateMonMarkingsSprite(&sMonSummaryScreen->currentMon);
+1371:        CreateCaughtBallSprite(&sMonSummaryScreen->currentMon);
+1383:        if (sMonSummaryScreen->mode != SUMMARY_MODE_SELECT_MOVE)
+1410:    SetBgTilemapBuffer(1, sMonSummaryScreen->bgTilemapBuffers[PSS_PAGE_BATTLE_MOVES][0]);
+1411:    SetBgTilemapBuffer(2, sMonSummaryScreen->bgTilemapBuffers[PSS_PAGE_SKILLS][0]);
+1412:    SetBgTilemapBuffer(3, sMonSummaryScreen->bgTilemapBuffers[PSS_PAGE_INFO][0]);
+1427:    switch (sMonSummaryScreen->switchCounter)
+1432:        sMonSummaryScreen->switchCounter++;
+1437:            DecompressDataWithHeaderWram(gSummaryPage_Info_Tilemap, sMonSummaryScreen->bgTilemapBuffers[PSS_PAGE_INFO][0]);
+1438:            sMonSummaryScreen->switchCounter++;
+1442:        DecompressDataWithHeaderWram(gSummaryPage_InfoEgg_Tilemap, sMonSummaryScreen->bgTilemapBuffers[PSS_PAGE_INFO][1]);
+1443:        sMonSummaryScreen->switchCounter++;
+1446:        DecompressDataWithHeaderWram(gSummaryPage_Skills_Tilemap, sMonSummaryScreen->bgTilemapBuffers[PSS_PAGE_SKILLS][1]);
+1447:        sMonSummaryScreen->switchCounter++;
+1450:        DecompressDataWithHeaderWram(gSummaryPage_BattleMoves_Tilemap, sMonSummaryScreen->bgTilemapBuffers[PSS_PAGE_BATTLE_MOVES][1]);
+1451:        sMonSummaryScreen->switchCounter++;
+1454:        DecompressDataWithHeaderWram(gSummaryPage_ContestMoves_Tilemap, sMonSummaryScreen->bgTilemapBuffers[PSS_PAGE_CONTEST_MOVES][1]);
+1455:        sMonSummaryScreen->switchCounter++;
+1459:        sMonSummaryScreen->switchCounter++;
+1463:        sMonSummaryScreen->switchCounter++;
+1467:        sMonSummaryScreen->switchCounter++;
+1471:        sMonSummaryScreen->switchCounter++;
+1475:        sMonSummaryScreen->switchCounter++;
+1479:        sMonSummaryScreen->switchCounter++;
+1485:        sMonSummaryScreen->switchCounter = 0;
+1493:    if (!sMonSummaryScreen->isBoxMon)
+1495:        struct Pokemon *partyMon = sMonSummaryScreen->monList.mons;
+1496:        *mon = partyMon[sMonSummaryScreen->curMonIndex];
+1500:        struct BoxPokemon *boxMon = sMonSummaryScreen->monList.boxMons;
+1501:        BoxMonToMon(&boxMon[sMonSummaryScreen->curMonIndex], mon);
+1508:    struct PokeSummary *sum = &sMonSummaryScreen->summary;
+1510:    switch (sMonSummaryScreen->switchCounter)
+1557:        sMonSummaryScreen->relearnableMovesNum = P_SUMMARY_SCREEN_MOVE_RELEARNER ? GetNumberOfRelearnableMoves(mon) : 0;
+1560:    sMonSummaryScreen->switchCounter++;
+1566:    if ((sMonSummaryScreen->currPageIndex != PSS_PAGE_BATTLE_MOVES && sMonSummaryScreen->currPageIndex != PSS_PAGE_CONTEST_MOVES)
+1567:        || sMonSummaryScreen->mode == SUMMARY_MODE_RELEARNER_BATTLE
+1568:        || sMonSummaryScreen->mode == SUMMARY_MODE_RELEARNER_CONTEST)
+1575:        DrawContestMoveHearts(sMonSummaryScreen->summary.moves[sMonSummaryScreen->firstMoveIndex]);
+1576:        TilemapFiveMovesDisplay(sMonSummaryScreen->bgTilemapBuffers[PSS_PAGE_BATTLE_MOVES][0], 3, FALSE);
+1577:        TilemapFiveMovesDisplay(sMonSummaryScreen->bgTilemapBuffers[PSS_PAGE_CONTEST_MOVES][0], 1, FALSE);
+1578:        SetBgTilemapBuffer(1, sMonSummaryScreen->bgTilemapBuffers[PSS_PAGE_CONTEST_MOVES][0]);
+1579:        SetBgTilemapBuffer(2, sMonSummaryScreen->bgTilemapBuffers[PSS_PAGE_BATTLE_MOVES][0]);
+1586:    if (sMonSummaryScreen->mode == SUMMARY_MODE_RELEARNER_BATTLE)
+1588:        SetBgTilemapBuffer(1, sMonSummaryScreen->bgTilemapBuffers[PSS_PAGE_SKILLS][0]);
+1589:        SetBgTilemapBuffer(2, sMonSummaryScreen->bgTilemapBuffers[PSS_PAGE_BATTLE_MOVES][0]);
+1597:    else if (sMonSummaryScreen->mode == SUMMARY_MODE_RELEARNER_CONTEST)
+1599:        sMonSummaryScreen->bgDisplayOrder = 1;
+1600:        SetBgTilemapBuffer(1, sMonSummaryScreen->bgTilemapBuffers[PSS_PAGE_CONTEST_MOVES][0]);
+1601:        SetBgTilemapBuffer(2, sMonSummaryScreen->bgTilemapBuffers[PSS_PAGE_BATTLE_MOVES][0]);
+1610:    if (sMonSummaryScreen->summary.ailment == AILMENT_NONE)
+1612:    else if ((sMonSummaryScreen->currPageIndex != PSS_PAGE_BATTLE_MOVES && sMonSummaryScreen->currPageIndex != PSS_PAGE_CONTEST_MOVES)
+1613:            || sMonSummaryScreen->mode == SUMMARY_MODE_RELEARNER_BATTLE
+1614:            || sMonSummaryScreen->mode == SUMMARY_MODE_RELEARNER_CONTEST)
+1618:    DrawPokerusCuredSymbol(&sMonSummaryScreen->currentMon);
+1666:        if (sMonSummaryScreen->callback == gInitialSummaryScreenCallback)
+1668:        SetMainCallback2(sMonSummaryScreen->callback);
+1669:        gLastViewedMonIndex = sMonSummaryScreen->curMonIndex;
+1757:            if (sMonSummaryScreen->currPageIndex != PSS_PAGE_SKILLS)
+1759:                if (sMonSummaryScreen->currPageIndex == PSS_PAGE_INFO)
+1763:                        sMonSummaryScreen->callback = CB2_PssChangePokemonNickname;
+1764:                        gSpecialVar_0x8004 = sMonSummaryScreen->curMonIndex;
+1771:                else if (sMonSummaryScreen->currPageIndex == PSS_PAGE_BATTLE_MOVES
+1772:                         || sMonSummaryScreen->currPageIndex == PSS_PAGE_CONTEST_MOVES)
+1778:            if (sMonSummaryScreen->currPageIndex == PSS_PAGE_SKILLS)
+1782:                    ShowMonSkillsInfo(taskId, IncrementSkillsStatsMode(sMonSummaryScreen->skillsPageMode));
+1795:                && (sMonSummaryScreen->currPageIndex == PSS_PAGE_BATTLE_MOVES || sMonSummaryScreen->currPageIndex == PSS_PAGE_CONTEST_MOVES))
+1797:            sMonSummaryScreen->callback = CB2_InitLearnMove;
+1798:            gSpecialVar_0x8004 = sMonSummaryScreen->curMonIndex;
+1799:            gOriginSummaryScreenPage = sMonSummaryScreen->currPageIndex;
+1806:            sMonSummaryScreen->callback = CB2_Pokemon_Sprite_Visualizer;
+1821:            sMonSummaryScreen->skillsPageMode = SUMMARY_SKILLS_MODE_EVS;
+1826:            sMonSummaryScreen->skillsPageMode = SUMMARY_SKILLS_MODE_IVS;
+1833:            sMonSummaryScreen->skillsPageMode = SUMMARY_SKILLS_MODE_STATS;
+1838:            sMonSummaryScreen->skillsPageMode = SUMMARY_SKILLS_MODE_EVS;
+1843:        sMonSummaryScreen->skillsPageMode = SUMMARY_SKILLS_MODE_STATS;
+1851:    struct PokeSummary *sum = &sMonSummaryScreen->summary;
+1852:    struct Pokemon *mon = &sMonSummaryScreen->currentMon;
+1854:    FillWindowPixelBuffer(sMonSummaryScreen->windowIds[PSS_DATA_WINDOW_SKILLS_STATS_LEFT], 0);
+1855:    FillWindowPixelBuffer(sMonSummaryScreen->windowIds[PSS_DATA_WINDOW_SKILLS_STATS_RIGHT], 0);
+1857:    if (sMonSummaryScreen->currPageIndex == PSS_PAGE_SKILLS)
+1887:    if (sMonSummaryScreen->monList.mons == gPlayerParty || sMonSummaryScreen->mode == SUMMARY_MODE_BOX || sMonSummaryScreen->handleDeoxys == TRUE)
+1937:    if (!sMonSummaryScreen->lockMonFlag)
+1939:        if (sMonSummaryScreen->isBoxMon == TRUE)
+1941:            if (sMonSummaryScreen->currPageIndex != PSS_PAGE_INFO)
+1955:            monId = AdvanceStorageMonIndex(sMonSummaryScreen->monList.boxMons, sMonSummaryScreen->curMonIndex, sMonSummaryScreen->maxMonIndex, delta);
+1969:            if (sMonSummaryScreen->summary.ailment != AILMENT_NONE)
+1976:            sMonSummaryScreen->curMonIndex = monId;
+1994:        DestroySpriteAndFreeResources(&gSprites[sMonSummaryScreen->spriteIds[SPRITE_ARR_ID_MON]]);
+1997:        DestroySpriteAndFreeResources(&gSprites[sMonSummaryScreen->spriteIds[SPRITE_ARR_ID_BALL]]);
+2000:        CopyMonToSummaryStruct(&sMonSummaryScreen->currentMon);
+2001:        sMonSummaryScreen->switchCounter = 0;
+2004:        if (P_SUMMARY_SCREEN_RENAME && sMonSummaryScreen->currPageIndex == PSS_PAGE_INFO)
+2006:        if (ShouldShowIvEvPrompt() && sMonSummaryScreen->currPageIndex == PSS_PAGE_SKILLS)
+2008:            sMonSummaryScreen->skillsPageMode = SUMMARY_SKILLS_MODE_STATS;
+2011:        if (ExtractMonDataToSummaryStruct(&sMonSummaryScreen->currentMon) == FALSE)
+2018:                && (sMonSummaryScreen->currPageIndex == PSS_PAGE_BATTLE_MOVES || sMonSummaryScreen->currPageIndex == PSS_PAGE_CONTEST_MOVES))
+2028:        RemoveAndCreateMonMarkingsSprite(&sMonSummaryScreen->currentMon);
+2031:        CreateCaughtBallSprite(&sMonSummaryScreen->currentMon);
+2034:        if (sMonSummaryScreen->summary.ailment != AILMENT_NONE)
+2036:        DrawPokerusCuredSymbol(&sMonSummaryScreen->currentMon);
+2043:        sMonSummaryScreen->spriteIds[SPRITE_ARR_ID_MON] = LoadMonGfxAndSprite(&sMonSummaryScreen->currentMon, &data[1]);
+2044:        if (sMonSummaryScreen->spriteIds[SPRITE_ARR_ID_MON] == SPRITE_NONE)
+2046:        gSprites[sMonSummaryScreen->spriteIds[SPRITE_ARR_ID_MON]].data[2] = 1;
+2057:        PrintPageSpecificText(sMonSummaryScreen->currPageIndex);
+2061:        gSprites[sMonSummaryScreen->spriteIds[SPRITE_ARR_ID_MON]].data[2] = 0;
+2076:    struct Pokemon *mon = sMonSummaryScreen->monList.mons;
+2078:    if (sMonSummaryScreen->currPageIndex == PSS_PAGE_INFO)
+2080:        if (delta == -1 && sMonSummaryScreen->curMonIndex == 0)
+2082:        else if (delta == 1 && sMonSummaryScreen->curMonIndex >= sMonSummaryScreen->maxMonIndex)
+2085:            return sMonSummaryScreen->curMonIndex + delta;
+2089:        s8 index = sMonSummaryScreen->curMonIndex;
+2094:            if (index < 0 || index > sMonSummaryScreen->maxMonIndex)
+2103:    struct Pokemon *mons = sMonSummaryScreen->monList.mons;
+2109:        if (sMultiBattleOrder[i] == sMonSummaryScreen->curMonIndex)
+2133:    else if (sMonSummaryScreen->curMonIndex != 0 || !GetMonData(mon, MON_DATA_IS_EGG))
+2141:    struct PokeSummary *summary = &sMonSummaryScreen->summary;
+2146:    else if (delta == -1 && sMonSummaryScreen->currPageIndex == sMonSummaryScreen->minPageIndex)
+2148:    else if (delta == 1 && sMonSummaryScreen->currPageIndex == sMonSummaryScreen->maxPageIndex)
+2152:    ClearPageWindowTilemaps(sMonSummaryScreen->currPageIndex);
+2153:    sMonSummaryScreen->currPageIndex += delta;
+2159:    CreateTextPrinterTask(sMonSummaryScreen->currPageIndex);
+2162:    if (sMonSummaryScreen->currPageIndex == PSS_PAGE_SKILLS
+2163:        || (sMonSummaryScreen->currPageIndex + delta) == PSS_PAGE_SKILLS)
+2165:        struct Pokemon *mon = &sMonSummaryScreen->currentMon;
+2167:        if (sMonSummaryScreen->skillsPageMode != SUMMARY_SKILLS_MODE_STATS)
+2168:            sMonSummaryScreen->skillsPageMode = SUMMARY_SKILLS_MODE_STATS;
+2170:        ShowUtilityPrompt(sMonSummaryScreen->skillsPageMode);
+2186:        if (sMonSummaryScreen->bgDisplayOrder == 0)
+2201:        SetBgTilemapBuffer(data[1], sMonSummaryScreen->bgTilemapBuffers[sMonSummaryScreen->currPageIndex][0]);
+2214:    sMonSummaryScreen->bgDisplayOrder ^= 1;
+2218:    PutPageWindowTilemaps(sMonSummaryScreen->currPageIndex);
+2228:    if (sMonSummaryScreen->currPageIndex == PSS_PAGE_SKILLS)
+2232:        if (sMonSummaryScreen->bgDisplayOrder == 0)
+2247:    if (sMonSummaryScreen->bgDisplayOrder == 0)
+2259:    if (sMonSummaryScreen->currPageIndex > 1)
+2261:        SetBgTilemapBuffer(data[1], sMonSummaryScreen->bgTilemapBuffers[sMonSummaryScreen->currPageIndex - 1][0]);
+2266:    sMonSummaryScreen->bgDisplayOrder ^= 1;
+2270:    PutPageWindowTilemaps(sMonSummaryScreen->currPageIndex);
+2278:    if (sMonSummaryScreen->currPageIndex == PSS_PAGE_SKILLS)
+2280:        if (GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_IS_SHADOW))
+2281:            DrawHeartGaugeBar(&sMonSummaryScreen->currentMon);
+2283:            DrawExperienceProgressBar(&sMonSummaryScreen->currentMon);
+2290:    if (sMonSummaryScreen->summary.isShadow)
+2299:    sMonSummaryScreen->firstMoveIndex = 0;
+2300:    move = sMonSummaryScreen->summary.moves[sMonSummaryScreen->firstMoveIndex];
+2302:    if (!gSprites[sMonSummaryScreen->spriteIds[SPRITE_ARR_ID_STATUS]].invisible)
+2307:    if (!sMonSummaryScreen->lockMovesFlag)
+2319:    TilemapFiveMovesDisplay(sMonSummaryScreen->bgTilemapBuffers[PSS_PAGE_BATTLE_MOVES][0], 3, FALSE);
+2320:    TilemapFiveMovesDisplay(sMonSummaryScreen->bgTilemapBuffers[PSS_PAGE_CONTEST_MOVES][0], 1, FALSE);
+2340:            ChangeSelectedMove(data, -1, &sMonSummaryScreen->firstMoveIndex);
+2345:            ChangeSelectedMove(data, 1, &sMonSummaryScreen->firstMoveIndex);
+2349:            if (sMonSummaryScreen->lockMovesFlag == TRUE
+2350:                || (sMonSummaryScreen->newMove == MOVE_NONE && sMonSummaryScreen->firstMoveIndex == MAX_MON_MOVES))
+2380:        if (sMonSummaryScreen->summary.moves[i] != 0)
+2403:            move = sMonSummaryScreen->newMove;
+2406:        move = sMonSummaryScreen->summary.moves[newMoveIndex];
+2414:    if ((*moveIndexPtr == MAX_MON_MOVES && sMonSummaryScreen->newMove == MOVE_NONE)
+2418:        if (!gSprites[sMonSummaryScreen->spriteIds[SPRITE_ARR_ID_STATUS]].invisible)
+2426:        && sMonSummaryScreen->newMove == MOVE_NONE)
+2438:    if (moveIndexPtr == &sMonSummaryScreen->firstMoveIndex)
+2452:    TilemapFiveMovesDisplay(sMonSummaryScreen->bgTilemapBuffers[PSS_PAGE_BATTLE_MOVES][0], 3, TRUE);
+2453:    TilemapFiveMovesDisplay(sMonSummaryScreen->bgTilemapBuffers[PSS_PAGE_CONTEST_MOVES][0], 1, TRUE);
+2455:    if (sMonSummaryScreen->firstMoveIndex != MAX_MON_MOVES)
+2471:    sMonSummaryScreen->secondMoveIndex = sMonSummaryScreen->firstMoveIndex;
+2486:            ChangeSelectedMove(&data[0], -1, &sMonSummaryScreen->secondMoveIndex);
+2491:            ChangeSelectedMove(&data[0], 1, &sMonSummaryScreen->secondMoveIndex);
+2495:            if (sMonSummaryScreen->firstMoveIndex == sMonSummaryScreen->secondMoveIndex)
+2517:        if (!sMonSummaryScreen->isBoxMon)
+2519:            struct Pokemon *mon = sMonSummaryScreen->monList.mons;
+2520:            SwapMonMoves(&mon[sMonSummaryScreen->curMonIndex], sMonSummaryScreen->firstMoveIndex, sMonSummaryScreen->secondMoveIndex);
+2524:            struct BoxPokemon *boxMon = sMonSummaryScreen->monList.boxMons;
+2525:            SwapBoxMonMoves(&boxMon[sMonSummaryScreen->curMonIndex], sMonSummaryScreen->firstMoveIndex, sMonSummaryScreen->secondMoveIndex);
+2527:        CopyMonToSummaryStruct(&sMonSummaryScreen->currentMon);
+2528:        SwapMovesNamesPP(sMonSummaryScreen->firstMoveIndex, sMonSummaryScreen->secondMoveIndex);
+2529:        SwapMovesTypeSprites(sMonSummaryScreen->firstMoveIndex, sMonSummaryScreen->secondMoveIndex);
+2530:        sMonSummaryScreen->firstMoveIndex = sMonSummaryScreen->secondMoveIndex;
+2533:    move = sMonSummaryScreen->summary.moves[sMonSummaryScreen->firstMoveIndex];
+2543:    struct PokeSummary *summary = &sMonSummaryScreen->summary;
+2578:    struct PokeSummary *summary = &sMonSummaryScreen->summary;
+2629:                ChangeSelectedMove(data, -1, &sMonSummaryScreen->firstMoveIndex);
+2634:                ChangeSelectedMove(data, 1, &sMonSummaryScreen->firstMoveIndex);
+2650:                    sMoveSlotToReplace = sMonSummaryScreen->firstMoveIndex;
+2674:    if (sMonSummaryScreen->firstMoveIndex == MAX_MON_MOVES
+2675:        || sMonSummaryScreen->newMove == MOVE_NONE
+2676:        || IsMoveHM(sMonSummaryScreen->summary.moves[sMonSummaryScreen->firstMoveIndex]) != TRUE)
+2686:    gSprites[sMonSummaryScreen->categoryIconSpriteId].invisible = TRUE;
+2705:            ChangeSelectedMove(&data[0], -1, &sMonSummaryScreen->firstMoveIndex);
+2713:            ChangeSelectedMove(&data[0], 1, &sMonSummaryScreen->firstMoveIndex);
+2719:            if (sMonSummaryScreen->currPageIndex != PSS_PAGE_BATTLE_MOVES)
+2722:                if (!gSprites[sMonSummaryScreen->spriteIds[SPRITE_ARR_ID_STATUS]].invisible)
+2724:                move = sMonSummaryScreen->summary.moves[sMonSummaryScreen->firstMoveIndex];
+2733:            if (sMonSummaryScreen->currPageIndex != PSS_PAGE_CONTEST_MOVES)
+2736:                if (!gSprites[sMonSummaryScreen->spriteIds[SPRITE_ARR_ID_STATUS]].invisible)
+2738:                move = sMonSummaryScreen->summary.moves[sMonSummaryScreen->firstMoveIndex];
+2748:            if (!gSprites[sMonSummaryScreen->spriteIds[SPRITE_ARR_ID_STATUS]].invisible)
+2750:            move = sMonSummaryScreen->summary.moves[sMonSummaryScreen->firstMoveIndex];
+2774:        if (i < sMonSummaryScreen->minPageIndex)
+2781:        else if (i > sMonSummaryScreen->maxPageIndex)
+2788:        else if (i < sMonSummaryScreen->currPageIndex)
+2795:        else if (i == sMonSummaryScreen->currPageIndex)
+2797:            if (i != sMonSummaryScreen->maxPageIndex)
+2812:        else if (i != sMonSummaryScreen->maxPageIndex)
+2863:        ChangeTilemap(&sBattleMoveTilemapCtrl, sMonSummaryScreen->bgTilemapBuffers[PSS_PAGE_BATTLE_MOVES][0], b, TRUE);
+2887:    ChangeTilemap(&sBattleMoveTilemapCtrl, sMonSummaryScreen->bgTilemapBuffers[PSS_PAGE_BATTLE_MOVES][0], data[1], TRUE);
+2892:            if (sMonSummaryScreen->currPageIndex == PSS_PAGE_BATTLE_MOVES)
+2897:            if (!gSprites[sMonSummaryScreen->spriteIds[SPRITE_ARR_ID_STATUS]].invisible)
+2915:        ChangeTilemap(&sContestMoveTilemapCtrl, sMonSummaryScreen->bgTilemapBuffers[PSS_PAGE_CONTEST_MOVES][0], b, TRUE);
+2940:    ChangeTilemap(&sContestMoveTilemapCtrl, sMonSummaryScreen->bgTilemapBuffers[PSS_PAGE_CONTEST_MOVES][0], data[1], TRUE);
+2945:            if (sMonSummaryScreen->currPageIndex == PSS_PAGE_CONTEST_MOVES && FuncIsActiveTask(PssScrollRight) == 0)
+2951:            if (!gSprites[sMonSummaryScreen->spriteIds[SPRITE_ARR_ID_STATUS]].invisible)
+2970:        ChangeTilemap(&sStatusTilemapCtrl1, sMonSummaryScreen->bgTilemapBuffers[PSS_PAGE_INFO][0], b, FALSE);
+2971:        ChangeTilemap(&sStatusTilemapCtrl2, sMonSummaryScreen->bgTilemapBuffers[PSS_PAGE_INFO][0], b, FALSE);
+2989:    ChangeTilemap(&sStatusTilemapCtrl1, sMonSummaryScreen->bgTilemapBuffers[PSS_PAGE_INFO][0], data[1], FALSE);
+2990:    ChangeTilemap(&sStatusTilemapCtrl2, sMonSummaryScreen->bgTilemapBuffers[PSS_PAGE_INFO][0], data[1], FALSE);
+3035:        sMonSummaryScreen->bgTilemapBuffers[PSS_PAGE_INFO][0][0x223] = 0x2C;
+3036:        sMonSummaryScreen->bgTilemapBuffers[PSS_PAGE_INFO][1][0x223] = 0x2C;
+3040:        sMonSummaryScreen->bgTilemapBuffers[PSS_PAGE_INFO][0][0x223] = 0x81A;
+3041:        sMonSummaryScreen->bgTilemapBuffers[PSS_PAGE_INFO][1][0x223] = 0x81A;
+3058:    struct PokeSummary *summary = &sMonSummaryScreen->summary;
+3081:    dst = &sMonSummaryScreen->bgTilemapBuffers[PSS_PAGE_SKILLS][1][0x255];
+3094:    expLabelReplacer = &sMonSummaryScreen->bgTilemapBuffers[PSS_PAGE_SKILLS][1][0x253];
+3098:    expBarEndCap = &sMonSummaryScreen->bgTilemapBuffers[PSS_PAGE_SKILLS][1][0x25D];
+3101:    if (GetBgTilemapBuffer(1) == sMonSummaryScreen->bgTilemapBuffers[PSS_PAGE_SKILLS][0])
+3109:    u16 *tilemap = sMonSummaryScreen->bgTilemapBuffers[PSS_PAGE_CONTEST_MOVES][1];
+3144:    if (sMonSummaryScreen->summary.isEgg)
+3158:    for (i = 0; i < ARRAY_COUNT(sMonSummaryScreen->windowIds); i++)
+3159:        sMonSummaryScreen->windowIds[i] = WINDOW_NONE;
+3188:    if (!sMonSummaryScreen->summary.isEgg)
+3197:    struct Pokemon *mon = &sMonSummaryScreen->currentMon;
+3198:    struct PokeSummary *summary = &sMonSummaryScreen->summary;
+3242:    GetMonNickname(&sMonSummaryScreen->currentMon, gStringVar1);
+3340:        if (sMonSummaryScreen->mode == SUMMARY_MODE_SELECT_MOVE)
+3342:            if (sMonSummaryScreen->newMove != MOVE_NONE || sMonSummaryScreen->firstMoveIndex != MAX_MON_MOVES)
+3354:        if (sMonSummaryScreen->mode == SUMMARY_MODE_SELECT_MOVE)
+3356:            if (sMonSummaryScreen->newMove != MOVE_NONE || sMonSummaryScreen->firstMoveIndex != MAX_MON_MOVES)
+3367:    for (i = 0; i < ARRAY_COUNT(sMonSummaryScreen->windowIds); i++)
+3368:        PutWindowTilemap(sMonSummaryScreen->windowIds[i]);
+3393:        if (sMonSummaryScreen->mode == SUMMARY_MODE_SELECT_MOVE)
+3395:            if (sMonSummaryScreen->newMove != MOVE_NONE || sMonSummaryScreen->firstMoveIndex != MAX_MON_MOVES)
+3398:                gSprites[sMonSummaryScreen->categoryIconSpriteId].invisible = TRUE;
+3408:        if (sMonSummaryScreen->mode == SUMMARY_MODE_SELECT_MOVE)
+3410:            if (sMonSummaryScreen->newMove != MOVE_NONE || sMonSummaryScreen->firstMoveIndex != MAX_MON_MOVES)
+3421:    for (i = 0; i < ARRAY_COUNT(sMonSummaryScreen->windowIds); i++)
+3429:    u8 *windowIdPtr = &sMonSummaryScreen->windowIds[templateId];
+3440:    u8 *windowIdPtr = &sMonSummaryScreen->windowIds[windowIndex];
+3452:    for (i = 0; i < ARRAY_COUNT(sMonSummaryScreen->windowIds); i++)
+3454:        if (sMonSummaryScreen->windowIds[i] != WINDOW_NONE)
+3455:            FillWindowPixelBuffer(sMonSummaryScreen->windowIds[i], PIXEL_FILL(0));
+3467:    if (sMonSummaryScreen->summary.isEgg)
+3523:        if (sMonSummaryScreen->summary.OTGender == 0)
+3524:            PrintTextOnWindow(windowId, sMonSummaryScreen->summary.OTName, x, 1, 0, 5);
+3526:            PrintTextOnWindow(windowId, sMonSummaryScreen->summary.OTName, x, 1, 0, 6);
+3535:        ConvertIntToDecimalStringN(StringCopy(gStringVar1, gText_IDNumber2), (u16)sMonSummaryScreen->summary.OTID, STR_CONV_MODE_LEADING_ZEROS, 5);
+3543:    u16 ability = GetAbilityBySpecies(sMonSummaryScreen->summary.species, sMonSummaryScreen->summary.abilityNum);
+3549:    u16 ability = GetAbilityBySpecies(sMonSummaryScreen->summary.species, sMonSummaryScreen->summary.abilityNum);
+3555:    struct PokeSummary *sum = &sMonSummaryScreen->summary;
+3618:    u8 level = sMonSummaryScreen->summary.metLevel;
+3627:    struct PokeSummary *sum = &sMonSummaryScreen->summary;
+3631:    if (sMonSummaryScreen->monList.mons == gEnemyParty)
+3653:    struct PokeSummary *sum = &sMonSummaryScreen->summary;
+3661:    struct PokeSummary *sum = &sMonSummaryScreen->summary;
+3671:        if (sMonSummaryScreen->curMonIndex == 1 || sMonSummaryScreen->curMonIndex == 4 || sMonSummaryScreen->curMonIndex == 5)
+3697:    struct PokeSummary *sum = &sMonSummaryScreen->summary;
+3699:    if (sMonSummaryScreen->summary.sanity == TRUE)
+3716:    struct PokeSummary *sum = &sMonSummaryScreen->summary;
+3718:    if (sMonSummaryScreen->summary.sanity != 1)
+3793:    if (sMonSummaryScreen->summary.item == ITEM_ENIGMA_BERRY_E_READER
+3795:        && (sMonSummaryScreen->curMonIndex == 1 || sMonSummaryScreen->curMonIndex == 4 || sMonSummaryScreen->curMonIndex == 5))
+3799:    else if (sMonSummaryScreen->summary.item == ITEM_NONE)
+3805:        CopyItemName(sMonSummaryScreen->summary.item, gStringVar1);
+3819:    if (sMonSummaryScreen->summary.ribbonCount == 0)
+3825:        ConvertIntToDecimalStringN(gStringVar1, sMonSummaryScreen->summary.ribbonCount, STR_CONV_MODE_RIGHT_ALIGN, 2);
+3841:    if (statIndex == 0 || !SUMMARY_SCREEN_NATURE_COLORS || gNaturesInfo[sMonSummaryScreen->summary.mintNature].statUp == gNaturesInfo[sMonSummaryScreen->summary.mintNature].statDown)
+3843:    else if (statIndex == gNaturesInfo[sMonSummaryScreen->summary.mintNature].statUp)
+3845:    else if (statIndex == gNaturesInfo[sMonSummaryScreen->summary.mintNature].statDown)
+3851:        && sMonSummaryScreen->skillsPageMode == SUMMARY_SKILLS_MODE_IVS)
+3891:    BufferStat(currentHPString, STAT_HP, sMonSummaryScreen->summary.currentHP, 0, 3);
+3892:    BufferStat(maxHPString, STAT_HP, sMonSummaryScreen->summary.maxHP, 1, 3);
+3893:    BufferStat(attackString, STAT_ATK, sMonSummaryScreen->summary.atk, 2, 7);
+3894:    BufferStat(defenseString, STAT_DEF, sMonSummaryScreen->summary.def, 3, 7);
+3912:    BufferStat(hpIvEvString, STAT_HP, sMonSummaryScreen->summary.currentHP, 0, 7);
+3913:    BufferStat(attackIvEvString, STAT_ATK, sMonSummaryScreen->summary.atk, 1, 7);
+3914:    BufferStat(defenseIvEvString, STAT_DEF, sMonSummaryScreen->summary.def, 2, 7);
+3927:    if (sMonSummaryScreen->skillsPageMode == SUMMARY_SKILLS_MODE_IVS && !P_SUMMARY_SCREEN_IV_EV_VALUES)
+3939:    BufferStat(gStringVar1, STAT_SPATK, sMonSummaryScreen->summary.spatk, 0, 3);
+3940:    BufferStat(gStringVar2, STAT_SPDEF, sMonSummaryScreen->summary.spdef, 1, 3);
+3941:    BufferStat(gStringVar3, STAT_SPEED, sMonSummaryScreen->summary.speed, 2, 3);
+3950:    if (sMonSummaryScreen->skillsPageMode == SUMMARY_SKILLS_MODE_IVS && !P_SUMMARY_SCREEN_IV_EV_VALUES)
+3960:    struct PokeSummary *sum = &sMonSummaryScreen->summary;
+3985:    if (sMonSummaryScreen->mode == SUMMARY_MODE_SELECT_MOVE)
+3988:        if (sMonSummaryScreen->firstMoveIndex == MAX_MON_MOVES)
+3990:            if (sMonSummaryScreen->newMove != MOVE_NONE)
+3991:                PrintMoveDetails(sMonSummaryScreen->newMove);
+3995:            PrintMoveDetails(sMonSummaryScreen->summary.moves[sMonSummaryScreen->firstMoveIndex]);
+4019:        if (sMonSummaryScreen->mode == SUMMARY_MODE_SELECT_MOVE)
+4023:        if (sMonSummaryScreen->mode == SUMMARY_MODE_SELECT_MOVE)
+4025:            if (sMonSummaryScreen->firstMoveIndex == MAX_MON_MOVES)
+4026:                data[1] = sMonSummaryScreen->newMove;
+4028:                data[1] = sMonSummaryScreen->summary.moves[sMonSummaryScreen->firstMoveIndex];
+4032:        if (sMonSummaryScreen->mode == SUMMARY_MODE_SELECT_MOVE)
+4034:            if (sMonSummaryScreen->newMove != MOVE_NONE || sMonSummaryScreen->firstMoveIndex != MAX_MON_MOVES)
+4050:    struct PokeSummary *summary = &sMonSummaryScreen->summary;
+4122:    if (sMonSummaryScreen->mode == SUMMARY_MODE_SELECT_MOVE)
+4125:        PrintContestMoveDescription(sMonSummaryScreen->firstMoveIndex);
+4148:        if (sMonSummaryScreen->mode == SUMMARY_MODE_SELECT_MOVE)
+4152:        if (sMonSummaryScreen->mode == SUMMARY_MODE_SELECT_MOVE)
+4154:            if (sMonSummaryScreen->newMove != MOVE_NONE || sMonSummaryScreen->firstMoveIndex != MAX_MON_MOVES)
+4155:                PrintContestMoveDescription(sMonSummaryScreen->firstMoveIndex);
+4170:        move = sMonSummaryScreen->newMove;
+4172:        move = sMonSummaryScreen->summary.moves[moveSlot];
+4187:        if (sMonSummaryScreen->currPageIndex == PSS_PAGE_BATTLE_MOVES)
+4213:    if (sMonSummaryScreen->newMove == MOVE_NONE)
+4219:        u16 move = sMonSummaryScreen->newMove;
+4221:        if (sMonSummaryScreen->currPageIndex == PSS_PAGE_BATTLE_MOVES)
+4268:    for (i = 0; i < ARRAY_COUNT(sMonSummaryScreen->spriteIds); i++)
+4269:        sMonSummaryScreen->spriteIds[i] = SPRITE_NONE;
+4274:    if (sMonSummaryScreen->spriteIds[spriteArrayId] != SPRITE_NONE)
+4276:        DestroySprite(&gSprites[sMonSummaryScreen->spriteIds[spriteArrayId]]);
+4277:        sMonSummaryScreen->spriteIds[spriteArrayId] = SPRITE_NONE;
+4283:    gSprites[sMonSummaryScreen->spriteIds[spriteArrayId]].invisible = invisible;
+4291:    for (i = SPRITE_ARR_ID_TYPE; i < ARRAY_COUNT(sMonSummaryScreen->spriteIds); i++)
+4293:        if (sMonSummaryScreen->spriteIds[i] != SPRITE_NONE)
+4300:    switch (sMonSummaryScreen->currPageIndex)
+4322:        if (sMonSummaryScreen->spriteIds[i] == SPRITE_NONE)
+4323:            sMonSummaryScreen->spriteIds[i] = CreateSprite(&gSpriteTemplate_MoveTypes, 0, 0, 2);
+4331:    struct Sprite *sprite = &gSprites[sMonSummaryScreen->spriteIds[spriteArrayId]];
+4344:    struct PokeSummary *summary = &sMonSummaryScreen->summary;
+4372:    struct PokeSummary *summary = &sMonSummaryScreen->summary;
+4373:    struct Pokemon *mon = &sMonSummaryScreen->currentMon;
+4399:    struct PokeSummary *summary = &sMonSummaryScreen->summary;
+4411:    u32 type = GetMoveType(sMonSummaryScreen->newMove);
+4412:    struct Pokemon *mon = &sMonSummaryScreen->currentMon;
+4417:        type = CheckDynamicMoveType(mon, sMonSummaryScreen->newMove, 0, state);  // Bug: in battle, this only shows the dynamic type of battler in position 0
+4420:    if (sMonSummaryScreen->newMove == MOVE_NONE)
+4426:        if (sMonSummaryScreen->currPageIndex == PSS_PAGE_BATTLE_MOVES)
+4432:            SetTypeSpritePosAndPal(NUMBER_OF_MON_TYPES + GetMoveContestCategory(sMonSummaryScreen->newMove), 85, 96, SPRITE_ARR_ID_TYPE + 4);
+4439:    struct Sprite *sprite1 = &gSprites[sMonSummaryScreen->spriteIds[moveIndex1 + SPRITE_ARR_ID_TYPE]];
+4440:    struct Sprite *sprite2 = &gSprites[sMonSummaryScreen->spriteIds[moveIndex2 + SPRITE_ARR_ID_TYPE]];
+4458:    struct PokeSummary *summary = &sMonSummaryScreen->summary;
+4502:    struct PokeSummary *summary = &sMonSummaryScreen->summary;
+4505:        if (ShouldPlayNormalMonCry(&sMonSummaryScreen->currentMon) == TRUE)
+4514:    struct PokeSummary *summary = &sMonSummaryScreen->summary;
+4533:    struct PokeSummary *summary = &sMonSummaryScreen->summary;
+4561:    if (gSprites[sMonSummaryScreen->spriteIds[SPRITE_ARR_ID_MON]].callback == SpriteCallbackDummy)
+4571:    u8 spriteId = sMonSummaryScreen->spriteIds[SPRITE_ARR_ID_MON];
+4597:    sMonSummaryScreen->markingsSprite = sprite;
+4601:        sMonSummaryScreen->markingsSprite->x = 60;
+4602:        sMonSummaryScreen->markingsSprite->y = 26;
+4603:        sMonSummaryScreen->markingsSprite->oam.priority = 1;
+4609:    DestroySprite(sMonSummaryScreen->markingsSprite);
+4619:    sMonSummaryScreen->spriteIds[SPRITE_ARR_ID_BALL] = CreateSprite(&gBallSpriteTemplates[ball], 16, 136, 0);
+4620:    gSprites[sMonSummaryScreen->spriteIds[SPRITE_ARR_ID_BALL]].callback = SpriteCallbackDummy;
+4621:    gSprites[sMonSummaryScreen->spriteIds[SPRITE_ARR_ID_BALL]].oam.priority = 3;
+4626:    u8 *spriteId = &sMonSummaryScreen->spriteIds[SPRITE_ARR_ID_STATUS];
+4632:    statusAnim = GetMonAilment(&sMonSummaryScreen->currentMon);
+4647:    u8 *spriteIds = &sMonSummaryScreen->spriteIds[idArrayStart];
+4649:    if (sMonSummaryScreen->currPageIndex >= PSS_PAGE_BATTLE_MOVES)
+4689:        sprite->y2 = sMonSummaryScreen->firstMoveIndex * 16;
+4691:        sprite->y2 = sMonSummaryScreen->secondMoveIndex * 16;
+4704:    u8 *spriteIds = &sMonSummaryScreen->spriteIds[SPRITE_ARR_ID_MOVE_SELECTOR1];
+4721:    u8 *spriteIds = &sMonSummaryScreen->spriteIds[firstSpriteId];
+4733:         && !sMonSummaryScreen->lockMovesFlag
+4734:         && !sMonSummaryScreen->isBoxMon
+4735:         && sMonSummaryScreen->mode != SUMMARY_MODE_BOX
+4736:         && sMonSummaryScreen->mode != SUMMARY_MODE_BOX_CURSOR
+4737:         && sMonSummaryScreen->relearnableMovesNum > 0
+4745:         && !sMonSummaryScreen->lockMovesFlag
+4746:         && !sMonSummaryScreen->summary.isEgg
+4747:         && !sMonSummaryScreen->isBoxMon
+4748:         && sMonSummaryScreen->mode != SUMMARY_MODE_BOX
+4749:         && sMonSummaryScreen->mode != SUMMARY_MODE_BOX_CURSOR
+4752:         && GetPlayerIDAsU32() == sMonSummaryScreen->summary.OTID);
+4760:            && (sMonSummaryScreen->mode == SUMMARY_MODE_BOX|| sMonSummaryScreen->mode == SUMMARY_MODE_BOX_CURSOR);
+4776:    if (sMonSummaryScreen->currPageIndex == PSS_PAGE_INFO)
+4783:    else if (sMonSummaryScreen->currPageIndex == PSS_PAGE_SKILLS)
+4807:    else if (sMonSummaryScreen->currPageIndex == PSS_PAGE_BATTLE_MOVES
+4808:             || sMonSummaryScreen->currPageIndex == PSS_PAGE_CONTEST_MOVES)
+4810:        if (mode == SUMMARY_MODE_SELECT_MOVE && !sMonSummaryScreen->lockMovesFlag)
+4853:    struct PokeSummary *summary = &sMonSummaryScreen->summary;
+4876:    dst = &sMonSummaryScreen->bgTilemapBuffers[PSS_PAGE_SKILLS][1][0x255];
+4904:    expLabelReplacer = &sMonSummaryScreen->bgTilemapBuffers[PSS_PAGE_SKILLS][1][0x253];
+4908:    expBarEndCap = &sMonSummaryScreen->bgTilemapBuffers[PSS_PAGE_SKILLS][1][0x25D];
+4911:    if (GetBgTilemapBuffer(1) == sMonSummaryScreen->bgTilemapBuffers[PSS_PAGE_SKILLS][0])

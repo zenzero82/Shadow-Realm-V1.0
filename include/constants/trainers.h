@@ -115,8 +115,51 @@
 #define TRAINER_PIC_ROCKET_GRUNT_F        97
 #define TRAINER_PIC_BROCK_KANTO           98
 #define TRAINER_PIC_CAMPER_KANTO          99
+// === Gen 1/2 bulk import ===
+#define TRAINER_PIC_ARCHER             100
+#define TRAINER_PIC_ARIANA             101
+#define TRAINER_PIC_BIKER              102
+#define TRAINER_PIC_BLAINE             103
+#define TRAINER_PIC_BURGLAR            104
+#define TRAINER_PIC_CHAMPION_LANCE     105
+#define TRAINER_PIC_ELITE_FOUR_BRUNO   106
+#define TRAINER_PIC_ELITE_FOUR_KAREN   107
+#define TRAINER_PIC_ELITE_FOUR_KOGA    108
+#define TRAINER_PIC_ELITE_FOUR_WILL    109
+#define TRAINER_PIC_ENGINEER           110
+#define TRAINER_PIC_ERIKA              111
+#define TRAINER_PIC_EUSINE             112
+#define TRAINER_PIC_FIREBREATHER       113
+#define TRAINER_PIC_GOLD               114
+#define TRAINER_PIC_JANINE             115
+#define TRAINER_PIC_JUGGLER            116
+#define TRAINER_PIC_KIMONO_GIRL        117
+#define TRAINER_PIC_LEADER_BLUE        118
+#define TRAINER_PIC_LEADER_BUGSY       119
+#define TRAINER_PIC_LEADER_CHUCK       120
+#define TRAINER_PIC_LEADER_CLAIR       121
+#define TRAINER_PIC_LEADER_FALKNER     122
+#define TRAINER_PIC_LEADER_JASMINE     123
+#define TRAINER_PIC_LEADER_MORTY       124
+#define TRAINER_PIC_LEADER_PRYCE       125
+#define TRAINER_PIC_LEADER_WHITNEY     126
+#define TRAINER_PIC_LYRA               127
+#define TRAINER_PIC_MISTY              128
+#define TRAINER_PIC_NURSE              129
+#define TRAINER_PIC_OFFICER            130
+#define TRAINER_PIC_PETREL             131
+#define TRAINER_PIC_PROTON             132
+#define TRAINER_PIC_PSYCHIC_M2         133
+#define TRAINER_PIC_SABRINA            134
+#define TRAINER_PIC_SAGE               135
+#define TRAINER_PIC_SAGE_LEADER        136
+#define TRAINER_PIC_SILVER             137
+#define TRAINER_PIC_SUPER_NERD         138
+#define TRAINER_PIC_SURGE              139
+#define TRAINER_PIC_TWINS2             140
+#define TRAINER_PIC_YOUNGSTER2         141
 
-#define TRAINER_PIC_COUNT                 100
+#define TRAINER_PIC_COUNT                 142
 
 // The player back pics are assumed to alternate according to the gender values (MALE/FEMALE)
 #define TRAINER_BACK_PIC_BRENDAN                0
@@ -367,8 +410,21 @@
 #define TRAINER_CLASS_TEAM_PLASMA    0x45
 #define TRAINER_CLASS_TEAM_FLARE     0x46
 #define TRAINER_CLASS_TEAM_SKULL     0x47
+#define TRAINER_CLASS_NURSE          0x48
+#define TRAINER_CLASS_POLICEMAN      0x49
+#define TRAINER_CLASS_ROCKET_ADMIN   0x4A
+#define TRAINER_CLASS_SAGE           0x4B
+#define TRAINER_CLASS_ENGINEER       0x4C
+#define TRAINER_CLASS_FIREBREATHER   0x4D
+#define TRAINER_CLASS_KIMONO_GIRL    0x4E
+#define TRAINER_CLASS_BIKER          0x4F
+#define TRAINER_CLASS_MYSTERY_MAN    0x50
+#define TRAINER_CLASS_BURGLAR        0x51
+#define TRAINER_CLASS_JUGGLER        0x52
+#define TRAINER_CLASS_PSYCHIC_M      0x53
+#define TRAINER_CLASS_TEAM_SNAGEM    0x54
 
-#define TRAINER_CLASS_COUNT          0x48
+#define TRAINER_CLASS_COUNT          0x55
 
 #define TRAINER_ENCOUNTER_MUSIC_MALE         0 // standard male encounter music
 #define TRAINER_ENCOUNTER_MUSIC_FEMALE       1 // standard female encounter music
@@ -385,6 +441,8 @@
 #define TRAINER_ENCOUNTER_MUSIC_INTERVIEWER 12
 #define TRAINER_ENCOUNTER_MUSIC_RICH        13 // Rich Boys and Gentlemen
 #define TRAINER_ENCOUNTER_MUSIC_CIPHER_PEON 14
+#define TRAINER_ENCOUNTER_MUSIC_TEAM_ROCKET 15
+
 #define F_TRAINER_FEMALE (1 << 7)
 
 // Trainer party defines

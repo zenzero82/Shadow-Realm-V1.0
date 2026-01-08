@@ -283,6 +283,8 @@ extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_SurgeGen1;
 
 
 //Johto
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_Berry_Tree_Early_Stages_Gen2;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_Berry_Tree_Gen2;
 extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_ArtistGen2;
 extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_AttendantFGen2;
 extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_AttendantMGen2;
@@ -393,6 +395,20 @@ extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_Youngster2G
 //Sinnoh
 
 //Unova
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_BroniusGen5;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_ColressGen5;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_GhetsisGen5;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_GialloGen5;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_GormGen5;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_HilbertGen5;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_HildaGen5;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_IrisGen5;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_NGen5;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_PlasmaGruntFGen5;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_PlasmaGruntMGen5;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_RoodGen5;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_RyokuGen5;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_ZinzolinGen5;
 
 //Kalos 
 
@@ -678,6 +694,10 @@ const struct ObjectEventGraphicsInfo *const gObjectEventGraphicsInfoPointers[NUM
     [OBJ_EVENT_GFX_SURGE_GEN1]  = &gObjectEventGraphicsInfo_SurgeGen1,
 
     //Johto
+    [OBJ_EVENT_GFX_BERRY_TREE_EARLY_STAGES_GEN2] = &gObjectEventGraphicsInfo_Berry_Tree_Early_Stages_Gen2,
+    [OBJ_EVENT_GFX_BERRY_TREE_GEN2]              = &gObjectEventGraphicsInfo_Berry_Tree_Gen2,
+
+
     [OBJ_EVENT_GFX_ARTIST_GEN2]  = &gObjectEventGraphicsInfo_ArtistGen2,
     [OBJ_EVENT_GFX_ATTENDANT_F_GEN2]  = &gObjectEventGraphicsInfo_AttendantFGen2,
     [OBJ_EVENT_GFX_ATTENDANT_M_GEN2]  = &gObjectEventGraphicsInfo_AttendantMGen2,
@@ -758,6 +778,20 @@ const struct ObjectEventGraphicsInfo *const gObjectEventGraphicsInfoPointers[NUM
     //Sinnoh
 
     //Unova
+    [OBJ_EVENT_GFX_BRONIUS_GEN5]  = &gObjectEventGraphicsInfo_BroniusGen5,
+    [OBJ_EVENT_GFX_COLRESS_GEN5]  = &gObjectEventGraphicsInfo_ColressGen5,
+    [OBJ_EVENT_GFX_GHETSIS_GEN5]  = &gObjectEventGraphicsInfo_GhetsisGen5,
+    [OBJ_EVENT_GFX_GIALLO_GEN5]  = &gObjectEventGraphicsInfo_GialloGen5,
+    [OBJ_EVENT_GFX_GORM_GEN5]  = &gObjectEventGraphicsInfo_GormGen5,
+    [OBJ_EVENT_GFX_HILBERT_GEN5]  = &gObjectEventGraphicsInfo_HilbertGen5,
+    [OBJ_EVENT_GFX_HILDA_GEN5]  = &gObjectEventGraphicsInfo_HildaGen5,
+    [OBJ_EVENT_GFX_IRIS_GEN5]  = &gObjectEventGraphicsInfo_IrisGen5,
+    [OBJ_EVENT_GFX_N_GEN5]  = &gObjectEventGraphicsInfo_NGen5,
+    [OBJ_EVENT_GFX_PLASMAGRUNTF_GEN5]  = &gObjectEventGraphicsInfo_PlasmaGruntFGen5,
+    [OBJ_EVENT_GFX_PLASMAGRUNTM_GEN5]  = &gObjectEventGraphicsInfo_PlasmaGruntMGen5,
+    [OBJ_EVENT_GFX_ROOD_GEN5]  = &gObjectEventGraphicsInfo_RoodGen5,
+    [OBJ_EVENT_GFX_RYOKU_GEN5]  = &gObjectEventGraphicsInfo_RyokuGen5,
+    [OBJ_EVENT_GFX_ZINZOLIN_GEN5]  = &gObjectEventGraphicsInfo_ZinzolinGen5,
 
     //Kalos 
 

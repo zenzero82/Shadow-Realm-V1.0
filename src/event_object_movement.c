@@ -38,6 +38,16 @@
 #include "task.h"
 #include "trainer_see.h"
 #include "trainer_hill.h"
+
+#if OW_POKEMON_OBJECT_EVENTS
+extern const u32 gObjectEventPic_PikachuShadow[];
+#if OW_PKMN_OBJECTS_SHARE_PALETTES == FALSE
+extern const u16 gOverworldPalette_PikachuShadow[];
+#endif
+#if P_GENDER_DIFFERENCES
+extern const u32 gObjectEventPic_PikachuFShadow[];
+#endif
+#endif
 #include "util.h"
 #include "wild_encounter.h"
 #include "constants/event_object_movement.h"
@@ -200,7 +210,7 @@ static void SetSpriteDataForNormalStep(struct Sprite *, u8, u8);
 static void InitSpriteForFigure8Anim(struct Sprite *);
 static bool8 AnimateSpriteInFigure8(struct Sprite *);
 u8 GetDirectionToFace(s16 x1, s16 y1, s16 x2, s16 y2);
-static void FollowerSetGraphics(struct ObjectEvent *objEvent, u32 species, bool32 shiny, bool32 female);
+static void FollowerSetGraphics(struct ObjectEvent *objEvent, u32 species, bool32 shiny, bool32 female, bool32 shadow);
 static void ObjectEventSetGraphics(struct ObjectEvent *, const struct ObjectEventGraphicsInfo *);
 static void SpriteCB_VirtualObject(struct Sprite *);
 static void DoShadowFieldEffect(struct ObjectEvent *);
@@ -212,16 +222,17 @@ static u8 DoJumpSpriteMovement(struct Sprite *);
 static u8 DoJumpSpecialSpriteMovement(struct Sprite *);
 static void CreateLevitateMovementTask(struct ObjectEvent *);
 static void DestroyLevitateMovementTask(u8);
-static u32 LoadDynamicFollowerPalette(u32 species, bool32 shiny, bool32 female);
-const struct ObjectEventGraphicsInfo *SpeciesToGraphicsInfo(u32 species, bool32 shiny, bool32 female);
+static u32 LoadDynamicFollowerPalette(u32 species, bool32 shiny, bool32 female, bool32 shadow);
+const struct ObjectEventGraphicsInfo *SpeciesToGraphicsInfo(u32 species, bool32 shiny, bool32 female, bool32 shadow);
 static bool8 NpcTakeStep(struct Sprite *);
 static bool8 AreElevationsCompatible(u8, u8);
 static void CopyObjectGraphicsInfoToSpriteTemplate_WithMovementType(u16 graphicsId, u16 movementType, struct SpriteTemplate *spriteTemplate, const struct SubspriteTable **subspriteTables);
 
-static u16 GetGraphicsIdForMon(u32 species, bool32 shiny, bool32 female);
+static u16 GetGraphicsIdForMon(u32 species, bool32 shiny, bool32 female, bool32 shadow);
 static u16 GetUnownSpecies(struct Pokemon *mon);
 
 static const struct SpriteFrameImage sPicTable_PechaBerryTree[];
+static const struct ObjectEventGraphicsInfo *GetShadowOverworldGraphicsInfo(u32 species, bool32 shiny, bool32 female, bool32 shadow, const struct ObjectEventGraphicsInfo *base);
 
 static void StartSlowRunningAnim(struct ObjectEvent *objectEvent, struct Sprite *sprite, u8 direction);
 
@@ -263,6 +274,34 @@ static void (*const sCameraObjectFuncs[])(struct Sprite *) = {
 };
 
 #include "data/object_events/object_event_graphics.h"
+
+#if OW_POKEMON_OBJECT_EVENTS
+static const struct SpriteFrameImage sPicTable_PikachuShadow[] = {
+    overworld_ascending_frames(gObjectEventPic_PikachuShadow, 4, 4),
+};
+#if P_GENDER_DIFFERENCES
+static const struct SpriteFrameImage sPicTable_PikachuFShadow[] = {
+    overworld_ascending_frames(gObjectEventPic_PikachuFShadow, 4, 4),
+};
+#endif
+#endif
+
+static const u16 *GetShadowOverworldPalette(u32 species, bool32 shiny, bool32 female)
+{
+    (void)shiny;
+    (void)female;
+#if OW_POKEMON_OBJECT_EVENTS && OW_PKMN_OBJECTS_SHARE_PALETTES == FALSE
+    switch (GET_BASE_SPECIES_ID(species))
+    {
+    case SPECIES_PIKACHU:
+        return gOverworldPalette_PikachuShadow;
+    default:
+        return NULL;
+    }
+#else
+    return NULL;
+#endif
+}
 
 // movement type callbacks
 static void (*const sMovementTypeCallbacks[])(struct Sprite *) =
@@ -641,6 +680,20 @@ static const struct SpritePalette sObjectEventSpritePalettes[] = {
     //Sinnoh
 
     //Unova
+    {gObjectEventPal_BroniusGen5,         OBJ_EVENT_PAL_TAG_BRONIUS_GEN5},
+    {gObjectEventPal_ColressGen5,         OBJ_EVENT_PAL_TAG_COLRESS_GEN5},
+    {gObjectEventPal_GhetsisGen5,         OBJ_EVENT_PAL_TAG_GHETSIS_GEN5},
+    {gObjectEventPal_GialloGen5,          OBJ_EVENT_PAL_TAG_GIALLO_GEN5},
+    {gObjectEventPal_GormGen5,            OBJ_EVENT_PAL_TAG_GORM_GEN5},
+    {gObjectEventPal_HilbertGen5,         OBJ_EVENT_PAL_TAG_HILBERT_GEN5},
+    {gObjectEventPal_HildaGen5,           OBJ_EVENT_PAL_TAG_HILDA_GEN5},
+    {gObjectEventPal_IrisGen5,            OBJ_EVENT_PAL_TAG_IRIS_GEN5},
+    {gObjectEventPal_NGen5,               OBJ_EVENT_PAL_TAG_BRONIUS_GEN5},
+    {gObjectEventPal_PlasmaGruntFGen5,    OBJ_EVENT_PAL_TAG_PLASMAGRUNTF_GEN5},
+    {gObjectEventPal_PlasmaGruntMGen5,    OBJ_EVENT_PAL_TAG_PLASMAGRUNTM_GEN5},
+    {gObjectEventPal_RoodGen5,            OBJ_EVENT_PAL_TAG_ROOD_GEN5},
+    {gObjectEventPal_RyokuGen5,           OBJ_EVENT_PAL_TAG_RYOKU_GEN5},
+    {gObjectEventPal_ZinzolinGen5,        OBJ_EVENT_PAL_TAG_ZINZOLIN_GEN5},
 
     //Kalos 
 
@@ -1847,7 +1900,7 @@ static u8 TrySetupObjectEventSprite(const struct ObjectEventTemplate *objectEven
     sprite = &gSprites[spriteId];
     // Use palette from species palette table
     if (spriteTemplate->paletteTag == OBJ_EVENT_PAL_TAG_DYNAMIC)
-        sprite->oam.paletteNum = LoadDynamicFollowerPalette(OW_SPECIES(objectEvent), OW_SHINY(objectEvent), OW_FEMALE(objectEvent));
+        sprite->oam.paletteNum = LoadDynamicFollowerPalette(OW_SPECIES(objectEvent), OW_SHINY(objectEvent), OW_FEMALE(objectEvent), OW_SHADOW(objectEvent));
     if (OW_GFX_COMPRESS && sprite->usingSheet)
         sprite->sheetSpan = GetSpanPerImage(sprite->oam.shape, sprite->oam.size);
     GetMapCoordsFromSpritePos(objectEvent->currentCoords.x + cameraX, objectEvent->currentCoords.y + cameraY, &sprite->x, &sprite->y);
@@ -1964,7 +2017,8 @@ static u32 LoadDynamicFollowerPaletteFromGraphicsId(u16 graphicsId, struct Sprit
     u16 species = graphicsId & OBJ_EVENT_MON_SPECIES_MASK;
     bool32 shiny = graphicsId & OBJ_EVENT_MON_SHINY;
     bool32 female = graphicsId & OBJ_EVENT_MON_FEMALE;
-    u8 paletteNum = LoadDynamicFollowerPalette(species, shiny, female);
+    bool32 shadow = graphicsId & OBJ_EVENT_MON_SHADOW;
+    u8 paletteNum = LoadDynamicFollowerPalette(species, shiny, female, shadow);
     if (template)
     {
         template->paletteTag = species + OBJ_EVENT_MON;
@@ -1972,6 +2026,8 @@ static u32 LoadDynamicFollowerPaletteFromGraphicsId(u16 graphicsId, struct Sprit
             template->paletteTag += OBJ_EVENT_MON_SHINY;
         if (female)
             template->paletteTag += OBJ_EVENT_MON_FEMALE;
+        if (shadow)
+            template->paletteTag += OBJ_EVENT_MON_SHADOW_PAL;
     }
     return paletteNum;
 }
@@ -2104,8 +2160,48 @@ struct ObjectEvent *GetFollowerObject(void)
     return NULL;
 }
 
+#if OW_POKEMON_OBJECT_EVENTS
+static const struct SpriteFrameImage *GetShadowOverworldPicTable(u32 species, bool32 female)
+{
+    switch (GET_BASE_SPECIES_ID(species))
+    {
+    case SPECIES_PIKACHU:
+    #if P_GENDER_DIFFERENCES
+        if (female)
+            return sPicTable_PikachuFShadow;
+    #endif
+        return sPicTable_PikachuShadow;
+    default:
+        return NULL;
+    }
+}
+#endif
+
+static const struct ObjectEventGraphicsInfo *GetShadowOverworldGraphicsInfo(u32 species, bool32 shiny, bool32 female, bool32 shadow, const struct ObjectEventGraphicsInfo *base)
+{
+#if OW_POKEMON_OBJECT_EVENTS
+    static struct ObjectEventGraphicsInfo sShadowGfxInfo;
+    const struct SpriteFrameImage *shadowPicTable;
+
+    (void)shiny;
+
+    if (!shadow || base == NULL)
+        return base;
+
+    shadowPicTable = GetShadowOverworldPicTable(species, female);
+    if (shadowPicTable == NULL)
+        return base;
+
+    sShadowGfxInfo = *base;
+    sShadowGfxInfo.images = shadowPicTable;
+    return &sShadowGfxInfo;
+#else
+    return base;
+#endif
+}
+
 // Return graphicsInfo for a pokemon species & form
-const struct ObjectEventGraphicsInfo *SpeciesToGraphicsInfo(u32 species, bool32 shiny, bool32 female)
+const struct ObjectEventGraphicsInfo *SpeciesToGraphicsInfo(u32 species, bool32 shiny, bool32 female, bool32 shadow)
 {
     const struct ObjectEventGraphicsInfo *graphicsInfo = NULL;
 #if OW_POKEMON_OBJECT_EVENTS
@@ -2128,6 +2224,8 @@ const struct ObjectEventGraphicsInfo *SpeciesToGraphicsInfo(u32 species, bool32 
         break;
     }
 
+    graphicsInfo = GetShadowOverworldGraphicsInfo(species, shiny, female, shadow, graphicsInfo);
+
     // Try to avoid OOB or undefined access
     if ((graphicsInfo->tileTag == 0 && species < NUM_SPECIES) || (graphicsInfo->tileTag != TAG_NONE && species >= NUM_SPECIES))
     {
@@ -2140,39 +2238,51 @@ const struct ObjectEventGraphicsInfo *SpeciesToGraphicsInfo(u32 species, bool32 
 }
 
 // Find, or load, the palette for the specified pokemon info
-static u32 LoadDynamicFollowerPalette(u32 species, bool32 shiny, bool32 female)
+static u32 LoadDynamicFollowerPalette(u32 species, bool32 shiny, bool32 female, bool32 shadow)
 {
     u32 paletteNum;
+    u16 palTag = species + OBJ_EVENT_MON;
+    const u16 *shadowPalette = NULL;
+    if (shiny)
+        palTag += OBJ_EVENT_MON_SHINY;
+    if (female)
+        palTag += OBJ_EVENT_MON_FEMALE;
+    if (shadow)
+        palTag += OBJ_EVENT_MON_SHADOW_PAL;
     // Use standalone palette, unless entry is OOB or NULL (fallback to front-sprite-based)
 #if OW_POKEMON_OBJECT_EVENTS == TRUE && OW_PKMN_OBJECTS_SHARE_PALETTES == FALSE
-    if ((shiny && gSpeciesInfo[species].overworldPalette)
+    shadowPalette = GetShadowOverworldPalette(species, shiny, female);
+    if (shadowPalette != NULL
+    || (shiny && gSpeciesInfo[species].overworldPalette)
     || (!shiny && gSpeciesInfo[species].overworldShinyPalette))
     {
         struct SpritePalette spritePalette;
-        u16 palTag = species + OBJ_EVENT_MON + (shiny ? OBJ_EVENT_MON_SHINY : 0);
-    #if P_GENDER_DIFFERENCES
-        if (female && gSpeciesInfo[species].overworldShinyPaletteFemale != NULL)
-            palTag += OBJ_EVENT_MON_FEMALE;
-    #endif
         // palette already loaded
         if ((paletteNum = IndexOfSpritePaletteTag(palTag)) < 16)
             return paletteNum;
         spritePalette.tag = palTag;
-    #if P_GENDER_DIFFERENCES
-        if (female && gSpeciesInfo[species].overworldPaletteFemale != NULL)
+        if (shadowPalette != NULL)
         {
-            if (shiny)
-                spritePalette.data = gSpeciesInfo[species].overworldShinyPaletteFemale;
-            else
-                spritePalette.data = gSpeciesInfo[species].overworldPaletteFemale;
+            spritePalette.data = shadowPalette;
         }
         else
-    #endif
         {
-            if (shiny)
-                spritePalette.data = gSpeciesInfo[species].overworldShinyPalette;
+    #if P_GENDER_DIFFERENCES
+            if (female && gSpeciesInfo[species].overworldPaletteFemale != NULL)
+            {
+                if (shiny)
+                    spritePalette.data = gSpeciesInfo[species].overworldShinyPaletteFemale;
+                else
+                    spritePalette.data = gSpeciesInfo[species].overworldPaletteFemale;
+            }
             else
-                spritePalette.data = gSpeciesInfo[species].overworldPalette;
+    #endif
+            {
+                if (shiny)
+                    spritePalette.data = gSpeciesInfo[species].overworldShinyPalette;
+                else
+                    spritePalette.data = gSpeciesInfo[species].overworldPalette;
+            }
         }
 
         // Check if pal data must be decompressed
@@ -2196,12 +2306,12 @@ static u32 LoadDynamicFollowerPalette(u32 species, bool32 shiny, bool32 female)
         // so that palette tags do not overlap
         const u16 *palette = GetMonSpritePalFromSpecies(species, shiny, female); //ETODO
         // palette already loaded
-        if ((paletteNum = IndexOfSpritePaletteTag(species)) < 16)
+        if ((paletteNum = IndexOfSpritePaletteTag(palTag)) < 16)
             return paletteNum;
         // Use matching front sprite's normal/shiny palettes
         // Load compressed palette
-        LoadSpritePaletteWithTag(palette, species);
-        paletteNum = IndexOfSpritePaletteTag(species); // Tag is always present
+        LoadSpritePaletteWithTag(palette, palTag);
+        paletteNum = IndexOfSpritePaletteTag(palTag); // Tag is always present
     }
 
     if (gWeatherPtr->currWeather != WEATHER_FOG_HORIZONTAL) // don't want to weather blend in fog
@@ -2210,11 +2320,11 @@ static u32 LoadDynamicFollowerPalette(u32 species, bool32 shiny, bool32 female)
 }
 
 // Set graphics & sprite for a follower object event by species & shininess.
-static void FollowerSetGraphics(struct ObjectEvent *objEvent, u32 species, bool32 shiny, bool32 female)
+static void FollowerSetGraphics(struct ObjectEvent *objEvent, u32 species, bool32 shiny, bool32 female, bool32 shadow)
 {
-    const struct ObjectEventGraphicsInfo *graphicsInfo = SpeciesToGraphicsInfo(species, shiny, female);
+    const struct ObjectEventGraphicsInfo *graphicsInfo = SpeciesToGraphicsInfo(species, shiny, female, shadow);
     ObjectEventSetGraphics(objEvent, graphicsInfo);
-    objEvent->graphicsId = GetGraphicsIdForMon(species, shiny, female);
+    objEvent->graphicsId = GetGraphicsIdForMon(species, shiny, female, shadow);
     if (graphicsInfo->paletteTag == OBJ_EVENT_PAL_TAG_DYNAMIC) // Use palette from species palette table
     {
         struct Sprite *sprite = &gSprites[objEvent->spriteId];
@@ -2222,7 +2332,7 @@ static void FollowerSetGraphics(struct ObjectEvent *objEvent, u32 species, bool3
         sprite->inUse = FALSE;
         FieldEffectFreePaletteIfUnused(sprite->oam.paletteNum);
         sprite->inUse = TRUE;
-        sprite->oam.paletteNum = LoadDynamicFollowerPalette(species, shiny, female);
+        sprite->oam.paletteNum = LoadDynamicFollowerPalette(species, shiny, female, shadow);
     }
 }
 
@@ -2233,7 +2343,8 @@ static void RefreshFollowerGraphics(struct ObjectEvent *objEvent)
     u32 species = OW_SPECIES(objEvent);
     bool32 shiny = OW_SHINY(objEvent);
     bool32 female = OW_FEMALE(objEvent);
-    const struct ObjectEventGraphicsInfo *graphicsInfo = SpeciesToGraphicsInfo(species, shiny, female);
+    bool32 shadow = OW_SHADOW(objEvent);
+    const struct ObjectEventGraphicsInfo *graphicsInfo = SpeciesToGraphicsInfo(species, shiny, female, shadow);
     struct Sprite *sprite = &gSprites[objEvent->spriteId];
     u32 i = FindObjectEventPaletteIndexByTag(graphicsInfo->paletteTag);
 
@@ -2262,7 +2373,7 @@ static void RefreshFollowerGraphics(struct ObjectEvent *objEvent)
         sprite->inUse = FALSE;
         FieldEffectFreePaletteIfUnused(sprite->oam.paletteNum);
         sprite->inUse = TRUE;
-        sprite->oam.paletteNum = LoadDynamicFollowerPalette(species, shiny, female);
+        sprite->oam.paletteNum = LoadDynamicFollowerPalette(species, shiny, female, shadow);
     }
     else if (i != 0xFF)
     {
@@ -2292,18 +2403,20 @@ u16 GetOverworldWeatherSpecies(u16 species)
     return species;
 }
 
-static bool8 GetMonInfo(struct Pokemon *mon, u32 *species, bool32 *shiny, bool32 *female)
+static bool8 GetMonInfo(struct Pokemon *mon, u32 *species, bool32 *shiny, bool32 *female, bool32 *shadow)
 {
     if (!mon)
     {
         *species = SPECIES_NONE;
         *shiny = FALSE;
         *female = FALSE;
+        *shadow = FALSE;
         return FALSE;
     }
     *species = GetMonData(mon, MON_DATA_SPECIES);
     *shiny = IsMonShiny(mon) ? OBJ_EVENT_MON_SHINY : 0;
     *female = GetMonGender(mon) == MON_FEMALE ? OBJ_EVENT_MON_FEMALE : 0;
+    *shadow = GetMonData(mon, MON_DATA_IS_SHADOW) ? OBJ_EVENT_MON_SHADOW : 0;
     switch (*species)
     {
     case SPECIES_UNOWN:
@@ -2317,9 +2430,9 @@ static bool8 GetMonInfo(struct Pokemon *mon, u32 *species, bool32 *shiny, bool32
 }
 
 // Retrieve graphic information about the following pokemon, if any
-bool8 GetFollowerInfo(u32 *species, bool32 *shiny, bool32 *female)
+bool8 GetFollowerInfo(u32 *species, bool32 *shiny, bool32 *female, bool32 *shadow)
 {
-    return GetMonInfo(GetFirstLiveMon(), species, shiny, female);
+    return GetMonInfo(GetFirstLiveMon(), species, shiny, female, shadow);
 }
 
 // Update following pokemon if any
@@ -2330,6 +2443,7 @@ void UpdateFollowingPokemon(void)
     u32 species;
     bool32 shiny;
     bool32 female;
+    bool32 shadow;
     // Don't spawn follower if:
     // 1. GetFollowerInfo returns FALSE
     // 2. Map is indoors and gfx is larger than 32x32
@@ -2338,9 +2452,9 @@ void UpdateFollowingPokemon(void)
     if (OW_POKEMON_OBJECT_EVENTS == FALSE
      || OW_FOLLOWERS_ENABLED == FALSE
      || FlagGet(B_FLAG_FOLLOWERS_DISABLED)
-     || !GetFollowerInfo(&species, &shiny, &female)
-     || SpeciesToGraphicsInfo(species, shiny, female) == NULL
-     || (gMapHeader.mapType == MAP_TYPE_INDOOR && SpeciesToGraphicsInfo(species, shiny, female)->oam->size > ST_OAM_SIZE_2)
+     || !GetFollowerInfo(&species, &shiny, &female, &shadow)
+     || SpeciesToGraphicsInfo(species, shiny, female, shadow) == NULL
+     || (gMapHeader.mapType == MAP_TYPE_INDOOR && SpeciesToGraphicsInfo(species, shiny, female, shadow)->oam->size > ST_OAM_SIZE_2)
      || FlagGet(FLAG_TEMP_HIDE_FOLLOWER)
      || PlayerHasFollowerNPC()
      )
@@ -2356,7 +2470,7 @@ void UpdateFollowingPokemon(void)
         struct ObjectEventTemplate template =
         {
             .localId = OBJ_EVENT_ID_FOLLOWER,
-            .graphicsId = GetGraphicsIdForMon(species, shiny, female),
+            .graphicsId = GetGraphicsIdForMon(species, shiny, female, shadow),
             .flagId = 0,
             .x = gSaveBlock1Ptr->pos.x,
             .y = gSaveBlock1Ptr->pos.y,
@@ -2373,12 +2487,12 @@ void UpdateFollowingPokemon(void)
     }
     sprite = &gSprites[objEvent->spriteId];
     // Follower appearance changed; move to player and set invisible
-    if (species != OW_SPECIES(objEvent) || shiny != OW_SHINY(objEvent) || female != OW_FEMALE(objEvent))
+    if (species != OW_SPECIES(objEvent) || shiny != OW_SHINY(objEvent) || female != OW_FEMALE(objEvent) || shadow != OW_SHADOW(objEvent))
     {
         MoveObjectEventToMapCoords(objEvent,
                                    gObjectEvents[gPlayerAvatar.objectEventId].currentCoords.x,
                                    gObjectEvents[gPlayerAvatar.objectEventId].currentCoords.y);
-        FollowerSetGraphics(objEvent, species, shiny, female);
+        FollowerSetGraphics(objEvent, species, shiny, female, shadow);
         objEvent->invisible = TRUE;
     }
     sprite->data[6] = 0; // set animation data
@@ -2981,7 +3095,7 @@ static void SpawnObjectEventOnReturnToField(u8 objectEventId, s16 x, s16 y)
 
     if (spriteTemplate.paletteTag == OBJ_EVENT_PAL_TAG_DYNAMIC)
     {
-        u32 paletteNum = LoadDynamicFollowerPalette(OW_SPECIES(objectEvent), OW_SHINY(objectEvent), OW_FEMALE(objectEvent));
+        u32 paletteNum = LoadDynamicFollowerPalette(OW_SPECIES(objectEvent), OW_SHINY(objectEvent), OW_FEMALE(objectEvent), OW_SHADOW(objectEvent));
         spriteTemplate.paletteTag = GetSpritePaletteTagByPaletteNum(paletteNum);
     }
     else if (spriteTemplate.paletteTag != TAG_NONE)
@@ -3140,24 +3254,51 @@ void PlayerObjectTurn(struct PlayerAvatar *playerAvatar, u8 direction)
     ObjectEventTurn(&gObjectEvents[playerAvatar->objectEventId], direction);
 }
 
+static const u16 sBerryTreeObjectEventGraphicsIdTableGen2[] =
+{
+    OBJ_EVENT_GFX_BERRY_TREE_EARLY_STAGES_GEN2,
+    OBJ_EVENT_GFX_BERRY_TREE_EARLY_STAGES_GEN2,
+    OBJ_EVENT_GFX_BERRY_TREE_LATE_STAGES_GEN2,
+    OBJ_EVENT_GFX_BERRY_TREE_LATE_STAGES_GEN2,
+    OBJ_EVENT_GFX_BERRY_TREE_LATE_STAGES_GEN2,
+    OBJ_EVENT_GFX_BERRY_TREE_LATE_STAGES_GEN2,
+    OBJ_EVENT_GFX_BERRY_TREE_LATE_STAGES_GEN2,
+};
+
 static void SetBerryTreeGraphicsById(struct ObjectEvent *objectEvent, u8 berryId, u8 berryStage)
 {
-    const u16 graphicsId = gBerryTreeObjectEventGraphicsIdTable[berryStage];
+    // We decide Gen2-vs-Hoenn by the object's current graphicsId.
+    // - In Porymap, set the berry overlay object to OBJ_EVENT_GFX_BERRY_TREE_GEN2 for Kanto/Johto.
+    // - After the first update, the object will switch to *_EARLY_STAGES_GEN2 / *_LATE_STAGES_GEN2 and stay Gen2.
+    const bool8 useGen2 =
+        (objectEvent->graphicsId == OBJ_EVENT_GFX_BERRY_TREE_GEN2)
+     || (objectEvent->graphicsId == OBJ_EVENT_GFX_BERRY_TREE_EARLY_STAGES_GEN2)
+     || (objectEvent->graphicsId == OBJ_EVENT_GFX_BERRY_TREE_LATE_STAGES_GEN2);
+
+    const u16 graphicsId = useGen2
+        ? sBerryTreeObjectEventGraphicsIdTableGen2[berryStage]
+        : gBerryTreeObjectEventGraphicsIdTable[berryStage];
+
     const struct ObjectEventGraphicsInfo *graphicsInfo = GetObjectEventGraphicsInfo(graphicsId);
     struct Sprite *sprite = &gSprites[objectEvent->spriteId];
-    UpdateSpritePalette(&sObjectEventSpritePalettes[gBerryTreePaletteSlotTablePointers[berryId][berryStage]-2], sprite);
+
+    // Palette slots are shared; only the frame table changes for Gen2.
+    UpdateSpritePalette(&sObjectEventSpritePalettes[gBerryTreePaletteSlotTablePointers[berryId][berryStage] - 2], sprite);
+
     sprite->oam.shape = graphicsInfo->oam->shape;
     sprite->oam.size = graphicsInfo->oam->size;
-    sprite->images = gBerryTreePicTablePointers[berryId];
+    sprite->images = useGen2 ? gBerryTreePicTablePointersGen2[berryId] : gBerryTreePicTablePointers[berryId];
     sprite->anims = graphicsInfo->anims;
     sprite->subspriteTables = graphicsInfo->subspriteTables;
     objectEvent->inanimate = graphicsInfo->inanimate;
     objectEvent->graphicsId = graphicsId;
+
     SetSpritePosToMapCoords(objectEvent->currentCoords.x, objectEvent->currentCoords.y, &sprite->x, &sprite->y);
     sprite->centerToCornerVecX = -(graphicsInfo->width >> 1);
     sprite->centerToCornerVecY = -(graphicsInfo->height >> 1);
     sprite->x += 8;
     sprite->y += 16 + sprite->centerToCornerVecY;
+
     if (objectEvent->trackedByCamera)
         CameraObjectReset();
 }
@@ -3193,7 +3334,7 @@ const struct ObjectEventGraphicsInfo *GetObjectEventGraphicsInfo(u16 graphicsId)
         return gMauvilleOldManGraphicsInfoPointers[GetCurrentMauvilleOldMan()];
 
     if (graphicsId & OBJ_EVENT_MON)
-        return SpeciesToGraphicsInfo(graphicsId & OBJ_EVENT_MON_SPECIES_MASK, graphicsId & OBJ_EVENT_MON_SHINY, graphicsId & OBJ_EVENT_MON_FEMALE);
+        return SpeciesToGraphicsInfo(graphicsId & OBJ_EVENT_MON_SPECIES_MASK, graphicsId & OBJ_EVENT_MON_SHINY, graphicsId & OBJ_EVENT_MON_FEMALE, graphicsId & OBJ_EVENT_MON_SHADOW);
 
     if (graphicsId >= NUM_OBJ_EVENT_GFX)
         graphicsId = OBJ_EVENT_GFX_NINJA_BOY;
@@ -7801,7 +7942,7 @@ bool8 MovementAction_ExitPokeball_Step1(struct ObjectEvent *objectEvent, struct 
     // Set graphics, palette, and affine animation
     else if (sprite->sDuration == animStepFrame)
     {
-        FollowerSetGraphics(objectEvent, OW_SPECIES(objectEvent), OW_SHINY(objectEvent), OW_FEMALE(objectEvent));
+        FollowerSetGraphics(objectEvent, OW_SPECIES(objectEvent), OW_SHINY(objectEvent), OW_FEMALE(objectEvent), OW_SHADOW(objectEvent));
         LoadFillColorPalette(RGB_WHITE, OBJ_EVENT_PAL_TAG_WHITE, sprite);
         // Initialize affine animation
         sprite->affineAnims = sAffineAnims_PokeballFollower;
@@ -7818,7 +7959,7 @@ bool8 MovementAction_ExitPokeball_Step1(struct ObjectEvent *objectEvent, struct 
         sprite->affineAnimEnded = TRUE;
         FreeSpriteOamMatrix(sprite);
         sprite->oam.affineMode = ST_OAM_AFFINE_OFF;
-        FollowerSetGraphics(objectEvent, OW_SPECIES(objectEvent), OW_SHINY(objectEvent), OW_FEMALE(objectEvent));
+        FollowerSetGraphics(objectEvent, OW_SPECIES(objectEvent), OW_SHINY(objectEvent), OW_FEMALE(objectEvent), OW_SHADOW(objectEvent));
     }
     return FALSE;
 }
@@ -7874,7 +8015,7 @@ bool8 MovementAction_EnterPokeball_Step1(struct ObjectEvent *objectEvent, struct
 
 bool8 MovementAction_EnterPokeball_Step2(struct ObjectEvent *objectEvent, struct Sprite *sprite)
 {
-    FollowerSetGraphics(objectEvent, OW_SPECIES(objectEvent), OW_SHINY(objectEvent), OW_FEMALE(objectEvent));
+    FollowerSetGraphics(objectEvent, OW_SPECIES(objectEvent), OW_SHINY(objectEvent), OW_FEMALE(objectEvent), OW_SHADOW(objectEvent));
     objectEvent->invisible = TRUE;
     sprite->sTypeFuncId = 0;
     sprite->sSpeedFlip = 0;
@@ -11372,6 +11513,7 @@ void GetDaycareGraphics(struct ScriptContext *ctx)
     u32 specGfx;
     bool32 shiny;
     bool32 female;
+    bool32 shadow;
     s32 i;
 
     Script_RequestEffects(SCREFF_V1);
@@ -11382,7 +11524,7 @@ void GetDaycareGraphics(struct ScriptContext *ctx)
 
     for (i = 0; i < 2; i++)
     {
-        GetMonInfo((struct Pokemon *) &gSaveBlock1Ptr->daycare.mons[i].mon, &specGfx, &shiny, &female);
+        GetMonInfo((struct Pokemon *) &gSaveBlock1Ptr->daycare.mons[i].mon, &specGfx, &shiny, &female, &shadow);
         if (specGfx == SPECIES_NONE)
             break;
         // Assemble gfx ID like FollowerSetGraphics
@@ -11391,6 +11533,8 @@ void GetDaycareGraphics(struct ScriptContext *ctx)
             specGfx += OBJ_EVENT_MON_SHINY;
         if (female)
             specGfx += OBJ_EVENT_MON_FEMALE;
+        if (shadow)
+            specGfx += OBJ_EVENT_MON_SHADOW;
         VarSet(varGfx[i], (u16)specGfx);
         VarSet(varForm[i], 0);  //  This shouldn't be needed anymore, track down
     }
@@ -11526,13 +11670,15 @@ bool8 MovementAction_WalkSlowStairsRight_Step1(struct ObjectEvent *objectEvent, 
     return FALSE;
 }
 
-static u16 GetGraphicsIdForMon(u32 species, bool32 shiny, bool32 female)
+static u16 GetGraphicsIdForMon(u32 species, bool32 shiny, bool32 female, bool32 shadow)
 {
     u16 graphicsId = species + OBJ_EVENT_MON;
     if (shiny)
         graphicsId += OBJ_EVENT_MON_SHINY;
     if (female)
         graphicsId += OBJ_EVENT_MON_FEMALE;
+    if (shadow)
+        graphicsId += OBJ_EVENT_MON_SHADOW;
     return graphicsId;
 }
 

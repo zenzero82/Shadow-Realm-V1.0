@@ -479,7 +479,7 @@
 #define MUS_RG_SEVII_ROUTE          545 // MUS_RG_NANASHIMA
 #define MUS_RG_SEVII_DUNGEON        546 // MUS_RG_NANAISEKI     // Identical to MUS_RG_VIRIDIAN_FOREST.
 #define MUS_RG_SEVII_123            547 // MUS_RG_NANA123       // Identical to MUS_RG_PEWTER
-#define MUS_RG_SEVII_45             548 // MUS_RG_NANA45
+#define MUS_HG_VS_ROCKET            548 // MUS_HG_VS_ROCKET
 #define MUS_RG_SEVII_67             549 // MUS_RG_NANA67
 #define MUS_RG_POKE_FLUTE           550 // MUS_RG_POKEFUE
 #define MUS_RG_VS_DEOXYS            551 // MUS_RG_VS_DEO

@@ -38,6 +38,7 @@
 #include "fldeff_misc.h"
 #include "field_control_avatar.h"
 #include "mirage_tower.h"
+#include "pokedex.h"
 #include "field_screen_effect.h"
 #include "data.h"
 #include "vs_seeker.h"
@@ -874,6 +875,8 @@ static void CB2_GiveStarter(void)
     *GetVarPointer(VAR_STARTER_MON) = gSpecialVar_Result;
     starterMon = GetStarterPokemon(gSpecialVar_Result);
     ScriptGiveMon(starterMon, 5, ITEM_NONE);
+    GetSetPokedexFlag(SpeciesToNationalPokedexNum(starterMon), FLAG_SET_SEEN);
+    GetSetPokedexFlag(SpeciesToNationalPokedexNum(starterMon), FLAG_SET_CAUGHT);
     ResetTasks();
     PlayBattleBGM();
     SetMainCallback2(CB2_StartFirstBattle);
@@ -1473,6 +1476,9 @@ void PlayTrainerEncounterMusic(void)
             break;
         case TRAINER_ENCOUNTER_MUSIC_CIPHER_PEON:
             music = MUS_ENCOUNTER_SUSPICIOUS;
+            break;
+        case TRAINER_ENCOUNTER_MUSIC_TEAM_ROCKET:
+            music = MUS_HG_ENCOUNTER_ROCKET;
             break;
         default:
             music = MUS_ENCOUNTER_SUSPICIOUS;

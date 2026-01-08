@@ -1888,7 +1888,61 @@ static const struct SpriteFrameImage sPicTable_Youngster2Gen2[] =
 //Sinnoh
 
 //Unova
+static const struct SpriteFrameImage sPicTable_BroniusGen5[] = {
+    overworld_ascending_frames(gObjectEventPic_BroniusGen5, 2, 4),
+};
 
+static const struct SpriteFrameImage sPicTable_ColressGen5[] = {
+    overworld_ascending_frames(gObjectEventPic_ColressGen5, 2, 4),
+};
+
+static const struct SpriteFrameImage sPicTable_GhetsisGen5[] = {
+    overworld_ascending_frames(gObjectEventPic_GhetsisGen5, 4, 4),
+};
+
+static const struct SpriteFrameImage sPicTable_GialloGen5[] = {
+    overworld_ascending_frames(gObjectEventPic_GialloGen5, 2, 4),
+};
+
+static const struct SpriteFrameImage sPicTable_GormGen5[] = {
+    overworld_ascending_frames(gObjectEventPic_GormGen5, 2, 4),
+};
+
+static const struct SpriteFrameImage sPicTable_HilbertGen5[] = {
+    overworld_ascending_frames(gObjectEventPic_HilbertGen5, 2, 4),
+};
+
+static const struct SpriteFrameImage sPicTable_HildaGen5[] = {
+    overworld_ascending_frames(gObjectEventPic_HildaGen5, 2, 4),
+};
+
+static const struct SpriteFrameImage sPicTable_IrisGen5[] = {
+    overworld_ascending_frames(gObjectEventPic_IrisGen5, 2, 4),
+};
+
+static const struct SpriteFrameImage sPicTable_NGen5[] = {
+    overworld_ascending_frames(gObjectEventPic_NGen5, 4, 4),
+};
+
+static const struct SpriteFrameImage sPicTable_PlasmaGruntFGen5[] = {
+    overworld_ascending_frames(gObjectEventPic_PlasmaGruntFGen5, 4, 4),
+};
+
+static const struct SpriteFrameImage sPicTable_PlasmaGruntMGen5[] = {
+    overworld_ascending_frames(gObjectEventPic_PlasmaGruntMGen5, 4, 4),
+};
+
+static const struct SpriteFrameImage sPicTable_RoodGen5[] = {
+    overworld_ascending_frames(gObjectEventPic_RoodGen5, 2, 4),
+};
+
+static const struct SpriteFrameImage sPicTable_RyokuGen5[] = {
+    overworld_ascending_frames(gObjectEventPic_RyokuGen5, 2, 4),
+};
+
+static const struct SpriteFrameImage sPicTable_ZinzolinGen5[] = {
+    overworld_ascending_frames(gObjectEventPic_ZinzolinGen5, 4, 4),
+};
 //Kalos 
 
 //XD(Orre)

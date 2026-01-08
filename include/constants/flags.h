@@ -1228,10 +1228,7 @@
 #define FLAG_ITEM_SAFARI_ZONE_NORTH_EAST_NUGGET                     0x491
 #define FLAG_ITEM_SAFARI_ZONE_SOUTH_EAST_BIG_PEARL                  0x492
 
-#define FLAG_UNUSED_0x493                                           0x493 // Unused Flag
-#define FLAG_UNUSED_0x494                                           0x494 // Unused Flag
-#define FLAG_UNUSED_0x495                                           0x495 // Unused Flag
-#define FLAG_UNUSED_0x496                                           0x496 // Unused Flag
+
 #define FLAG_UNUSED_0x497                                           0x497 // Unused Flag
 #define FLAG_UNUSED_0x498                                           0x498 // Unused Flag
 #define FLAG_UNUSED_0x499                                           0x499 // Unused Flag
@@ -1413,11 +1410,30 @@
 // Kanto/Johto Towns and Cities
 #define FLAG_VISITED_PALLET_TOWN                    (SYSTEM_FLAGS + 0x21) 
 #define FLAG_VISITED_VIRIDIAN_CITY                  (SYSTEM_FLAGS + 0x22) // Unused Flag
+#define FLAG_VISITED_VIRIDIAN_FOREST                           (SYSTEM_FLAGS + 0x95) // Unused Flag
 #define FLAG_VISITED_PEWTER_CITY                    (SYSTEM_FLAGS + 0x23) // Unused Flag
 #define FLAG_VISITED_CERULEAN_CITY                  (SYSTEM_FLAGS + 0x24) // Unused Flag
-#define FLAG_UNUSED_0x885                           (SYSTEM_FLAGS + 0x25) // Unused Flag
-#define FLAG_UNUSED_0x886                           (SYSTEM_FLAGS + 0x26) // Unused Flag
-#define FLAG_UNUSED_0x887                           (SYSTEM_FLAGS + 0x27) // Unused Flag
+#define FLAG_VISITED_LAVENDER_TOWN                            (SYSTEM_FLAGS + 0x25) // Unused Flag
+#define FLAG_VISITED_SAFFRON_CITY                           (SYSTEM_FLAGS + 0x26) // Unused Flag
+#define FLAG_VISITED_CELADON_CITY                           (SYSTEM_FLAGS + 0x27) // Unused Flag
+#define FLAG_VISITED_VERMILLION_CITY                                            0x493 // Unused Flag
+#define FLAG_VISITED_FUCHSIA_CITY                                           0x494 // Unused Flag
+#define FLAG_VISITED_CINNABAR_ISLAND                                           0x495 // Unused Flag
+#define FLAG_VISITED_INDIGO_PLATEAU                                            0x496 // Unused Flag
+
+//Visited Johto
+#define FLAG_VISITED_NEW_BARK_TOWN                  (SYSTEM_FLAGS + 0xA0) // Unused Flag
+#define FLAG_VISITED_CHERRYGROVE_CITY                           (SYSTEM_FLAGS + 0xA1) // Unused Flag
+#define FLAG_VISITED_VIOLET_CITY                           (SYSTEM_FLAGS + 0xA2) // Unused Flag
+#define FLAG_VISITED_AZALEA_TOWN                           (SYSTEM_FLAGS + 0xA3) // Unused Flag
+#define FLAG_VISITED_GOLDENROD_CITY                           (SYSTEM_FLAGS + 0xA4) // Unused Flag
+#define FLAG_VISITED_ECRUTEAK_CITY                           (SYSTEM_FLAGS + 0xA5) // Unused Flag
+#define FLAG_VISITED_OLIVINE_CITY                            (SYSTEM_FLAGS + 0xA6) // Unused Flag
+#define FLAG_VISITED_CIANWOOD_CITY                           (SYSTEM_FLAGS + 0xA7) // Unused Flag
+#define FLAG_VISITED_MAHOGANY_TOWN                           (SYSTEM_FLAGS + 0xA8) // Unused Flag
+#define FLAG_VISITED_BLACKTHORN_CITY                           (SYSTEM_FLAGS + 0xA9) // Unused Flag
+#define FLAG_VISITED_LAKE_OF_RAGE                           (SYSTEM_FLAGS + 0xAA) // Unused Flag
+#define FLAG_VISITED_MT_SILVER                           (SYSTEM_FLAGS + 0xAB) // Unused Flag
 
 #define FLAG_SYS_USE_FLASH                          (SYSTEM_FLAGS + 0x28)
 #define FLAG_SYS_USE_STRENGTH                       (SYSTEM_FLAGS + 0x29)
@@ -1531,7 +1547,6 @@
 #define FLAG_RECEIVED_POKEDEX_FROM_BIRCH            (SYSTEM_FLAGS + 0x84)
 
 
-#define FLAG_UNUSED_0x8F5                           (SYSTEM_FLAGS + 0x95) // Unused Flag
 #define FLAG_UNUSED_0x8F6                           (SYSTEM_FLAGS + 0x96) // Unused Flag
 #define FLAG_UNUSED_0x8F7                           (SYSTEM_FLAGS + 0x97) // Unused Flag
 #define FLAG_UNUSED_0x8F8                           (SYSTEM_FLAGS + 0x98) // Unused Flag
@@ -1543,19 +1558,7 @@
 #define FLAG_UNUSED_0x8FE                           (SYSTEM_FLAGS + 0x9E) // Unused Flag
 #define FLAG_UNUSED_0x8FF                           (SYSTEM_FLAGS + 0x9F) // Unused Flag
 
-//Visited Johto
-#define FLAG_VISITED_NEW_BARK_TOWN                  (SYSTEM_FLAGS + 0xA0) // Unused Flag
-#define FLAG_UNUSED_0x901                           (SYSTEM_FLAGS + 0xA1) // Unused Flag
-#define FLAG_UNUSED_0x902                           (SYSTEM_FLAGS + 0xA2) // Unused Flag
-#define FLAG_UNUSED_0x903                           (SYSTEM_FLAGS + 0xA3) // Unused Flag
-#define FLAG_UNUSED_0x904                           (SYSTEM_FLAGS + 0xA4) // Unused Flag
-#define FLAG_UNUSED_0x905                           (SYSTEM_FLAGS + 0xA5) // Unused Flag
-#define FLAG_UNUSED_0x906                           (SYSTEM_FLAGS + 0xA6) // Unused Flag
-#define FLAG_UNUSED_0x907                           (SYSTEM_FLAGS + 0xA7) // Unused Flag
-#define FLAG_UNUSED_0x908                           (SYSTEM_FLAGS + 0xA8) // Unused Flag
-#define FLAG_UNUSED_0x909                           (SYSTEM_FLAGS + 0xA9) // Unused Flag
-#define FLAG_UNUSED_0x90A                           (SYSTEM_FLAGS + 0xAA) // Unused Flag
-#define FLAG_UNUSED_0x90B                           (SYSTEM_FLAGS + 0xAB) // Unused Flag
+
 #define FLAG_UNUSED_0x90C                           (SYSTEM_FLAGS + 0xAC) // Unused Flag
 #define FLAG_UNUSED_0x90D                           (SYSTEM_FLAGS + 0xAD) // Unused Flag
 #define FLAG_UNUSED_0x90E                           (SYSTEM_FLAGS + 0xAE) // Unused Flag

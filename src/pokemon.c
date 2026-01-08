@@ -33,6 +33,7 @@
 #include "pokemon.h"
 #include "pokemon_animation.h"
 #include "pokemon_icon.h"
+#include "shadow_graphics.h"
 #include "pokemon_summary_screen.h"
 #include "pokemon_storage_system.h"
 #include "random.h"
@@ -70,6 +71,8 @@
 #include "script.h"
 #include "constants/vars.h"
 #include "constants/species.h"
+
+extern const u16 gMonPalette_PikachuShadow[];
 
 
 #define FRIENDSHIP_EVO_THRESHOLD ((P_FRIENDSHIP_EVO_THRESHOLD >= GEN_8) ? 160 : 220)
@@ -6102,8 +6105,20 @@ const u16 *GetMonSpritePalFromSpecies(u16 species, bool32 isShiny, bool32 isFema
         if (gSpeciesInfo[species].palette != NULL)
             return gSpeciesInfo[species].palette;
         else
-            return gSpeciesInfo[SPECIES_NONE].palette;
+        return gSpeciesInfo[SPECIES_NONE].palette;
     }
+}
+
+const u16 *GetMonSpritePalFromSpeciesAndPersonality_ShadowAware(u16 species, bool32 isShiny, u32 personality, bool32 isShadow)
+{
+    if (isShadow)
+    {
+        const u16 *shadowPalette = GetShadowMonPalette(species);
+        if (shadowPalette != NULL)
+            return shadowPalette;
+    }
+
+    return GetMonSpritePalFromSpeciesAndPersonality(species, isShiny, personality);
 }
 
 bool8 IsMoveHM(u16 move)
@@ -7586,4 +7601,7 @@ void GiveStarterMon(void)
               0);                 /* fixedOtId */
 
     GiveMonToPlayer(&mon);
+    u16 nationalDexNum = SpeciesToNationalPokedexNum(species);
+    GetSetPokedexFlag(nationalDexNum, FLAG_SET_SEEN);
+    GetSetPokedexFlag(nationalDexNum, FLAG_SET_CAUGHT);
 }

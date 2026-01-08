@@ -4,9 +4,17 @@
 #include "palette.h"
 #include "pokemon_sprite_visualizer.h"
 #include "pokemon_icon.h"
+#include "shadow_graphics.h"
 #include "sprite.h"
 #include "data.h"
 #include "constants/pokemon_icon.h"
+
+#if P_GENDER_DIFFERENCES
+#if P_CUSTOM_GENDER_DIFF_ICONS
+extern const u8 gMonIcon_PikachuFShadow[];
+#endif
+#endif
+extern const u8 gMonIcon_PikachuShadow[];
 
 struct MonIconSpriteTemplate
 {
@@ -29,7 +37,12 @@ const struct SpritePalette gMonIconPaletteTable[] =
     { gMonIconPalettes[3], POKE_ICON_BASE_PAL_TAG + 3 },
     { gMonIconPalettes[4], POKE_ICON_BASE_PAL_TAG + 4 },
     { gMonIconPalettes[5], POKE_ICON_BASE_PAL_TAG + 5 },
+    { gMonIconPalette_Shadow, POKE_ICON_SHADOW_PAL_TAG },
 };
+
+#define MON_ICON_SHADOW_PALETTE_INDEX (ARRAY_COUNT(gMonIconPaletteTable) - 1)
+
+const u8 gMonIconShadowPaletteIndex = MON_ICON_SHADOW_PALETTE_INDEX;
 
 static const struct OamData sMonIconOamData =
 {
@@ -134,26 +147,39 @@ static const u16 sSpriteImageSizes[3][4] =
     },
 };
 
-u8 CreateMonIcon(u16 species, void (*callback)(struct Sprite *), s16 x, s16 y, u8 subpriority, u32 personality)
+u8 CreateMonIcon(u16 species, void (*callback)(struct Sprite *), s16 x, s16 y, u8 subpriority, u32 personality, bool8 isShadow)
 {
     u8 spriteId;
+    u16 sanitizedSpecies = SanitizeSpeciesId(species);
+    u16 iconSpecies = GetIconSpecies(species, personality);
+    const struct ShadowGraphicsOverride *shadow = GetShadowGraphicsOverride(iconSpecies);
+    bool8 useShadowIcon = isShadow && shadow != NULL && shadow->icon != NULL;
     struct MonIconSpriteTemplate iconTemplate =
     {
         .oam = &sMonIconOamData,
-        .image = GetMonIconPtr(species, personality),
+        .image = GetMonIconTiles_ShadowAware(species, personality, useShadowIcon),
         .anims = sMonIconAnims,
         .affineAnims = sMonIconAffineAnims,
         .callback = callback,
-        .paletteTag = POKE_ICON_BASE_PAL_TAG + gSpeciesInfo[species].iconPalIndex,
     };
-    species = SanitizeSpeciesId(species);
 
-    if (species > NUM_SPECIES)
-        iconTemplate.paletteTag = POKE_ICON_BASE_PAL_TAG;
+    if (useShadowIcon)
+    {
+        if (IndexOfSpritePaletteTag(POKE_ICON_SHADOW_PAL_TAG) == 0xFF)
+            LoadSpritePalette(&gMonIconPaletteTable[gMonIconShadowPaletteIndex]);
+        iconTemplate.paletteTag = POKE_ICON_SHADOW_PAL_TAG;
+    }
+    else
+    {
+        iconTemplate.paletteTag = POKE_ICON_BASE_PAL_TAG + gSpeciesInfo[sanitizedSpecies].iconPalIndex;
+
+        if (sanitizedSpecies > NUM_SPECIES)
+            iconTemplate.paletteTag = POKE_ICON_BASE_PAL_TAG;
 #if P_GENDER_DIFFERENCES
-    else if (gSpeciesInfo[species].iconSpriteFemale != NULL && IsPersonalityFemale(species, personality))
-        iconTemplate.paletteTag = POKE_ICON_BASE_PAL_TAG + gSpeciesInfo[species].iconPalIndexFemale;
+        else if (gSpeciesInfo[sanitizedSpecies].iconSpriteFemale != NULL && IsPersonalityFemale(sanitizedSpecies, personality))
+            iconTemplate.paletteTag = POKE_ICON_BASE_PAL_TAG + gSpeciesInfo[sanitizedSpecies].iconPalIndexFemale;
 #endif
+    }
 
     spriteId = CreateMonIconSprite(&iconTemplate, x, y, subpriority);
 
@@ -301,6 +327,20 @@ const u8 *GetMonIconTiles(u16 species, u32 personality)
         iconSprite = gSpeciesInfo[SPECIES_NONE].iconSprite;
 
     return iconSprite;
+}
+
+const u8 *GetMonIconTiles_ShadowAware(u16 species, u32 personality, bool8 useShadowIcon)
+{
+    u16 iconSpecies = GetIconSpecies(species, personality);
+
+    if (useShadowIcon)
+    {
+        const u8 *shadowIcon = GetShadowMonIcon(iconSpecies, personality);
+        if (shadowIcon != NULL)
+            return shadowIcon;
+    }
+
+    return GetMonIconTiles(iconSpecies, personality);
 }
 
 void TryLoadAllMonIconPalettesAtOffset(u16 offset)

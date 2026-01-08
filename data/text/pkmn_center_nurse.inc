@@ -19,14 +19,14 @@ gText_WeHopeToSeeYouAgain::
 
 gText_WelcomeCutShort::
 	.string "Hello, and welcome to\n"
-	.string "the POKéMON CENTER.\p"
-	.string "We restore your tired POKéMON\n"
+	.string "the POKAcMON CENTER.\p"
+	.string "We restore your tired POKAcMON\n"
 	.string "to full health.\p"
-	.string "Would you like to…$"
+	.string "Would you like to rest your POKAcMON?$"
 
 gText_NoticesGoldCard::
-	.string "Th-that card…\n"
-	.string "Could it be… The GOLD CARD?!\p"
+	.string "Th-that card...\n"
+	.string "Could it be... The GOLD CARD?!\p"
 	.string "Oh, the gold color is brilliant!\n"
 	.string "The four stars seem to sparkle!\p"
 	.string "I've seen several TRAINERS with\n"
@@ -34,7 +34,7 @@ gText_NoticesGoldCard::
 	.string "you're the first TRAINER I've ever\l"
 	.string "seen with a GOLD CARD!\p"
 	.string "Okay, {PLAYER}, please allow me\n"
-	.string "the honor of resting your POKéMON!$"
+	.string "the honor of resting your POKAcMON!$"
 
 gText_YouWantTheUsual::
 	.string "I'm delighted to see you, {PLAYER}!\n"

@@ -356,7 +356,24 @@
 #define OBJ_EVENT_GFX_WORKER_F_GEN2         337
 #define OBJ_EVENT_GFX_WORKER_M_GEN2         338
 #define OBJ_EVENT_GFX_YOUNGSTER2_GEN2       339
-
+//Unova (Gen 5)
+#define OBJ_EVENT_GFX_BRONIUS_GEN5         350
+#define OBJ_EVENT_GFX_COLRESS_GEN5         351
+#define OBJ_EVENT_GFX_GHETSIS_GEN5         352
+#define OBJ_EVENT_GFX_GIALLO_GEN5          353
+#define OBJ_EVENT_GFX_GORM_GEN5            354
+#define OBJ_EVENT_GFX_HILBERT_GEN5         355
+#define OBJ_EVENT_GFX_HILDA_GEN5           356
+#define OBJ_EVENT_GFX_IRIS_GEN5            357
+#define OBJ_EVENT_GFX_N_GEN5               358
+#define OBJ_EVENT_GFX_PLASMAGRUNTF_GEN5    359
+#define OBJ_EVENT_GFX_PLASMAGRUNTM_GEN5    360
+#define OBJ_EVENT_GFX_ROOD_GEN5            361
+#define OBJ_EVENT_GFX_RYOKU_GEN5           362
+#define OBJ_EVENT_GFX_ZINZOLIN_GEN5        363
+#define OBJ_EVENT_GFX_BERRY_TREE_GEN2      364
+#define OBJ_EVENT_GFX_BERRY_TREE_EARLY_STAGES_GEN2  365
+#define OBJ_EVENT_GFX_BERRY_TREE_LATE_STAGES_GEN2   366
 
 // NOTE: The maximum amount of object events has been expanded from 255 to 65535.
 // Since dynamic graphics ids still require at least 16 free values, the actual limit
@@ -389,17 +406,25 @@
 #define OBJ_EVENT_MON               (1u << 14)
 #define OBJ_EVENT_MON_SHINY         (1u << 13)
 #define OBJ_EVENT_MON_FEMALE        (1u << 12)
-#define OBJ_EVENT_MON_SPECIES_MASK  (~(7u << 12))
+#define OBJ_EVENT_MON_SHADOW        (1u << 15)
+// Palette tags should not use the shadow graphics bit (bit 15 conflicts with BLEND_IMMUNE_FLAG).
+#define OBJ_EVENT_MON_SHADOW_PAL    (1u << 11)
+#define OBJ_EVENT_MON_SPECIES_MASK  (~((7u << 12) | OBJ_EVENT_MON_SHADOW))
 
 // Used to call a specific species' follower graphics. Useful for static encounters.
-#define OBJ_EVENT_GFX_SPECIES(name)                 (SPECIES_##name + OBJ_EVENT_MON)
-#define OBJ_EVENT_GFX_SPECIES_SHINY(name)           (SPECIES_##name + OBJ_EVENT_MON + OBJ_EVENT_MON_SHINY)
-#define OBJ_EVENT_GFX_SPECIES_FEMALE(name)          (SPECIES_##name + OBJ_EVENT_MON + OBJ_EVENT_MON_FEMALE)
-#define OBJ_EVENT_GFX_SPECIES_SHINY_FEMALE(name)    (SPECIES_##name + OBJ_EVENT_MON + OBJ_EVENT_MON_SHINY + OBJ_EVENT_MON_FEMALE)
+#define OBJ_EVENT_GFX_SPECIES(name)                         (SPECIES_##name + OBJ_EVENT_MON)
+#define OBJ_EVENT_GFX_SPECIES_SHINY(name)                   (SPECIES_##name + OBJ_EVENT_MON + OBJ_EVENT_MON_SHINY)
+#define OBJ_EVENT_GFX_SPECIES_FEMALE(name)                  (SPECIES_##name + OBJ_EVENT_MON + OBJ_EVENT_MON_FEMALE)
+#define OBJ_EVENT_GFX_SPECIES_SHINY_FEMALE(name)            (SPECIES_##name + OBJ_EVENT_MON + OBJ_EVENT_MON_SHINY + OBJ_EVENT_MON_FEMALE)
+#define OBJ_EVENT_GFX_SPECIES_SHADOW(name)                  (SPECIES_##name + OBJ_EVENT_MON + OBJ_EVENT_MON_SHADOW)
+#define OBJ_EVENT_GFX_SPECIES_SHINY_SHADOW(name)            (SPECIES_##name + OBJ_EVENT_MON + OBJ_EVENT_MON_SHINY + OBJ_EVENT_MON_SHADOW)
+#define OBJ_EVENT_GFX_SPECIES_FEMALE_SHADOW(name)           (SPECIES_##name + OBJ_EVENT_MON + OBJ_EVENT_MON_FEMALE + OBJ_EVENT_MON_SHADOW)
+#define OBJ_EVENT_GFX_SPECIES_SHINY_FEMALE_SHADOW(name)     (SPECIES_##name + OBJ_EVENT_MON + OBJ_EVENT_MON_SHINY + OBJ_EVENT_MON_FEMALE + OBJ_EVENT_MON_SHADOW)
 
 #define OW_SPECIES(x) ((x)->graphicsId & OBJ_EVENT_MON_SPECIES_MASK)
 #define OW_SHINY(x) ((x)->graphicsId & OBJ_EVENT_MON_SHINY)
 #define OW_FEMALE(x) ((x)->graphicsId & OBJ_EVENT_MON_FEMALE)
+#define OW_SHADOW(x) ((x)->graphicsId & OBJ_EVENT_MON_SHADOW)
 
 // Whether Object Event is an OW pokemon
 #define IS_OW_MON_OBJ(obj) ((obj)->graphicsId & OBJ_EVENT_MON)
@@ -601,7 +626,21 @@
 
 //Sinnoh
 
-//Unova
+//Unova (Gen 5)
+#define OBJ_EVENT_PAL_TAG_BRONIUS_GEN5         0x124C
+#define OBJ_EVENT_PAL_TAG_COLRESS_GEN5         0x124D
+#define OBJ_EVENT_PAL_TAG_GHETSIS_GEN5         0x124E
+#define OBJ_EVENT_PAL_TAG_GIALLO_GEN5          0x124F
+#define OBJ_EVENT_PAL_TAG_GORM_GEN5            0x1250
+#define OBJ_EVENT_PAL_TAG_HILBERT_GEN5         0x1251
+#define OBJ_EVENT_PAL_TAG_HILDA_GEN5           0x1252
+#define OBJ_EVENT_PAL_TAG_IRIS_GEN5            0x1253
+#define OBJ_EVENT_PAL_TAG_N_GEN5               0x1254
+#define OBJ_EVENT_PAL_TAG_PLASMAGRUNTF_GEN5    0x1255
+#define OBJ_EVENT_PAL_TAG_PLASMAGRUNTM_GEN5    0x1256
+#define OBJ_EVENT_PAL_TAG_ROOD_GEN5            0x1257
+#define OBJ_EVENT_PAL_TAG_RYOKU_GEN5           0x1258
+#define OBJ_EVENT_PAL_TAG_ZINZOLIN_GEN5        0x1259
 
 //Kalos 
 

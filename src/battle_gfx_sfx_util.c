@@ -690,6 +690,7 @@ void BattleLoadMonSpriteGfx(struct Pokemon *mon, u32 battler)
     struct Pokemon *illusionMon = GetIllusionMonPtr(battler);
     if (illusionMon != NULL)
         mon = illusionMon;
+    bool8 isShadow = GetMonData(mon, MON_DATA_IS_SHADOW);
 
     if (GetMonData(mon, MON_DATA_IS_EGG) || GetMonData(mon, MON_DATA_SPECIES) == SPECIES_NONE) // Don't load GFX of egg pokemon.
         return;
@@ -720,14 +721,15 @@ void BattleLoadMonSpriteGfx(struct Pokemon *mon, u32 battler)
     }
 
     position = GetBattlerPosition(battler);
-    HandleLoadSpecialPokePic(!IsOnPlayerSide(battler),
+    HandleLoadSpecialPokePic_ShadowAware(!IsOnPlayerSide(battler),
                              gMonSpritesGfxPtr->spritesGfx[position],
-                             species, personalityValue);
+                             species, personalityValue,
+                             isShadow);
 
     paletteOffset = OBJ_PLTT_ID(battler);
 
     if (gBattleSpritesDataPtr->battlerData[battler].transformSpecies == SPECIES_NONE)
-        paletteData = GetMonFrontSpritePal(mon);
+        paletteData = GetMonSpritePalFromSpeciesAndPersonality_ShadowAware(species, isShiny, personalityValue, isShadow);
     else
         paletteData = GetMonSpritePalFromSpeciesAndPersonality(species, isShiny, personalityValue);
 

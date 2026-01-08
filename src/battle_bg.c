@@ -28,6 +28,72 @@
 #include "constants/battle_anim.h"
 #include "constants/battle_partner.h"
 
+extern const u32 gBattleEnvironmentTiles_TallGrass_2[];
+extern const u32 gBattleEnvironmentTilemap_TallGrass_2[];
+extern const u32 gBattleEnvironmentAnimTiles_TallGrass_2[];
+extern const u32 gBattleEnvironmentAnimTilemap_TallGrass_2[];
+extern const u16 gBattleEnvironmentPalette_TallGrass_2[];
+
+extern const u32 gBattleEnvironmentTiles_LongGrass_2[];
+extern const u32 gBattleEnvironmentTilemap_LongGrass_2[];
+extern const u32 gBattleEnvironmentAnimTiles_LongGrass_2[];
+extern const u32 gBattleEnvironmentAnimTilemap_LongGrass_2[];
+extern const u16 gBattleEnvironmentPalette_LongGrass_2[];
+
+extern const u32 gBattleEnvironmentTiles_Sand_2[];
+extern const u32 gBattleEnvironmentTilemap_Sand_2[];
+extern const u32 gBattleEnvironmentAnimTiles_Sand_2[];
+extern const u32 gBattleEnvironmentAnimTilemap_Sand_2[];
+extern const u16 gBattleEnvironmentPalette_Sand_2[];
+
+extern const u32 gBattleEnvironmentTiles_Underwater_2[];
+extern const u32 gBattleEnvironmentTilemap_Underwater_2[];
+extern const u32 gBattleEnvironmentAnimTiles_Underwater_2[];
+extern const u32 gBattleEnvironmentAnimTilemap_Underwater_2[];
+extern const u16 gBattleEnvironmentPalette_Underwater_2[];
+
+extern const u32 gBattleEnvironmentTiles_Water_2[];
+extern const u32 gBattleEnvironmentTilemap_Water_2[];
+extern const u32 gBattleEnvironmentAnimTiles_Water_2[];
+extern const u32 gBattleEnvironmentAnimTilemap_Water_2[];
+extern const u16 gBattleEnvironmentPalette_Water_2[];
+
+extern const u32 gBattleEnvironmentTiles_PondWater_2[];
+extern const u32 gBattleEnvironmentTilemap_PondWater_2[];
+extern const u32 gBattleEnvironmentAnimTiles_PondWater_2[];
+extern const u32 gBattleEnvironmentAnimTilemap_PondWater_2[];
+extern const u16 gBattleEnvironmentPalette_PondWater_2[];
+
+extern const u32 gBattleEnvironmentTiles_Rock_2[];
+extern const u32 gBattleEnvironmentTilemap_Rock_2[];
+extern const u32 gBattleEnvironmentAnimTiles_Rock_2[];
+extern const u32 gBattleEnvironmentAnimTilemap_Rock_2[];
+extern const u16 gBattleEnvironmentPalette_Rock_2[];
+
+extern const u32 gBattleEnvironmentTiles_Cave_2[];
+extern const u32 gBattleEnvironmentTilemap_Cave_2[];
+extern const u32 gBattleEnvironmentAnimTiles_Cave_2[];
+extern const u32 gBattleEnvironmentAnimTilemap_Cave_2[];
+extern const u16 gBattleEnvironmentPalette_Cave_2[];
+
+extern const u32 gBattleEnvironmentTiles_Building_2[];
+extern const u32 gBattleEnvironmentTilemap_Building_2[];
+extern const u32 gBattleEnvironmentAnimTiles_Building_2[];
+extern const u32 gBattleEnvironmentAnimTilemap_Building_2[];
+extern const u16 gBattleEnvironmentPalette_Building_2[];
+
+extern const u32 gBattleEnvironmentTiles_Plain_2[];
+extern const u32 gBattleEnvironmentTilemap_Plain_2[];
+extern const u16 gBattleEnvironmentPalette_Plain_2[];
+
+// Use the "_2" battle environment backgrounds (HNS-style alt backgrounds).
+// Set this to 0 to keep the vanilla backgrounds.
+#ifndef BATTLE_BG_USE_ENVIRONMENT_2
+#define BATTLE_BG_USE_ENVIRONMENT_2 1
+#endif
+
+#define BATTLE_ENV_BG_TABLE (BATTLE_BG_USE_ENVIRONMENT_2 ? sBattleEnvironmentTable_2 : sBattleEnvironmentTable)
+
 // .rodata
 
 static const struct OamData sVsLetter_V_OamData =
@@ -703,6 +769,100 @@ const struct BattleBackground sBattleEnvironmentTable[] =
     },
 };
 
+static const struct BattleBackground sBattleEnvironmentTable_2[] =
+{
+    [BATTLE_ENVIRONMENT_GRASS] =
+    {
+        .tileset = gBattleEnvironmentTiles_TallGrass_2,
+        .tilemap = gBattleEnvironmentTilemap_TallGrass_2,
+        .entryTileset = gBattleEnvironmentAnimTiles_TallGrass_2,
+        .entryTilemap = gBattleEnvironmentAnimTilemap_TallGrass_2,
+        .palette = gBattleEnvironmentPalette_TallGrass_2,
+    },
+
+    [BATTLE_ENVIRONMENT_LONG_GRASS] =
+    {
+        .tileset = gBattleEnvironmentTiles_LongGrass_2,
+        .tilemap = gBattleEnvironmentTilemap_LongGrass_2,
+        .entryTileset = gBattleEnvironmentAnimTiles_LongGrass_2,
+        .entryTilemap = gBattleEnvironmentAnimTilemap_LongGrass_2,
+        .palette = gBattleEnvironmentPalette_LongGrass_2,
+    },
+
+    [BATTLE_ENVIRONMENT_SAND] =
+    {
+        .tileset = gBattleEnvironmentTiles_Sand_2,
+        .tilemap = gBattleEnvironmentTilemap_Sand_2,
+        .entryTileset = gBattleEnvironmentAnimTiles_Sand_2,
+        .entryTilemap = gBattleEnvironmentAnimTilemap_Sand_2,
+        .palette = gBattleEnvironmentPalette_Sand_2,
+    },
+
+    [BATTLE_ENVIRONMENT_UNDERWATER] =
+    {
+        .tileset = gBattleEnvironmentTiles_Underwater_2,
+        .tilemap = gBattleEnvironmentTilemap_Underwater_2,
+        .entryTileset = gBattleEnvironmentAnimTiles_Underwater_2,
+        .entryTilemap = gBattleEnvironmentAnimTilemap_Underwater_2,
+        .palette = gBattleEnvironmentPalette_Underwater_2,
+    },
+
+    [BATTLE_ENVIRONMENT_WATER] =
+    {
+        .tileset = gBattleEnvironmentTiles_Water_2,
+        .tilemap = gBattleEnvironmentTilemap_Water_2,
+        .entryTileset = gBattleEnvironmentAnimTiles_Water_2,
+        .entryTilemap = gBattleEnvironmentAnimTilemap_Water_2,
+        .palette = gBattleEnvironmentPalette_Water_2,
+    },
+
+    [BATTLE_ENVIRONMENT_POND] =
+    {
+        .tileset = gBattleEnvironmentTiles_PondWater_2,
+        .tilemap = gBattleEnvironmentTilemap_PondWater_2,
+        .entryTileset = gBattleEnvironmentAnimTiles_PondWater_2,
+        .entryTilemap = gBattleEnvironmentAnimTilemap_PondWater_2,
+        .palette = gBattleEnvironmentPalette_PondWater_2,
+    },
+
+    [BATTLE_ENVIRONMENT_MOUNTAIN] =
+    {
+        .tileset = gBattleEnvironmentTiles_Rock_2,
+        .tilemap = gBattleEnvironmentTilemap_Rock_2,
+        .entryTileset = gBattleEnvironmentAnimTiles_Rock_2,
+        .entryTilemap = gBattleEnvironmentAnimTilemap_Rock_2,
+        .palette = gBattleEnvironmentPalette_Rock_2,
+    },
+
+    [BATTLE_ENVIRONMENT_CAVE] =
+    {
+        .tileset = gBattleEnvironmentTiles_Cave_2,
+        .tilemap = gBattleEnvironmentTilemap_Cave_2,
+        .entryTileset = gBattleEnvironmentAnimTiles_Cave_2,
+        .entryTilemap = gBattleEnvironmentAnimTilemap_Cave_2,
+        .palette = gBattleEnvironmentPalette_Cave_2,
+    },
+
+    [BATTLE_ENVIRONMENT_BUILDING] =
+    {
+        .tileset = gBattleEnvironmentTiles_Building_2,
+        .tilemap = gBattleEnvironmentTilemap_Building_2,
+        .entryTileset = gBattleEnvironmentAnimTiles_Building_2,
+        .entryTilemap = gBattleEnvironmentAnimTilemap_Building_2,
+        .palette = gBattleEnvironmentPalette_Building_2,
+    },
+
+    [BATTLE_ENVIRONMENT_PLAIN] =
+    {
+        .tileset = gBattleEnvironmentTiles_Plain_2,
+        .tilemap = gBattleEnvironmentTilemap_Plain_2,
+        .entryTileset = gBattleEnvironmentAnimTiles_Building_2,
+        .entryTilemap = gBattleEnvironmentAnimTilemap_Building_2,
+        .palette = gBattleEnvironmentPalette_Plain_2,
+    },
+};
+
+
 void BattleInitBgsAndWindows(void)
 {
     ResetBgsAndClearDma3BusyFlags(0);
@@ -778,9 +938,9 @@ void DrawMainBattleBackground(void)
             LoadPalette(gBattleEnvironmentPalette_Rayquaza, BG_PLTT_ID(2), 3 * PLTT_SIZE_4BPP);
             break;
         default:
-            DecompressDataWithHeaderVram(sBattleEnvironmentTable[gBattleEnvironment].tileset, (void *)(BG_CHAR_ADDR(2)));
-            DecompressDataWithHeaderVram(sBattleEnvironmentTable[gBattleEnvironment].tilemap, (void *)(BG_SCREEN_ADDR(26)));
-            LoadPalette(sBattleEnvironmentTable[gBattleEnvironment].palette, BG_PLTT_ID(2), 3 * PLTT_SIZE_4BPP);
+            DecompressDataWithHeaderVram(BATTLE_ENV_BG_TABLE[gBattleEnvironment].tileset, (void *)(BG_CHAR_ADDR(2)));
+            DecompressDataWithHeaderVram(BATTLE_ENV_BG_TABLE[gBattleEnvironment].tilemap, (void *)(BG_SCREEN_ADDR(26)));
+            LoadPalette(BATTLE_ENV_BG_TABLE[gBattleEnvironment].palette, BG_PLTT_ID(2), 3 * PLTT_SIZE_4BPP);
             break;
         }
     }
@@ -809,9 +969,9 @@ void DrawMainBattleBackground(void)
         {
         default:
         case MAP_BATTLE_SCENE_NORMAL:
-            DecompressDataWithHeaderVram(sBattleEnvironmentTable[gBattleEnvironment].tileset, (void *)(BG_CHAR_ADDR(2)));
-            DecompressDataWithHeaderVram(sBattleEnvironmentTable[gBattleEnvironment].tilemap, (void *)(BG_SCREEN_ADDR(26)));
-            LoadPalette(sBattleEnvironmentTable[gBattleEnvironment].palette, BG_PLTT_ID(2), 3 * PLTT_SIZE_4BPP);
+            DecompressDataWithHeaderVram(BATTLE_ENV_BG_TABLE[gBattleEnvironment].tileset, (void *)(BG_CHAR_ADDR(2)));
+            DecompressDataWithHeaderVram(BATTLE_ENV_BG_TABLE[gBattleEnvironment].tilemap, (void *)(BG_SCREEN_ADDR(26)));
+            LoadPalette(BATTLE_ENV_BG_TABLE[gBattleEnvironment].palette, BG_PLTT_ID(2), 3 * PLTT_SIZE_4BPP);
             break;
         case MAP_BATTLE_SCENE_GYM:
             DecompressDataWithHeaderVram(gBattleEnvironmentTiles_Building, (void *)(BG_CHAR_ADDR(2)));
@@ -1180,8 +1340,8 @@ void DrawBattleEntryBackground(void)
             DecompressDataWithHeaderVram(gBattleEnvironmentAnimTilemap_Rayquaza, (void*)(BG_SCREEN_ADDR(28)));
             break;
         default:
-            DecompressDataWithHeaderVram(sBattleEnvironmentTable[gBattleEnvironment].entryTileset, (void *)(BG_CHAR_ADDR(1)));
-            DecompressDataWithHeaderVram(sBattleEnvironmentTable[gBattleEnvironment].entryTilemap, (void *)(BG_SCREEN_ADDR(28)));
+            DecompressDataWithHeaderVram(BATTLE_ENV_BG_TABLE[gBattleEnvironment].entryTileset, (void *)(BG_CHAR_ADDR(1)));
+            DecompressDataWithHeaderVram(BATTLE_ENV_BG_TABLE[gBattleEnvironment].entryTilemap, (void *)(BG_SCREEN_ADDR(28)));
             break;
         }
     }
@@ -1206,8 +1366,8 @@ void DrawBattleEntryBackground(void)
 
         if (GetCurrentMapBattleScene() == MAP_BATTLE_SCENE_NORMAL)
         {
-            DecompressDataWithHeaderVram(sBattleEnvironmentTable[gBattleEnvironment].entryTileset, (void *)(BG_CHAR_ADDR(1)));
-            DecompressDataWithHeaderVram(sBattleEnvironmentTable[gBattleEnvironment].entryTilemap, (void *)(BG_SCREEN_ADDR(28)));
+            DecompressDataWithHeaderVram(BATTLE_ENV_BG_TABLE[gBattleEnvironment].entryTileset, (void *)(BG_CHAR_ADDR(1)));
+            DecompressDataWithHeaderVram(BATTLE_ENV_BG_TABLE[gBattleEnvironment].entryTilemap, (void *)(BG_SCREEN_ADDR(28)));
         }
         else
         {
@@ -1271,7 +1431,7 @@ bool8 LoadChosenBattleElement(u8 caseId)
             {
             default:
             case MAP_BATTLE_SCENE_NORMAL:
-                DecompressDataWithHeaderVram(sBattleEnvironmentTable[gBattleEnvironment].tileset, (void *)(BG_CHAR_ADDR(2)));
+                DecompressDataWithHeaderVram(BATTLE_ENV_BG_TABLE[gBattleEnvironment].tileset, (void *)(BG_CHAR_ADDR(2)));
                 break;
             case MAP_BATTLE_SCENE_GYM:
                 DecompressDataWithHeaderVram(gBattleEnvironmentTiles_Building, (void *)(BG_CHAR_ADDR(2)));
@@ -1333,7 +1493,7 @@ bool8 LoadChosenBattleElement(u8 caseId)
             {
             default:
             case MAP_BATTLE_SCENE_NORMAL:
-                DecompressDataWithHeaderVram(sBattleEnvironmentTable[gBattleEnvironment].tilemap, (void *)(BG_SCREEN_ADDR(26)));
+                DecompressDataWithHeaderVram(BATTLE_ENV_BG_TABLE[gBattleEnvironment].tilemap, (void *)(BG_SCREEN_ADDR(26)));
                 break;
             case MAP_BATTLE_SCENE_GYM:
                 DecompressDataWithHeaderVram(gBattleEnvironmentTilemap_Building, (void *)(BG_SCREEN_ADDR(26)));
@@ -1395,7 +1555,7 @@ bool8 LoadChosenBattleElement(u8 caseId)
             {
             default:
             case MAP_BATTLE_SCENE_NORMAL:
-                LoadPalette(sBattleEnvironmentTable[gBattleEnvironment].palette, BG_PLTT_ID(2), 3 * PLTT_SIZE_4BPP);
+                LoadPalette(BATTLE_ENV_BG_TABLE[gBattleEnvironment].palette, BG_PLTT_ID(2), 3 * PLTT_SIZE_4BPP);
                 break;
             case MAP_BATTLE_SCENE_GYM:
                 LoadPalette(gBattleEnvironmentPalette_BuildingGym, BG_PLTT_ID(2), 3 * PLTT_SIZE_4BPP);
@@ -1456,4 +1616,3 @@ void DrawTerrainTypeBattleBackground(void)
         break;
     }
 }
-

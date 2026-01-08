@@ -869,13 +869,56 @@
 #define TRAINER_BROCK_KANTO                 860
 #define TRAINER_CAMPER_KANTO                861
 
+// === Gen 1/2 bulk import ===
+#define TRAINER_ARCHER                   862
+#define TRAINER_ARIANA                   863
+#define TRAINER_BIKER                    864
+#define TRAINER_BLAINE                   865
+#define TRAINER_BURGLAR                  866
+#define TRAINER_CHAMPION_LANCE           867
+#define TRAINER_ELITE_FOUR_BRUNO         868
+#define TRAINER_ELITE_FOUR_KAREN         869
+#define TRAINER_ELITE_FOUR_KOGA          870
+#define TRAINER_ELITE_FOUR_WILL          871
+#define TRAINER_ENGINEER                 872
+#define TRAINER_ERIKA                    873
+#define TRAINER_EUSINE                   874
+#define TRAINER_FIREBREATHER             875
+#define TRAINER_GOLD                     876
+#define TRAINER_JANINE                   877
+#define TRAINER_JUGGLER                  878
+#define TRAINER_KIMONO_GIRL              879
+#define TRAINER_LEADER_BLUE              880
+#define TRAINER_LEADER_BUGSY             881
+#define TRAINER_LEADER_CHUCK             882
+#define TRAINER_LEADER_CLAIR             883
+#define TRAINER_LEADER_FALKNER           884
+#define TRAINER_LEADER_JASMINE           885
+#define TRAINER_LEADER_MORTY             886
+#define TRAINER_LEADER_PRYCE             887
+#define TRAINER_LEADER_WHITNEY           888
+#define TRAINER_LYRA                     889
+#define TRAINER_MISTY                    890
+#define TRAINER_NURSE                    891
+#define TRAINER_OFFICER                  892
+#define TRAINER_PETREL                   893
+#define TRAINER_PROTON                   894
+#define TRAINER_PSYCHIC_M2               895
+#define TRAINER_SABRINA                  896
+#define TRAINER_SAGE                     897
+#define TRAINER_SAGE_LEADER              898
+#define TRAINER_SILVER                   899
+#define TRAINER_SUPER_NERD               900
+#define TRAINER_SURGE                    901
+#define TRAINER_TWINS2                   902
+#define TRAINER_YOUNGSTER2               903
 
 // NOTE: Because each Trainer uses a flag to determine when they are defeated, there is only space for 9 additional trainers before trainer flag space overflows
 //       More space can be made by shifting flags around in constants/flags.h or changing how trainer flags are handled
 //       MAX_TRAINERS_COUNT can be increased but will take up additional saveblock space
 
-#define TRAINERS_COUNT                      862
-#define MAX_TRAINERS_COUNT                  864
+#define TRAINERS_COUNT                      904
+#define MAX_TRAINERS_COUNT                  1000
 #define TRAINER_PARTNER(partner)           (MAX_TRAINERS_COUNT + partner)
 
 #endif  // GUARD_CONSTANTS_OPPONENTS_H

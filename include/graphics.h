@@ -67,6 +67,7 @@ extern const u32 gOpenPokeballGfx[];
 
 // Pokémon gfx
 extern const u16 gMonIconPalettes[][16];
+extern const u16 gMonIconPalette_Shadow[];
 
 // pokeblock
 extern const u32 gMenuPokeblock_Gfx[];
@@ -1971,6 +1972,7 @@ extern const u32 gPokenavRibbonsSummaryBg_Tilemap[];
 
 extern const u32 gSummaryScreen_Gfx[];
 extern const u16 gSummaryScreen_Pal[];
+extern const u16 gSummaryShadow_Pal[];
 extern const u32 gSummaryPage_Info_Tilemap[];
 extern const u32 gSummaryPage_InfoEgg_Tilemap[];
 extern const u32 gSummaryPage_Skills_Tilemap[];
@@ -1979,9 +1981,6 @@ extern const u32 gSummaryPage_ContestMoves_Tilemap[];
 extern const u16 gPPTextPalette[];
 extern const u16 gMoveTypes_Pal[];
 // Shadow
-extern const u32 gSummaryShadow_Gfx[];
-extern const u32 gSummaryShadow_Pal[];
-
 extern const u16 gSummaryScreen_MoveEffect_Battle_Tilemap[];
 extern const u16 gSummaryScreen_MoveEffect_Contest_Tilemap[];
 extern const u16 gSummaryScreen_MoveEffect_Cancel_Tilemap[];

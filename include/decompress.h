@@ -80,6 +80,12 @@ void HandleLoadSpecialPokePic(bool32 isFrontPic, void *dest, s32 species, u32 pe
 
 void LoadSpecialPokePic(void *dest, s32 species, u32 personality, bool8 isFrontPic);
 
+// Shadow graphics override helpers.
+// These are opt-in so we can swap graphics in battles/summary/storage while
+// keeping the main Pokédex unaffected.
+void HandleLoadSpecialPokePic_ShadowAware(bool32 isFrontPic, void *dest, s32 species, u32 personality, bool8 isShadow);
+void LoadSpecialPokePic_ShadowAware(void *dest, s32 species, u32 personality, bool8 isFrontPic, bool8 isShadow);
+
 u32 GetDecompressedDataSize(const u32 *ptr);
 
 #endif // GUARD_DECOMPRESS_H

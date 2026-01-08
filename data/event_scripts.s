@@ -1112,7 +1112,7 @@ EventScript_ShadowPurifyReady::
     end
 
 gText_ShadowPurifyReady::
-    .string "One of your Pokémon is ready to open\nthe door to its heart!\p$"
+    .string "One of your POKEMON is ready to open\nthe door to its heart!\p$"
 
 	.include "data/scripts/pc_transfer.inc"
 	.include "data/scripts/questionnaire.inc"

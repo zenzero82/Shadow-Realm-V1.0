@@ -88,6 +88,8 @@ struct Pokemon
 
     bool shadow;
     int shadow_line;
+    int shadowID;
+    int shadowID_line;
 
     int heartGauge;
     int heartGauge_line;
@@ -1470,6 +1472,14 @@ static bool parse_trainer(struct Parser *p, const struct Parsed *parsed, struct 
                 if (!token_bool(p, &value, &pokemon->shadow))
                     any_error = !show_parse_error(p);
             }
+            else if (is_literal_token(&key, "Shadow ID"))
+            {
+                if (pokemon->shadowID_line)
+                    any_error = !set_show_parse_error(p, key.location, "duplicate 'Shadow ID'");
+                pokemon->shadowID_line = value.location.line;
+                if (!token_int(p, &value, &pokemon->shadowID))
+                    any_error = !show_parse_error(p);
+            }
             else if (is_literal_token(&key, "Heart Gauge"))
             {
                 if (pokemon->heartGauge_line)
@@ -2049,6 +2059,11 @@ static void fprint_trainers(const char *output_path, FILE *f, struct Parsed *par
             {
                 fprintf(f, "#line %d\n", pokemon->heartGauge_line);
                 fprintf(f, "            .heartGauge = %d,\n", pokemon->heartGauge);
+            }
+            if (pokemon->shadowID_line)
+            {
+                fprintf(f, "#line %d\n", pokemon->shadowID_line);
+                fprintf(f, "            .shadowID = %d,\n", pokemon->shadowID);
             }
 
             if (pokemon->moves_n > 0)

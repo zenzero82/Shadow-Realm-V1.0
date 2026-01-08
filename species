@@ -1,0 +1,59 @@
+2114:    if (summary->isEgg)
+2516:    u16 move1 = summary->moves[moveIndex1];
+2517:    u16 move2 = summary->moves[moveIndex2];
+2518:    u8 move1pp = summary->pp[moveIndex1];
+2519:    u8 move2pp = summary->pp[moveIndex2];
+2520:    u8 ppBonuses = summary->ppBonuses;
+2538:    summary->moves[moveIndex1] = move2;
+2539:    summary->moves[moveIndex2] = move1;
+2541:    summary->pp[moveIndex1] = move2pp;
+2542:    summary->pp[moveIndex2] = move1pp;
+2544:    summary->ppBonuses = ppBonuses;
+2551:    u16 move1 = summary->moves[moveIndex1];
+2552:    u16 move2 = summary->moves[moveIndex2];
+2553:    u8 move1pp = summary->pp[moveIndex1];
+2554:    u8 move2pp = summary->pp[moveIndex2];
+2555:    u8 ppBonuses = summary->ppBonuses;
+2573:    summary->moves[moveIndex1] = move2;
+2574:    summary->moves[moveIndex2] = move1;
+2576:    summary->pp[moveIndex1] = move2pp;
+2577:    summary->pp[moveIndex2] = move1pp;
+2579:    summary->ppBonuses = ppBonuses;
+3035:    if (summary->level < MAX_LEVEL)
+3037:        u32 expBetweenLevels = gExperienceTables[gSpeciesInfo[summary->species].growthRate][summary->level + 1] - gExperienceTables[gSpeciesInfo[summary->species].growthRate][summary->level];
+3038:        u32 expSinceLastLevel = summary->exp - gExperienceTables[gSpeciesInfo[summary->species].growthRate][summary->level];
+3170:    u16 dexNum = SpeciesToPokedexNum(summary->species);
+3199:    ConvertIntToDecimalStringN(gStringVar2, summary->level, STR_CONV_MODE_LEFT_ALIGN, 3);
+3205:    PrintTextOnWindowToFitPx(PSS_LABEL_WINDOW_PORTRAIT_SPECIES, GetSpeciesName(summary->species2), 6, 1, 0, 1, WindowWidthPx(PSS_LABEL_WINDOW_PORTRAIT_SPECIES) - 9);
+3206:    PrintGenderSymbol(mon, summary->species2);
+4024:    u16 move = summary->moves[moveIndex];
+4028:        pp = CalculatePPWithBonus(move, summary->ppBonuses, moveIndex);
+4030:        ConvertIntToDecimalStringN(gStringVar1, summary->pp[moveIndex], STR_CONV_MODE_RIGHT_ALIGN, 2);
+4037:        ppState = GetCurrentPpToMaxPpState(summary->pp[moveIndex], pp) + 9;
+4316:    if (summary->isEgg)
+4323:        SetTypeSpritePosAndPal(gSpeciesInfo[summary->species].types[0], 120, 48, SPRITE_ARR_ID_TYPE);
+4324:        if (gSpeciesInfo[summary->species].types[0] != gSpeciesInfo[summary->species].types[1])
+4326:            SetTypeSpritePosAndPal(gSpeciesInfo[summary->species].types[1], 160, 48, SPRITE_ARR_ID_TYPE + 1);
+4335:            SetTypeSpritePosAndPal(summary->teraType, 200, 48, SPRITE_ARR_ID_TYPE + 2);
+4349:        if (summary->moves[i] != MOVE_NONE)
+4351:            type = GetMoveType(summary->moves[i]);
+4355:                type = CheckDynamicMoveType(mon, summary->moves[i], 0, state); // Bug: in battle, this only shows the dynamic type of battler in position 0
+4373:        if (summary->moves[i] != MOVE_NONE)
+4374:            SetTypeSpritePosAndPal(NUMBER_OF_MON_TYPES + GetMoveContestCategory(summary->moves[i]), 85, 32 + (i * 16), i + SPRITE_ARR_ID_TYPE);
+4440:                                     summary->species2,
+4441:                                     summary->pid);
+4449:                                         summary->species2,
+4450:                                         summary->pid);
+4456:                                         summary->species2,
+4457:                                         summary->pid);
+4463:        LoadSpritePaletteWithTag(GetMonSpritePalFromSpeciesAndPersonality(summary->species2, summary->isShiny, summary->pid), summary->species2);
+4464:        SetMultiuseSpriteTemplateToPokemon(summary->species2, B_POSITION_OPPONENT_LEFT);
+4473:    if (!summary->isEgg)
+4476:            PlayCry_ByMode(summary->species2, 0, CRY_MODE_NORMAL);
+4478:            PlayCry_ByMode(summary->species2, 0, CRY_MODE_WEAK);
+4488:    gSprites[spriteId].data[0] = summary->species2;
+4493:    if (!IsMonSpriteNotFlipped(summary->species2))
+4509:        PokemonSummaryDoMonAnimation(sprite, sprite->data[0], summary->isEgg);
+4821:    if (summary->heartValue)
+4823:        u32 hVal = summary->heartValue;
+4824:        u32 hMax = summary->heartMax;

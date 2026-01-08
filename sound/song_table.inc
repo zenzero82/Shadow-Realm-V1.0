@@ -549,7 +549,7 @@ gSongTable::
 	song mus_rg_sevii_route, 0, 0
 	song mus_rg_sevii_dungeon, 0, 0
 	song mus_rg_sevii_123, 0, 0
-	song mus_rg_sevii_45, 0, 0
+	song mus_hg_vs_rocket, 0, 0
 	song mus_rg_sevii_67, 0, 0
 	song mus_rg_poke_flute, 2, 2
 	song mus_rg_vs_deoxys, 0, 0

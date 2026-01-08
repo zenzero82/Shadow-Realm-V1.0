@@ -2,6 +2,10 @@
 #define GUARD_POKEMON_ICON_H
 
 extern const struct SpritePalette gMonIconPaletteTable[];
+extern const u8 gMonIconShadowPaletteIndex;
+
+struct Pokemon;
+
 
 const u8 *GetMonIconTiles(u16 species, u32 personality);
 void TryLoadAllMonIconPalettesAtOffset(u16 offset);
@@ -17,7 +21,9 @@ void FreeMonIconPalettes(void);
 u8 CreateMonIconNoPersonality(u16 species, void (*callback)(struct Sprite *), s16 x, s16 y, u8 subpriority);
 void FreeMonIconPalette(u16 species);
 void FreeAndDestroyMonIconSprite(struct Sprite *sprite);
-u8 CreateMonIcon(u16 species, void (*callback)(struct Sprite *), s16 x, s16 y, u8 subpriority, u32 personality);
+u8 CreateMonIcon(u16 species, void (*callback)(struct Sprite *), s16 x, s16 y, u8 subpriority, u32 personality, bool8 isShadow);
+u8 CreateMonIconFromMon(const struct Pokemon *mon, void (*callback)(struct Sprite *), s16 x, s16 y, u8 subpriority);
+const u8 *GetMonIconPtrFromMon(const struct Pokemon *mon);
 u8 UpdateMonIconFrame(struct Sprite *sprite);
 void LoadMonIconPalette(u16 species);
 void LoadMonIconPalettePersonality(u16 species, u32 personality);
@@ -25,5 +31,6 @@ void SpriteCB_MonIcon(struct Sprite *sprite);
 void SetPartyHPBarSprite(struct Sprite *sprite, u8 animNum);
 u8 GetMonIconPaletteIndexFromSpecies(u16 species);
 void SafeFreeMonIconPalette(u16 species);
+const u8 *GetMonIconTiles_ShadowAware(u16 species, u32 personality, bool8 isShadow);
 
 #endif // GUARD_POKEMON_ICON_H

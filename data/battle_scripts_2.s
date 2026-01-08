@@ -222,7 +222,6 @@ BattleScript_ShowCaughtTargetAsFainted::
 	tryillusionoff BS_TARGET
 	cleareffectsonfaint BS_TARGET
 	trytrainerslidefirstdownmsg BS_TARGET
-	return
 	setbyte sMON_CAUGHT, FALSE
 	goto BattleScript_HandleFaintedMon
 

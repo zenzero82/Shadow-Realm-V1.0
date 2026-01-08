@@ -285,6 +285,39 @@ const u32 gObjectEventPic_MicleBerryTree[] = INCBIN_U32("graphics/object_events/
 const u32 gObjectEventPic_CustapBerryTree[] = INCBIN_U32("graphics/object_events/pics/berry_trees/custap.4bpp");
 const u32 gObjectEventPic_JabocaBerryTree[] = INCBIN_U32("graphics/object_events/pics/berry_trees/jaboca.4bpp");
 const u32 gObjectEventPic_RowapBerryTree[] = INCBIN_U32("graphics/object_events/pics/berry_trees/rowap.4bpp");
+// === Berry Trees (Gen 2 style) ===
+const u32 gObjectEventPic_BerryTreeDirtPileGen2[] = INCBIN_U32("graphics/object_events/pics/berry_trees/dirt_pile_gen2.4bpp");
+const u32 gObjectEventPic_BerryTreeSproutGen2[] = INCBIN_U32("graphics/object_events/pics/berry_trees/sprout_gen2.4bpp");
+const u32 gObjectEventPic_AguavBerryTreeGen2[] = INCBIN_U32("graphics/object_events/pics/berry_trees/aguav_gen2.4bpp");
+const u32 gObjectEventPic_AspearBerryTreeGen2[] = INCBIN_U32("graphics/object_events/pics/berry_trees/aspear_gen2.4bpp");
+const u32 gObjectEventPic_CheriBerryTreeGen2[] = INCBIN_U32("graphics/object_events/pics/berry_trees/cheri_gen2.4bpp");
+const u32 gObjectEventPic_ChestoBerryTreeGen2[] = INCBIN_U32("graphics/object_events/pics/berry_trees/chesto_gen2.4bpp");
+const u32 gObjectEventPic_CornnBerryTreeGen2[] = INCBIN_U32("graphics/object_events/pics/berry_trees/cornn_gen2.4bpp");
+const u32 gObjectEventPic_DurinBerryTreeGen2[] = INCBIN_U32("graphics/object_events/pics/berry_trees/durin_gen2.4bpp");
+const u32 gObjectEventPic_FigyBerryTreeGen2[] = INCBIN_U32("graphics/object_events/pics/berry_trees/figy_gen2.4bpp");
+const u32 gObjectEventPic_GrepaBerryTreeGen2[] = INCBIN_U32("graphics/object_events/pics/berry_trees/grepa_gen2.4bpp");
+const u32 gObjectEventPic_HondewBerryTreeGen2[] = INCBIN_U32("graphics/object_events/pics/berry_trees/hondew_gen2.4bpp");
+const u32 gObjectEventPic_IapapaBerryTreeGen2[] = INCBIN_U32("graphics/object_events/pics/berry_trees/iapapa_gen2.4bpp");
+const u32 gObjectEventPic_KelpsyBerryTreeGen2[] = INCBIN_U32("graphics/object_events/pics/berry_trees/kelpsy_gen2.4bpp");
+const u32 gObjectEventPic_LansatBerryTreeGen2[] = INCBIN_U32("graphics/object_events/pics/berry_trees/lansat_gen2.4bpp");
+const u32 gObjectEventPic_LeppaBerryTreeGen2[] = INCBIN_U32("graphics/object_events/pics/berry_trees/leppa_gen2.4bpp");
+const u32 gObjectEventPic_LiechiBerryTreeGen2[] = INCBIN_U32("graphics/object_events/pics/berry_trees/liechi_gen2.4bpp");
+const u32 gObjectEventPic_LumBerryTreeGen2[] = INCBIN_U32("graphics/object_events/pics/berry_trees/lum_gen2.4bpp");
+const u32 gObjectEventPic_MagoBerryTreeGen2[] = INCBIN_U32("graphics/object_events/pics/berry_trees/mago_gen2.4bpp");
+const u32 gObjectEventPic_NomelBerryTreeGen2[] = INCBIN_U32("graphics/object_events/pics/berry_trees/nomel_gen2.4bpp");
+const u32 gObjectEventPic_OranBerryTreeGen2[] = INCBIN_U32("graphics/object_events/pics/berry_trees/oran_gen2.4bpp");
+const u32 gObjectEventPic_PamtreBerryTreeGen2[] = INCBIN_U32("graphics/object_events/pics/berry_trees/pamtre_gen2.4bpp");
+const u32 gObjectEventPic_PechaBerryTreeGen2[] = INCBIN_U32("graphics/object_events/pics/berry_trees/pecha_gen2.4bpp");
+const u32 gObjectEventPic_PersimBerryTreeGen2[] = INCBIN_U32("graphics/object_events/pics/berry_trees/persim_gen2.4bpp");
+const u32 gObjectEventPic_PomegBerryTreeGen2[] = INCBIN_U32("graphics/object_events/pics/berry_trees/pomeg_gen2.4bpp");
+const u32 gObjectEventPic_RabutaBerryTreeGen2[] = INCBIN_U32("graphics/object_events/pics/berry_trees/rabuta_gen2.4bpp");
+const u32 gObjectEventPic_RawstBerryTreeGen2[] = INCBIN_U32("graphics/object_events/pics/berry_trees/rawst_gen2.4bpp");
+const u32 gObjectEventPic_RazzBerryTreeGen2[] = INCBIN_U32("graphics/object_events/pics/berry_trees/razz_gen2.4bpp");
+const u32 gObjectEventPic_SitrusBerryTreeGen2[] = INCBIN_U32("graphics/object_events/pics/berry_trees/sitrus_gen2.4bpp");
+const u32 gObjectEventPic_SpelonBerryTreeGen2[] = INCBIN_U32("graphics/object_events/pics/berry_trees/spelon_gen2.4bpp");
+const u32 gObjectEventPic_TamatoBerryTreeGen2[] = INCBIN_U32("graphics/object_events/pics/berry_trees/tamato_gen2.4bpp");
+const u32 gObjectEventPic_WepearBerryTreeGen2[] = INCBIN_U32("graphics/object_events/pics/berry_trees/wepear_gen2.4bpp");
+const u32 gObjectEventPic_WikiBerryTreeGen2[] = INCBIN_U32("graphics/object_events/pics/berry_trees/wiki_gen2.4bpp");
 const u32 gFieldEffectObjectPic_SurfBlob[] = INCBIN_U32("graphics/field_effects/pics/surf_blob.4bpp");
 const u32 gObjectEventPic_QuintyPlump[] = INCBIN_U32("graphics/object_events/pics/people/quinty_plump.4bpp");
 const u16 gObjectEventPal_QuintyPlump[] = INCBIN_U16("graphics/object_events/palettes/quinty_plump.gbapal");
@@ -788,6 +821,47 @@ const u16 gObjectEventPal_Youngster2Gen2[] = INCBIN_U16("graphics/object_events/
 //Sinnoh Trainers
 
 //Unova Trainers
+const u32 gObjectEventPic_BroniusGen5[] = INCBIN_U32("graphics/object_events/pics/gen5/bronius.4bpp");
+const u16 gObjectEventPal_BroniusGen5[] = INCBIN_U16("graphics/object_events/pics/gen5/bronius.gbapal");
+
+const u32 gObjectEventPic_ColressGen5[] = INCBIN_U32("graphics/object_events/pics/gen5/colress.4bpp");
+const u16 gObjectEventPal_ColressGen5[] = INCBIN_U16("graphics/object_events/pics/gen5/colress.gbapal");
+
+const u32 gObjectEventPic_GhetsisGen5[] = INCBIN_U32("graphics/object_events/pics/gen5/ghetsis.4bpp");
+const u16 gObjectEventPal_GhetsisGen5[] = INCBIN_U16("graphics/object_events/pics/gen5/ghetsis.gbapal");
+
+const u32 gObjectEventPic_GialloGen5[] = INCBIN_U32("graphics/object_events/pics/gen5/giallo.4bpp");
+const u16 gObjectEventPal_GialloGen5[] = INCBIN_U16("graphics/object_events/pics/gen5/giallo.gbapal");
+
+const u32 gObjectEventPic_GormGen5[] = INCBIN_U32("graphics/object_events/pics/gen5/gorm.4bpp");
+const u16 gObjectEventPal_GormGen5[] = INCBIN_U16("graphics/object_events/pics/gen5/gorm.gbapal");
+
+const u32 gObjectEventPic_HilbertGen5[] = INCBIN_U32("graphics/object_events/pics/gen5/hilbert.4bpp");
+const u16 gObjectEventPal_HilbertGen5[] = INCBIN_U16("graphics/object_events/pics/gen5/hilbert.gbapal");
+
+const u32 gObjectEventPic_HildaGen5[] = INCBIN_U32("graphics/object_events/pics/gen5/hilda.4bpp");
+const u16 gObjectEventPal_HildaGen5[] = INCBIN_U16("graphics/object_events/pics/gen5/hilda.gbapal");
+
+const u32 gObjectEventPic_IrisGen5[] = INCBIN_U32("graphics/object_events/pics/gen5/iris.4bpp");
+const u16 gObjectEventPal_IrisGen5[] = INCBIN_U16("graphics/object_events/pics/gen5/iris.gbapal");
+
+const u32 gObjectEventPic_NGen5[] = INCBIN_U32("graphics/object_events/pics/gen5/n.4bpp");
+const u16 gObjectEventPal_NGen5[] = INCBIN_U16("graphics/object_events/pics/gen5/n.gbapal");
+
+const u32 gObjectEventPic_PlasmaGruntFGen5[] = INCBIN_U32("graphics/object_events/pics/gen5/plasmagruntf.4bpp");
+const u16 gObjectEventPal_PlasmaGruntFGen5[] = INCBIN_U16("graphics/object_events/pics/gen5/plasmagruntf.gbapal");
+
+const u32 gObjectEventPic_PlasmaGruntMGen5[] = INCBIN_U32("graphics/object_events/pics/gen5/plasmagruntm.4bpp");
+const u16 gObjectEventPal_PlasmaGruntMGen5[] = INCBIN_U16("graphics/object_events/pics/gen5/plasmagruntm.gbapal");
+
+const u32 gObjectEventPic_RoodGen5[] = INCBIN_U32("graphics/object_events/pics/gen5/rood.4bpp");
+const u16 gObjectEventPal_RoodGen5[] = INCBIN_U16("graphics/object_events/pics/gen5/rood.gbapal");
+
+const u32 gObjectEventPic_RyokuGen5[] = INCBIN_U32("graphics/object_events/pics/gen5/ryoku.4bpp");
+const u16 gObjectEventPal_RyokuGen5[] = INCBIN_U16("graphics/object_events/pics/gen5/ryoku.gbapal");
+
+const u32 gObjectEventPic_ZinzolinGen5[] = INCBIN_U32("graphics/object_events/pics/gen5/zinzolin.4bpp");
+const u16 gObjectEventPal_ZinzolinGen5[] = INCBIN_U16("graphics/object_events/pics/gen5/zinzolin.gbapal");
 
 //Kalos Trainers 
 
