@@ -19335,8 +19335,6 @@ Move_SHADOW_BLITZ::
 	waitforvisualfinish
 	restorebg
 	waitbgfadein
-	clearmonbg ANIM_TARGET
-	clearmonbg ANIM_ATTACKER
 	blendoff
 	end
 
@@ -19402,6 +19400,8 @@ Move_SHADOW_RUSH::
 	delay 5
 	createsprite gSlideMonToOriginalPosSpriteTemplate, ANIM_ATTACKER, 2, 1, 0, 6
 	waitforvisualfinish
+	clearmonbg ANIM_TARGET
+	clearmonbg ANIM_ATTACKER
 	restorebg
 	waitbgfadein
 	clearmonbg ANIM_TARGET

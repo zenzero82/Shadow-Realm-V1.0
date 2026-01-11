@@ -287,6 +287,30 @@ static const s32 sExperienceScalingFactors[] =
     159767,
 };
 
+static const u16 sReverseModeHeartBoostRanges[NUM_AGGRO_LEVELS][2] =
+{
+    [SHADOW_AGGRO_NONE]       = {50, 50},
+    [SHADOW_AGGRO_VERY_LOW]   = {50, 50},
+    [SHADOW_AGGRO_LOW]        = {50, 100},
+    [SHADOW_AGGRO_MEDIUM]     = {100, 150},
+    [SHADOW_AGGRO_HIGH]       = {150, 200},
+    [SHADOW_AGGRO_VERY_HIGH]  = {150, 200},
+    [SHADOW_AGGRO_TEST]       = {200, 200},
+};
+
+static u16 GetReverseModeHeartBoost(u8 aggro)
+{
+    if (aggro >= NUM_AGGRO_LEVELS)
+        aggro = NUM_AGGRO_LEVELS - 1;
+
+    u16 min = sReverseModeHeartBoostRanges[aggro][0];
+    u16 max = sReverseModeHeartBoostRanges[aggro][1];
+    if (max <= min)
+        return min;
+
+    return min + (Random() % (max - min + 1));
+}
+
 static const u16 sTrappingMoves[NUM_TRAPPING_MOVES] =
 {
     MOVE_BIND,
@@ -7513,6 +7537,9 @@ static void Cmd_moveend(void)
                 if (roll < chance)
                 {
                     gBattleMons[gBattlerAttacker].isReverse = TRUE;
+                    AddHeartValueInBattle(gBattlerAttacker, GetReverseModeHeartBoost(gBattleMons[gBattlerAttacker].shadowAggro));
+                    u8 reverseFlag = TRUE;
+                    SetMonData(&gPlayerParty[gBattlerPartyIndexes[gBattlerAttacker]], MON_DATA_REVERSE_MODE, &reverseFlag);
                     BtlController_EmitSetMonData(gBattlerAttacker, B_COMM_TO_CONTROLLER, REQUEST_STATUS_BATTLE, 0, sizeof(gBattleMons[gBattlerAttacker].status1), &gBattleMons[gBattlerAttacker].status1);
                     UpdateHealthboxAttribute(gHealthboxSpriteIds[gBattlerAttacker], &gPlayerParty[gBattlerPartyIndexes[gBattlerAttacker]], HEALTHBOX_ALL);
                     PrepareStringBattle(STRINGID_REVERSEMODE_ENTER, gBattlerAttacker);

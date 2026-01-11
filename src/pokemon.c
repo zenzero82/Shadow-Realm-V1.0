@@ -3816,8 +3816,7 @@ void PokemonToBattleMon(struct Pokemon *src, struct BattlePokemon *dst)
     dst->isShiny = IsMonShiny(src);
     dst->ability = GetAbilityBySpecies(dst->species, dst->abilityNum);
     dst->isShadow = GetMonData(src, MON_DATA_IS_SHADOW, NULL);
-    // Always start calm: Reverse Mode is battle-only and triggered by RNG.
-    dst->isReverse   = FALSE;
+    dst->isReverse = (u8)GetMonData(src, MON_DATA_REVERSE_MODE, NULL);
     dst->shadowAggro = GetMonData(src, MON_DATA_SHADOW_AGGRO, NULL);
     dst->shadowID = GetMonData(src, MON_DATA_SHADOW_ID, NULL);
         // Heart gauge values
@@ -7425,6 +7424,26 @@ u16 ModifyHeartValueInBattle(u8 battlerId, u16 amount)
     }
 
     return (u16)newVal;
+}
+
+u16 AddHeartValueInBattle(u8 battlerId, u16 amount)
+{
+    if (!gBattleMons[battlerId].isShadow || amount == 0)
+        return gBattleMons[battlerId].heartVal;
+
+    u16 oldVal = gBattleMons[battlerId].heartVal;
+    u16 maxVal = gBattleMons[battlerId].heartMax;
+    u32 newVal = oldVal + amount;
+    if (newVal > maxVal)
+        newVal = maxVal;
+
+    gBattleMons[battlerId].heartVal = (u16)newVal;
+
+    struct Pokemon *party = GetBattlerParty(battlerId);
+    struct Pokemon *mon   = &party[gBattlerPartyIndexes[battlerId]];
+    SetMonHeartValue(mon, gBattleMons[battlerId].heartVal);
+
+    return gBattleMons[battlerId].heartVal;
 }
 
 // ===============================

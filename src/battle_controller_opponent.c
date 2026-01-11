@@ -39,6 +39,7 @@
 #include "constants/trainers.h"
 #include "trainer_hill.h"
 #include "test_runner.h"
+#include "battle_gfx_sfx_util.h"
 #include "battle_interface.h"  
 
 void ShadowHud_Clear(u8 battler);
@@ -398,6 +399,9 @@ static void SwitchIn_ShowHealthbox(u32 battler)
 
         // Force overlay to match the current species
         SetBattlerShadowSpriteCallback(battler, gBattleMons[battler].species);
+
+        // Ensure the appropriate shader palette is loaded again for the new Pokémon
+        ShdwLoadHealthboxPalette(battler);
 
         // Choose & apply the correct HUD palette now
         {

@@ -1469,6 +1469,7 @@ const struct CompressedSpriteSheet gBattleAnimPicTable[] =
     {gBattleAnimSpriteGfx_TeraStarstormBeam, 0x200, ANIM_TAG_STARSTORM},
     {gBattleAnimSpriteGfx_SaltParticle, 0x400, ANIM_TAG_SALT_PARTICLE},
     {gBattleAnimSpriteGfx_ShadowParticles, 0x0400, ANIM_TAG_SHADOW_PARTICLES},
+    {gBattleAnimSpriteGfx_ShadowParticles, 0x0400, ANIM_TAG_REVERSE_PARTICLES},
 };
 
 const struct SpritePalette gBattleAnimPaletteTable[] =

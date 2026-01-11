@@ -2274,9 +2274,8 @@ void BlitMenuInfoIcon(u8 windowId, u8 iconId, u16 x, u16 y)
 
 void BufferSaveMenuText(u8 textId, u8 *dest, u8 color)
 {
-    s32 curFlag;
     s32 flagCount;
-    u8 *endOfString;
+    u32 i;
     u8 *string = dest;
 
     *(string++) = EXT_CTRL_CODE_BEGIN;
@@ -2307,13 +2306,13 @@ void BufferSaveMenuText(u8 textId, u8 *dest, u8 color)
             GetMapNameGeneric(string, gMapHeader.regionMapSectionId);
             break;
         case SAVE_MENU_BADGES:
-            for (curFlag = FLAG_BADGE01_GET, flagCount = 0, endOfString = string + 1; curFlag < FLAG_BADGE01_GET + NUM_BADGES; curFlag++)
+            flagCount = 0;
+            for (i = 0; i < NUM_BADGES; i++)
             {
-                if (FlagGet(curFlag))
+                if (FlagGet(gBadgeFlags[i]))
                     flagCount++;
             }
-            *string = flagCount + CHAR_0;
-            *endOfString = EOS;
+            string = ConvertIntToDecimalStringN(string, flagCount, STR_CONV_MODE_LEADING_ZEROS, 2);
             break;
     }
 }

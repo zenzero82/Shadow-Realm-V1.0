@@ -41,6 +41,7 @@
 
 #define MAP_WIDTH 28
 #define MAP_HEIGHT 17
+#define MAP_HEIGHT_LEGACY 15
 #define MAPCURSOR_X_MIN 1
 #define MAPCURSOR_Y_MIN 2
 #define MAPCURSOR_X_MAX (MAPCURSOR_X_MIN + MAP_WIDTH - 1)
@@ -126,6 +127,9 @@ static u8 GetRegionMapIdFromMapSec(u16 mapSecId);
 static void SetRegionMapLayoutFromMapSec(u16 mapSecId);
 
 static bool32 MapSecIsInActiveLayout(u16 mapSecId);
+static void BuildRegionMapLayoutLookup(void);
+static void BuildLayoutLookup(const u16 (*layout)[MAP_WIDTH], bool8 *lookup, u8 height);
+static void EnsureRegionMapLayoutLookups(void);
 static void RemapFrameTilemapPalette(u16 screenBase, u8 fromPal, u8 toPal);
 
 static const u16 sRegionMapCursorPal[] = INCBIN_U16("graphics/pokenav/region_map/cursor.gbapal");
@@ -190,6 +194,19 @@ static const u8 sRegionMapPlayerIcon_MayGfx[] = INCBIN_U8("graphics/pokenav/regi
 static const u16 *sRegionMapLayoutFlat;
 static u16 sRegionMapLayoutWidth;
 static u16 sRegionMapLayoutHeight;
+static bool8 sRegionMapLayoutLookup[MAPSEC_COUNT];
+static u16 sRegionMapActiveMapSecs[MAPSEC_COUNT];
+static u16 sRegionMapActiveMapSecCount;
+static bool8 sLayoutLookupBuilt;
+static bool8 sHoennLayoutLookup[MAPSEC_COUNT];
+static bool8 sKantoLayoutLookup[MAPSEC_COUNT];
+static bool8 sJohtoLayoutLookup[MAPSEC_COUNT];
+static const u8 sRegionMapLayoutHeightByRegion[] =
+{
+    MAP_HEIGHT,
+    MAP_HEIGHT_LEGACY,
+    MAP_HEIGHT_LEGACY,
+};
 
 #include "data/region_map/region_map_layout.h"
 #include "data/region_map/region_map_layout_kanto.h"
@@ -200,52 +217,7 @@ static u16 sRegionMapLayoutHeight;
 // Default to Hoenn layout
 static const u16 (*sRegionMapLayout)[MAP_WIDTH];
 
-static bool32 IsMapSecInList(u16 mapSecId, const u16 *list)
-{
-    while (*list != MAPSEC_NONE)
-    {
-        if (*list == mapSecId)
-            return TRUE;
-        list++;
-    }
-    return FALSE;
-}
-
-// Kanto map sections
-static const u16 sKantoMapSecList[] =
-{
-    MAPSEC_PALLET_TOWN,
-    MAPSEC_PALLET_TOWN_WESTERN_FOREST,
-    MAPSEC_VIRIDIAN_CITY,
-    MAPSEC_PEWTER_CITY,
-    MAPSEC_CERULEAN_CITY,
-    MAPSEC_LAVENDER_TOWN,
-    MAPSEC_SAFFRON_CITY,
-    MAPSEC_CELADON_CITY,
-    MAPSEC_VERMILION_CITY,
-    MAPSEC_FUCHSIA_CITY,
-    MAPSEC_CINNABAR_ISLAND,
-    MAPSEC_INDIGO_PLATEAU,
-    MAPSEC_NONE
-};
-
-// Johto map sections
-static const u16 sJohtoMapSecList[] =
-{
-    MAPSEC_NEW_BARK_TOWN,
-    MAPSEC_CHERRYGROVE_CITY,
-    MAPSEC_VIOLET_CITY,
-    MAPSEC_AZALEA_TOWN,
-    MAPSEC_GOLDENROD_CITY,
-    MAPSEC_ECRUTEAK_CITY,
-    MAPSEC_OLIVINE_CITY,
-    MAPSEC_CIANWOOD_CITY,
-    MAPSEC_MAHOGANY_TOWN,
-    MAPSEC_BLACKTHORN_CITY,
-    MAPSEC_LAKE_OF_RAGE,
-    MAPSEC_MT_SILVER,
-    MAPSEC_NONE
-};
+static void EnsureRegionMapLayoutLookups(void);
 
 static u8 GetRegionMapIdFromMapSec(u16 mapSecId)
 {
@@ -254,11 +226,81 @@ static u8 GetRegionMapIdFromMapSec(u16 mapSecId)
     if (mapSecId == MAPSEC_NONE || mapSecId == MAPSEC_DYNAMIC || mapSecId >= MAPSEC_COUNT)
         return REGIONMAP_HOENN;
 
-    if (IsMapSecInList(mapSecId, sKantoMapSecList))
+    EnsureRegionMapLayoutLookups();
+    if (sKantoLayoutLookup[mapSecId])
         return REGIONMAP_KANTO;
-    if (IsMapSecInList(mapSecId, sJohtoMapSecList))
+    if (sJohtoLayoutLookup[mapSecId])
         return REGIONMAP_JOHTO;
     return REGIONMAP_HOENN;
+}
+
+static void BuildRegionMapLayoutLookup(void)
+{
+    u16 x, y;
+    u16 mapSecId;
+
+    if (sRegionMapLayout == NULL)
+    {
+        sRegionMapActiveMapSecCount = 0;
+        for (mapSecId = 0; mapSecId < MAPSEC_COUNT; mapSecId++)
+            sRegionMapLayoutLookup[mapSecId] = FALSE;
+        return;
+    }
+
+    sRegionMapActiveMapSecCount = 0;
+    for (mapSecId = 0; mapSecId < MAPSEC_COUNT; mapSecId++)
+        sRegionMapLayoutLookup[mapSecId] = FALSE;
+
+    for (y = 0; y < sRegionMapLayoutHeight; y++)
+    {
+        for (x = 0; x < sRegionMapLayoutWidth; x++)
+        {
+            mapSecId = sRegionMapLayout[y][x];
+            if (mapSecId == MAPSEC_NONE || mapSecId == MAPSEC_DYNAMIC || mapSecId >= MAPSEC_COUNT)
+                continue;
+
+            if (!sRegionMapLayoutLookup[mapSecId])
+            {
+                sRegionMapLayoutLookup[mapSecId] = TRUE;
+                sRegionMapActiveMapSecs[sRegionMapActiveMapSecCount++] = mapSecId;
+            }
+        }
+    }
+}
+
+static void BuildLayoutLookup(const u16 (*layout)[MAP_WIDTH], bool8 *lookup, u8 height)
+{
+    u16 x, y;
+    u16 mapSecId;
+
+    if (layout == NULL)
+        return;
+
+    for (mapSecId = 0; mapSecId < MAPSEC_COUNT; mapSecId++)
+        lookup[mapSecId] = FALSE;
+
+    for (y = 0; y < height; y++)
+    {
+        for (x = 0; x < MAP_WIDTH; x++)
+        {
+            mapSecId = layout[y][x];
+            if (mapSecId == MAPSEC_NONE || mapSecId == MAPSEC_DYNAMIC || mapSecId >= MAPSEC_COUNT)
+                continue;
+            lookup[mapSecId] = TRUE;
+        }
+    }
+}
+
+static void EnsureRegionMapLayoutLookups(void)
+{
+    if (sLayoutLookupBuilt)
+        return;
+
+    BuildLayoutLookup(sRegionMap_MapSectionLayout_Hoenn, sHoennLayoutLookup, sRegionMapLayoutHeightByRegion[REGIONMAP_HOENN]);
+    BuildLayoutLookup(sRegionMap_MapSectionLayout_Kanto, sKantoLayoutLookup, sRegionMapLayoutHeightByRegion[REGIONMAP_KANTO]);
+    BuildLayoutLookup(sRegionMap_MapSectionLayout_Johto, sJohtoLayoutLookup, sRegionMapLayoutHeightByRegion[REGIONMAP_JOHTO]);
+
+    sLayoutLookupBuilt = TRUE;
 }
 
 static void SetRegionMapLayoutFromMapSec(u16 mapSecId)
@@ -281,30 +323,18 @@ static void SetRegionMapLayoutFromMapSec(u16 mapSecId)
     // Keep these in sync for multi-region layouts.
     sRegionMapLayoutFlat   = &sRegionMapLayout[0][0];
     sRegionMapLayoutWidth  = MAP_WIDTH;
-    sRegionMapLayoutHeight = MAP_HEIGHT;
+    sRegionMapLayoutHeight = sRegionMapLayoutHeightByRegion[regionId];
+
+    BuildRegionMapLayoutLookup();
 
     sLastRegionMapId = regionId;
 }
 
 static bool32 MapSecIsInActiveLayout(u16 mapSecId)
 {
-    u16 x, y;
-
     if (mapSecId == MAPSEC_NONE || mapSecId == MAPSEC_DYNAMIC || mapSecId >= MAPSEC_COUNT)
         return FALSE;
-
-    if (sRegionMapLayout == NULL)
-        return FALSE;
-
-    for (y = 0; y < sRegionMapLayoutHeight; y++)
-    {
-        for (x = 0; x < sRegionMapLayoutWidth; x++)
-        {
-            if (sRegionMapLayout[y][x] == mapSecId)
-                return TRUE;
-        }
-    }
-    return FALSE;
+    return sRegionMapLayoutLookup[mapSecId];
 }
 
 static void RemapFrameTilemapPalette(u16 screenBase, u8 fromPal, u8 toPal)
@@ -1171,17 +1201,16 @@ static u16 GetMapSecIdAt(u16 x, u16 y)
     if (sLastRegionMapId == REGIONMAP_HOENN)
     {
         u16 i;
-        for (i = 0; i < MAPSEC_COUNT; i++)
+        for (i = 0; i < sRegionMapActiveMapSecCount; i++)
         {
-            if (!MapSecIsInActiveLayout(i))
-                continue;
-            const struct RegionMapLocation *e = &gRegionMapEntries[i];
+            u16 mapSecId = sRegionMapActiveMapSecs[i];
+            const struct RegionMapLocation *e = &gRegionMapEntries[mapSecId];
             if (e->width == 0 || e->height == 0)
                 continue;
 
             if (x >= e->x && x < e->x + e->width
              && y >= e->y && y < e->y + e->height)
-                return i;
+                return mapSecId;
         }
         return MAPSEC_NONE;
     }
@@ -1926,7 +1955,7 @@ static void GetMapSecDimensions(u16 mapSecId, u16 *x, u16 *y, u16 *width, u16 *h
         s32 minX = 999, minY = 999, maxX = -1, maxY = -1;
         u16 lx, ly;
 
-        for (ly = 0; ly < MAP_HEIGHT; ly++)
+        for (ly = 0; ly < sRegionMapLayoutHeight; ly++)
         {
             for (lx = 0; lx < MAP_WIDTH; lx++)
             {

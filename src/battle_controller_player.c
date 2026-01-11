@@ -24,6 +24,7 @@
 #include "random.h"
 #include "recorded_battle.h"
 #include "reshow_battle_screen.h"
+#include "battle_gfx_sfx_util.h"
 #include "sound.h"
 #include "string_util.h"
 #include "task.h"
@@ -355,6 +356,13 @@ static void HandleInputChooseAction(u32 battler)
                 BtlController_EmitTwoReturnValues(battler, B_COMM_TO_ENGINE, B_ACTION_RUN, 0);
             break;
         }
+        PlayerBufferExecCompleted(battler);
+    }
+    else if (JOY_NEW(L_BUTTON))
+    {
+        PlaySE(SE_SELECT);
+        TryHideLastUsedBall();
+        BtlController_EmitTwoReturnValues(battler, B_COMM_TO_ENGINE, B_ACTION_CALL, 0);
         PlayerBufferExecCompleted(battler);
     }
     else if (JOY_NEW(DPAD_LEFT))
@@ -1417,6 +1425,9 @@ static void SwitchIn_TryShinyAnimShowHealthbox(u32 battler)
 {
     if (SwitchIn_TryShinyAnimUtil(battler))
     {
+        if (GetBattlerCoordsIndex(battler) == BATTLE_COORDS_SINGLES)
+            ShdwLoadHealthboxSprite();
+        ShdwLoadHealthboxPalette(battler);
         UpdateHealthboxAttribute(gHealthboxSpriteIds[battler], GetBattlerMon(battler), HEALTHBOX_ALL);
         ShadowHud_Clear(battler);
         ShadowHud_SyncForBattler(battler);

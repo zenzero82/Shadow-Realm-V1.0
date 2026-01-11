@@ -3287,7 +3287,14 @@ static void SetBerryTreeGraphicsById(struct ObjectEvent *objectEvent, u8 berryId
 
     sprite->oam.shape = graphicsInfo->oam->shape;
     sprite->oam.size = graphicsInfo->oam->size;
-    sprite->images = useGen2 ? gBerryTreePicTablePointersGen2[berryId] : gBerryTreePicTablePointers[berryId];
+    const struct SpriteFrameImage *picTable = gBerryTreePicTablePointers[berryId];
+    if (useGen2 && berryId < ARRAY_COUNT(gBerryTreePicTablePointersGen2))
+    {
+        const struct SpriteFrameImage *gen2PicTable = gBerryTreePicTablePointersGen2[berryId];
+        if (gen2PicTable != NULL)
+            picTable = gen2PicTable;
+    }
+    sprite->images = picTable;
     sprite->anims = graphicsInfo->anims;
     sprite->subspriteTables = graphicsInfo->subspriteTables;
     objectEvent->inanimate = graphicsInfo->inanimate;

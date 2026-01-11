@@ -6,6 +6,8 @@
 #include "gpu_regs.h"
 #include "graphics.h"
 #include "main.h"
+#include "overworld.h"
+#include "script.h"
 #include "menu.h"
 #include "palette.h"
 #include "rtc.h"
@@ -771,6 +773,13 @@ void CB2_ViewWallClock(void)
     AddTextPrinterParameterized(WIN_BUTTON_LABEL, FONT_NORMAL, gText_Cancel4, 0, 1, 0, NULL);
     PutWindowTilemap(WIN_BUTTON_LABEL);
     ScheduleBgCopyTilemapToVram(2);
+}
+
+void ShowWallClock(void)
+{
+    gMain.savedCallback = CB2_ReturnToFieldContinueScript;
+    CB2_ViewWallClock();
+    ScriptContext_Stop();
 }
 
 static void CB2_WallClock(void)

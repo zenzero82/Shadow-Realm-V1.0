@@ -2150,8 +2150,6 @@ u8 GetMonAilment(struct Pokemon *mon)
         return ailment;
     if (CheckPartyPokerus(mon, 0))
         return AILMENT_PKRS;
-    if (CheckPartyShadow(mon, 0))
-        return AILMENT_SHADOW;
     return AILMENT_NONE;
 }
 

@@ -173,7 +173,7 @@
       "name": "ROUTE 106",
       "x": 0,
       "y": 13,
-      "width": 2,
+      "width": 3,
       "height": 1
     },
     {
@@ -452,9 +452,9 @@
       "id": "MAPSEC_MT_CHIMNEY",
       "name": "MT. CHIMNEY",
       "x": 6,
-      "y": 2,
-      "width": 1,
-      "height": 1
+      "y": 1,
+      "width": 2,
+      "height": 2
     },
     {
       "id": "MAPSEC_SAFARI_ZONE",

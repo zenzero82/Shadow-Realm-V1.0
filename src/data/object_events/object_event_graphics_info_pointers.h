@@ -285,6 +285,7 @@ extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_SurgeGen1;
 //Johto
 extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_Berry_Tree_Early_Stages_Gen2;
 extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_Berry_Tree_Gen2;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_Berry_Tree_Late_Stages_Gen2;
 extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_ArtistGen2;
 extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_AttendantFGen2;
 extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_AttendantMGen2;
@@ -696,6 +697,7 @@ const struct ObjectEventGraphicsInfo *const gObjectEventGraphicsInfoPointers[NUM
     //Johto
     [OBJ_EVENT_GFX_BERRY_TREE_EARLY_STAGES_GEN2] = &gObjectEventGraphicsInfo_Berry_Tree_Early_Stages_Gen2,
     [OBJ_EVENT_GFX_BERRY_TREE_GEN2]              = &gObjectEventGraphicsInfo_Berry_Tree_Gen2,
+    [OBJ_EVENT_GFX_BERRY_TREE_LATE_STAGES_GEN2]  = &gObjectEventGraphicsInfo_Berry_Tree_Late_Stages_Gen2,
 
 
     [OBJ_EVENT_GFX_ARTIST_GEN2]  = &gObjectEventGraphicsInfo_ArtistGen2,

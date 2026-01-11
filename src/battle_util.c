@@ -813,6 +813,7 @@ void HandleAction_Call(void)
 
         if (gBattleMons[battler].heartMax != 0)
         {
+            u16 oldHeart = gBattleMons[battler].heartVal;
             if (gBattleMons[battler].isReverse)
             {
                 // Bigger drop when calming reverse mode
@@ -823,12 +824,26 @@ void HandleAction_Call(void)
                 // Small drop for a normal CALL on a shadow mon
                 ModifyHeartValueInBattle((u8)battler, HEART_STEP_CALL_NORMAL);
             }
+
+            u16 newHeart = gBattleMons[battler].heartVal;
+            if (oldHeart > newHeart)
+            {
+                u8 healthboxId = gHealthboxSpriteIds[battler];
+                SetHealthboxSpriteInvisible(healthboxId);
+                UpdateHealthboxAttribute(healthboxId, &gPlayerParty[gBattlerPartyIndexes[battler]], HEALTHBOX_EXP_BAR);
+                SetHealthboxSpriteVisible(healthboxId);
+            }
         }
 
         if (gBattleMons[battler].isReverse)
         {
             // Clear reverse flag here in C
             gBattleMons[battler].isReverse = FALSE;
+            if (GetBattlerSide(battler) != B_SIDE_OPPONENT)
+            {
+                u8 reverseFlag = FALSE;
+                SetMonData(&gPlayerParty[gBattlerPartyIndexes[battler]], MON_DATA_REVERSE_MODE, &reverseFlag);
+            }
             gBattlescriptCurrInstr = gBattleScript_PlayerCall_Shadow_ReverseEnded;
         }
         else
