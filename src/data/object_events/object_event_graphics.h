@@ -819,6 +819,47 @@ const u32 gObjectEventPic_Youngster2Gen2[] = INCBIN_U32("graphics/object_events/
 const u16 gObjectEventPal_Youngster2Gen2[] = INCBIN_U16("graphics/object_events/pics/gen2/youngster2.gbapal");
 
 //Sinnoh Trainers
+const u16 gObjectEventPal_DawnGen4[] = INCBIN_U16("graphics/object_events/pics/gen4/dawn.gbapal");
+const u32 gObjectEventPic_DawnGen4[] = INCBIN_U32("graphics/object_events/pics/gen4/dawn.4bpp");
+
+const u16 gObjectEventPal_LucasGen4[] = INCBIN_U16("graphics/object_events/pics/gen4/lucas.gbapal");
+const u32 gObjectEventPic_LucasGen4[] = INCBIN_U32("graphics/object_events/pics/gen4/lucas.4bpp");
+
+const u16 gObjectEventPal_BarryGen4[] = INCBIN_U16("graphics/object_events/pics/gen4/barry.gbapal");
+const u32 gObjectEventPic_BarryGen4[] = INCBIN_U32("graphics/object_events/pics/gen4/barry.4bpp");
+
+const u16 gObjectEventPal_CynthiaGen4[] = INCBIN_U16("graphics/object_events/pics/gen4/cynthia.gbapal");
+const u32 gObjectEventPic_CynthiaGen4[] = INCBIN_U32("graphics/object_events/pics/gen4/cynthia.4bpp");
+
+const u16 gObjectEventPal_CyrusGen4[] = INCBIN_U16("graphics/object_events/pics/gen4/cyrus.gbapal");
+const u32 gObjectEventPic_CyrusGen4[] = INCBIN_U32("graphics/object_events/pics/gen4/cyrus.4bpp");
+
+const u16 gObjectEventPal_LookerGen4[] = INCBIN_U16("graphics/object_events/pics/gen4/looker.gbapal");
+const u32 gObjectEventPic_LookerGen4[] = INCBIN_U32("graphics/object_events/pics/gen4/looker.4bpp");
+
+const u16 gObjectEventPal_VolknerGen4[] = INCBIN_U16("graphics/object_events/pics/gen4/volkner.gbapal");
+const u32 gObjectEventPic_VolknerGen4[] = INCBIN_U32("graphics/object_events/pics/gen4/volkner.4bpp");
+
+const u16 gObjectEventPal_GalacticGruntMGen4[] = INCBIN_U16("graphics/object_events/pics/gen4/galactic_grunt_m.gbapal");
+const u32 gObjectEventPic_GalacticGruntMGen4[] = INCBIN_U32("graphics/object_events/pics/gen4/galactic_grunt_m.4bpp");
+
+const u16 gObjectEventPal_GalacticGruntFGen4[] = INCBIN_U16("graphics/object_events/pics/gen4/galactic_grunt_f.gbapal");
+const u32 gObjectEventPic_GalacticGruntFGen4[] = INCBIN_U32("graphics/object_events/pics/gen4/galactic_grunt_f.4bpp");
+
+const u16 gObjectEventPal_MarsGen4[] = INCBIN_U16("graphics/object_events/pics/gen4/mars.gbapal");
+const u32 gObjectEventPic_MarsGen4[] = INCBIN_U32("graphics/object_events/pics/gen4/mars.4bpp");
+
+const u16 gObjectEventPal_JupiterGen4[] = INCBIN_U16("graphics/object_events/pics/gen4/jupiter.gbapal");
+const u32 gObjectEventPic_JupiterGen4[] = INCBIN_U32("graphics/object_events/pics/gen4/jupiter.4bpp");
+
+const u16 gObjectEventPal_SaturnGen4[] = INCBIN_U16("graphics/object_events/pics/gen4/saturn.gbapal");
+const u32 gObjectEventPic_SaturnGen4[] = INCBIN_U32("graphics/object_events/pics/gen4/saturn.4bpp");
+
+const u16 gObjectEventPal_CharonGen4[] = INCBIN_U16("graphics/object_events/pics/gen4/charon.gbapal");
+const u32 gObjectEventPic_CharonGen4[] = INCBIN_U32("graphics/object_events/pics/gen4/charon.4bpp");
+
+const u32 gObjectEventPic_RowanGen4[] = INCBIN_U32("graphics/object_events/pics/gen4/rowan_gen4.4bpp");
+const u16 gObjectEventPal_RowanGen4[] = INCBIN_U16("graphics/object_events/pics/gen4/rowan_gen4.gbapal");
 
 //Unova Trainers
 const u32 gObjectEventPic_BroniusGen5[] = INCBIN_U32("graphics/object_events/pics/gen5/bronius.4bpp");
@@ -863,7 +904,150 @@ const u16 gObjectEventPal_RyokuGen5[] = INCBIN_U16("graphics/object_events/pics/
 const u32 gObjectEventPic_ZinzolinGen5[] = INCBIN_U32("graphics/object_events/pics/gen5/zinzolin.4bpp");
 const u16 gObjectEventPal_ZinzolinGen5[] = INCBIN_U16("graphics/object_events/pics/gen5/zinzolin.gbapal");
 
+const u32 gObjectEventPic_JuniperGen5[] = INCBIN_U32("graphics/object_events/pics/gen5/juniper_gen5.4bpp");
+const u16 gObjectEventPal_JuniperGen5[] = INCBIN_U16("graphics/object_events/pics/gen5/juniper_gen5.gbapal");
+
 //Kalos Trainers 
+const u32 gObjectEventPic_LysanderGen6[] = INCBIN_U32("graphics/object_events/pics/gen6/lysander_gen6.4bpp");
+const u16 gObjectEventPal_LysanderGen6[] = INCBIN_U16("graphics/object_events/pics/gen6/lysander_gen6.gbapal");
+
+const u32 gObjectEventPic_AlianaGen6[] = INCBIN_U32("graphics/object_events/pics/gen6/aliana_gen6.4bpp");
+const u16 gObjectEventPal_AlianaGen6[] = INCBIN_U16("graphics/object_events/pics/gen6/aliana_gen6.gbapal");
+
+const u32 gObjectEventPic_AzGen6[] = INCBIN_U32("graphics/object_events/pics/gen6/az_gen6.4bpp");
+const u16 gObjectEventPal_AzGen6[] = INCBIN_U16("graphics/object_events/pics/gen6/az_gen6.gbapal");
+
+const u32 gObjectEventPic_BryonyGen6[] = INCBIN_U32("graphics/object_events/pics/gen6/bryony_gen6.4bpp");
+const u16 gObjectEventPal_BryonyGen6[] = INCBIN_U16("graphics/object_events/pics/gen6/bryony_gen6.gbapal");
+
+const u32 gObjectEventPic_CalemGen6[] = INCBIN_U32("graphics/object_events/pics/gen6/calem_gen6.4bpp");
+const u16 gObjectEventPal_CalemGen6[] = INCBIN_U16("graphics/object_events/pics/gen6/calem_gen6.gbapal");
+
+const u32 gObjectEventPic_CelosiaGen6[] = INCBIN_U32("graphics/object_events/pics/gen6/celosia_gen6.4bpp");
+const u16 gObjectEventPal_CelosiaGen6[] = INCBIN_U16("graphics/object_events/pics/gen6/celosia_gen6.gbapal");
+
+const u32 gObjectEventPic_DianthaGen6[] = INCBIN_U32("graphics/object_events/pics/gen6/diantha_gen6.4bpp");
+const u16 gObjectEventPal_DianthaGen6[] = INCBIN_U16("graphics/object_events/pics/gen6/diantha_gen6.gbapal");
+
+const u32 gObjectEventPic_FlareGruntFGen6[] = INCBIN_U32("graphics/object_events/pics/gen6/flare_grunt_f_gen6.4bpp");
+const u16 gObjectEventPal_FlareGruntFGen6[] = INCBIN_U16("graphics/object_events/pics/gen6/flare_grunt_f_gen6.gbapal");
+
+const u32 gObjectEventPic_FlareGruntMGen6[] = INCBIN_U32("graphics/object_events/pics/gen6/flare_grunt_m_gen6.4bpp");
+const u16 gObjectEventPal_FlareGruntMGen6[] = INCBIN_U16("graphics/object_events/pics/gen6/flare_grunt_m_gen6.gbapal");
+
+const u32 gObjectEventPic_MableGen6[] = INCBIN_U32("graphics/object_events/pics/gen6/mable_gen6.4bpp");
+const u16 gObjectEventPal_MableGen6[] = INCBIN_U16("graphics/object_events/pics/gen6/mable_gen6.gbapal");
+
+const u32 gObjectEventPic_SerenaGen6[] = INCBIN_U32("graphics/object_events/pics/gen6/serena_gen6.4bpp");
+const u16 gObjectEventPal_SerenaGen6[] = INCBIN_U16("graphics/object_events/pics/gen6/serena_gen6.gbapal");
+
+const u32 gObjectEventPic_ShaunaGen6[] = INCBIN_U32("graphics/object_events/pics/gen6/shauna_gen6.4bpp");
+const u16 gObjectEventPal_ShaunaGen6[] = INCBIN_U16("graphics/object_events/pics/gen6/shauna_gen6.gbapal");
+
+const u32 gObjectEventPic_SycamoreGen6[] = INCBIN_U32("graphics/object_events/pics/gen6/sycamore_gen6.4bpp");
+const u16 gObjectEventPal_SycamoreGen6[] = INCBIN_U16("graphics/object_events/pics/gen6/sycamore_gen6.gbapal");
+
+const u32 gObjectEventPic_TiernoGen6[] = INCBIN_U32("graphics/object_events/pics/gen6/tierno_gen6.4bpp");
+const u16 gObjectEventPal_TiernoGen6[] = INCBIN_U16("graphics/object_events/pics/gen6/tierno_gen6.gbapal");
+
+const u32 gObjectEventPic_TrevorGen6[] = INCBIN_U32("graphics/object_events/pics/gen6/trevor_gen6.4bpp");
+const u16 gObjectEventPal_TrevorGen6[] = INCBIN_U16("graphics/object_events/pics/gen6/trevor_gen6.gbapal");
+
+const u32 gObjectEventPic_XerosicGen6[] = INCBIN_U32("graphics/object_events/pics/gen6/xerosic_gen6.4bpp");
+const u16 gObjectEventPal_XerosicGen6[] = INCBIN_U16("graphics/object_events/pics/gen6/xerosic_gen6.gbapal");
+
+
+//Alola
+const u32 gObjectEventPic_ElioGen7[] = INCBIN_U32("graphics/object_events/pics/gen7/elio_gen7.4bpp");
+const u16 gObjectEventPal_ElioGen7[] = INCBIN_U16("graphics/object_events/pics/gen7/elio_gen7.gbapal");
+
+const u32 gObjectEventPic_SeleneGen7[] = INCBIN_U32("graphics/object_events/pics/gen7/selene_gen7.4bpp");
+const u16 gObjectEventPal_SeleneGen7[] = INCBIN_U16("graphics/object_events/pics/gen7/selene_gen7.gbapal");
+
+const u32 gObjectEventPic_LillieGen7[] = INCBIN_U32("graphics/object_events/pics/gen7/lillie_gen7.4bpp");
+const u16 gObjectEventPal_LillieGen7[] = INCBIN_U16("graphics/object_events/pics/gen7/lillie_gen7.gbapal");
+
+const u32 gObjectEventPic_HauGen7[] = INCBIN_U32("graphics/object_events/pics/gen7/hau_gen7.4bpp");
+const u16 gObjectEventPal_HauGen7[] = INCBIN_U16("graphics/object_events/pics/gen7/hau_gen7.gbapal");
+
+const u32 gObjectEventPic_GladionGen7[] = INCBIN_U32("graphics/object_events/pics/gen7/gladion_gen7.4bpp");
+const u16 gObjectEventPal_GladionGen7[] = INCBIN_U16("graphics/object_events/pics/gen7/gladion_gen7.gbapal");
+
+const u32 gObjectEventPic_GuzmaGen7[] = INCBIN_U32("graphics/object_events/pics/gen7/guzma_gen7.4bpp");
+const u16 gObjectEventPal_GuzmaGen7[] = INCBIN_U16("graphics/object_events/pics/gen7/guzma_gen7.gbapal");
+
+const u32 gObjectEventPic_KukuiGen7[] = INCBIN_U32("graphics/object_events/pics/gen7/kukui_gen7.4bpp");
+const u16 gObjectEventPal_KukuiGen7[] = INCBIN_U16("graphics/object_events/pics/gen7/kukui_gen7.gbapal");
+
+const u32 gObjectEventPic_BurnetGen7[] = INCBIN_U32("graphics/object_events/pics/gen7/burnet_gen7.4bpp");
+const u16 gObjectEventPal_BurnetGen7[] = INCBIN_U16("graphics/object_events/pics/gen7/burnet_gen7.gbapal");
+
+const u32 gObjectEventPic_LusamineGen7[] = INCBIN_U32("graphics/object_events/pics/gen7/lusamine_gen7.4bpp");
+const u16 gObjectEventPal_LusamineGen7[] = INCBIN_U16("graphics/object_events/pics/gen7/lusamine_gen7.gbapal");
+
+const u32 gObjectEventPic_SophoclesGen7[] = INCBIN_U32("graphics/object_events/pics/gen7/sophocles_gen7.4bpp");
+const u16 gObjectEventPal_SophoclesGen7[] = INCBIN_U16("graphics/object_events/pics/gen7/sophocles_gen7.gbapal");
+
+const u32 gObjectEventPic_MolayneGen7[] = INCBIN_U32("graphics/object_events/pics/gen7/molayne_gen7.4bpp");
+const u16 gObjectEventPal_MolayneGen7[] = INCBIN_U16("graphics/object_events/pics/gen7/molayne_gen7.gbapal");
+
+const u32 gObjectEventPic_PlumeriaGen7[] = INCBIN_U32("graphics/object_events/pics/gen7/plumeria_gen7.4bpp");
+const u16 gObjectEventPal_PlumeriaGen7[] = INCBIN_U16("graphics/object_events/pics/gen7/plumeria_gen7.gbapal");
+
+const u32 gObjectEventPic_SkullGruntMGen7[] = INCBIN_U32("graphics/object_events/pics/gen7/skull_grunt_m_gen7.4bpp");
+const u16 gObjectEventPal_SkullGruntMGen7[] = INCBIN_U16("graphics/object_events/pics/gen7/skull_grunt_m_gen7.gbapal");
+
+const u32 gObjectEventPic_SkullGruntFGen7[] = INCBIN_U32("graphics/object_events/pics/gen7/skull_grunt_f_gen7.4bpp");
+const u16 gObjectEventPal_SkullGruntFGen7[] = INCBIN_U16("graphics/object_events/pics/gen7/skull_grunt_f_gen7.gbapal");
+
+
+//Galar
+const u32 gObjectEventPic_VictorGen8[] = INCBIN_U32("graphics/object_events/pics/gen8/victor_gen8.4bpp");
+const u16 gObjectEventPal_VictorGen8[] = INCBIN_U16("graphics/object_events/pics/gen8/victor_gen8.gbapal");
+
+const u32 gObjectEventPic_GloriaGen8[] = INCBIN_U32("graphics/object_events/pics/gen8/gloria_gen8.4bpp");
+const u16 gObjectEventPal_GloriaGen8[] = INCBIN_U16("graphics/object_events/pics/gen8/gloria_gen8.gbapal");
+
+const u32 gObjectEventPic_HopGen8[] = INCBIN_U32("graphics/object_events/pics/gen8/hop_gen8.4bpp");
+const u16 gObjectEventPal_HopGen8[] = INCBIN_U16("graphics/object_events/pics/gen8/hop_gen8.gbapal");
+
+const u32 gObjectEventPic_BedeGen8[] = INCBIN_U32("graphics/object_events/pics/gen8/bede_gen8.4bpp");
+const u16 gObjectEventPal_BedeGen8[] = INCBIN_U16("graphics/object_events/pics/gen8/bede_gen8.gbapal");
+
+const u32 gObjectEventPic_MarnieGen8[] = INCBIN_U32("graphics/object_events/pics/gen8/marnie_gen8.4bpp");
+const u16 gObjectEventPal_MarnieGen8[] = INCBIN_U16("graphics/object_events/pics/gen8/marnie_gen8.gbapal");
+
+const u32 gObjectEventPic_LeonGen8[] = INCBIN_U32("graphics/object_events/pics/gen8/leon_gen8.4bpp");
+const u16 gObjectEventPal_LeonGen8[] = INCBIN_U16("graphics/object_events/pics/gen8/leon_gen8.gbapal");
+
+const u32 gObjectEventPic_RoseGen8[] = INCBIN_U32("graphics/object_events/pics/gen8/rose_gen8.4bpp");
+const u16 gObjectEventPal_RoseGen8[] = INCBIN_U16("graphics/object_events/pics/gen8/rose_gen8.gbapal");
+
+const u32 gObjectEventPic_OleanaGen8[] = INCBIN_U32("graphics/object_events/pics/gen8/oleana_gen8.4bpp");
+const u16 gObjectEventPal_OleanaGen8[] = INCBIN_U16("graphics/object_events/pics/gen8/oleana_gen8.gbapal");
+
+const u32 gObjectEventPic_MagnoliaGen8[] = INCBIN_U32("graphics/object_events/pics/gen8/magnolia_gen8.4bpp");
+const u16 gObjectEventPal_MagnoliaGen8[] = INCBIN_U16("graphics/object_events/pics/gen8/magnolia_gen8.gbapal");
+
+
+//Paldea
+const u32 gObjectEventPic_FlorianGen9[] = INCBIN_U32("graphics/object_events/pics/gen9/florian_gen9.4bpp");
+const u16 gObjectEventPal_FlorianGen9[] = INCBIN_U16("graphics/object_events/pics/gen9/florian_gen9.gbapal");
+
+const u32 gObjectEventPic_JulianaGen9[] = INCBIN_U32("graphics/object_events/pics/gen9/juliana_gen9.4bpp");
+const u16 gObjectEventPal_JulianaGen9[] = INCBIN_U16("graphics/object_events/pics/gen9/juliana_gen9.gbapal");
+
+const u32 gObjectEventPic_NemonaGen9[] = INCBIN_U32("graphics/object_events/pics/gen9/nemona_gen9.4bpp");
+const u16 gObjectEventPal_NemonaGen9[] = INCBIN_U16("graphics/object_events/pics/gen9/nemona_gen9.gbapal");
+
+const u32 gObjectEventPic_ArvenGen9[] = INCBIN_U32("graphics/object_events/pics/gen9/arven_gen9.4bpp");
+const u16 gObjectEventPal_ArvenGen9[] = INCBIN_U16("graphics/object_events/pics/gen9/arven_gen9.gbapal");
+
+const u32 gObjectEventPic_PennyGen9[] = INCBIN_U32("graphics/object_events/pics/gen9/penny_gen9.4bpp");
+const u16 gObjectEventPal_PennyGen9[] = INCBIN_U16("graphics/object_events/pics/gen9/penny_gen9.gbapal");
+
+const u32 gObjectEventPic_GeetaGen9[] = INCBIN_U32("graphics/object_events/pics/gen9/geeta_gen9.4bpp");
+const u16 gObjectEventPal_GeetaGen9[] = INCBIN_U16("graphics/object_events/pics/gen9/geeta_gen9.gbapal");
 
 //XD(Orre) Trainers
 const u16 gObjectEventPal_Wes[] = INCBIN_U16("graphics/object_events/pics/xd/wes.gbapal");

@@ -701,6 +701,7 @@ const u8 gShadowAggressionTable[NUM_AGGRO_LEVELS][HEART_GAUGE_LEVELS] =
 };
 
 #include "data/graphics/pokemon.h"
+#include "data/graphics/shadow_forms.inc"
 
 #include "data/pokemon/trainer_class_lookups.h"
 #include "data/pokemon/experience_tables.h"
@@ -5834,6 +5835,9 @@ u8 GetMoveRelearnerMoves(struct Pokemon *mon, u16 *moves)
     const struct LevelUpMove *learnset = GetSpeciesLevelUpLearnset(species);
     int i, j, k;
 
+    if (GetMonData(mon, MON_DATA_IS_SHADOW, 0))
+        return 0;
+
     for (i = 0; i < MAX_MON_MOVES; i++)
         learnedMoves[i] = GetMonData(mon, MON_DATA_MOVE1 + i, 0);
 
@@ -5886,6 +5890,9 @@ u8 GetNumberOfRelearnableMoves(struct Pokemon *mon)
     u8 level = GetMonData(mon, MON_DATA_LEVEL, 0);
     const struct LevelUpMove *learnset = GetSpeciesLevelUpLearnset(species);
     int i, j, k;
+
+    if (GetMonData(mon, MON_DATA_IS_SHADOW, 0))
+        return 0;
 
     if (species == SPECIES_EGG)
         return 0;
@@ -7331,13 +7338,22 @@ u16 GetMonHeartMax(struct Pokemon *mon)
     return GetMonData(mon, MON_DATA_HEART_MAX, NULL);
 }
 
+static u16 Shadow_ClampHeartGauge(u16 val)
+{
+    if (val > SHADOW_HEART_GAUGE_MAX)
+        return SHADOW_HEART_GAUGE_MAX;
+    return val;
+}
+
 void SetMonHeartValue(struct Pokemon *mon, u16 val)
 {
+    val = Shadow_ClampHeartGauge(val);
     SetMonData(mon, MON_DATA_HEART_VALUE, &val);
 }
 
 void SetMonHeartMax(struct Pokemon *mon, u16 val)
 {
+    val = Shadow_ClampHeartGauge(val);
     SetMonData(mon, MON_DATA_HEART_MAX, &val);
 }
 
@@ -7550,6 +7566,28 @@ static inline bool32 IsValidShadowID(u16 shadowId)
     return shadowId > 0 && shadowId <= MAX_SHADOW_MON_IDS;
 }
 
+static void Shadow_GrantStoredExpForShadowId(u16 shadowId)
+{
+    s32 i;
+
+    if (!IsValidShadowID(shadowId))
+        return;
+
+    for (i = 0; i < PARTY_SIZE; i++)
+    {
+        struct Pokemon *mon = &gPlayerParty[i];
+
+        if (GetMonData(mon, MON_DATA_SPECIES_OR_EGG, NULL) == SPECIES_NONE)
+            continue;
+        if (!GetMonData(mon, MON_DATA_IS_SHADOW, NULL))
+            continue;
+        if (GetMonData(mon, MON_DATA_SHADOW_ID, NULL) != shadowId)
+            continue;
+
+        Shadow_GrantStoredExp(mon);
+    }
+}
+
 u8 Shdw_GetState(u16 shadowId)
 {
     if (!IsValidShadowID(shadowId))
@@ -7562,6 +7600,8 @@ void Shdw_SetState(u16 shadowId, u8 state)
     if (!IsValidShadowID(shadowId))
         return;
     gSaveBlock1Ptr->shadowMonStates[shadowId] = state;
+    if (state == SHDW_STATE_PURIFIED)
+        Shadow_GrantStoredExpForShadowId(shadowId);
 }
 
 void Shdw_OnEncounterMon(struct Pokemon *mon)
@@ -7594,6 +7634,68 @@ void Shdw_OnSnagMon(struct Pokemon *mon)
     // Make sure MON_DATA_SNAGGED stays in sync too
     u8 snagged = TRUE;
     SetMonData(mon, MON_DATA_SNAGGED, &snagged);
+}
+
+#define SHADOW_STORED_EXP_MAX 0xFFFFFFFF
+
+void Shadow_AddStoredExp(struct Pokemon *mon, u32 amount)
+{
+    if (amount == 0 || mon == NULL)
+        return;
+
+    struct Shadowdata *shadowData = &mon->box.nickData.shadowData;
+    u32 current = shadowData->storedExp;
+    if (current >= SHADOW_STORED_EXP_MAX - amount)
+        shadowData->storedExp = SHADOW_STORED_EXP_MAX;
+    else
+        shadowData->storedExp = current + amount;
+}
+
+u32 Shadow_TakeStoredExp(struct Pokemon *mon)
+{
+    if (mon == NULL)
+        return 0;
+
+    struct Shadowdata *shadowData = &mon->box.nickData.shadowData;
+    u32 stored = shadowData->storedExp;
+    shadowData->storedExp = 0;
+    return stored;
+}
+
+u32 Shadow_GetStoredExp(const struct Pokemon *mon)
+{
+    if (mon == NULL)
+        return 0;
+
+    return mon->box.nickData.shadowData.storedExp;
+}
+
+void Shadow_GrantStoredExp(struct Pokemon *mon)
+{
+    if (mon == NULL)
+        return;
+
+    u32 storedExp = Shadow_TakeStoredExp(mon);
+    if (storedExp == 0)
+        return;
+
+    u16 species = GetMonData(mon, MON_DATA_SPECIES, NULL);
+    if (species == SPECIES_NONE)
+        return;
+
+    u32 growthRate = gSpeciesInfo[species].growthRate;
+    u32 currentExp = GetMonData(mon, MON_DATA_EXP, NULL);
+    u32 maxExp = gExperienceTables[growthRate][MAX_LEVEL];
+
+    if (currentExp >= maxExp)
+        return;
+
+    if (storedExp > maxExp - currentExp)
+        storedExp = maxExp - currentExp;
+
+    currentExp += storedExp;
+    SetMonData(mon, MON_DATA_EXP, &currentExp);
+    CalculateMonStats(mon);
 }
 
 

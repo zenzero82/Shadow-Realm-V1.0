@@ -36,6 +36,7 @@
 #include "script.h"
 #include "sound.h"
 #include "strings.h"
+#include "pokedex.h"
 #include "string_util.h"
 #include "task.h"
 #include "text.h"
@@ -1104,6 +1105,12 @@ void ItemUseOutOfBattle_EvolutionStone(u8 taskId)
     SetUpItemUseCallback(taskId);
 }
 
+void ItemUseOutOfBattle_TimeFlute(u8 taskId)
+{
+    gItemUseCB = ItemUseCB_TimeFlute;
+    SetUpItemUseCallback(taskId);
+}
+
 static u32 GetBallThrowableState(void)
 {
     if (IsBattlerAlive(GetBattlerAtPosition(B_POSITION_OPPONENT_LEFT))
@@ -1596,6 +1603,19 @@ static void ItemUseOnFieldCB_TownMap(u8 taskId)
     LockPlayerFieldControls();
     ScriptContext_SetupScript(EventScript_RegionMap);
     DestroyTask(taskId);
+}
+
+void ItemUseOutOfBattle_ShadowMonitor(u8 taskId)
+{
+    if (!gTasks[taskId].tUsingRegisteredKeyItem)
+    {
+        gBagMenu->newScreenCallback = CB2_OpenShadowMonitor;
+        Task_FadeAndCloseBagMenu(taskId);
+    }
+    else
+    {
+        DisplayDadsAdviceCannotUseItemMessage(taskId, gTasks[taskId].tUsingRegisteredKeyItem);
+    }
 }
 
 void ItemUseOutOfBattle_TownMap(u8 taskId)

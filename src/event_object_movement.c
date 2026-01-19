@@ -22,6 +22,7 @@
 #include "follower_helper.h"
 #include "gpu_regs.h"
 #include "graphics.h"
+#include "data/graphics/shadow_forms.h"
 #include "mauville_old_man.h"
 #include "metatile_behavior.h"
 #include "overworld.h"
@@ -276,28 +277,18 @@ static void (*const sCameraObjectFuncs[])(struct Sprite *) = {
 #include "data/object_events/object_event_graphics.h"
 
 #if OW_POKEMON_OBJECT_EVENTS
-static const struct SpriteFrameImage sPicTable_PikachuShadow[] = {
-    overworld_ascending_frames(gObjectEventPic_PikachuShadow, 4, 4),
-};
-#if P_GENDER_DIFFERENCES
-static const struct SpriteFrameImage sPicTable_PikachuFShadow[] = {
-    overworld_ascending_frames(gObjectEventPic_PikachuFShadow, 4, 4),
-};
-#endif
+#include "data/graphics/shadow_forms_overworld.inc"
 #endif
 
-static const u16 *GetShadowOverworldPalette(u32 species, bool32 shiny, bool32 female)
+static const u16 *GetShadowOverworldPalette(u32 species, bool32 shiny, bool32 female, bool32 shadow)
 {
     (void)shiny;
     (void)female;
 #if OW_POKEMON_OBJECT_EVENTS && OW_PKMN_OBJECTS_SHARE_PALETTES == FALSE
-    switch (GET_BASE_SPECIES_ID(species))
-    {
-    case SPECIES_PIKACHU:
-        return gOverworldPalette_PikachuShadow;
-    default:
+    u32 baseSpecies = GET_BASE_SPECIES_ID(species);
+    if (baseSpecies >= NUM_SPECIES || !shadow)
         return NULL;
-    }
+    return sShadowOverworldPalettes[baseSpecies];
 #else
     return NULL;
 #endif
@@ -674,10 +665,21 @@ static const struct SpritePalette sObjectEventSpritePalettes[] = {
     {gObjectEventPal_WorkerFGen2,                   OBJ_EVENT_PAL_TAG_WORKER_F_GEN2},
     {gObjectEventPal_WorkerMGen2,                   OBJ_EVENT_PAL_TAG_WORKER_M_GEN2},
     {gObjectEventPal_Youngster2Gen2,                OBJ_EVENT_PAL_TAG_YOUNGSTER2_GEN2},
-
     //Sinnoh
-
-    //Sinnoh
+    {gObjectEventPal_DawnGen4,              OBJ_EVENT_PAL_TAG_DAWN_GEN4},
+    {gObjectEventPal_LucasGen4,             OBJ_EVENT_PAL_TAG_LUCAS_GEN4},
+    {gObjectEventPal_BarryGen4,             OBJ_EVENT_PAL_TAG_BARRY_GEN4},
+    {gObjectEventPal_CynthiaGen4,           OBJ_EVENT_PAL_TAG_CYNTHIA_GEN4},
+    {gObjectEventPal_CyrusGen4,             OBJ_EVENT_PAL_TAG_CYRUS_GEN4},
+    {gObjectEventPal_LookerGen4,            OBJ_EVENT_PAL_TAG_LOOKER_GEN4},
+    {gObjectEventPal_VolknerGen4,           OBJ_EVENT_PAL_TAG_VOLKNER_GEN4},
+    {gObjectEventPal_GalacticGruntMGen4,    OBJ_EVENT_PAL_TAG_GALACTIC_GRUNT_M_GEN4},
+    {gObjectEventPal_GalacticGruntFGen4,    OBJ_EVENT_PAL_TAG_GALACTIC_GRUNT_F_GEN4},
+    {gObjectEventPal_MarsGen4,              OBJ_EVENT_PAL_TAG_MARS_GEN4},
+    {gObjectEventPal_JupiterGen4,            OBJ_EVENT_PAL_TAG_JUPITER_GEN4},
+    {gObjectEventPal_SaturnGen4,             OBJ_EVENT_PAL_TAG_SATURN_GEN4},
+    {gObjectEventPal_CharonGen4,             OBJ_EVENT_PAL_TAG_CHARON_GEN4},
+    {gObjectEventPal_RowanGen4,             OBJ_EVENT_PAL_TAG_ROWAN_GEN4},
 
     //Unova
     {gObjectEventPal_BroniusGen5,         OBJ_EVENT_PAL_TAG_BRONIUS_GEN5},
@@ -694,9 +696,57 @@ static const struct SpritePalette sObjectEventSpritePalettes[] = {
     {gObjectEventPal_RoodGen5,            OBJ_EVENT_PAL_TAG_ROOD_GEN5},
     {gObjectEventPal_RyokuGen5,           OBJ_EVENT_PAL_TAG_RYOKU_GEN5},
     {gObjectEventPal_ZinzolinGen5,        OBJ_EVENT_PAL_TAG_ZINZOLIN_GEN5},
+    {gObjectEventPal_JuniperGen5,        OBJ_EVENT_PAL_TAG_JUNIPER_GEN5},
 
     //Kalos 
-
+    {gObjectEventPal_LysanderGen6, OBJ_EVENT_PAL_TAG_LYSANDER_GEN6},
+    {gObjectEventPal_AlianaGen6, OBJ_EVENT_PAL_TAG_ALIANA_GEN6},
+    {gObjectEventPal_AzGen6, OBJ_EVENT_PAL_TAG_AZ_GEN6},
+    {gObjectEventPal_BryonyGen6, OBJ_EVENT_PAL_TAG_BRYONY_GEN6},
+    {gObjectEventPal_CalemGen6, OBJ_EVENT_PAL_TAG_CALEM_GEN6},
+    {gObjectEventPal_CelosiaGen6, OBJ_EVENT_PAL_TAG_CELOSIA_GEN6},
+    {gObjectEventPal_DianthaGen6, OBJ_EVENT_PAL_TAG_DIANTHA_GEN6},
+    {gObjectEventPal_FlareGruntFGen6, OBJ_EVENT_PAL_TAG_FLARE_GRUNT_F_GEN6},
+    {gObjectEventPal_FlareGruntMGen6, OBJ_EVENT_PAL_TAG_FLARE_GRUNT_M_GEN6},
+    {gObjectEventPal_MableGen6, OBJ_EVENT_PAL_TAG_MABLE_GEN6},
+    {gObjectEventPal_SerenaGen6, OBJ_EVENT_PAL_TAG_SERENA_GEN6},
+    {gObjectEventPal_ShaunaGen6, OBJ_EVENT_PAL_TAG_SHAUNA_GEN6},
+    {gObjectEventPal_SycamoreGen6, OBJ_EVENT_PAL_TAG_SYCAMORE_GEN6},
+    {gObjectEventPal_TiernoGen6, OBJ_EVENT_PAL_TAG_TIERNO_GEN6},
+    {gObjectEventPal_TrevorGen6, OBJ_EVENT_PAL_TAG_TREVOR_GEN6},
+    {gObjectEventPal_XerosicGen6, OBJ_EVENT_PAL_TAG_XEROSIC_GEN6},
+    //Alola
+    {gObjectEventPal_ElioGen7, OBJ_EVENT_PAL_TAG_ELIO_GEN7},
+    {gObjectEventPal_SeleneGen7, OBJ_EVENT_PAL_TAG_SELENE_GEN7},
+    {gObjectEventPal_LillieGen7, OBJ_EVENT_PAL_TAG_LILLIE_GEN7},
+    {gObjectEventPal_HauGen7, OBJ_EVENT_PAL_TAG_HAU_GEN7},
+    {gObjectEventPal_GladionGen7, OBJ_EVENT_PAL_TAG_GLADION_GEN7},
+    {gObjectEventPal_GuzmaGen7, OBJ_EVENT_PAL_TAG_GUZMA_GEN7},
+    {gObjectEventPal_KukuiGen7, OBJ_EVENT_PAL_TAG_KUKUI_GEN7},
+    {gObjectEventPal_BurnetGen7, OBJ_EVENT_PAL_TAG_BURNET_GEN7},
+    {gObjectEventPal_LusamineGen7, OBJ_EVENT_PAL_TAG_LUSAMINE_GEN7},
+    {gObjectEventPal_SophoclesGen7, OBJ_EVENT_PAL_TAG_SOPHOCLES_GEN7},
+    {gObjectEventPal_MolayneGen7, OBJ_EVENT_PAL_TAG_MOLAYNE_GEN7},
+    {gObjectEventPal_PlumeriaGen7, OBJ_EVENT_PAL_TAG_PLUMERIA_GEN7},
+    {gObjectEventPal_SkullGruntMGen7, OBJ_EVENT_PAL_TAG_SKULL_GRUNT_M_GEN7},
+    {gObjectEventPal_SkullGruntFGen7, OBJ_EVENT_PAL_TAG_SKULL_GRUNT_F_GEN7},
+    //Galar
+    {gObjectEventPal_VictorGen8, OBJ_EVENT_PAL_TAG_VICTOR_GEN8},
+    {gObjectEventPal_GloriaGen8, OBJ_EVENT_PAL_TAG_GLORIA_GEN8},
+    {gObjectEventPal_HopGen8, OBJ_EVENT_PAL_TAG_HOP_GEN8},
+    {gObjectEventPal_BedeGen8, OBJ_EVENT_PAL_TAG_BEDE_GEN8},
+    {gObjectEventPal_MarnieGen8, OBJ_EVENT_PAL_TAG_MARNIE_GEN8},
+    {gObjectEventPal_LeonGen8, OBJ_EVENT_PAL_TAG_LEON_GEN8},
+    {gObjectEventPal_RoseGen8, OBJ_EVENT_PAL_TAG_ROSE_GEN8},
+    {gObjectEventPal_OleanaGen8, OBJ_EVENT_PAL_TAG_OLEANA_GEN8},
+    {gObjectEventPal_MagnoliaGen8, OBJ_EVENT_PAL_TAG_MAGNOLIA_GEN8},
+    //Paldea
+    {gObjectEventPal_FlorianGen9, OBJ_EVENT_PAL_TAG_FLORIAN_GEN9},
+    {gObjectEventPal_JulianaGen9, OBJ_EVENT_PAL_TAG_JULIANA_GEN9},
+    {gObjectEventPal_NemonaGen9, OBJ_EVENT_PAL_TAG_NEMONA_GEN9},
+    {gObjectEventPal_ArvenGen9, OBJ_EVENT_PAL_TAG_ARVEN_GEN9},
+    {gObjectEventPal_PennyGen9, OBJ_EVENT_PAL_TAG_PENNY_GEN9},
+    {gObjectEventPal_GeetaGen9, OBJ_EVENT_PAL_TAG_GEETA_GEN9},
     //XD(Orre)
     {gObjectEventPal_Wes,                   OBJ_EVENT_PAL_TAG_WES},
     {gObjectEventPal_CipherPeonM,           OBJ_EVENT_PAL_TAG_CIPHER_PEON_M},
@@ -2161,19 +2211,20 @@ struct ObjectEvent *GetFollowerObject(void)
 }
 
 #if OW_POKEMON_OBJECT_EVENTS
-static const struct SpriteFrameImage *GetShadowOverworldPicTable(u32 species, bool32 female)
+static const struct SpriteFrameImage *GetShadowOverworldPicTable(u32 species, bool32 female, bool32 shadow)
 {
-    switch (GET_BASE_SPECIES_ID(species))
-    {
-    case SPECIES_PIKACHU:
-    #if P_GENDER_DIFFERENCES
-        if (female)
-            return sPicTable_PikachuFShadow;
-    #endif
-        return sPicTable_PikachuShadow;
-    default:
+    u32 baseSpecies = GET_BASE_SPECIES_ID(species);
+    if (!shadow || baseSpecies >= NUM_SPECIES)
         return NULL;
+#if P_GENDER_DIFFERENCES
+    if (female)
+    {
+        const struct SpriteFrameImage *shadowFemale = sShadowOverworldPicTables_Female[baseSpecies];
+        if (shadowFemale != NULL)
+            return shadowFemale;
     }
+#endif
+    return sShadowOverworldPicTables[baseSpecies];
 }
 #endif
 
@@ -2188,7 +2239,7 @@ static const struct ObjectEventGraphicsInfo *GetShadowOverworldGraphicsInfo(u32 
     if (!shadow || base == NULL)
         return base;
 
-    shadowPicTable = GetShadowOverworldPicTable(species, female);
+    shadowPicTable = GetShadowOverworldPicTable(species, female, shadow);
     if (shadowPicTable == NULL)
         return base;
 
@@ -2251,7 +2302,7 @@ static u32 LoadDynamicFollowerPalette(u32 species, bool32 shiny, bool32 female, 
         palTag += OBJ_EVENT_MON_SHADOW_PAL;
     // Use standalone palette, unless entry is OOB or NULL (fallback to front-sprite-based)
 #if OW_POKEMON_OBJECT_EVENTS == TRUE && OW_PKMN_OBJECTS_SHARE_PALETTES == FALSE
-    shadowPalette = GetShadowOverworldPalette(species, shiny, female);
+    shadowPalette = GetShadowOverworldPalette(species, shiny, female, shadow);
     if (shadowPalette != NULL
     || (shiny && gSpeciesInfo[species].overworldPalette)
     || (!shiny && gSpeciesInfo[species].overworldShinyPalette))
@@ -2426,6 +2477,8 @@ static bool8 GetMonInfo(struct Pokemon *mon, u32 *species, bool32 *shiny, bool32
         *species = GetOverworldWeatherSpecies(*species);
         break;
     }
+    if (*species == SPECIES_MIMIKYU_BUSTED || *species == SPECIES_MIMIKYU_BUSTED_TOTEM)
+        *shadow = OBJ_EVENT_MON_SHADOW;
     return TRUE;
 }
 

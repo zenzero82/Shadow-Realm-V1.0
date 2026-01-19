@@ -5324,7 +5324,7 @@
       "height": 14,
       "border_width": 2,
       "border_height": 2,
-      "primary_tileset": "gTileset_johto_building",
+      "primary_tileset": "gTileset_kanto_inside",
       "secondary_tileset": "gTileset_oaks_lab",
       "border_filepath": "data/layouts/Oaks_Lab/border.bin",
       "blockdata_filepath": "data/layouts/Oaks_Lab/map.bin"
@@ -5384,7 +5384,7 @@
       "height": 10,
       "border_width": 2,
       "border_height": 2,
-      "primary_tileset": "gTileset_johto_building",
+      "primary_tileset": "gTileset_kanto_inside",
       "secondary_tileset": "gTileset_reds",
       "border_filepath": "data/layouts/Reds_House/border.bin",
       "blockdata_filepath": "data/layouts/Reds_House/map.bin"
@@ -5396,7 +5396,7 @@
       "height": 9,
       "border_width": 2,
       "border_height": 2,
-      "primary_tileset": "gTileset_johto_building",
+      "primary_tileset": "gTileset_kanto_inside",
       "secondary_tileset": "gTileset_reds",
       "border_filepath": "data/layouts/Reds_House_2ndFL/border.bin",
       "blockdata_filepath": "data/layouts/Reds_House_2ndFL/map.bin"
@@ -5444,7 +5444,7 @@
       "height": 10,
       "border_width": 2,
       "border_height": 2,
-      "primary_tileset": "gTileset_johto_building",
+      "primary_tileset": "gTileset_kanto_inside",
       "secondary_tileset": "gTileset_oaks_lab",
       "border_filepath": "data/layouts/viridian_house2/border.bin",
       "blockdata_filepath": "data/layouts/viridian_house2/map.bin"
@@ -5528,7 +5528,7 @@
       "height": 10,
       "border_width": 2,
       "border_height": 2,
-      "primary_tileset": "gTileset_johto_building",
+      "primary_tileset": "gTileset_kanto_inside",
       "secondary_tileset": "gTileset_Reds",
       "border_filepath": "data/layouts/Blues_House/border.bin",
       "blockdata_filepath": "data/layouts/Blues_House/map.bin"
@@ -5588,7 +5588,7 @@
       "height": 10,
       "border_width": 2,
       "border_height": 2,
-      "primary_tileset": "gTileset_johto_building",
+      "primary_tileset": "gTileset_kanto_inside",
       "secondary_tileset": "gTileset_oaks_lab",
       "border_filepath": "data/layouts/viridian_house1/border.bin",
       "blockdata_filepath": "data/layouts/viridian_house1/map.bin"
@@ -5636,7 +5636,7 @@
       "height": 11,
       "border_width": 2,
       "border_height": 2,
-      "primary_tileset": "gTileset_johto_building",
+      "primary_tileset": "gTileset_kanto_inside",
       "secondary_tileset": "gTileset_pewter_museum",
       "border_filepath": "data/layouts/pewter_museum/border.bin",
       "blockdata_filepath": "data/layouts/pewter_museum/map.bin"
@@ -5648,7 +5648,7 @@
       "height": 10,
       "border_width": 2,
       "border_height": 2,
-      "primary_tileset": "gTileset_johto_building",
+      "primary_tileset": "gTileset_kanto_inside",
       "secondary_tileset": "gTileset_pewter_museum",
       "border_filepath": "data/layouts/pewter_museum2fl/border.bin",
       "blockdata_filepath": "data/layouts/pewter_museum2fl/map.bin"
@@ -6488,7 +6488,7 @@
       "height": 10,
       "border_width": 2,
       "border_height": 2,
-      "primary_tileset": "gTileset_johto_building",
+      "primary_tileset": "gTileset_kanto_inside",
       "secondary_tileset": "gTileset_cerulean_bikeshop",
       "border_filepath": "data/layouts/cerulean_bikeshop/border.bin",
       "blockdata_filepath": "data/layouts/cerulean_bikeshop/map.bin"
@@ -7184,7 +7184,7 @@
       "height": 11,
       "border_width": 2,
       "border_height": 2,
-      "primary_tileset": "gTileset_johto_building",
+      "primary_tileset": "gTileset_kanto_inside",
       "secondary_tileset": "gTileset_seacottage",
       "border_filepath": "data/layouts/route25_billshouse/border.bin",
       "blockdata_filepath": "data/layouts/route25_billshouse/map.bin"
@@ -8636,10 +8636,22 @@
       "height": 10,
       "border_width": 2,
       "border_height": 2,
-      "primary_tileset": "gTileset_johto_general_og",
-      "secondary_tileset": "gTileset_Cave_Green",
+      "primary_tileset": "gTileset_wescave",
+      "secondary_tileset": "gTileset_wescave2",
       "border_filepath": "data/layouts/WesHideout_Entrance/border.bin",
       "blockdata_filepath": "data/layouts/WesHideout_Entrance/map.bin"
+    },
+    {
+      "id": "LAYOUT_WES_HIDEOUT_UNDERGROUND",
+      "name": "WesHideout_Underground_Layout",
+      "width": 30,
+      "height": 25,
+      "border_width": 2,
+      "border_height": 2,
+      "primary_tileset": "gTileset_wescave",
+      "secondary_tileset": "gTileset_wescave2",
+      "border_filepath": "data/layouts/WesHideout_Underground/border.bin",
+      "blockdata_filepath": "data/layouts/WesHideout_Underground/map.bin"
     }
   ]
 }

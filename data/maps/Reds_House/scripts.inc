@@ -27,8 +27,10 @@ PalletTown_RedsHouse_1F_EventScript_Mom::
 	closemessage
 
 	checkplayergender
-	setvar 0x8004, 0x8000
-	callnative ShowWallClock
+	copyvar VAR_TEMP_4, VAR_TEMP_0
+	fadescreen FADE_TO_BLACK
+	special StartWallClock
+	waitstate
 
 	setvar VAR_TEMP_0, 1
 	call PalletTown_RedsHouse_1F_EventScript_MomAfterMessage

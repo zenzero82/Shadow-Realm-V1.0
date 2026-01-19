@@ -4,6 +4,16 @@
 #include "constants/opponents.h"
 #include "constants/battle_frontier_trainers.h"
 
+#define TRAINER_ANABEL                    TRAINER_NONE
+#define TRAINER_TUCKER                    TRAINER_NONE
+#define TRAINER_SPENSER                   TRAINER_NONE
+#define TRAINER_GRETA                     TRAINER_NONE
+#define TRAINER_NOLAND                    TRAINER_NONE
+#define TRAINER_LUCY                      TRAINER_NONE
+#define TRAINER_BRANDON                   TRAINER_NONE
+
+#define TRAINER_NONE                       0xFFFF  // sentinel for no trainer
+#include "constants/old_trainers.h"
 // Special Trainer Ids.
 //      0-299 are frontier trainers
 #define TRAINER_RECORD_MIXING_FRIEND        FRONTIER_TRAINERS_COUNT
@@ -159,7 +169,32 @@
 #define TRAINER_PIC_TWINS2             140
 #define TRAINER_PIC_YOUNGSTER2         141
 
-#define TRAINER_PIC_COUNT                 142
+// Sinnoh (Gen 4)
+#define TRAINER_PIC_DAWN_GEN4            142
+#define TRAINER_PIC_LUCAS_GEN4           143
+#define TRAINER_PIC_BARRY_GEN4           144
+#define TRAINER_PIC_CYNTHIA_GEN4         145
+#define TRAINER_PIC_CYRUS_GEN4           146
+#define TRAINER_PIC_VOLKNER_GEN4         147
+#define TRAINER_PIC_GALACTIC_GRUNT_M_GEN4 148
+#define TRAINER_PIC_GALACTIC_GRUNT_F_GEN4 149
+#define TRAINER_PIC_MARS_GEN4            150
+#define TRAINER_PIC_JUPITER_GEN4         151
+#define TRAINER_PIC_SATURN_GEN4          152
+
+// Unova (Gen 5)
+#define TRAINER_PIC_HILBERT_GEN5         153
+#define TRAINER_PIC_HILDA_GEN5           154
+#define TRAINER_PIC_N_GEN5               155
+#define TRAINER_PIC_PLASMA_GRUNT_M_GEN5  156
+#define TRAINER_PIC_PLASMA_GRUNT_F_GEN5  157
+#define TRAINER_PIC_COLRESS_GEN5         158
+#define TRAINER_PIC_GHETSIS_GEN5         159
+#define TRAINER_PIC_IRIS_GEN5            160
+#define TRAINER_PIC_LOOKER_GEN5          161
+#define TRAINER_PIC_ZINZOLIN_GEN5        162
+
+#define TRAINER_PIC_COUNT                 163
 
 // The player back pics are assumed to alternate according to the gender values (MALE/FEMALE)
 #define TRAINER_BACK_PIC_BRENDAN                0

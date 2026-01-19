@@ -70,8 +70,9 @@
 #define FLAG_PEWTER_BROCK_WES_SCENE_DONE    0x2F // Unused Flag
 #define FLAG_HIDE_PEWTER_CITY_BROCK    0x30 // Unused Flag
 #define FLAG_HIDE_PEWTER_CITY_WES   0x31 // Unused Flag
-#define FLAG_UNUSED_0x032    0x32 // Unused Flag
-#define FLAG_UNUSED_0x033    0x33 // Unused Flag
+#define FLAG_VIRIDIAN_FOREST_PLASMA_SCENE_DONE 0x32 // Persistent flag for the Plasma scene
+#define FLAG_UNUSED_0x032    FLAG_VIRIDIAN_FOREST_PLASMA_SCENE_DONE
+#define FLAG_HIDE_ROUTE_24_ZANDER  0x33 // hides Zander after his fight
 #define FLAG_UNUSED_0x034    0x34 // Unused Flag
 #define FLAG_UNUSED_0x035    0x35 // Unused Flag
 #define FLAG_UNUSED_0x036    0x36 // Unused Flag
@@ -107,6 +108,7 @@
 #define FLAG_LEGENDARIES_IN_SOOTOPOLIS           0x53
 
 #define FLAG_UNUSED_0x054                    0x54  // Unused Flag
+#define FLAG_RECEIVED_SNAG_MACHINE           FLAG_UNUSED_0x054
 #define FLAG_UNUSED_0x055                    0x55  // Unused Flag
 
 #define FLAG_HIDE_CONTEST_POKE_BALL          0x56  // Always set after new game, object it hides is added directly
@@ -129,6 +131,7 @@
 #define FLAG_MOSSDEEP_GYM_SWITCH_4           0x67 //
 
 #define FLAG_UNUSED_0x068                    0x68  // Unused Flag
+#define FLAG_RECEIVED_SHADOW_MONITOR         FLAG_UNUSED_0x068
 
 #define FLAG_OCEANIC_MUSEUM_MET_REPORTER     0x69
 #define FLAG_RECEIVED_HM_STRENGTH            0x6A

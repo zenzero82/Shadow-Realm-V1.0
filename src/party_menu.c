@@ -38,6 +38,7 @@
 #include "link.h"
 #include "link_rfu.h"
 #include "mail.h"
+#include "pokemon.h"
 #include "main.h"
 #include "menu.h"
 #include "menu_helpers.h"
@@ -152,6 +153,7 @@ enum {
 #define PARTY_PAL_TO_SOFTBOIL  (1 << 5)
 #define PARTY_PAL_NO_MON       (1 << 6)
 #define PARTY_PAL_SHADOW       (1 << 7)
+#define PARTY_PAL_REVERSE      (1 << 8)
 
 #define MENU_DIR_DOWN     1
 #define MENU_DIR_UP      -1
@@ -228,13 +230,16 @@ static EWRAM_DATA u8 *sPartyBgTilemapBuffer = NULL;
 EWRAM_DATA bool8 gPartyMenuUseExitCallback = 0;
 EWRAM_DATA u8 gSelectedMonPartyId = 0;
 EWRAM_DATA MainCallback gPostMenuFieldCallback = NULL;
+static EWRAM_DATA MainCallback sTimeFluteReturnCallback = NULL;
+static EWRAM_DATA u8 sTimeFluteSlotId;
+static EWRAM_DATA u8 sTimeFluteSavedNickname[POKEMON_NAME_LENGTH + 1] = {0};
 static EWRAM_DATA u16 *sSlot1TilemapBuffer = 0; // for switching party slots
 static EWRAM_DATA u16 *sSlot2TilemapBuffer = 0; //
 EWRAM_DATA u8 gSelectedOrderFromParty[MAX_FRONTIER_PARTY_SIZE] = {0};
 static EWRAM_DATA u16 sPartyMenuItemId = 0;
 EWRAM_DATA u8 gBattlePartyCurrentOrder[PARTY_SIZE / 2] = {0}; // bits 0-3 are the current pos of Slot 1, 4-7 are Slot 2, and so on
-static EWRAM_DATA u8 sInitialLevel = 0;
-static EWRAM_DATA u8 sFinalLevel = 0;
+ static EWRAM_DATA u8 sInitialLevel = 0;
+ static EWRAM_DATA u8 sFinalLevel = 0;
 
 // IWRAM common
 COMMON_DATA void (*gItemUseCB)(u8, TaskFunc) = NULL;
@@ -260,8 +265,9 @@ static void CreateCancelConfirmWindows(u8);
 static void Task_ExitPartyMenu(u8);
 static void FreePartyPointers(void);
 static void PartyPaletteBufferCopy(u8);
+static void LoadReversePartyBoxPalettes(void);
 static void DisplayPartyPokemonDataForMultiBattle(u8);
-static void LoadPartyBoxPalette(struct PartyMenuBox *, u8);
+static void LoadPartyBoxPalette(struct PartyMenuBox *, u16);
 static void DrawEmptySlot(u8 windowId);
 static void DisplayPartyPokemonDataForRelearner(u8);
 static void DisplayPartyPokemonDataForContest(u8);
@@ -301,7 +307,7 @@ static void DrawCancelConfirmButtons(void);
 static u8 CreatePokeballButtonSprite(u8, u8);
 static void AnimateSelectedPartyIcon(u8, u8);
 static void PartyMenuStartSpriteAnim(u8, u8);
-static u8 GetPartyBoxPaletteFlags(u8, u8);
+static u16 GetPartyBoxPaletteFlags(u8, u8);
 static bool8 PartyBoxPal_ParnterOrDisqualifiedInArena(u8);
 static u8 GetPartyIdFromBattleSlot(u8);
 static void Task_ClosePartyMenuAndSetCB2(u8);
@@ -316,6 +322,7 @@ static bool8 DoesSelectedMonKnowHM(u8 *);
 static void PartyMenuRemoveWindow(u8 *);
 static void CB2_SetUpExitToBattleScreen(void);
 static void Task_ClosePartyMenuAfterText(u8);
+static void CB2_TimeFluteReturn(void);
 static void TryTutorSelectedMon(u8);
 static void TryGiveMailToSelectedMon(u8);
 static void TryGiveItemOrMailToSelectedMon(u8);
@@ -886,6 +893,7 @@ static bool8 AllocPartyMenuBgGfx(void)
     case 2:
         LoadPalette(gPartyMenuBg_Pal, BG_PLTT_ID(0), 11 * PLTT_SIZE_4BPP);
         CpuCopy16(gPlttBufferUnfaded, sPartyMenuInternal->palBuffer, 11 * PLTT_SIZE_4BPP);
+        LoadReversePartyBoxPalettes();
         sPartyMenuInternal->data[0]++;
         break;
     case 3:
@@ -919,6 +927,60 @@ static void PartyPaletteBufferCopy(u8 palNum)
     u8 offset = PLTT_ID(palNum);
     CpuCopy16(&gPlttBufferUnfaded[BG_PLTT_ID(3)], &gPlttBufferUnfaded[offset], PLTT_SIZE_4BPP);
     CpuCopy16(&gPlttBufferUnfaded[BG_PLTT_ID(3)], &gPlttBufferFaded[offset], PLTT_SIZE_4BPP);
+}
+
+static const u16 sPartyBoxReversePalette_Unselected[16] =
+{
+    RGB(31, 8, 0),
+    RGB(31, 8, 0),
+    RGB(31, 12, 0),
+    RGB(31, 15, 1),
+    RGB(31, 17, 2),
+    RGB(31, 19, 3),
+    RGB(31, 20, 4),
+    RGB(31, 21, 5),
+    RGB(31, 22, 6),
+    RGB(31, 23, 6),
+    RGB(31, 24, 7),
+    RGB(31, 25, 7),
+    RGB(31, 26, 8),
+    RGB(31, 27, 8),
+    RGB(31, 28, 9),
+    RGB(31, 30, 9),
+};
+
+static const u16 sPartyBoxReversePalette_Selected[16] =
+{
+    RGB(31, 12, 3),
+    RGB(31, 12, 3),
+    RGB(31, 14, 4),
+    RGB(31, 16, 5),
+    RGB(31, 18, 6),
+    RGB(31, 20, 7),
+    RGB(31, 21, 8),
+    RGB(31, 22, 9),
+    RGB(31, 23, 10),
+    RGB(31, 24, 10),
+    RGB(31, 25, 11),
+    RGB(31, 26, 11),
+    RGB(31, 27, 12),
+    RGB(31, 28, 12),
+    RGB(31, 29, 13),
+    RGB(31, 31, 14),
+};
+
+static const u8 sPartyBoxReverseUnselectedPalIds[] = {200, 201, 202, 203, 204, 205};
+static const u8 sPartyBoxReverseSelectedPalIds[] = {206, 207, 208, 209, 210, 211};
+
+static void LoadReversePartyBoxPalettes(void)
+{
+    u16 *palBuffer = sPartyMenuInternal->palBuffer;
+
+    for (u32 i = 0; i < ARRAY_COUNT(sPartyBoxReverseUnselectedPalIds); i++)
+        CpuCopy16(sPartyBoxReversePalette_Unselected, &palBuffer[sPartyBoxReverseUnselectedPalIds[i]], PLTT_SIZE_4BPP);
+
+    for (u32 i = 0; i < ARRAY_COUNT(sPartyBoxReverseSelectedPalIds); i++)
+        CpuCopy16(sPartyBoxReversePalette_Selected, &palBuffer[sPartyBoxReverseSelectedPalIds[i]], PLTT_SIZE_4BPP);
 }
 
 static void FreePartyPointers(void)
@@ -1304,9 +1366,9 @@ void AnimatePartySlot(u8 slot, u8 animNum)
     ScheduleBgCopyTilemapToVram(1);
 }
 
-static u8 GetPartyBoxPaletteFlags(u8 slot, u8 animNum)
+static u16 GetPartyBoxPaletteFlags(u8 slot, u8 animNum)
 {
-    u8 palFlags = 0;
+    u16 palFlags = 0;
 
     if (animNum == 1)
         palFlags |= PARTY_PAL_SELECTED;
@@ -1324,7 +1386,11 @@ static u8 GetPartyBoxPaletteFlags(u8 slot, u8 animNum)
     if (gPartyMenu.action == PARTY_ACTION_SOFTBOILED && slot == gPartyMenu.slotId )
         palFlags |= PARTY_PAL_TO_SOFTBOIL;
     if (GetMonData(&gPlayerParty[slot], MON_DATA_IS_SHADOW, 0) & 0xF)
+    {
         palFlags |= PARTY_PAL_SHADOW;
+        if (GetMonData(&gPlayerParty[slot], MON_DATA_REVERSE_MODE, 0))
+            palFlags |= PARTY_PAL_REVERSE;
+    }
 
     return palFlags;
 }
@@ -2395,7 +2461,7 @@ static void DrawEmptySlot(u8 windowId)
     LoadPalette(GetPartyMenuPalBufferPtr(paletteIds[2]), paletteOffsets[2] + palOffset, PLTT_SIZEOF(1));  \
 }
 
-static void LoadPartyBoxPalette(struct PartyMenuBox *menuBox, u8 palFlags)
+static void LoadPartyBoxPalette(struct PartyMenuBox *menuBox, u16 palFlags)
 {
     u8 palOffset = BG_PLTT_ID(GetWindowAttribute(menuBox->windowId, WINDOW_PALETTE_NUM));
 
@@ -2445,6 +2511,19 @@ static void LoadPartyBoxPalette(struct PartyMenuBox *menuBox, u8 palFlags)
         {
             LOAD_PARTY_BOX_PAL(sPartyBoxFaintedPalIds1, sPartyBoxPalOffsets1);
             LOAD_PARTY_BOX_PAL(sPartyBoxFaintedPalIds2, sPartyBoxPalOffsets2);
+        }
+    }
+    else if (palFlags & PARTY_PAL_REVERSE)
+    {
+        if (palFlags & PARTY_PAL_SELECTED)
+        {
+            LOAD_PARTY_BOX_PAL(sPartyBoxCurrSelectionReversePalIds1, sPartyBoxPalOffsets1);
+            LOAD_PARTY_BOX_PAL(sPartyBoxCurrSelectionReversePalIds2, sPartyBoxPalOffsets2);
+        }
+        else
+        {
+            LOAD_PARTY_BOX_PAL(sPartyBoxReversePalIds1, sPartyBoxPalOffsets1);
+            LOAD_PARTY_BOX_PAL(sPartyBoxReversePalIds2, sPartyBoxPalOffsets2);
         }
     }
     else if (palFlags & PARTY_PAL_SHADOW)
@@ -6095,6 +6174,74 @@ void ItemUseCB_EvolutionStone(u8 taskId, TaskFunc task)
             RemoveBagItem(gSpecialVar_ItemId, 1);
         FreePartyPointers();
     }
+}
+
+void ItemUseCB_TimeFlute(u8 taskId, TaskFunc task)
+{
+    struct Pokemon *mon = &gPlayerParty[gPartyMenu.slotId];
+    u16 itemId = gSpecialVar_ItemId;
+
+    PlaySE(SE_SELECT);
+    if (!GetMonData(mon, MON_DATA_IS_SHADOW, NULL))
+    {
+        gPartyMenuUseExitCallback = FALSE;
+        DisplayPartyMenuMessage(gText_TimeFluteShadowOnly, TRUE);
+        ScheduleBgCopyTilemapToVram(2);
+        gTasks[taskId].func = task;
+        return;
+    }
+
+    gCB2_AfterEvolution = CB2_TimeFluteReturn;
+    sTimeFluteReturnCallback = gPartyMenu.exitCallback;
+    sTimeFluteSlotId = gPartyMenu.slotId;
+    SetMonHeartValue(mon, 0);
+    SetMonHeartMax(mon, 0);
+    GetMonData(mon, MON_DATA_NICKNAME, sTimeFluteSavedNickname);
+    gSkipEvolutionRenameForShadowPurification = TRUE;
+
+    if (GetItemPocket(itemId) != POCKET_KEY_ITEMS)
+        RemoveBagItem(itemId, 1);
+    FreePartyPointers();
+    BeginPurificationScene(mon, gPartyMenu.slotId);
+}
+
+static void CB2_TimeFluteReturn(void)
+{
+    if (sTimeFluteSlotId >= PARTY_SIZE)
+    {
+        if (sTimeFluteReturnCallback != NULL)
+            sTimeFluteReturnCallback();
+        return;
+    }
+
+    struct Pokemon *mon = &gPlayerParty[sTimeFluteSlotId];
+    if (sTimeFluteSavedNickname[0] != EOS)
+    {
+        SetMonData(mon, MON_DATA_NICKNAME, sTimeFluteSavedNickname);
+        sTimeFluteSavedNickname[0] = EOS;
+    }
+    u8 isShadow = FALSE;
+    SetMonData(mon, MON_DATA_IS_SHADOW, &isShadow);
+    u8 snagged = FALSE;
+    SetMonData(mon, MON_DATA_SNAGGED, &snagged);
+    u8 shadowAggro = 0;
+    SetMonData(mon, MON_DATA_SHADOW_AGGRO, &shadowAggro);
+    SetMonHeartValue(mon, 0);
+    SetMonHeartMax(mon, 0);
+    u16 shadowId = GetMonData(mon, MON_DATA_SHADOW_ID, NULL);
+    if (shadowId != 0)
+        Shdw_SetState(shadowId, SHDW_STATE_PURIFIED);
+    u8 nationalRibbon = TRUE;
+    SetMonData(mon, MON_DATA_NATIONAL_RIBBON, &nationalRibbon);
+
+    UpdateFollowingPokemon();
+
+    gSkipEvolutionRenameForShadowPurification = FALSE;
+    MainCallback cb = sTimeFluteReturnCallback;
+    sTimeFluteReturnCallback = NULL;
+    sTimeFluteSlotId = PARTY_SIZE;
+    if (cb != NULL)
+        cb();
 }
 
 #define FUSE_MON        1

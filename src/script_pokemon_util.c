@@ -641,8 +641,8 @@ void CreateScriptedWildShadowMon(u16 species, u8 level, u16 item, u16 heartValue
         SetMonData(&gEnemyParty[0], MON_DATA_HELD_ITEM, heldItem);
     }
     SetMonData(&gEnemyParty[0], MON_DATA_IS_SHADOW, &isShadow);
-    SetMonData(&gEnemyParty[0], MON_DATA_HEART_MAX, &heartValue);
-    SetMonData(&gEnemyParty[0], MON_DATA_HEART_VALUE, &heartValue);
+    SetMonHeartMax(&gEnemyParty[0], heartValue);
+    SetMonHeartValue(&gEnemyParty[0], heartValue);
 }
 
 // heartValue args can take 0 to make the left/right mon not shadow
@@ -665,8 +665,8 @@ void CreateScriptedDoubleWildShadowMon(u16 species1, u8 level1, u16 item1, u16 h
     if (heartValue1)
     {
         SetMonData(&gEnemyParty[0], MON_DATA_IS_SHADOW, &isShadow);
-        SetMonData(&gEnemyParty[0], MON_DATA_HEART_MAX, &heartValue1);
-        SetMonData(&gEnemyParty[0], MON_DATA_HEART_VALUE, &heartValue1);
+        SetMonHeartMax(&gEnemyParty[0], heartValue1);
+        SetMonHeartValue(&gEnemyParty[0], heartValue1);
     }
 
     CreateMon(&gEnemyParty[3], species2, level2, 32, 0, 0, OT_ID_PLAYER_ID, 0);
@@ -679,7 +679,7 @@ void CreateScriptedDoubleWildShadowMon(u16 species1, u8 level1, u16 item1, u16 h
     if (heartValue2)
     {
         SetMonData(&gEnemyParty[3], MON_DATA_IS_SHADOW, &isShadow);
-        SetMonData(&gEnemyParty[3], MON_DATA_HEART_MAX, &heartValue2);
-        SetMonData(&gEnemyParty[3], MON_DATA_HEART_VALUE, &heartValue2);
+        SetMonHeartMax(&gEnemyParty[3], heartValue2);
+        SetMonHeartValue(&gEnemyParty[3], heartValue2);
     }
 }

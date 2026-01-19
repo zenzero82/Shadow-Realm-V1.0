@@ -394,7 +394,20 @@ extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_WorkerFGen2
 extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_WorkerMGen2;
 extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_Youngster2Gen2;
 //Sinnoh
-
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_DawnGen4;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_LucasGen4;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_BarryGen4;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_CynthiaGen4;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_CyrusGen4;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_LookerGen4;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_VolknerGen4;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_GalacticGruntMGen4;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_GalacticGruntFGen4;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_MarsGen4;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_JupiterGen4;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_SaturnGen4;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_CharonGen4;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_RowanGen4;
 //Unova
 extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_BroniusGen5;
 extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_ColressGen5;
@@ -410,8 +423,56 @@ extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_PlasmaGrunt
 extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_RoodGen5;
 extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_RyokuGen5;
 extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_ZinzolinGen5;
-
-//Kalos 
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_JuniperGen5;
+//Kalos
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_LysanderGen6;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_AlianaGen6;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_AzGen6;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_BryonyGen6;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_CalemGen6;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_CelosiaGen6;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_DianthaGen6;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_FlareGruntFGen6;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_FlareGruntMGen6;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_MableGen6;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_SerenaGen6;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_ShaunaGen6;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_SycamoreGen6;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_TiernoGen6;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_TrevorGen6;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_XerosicGen6;
+//Alola
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_ElioGen7;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_SeleneGen7;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_LillieGen7;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_HauGen7;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_GladionGen7;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_GuzmaGen7;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_KukuiGen7;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_BurnetGen7;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_LusamineGen7;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_SophoclesGen7;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_MolayneGen7;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_PlumeriaGen7;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_SkullGruntMGen7;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_SkullGruntFGen7;
+//Galar
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_VictorGen8;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_GloriaGen8;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_HopGen8;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_BedeGen8;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_MarnieGen8;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_LeonGen8;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_RoseGen8;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_OleanaGen8;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_MagnoliaGen8;
+//Paldea
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_FlorianGen9;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_JulianaGen9;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_NemonaGen9;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_ArvenGen9;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_PennyGen9;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_GeetaGen9;
 
 //XD(Orre)
 extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_Wes;
@@ -778,7 +839,20 @@ const struct ObjectEventGraphicsInfo *const gObjectEventGraphicsInfoPointers[NUM
     [OBJ_EVENT_GFX_YOUNGSTER2_GEN2]  = &gObjectEventGraphicsInfo_Youngster2Gen2,
 
     //Sinnoh
-
+    [OBJ_EVENT_GFX_DAWN_GEN4]        = &gObjectEventGraphicsInfo_DawnGen4,
+    [OBJ_EVENT_GFX_LUCAS_GEN4]       = &gObjectEventGraphicsInfo_LucasGen4,
+    [OBJ_EVENT_GFX_BARRY_GEN4]       = &gObjectEventGraphicsInfo_BarryGen4,
+    [OBJ_EVENT_GFX_CYNTHIA_GEN4]     = &gObjectEventGraphicsInfo_CynthiaGen4,
+    [OBJ_EVENT_GFX_CYRUS_GEN4]       = &gObjectEventGraphicsInfo_CyrusGen4,
+    [OBJ_EVENT_GFX_LOOKER_GEN4]      = &gObjectEventGraphicsInfo_LookerGen4,
+    [OBJ_EVENT_GFX_VOLKNER_GEN4]     = &gObjectEventGraphicsInfo_VolknerGen4,
+    [OBJ_EVENT_GFX_GALACTIC_GRUNT_M_GEN4] = &gObjectEventGraphicsInfo_GalacticGruntMGen4,
+    [OBJ_EVENT_GFX_GALACTIC_GRUNT_F_GEN4] = &gObjectEventGraphicsInfo_GalacticGruntFGen4,
+    [OBJ_EVENT_GFX_MARS_GEN4]        = &gObjectEventGraphicsInfo_MarsGen4,
+    [OBJ_EVENT_GFX_JUPITER_GEN4]     = &gObjectEventGraphicsInfo_JupiterGen4,
+    [OBJ_EVENT_GFX_SATURN_GEN4]      = &gObjectEventGraphicsInfo_SaturnGen4,
+    [OBJ_EVENT_GFX_CHARON_GEN4]      = &gObjectEventGraphicsInfo_CharonGen4,
+    [OBJ_EVENT_GFX_ROWAN_GEN4]      = &gObjectEventGraphicsInfo_RowanGen4,
     //Unova
     [OBJ_EVENT_GFX_BRONIUS_GEN5]  = &gObjectEventGraphicsInfo_BroniusGen5,
     [OBJ_EVENT_GFX_COLRESS_GEN5]  = &gObjectEventGraphicsInfo_ColressGen5,
@@ -794,8 +868,60 @@ const struct ObjectEventGraphicsInfo *const gObjectEventGraphicsInfoPointers[NUM
     [OBJ_EVENT_GFX_ROOD_GEN5]  = &gObjectEventGraphicsInfo_RoodGen5,
     [OBJ_EVENT_GFX_RYOKU_GEN5]  = &gObjectEventGraphicsInfo_RyokuGen5,
     [OBJ_EVENT_GFX_ZINZOLIN_GEN5]  = &gObjectEventGraphicsInfo_ZinzolinGen5,
+    [OBJ_EVENT_GFX_JUNIPER_GEN5]      = &gObjectEventGraphicsInfo_JuniperGen5,
 
     //Kalos 
+    [OBJ_EVENT_GFX_LYSANDER_GEN6]        = &gObjectEventGraphicsInfo_LysanderGen6,
+    [OBJ_EVENT_GFX_ALIANA_GEN6]        = &gObjectEventGraphicsInfo_AlianaGen6,
+    [OBJ_EVENT_GFX_AZ_GEN6]        = &gObjectEventGraphicsInfo_AzGen6,
+    [OBJ_EVENT_GFX_BRYONY_GEN6]        = &gObjectEventGraphicsInfo_BryonyGen6,
+    [OBJ_EVENT_GFX_CALEM_GEN6]        = &gObjectEventGraphicsInfo_CalemGen6,
+    [OBJ_EVENT_GFX_CELOSIA_GEN6]        = &gObjectEventGraphicsInfo_CelosiaGen6,
+    [OBJ_EVENT_GFX_DIANTHA_GEN6]        = &gObjectEventGraphicsInfo_DianthaGen6,
+    [OBJ_EVENT_GFX_FLARE_GRUNT_F_GEN6]        = &gObjectEventGraphicsInfo_FlareGruntFGen6,
+    [OBJ_EVENT_GFX_FLARE_GRUNT_M_GEN6]        = &gObjectEventGraphicsInfo_FlareGruntMGen6,
+    [OBJ_EVENT_GFX_MABLE_GEN6]        = &gObjectEventGraphicsInfo_MableGen6,
+    [OBJ_EVENT_GFX_SERENA_GEN6]        = &gObjectEventGraphicsInfo_SerenaGen6,
+    [OBJ_EVENT_GFX_SHAUNA_GEN6]        = &gObjectEventGraphicsInfo_ShaunaGen6,
+    [OBJ_EVENT_GFX_SYCAMORE_GEN6]        = &gObjectEventGraphicsInfo_SycamoreGen6,
+    [OBJ_EVENT_GFX_TIERNO_GEN6]        = &gObjectEventGraphicsInfo_TiernoGen6,
+    [OBJ_EVENT_GFX_TREVOR_GEN6]        = &gObjectEventGraphicsInfo_TrevorGen6,
+    [OBJ_EVENT_GFX_XEROSIC_GEN6]        = &gObjectEventGraphicsInfo_XerosicGen6,
+
+    //Alola (Gen 7)
+    [OBJ_EVENT_GFX_ELIO_GEN7]  = &gObjectEventGraphicsInfo_ElioGen7,
+    [OBJ_EVENT_GFX_SELENE_GEN7]  = &gObjectEventGraphicsInfo_SeleneGen7,
+    [OBJ_EVENT_GFX_LILLIE_GEN7]  = &gObjectEventGraphicsInfo_LillieGen7,
+    [OBJ_EVENT_GFX_HAU_GEN7]  = &gObjectEventGraphicsInfo_HauGen7,
+    [OBJ_EVENT_GFX_GLADION_GEN7]  = &gObjectEventGraphicsInfo_GladionGen7,
+    [OBJ_EVENT_GFX_GUZMA_GEN7]  = &gObjectEventGraphicsInfo_GuzmaGen7,
+    [OBJ_EVENT_GFX_KUKUI_GEN7]  = &gObjectEventGraphicsInfo_KukuiGen7,
+    [OBJ_EVENT_GFX_BURNET_GEN7]  = &gObjectEventGraphicsInfo_BurnetGen7,
+    [OBJ_EVENT_GFX_LUSAMINE_GEN7]  = &gObjectEventGraphicsInfo_LusamineGen7,
+    [OBJ_EVENT_GFX_SOPHOCLES_GEN7]  = &gObjectEventGraphicsInfo_SophoclesGen7,
+    [OBJ_EVENT_GFX_MOLAYNE_GEN7]  = &gObjectEventGraphicsInfo_MolayneGen7,
+    [OBJ_EVENT_GFX_PLUMERIA_GEN7]  = &gObjectEventGraphicsInfo_PlumeriaGen7,
+    [OBJ_EVENT_GFX_SKULL_GRUNT_M_GEN7]  = &gObjectEventGraphicsInfo_SkullGruntMGen7,
+    [OBJ_EVENT_GFX_SKULL_GRUNT_F_GEN7]  = &gObjectEventGraphicsInfo_SkullGruntFGen7,
+
+    //Galar (Gen 8)
+    [OBJ_EVENT_GFX_VICTOR_GEN8]  = &gObjectEventGraphicsInfo_VictorGen8,
+    [OBJ_EVENT_GFX_GLORIA_GEN8]  = &gObjectEventGraphicsInfo_GloriaGen8,
+    [OBJ_EVENT_GFX_HOP_GEN8]  = &gObjectEventGraphicsInfo_HopGen8,
+    [OBJ_EVENT_GFX_BEDE_GEN8]  = &gObjectEventGraphicsInfo_BedeGen8,
+    [OBJ_EVENT_GFX_MARNIE_GEN8]  = &gObjectEventGraphicsInfo_MarnieGen8,
+    [OBJ_EVENT_GFX_LEON_GEN8]  = &gObjectEventGraphicsInfo_LeonGen8,
+    [OBJ_EVENT_GFX_ROSE_GEN8]  = &gObjectEventGraphicsInfo_RoseGen8,
+    [OBJ_EVENT_GFX_OLEANA_GEN8]  = &gObjectEventGraphicsInfo_OleanaGen8,
+    [OBJ_EVENT_GFX_MAGNOLIA_GEN8]  = &gObjectEventGraphicsInfo_MagnoliaGen8,
+
+    //Paldea (Gen 9)
+    [OBJ_EVENT_GFX_FLORIAN_GEN9]  = &gObjectEventGraphicsInfo_FlorianGen9,
+    [OBJ_EVENT_GFX_JULIANA_GEN9]  = &gObjectEventGraphicsInfo_JulianaGen9,
+    [OBJ_EVENT_GFX_NEMONA_GEN9]  = &gObjectEventGraphicsInfo_NemonaGen9,
+    [OBJ_EVENT_GFX_ARVEN_GEN9]  = &gObjectEventGraphicsInfo_ArvenGen9,
+    [OBJ_EVENT_GFX_PENNY_GEN9]  = &gObjectEventGraphicsInfo_PennyGen9,
+    [OBJ_EVENT_GFX_GEETA_GEN9]  = &gObjectEventGraphicsInfo_GeetaGen9,
 
     //XD(Orre)
     [OBJ_EVENT_GFX_WES]   =                    &gObjectEventGraphicsInfo_Wes,

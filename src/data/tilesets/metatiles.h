@@ -468,3 +468,12 @@ const u16 gMetatileAttributes_shoprooftop[] = INCBIN_U16("data/tilesets/secondar
 
 const u16 gMetatiles_burnedtower[] = INCBIN_U16("data/tilesets/secondary/burnedtower/metatiles.bin");
 const u16 gMetatileAttributes_burnedtower[] = INCBIN_U16("data/tilesets/secondary/burnedtower/metatile_attributes.bin");
+
+const u16 gMetatiles_shadowrealm[] = INCBIN_U16("data/tilesets/primary/shadowrealm/metatiles.bin");
+const u16 gMetatileAttributes_shadowrealm[] = INCBIN_U16("data/tilesets/primary/shadowrealm/metatile_attributes.bin");
+
+const u16 gMetatiles_wescave[] = INCBIN_U16("data/tilesets/primary/wescave/metatiles.bin");
+const u16 gMetatileAttributes_wescave[] = INCBIN_U16("data/tilesets/primary/wescave/metatile_attributes.bin");
+
+const u16 gMetatiles_wescave2[] = INCBIN_U16("data/tilesets/secondary/wescave_2/metatiles.bin");
+const u16 gMetatileAttributes_wescave2[] = INCBIN_U16("data/tilesets/secondary/wescave_2/metatile_attributes.bin");

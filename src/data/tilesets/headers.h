@@ -1788,3 +1788,36 @@ const struct Tileset gTileset_burnedtower =
     .metatileAttributes = gMetatileAttributes_burnedtower,
     .callback = NULL,
 };
+
+const struct Tileset gTileset_shadowrealm =
+{
+    .isCompressed = TRUE,
+    .isSecondary = FALSE,
+    .tiles = gTilesetTiles_shadowrealm,
+    .palettes = gTilesetPalettes_shadowrealm,
+    .metatiles = gMetatiles_shadowrealm,
+    .metatileAttributes = gMetatileAttributes_shadowrealm,
+    .callback = NULL,
+};
+
+const struct Tileset gTileset_wescave =
+{
+    .isCompressed = TRUE,
+    .isSecondary = FALSE,
+    .tiles = gTilesetTiles_wescave,
+    .palettes = gTilesetPalettes_wescave,
+    .metatiles = gMetatiles_wescave,
+    .metatileAttributes = gMetatileAttributes_wescave,
+    .callback = NULL,
+};
+
+const struct Tileset gTileset_wescave2 =
+{
+    .isCompressed = TRUE,
+    .isSecondary = TRUE,
+    .tiles = gTilesetTiles_wescave2,
+    .palettes = gTilesetPalettes_wescave2,
+    .metatiles = gMetatiles_wescave2,
+    .metatileAttributes = gMetatileAttributes_wescave2,
+    .callback = NULL,
+};

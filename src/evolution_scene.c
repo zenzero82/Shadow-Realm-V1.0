@@ -42,12 +42,15 @@ struct EvoInfo
     u8 evoTaskId;
     u8 delayTimer;
     u16 savedPalette[48];
+    bool8 isPurificationScene;
 };
 
 static EWRAM_DATA struct EvoInfo *sEvoStructPtr = NULL;
 static EWRAM_DATA u16 *sBgAnimPal = NULL;
+static bool8 sEvoIsPurificationScene = FALSE;
 
 COMMON_DATA void (*gCB2_AfterEvolution)(void) = NULL;
+COMMON_DATA bool8 gSkipEvolutionRenameForShadowPurification = FALSE;
 
 #define sEvoCursorPos           gBattleCommunication[1] // when learning a new move
 #define sEvoGraphicsTaskId      gBattleCommunication[2]
@@ -205,6 +208,12 @@ void BeginEvolutionScene(struct Pokemon *mon, u16 postEvoSpecies, bool8 canStopE
     SetMainCallback2(CB2_BeginEvolutionScene);
 }
 
+void BeginPurificationScene(struct Pokemon *mon, u8 partyId)
+{
+    sEvoIsPurificationScene = TRUE;
+    EvolutionScene(mon, GetMonData(mon, MON_DATA_SPECIES, NULL), FALSE, partyId);
+}
+
 void EvolutionScene(struct Pokemon *mon, u16 postEvoSpecies, bool8 canStopEvo, u8 partyId)
 {
     u8 name[POKEMON_NAME_BUFFER_SIZE];
@@ -250,6 +259,9 @@ void EvolutionScene(struct Pokemon *mon, u16 postEvoSpecies, bool8 canStopEvo, u
     sEvoStructPtr = AllocZeroed(sizeof(struct EvoInfo));
     AllocateMonSpritesGfx();
 
+    sEvoStructPtr->isPurificationScene = sEvoIsPurificationScene;
+    sEvoIsPurificationScene = FALSE;
+
     GetMonData(mon, MON_DATA_NICKNAME, name);
     StringCopy_Nickname(gStringVar1, name);
     StringCopy(gStringVar2, GetSpeciesName(postEvoSpecies));
@@ -258,11 +270,21 @@ void EvolutionScene(struct Pokemon *mon, u16 postEvoSpecies, bool8 canStopEvo, u
     currSpecies = GetMonData(mon, MON_DATA_SPECIES);
     isShiny = GetMonData(mon, MON_DATA_IS_SHINY);
     personality = GetMonData(mon, MON_DATA_PERSONALITY);
-    LoadSpecialPokePic(gMonSpritesGfxPtr->spritesGfx[B_POSITION_OPPONENT_LEFT],
-                        currSpecies,
-                        personality,
-                        TRUE);
-    LoadPalette(GetMonSpritePalFromSpeciesAndPersonality(currSpecies, isShiny, personality), OBJ_PLTT_ID(1), PLTT_SIZE_4BPP);
+    if (sEvoStructPtr->isPurificationScene)
+        LoadSpecialPokePic_ShadowAware(gMonSpritesGfxPtr->spritesGfx[B_POSITION_OPPONENT_LEFT],
+                                       currSpecies,
+                                       personality,
+                                       TRUE,
+                                       TRUE);
+    else
+        LoadSpecialPokePic(gMonSpritesGfxPtr->spritesGfx[B_POSITION_OPPONENT_LEFT],
+                           currSpecies,
+                           personality,
+                           TRUE);
+    const u16 *preEvoPalette = GetMonSpritePalFromSpeciesAndPersonality(currSpecies, isShiny, personality);
+    if (sEvoStructPtr->isPurificationScene)
+        preEvoPalette = GetMonSpritePalFromSpeciesAndPersonality_ShadowAware(currSpecies, isShiny, personality, TRUE);
+    LoadPalette(preEvoPalette, OBJ_PLTT_ID(1), PLTT_SIZE_4BPP);
 
     SetMultiuseSpriteTemplateToPokemon(currSpecies, B_POSITION_OPPONENT_LEFT);
     gMultiuseSpriteTemplate.affineAnims = gDummySpriteAffineAnimTable;
@@ -674,7 +696,8 @@ static void Task_EvolutionScene(u8 taskId)
     case EVOSTATE_INTRO_MSG:
         if (!gPaletteFade.active)
         {
-            StringExpandPlaceholders(gStringVar4, gText_PkmnIsEvolving);
+            const u8 *introText = sEvoStructPtr->isPurificationScene ? gText_PkmnIsOpeningHeartDoor : gText_PkmnIsEvolving;
+            StringExpandPlaceholders(gStringVar4, introText);
             BattlePutTextOnWindow(gStringVar4, B_WIN_MSG);
             gTasks[taskId].tState++;
         }
@@ -772,14 +795,16 @@ static void Task_EvolutionScene(u8 taskId)
         if (IsCryFinished())
         {
             u32 zero = 0;
-            StringExpandPlaceholders(gStringVar4, gText_CongratsPkmnEvolved);
+            const u8 *message = sEvoStructPtr->isPurificationScene ? gText_PkmnPurified : gText_CongratsPkmnEvolved;
+            StringExpandPlaceholders(gStringVar4, message);
             BattlePutTextOnWindow(gStringVar4, B_WIN_MSG);
             PlayBGM(MUS_EVOLVED);
             gTasks[taskId].tState++;
             SetMonData(mon, MON_DATA_SPECIES, (void *)(&gTasks[taskId].tPostEvoSpecies));
             SetMonData(mon, MON_DATA_EVOLUTION_TRACKER, &zero);
             CalculateMonStats(mon);
-            EvolutionRenameMon(mon, gTasks[taskId].tPreEvoSpecies, gTasks[taskId].tPostEvoSpecies);
+            if (!sEvoStructPtr->isPurificationScene && !gSkipEvolutionRenameForShadowPurification)
+                EvolutionRenameMon(mon, gTasks[taskId].tPreEvoSpecies, gTasks[taskId].tPostEvoSpecies);
             GetSetPokedexFlag(SpeciesToNationalPokedexNum(gTasks[taskId].tPostEvoSpecies), FLAG_SET_SEEN);
             GetSetPokedexFlag(SpeciesToNationalPokedexNum(gTasks[taskId].tPostEvoSpecies), FLAG_SET_CAUGHT);
             IncrementGameStat(GAME_STAT_EVOLVED_POKEMON);
@@ -1195,14 +1220,16 @@ static void Task_TradeEvolutionScene(u8 taskId)
         if (IsCryFinished())
         {
             u32 zero = 0;
-            StringExpandPlaceholders(gStringVar4, gText_CongratsPkmnEvolved);
+            const u8 *message = sEvoStructPtr->isPurificationScene ? gText_PkmnPurified : gText_CongratsPkmnEvolved;
+            StringExpandPlaceholders(gStringVar4, message);
             DrawTextOnTradeWindow(0, gStringVar4, 1);
             PlayFanfare(MUS_EVOLVED);
             gTasks[taskId].tState++;
             SetMonData(mon, MON_DATA_SPECIES, (&gTasks[taskId].tPostEvoSpecies));
             SetMonData(mon, MON_DATA_EVOLUTION_TRACKER, &zero);
             CalculateMonStats(mon);
-            EvolutionRenameMon(mon, gTasks[taskId].tPreEvoSpecies, gTasks[taskId].tPostEvoSpecies);
+            if (!sEvoStructPtr->isPurificationScene && !gSkipEvolutionRenameForShadowPurification)
+                EvolutionRenameMon(mon, gTasks[taskId].tPreEvoSpecies, gTasks[taskId].tPostEvoSpecies);
             GetSetPokedexFlag(SpeciesToNationalPokedexNum(gTasks[taskId].tPostEvoSpecies), FLAG_SET_SEEN);
             GetSetPokedexFlag(SpeciesToNationalPokedexNum(gTasks[taskId].tPostEvoSpecies), FLAG_SET_CAUGHT);
             IncrementGameStat(GAME_STAT_EVOLVED_POKEMON);

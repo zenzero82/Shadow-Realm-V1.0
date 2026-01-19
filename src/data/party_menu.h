@@ -632,6 +632,11 @@ static const u8 sPartyBoxShadowPalIds1[] = {31, 47, 31};
 static const u8 sPartyBoxCurrSelectionShadowPalIds[] = {31, 47, 31};
 static const u8 sPartyBoxShadowPalIds2[] = {81, 87, 88};
 
+static const u8 sPartyBoxReversePalIds1[] = {200, 201, 202};
+static const u8 sPartyBoxReversePalIds2[] = {203, 204, 205};
+static const u8 sPartyBoxCurrSelectionReversePalIds1[] = {206, 207, 208};
+static const u8 sPartyBoxCurrSelectionReversePalIds2[] = {209, 210, 211};
+
 static const u8 *const sActionStringTable[] =
 {
     [PARTY_MSG_CHOOSE_MON]             = gText_ChoosePokemon,

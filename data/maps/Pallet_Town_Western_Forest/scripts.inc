@@ -221,11 +221,56 @@ Pallet_Town_Western_Forest_Text_PortalAsk_Littleroot:
 Speaker_Jeremy:
     .string "JEREMY$"
 
-    TestNameboxNPC::
+TestNameboxNPC::
+    lock
+    faceplayer
     setspeaker Speaker_Jeremy
+    checkflag FLAG_RECEIVED_SHADOW_MONITOR
+    goto_if_eq ShadowMonitorAlreadyHas
+
     msgbox TestText, MSGBOX_NPC
+    closemessage
+    giveitem ITEM_SHADOW_MONITOR
+    setflag FLAG_RECEIVED_SHADOW_MONITOR
+    msgbox ShadowMonitor_Text_Given, MSGBOX_NPC
+    closemessage
+    checkflag FLAG_RECEIVED_SNAG_MACHINE
+    goto_if_eq SnagMachineAlreadyHas
+    goto GiveSnagMachine
+
+ShadowMonitorAlreadyHas::
+    msgbox ShadowMonitor_Text_AlreadyHave, MSGBOX_NPC
+    closemessage
+    checkflag FLAG_RECEIVED_SNAG_MACHINE
+    goto_if_eq SnagMachineAlreadyHas
+    goto GiveSnagMachine
+
+GiveSnagMachine::
+    giveitem ITEM_SNAG_MACHINE
+    setflag FLAG_RECEIVED_SNAG_MACHINE
+    msgbox SnagMachine_Text_Given, MSGBOX_NPC
+    closemessage
+    release
+    end
+
+SnagMachineAlreadyHas::
+    msgbox SnagMachine_Text_AlreadyHave, MSGBOX_NPC
+    closemessage
+    release
     end
 
 TestText:
     .string "Yo wassup!$"
+
+ShadowMonitor_Text_Given:
+    .string "Here's the Shadow Monitor I found.\pIt keeps track of every Shadow\nPokémon you snag.$"
+
+ShadowMonitor_Text_AlreadyHave:
+    .string "You already grabbed the Shadow\nMonitor, but thanks for checking!$"
+
+SnagMachine_Text_Given:
+    .string "The Snag Machine is yours now.\pIt logs every Shadow\nPokemon you capture.$"
+
+SnagMachine_Text_AlreadyHave:
+    .string "You already have the Snag\nMachine, so I can't give it again!$"
 

@@ -6906,6 +6906,7 @@ BattleScript_ApplyDisguiseFormChangeHPLoss::
 
 BattleScript_TargetFormChangeNoPopup:
 	flushtextbox
+	handleformchange BS_TARGET, 0
 	handleformchange BS_SCRIPTING, 0
 	handleformchange BS_SCRIPTING, 1
 	playanimation BS_TARGET, B_ANIM_FORM_CHANGE

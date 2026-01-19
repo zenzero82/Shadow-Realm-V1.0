@@ -1470,7 +1470,6 @@ static void Task_GiveExpToMon(u8 taskId)
     u32 monId = (u8)(gTasks[taskId].tExpTask_monId);
     u8 battler = gTasks[taskId].tExpTask_battler;
     s32 gainedExp = GetTaskExpValue(taskId);
-
     if ((GetBattlerCoordsIndex(battler) == BATTLE_COORDS_DOUBLES || monId != gBattlerPartyIndexes[battler])
         || (monId == gBattlerPartyIndexes[battler] && GetMonData(&gPlayerParty[monId], MON_DATA_IS_SHADOW))) // Give exp without moving the expbar.
     {

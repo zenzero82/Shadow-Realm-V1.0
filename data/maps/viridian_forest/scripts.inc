@@ -27,9 +27,6 @@ viridian_forest_MapScripts::
 .set LOCALID_ITEMBALL_5,     12
 .set LOCALID_ITEMBALL_6,     13
 
-@ Use a real free flag in constants/flags.h later.
-.set FLAG_VIRIDIAN_FOREST_PLASMA_SCENE_DONE,  FLAG_TEMP_1
-
 @ -------------------------
 @ Map Scripts
 @ -------------------------
@@ -49,6 +46,8 @@ ViridianForest_EventScript_Enter::
 ViridianForest_Enter_Done::
     hideobjectat LOCALID_PROTON,   MAP_VIRIDIAN_FOREST
     hideobjectat LOCALID_ZINZOLIN, MAP_VIRIDIAN_FOREST
+    removeobject LOCALID_PROTON
+    removeobject LOCALID_ZINZOLIN
     end
 
 
@@ -269,8 +268,8 @@ ViridianForest_EventScript_Item_ParalyzeHeal::
     finditem ITEM_PARALYZE_HEAL
     end
 
-ViridianForest_EventScript_Item_Potion2::
-    finditem ITEM_POTION
+ViridianForest_EventScript_Item_Time_Flute::
+    finditem ITEM_TIME_FLUTE
     end
 
 ViridianForest_EventScript_Item_EscapeRope::

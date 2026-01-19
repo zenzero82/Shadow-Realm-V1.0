@@ -9,7 +9,12 @@
 .set LOCALID_LEO, 5
 
 Oaks_Lab_MapScripts::
-    .byte 0
+	map_script MAP_SCRIPT_ON_LOAD, OaksLab_EventScript_OnLoad
+	.byte 0
+
+OaksLab_EventScript_OnLoad::
+	call OaksLab_EventScript_ApplyPostStarterState
+	return
 
 @ ==============================
 @ SPEAKER STRINGS (unique labels)
@@ -68,10 +73,16 @@ OaksLab_EventScript_Leo_Talk::
     faceplayer
 
     checkflag FLAG_SYS_POKEMON_GET
-    goto_if_eq OaksLab_EventScript_Leo_PostStarter
+    goto_if_eq OaksLab_EventScript_Leo_Talk_HasStarter
 
+    setspeaker OaksLab_Speaker_Leo
+    msgbox OaksLab_Text_Leo_AfterNia, MSGBOX_DEFAULT
+    closemessage
+    goto OaksLab_EventScript_Leo_Talk_Release
+
+OaksLab_EventScript_Leo_Talk_HasStarter::
     checkflag FLAG_SYS_NATIONAL_DEX
-    goto_if_eq OaksLab_EventScript_Leo_Talk_PostDex
+    goto_if_eq OaksLab_EventScript_Leo_PostStarter
 
     @ Repeat until starter is chosen
     setspeaker OaksLab_Speaker_Leo
@@ -83,12 +94,6 @@ OaksLab_EventScript_Leo_Talk::
     special EnableNationalPokedex
     setflag FLAG_SYS_POKEDEX_GET
     special SetUnlockedPokedexFlags
-    goto OaksLab_EventScript_Leo_Talk_Release
-
-OaksLab_EventScript_Leo_Talk_PostDex::
-    setspeaker OaksLab_Speaker_Leo
-    msgbox OaksLab_Text_Leo_AfterNia, MSGBOX_DEFAULT
-    closemessage
     goto OaksLab_EventScript_Leo_Talk_Release
 
 OaksLab_EventScript_Leo_Talk_Release::
@@ -318,11 +323,33 @@ OaksLab_EventScript_ChoseStarter::
     call Common_EventScript_NameReceivedPartyMon
 
 OaksLab_SkipNickname::
-    callnative UpdateFollowingPokemon
+	call OaksLab_EventScript_SetPostStarterState
+	callnative UpdateFollowingPokemon
 
-    closemessage
-    release
-    end
+	closemessage
+	release
+	end
+
+OaksLab_EventScript_SetPostStarterState::
+	checkflag FLAG_OAKS_LAB_POST_STARTER_STATE
+	goto_if_eq OaksLab_EventScript_SetPostStarterState_Done
+	setflag FLAG_OAKS_LAB_POST_STARTER_STATE
+	call OaksLab_EventScript_ApplyPostStarterState
+OaksLab_EventScript_SetPostStarterState_Done::
+	return
+
+OaksLab_EventScript_ApplyPostStarterState::
+	checkflag FLAG_OAKS_LAB_POST_STARTER_STATE
+	goto_if_eq OaksLab_EventScript_ApplyPostStarterState_Done
+	setobjectxy LOCALID_LEO, 2, 10
+	setobjectxyperm LOCALID_LEO, 2, 10
+	setobjectmovementtype LOCALID_LEO, MOVEMENT_TYPE_WANDER_AROUND
+	setobjectxy LOCALID_NIA, 7, 2
+	setobjectxyperm LOCALID_NIA, 7, 2
+	setobjectmovementtype LOCALID_NIA, MOVEMENT_TYPE_FACE_UP
+	turnobject LOCALID_NIA, DIR_NORTH
+OaksLab_EventScript_ApplyPostStarterState_Done::
+	return
 
 @ ---------------- TEXT ----------------
 
@@ -338,7 +365,7 @@ OaksLab_Text_OakEmailIntro:
     .string "So you met LEO outside?\p"
     .string "He said a strange man used a device on\n"
     .string "a Pokemon and it went out of control.\p"
-    .string "Before Professor OAK disappeared, he\n"
+    .string "Before Professor OAK vanished, he\n"
     .string "sent one final email:\p"
     .string "Cipher is on the move.\n"
     .string "They have learned to twist Pokemon\l"

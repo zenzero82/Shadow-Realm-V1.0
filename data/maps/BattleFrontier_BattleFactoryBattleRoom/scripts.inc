@@ -82,7 +82,7 @@ BattleFrontier_BattleFactoryBattleRoom_EventScript_BattleOpponent::
 	special HealPlayerParty
 	setvar VAR_0x8004, SPECIAL_BATTLE_FACTORY
 	setvar VAR_0x8005, 0
-	special DoSpecialTrainerBattle
+; 	special DoSpecial// trainerbattle
 	waitstate
 	switch VAR_RESULT
 	case 1, BattleFrontier_BattleFactoryBattleRoom_EventScript_DefeatedOpponent
@@ -173,7 +173,7 @@ BattleFrontier_BattleFactoryBattleRoom_EventScript_DoNolandBattle::
 	special HealPlayerParty
 	setvar VAR_0x8004, SPECIAL_BATTLE_FACTORY
 	setvar VAR_0x8005, 0
-	special DoSpecialTrainerBattle
+; 	special DoSpecial// trainerbattle
 	waitstate
 	return
 

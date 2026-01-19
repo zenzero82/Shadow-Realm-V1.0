@@ -298,7 +298,7 @@ BattleFrontier_BattleTowerBattleRoom_EventScript_DoTowerBattle::
 	special HealPlayerParty
 	setvar VAR_0x8004, SPECIAL_BATTLE_TOWER
 	setvar VAR_0x8005, 0
-	special DoSpecialTrainerBattle
+; 	special DoSpecial// trainerbattle
 	waitstate
 	copyvar VAR_0x8004, VAR_FRONTIER_BATTLE_MODE
 	goto_if_eq VAR_0x8004, FRONTIER_MODE_LINK_MULTIS, BattleFrontier_BattleTowerBattleRoom_EventScript_EndTowerBattle

@@ -58,7 +58,7 @@ BattleFrontier_BattlePyramidFloor_EventScript_ResetParty::
 
 BattleFrontier_BattlePyramid_EventScript_WarpToLobbyLost::
 	frontier_set FRONTIER_DATA_CHALLENGE_STATUS, CHALLENGE_STATUS_LOST
-	pyramid_set PYRAMID_DATA_TRAINER_FLAGS, 255
+; 	pyramid_set PYRAMID_DATA_TRAINER_FLAGS, 255
 BattleFrontier_BattlePyramid_EventScript_WarpToLobby::
 	pyramid_updatelight 0, PYRAMID_LIGHT_SET_RADIUS
 	pyramid_clearhelditems
@@ -103,16 +103,6 @@ BattlePyramid_WarpToTop::
 	waitstate
 	end
 
-@ TRAINER_PHILLIP is used as a placeholder
-BattlePyramid_TrainerBattle::
-	trainerbattle TRAINER_BATTLE_HILL, OBJ_ID_NONE, TRAINER_PHILLIP, BattleFacility_TrainerBattle_PlaceholderText, BattleFacility_TrainerBattle_PlaceholderText, NULL, OBJ_ID_NONE, TRAINER_NONE, NULL, NULL, NULL, NULL, NULL, FALSE, FALSE, FALSE, FALSE
-	pyramid_showhint
-	waitmessage
-	waitbuttonpress
-	closemessage
-	releaseall
-	end
-
 BattlePyramid_FindItemBall::
 	pyramid_setitem
 	callstd STD_FIND_ITEM
@@ -123,10 +113,6 @@ BattlePyramid_FindItemBallEnd::
 
 BattlePyramid_Retire::
 	goto BattleFrontier_BattlePyramid_EventScript_WarpToLobbyLost
-
-@ Also used by Trainer Hill
-BattleFacility_TrainerBattle_PlaceholderText:
-	.string "This is a sample message.$"
 
 gText_BattlePyramidConfirmRest::
 	.string "Your BATTLE PYRAMID quest will be\n"

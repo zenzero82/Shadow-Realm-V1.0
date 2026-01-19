@@ -1424,6 +1424,8 @@ const u16 gDamageNonTypesDmgStringIds[] =
 };
 
 const u8 gText_PkmnIsEvolving[] = _("What?\n{STR_VAR_1} is evolving!");
+const u8 gText_PkmnIsOpeningHeartDoor[] = _("{STR_VAR_1} is opening the door to its heart!");
+const u8 gText_PkmnPurified[] = _("{STR_VAR_1} has successfully been purified!{PAUSE_UNTIL_PRESS}");
 const u8 gText_CongratsPkmnEvolved[] = _("Congratulations! Your {STR_VAR_1}\nevolved into {STR_VAR_2}!{WAIT_SE}\p");
 const u8 gText_PkmnStoppedEvolving[] = _("Huh? {STR_VAR_1}\nstopped evolving!\p");
 const u8 gText_EllipsisQuestionMark[] = _("……?\p");

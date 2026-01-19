@@ -2683,8 +2683,17 @@ static void Cmd_datahpupdate(void)
                 gBattleMons[battler].species = SPECIES_MIMIKYU_BUSTED_TOTEM;
             else
                 gBattleMons[battler].species = SPECIES_MIMIKYU_BUSTED;
+            SetMonData(GetBattlerMon(battler), MON_DATA_SPECIES, &gBattleMons[battler].species);
+            BattleLoadMonSpriteGfx(GetBattlerMon(battler), battler);
+            SetBattlerShadowSpriteCallback(battler, gBattleMons[battler].species);
             if (B_DISGUISE_HP_LOSS >= GEN_8)
                 gBattleStruct->moveDamage[battler] = GetNonDynamaxMaxHP(battler) / 8;
+            {
+                u16 newSpecies = gBattleMons[battler].species;
+                PREPARE_SPECIES_BUFFER(gBattleTextBuff1, newSpecies);
+                BtlController_EmitSetMonData(battler, B_COMM_TO_CONTROLLER, REQUEST_SPECIES_BATTLE, 1u << gBattlerPartyIndexes[battler], sizeof(newSpecies), &newSpecies);
+                MarkBattlerForControllerExec(battler);
+            }
             BattleScriptPush(cmd->nextInstr);
             gBattlescriptCurrInstr = BattleScript_TargetFormChange;
             return;
@@ -5075,8 +5084,10 @@ static void Cmd_getexp(void)
                     gBattleStruct->wildVictorySong++;
                 }
 
-                if (IsValidForBattle(&gPlayerParty[*expMonId]) && ShdwCanMonGainEXP(&gPlayerParty[*expMonId]))
+                if (IsValidForBattle(&gPlayerParty[*expMonId]))
                 {
+                    bool32 storedExp = FALSE;
+
                     if (wasSentOut)
                         gBattleStruct->battlerExpReward = GetSoftLevelCapExpValue(gPlayerParty[*expMonId].level, gBattleStruct->expValue);
                     else
@@ -5085,7 +5096,7 @@ static void Cmd_getexp(void)
                     if ((holdEffect == HOLD_EFFECT_EXP_SHARE || IsGen6ExpShareEnabled())
                         && (B_SPLIT_EXP < GEN_6 || gBattleStruct->battlerExpReward == 0)) // only give exp share bonus in later gens if the mon wasn't sent out
                     {
-                        gBattleStruct->battlerExpReward += GetSoftLevelCapExpValue(gPlayerParty[*expMonId].level, gBattleStruct->expShareExpValue);;
+                        gBattleStruct->battlerExpReward += GetSoftLevelCapExpValue(gPlayerParty[*expMonId].level, gBattleStruct->expShareExpValue);
                     }
 
                     ApplyExperienceMultipliers(&gBattleStruct->battlerExpReward, *expMonId, gBattlerFainted);
@@ -5135,9 +5146,16 @@ static void Cmd_getexp(void)
                     PREPARE_STRING_BUFFER(gBattleTextBuff2, i);
                     PREPARE_WORD_NUMBER_BUFFER(gBattleTextBuff3, 6, gBattleStruct->battlerExpReward);
 
+                    if (!ShdwCanMonGainEXP(&gPlayerParty[*expMonId]))
+                    {
+                        storedExp = TRUE;
+                        Shadow_AddStoredExp(&gPlayerParty[*expMonId], gBattleStruct->battlerExpReward);
+                        gBattleStruct->battlerExpReward = 0;
+                    }
+
                     if (wasSentOut || holdEffect == HOLD_EFFECT_EXP_SHARE)
                     {
-                        if (GetMonData(&gPlayerParty[gBattleStruct->expGetterMonId], MON_DATA_IS_SHADOW))
+                        if (storedExp || GetMonData(&gPlayerParty[gBattleStruct->expGetterMonId], MON_DATA_IS_SHADOW))
                             PrepareStringBattle(STRINGID_PKMNSTOREDEXP, gBattleStruct->expGetterBattlerId);
                         else
                             PrepareStringBattle(STRINGID_PKMNGAINEDEXP, gBattleStruct->expGetterBattlerId);
@@ -5149,7 +5167,8 @@ static void Cmd_getexp(void)
                         gBattleStruct->teamGotExpMsgPrinted = TRUE;
                     }
 
-                    MonGainEVs(&gPlayerParty[*expMonId], gBattleMons[gBattlerFainted].species);
+                    if (!storedExp)
+                        MonGainEVs(&gPlayerParty[*expMonId], gBattleMons[gBattlerFainted].species);
                 }
                 gBattleScripting.getexpState++;
             }
@@ -10837,6 +10856,8 @@ static void Cmd_various(void)
             */
             BtlController_EmitSetMonData(battler, B_COMM_TO_CONTROLLER, REQUEST_SPECIES_BATTLE, 1u << gBattlerPartyIndexes[battler], sizeof(gBattleMons[battler].species), &gBattleMons[battler].species);
             MarkBattlerForControllerExec(battler);
+            BattleLoadMonSpriteGfx(GetBattlerMon(battler), battler);
+            SetBattlerShadowSpriteCallback(battler, gBattleMons[battler].species);
         }
         // Change stats.
         else if (cmd->case_ == 1)

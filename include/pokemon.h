@@ -254,18 +254,15 @@ union __attribute__((packed, aligned(2))) NicknameShadowdata
     /* 0x00 */ u16 heartValue;
     /* 0x02 */ u16 heartMax;
     /* 0x04 */ u8 shadowID;
-    /* 0x05 */ u8 shadowAggro:3; //Determines chance to enter Reverse Mode
-    /* 0x05 */ u8 isXD:1; //for Shadow Lugia's special case
-    /* 0x05 */ u8 isReverse:1;
-    /* 0x05 */ u8 snagFlag:1; //Set when catching from another trainer, so that the mon is given to you after winning. Unset afterward.
+     /* 0x05 */ u8 shadowAggro:3; //Determines chance to enter Reverse Mode
+     /* 0x05 */ u8 isXD:1; //for Shadow Lugia's special case
+     /* 0x05 */ u8 isReverse:1;
+     /* 0x05 */ u8 snagFlag:1; //Set when catching from another trainer, so that the mon is given to you after winning. Unset afterward.
     /* 0x05 */ u8 filler:2;
-    /* 0x06 */ 
-    /* 0x07 */ 
-    /* 0x08 */ 
-    /* 0x09 */ 
+    /* 0x06 */ u32 storedExp;
     /* size = 10 */
         
-    } shadowData;
+    } __attribute__((packed)) shadowData;
 };
 
 enum {
@@ -721,11 +718,19 @@ void CreateMonWithEVSpreadNatureOTID(struct Pokemon *mon, u16 species, u8 level,
 u8 Shdw_GetAggroForNature(u8 nature);
 bool8 Shdw_IsPurificationReady(const struct Pokemon *mon);
 bool8 Shdw_AnyPartyMonPurificationReady(void);
-void Shdw_UpdatePurifyReadyFlag(void);
-u8  Shdw_GetState(u16 shadowId);
-void Shdw_SetState(u16 shadowId, u8 state);
-void Shdw_OnEncounterMon(struct Pokemon *mon);
-void Shdw_OnSnagMon(struct Pokemon *mon);
+	void Shdw_UpdatePurifyReadyFlag(void);
+	u8  Shdw_GetState(u16 shadowId);
+	void Shdw_SetState(u16 shadowId, u8 state);
+	void Shdw_OnEncounterMon(struct Pokemon *mon);
+	void Shdw_OnSnagMon(struct Pokemon *mon);
+	void Shadow_AddStoredExp(struct Pokemon *mon, u32 amount);
+	u32 Shadow_TakeStoredExp(struct Pokemon *mon);
+	u32 Shadow_GetStoredExp(const struct Pokemon *mon);
+	void Shadow_GrantStoredExp(struct Pokemon *mon);
+	u16 GetMonHeartValue(struct Pokemon *mon);
+	u16 GetMonHeartMax(struct Pokemon *mon);
+	void SetMonHeartValue(struct Pokemon *mon, u16 val);
+	void SetMonHeartMax(struct Pokemon *mon, u16 val);
 void ConvertPokemonToBattleTowerPokemon(struct Pokemon *mon, struct BattleTowerPokemon *dest);
 bool8 ShouldIgnoreDeoxysForm(u8 caseId, u8 battler);
 u16 GetUnionRoomTrainerPic(void);

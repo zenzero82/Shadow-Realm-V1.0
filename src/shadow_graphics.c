@@ -1,35 +1,12 @@
 #include "global.h"
 #include "pokemon.h"
 #include "shadow_graphics.h"
+#include "data/graphics/shadow_forms.h"
 
-extern const u32 gMonFrontPic_PikachuShadow[];
-extern const u32 gMonBackPic_PikachuShadow[];
-#if P_GENDER_DIFFERENCES
-extern const u32 gMonFrontPic_PikachuFShadow[];
-extern const u32 gMonBackPic_PikachuFShadow[];
-#endif
-extern const u16 gMonPalette_PikachuShadow[];
-extern const u8 gMonIcon_PikachuShadow[];
-#if P_GENDER_DIFFERENCES && P_CUSTOM_GENDER_DIFF_ICONS
-extern const u8 gMonIcon_PikachuFShadow[];
-#endif
 
 static const struct ShadowGraphicsOverride sShadowGraphicsTable[] =
 {
-    {
-        .species = SPECIES_PIKACHU,
-        .frontPic = gMonFrontPic_PikachuShadow,
-        .backPic = gMonBackPic_PikachuShadow,
-#if P_GENDER_DIFFERENCES
-        .frontPicFemale = gMonFrontPic_PikachuFShadow,
-        .backPicFemale = gMonBackPic_PikachuFShadow,
-#endif
-        .palette = gMonPalette_PikachuShadow,
-        .icon = gMonIcon_PikachuShadow,
-#if P_GENDER_DIFFERENCES && P_CUSTOM_GENDER_DIFF_ICONS
-        .iconFemale = gMonIcon_PikachuFShadow,
-#endif
-    },
+#include "data/graphics/shadow_forms_table.inc"
 };
 
 const struct ShadowGraphicsOverride *GetShadowGraphicsOverride(u16 species)

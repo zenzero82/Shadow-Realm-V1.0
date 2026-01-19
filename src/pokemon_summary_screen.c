@@ -122,15 +122,6 @@ enum
 #define TILE_FILLED_JAM_HEART    0x103C
 #define TILE_EMPTY_JAM_HEART     0x103D
 
-#define PSS_HEART_GAUGE_TILE_INDEX_EVEN                  0x0A0
-#define PSS_HEART_GAUGE_TILE_INDEX_ODD                   0x0B0
-#define PSS_HEART_GAUGE_SHADOW_BAR_VALUE_BASE            118
-#define PSS_HEART_GAUGE_SHADOW_BAR_VALUE_FULL            126
-#define PSS_HEART_GAUGE_SHADOW_BAR_VALUE_WITH_LINES_BASE 127
-#define PSS_HEART_GAUGE_SHADOW_BAR_VALUE_WITH_LINES_FULL 135
-#define PSS_HEART_GAUGE_PALETTE_INDEX                     4
-#define PSS_SUMMARY_HEART_GAUGE_TILE_ENTRY(tileIndex)    ((PSS_HEART_GAUGE_PALETTE_INDEX << 12) | (tileIndex))
-
 static EWRAM_DATA struct PokemonSummaryScreenData
 {
     /*0x00*/ union {
@@ -213,6 +204,8 @@ static bool8 LoadGraphics(void);
 static void CB2_InitSummaryScreen(void);
 static void InitBGs(void);
 static bool8 DecompressGraphics(void);
+static void LoadSummaryTileset(bool8 isShadow);
+static void ReloadSummaryTileset(bool8 isShadow);
 static void CopyMonToSummaryStruct(struct Pokemon *);
 static bool8 ExtractMonDataToSummaryStruct(struct Pokemon *);
 static void SetDefaultTilemaps(void);
@@ -348,7 +341,6 @@ static u8 AddWindowFromTemplateList(const struct WindowTemplate *template, u8 te
 static u8 IncrementSkillsStatsMode(u8 mode);
 static void ClearStatLabel(u32 length, u32 statsCoordX, u32 statsCoordY);
 static void DrawHeartGaugeBar(struct Pokemon *unused);
-static void LoadSummaryHeartGaugeTiles(void);
 
 static const struct BgTemplate sBgTemplates[] =
 {
@@ -389,8 +381,6 @@ static const struct BgTemplate sBgTemplates[] =
         .baseTile = 0,
     },
 };
-
-static bool8 sSummaryHeartGaugeTilesLoaded = FALSE;
 
 struct TilemapCtrl
 {
@@ -1415,6 +1405,20 @@ static bool8 LoadGraphics(void)
     return FALSE;
 }
 
+static void LoadSummaryTileset(bool8 isShadow)
+{
+    const u32 *summaryGfx = isShadow ? gSummaryScreen_Gfx_Shadow : gSummaryScreen_Gfx;
+    DecompressAndCopyTileDataToVram(1, summaryGfx, 0, 0, 0);
+}
+
+static void ReloadSummaryTileset(bool8 isShadow)
+{
+    ResetTempTileDataBuffers();
+    LoadSummaryTileset(isShadow);
+    while (FreeTempTileDataBuffersIfPossible())
+        ;
+}
+
 static void InitBGs(void)
 {
     ResetBgsAndClearDma3BusyFlags(0);
@@ -1439,8 +1443,9 @@ static bool8 DecompressGraphics(void)
     switch (sMonSummaryScreen->switchCounter)
     {
     case 0:
+        CopyMonToSummaryStruct(&sMonSummaryScreen->currentMon);
         ResetTempTileDataBuffers();
-        DecompressAndCopyTileDataToVram(1, &gSummaryScreen_Gfx, 0, 0, 0);
+        LoadSummaryTileset(GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_IS_SHADOW));
         sMonSummaryScreen->switchCounter++;
         break;
     case 1:
@@ -2005,6 +2010,7 @@ static void Task_ChangeSummaryMon(u8 taskId)
                     ClearWindowTilemap(PSS_LABEL_WINDOW_PROMPT_RELEARN);
             }
         }
+        ReloadSummaryTileset(sMonSummaryScreen->summary.isShadow);
         break;
     case 5:
         RemoveAndCreateMonMarkingsSprite(&sMonSummaryScreen->currentMon);
@@ -2268,10 +2274,7 @@ static void TryDrawExperienceProgressBar(void)
 
 static void LoadSummaryPalette(void)
 {
-    if (sMonSummaryScreen->summary.isShadow)
-        LoadPalette(gSummaryShadow_Pal, BG_PLTT_ID(0), 8 * PLTT_SIZE_4BPP);
-    else
-        LoadPalette(gSummaryScreen_Pal, BG_PLTT_ID(0), 8 * PLTT_SIZE_4BPP);
+    LoadPalette(gSummaryScreen_Pal, BG_PLTT_ID(0), 8 * PLTT_SIZE_4BPP);
     LoadPalette(&gPPTextPalette, BG_PLTT_ID(8) + 1, PLTT_SIZEOF(16 - 1));
 }
 
@@ -4835,11 +4838,11 @@ static void DrawHeartGaugeBar(struct Pokemon *unused)
     u16 *expBarEndCap;
     u8 i;
 
-    LoadSummaryHeartGaugeTiles();
-
     if (summary->heartValue && summary->heartMax)
     {
         numExpProgressBarTicks = (summary->heartValue * 64) / summary->heartMax;
+        if (numExpProgressBarTicks == 0 && summary->heartValue != 0)
+            numExpProgressBarTicks = 1;
     }
     else
     {
@@ -4849,48 +4852,28 @@ static void DrawHeartGaugeBar(struct Pokemon *unused)
     dst = &sMonSummaryScreen->bgTilemapBuffers[PSS_PAGE_SKILLS][1][0x255];
     for (i = 0; i < 8; i++)
     {
-        u16 tileBase = (i % 2 != 0) ? PSS_HEART_GAUGE_TILE_INDEX_ODD
-                                       : PSS_HEART_GAUGE_TILE_INDEX_EVEN;
-        s64 ticks = numExpProgressBarTicks > 7 ? 8 : numExpProgressBarTicks;
-        dst[i] = PSS_SUMMARY_HEART_GAUGE_TILE_ENTRY(tileBase + (u8)ticks);
+        if (numExpProgressBarTicks > 7)
+            dst[i] = 0x206A;
+        else
+            dst[i] = 0x2062 + (numExpProgressBarTicks % 8);
         numExpProgressBarTicks -= 8;
         if (numExpProgressBarTicks < 0)
             numExpProgressBarTicks = 0;
     }
 
-    // this section replaces the "EXP" text with a heart icon and updates the palettes on the endcaps
-    expLabelReplacer = &sMonSummaryScreen->bgTilemapBuffers[PSS_PAGE_SKILLS][1][0x253];
-    expLabelReplacer[0] = 0x407A;
-    expLabelReplacer[1] = 0x407B;
+    // only override the EXP label/endcaps for the vanilla layout, let the shadow tiles keep the HRT text
+    if (!summary->isShadow)
+    {
+        expLabelReplacer = &sMonSummaryScreen->bgTilemapBuffers[PSS_PAGE_SKILLS][1][0x253];
+        expLabelReplacer[0] = 0x407A;
+        expLabelReplacer[1] = 0x407B;
 
-    expBarEndCap = &sMonSummaryScreen->bgTilemapBuffers[PSS_PAGE_SKILLS][1][0x25D];
-    expBarEndCap[0] = 0x407C;
+        expBarEndCap = &sMonSummaryScreen->bgTilemapBuffers[PSS_PAGE_SKILLS][1][0x25D];
+        expBarEndCap[0] = 0x407C;
+    }
     
     if (GetBgTilemapBuffer(1) == sMonSummaryScreen->bgTilemapBuffers[PSS_PAGE_SKILLS][0])
         ScheduleBgCopyTilemapToVram(1);
     else
         ScheduleBgCopyTilemapToVram(2);
-}
-
-static void LoadSummaryHeartGaugeTiles(void)
-{
-    if (sSummaryHeartGaugeTilesLoaded)
-        return;
-
-    u8 i;
-    u8 *dstEven = (u8 *)(BG_CHAR_ADDR(2) + PSS_HEART_GAUGE_TILE_INDEX_EVEN * TILE_SIZE_4BPP);
-    u8 *dstOdd = (u8 *)(BG_CHAR_ADDR(2) + PSS_HEART_GAUGE_TILE_INDEX_ODD * TILE_SIZE_4BPP);
-
-    for (i = 0; i < 8; i++)
-    {
-        CpuCopy32(&gHealthboxElementsGfxTable[PSS_HEART_GAUGE_SHADOW_BAR_VALUE_BASE + i], dstEven, TILE_SIZE_4BPP);
-        CpuCopy32(&gHealthboxElementsGfxTable[PSS_HEART_GAUGE_SHADOW_BAR_VALUE_WITH_LINES_BASE + i], dstOdd, TILE_SIZE_4BPP);
-        dstEven += TILE_SIZE_4BPP;
-        dstOdd += TILE_SIZE_4BPP;
-    }
-
-    CpuCopy32(&gHealthboxElementsGfxTable[PSS_HEART_GAUGE_SHADOW_BAR_VALUE_FULL], (void *)(BG_CHAR_ADDR(2) + (PSS_HEART_GAUGE_TILE_INDEX_EVEN + 8) * TILE_SIZE_4BPP), TILE_SIZE_4BPP);
-    CpuCopy32(&gHealthboxElementsGfxTable[PSS_HEART_GAUGE_SHADOW_BAR_VALUE_WITH_LINES_FULL], (void *)(BG_CHAR_ADDR(2) + (PSS_HEART_GAUGE_TILE_INDEX_ODD + 8) * TILE_SIZE_4BPP), TILE_SIZE_4BPP);
-
-    sSummaryHeartGaugeTilesLoaded = TRUE;
 }

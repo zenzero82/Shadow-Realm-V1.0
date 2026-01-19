@@ -679,7 +679,7 @@ void StartDodrioBerryPicking(u16 partyId, void (*exitCallback)(void))
         SetRandomPrize();
         GetActiveBerryColumns(sGame->numPlayers, &sGame->berryColStart, &sGame->berryColEnd);
         StopMapMusic();
-        PlayNewMapMusic(MUS_RG_BERRY_PICK);
+        PlayNewMapMusic(MUS_DUMMY);
     }
     else
     {
@@ -1375,7 +1375,7 @@ static void ResetGame(void)
         sGame->state++;
         break;
     case 4:
-        PlayNewMapMusic(MUS_RG_BERRY_PICK);
+        PlayNewMapMusic(MUS_DUMMY);
         StartCloudMovement();
         sGame->state++;
         break;

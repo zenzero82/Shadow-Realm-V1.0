@@ -5350,6 +5350,47 @@ $(OBJEVENTGFXDIR)/gen2/youngster2.4bpp: graphics/object_events/pics/gen2/youngst
 	$(GFX) $< $@ -mwidth 2 -mheight 4
 
 #Sinnoh
+$(OBJEVENTGFXDIR)/gen4/dawn.4bpp: %.4bpp: %.png
+	$(GFX) $< $@ -mwidth 2 -mheight 4
+
+$(OBJEVENTGFXDIR)/gen4/lucas.4bpp: %.4bpp: %.png
+	$(GFX) $< $@ -mwidth 2 -mheight 4
+
+$(OBJEVENTGFXDIR)/gen4/barry.4bpp: %.4bpp: %.png
+	$(GFX) $< $@ -mwidth 2 -mheight 4
+
+$(OBJEVENTGFXDIR)/gen4/cynthia.4bpp: %.4bpp: %.png
+	$(GFX) $< $@ -mwidth 2 -mheight 4
+
+$(OBJEVENTGFXDIR)/gen4/cyrus.4bpp: %.4bpp: %.png
+	$(GFX) $< $@ -mwidth 2 -mheight 4
+
+$(OBJEVENTGFXDIR)/gen4/looker.4bpp: %.4bpp: %.png
+	$(GFX) $< $@ -mwidth 2 -mheight 4
+
+$(OBJEVENTGFXDIR)/gen4/volkner.4bpp: %.4bpp: %.png
+	$(GFX) $< $@ -mwidth 2 -mheight 4
+
+$(OBJEVENTGFXDIR)/gen4/galactic_grunt_m.4bpp: %.4bpp: %.png
+	$(GFX) $< $@ -mwidth 2 -mheight 4
+
+$(OBJEVENTGFXDIR)/gen4/galactic_grunt_f.4bpp: %.4bpp: %.png
+	$(GFX) $< $@ -mwidth 2 -mheight 4
+
+$(OBJEVENTGFXDIR)/gen4/mars.4bpp: %.4bpp: %.png
+	$(GFX) $< $@ -mwidth 2 -mheight 4
+
+$(OBJEVENTGFXDIR)/gen4/jupiter.4bpp: %.4bpp: %.png
+	$(GFX) $< $@ -mwidth 2 -mheight 4
+
+$(OBJEVENTGFXDIR)/gen4/saturn.4bpp: %.4bpp: %.png
+	$(GFX) $< $@ -mwidth 2 -mheight 4
+
+$(OBJEVENTGFXDIR)/gen4/charon.4bpp: %.4bpp: %.png
+	$(GFX) $< $@ -mwidth 2 -mheight 4
+	
+$(OBJEVENTGFXDIR)/gen4/rowan_gen4.4bpp: %.4bpp: %.png
+	$(GFX) $< $@ -mwidth 2 -mheight 4
 
 #Unova
 $(OBJEVENTGFXDIR)/gen5/bronius.4bpp: graphics/object_events/pics/gen5/bronius.png
@@ -5394,7 +5435,150 @@ $(OBJEVENTGFXDIR)/gen5/ryoku.4bpp: graphics/object_events/pics/gen5/ryoku.png
 $(OBJEVENTGFXDIR)/gen5/zinzolin.4bpp: graphics/object_events/pics/gen5/zinzolin.png
 	$(GFX) $< $@ -mwidth 4 -mheight 4
 
-#Kalos 
+$(OBJEVENTGFXDIR)/gen5/juniper_gen5.4bpp: graphics/object_events/pics/gen5/juniper_gen5.png
+	$(GFX) $< $@ -mwidth 2 -mheight 4
+
+#Kalos (Gen 6)
+$(OBJEVENTGFXDIR)/gen6/aliana.4bpp: graphics/object_events/pics/gen6/aliana.png
+	$(GFX) $< $@ -mwidth 2 -mheight 4
+
+$(OBJEVENTGFXDIR)/gen6/az.4bpp: graphics/object_events/pics/gen6/az.png
+	$(GFX) $< $@ -mwidth 2 -mheight 4
+
+$(OBJEVENTGFXDIR)/gen6/bryony.4bpp: graphics/object_events/pics/gen6/bryony.png
+	$(GFX) $< $@ -mwidth 2 -mheight 4
+
+$(OBJEVENTGFXDIR)/gen6/calem.4bpp: graphics/object_events/pics/gen6/calem.png
+	$(GFX) $< $@ -mwidth 2 -mheight 4
+
+$(OBJEVENTGFXDIR)/gen6/celosia.4bpp: graphics/object_events/pics/gen6/celosia.png
+	$(GFX) $< $@ -mwidth 2 -mheight 4
+
+$(OBJEVENTGFXDIR)/gen6/diantha.4bpp: graphics/object_events/pics/gen6/diantha.png
+	$(GFX) $< $@ -mwidth 2 -mheight 4
+
+$(OBJEVENTGFXDIR)/gen6/flare_grunt_f.4bpp: graphics/object_events/pics/gen6/flare_grunt_f.png
+	$(GFX) $< $@ -mwidth 2 -mheight 4
+
+$(OBJEVENTGFXDIR)/gen6/flare_grunt_m.4bpp: graphics/object_events/pics/gen6/flare_grunt_m.png
+	$(GFX) $< $@ -mwidth 2 -mheight 4
+
+$(OBJEVENTGFXDIR)/gen6/lysander.4bpp: graphics/object_events/pics/gen6/lysander.png
+	$(GFX) $< $@ -mwidth 2 -mheight 4
+
+$(OBJEVENTGFXDIR)/gen6/mable.4bpp: graphics/object_events/pics/gen6/mable.png
+	$(GFX) $< $@ -mwidth 2 -mheight 4
+
+$(OBJEVENTGFXDIR)/gen6/serena.4bpp: graphics/object_events/pics/gen6/serena.png
+	$(GFX) $< $@ -mwidth 2 -mheight 4
+
+$(OBJEVENTGFXDIR)/gen6/shauna.4bpp: graphics/object_events/pics/gen6/shauna.png
+	$(GFX) $< $@ -mwidth 2 -mheight 4
+
+$(OBJEVENTGFXDIR)/gen6/sycamore.4bpp: graphics/object_events/pics/gen6/sycamore.png
+	$(GFX) $< $@ -mwidth 2 -mheight 4
+
+$(OBJEVENTGFXDIR)/gen6/tierno.4bpp: graphics/object_events/pics/gen6/tierno.png
+	$(GFX) $< $@ -mwidth 2 -mheight 4
+
+$(OBJEVENTGFXDIR)/gen6/trevor.4bpp: graphics/object_events/pics/gen6/trevor.png
+	$(GFX) $< $@ -mwidth 2 -mheight 4
+
+$(OBJEVENTGFXDIR)/gen6/xerosic.4bpp: graphics/object_events/pics/gen6/xerosic.png
+	$(GFX) $< $@ -mwidth 2 -mheight 4
+
+
+#Alola (Gen 7)
+$(OBJEVENTGFXDIR)/gen7/burnet.4bpp: graphics/object_events/pics/gen7/burnet.png
+	$(GFX) $< $@ -mwidth 2 -mheight 4
+
+$(OBJEVENTGFXDIR)/gen7/elio.4bpp: graphics/object_events/pics/gen7/elio.png
+	$(GFX) $< $@ -mwidth 2 -mheight 4
+
+$(OBJEVENTGFXDIR)/gen7/gladion.4bpp: graphics/object_events/pics/gen7/gladion.png
+	$(GFX) $< $@ -mwidth 2 -mheight 4
+
+$(OBJEVENTGFXDIR)/gen7/guzma.4bpp: graphics/object_events/pics/gen7/guzma.png
+	$(GFX) $< $@ -mwidth 2 -mheight 4
+
+$(OBJEVENTGFXDIR)/gen7/hau.4bpp: graphics/object_events/pics/gen7/hau.png
+	$(GFX) $< $@ -mwidth 2 -mheight 4
+
+$(OBJEVENTGFXDIR)/gen7/kukui.4bpp: graphics/object_events/pics/gen7/kukui.png
+	$(GFX) $< $@ -mwidth 2 -mheight 4
+
+$(OBJEVENTGFXDIR)/gen7/lillie.4bpp: graphics/object_events/pics/gen7/lillie.png
+	$(GFX) $< $@ -mwidth 2 -mheight 4
+
+$(OBJEVENTGFXDIR)/gen7/lusamine.4bpp: graphics/object_events/pics/gen7/lusamine.png
+	$(GFX) $< $@ -mwidth 2 -mheight 4
+
+$(OBJEVENTGFXDIR)/gen7/molayne.4bpp: graphics/object_events/pics/gen7/molayne.png
+	$(GFX) $< $@ -mwidth 2 -mheight 4
+
+$(OBJEVENTGFXDIR)/gen7/plumeria.4bpp: graphics/object_events/pics/gen7/plumeria.png
+	$(GFX) $< $@ -mwidth 2 -mheight 4
+
+$(OBJEVENTGFXDIR)/gen7/selene.4bpp: graphics/object_events/pics/gen7/selene.png
+	$(GFX) $< $@ -mwidth 2 -mheight 4
+
+$(OBJEVENTGFXDIR)/gen7/skull_grunt_f.4bpp: graphics/object_events/pics/gen7/skull_grunt_f.png
+	$(GFX) $< $@ -mwidth 2 -mheight 4
+
+$(OBJEVENTGFXDIR)/gen7/skull_grunt_m.4bpp: graphics/object_events/pics/gen7/skull_grunt_m.png
+	$(GFX) $< $@ -mwidth 2 -mheight 4
+
+$(OBJEVENTGFXDIR)/gen7/sophocles.4bpp: graphics/object_events/pics/gen7/sophocles.png
+	$(GFX) $< $@ -mwidth 2 -mheight 4
+
+
+#Galar (Gen 8)
+$(OBJEVENTGFXDIR)/gen8/bede.4bpp: graphics/object_events/pics/gen8/bede.png
+	$(GFX) $< $@ -mwidth 2 -mheight 4
+
+$(OBJEVENTGFXDIR)/gen8/gloria.4bpp: graphics/object_events/pics/gen8/gloria.png
+	$(GFX) $< $@ -mwidth 2 -mheight 4
+
+$(OBJEVENTGFXDIR)/gen8/hop.4bpp: graphics/object_events/pics/gen8/hop.png
+	$(GFX) $< $@ -mwidth 2 -mheight 4
+
+$(OBJEVENTGFXDIR)/gen8/leon.4bpp: graphics/object_events/pics/gen8/leon.png
+	$(GFX) $< $@ -mwidth 2 -mheight 4
+
+$(OBJEVENTGFXDIR)/gen8/magnolia.4bpp: graphics/object_events/pics/gen8/magnolia.png
+	$(GFX) $< $@ -mwidth 2 -mheight 4
+
+$(OBJEVENTGFXDIR)/gen8/marnie.4bpp: graphics/object_events/pics/gen8/marnie.png
+	$(GFX) $< $@ -mwidth 2 -mheight 4
+
+$(OBJEVENTGFXDIR)/gen8/oleana.4bpp: graphics/object_events/pics/gen8/oleana.png
+	$(GFX) $< $@ -mwidth 2 -mheight 4
+
+$(OBJEVENTGFXDIR)/gen8/rose.4bpp: graphics/object_events/pics/gen8/rose.png
+	$(GFX) $< $@ -mwidth 2 -mheight 4
+
+$(OBJEVENTGFXDIR)/gen8/victor.4bpp: graphics/object_events/pics/gen8/victor.png
+	$(GFX) $< $@ -mwidth 2 -mheight 4
+
+
+#Paldea (Gen 9)
+$(OBJEVENTGFXDIR)/gen9/arven.4bpp: graphics/object_events/pics/gen9/arven.png
+	$(GFX) $< $@ -mwidth 2 -mheight 4
+
+$(OBJEVENTGFXDIR)/gen9/florian.4bpp: graphics/object_events/pics/gen9/florian.png
+	$(GFX) $< $@ -mwidth 2 -mheight 4
+
+$(OBJEVENTGFXDIR)/gen9/geeta.4bpp: graphics/object_events/pics/gen9/geeta.png
+	$(GFX) $< $@ -mwidth 2 -mheight 4
+
+$(OBJEVENTGFXDIR)/gen9/juliana.4bpp: graphics/object_events/pics/gen9/juliana.png
+	$(GFX) $< $@ -mwidth 2 -mheight 4
+
+$(OBJEVENTGFXDIR)/gen9/nemona.4bpp: graphics/object_events/pics/gen9/nemona.png
+	$(GFX) $< $@ -mwidth 2 -mheight 4
+
+$(OBJEVENTGFXDIR)/gen9/penny.4bpp: graphics/object_events/pics/gen9/penny.png
+	$(GFX) $< $@ -mwidth 2 -mheight 4
 
 #XD(Orre)
 $(OBJEVENTGFXDIR)/xd/wes.4bpp: %.4bpp: %.png

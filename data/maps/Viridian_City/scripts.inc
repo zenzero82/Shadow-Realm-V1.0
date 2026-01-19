@@ -27,6 +27,9 @@ Viridian_Speaker_Meowth:
 Viridian_Speaker_Gonzap:
     .string "Gonzap$"
 
+Viridian_Speaker_JJ_Unison:
+    .string "Jessie&James$"
+
 Viridian_Speaker_GymGrunt:
     .string "Grunt Slate$"
 
@@ -159,16 +162,14 @@ ViridianCity_EventScript_JJ_Encounter::
     turnobject 1, 1
     turnobject 2, 1
 
-    @ Split dialogue so namebox always matches speaker
-    setspeaker Viridian_Speaker_Jessie
-    msgbox ViridianCity_Text_Jessie_Intro, MSGBOX_DEFAULT
+    setspeaker Viridian_Speaker_JJ_Unison
+    msgbox ViridianCity_Text_JJ_BattleIntro, MSGBOX_DEFAULT
     closemessage
 
-    setspeaker Viridian_Speaker_James
-    msgbox ViridianCity_Text_James_Intro, MSGBOX_DEFAULT
-    closemessage
+    applymovement OBJ_EVENT_ID_PLAYER, ViridianCity_Move_Player_JJ_FaceNorth
+    waitmovement 0
 
-    trainerbattle_single TRAINER_JESSIE_AND_JAMES, ViridianCity_Text_JJ_BattleIntro, ViridianCity_Text_JJ_Defeated, ViridianCity_EventScript_JJ_AfterBattle
+    trainerbattle_single TRAINER_JJ_VIRIDIAN, ViridianCity_Text_JJ_BattleCue, ViridianCity_Text_JJ_Defeated, ViridianCity_EventScript_JJ_AfterBattle
     end
 
 ViridianCity_EventScript_HideJJGroup::
@@ -207,6 +208,10 @@ ViridianCity_Move_Player_JJ_FromDown:
     step_end
 
 ViridianCity_Move_Player_JJ_Stay:
+    step_end
+
+ViridianCity_Move_Player_JJ_FaceNorth:
+    face_up
     step_end
 
 @ ==============================
@@ -593,24 +598,34 @@ ViridianCity_Text_James_Intro:
     .string "management, twerp.$"
 
 ViridianCity_Text_JJ_BattleIntro:
-    .string "We may be new to Team Rocket,\n"
-    .string "but we have already perfected our work!\p"
-    .string "And you'll be our first\n"
-    .string "demonstration.\p"
-    .string "Prepare yourself!$"
+    .string "Prepare for trouble!\n"
+    .string "And make it double!\p"
+    .string "To protect the world from devastation!\n"
+    .string "To unite all peoples within our nation!\p"
+    .string "To denounce the evils of truth and love!\n"
+    .string "To extend our reach to the stars above!\p"
+    .string "Jessie!\n"
+    .string "James!\p"
+    .string "Team Rocket blasts off at the speed of\n"
+    .string "light!\p"
+
+    .string "Surrender now or prepare to fight!$"
+
+ViridianCity_Text_JJ_BattleCue:
+    .string "Jessie & James challenge you!$"
 
 ViridianCity_Text_JJ_Defeated:
     .string "How did we lose to a rookie?!\p"
-    .string "Even Meowth can't believe it...$"
+    .string "We need a shadow pokemon...$"
 
 @ Old label kept, but now unused (we split into Jessie/James)
 ViridianCity_Text_JJ_PostBattle:
     .string "Just you wait, twerp.$"
 
-ViridianCity_Text_Jessie_PostBattle:
+ViridianCity_Text_James_PostBattle:
     .string "Hmph! Don't get used to this.$"
 
-ViridianCity_Text_James_PostBattle:
+ViridianCity_Text_Jessie_PostBattle:
     .string "That darn OAK and his meddling\n"
     .string "research...\p"
     .string "Team Rocket will fix everything in\n"

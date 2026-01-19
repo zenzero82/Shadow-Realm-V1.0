@@ -13,9 +13,13 @@ PewterGym_Speaker_GymGuy:
 
 
 PewterCity_Gym_EventScript_Jerry::
+    lockall
+    faceplayer
     setspeaker PewterGym_Speaker_Jerry
     trainerbattle_single TRAINER_CAMPER_KANTO, PewterCity_Gym_Text_CamperJerry_Seen, PewterCity_Gym_Text_CamperJerry_Beaten
     msgbox PewterCity_Gym_Text_CamperJerry_AfterBattle, MSGBOX_AUTOCLOSE
+    closemessage
+    releaseall
     end
 
 PewterCity_Gym_EventScript_Brock::
@@ -82,7 +86,7 @@ PewterCity_Gym_EventScript_GymStatuePostVictory::
 @ ============================
 
 PewterCity_Gym_Text_Brock_Intro:
-    .string "BROCK: So you're the trainer WES\n"
+    .string "So you're the trainer WES\n"
     .string "mentioned.\p"
     .string "I'm BROCK, the PEWTER GYM LEADER.\p"
     .string "In times like these, we need trainers\n"
@@ -91,7 +95,7 @@ PewterCity_Gym_Text_Brock_Intro:
     .string "what CIPHER and ROCKET are planning.$"
 
 PewterCity_Gym_Text_Brock_WinLoss:
-    .string "BROCK: Your POKEMON's power and resolve\n"
+    .string "Your POKEMON's power and resolve\n"
     .string "broke right through my rock-solid\n"
     .string "defense…\p"
     .string "Looks like KANTO has another trainer\n"
@@ -102,7 +106,7 @@ PewterCity_Gym_Text_ReceivedBoulderBadge:
     .string "{PLAYER} received the BOULDERBADGE!$"
 
 PewterCity_Gym_Text_Brock_FightDone:
-    .string "BROCK: The world is huge. There are\n"
+    .string "The world is huge. There are\n"
     .string "many strong trainers out there.\p"
     .string "If you keep growing like this, you'll\n"
     .string "be ready for whatever CIPHER throws\n"

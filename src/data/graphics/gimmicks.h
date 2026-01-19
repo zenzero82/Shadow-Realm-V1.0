@@ -141,10 +141,10 @@ static void SpriteCb_GimmickIndicator(struct Sprite *sprite);
 #define BATTLER_INDICATOR_TAG 0xDEDE
 static const struct SpriteSheet sBattler_GimmickSpritesheets[] =
 {
-    {sNormalIndicatorGfx, sizeof(sNormalIndicatorGfx), BATTLER_INDICATOR_TAG},
-    {sNormalIndicatorGfx, sizeof(sNormalIndicatorGfx), BATTLER_INDICATOR_TAG+1},
-    {sNormalIndicatorGfx, sizeof(sNormalIndicatorGfx), BATTLER_INDICATOR_TAG+2},
-    {sNormalIndicatorGfx, sizeof(sNormalIndicatorGfx), BATTLER_INDICATOR_TAG+3},
+    {sReverseIndicatorGfx, sizeof(sReverseIndicatorGfx), BATTLER_INDICATOR_TAG},
+    {sReverseIndicatorGfx, sizeof(sReverseIndicatorGfx), BATTLER_INDICATOR_TAG+1},
+    {sReverseIndicatorGfx, sizeof(sReverseIndicatorGfx), BATTLER_INDICATOR_TAG+2},
+    {sReverseIndicatorGfx, sizeof(sReverseIndicatorGfx), BATTLER_INDICATOR_TAG+3},
 };
 
 static const struct SpriteTemplate sSpriteTemplate_BattlerIndicators[] =

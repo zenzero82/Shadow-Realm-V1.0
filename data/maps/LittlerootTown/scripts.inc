@@ -55,7 +55,7 @@ LittlerootTown_EventScript_GiveSnagMachineAndBalls::
     faceplayer
     goto_if_set FLAG_HAS_SNAG_MACHINE, LittlerootTown_SnagAlreadySet
 
-    // Give the Snag Machine (flag) and 10 Master Balls, then hide this object (it vanishes because its Event Flag is this same flag)
+    @ Give the Snag Machine (flag) and 10 Master Balls, then hide this object (it vanishes because its Event Flag is this same flag)
     setflag FLAG_HAS_SNAG_MACHINE
     giveitem ITEM_MASTER_BALL, 10
     msgbox LittlerootTown_Text_SnagOnBallsGiven, MSGBOX_DEFAULT

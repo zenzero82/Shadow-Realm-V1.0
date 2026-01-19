@@ -26,6 +26,7 @@
 #include "strings.h"
 #include "task.h"
 #include "text_window.h"
+#include "shadow_monitor.h"
 #include "trainer_pokemon_sprites.h"
 #include "trig.h"
 #include "window.h"
@@ -110,10 +111,7 @@ enum {
 #define MAX_SEARCH_PARAM_ON_SCREEN   6
 #define MAX_SEARCH_PARAM_CURSOR_POS  (MAX_SEARCH_PARAM_ON_SCREEN - 1)
 
-#define MAX_MONS_ON_SCREEN 4
-
 #define LIST_SCROLL_STEP         16
-#define SHADOW_MON_LIST_HEADER_ROWS 4
 
 #define POKEBALL_ROTATION_TOP    64
 #define POKEBALL_ROTATION_BOTTOM (POKEBALL_ROTATION_TOP - 16)
@@ -122,7 +120,7 @@ enum {
 #define MON_PAGE_X 48
 #define MON_PAGE_Y 56
 
-static EWRAM_DATA struct PokedexView *sPokedexView = NULL;
+EWRAM_DATA struct PokedexView *sPokedexView = NULL;
 static EWRAM_DATA u16 sLastSelectedPokemon = 0;
 static EWRAM_DATA u8 sPokeBallRotation = 0;
 static EWRAM_DATA struct PokedexListItem *sPokedexListItem = NULL;
@@ -164,63 +162,6 @@ struct SearchMenuItem
     u8 selectionBgWidth;
 };
 
-struct PokedexListItem
-{
-    u16 dexNum;
-    u16 seen:1;
-    u16 owned:1;
-};
-
-struct PokedexView
-{
-    struct PokedexListItem pokedexList[NATIONAL_DEX_COUNT + 1];
-    u16 pokemonListCount;
-    u16 shadowListCount;
-    u8 shadowStateList[MAX_SHADOW_MON_IDS];
-    u16 selectedPokemon;
-    u16 selectedPokemonBackup;
-    u16 dexMode;
-    u16 dexModeBackup;
-    u16 dexOrder;
-    u16 dexOrderBackup;
-    u16 seenCount;
-    u16 ownCount;
-    u16 monSpriteIds[MAX_MONS_ON_SCREEN];
-    u16 selectedMonSpriteId;
-    u16 pokeBallRotationStep;
-    u16 pokeBallRotationBackup;
-    u8 pokeBallRotation;
-    u8 initialVOffset;
-    u8 scrollTimer;
-    u8 scrollDirection;
-    s16 listVOffset;
-    s16 listMovingVOffset;
-    u16 scrollMonIncrement;
-    u16 maxScrollTimer;
-    u16 scrollSpeed;
-    u16 unkArr1[4]; // Cleared, never read
-    u8 filler[8];
-    u8 currentPage;
-    u8 currentPageBackup;
-    bool8 isSearchResults:1;
-    u8 selectedScreen;
-    u8 screenSwitchState;
-    u8 menuIsOpen;
-    u16 menuCursorPos;
-    s16 menuY;     //Menu Y position (inverted because we use REG_BG0VOFS for this)
-    u8 unkArr2[8]; // Cleared, never read
-    u8 unkArr3[8]; // Cleared, never read
-};
-
-struct ShadowMonitorInfo
-{
-    bool8 found;
-    bool8 isSnagged;
-    u16 heartValue;
-    u16 heartMax;
-    u8 trainerName[PLAYER_NAME_LENGTH + 1];
-};
-
 // this file's functions
 static void CB2_Pokedex(void);
 static void Task_OpenPokedexMainPage(u8);
@@ -248,7 +189,7 @@ static void CreateMonDexNum(u16, u8, u8, u16);
 static void CreateCaughtBall(u16, u8, u8, u16);
 static u8 CreateMonName(u16, u8, u8);
 static void ClearMonListEntry(u8 x, u8 y, u16 unused);
-static u8 GetShadowMonitorListHeaderOffsetRows(void);
+#include "shadow_monitor.h"
 static void CreateMonSpritesAtPos(u16, u16);
 static bool8 UpdateDexListScroll(u8, u8, u8);
 static u16 TryDoPokedexScroll(u16, u16);
@@ -311,13 +252,6 @@ static void ResetOtherVideoRegisters(u16);
 static u8 PrintCryScreenSpeciesName(u8, u16, u8, u8);
 static void PrintDecimalNum(u8 windowId, u16 num, u8 left, u8 top);
 static u16 GetPokemonScaleFromNationalDexNumber(u16 nationalNum);
-static void BuildShadowMonitorList(void);
-static void PrintShadowMonitorHeader(void);
-static void UpdateShadowMonitorListState(void);
-static void PrintShadowMonitorFooter(void);
-static bool8 ShadowMonitorPopulateInfo(u16, struct ShadowMonitorInfo *);
-static const u8 *GetShadowMonitorStateName(u8 state);
-static bool8 ShadowMonitorMonIsOwned(u16 shadowId);
 static u16 GetPokemonOffsetFromNationalDexNumber(u16 nationalNum);
 static u16 GetTrainerScaleFromNationalDexNumber(u16 nationalNum);
 static u16 GetTrainerOffsetFromNationalDexNumber(u16 nationalNum);
@@ -883,6 +817,15 @@ static const struct WindowTemplate sPokemonList_WindowTemplate[] =
         .paletteNum = 0,
         .baseBlock = 1,
     },
+    {
+        .bg = 2,
+        .tilemapLeft = SHADOW_MON_STATS_LEFT,
+        .tilemapTop = SHADOW_MON_STATS_TOP,
+        .width = SHADOW_MON_STATS_WIDTH,
+        .height = SHADOW_MON_STATS_ROWS,
+        .paletteNum = 0,
+        .baseBlock = 0x40,
+    },
     DUMMY_WIN_TEMPLATE
 };
 
@@ -890,19 +833,6 @@ static const u8 sText_No0000[] = _("{NO}0000");
 static const u8 sText_No000[] = _("{NO}000");
 static const u8 sCaughtBall_Gfx[] = INCBIN_U8("graphics/pokedex/caught_ball.4bpp");
 static const u8 sText_TenDashes[] = _("----------");
-static const u8 sText_ShadowMonitorTitle[] = _("SHADOW MONITOR");
-static const u8 sText_ShadowMonitorStateFmt[] = _("State: {STR_VAR_1}");
-static const u8 sText_ShadowMonitorHeartFmt[] = _("Heart: {STR_VAR_1}/{STR_VAR_2}");
-static const u8 sText_ShadowMonitorPurifiedFmt[] = _("Purified: {STR_VAR_1}");
-static const u8 sText_ShadowMonitorTrainerFmt[] = _("Snagged from {STR_VAR_1}");
-static const u8 sText_ShadowStateUnseen[] = _("UNSEEN");
-static const u8 sText_ShadowStateSeen[] = _("SEEN");
-static const u8 sText_ShadowStateSnagged[] = _("SNAGGED");
-static const u8 sText_ShadowStatePurified[] = _("PURIFIED");
-static const u8 sText_ShadowStateFailed[] = _("FAILED");
-static const u8 sText_ShadowMonitorUnknownName[] = _("------");
-static const u8 sText_ShadowMonitorHint[] = _("Press R to return");
-static const u8 sText_ShadowMonitorHeaderFmt[] = _("{STR_VAR_1}: {STR_VAR_2}");
 
 ALIGNED(4) static const u8 sExpandedPlaceholder_PokedexDescription[] = _("");
 
@@ -1705,6 +1635,63 @@ void CB2_OpenPokedex(void)
     }
 }
 
+void CB2_OpenShadowMonitor(void)
+{
+    switch (gMain.state)
+    {
+    case 0:
+    default:
+        SetVBlankCallback(NULL);
+        ResetOtherVideoRegisters(0);
+        DmaFillLarge16(3, 0, (u8 *)VRAM, VRAM_SIZE, 0x1000);
+        DmaClear32(3, OAM, OAM_SIZE);
+        DmaClear16(3, PLTT, PLTT_SIZE);
+        gMain.state = 1;
+        break;
+    case 1:
+        ScanlineEffect_Stop();
+        ResetTasks();
+        ResetSpriteData();
+        ResetPaletteFade();
+        FreeAllSpritePalettes();
+        gReservedSpritePaletteCount = 8;
+        ResetAllPicSprites();
+        gMain.state++;
+        break;
+    case 2:
+        sPokedexView = AllocZeroed(sizeof(struct PokedexView));
+        ResetPokedexView(sPokedexView);
+        CreateTask(Task_OpenShadowMonitorPage, 0);
+        sPokedexView->dexMode = gSaveBlock2Ptr->pokedex.mode;
+        if (!IsNationalPokedexEnabled())
+            sPokedexView->dexMode = DEX_MODE_HOENN;
+        sPokedexView->dexOrder = gSaveBlock2Ptr->pokedex.order;
+        sPokedexView->selectedPokemon = sLastSelectedPokemon;
+        sPokedexView->pokeBallRotation = sPokeBallRotation;
+        sPokedexView->selectedScreen = AREA_SCREEN;
+        if (!IsNationalPokedexEnabled())
+        {
+            sPokedexView->seenCount = GetHoennPokedexCount(FLAG_GET_SEEN);
+            sPokedexView->ownCount = GetHoennPokedexCount(FLAG_GET_CAUGHT);
+        }
+        else
+        {
+            sPokedexView->seenCount = GetNationalPokedexCount(FLAG_GET_SEEN);
+            sPokedexView->ownCount = GetNationalPokedexCount(FLAG_GET_CAUGHT);
+        }
+        sPokedexView->initialVOffset = 8;
+        gMain.state++;
+        break;
+    case 3:
+        EnableInterrupts(1);
+        SetVBlankCallback(VBlankCB_Pokedex);
+        SetMainCallback2(CB2_Pokedex);
+        CreatePokedexList(sPokedexView->dexMode, sPokedexView->dexOrder);
+        m4aMPlayVolumeControl(&gMPlayInfo_BGM, TRACKS_ALL, 0x80);
+        break;
+    }
+}
+
 static void CB2_Pokedex(void)
 {
     RunTasks();
@@ -1797,12 +1784,13 @@ static void Task_HandlePokedexInput(u8 taskId)
         }
     }
 
-    if (sPokedexView->currentPage == PAGE_SHADOW_MONITOR && gWindows[0].tileData != NULL)
-    {
-        UpdateShadowMonitorListState();
-        PrintShadowMonitorHeader();
-        PrintShadowMonitorFooter();
-    }
+        if (sPokedexView->currentPage == PAGE_SHADOW_MONITOR && gWindows[0].tileData != NULL)
+        {
+            UpdateShadowMonitorListState();
+            PrintShadowMonitorHeader();
+            PrintShadowMonitorFooter();
+            ShadowMonitor_RefreshMonSprite();
+        }
 }
 
 static void Task_WaitForScroll(u8 taskId)
@@ -2170,6 +2158,7 @@ static bool8 LoadPokedexListPage(u8 page)
         InitWindows(sPokemonList_WindowTemplate);
         DeactivateAllTextPrinters();
         PutWindowTilemap(0);
+        PutWindowTilemap(WIN_SHADOW_MON_STATS);
         CopyWindowToVram(0, COPYWIN_FULL);
         gMain.state = 1;
         break;
@@ -2232,14 +2221,29 @@ static bool8 LoadPokedexListPage(u8 page)
     return FALSE;
 }
 
+static void LoadShadowMonitorBgPalette(void)
+{
+    LoadPalette(gPokedexShadowmonitor_Pal + 1, BG_PLTT_ID(0) + 1, PLTT_SIZEOF(6 * 16 - 1));
+}
+
 static void LoadPokedexBgPalette(bool8 isSearchResults)
 {
-    if (isSearchResults == TRUE)
+    if (sPokedexView->currentPage == PAGE_SHADOW_MONITOR)
+    {
+        LoadShadowMonitorBgPalette();
+    }
+    else if (isSearchResults == TRUE)
+    {
         LoadPalette(gPokedexSearchResults_Pal + 1, BG_PLTT_ID(0) + 1, PLTT_SIZEOF(6 * 16 - 1));
+    }
     else if (!IsNationalPokedexEnabled())
+    {
         LoadPalette(gPokedexBgHoenn_Pal + 1, BG_PLTT_ID(0) + 1, PLTT_SIZEOF(6 * 16 - 1));
+    }
     else
+    {
         LoadPalette(gPokedexBgNational_Pal + 1, BG_PLTT_ID(0) + 1, PLTT_SIZEOF(6 * 16 - 1));
+    }
     LoadPalette(GetOverworldTextboxPalettePtr(), BG_PLTT_ID(15), PLTT_SIZE_4BPP);
 }
 
@@ -2424,6 +2428,12 @@ static void PrintMonName(u8 windowId, u8 fontId, const u8 *str, u8 left, u8 top)
 // u16 ignored is passed but never used
 static void CreateMonListEntry(u8 position, u16 b, u16 ignored)
 {
+    if (sPokedexView->currentPage == PAGE_SHADOW_MONITOR)
+    {
+        ShadowMonitor_DrawListEntries(sPokedexView->selectedPokemon, ignored);
+        return;
+    }
+
     s16 entryNum;
     u16 i;
     u16 vOffset;
@@ -2511,18 +2521,13 @@ static void CreateMonListEntry(u8 position, u16 b, u16 ignored)
     CopyWindowToVram(0, COPYWIN_GFX);
 }
 
-static u8 GetShadowMonitorListHeaderOffsetRows(void)
-{
-    return sPokedexView->currentPage == PAGE_SHADOW_MONITOR ? SHADOW_MON_LIST_HEADER_ROWS : 0;
-}
-
 static void CreateMonDexNum(u16 entryNum, u8 left, u8 top, u16 unused)
 {
     u8 text[7];
     u16 dexNum, offset = 2;
 
     dexNum = sPokedexView->pokedexList[entryNum].dexNum;
-    if (sPokedexView->dexMode == DEX_MODE_HOENN)
+    if (sPokedexView->currentPage != PAGE_SHADOW_MONITOR && sPokedexView->dexMode == DEX_MODE_HOENN)
         dexNum = NationalToHoennOrder(dexNum);
     memcpy(text, sText_No0000, ARRAY_COUNT(sText_No0000));
     if (NATIONAL_DEX_COUNT > 999 && sPokedexView->dexMode != DEX_MODE_HOENN)
@@ -2534,12 +2539,12 @@ static void CreateMonDexNum(u16 entryNum, u8 left, u8 top, u16 unused)
     text[offset++] = CHAR_0 + ((dexNum % 1000) % 100) / 10;
     text[offset++] = CHAR_0 + ((dexNum % 1000) % 100) % 10;
     text[offset++] = EOS;
-    PrintMonDexNum(0, FONT_NARROW, text, left, top + GetShadowMonitorListHeaderOffsetRows());
+    PrintMonDexNum(0, FONT_NARROW, text, left, top + ShadowMonitor_GetListHeaderOffsetRows());
 }
 
 static void CreateCaughtBall(bool16 owned, u8 x, u8 y, u16 unused)
 {
-    u8 offsetRows = GetShadowMonitorListHeaderOffsetRows();
+    u8 offsetRows = ShadowMonitor_GetListHeaderOffsetRows();
 
     if (owned)
         BlitBitmapToWindow(0, sCaughtBall_Gfx, x * 8, (y + offsetRows) * 8, 8, 16);
@@ -2557,7 +2562,7 @@ static u8 CreateMonName(u16 num, u8 left, u8 top)
         if (shadowIndex < MAX_SHADOW_MON_IDS)
             str = GetShadowMonitorStateName(sPokedexView->shadowStateList[shadowIndex]);
         else
-            str = sText_ShadowStateUnseen;
+            str = GetShadowMonitorStateName(SHDW_STATE_NEVER_SEEN);
     }
     else
     {
@@ -2567,13 +2572,13 @@ static u8 CreateMonName(u16 num, u8 left, u8 top)
         else
             str = sText_TenDashes;
     }
-    PrintMonName(0, FONT_NARROW, str, left, top + GetShadowMonitorListHeaderOffsetRows());
+    PrintMonName(0, FONT_NARROW, str, left, top + ShadowMonitor_GetListHeaderOffsetRows());
     return StringLength(str);
 }
 
 static void ClearMonListEntry(u8 x, u8 y, u16 unused)
 {
-    FillWindowPixelRect(0, PIXEL_FILL(0), x * 8, (y + GetShadowMonitorListHeaderOffsetRows()) * 8, 0x60, 16);
+    FillWindowPixelRect(0, PIXEL_FILL(0), x * 8, (y + ShadowMonitor_GetListHeaderOffsetRows()) * 8, 0x60, 16);
 }
 
 // u16 ignored is passed but never used
@@ -2582,7 +2587,8 @@ static void CreateMonSpritesAtPos(u16 selectedMon, u16 ignored)
     if (sPokedexView->currentPage == PAGE_SHADOW_MONITOR)
     {
         ClearMonSprites();
-        sPokedexView->selectedMonSpriteId = 0xFFFF;
+        ShadowMonitor_CreateMonSpriteForSelected(selectedMon);
+        ShadowMonitor_DrawListEntries(selectedMon, ignored);
         return;
     }
     u8 i;
@@ -6003,205 +6009,4 @@ static void PrintSearchParameterTitle(u32 y, const u8 *str)
 static void ClearSearchParameterBoxText(void)
 {
     ClearSearchMenuRect(144, 8, 96, 96);
-}
-
-static void BuildShadowMonitorList(void)
-{
-    u16 i;
-
-    for (i = 0; i < MAX_SHADOW_MON_IDS; i++)
-    {
-        u16 shadowId = i + 1;
-        u8 state = Shdw_GetState(shadowId);
-
-        sPokedexView->shadowStateList[i] = state;
-        sPokedexView->pokedexList[i].dexNum = shadowId;
-        sPokedexView->pokedexList[i].seen = TRUE;
-        sPokedexView->pokedexList[i].owned = ShadowMonitorMonIsOwned(shadowId);
-    }
-
-    sPokedexView->shadowListCount = MAX_SHADOW_MON_IDS;
-    sPokedexView->pokemonListCount = MAX_SHADOW_MON_IDS;
-}
-
-static const u8 *GetShadowMonitorStateName(u8 state)
-{
-    switch (state)
-    {
-    case SHDW_STATE_SEEN:
-        return sText_ShadowStateSeen;
-    case SHDW_STATE_SNAGGED:
-        return sText_ShadowStateSnagged;
-    case SHDW_STATE_PURIFIED:
-        return sText_ShadowStatePurified;
-    case SHDW_STATE_FAILED:
-        return sText_ShadowStateFailed;
-    default:
-        return sText_ShadowStateUnseen;
-    }
-}
-
-static bool8 ShadowMonitorPopulateInfo(u16 shadowId, struct ShadowMonitorInfo *info)
-{
-    s32 i, box, slot;
-
-    info->found = FALSE;
-    info->isSnagged = FALSE;
-    info->heartValue = 0;
-    info->heartMax = 0;
-    info->trainerName[0] = EOS;
-
-    for (i = 0; i < PARTY_SIZE; i++)
-    {
-        if (!GetMonData(&gPlayerParty[i], MON_DATA_IS_SHADOW, NULL))
-            continue;
-        if (GetMonData(&gPlayerParty[i], MON_DATA_SHADOW_ID, NULL) != shadowId)
-            continue;
-
-        info->found = TRUE;
-        info->heartValue = GetMonData(&gPlayerParty[i], MON_DATA_HEART_VALUE, NULL);
-        info->heartMax = GetMonData(&gPlayerParty[i], MON_DATA_HEART_MAX, NULL);
-        info->isSnagged = GetMonData(&gPlayerParty[i], MON_DATA_SNAGGED, NULL);
-        GetMonData(&gPlayerParty[i], MON_DATA_OT_NAME, info->trainerName);
-        return TRUE;
-    }
-
-    for (box = 0; box < TOTAL_BOXES_COUNT; box++)
-    {
-        for (slot = 0; slot < IN_BOX_COUNT; slot++)
-        {
-            struct BoxPokemon *boxMon = &gPokemonStoragePtr->boxes[box][slot];
-
-            if (GetBoxMonData(boxMon, MON_DATA_SPECIES, NULL) == SPECIES_NONE)
-                continue;
-            if (!GetBoxMonData(boxMon, MON_DATA_IS_SHADOW, NULL))
-                continue;
-            if (GetBoxMonData(boxMon, MON_DATA_SHADOW_ID, NULL) != shadowId)
-                continue;
-
-            info->found = TRUE;
-            info->heartValue = GetBoxMonData(boxMon, MON_DATA_HEART_VALUE, NULL);
-            info->heartMax = GetBoxMonData(boxMon, MON_DATA_HEART_MAX, NULL);
-            info->isSnagged = GetBoxMonData(boxMon, MON_DATA_SNAGGED, NULL);
-            GetBoxMonData(boxMon, MON_DATA_OT_NAME, info->trainerName);
-            return TRUE;
-        }
-    }
-
-    return FALSE;
-}
-
-static bool8 ShadowMonitorMonIsOwned(u16 shadowId)
-{
-    u8 state = Shdw_GetState(shadowId);
-    struct ShadowMonitorInfo info;
-
-    if (state == SHDW_STATE_SNAGGED || state == SHDW_STATE_PURIFIED)
-        return TRUE;
-
-    if (ShadowMonitorPopulateInfo(shadowId, &info))
-        return info.isSnagged;
-
-    return FALSE;
-}
-
-static void UpdateShadowMonitorListState(void)
-{
-    u16 i;
-
-    for (i = 0; i < MAX_SHADOW_MON_IDS; i++)
-    {
-        u8 state = Shdw_GetState(i + 1);
-
-        sPokedexView->shadowStateList[i] = state;
-        sPokedexView->pokedexList[i].seen = state != SHDW_STATE_NEVER_SEEN;
-        sPokedexView->pokedexList[i].owned = (state == SHDW_STATE_SNAGGED || state == SHDW_STATE_PURIFIED);
-    }
-}
-
-static void PrintShadowMonitorHeader(void)
-{
-    const u16 headerWidth = 32 * 8;
-    const u16 headerHeight = SHADOW_MON_LIST_HEADER_ROWS * 8;
-    static const u8 colors[] = { TEXT_COLOR_TRANSPARENT, TEXT_COLOR_WHITE, TEXT_COLOR_LIGHT_GRAY };
-    u16 seenCount = 0;
-    u16 snaggedCount = 0;
-    u16 i;
-
-    for (i = 0; i < MAX_SHADOW_MON_IDS; i++)
-    {
-        u8 state = sPokedexView->shadowStateList[i];
-
-        if (state != SHDW_STATE_NEVER_SEEN)
-            seenCount++;
-        if (state == SHDW_STATE_SNAGGED || state == SHDW_STATE_PURIFIED)
-            snaggedCount++;
-    }
-
-    FillWindowPixelRect(0, PIXEL_FILL(0), 0, 0, headerWidth, headerHeight);
-
-    AddTextPrinterParameterized4(0, FONT_NORMAL, 4, 0, 0, 0, colors, TEXT_SKIP_DRAW, sText_ShadowMonitorTitle);
-
-    StringCopy(gStringVar1, sText_ShadowStateSeen);
-    ConvertIntToDecimalStringN(gStringVar2, seenCount, STR_CONV_MODE_RIGHT_ALIGN, 3);
-    StringExpandPlaceholders(gStringVar4, sText_ShadowMonitorHeaderFmt);
-    AddTextPrinterParameterized4(0, FONT_NARROW, 4, 16, 0, 0, colors, TEXT_SKIP_DRAW, gStringVar4);
-
-    StringCopy(gStringVar1, sText_ShadowStateSnagged);
-    ConvertIntToDecimalStringN(gStringVar2, snaggedCount, STR_CONV_MODE_RIGHT_ALIGN, 3);
-    StringExpandPlaceholders(gStringVar4, sText_ShadowMonitorHeaderFmt);
-    AddTextPrinterParameterized4(0, FONT_NARROW, 4, 24, 0, 0, colors, TEXT_SKIP_DRAW, gStringVar4);
-}
-
-static void PrintShadowMonitorFooter(void)
-{
-    const u16 baseRow = 24;
-    u16 shadowId = sPokedexView->pokedexList[sPokedexView->selectedPokemon].dexNum;
-    u16 shadowIndex = shadowId == 0 ? 0 : shadowId - 1;
-    u8 state = SHDW_STATE_NEVER_SEEN;
-    struct ShadowMonitorInfo info;
-    static const u8 colors[] = { TEXT_COLOR_TRANSPARENT, TEXT_COLOR_WHITE, TEXT_COLOR_LIGHT_GRAY };
-
-    if (shadowId != 0 && shadowIndex < MAX_SHADOW_MON_IDS)
-        state = sPokedexView->shadowStateList[shadowIndex];
-
-    FillWindowPixelRect(0, PIXEL_FILL(0), 0, baseRow * 8, 32 * 8, (32 - baseRow) * 8);
-
-    AddTextPrinterParameterized4(0, FONT_NARROW, 0, baseRow * 8, 0, 0, colors, TEXT_SKIP_DRAW, sText_ShadowMonitorTitle);
-
-    ShadowMonitorPopulateInfo(shadowId, &info);
-
-    StringCopy(gStringVar1, GetShadowMonitorStateName(state));
-    StringExpandPlaceholders(gStringVar4, sText_ShadowMonitorStateFmt);
-    AddTextPrinterParameterized4(0, FONT_NARROW, 0, (baseRow + 1) * 8, 0, 0, colors, TEXT_SKIP_DRAW, gStringVar4);
-
-    if (info.found)
-    {
-        ConvertIntToDecimalStringN(gStringVar1, info.heartValue, STR_CONV_MODE_RIGHT_ALIGN, 3);
-        ConvertIntToDecimalStringN(gStringVar2, info.heartMax, STR_CONV_MODE_RIGHT_ALIGN, 3);
-    }
-    else
-    {
-        StringCopy(gStringVar1, sText_ShadowMonitorUnknownName);
-        StringCopy(gStringVar2, sText_ShadowMonitorUnknownName);
-    }
-
-    StringExpandPlaceholders(gStringVar4, sText_ShadowMonitorHeartFmt);
-    AddTextPrinterParameterized4(0, FONT_NARROW, 0, (baseRow + 2) * 8, 0, 0, colors, TEXT_SKIP_DRAW, gStringVar4);
-
-    StringCopy(gStringVar1, state == SHDW_STATE_PURIFIED ? gText_Yes : gText_No);
-    StringExpandPlaceholders(gStringVar4, sText_ShadowMonitorPurifiedFmt);
-    AddTextPrinterParameterized4(0, FONT_NARROW, 0, (baseRow + 3) * 8, 0, 0, colors, TEXT_SKIP_DRAW, gStringVar4);
-
-    if (info.found && info.trainerName[0] != EOS)
-        StringCopy(gStringVar1, info.trainerName);
-    else
-        StringCopy(gStringVar1, sText_ShadowMonitorUnknownName);
-
-    StringExpandPlaceholders(gStringVar4, sText_ShadowMonitorTrainerFmt);
-    AddTextPrinterParameterized4(0, FONT_NARROW, 0, (baseRow + 4) * 8, 0, 0, colors, TEXT_SKIP_DRAW, gStringVar4);
-
-    AddTextPrinterParameterized4(0, FONT_NARROW, 0, (baseRow + 5) * 8, 0, 0, colors, TEXT_SKIP_DRAW, sText_ShadowMonitorHint);
-
-    CopyWindowToVram(0, COPYWIN_GFX);
 }

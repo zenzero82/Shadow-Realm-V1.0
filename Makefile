@@ -185,6 +185,11 @@ ALL_LEARNABLES_JSON := $(LEARNSET_HELPERS_BUILD_DIR)/all_learnables.json
 WILD_ENCOUNTERS_TOOL_DIR := $(TOOLS_DIR)/wild_encounters
 AUTO_GEN_TARGETS += $(DATA_SRC_SUBDIR)/wild_encounters.h
 
+SHADOW_GRAPHICS_DIRS := graphics/pokemon/*/shadow graphics/pokemon/pokemon/*/shadow
+SHADOW_GRAPHICS_PNGS := $(wildcard $(addsuffix /*.png,$(SHADOW_GRAPHICS_DIRS)))
+SHADOW_GRAPHICS_PALS := $(wildcard $(addsuffix /*.pal,$(SHADOW_GRAPHICS_DIRS)))
+AUTO_GEN_TARGETS += src/data/shadow_graphics_assets.generated src/data/shadow_forms.generated
+
 $(DATA_SRC_SUBDIR)/wild_encounters.h: $(DATA_SRC_SUBDIR)/wild_encounters.json $(WILD_ENCOUNTERS_TOOL_DIR)/wild_encounters_to_header.py $(INCLUDE_DIRS)/config/overworld.h $(INCLUDE_DIRS)/config/dexnav.h
 	python3 $(WILD_ENCOUNTERS_TOOL_DIR)/wild_encounters_to_header.py > $@
 
@@ -346,6 +351,16 @@ include audio_rules.mk
 # so you can't really call this rule directly
 generated: $(AUTO_GEN_TARGETS)
 	@: # Silence the "Nothing to be done for `generated'" message, which some people were confusing for an error.
+
+src/data/shadow_graphics_assets.generated: scripts/convert_shadow_pngs.py scripts/convert_jasc_palettes.py scripts/check_shadow_palettes_even.py $(SHADOW_GRAPHICS_PNGS) $(SHADOW_GRAPHICS_PALS)
+	python3 scripts/convert_shadow_pngs.py
+	python3 scripts/convert_jasc_palettes.py
+	python3 scripts/check_shadow_palettes_even.py
+	touch $@
+
+src/data/shadow_forms.generated: src/data/shadow_graphics_assets.generated scripts/generate_shadow_forms.py $(SHADOW_GRAPHICS_PNGS) $(SHADOW_GRAPHICS_PALS)
+	python3 scripts/generate_shadow_forms.py
+	touch $@
 
 
 %.s:   ;

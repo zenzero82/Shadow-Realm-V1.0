@@ -804,10 +804,8 @@
 #define METATILE_johto_general_og_Door          0x03D
 #define METATILE_johto_general_og_Door_Gym      0x15B
 #define METATILE_johto_general_og_Door_Sliding  0x062
-
-// gTileset_johto_general_og
-#define METATILE_johto_general_og_johto_gym   0x15B
-#define METATILE_johto_general_og_johto_shop  0x062
+#define METATILE_johto_general_og_johto_gym     0x15B
+#define METATILE_johto_general_og_johto_shop    0x062
 
 // gTileset_lavender_town
 #define METATILE_lavender_town_Lavender  0x26C

@@ -2017,8 +2017,8 @@ u8 CreateNPCTrainerPartyFromTrainer(struct Pokemon *party, const struct Trainer 
                 SetMonData(&party[i], MON_DATA_SHADOW_AGGRO, &aggro);
 
                 levelBoost = partyData[monIndex].boostLevel;
-                SetMonData(&party[i], MON_DATA_HEART_VALUE, &partyData[monIndex].heartGauge);
-                SetMonData(&party[i], MON_DATA_HEART_MAX, &partyData[monIndex].heartGauge);
+                SetMonHeartValue(&party[i], partyData[monIndex].heartGauge);
+                SetMonHeartMax(&party[i], partyData[monIndex].heartGauge);
             }
             else if (partyData[monIndex].nickname != NULL)
             {

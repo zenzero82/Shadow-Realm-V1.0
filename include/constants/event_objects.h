@@ -356,6 +356,21 @@
 #define OBJ_EVENT_GFX_WORKER_F_GEN2         337
 #define OBJ_EVENT_GFX_WORKER_M_GEN2         338
 #define OBJ_EVENT_GFX_YOUNGSTER2_GEN2       339
+//Gen 4
+#define OBJ_EVENT_GFX_DAWN_GEN4             370
+#define OBJ_EVENT_GFX_LUCAS_GEN4            371
+#define OBJ_EVENT_GFX_BARRY_GEN4            372
+#define OBJ_EVENT_GFX_CYNTHIA_GEN4          373
+#define OBJ_EVENT_GFX_CYRUS_GEN4            374
+#define OBJ_EVENT_GFX_LOOKER_GEN4           375
+#define OBJ_EVENT_GFX_VOLKNER_GEN4          376
+#define OBJ_EVENT_GFX_GALACTIC_GRUNT_M_GEN4 377
+#define OBJ_EVENT_GFX_GALACTIC_GRUNT_F_GEN4 378
+#define OBJ_EVENT_GFX_MARS_GEN4             379
+#define OBJ_EVENT_GFX_JUPITER_GEN4          380
+#define OBJ_EVENT_GFX_SATURN_GEN4           381
+#define OBJ_EVENT_GFX_CHARON_GEN4           382
+#define OBJ_EVENT_GFX_ROWAN_GEN4           428
 //Unova (Gen 5)
 #define OBJ_EVENT_GFX_BRONIUS_GEN5         350
 #define OBJ_EVENT_GFX_COLRESS_GEN5         351
@@ -371,14 +386,66 @@
 #define OBJ_EVENT_GFX_ROOD_GEN5            361
 #define OBJ_EVENT_GFX_RYOKU_GEN5           362
 #define OBJ_EVENT_GFX_ZINZOLIN_GEN5        363
+#define OBJ_EVENT_GFX_JUNIPER_GEN5         429
 #define OBJ_EVENT_GFX_BERRY_TREE_GEN2      364
 #define OBJ_EVENT_GFX_BERRY_TREE_EARLY_STAGES_GEN2  365
 #define OBJ_EVENT_GFX_BERRY_TREE_LATE_STAGES_GEN2   366
+//Alola (Gen 7)
+#define OBJ_EVENT_GFX_ELIO_GEN7                383
+#define OBJ_EVENT_GFX_SELENE_GEN7              384
+#define OBJ_EVENT_GFX_LILLIE_GEN7              385
+#define OBJ_EVENT_GFX_HAU_GEN7                 386
+#define OBJ_EVENT_GFX_GLADION_GEN7             387
+#define OBJ_EVENT_GFX_GUZMA_GEN7               388
+#define OBJ_EVENT_GFX_KUKUI_GEN7               389
+#define OBJ_EVENT_GFX_BURNET_GEN7              390
+#define OBJ_EVENT_GFX_LUSAMINE_GEN7            391
+#define OBJ_EVENT_GFX_SOPHOCLES_GEN7           392
+#define OBJ_EVENT_GFX_MOLAYNE_GEN7             393
+#define OBJ_EVENT_GFX_PLUMERIA_GEN7            394
+#define OBJ_EVENT_GFX_SKULL_GRUNT_M_GEN7       395
+#define OBJ_EVENT_GFX_SKULL_GRUNT_F_GEN7       396
 
+//Galar (Gen 8)
+#define OBJ_EVENT_GFX_VICTOR_GEN8              397
+#define OBJ_EVENT_GFX_GLORIA_GEN8              398
+#define OBJ_EVENT_GFX_HOP_GEN8                 399
+#define OBJ_EVENT_GFX_BEDE_GEN8                400
+#define OBJ_EVENT_GFX_MARNIE_GEN8              401
+#define OBJ_EVENT_GFX_LEON_GEN8                402
+#define OBJ_EVENT_GFX_ROSE_GEN8                403
+#define OBJ_EVENT_GFX_OLEANA_GEN8              404
+#define OBJ_EVENT_GFX_MAGNOLIA_GEN8            405
+
+//Paldea (Gen 9)
+#define OBJ_EVENT_GFX_FLORIAN_GEN9             406
+#define OBJ_EVENT_GFX_JULIANA_GEN9             407
+#define OBJ_EVENT_GFX_NEMONA_GEN9              408
+#define OBJ_EVENT_GFX_ARVEN_GEN9               409
+#define OBJ_EVENT_GFX_PENNY_GEN9               410
+#define OBJ_EVENT_GFX_GEETA_GEN9               411
+
+//Kalos (Gen 6)
+#define OBJ_EVENT_GFX_LYSANDER_GEN6         412
+#define OBJ_EVENT_GFX_ALIANA_GEN6           413
+#define OBJ_EVENT_GFX_AZ_GEN6               414
+#define OBJ_EVENT_GFX_BRYONY_GEN6           415
+#define OBJ_EVENT_GFX_CALEM_GEN6            416
+#define OBJ_EVENT_GFX_CELOSIA_GEN6          417
+#define OBJ_EVENT_GFX_DIANTHA_GEN6          418
+#define OBJ_EVENT_GFX_FLARE_GRUNT_F_GEN6    419
+#define OBJ_EVENT_GFX_FLARE_GRUNT_M_GEN6    420
+#define OBJ_EVENT_GFX_MABLE_GEN6            421
+#define OBJ_EVENT_GFX_SERENA_GEN6           422
+#define OBJ_EVENT_GFX_SHAUNA_GEN6           423
+#define OBJ_EVENT_GFX_SYCAMORE_GEN6         424
+#define OBJ_EVENT_GFX_TIERNO_GEN6           425
+#define OBJ_EVENT_GFX_TREVOR_GEN6           426
+#define OBJ_EVENT_GFX_XEROSIC_GEN6          427
 // NOTE: The maximum amount of object events has been expanded from 255 to 65535.
 // Since dynamic graphics ids still require at least 16 free values, the actual limit
 // is 65519, but even considering follower Pokémon, this should be more than enough :)
-#define NUM_OBJ_EVENT_GFX                        370
+#define NUM_OBJ_EVENT_GFX                                               431
 
 
 // These are dynamic object gfx ids.
@@ -625,7 +692,20 @@
 #define OBJ_EVENT_PAL_TAG_YOUNGSTER2_GEN2        0x124B
 
 //Sinnoh
-
+#define OBJ_EVENT_PAL_TAG_DAWN_GEN4             0x1300
+#define OBJ_EVENT_PAL_TAG_LUCAS_GEN4            0x1301
+#define OBJ_EVENT_PAL_TAG_BARRY_GEN4            0x1302
+#define OBJ_EVENT_PAL_TAG_CYNTHIA_GEN4          0x1303
+#define OBJ_EVENT_PAL_TAG_CYRUS_GEN4            0x1304
+#define OBJ_EVENT_PAL_TAG_LOOKER_GEN4           0x1305
+#define OBJ_EVENT_PAL_TAG_VOLKNER_GEN4          0x1306
+#define OBJ_EVENT_PAL_TAG_GALACTIC_GRUNT_M_GEN4 0x1307
+#define OBJ_EVENT_PAL_TAG_GALACTIC_GRUNT_F_GEN4 0x1308
+#define OBJ_EVENT_PAL_TAG_MARS_GEN4             0x1309
+#define OBJ_EVENT_PAL_TAG_JUPITER_GEN4          0x130A
+#define OBJ_EVENT_PAL_TAG_SATURN_GEN4           0x130B
+#define OBJ_EVENT_PAL_TAG_CHARON_GEN4           0x130C
+#define OBJ_EVENT_PAL_TAG_ROWAN_GEN4            0x1940
 //Unova (Gen 5)
 #define OBJ_EVENT_PAL_TAG_BRONIUS_GEN5         0x124C
 #define OBJ_EVENT_PAL_TAG_COLRESS_GEN5         0x124D
@@ -641,9 +721,60 @@
 #define OBJ_EVENT_PAL_TAG_ROOD_GEN5            0x1257
 #define OBJ_EVENT_PAL_TAG_RYOKU_GEN5           0x1258
 #define OBJ_EVENT_PAL_TAG_ZINZOLIN_GEN5        0x1259
+#define OBJ_EVENT_PAL_TAG_JUNIPER_GEN5         0x1941
 
-//Kalos 
+//Kalos (Gen 6)
+#define OBJ_EVENT_PAL_TAG_LYSANDER_GEN6     0x192A
+#define OBJ_EVENT_PAL_TAG_ALIANA_GEN6       0x192B
+#define OBJ_EVENT_PAL_TAG_AZ_GEN6           0x192C
+#define OBJ_EVENT_PAL_TAG_BRYONY_GEN6       0x192D
+#define OBJ_EVENT_PAL_TAG_CALEM_GEN6        0x192E
+#define OBJ_EVENT_PAL_TAG_CELOSIA_GEN6      0x192F
+#define OBJ_EVENT_PAL_TAG_DIANTHA_GEN6      0x1930
+#define OBJ_EVENT_PAL_TAG_FLARE_GRUNT_F_GEN6 0x1931
+#define OBJ_EVENT_PAL_TAG_FLARE_GRUNT_M_GEN6 0x1932
+#define OBJ_EVENT_PAL_TAG_MABLE_GEN6        0x1933
+#define OBJ_EVENT_PAL_TAG_SERENA_GEN6       0x1934
+#define OBJ_EVENT_PAL_TAG_SHAUNA_GEN6       0x1935
+#define OBJ_EVENT_PAL_TAG_SYCAMORE_GEN6     0x1936
+#define OBJ_EVENT_PAL_TAG_TIERNO_GEN6       0x1937
+#define OBJ_EVENT_PAL_TAG_TREVOR_GEN6       0x1938
+#define OBJ_EVENT_PAL_TAG_XEROSIC_GEN6      0x1939
 
+//Alola (Gen 7)
+#define OBJ_EVENT_PAL_TAG_ELIO_GEN7                0x190D
+#define OBJ_EVENT_PAL_TAG_SELENE_GEN7              0x190E
+#define OBJ_EVENT_PAL_TAG_LILLIE_GEN7              0x190F
+#define OBJ_EVENT_PAL_TAG_HAU_GEN7                 0x1910
+#define OBJ_EVENT_PAL_TAG_GLADION_GEN7             0x1911
+#define OBJ_EVENT_PAL_TAG_GUZMA_GEN7               0x1912
+#define OBJ_EVENT_PAL_TAG_KUKUI_GEN7               0x1913
+#define OBJ_EVENT_PAL_TAG_BURNET_GEN7              0x1914
+#define OBJ_EVENT_PAL_TAG_LUSAMINE_GEN7            0x1915
+#define OBJ_EVENT_PAL_TAG_SOPHOCLES_GEN7           0x1916
+#define OBJ_EVENT_PAL_TAG_MOLAYNE_GEN7             0x1917
+#define OBJ_EVENT_PAL_TAG_PLUMERIA_GEN7            0x1918
+#define OBJ_EVENT_PAL_TAG_SKULL_GRUNT_M_GEN7       0x1919
+#define OBJ_EVENT_PAL_TAG_SKULL_GRUNT_F_GEN7       0x191A
+
+//Galar (Gen 8)
+#define OBJ_EVENT_PAL_TAG_VICTOR_GEN8              0x191B
+#define OBJ_EVENT_PAL_TAG_GLORIA_GEN8              0x191C
+#define OBJ_EVENT_PAL_TAG_HOP_GEN8                 0x191D
+#define OBJ_EVENT_PAL_TAG_BEDE_GEN8                0x191E
+#define OBJ_EVENT_PAL_TAG_MARNIE_GEN8              0x191F
+#define OBJ_EVENT_PAL_TAG_LEON_GEN8                0x1920
+#define OBJ_EVENT_PAL_TAG_ROSE_GEN8                0x1921
+#define OBJ_EVENT_PAL_TAG_OLEANA_GEN8              0x1922
+#define OBJ_EVENT_PAL_TAG_MAGNOLIA_GEN8            0x1923
+
+//Paldea (Gen 9)
+#define OBJ_EVENT_PAL_TAG_FLORIAN_GEN9             0x1924
+#define OBJ_EVENT_PAL_TAG_JULIANA_GEN9             0x1925
+#define OBJ_EVENT_PAL_TAG_NEMONA_GEN9              0x1926
+#define OBJ_EVENT_PAL_TAG_ARVEN_GEN9               0x1927
+#define OBJ_EVENT_PAL_TAG_PENNY_GEN9               0x1928
+#define OBJ_EVENT_PAL_TAG_GEETA_GEN9               0x1929
 //XD(Orre)
 #define OBJ_EVENT_PAL_TAG_WES                     0x1139   
 #define OBJ_EVENT_PAL_TAG_CIPHER_PEON_M           0x1140

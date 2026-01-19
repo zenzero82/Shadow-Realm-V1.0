@@ -16,6 +16,9 @@ extern const u8 gMonIcon_PikachuFShadow[];
 #endif
 extern const u8 gMonIcon_PikachuShadow[];
 
+static u16 sShadowIconPaletteBuffer[16];
+static void LoadShadowMonIconPalette(u16 species);
+
 struct MonIconSpriteTemplate
 {
     const struct OamData *oam;
@@ -29,7 +32,7 @@ struct MonIconSpriteTemplate
 static u8 CreateMonIconSprite(struct MonIconSpriteTemplate *, s16, s16, u8);
 static void FreeAndDestroyMonIconSprite_(struct Sprite *sprite);
 
-const struct SpritePalette gMonIconPaletteTable[] =
+const struct SpritePalette gMonIconPaletteTable[] __attribute__((used)) __attribute__((section(".rodata"))) =
 {
     { gMonIconPalettes[0], POKE_ICON_BASE_PAL_TAG + 0 },
     { gMonIconPalettes[1], POKE_ICON_BASE_PAL_TAG + 1 },
@@ -37,12 +40,24 @@ const struct SpritePalette gMonIconPaletteTable[] =
     { gMonIconPalettes[3], POKE_ICON_BASE_PAL_TAG + 3 },
     { gMonIconPalettes[4], POKE_ICON_BASE_PAL_TAG + 4 },
     { gMonIconPalettes[5], POKE_ICON_BASE_PAL_TAG + 5 },
-    { gMonIconPalette_Shadow, POKE_ICON_SHADOW_PAL_TAG },
+    { sShadowIconPaletteBuffer, POKE_ICON_SHADOW_PAL_TAG },
 };
 
 #define MON_ICON_SHADOW_PALETTE_INDEX (ARRAY_COUNT(gMonIconPaletteTable) - 1)
 
 const u8 gMonIconShadowPaletteIndex = MON_ICON_SHADOW_PALETTE_INDEX;
+
+// Ensure the table’s section is kept by referencing it from read-only data.
+const struct SpritePalette *const gMonIconPaletteTableRef __attribute__((used)) = gMonIconPaletteTable;
+
+static void LoadShadowMonIconPalette(u16 species)
+{
+    const u16 *palette = GetShadowMonPalette(species);
+    if (palette == NULL)
+        return;
+
+    memcpy(sShadowIconPaletteBuffer, palette, sizeof(sShadowIconPaletteBuffer));
+}
 
 static const struct OamData sMonIconOamData =
 {
@@ -165,6 +180,7 @@ u8 CreateMonIcon(u16 species, void (*callback)(struct Sprite *), s16 x, s16 y, u
 
     if (useShadowIcon)
     {
+        LoadShadowMonIconPalette(iconSpecies);
         if (IndexOfSpritePaletteTag(POKE_ICON_SHADOW_PAL_TAG) == 0xFF)
             LoadSpritePalette(&gMonIconPaletteTable[gMonIconShadowPaletteIndex]);
         iconTemplate.paletteTag = POKE_ICON_SHADOW_PAL_TAG;

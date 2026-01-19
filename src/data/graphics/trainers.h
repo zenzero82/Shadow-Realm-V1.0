@@ -429,8 +429,69 @@ const u16 gTrainerPalette_Youngster2[] = INCBIN_U16("graphics/trainers/front_pic
 //Hoenn
 
 //Sinoh
+const u32 gTrainerFrontPic_DawnGen4[] = INCBIN_U32("graphics/trainers/front_pics/dawn_gen4.4bpp.lz");
+const u16 gTrainerPalette_DawnGen4[] = INCBIN_U16("graphics/trainers/front_pics/dawn_gen4.gbapal");
+
+const u32 gTrainerFrontPic_LucasGen4[] = INCBIN_U32("graphics/trainers/front_pics/lucas_gen4.4bpp.lz");
+const u16 gTrainerPalette_LucasGen4[] = INCBIN_U16("graphics/trainers/front_pics/lucas_gen4.gbapal");
+
+const u32 gTrainerFrontPic_BarryGen4[] = INCBIN_U32("graphics/trainers/front_pics/barry_gen4.4bpp.lz");
+const u16 gTrainerPalette_BarryGen4[] = INCBIN_U16("graphics/trainers/front_pics/barry_gen4.gbapal");
+
+const u32 gTrainerFrontPic_CynthiaGen4[] = INCBIN_U32("graphics/trainers/front_pics/cynthia_gen4.4bpp.lz");
+const u16 gTrainerPalette_CynthiaGen4[] = INCBIN_U16("graphics/trainers/front_pics/cynthia_gen4.gbapal");
+
+const u32 gTrainerFrontPic_CyrusGen4[] = INCBIN_U32("graphics/trainers/front_pics/cyrus_gen4.4bpp.lz");
+const u16 gTrainerPalette_CyrusGen4[] = INCBIN_U16("graphics/trainers/front_pics/cyrus_gen4.gbapal");
+
+const u32 gTrainerFrontPic_VolknerGen4[] = INCBIN_U32("graphics/trainers/front_pics/volkner_gen4.4bpp.lz");
+const u16 gTrainerPalette_VolknerGen4[] = INCBIN_U16("graphics/trainers/front_pics/volkner_gen4.gbapal");
+
+const u32 gTrainerFrontPic_GalacticGruntMGen4[] = INCBIN_U32("graphics/trainers/front_pics/galactic_grunt_m_gen4.4bpp.lz");
+const u16 gTrainerPalette_GalacticGruntMGen4[] = INCBIN_U16("graphics/trainers/front_pics/galactic_grunt_m_gen4.gbapal");
+
+const u32 gTrainerFrontPic_GalacticGruntFGen4[] = INCBIN_U32("graphics/trainers/front_pics/galactic_grunt_f_gen4.4bpp.lz");
+const u16 gTrainerPalette_GalacticGruntFGen4[] = INCBIN_U16("graphics/trainers/front_pics/galactic_grunt_f_gen4.gbapal");
+
+const u32 gTrainerFrontPic_MarsGen4[] = INCBIN_U32("graphics/trainers/front_pics/mars_gen4.4bpp.lz");
+const u16 gTrainerPalette_MarsGen4[] = INCBIN_U16("graphics/trainers/front_pics/mars_gen4.gbapal");
+
+const u32 gTrainerFrontPic_JupiterGen4[] = INCBIN_U32("graphics/trainers/front_pics/jupiter_gen4.4bpp.lz");
+const u16 gTrainerPalette_JupiterGen4[] = INCBIN_U16("graphics/trainers/front_pics/jupiter_gen4.gbapal");
+
+const u32 gTrainerFrontPic_SaturnGen4[] = INCBIN_U32("graphics/trainers/front_pics/saturn_gen4.4bpp.lz");
+const u16 gTrainerPalette_SaturnGen4[] = INCBIN_U16("graphics/trainers/front_pics/saturn_gen4.gbapal");
 
 //Unova
+const u32 gTrainerFrontPic_HilbertGen5[] = INCBIN_U32("graphics/trainers/front_pics/hilbert_gen5.4bpp.lz");
+const u16 gTrainerPalette_HilbertGen5[] = INCBIN_U16("graphics/trainers/front_pics/hilbert_gen5.gbapal");
+
+const u32 gTrainerFrontPic_HildaGen5[] = INCBIN_U32("graphics/trainers/front_pics/hilda_gen5.4bpp.lz");
+const u16 gTrainerPalette_HildaGen5[] = INCBIN_U16("graphics/trainers/front_pics/hilda_gen5.gbapal");
+
+const u32 gTrainerFrontPic_NGen5[] = INCBIN_U32("graphics/trainers/front_pics/n_gen5.4bpp.lz");
+const u16 gTrainerPalette_NGen5[] = INCBIN_U16("graphics/trainers/front_pics/n_gen5.gbapal");
+
+const u32 gTrainerFrontPic_ColressGen5[] = INCBIN_U32("graphics/trainers/front_pics/colress_gen5.4bpp.lz");
+const u16 gTrainerPalette_ColressGen5[] = INCBIN_U16("graphics/trainers/front_pics/colress_gen5.gbapal");
+
+const u32 gTrainerFrontPic_GhetsisGen5[] = INCBIN_U32("graphics/trainers/front_pics/ghetsis_gen5.4bpp.lz");
+const u16 gTrainerPalette_GhetsisGen5[] = INCBIN_U16("graphics/trainers/front_pics/ghetsis_gen5.gbapal");
+
+const u32 gTrainerFrontPic_ZinzolinGen5[] = INCBIN_U32("graphics/trainers/front_pics/zinzolin_gen5.4bpp.lz");
+const u16 gTrainerPalette_ZinzolinGen5[] = INCBIN_U16("graphics/trainers/front_pics/zinzolin_gen5.gbapal");
+
+const u32 gTrainerFrontPic_PlasmaGruntMGen5[] = INCBIN_U32("graphics/trainers/front_pics/plasma_grunt_m_gen5.4bpp.lz");
+const u16 gTrainerPalette_PlasmaGruntMGen5[] = INCBIN_U16("graphics/trainers/front_pics/plasma_grunt_m_gen5.gbapal");
+
+const u32 gTrainerFrontPic_PlasmaGruntFGen5[] = INCBIN_U32("graphics/trainers/front_pics/plasma_grunt_f_gen5.4bpp.lz");
+const u16 gTrainerPalette_PlasmaGruntFGen5[] = INCBIN_U16("graphics/trainers/front_pics/plasma_grunt_f_gen5.gbapal");
+
+const u32 gTrainerFrontPic_IrisGen5[] = INCBIN_U32("graphics/trainers/front_pics/iris_gen5.4bpp.lz");
+const u16 gTrainerPalette_IrisGen5[] = INCBIN_U16("graphics/trainers/front_pics/iris_gen5.gbapal");
+
+const u32 gTrainerFrontPic_LookerGen5[] = INCBIN_U32("graphics/trainers/front_pics/looker_gen5.4bpp.lz");
+const u16 gTrainerPalette_LookerGen5[] = INCBIN_U16("graphics/trainers/front_pics/looker_gen5.gbapal");
 
 //Kalos
 

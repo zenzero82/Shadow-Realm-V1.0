@@ -6,10 +6,10 @@ Route1_MapScripts::
 @ =========================================================
 
 Route1_Speaker_Torkin:
-    .string "Cipher Peon Torkin$"
+    .string "Torkin$"
 
 Route1_Speaker_OldMan:
-    .string "Old Man Harland$"
+    .string "Old Man Harlo$"
 
 @ =========================================================
 @ Route 1 – Sign

@@ -1984,6 +1984,8 @@ static void SetBattlerMonData(u32 battler, struct Pokemon *party, u32 monId)
         break;
     case REQUEST_SPECIES_BATTLE:
         SetMonData(&party[monId], MON_DATA_SPECIES, &gBattleResources->bufferA[battler][3]);
+        BattleLoadMonSpriteGfx(GetBattlerMon(battler), battler);
+        SetBattlerShadowSpriteCallback(battler, gBattleMons[battler].species);
         break;
     case REQUEST_HELDITEM_BATTLE:
         SetMonData(&party[monId], MON_DATA_HELD_ITEM, &gBattleResources->bufferA[battler][3]);
