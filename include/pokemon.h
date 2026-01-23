@@ -258,7 +258,8 @@ union __attribute__((packed, aligned(2))) NicknameShadowdata
      /* 0x05 */ u8 isXD:1; //for Shadow Lugia's special case
      /* 0x05 */ u8 isReverse:1;
      /* 0x05 */ u8 snagFlag:1; //Set when catching from another trainer, so that the mon is given to you after winning. Unset afterward.
-    /* 0x05 */ u8 filler:2;
+    /* 0x05 */ u8 readyMessageShown:1;
+    /* 0x05 */ u8 filler:1;
     /* 0x06 */ u32 storedExp;
     /* size = 10 */
         
@@ -718,15 +719,17 @@ void CreateMonWithEVSpreadNatureOTID(struct Pokemon *mon, u16 species, u8 level,
 u8 Shdw_GetAggroForNature(u8 nature);
 bool8 Shdw_IsPurificationReady(const struct Pokemon *mon);
 bool8 Shdw_AnyPartyMonPurificationReady(void);
-	void Shdw_UpdatePurifyReadyFlag(void);
-	u8  Shdw_GetState(u16 shadowId);
+void Shdw_UpdatePurifyReadyFlag(void);
+extern u8 gShadowPurifyReadyMonCount;
+u8  Shdw_GetState(u16 shadowId);
 	void Shdw_SetState(u16 shadowId, u8 state);
 	void Shdw_OnEncounterMon(struct Pokemon *mon);
 	void Shdw_OnSnagMon(struct Pokemon *mon);
-	void Shadow_AddStoredExp(struct Pokemon *mon, u32 amount);
-	u32 Shadow_TakeStoredExp(struct Pokemon *mon);
-	u32 Shadow_GetStoredExp(const struct Pokemon *mon);
-	void Shadow_GrantStoredExp(struct Pokemon *mon);
+void Shadow_AddStoredExp(struct Pokemon *mon, u32 amount);
+u32 Shadow_TakeStoredExp(struct Pokemon *mon);
+u32 Shadow_GetStoredExp(const struct Pokemon *mon);
+u32 Shadow_GrantStoredExp(struct Pokemon *mon);
+void Shadow_RemoveShadowMoves(struct Pokemon *mon);
 	u16 GetMonHeartValue(struct Pokemon *mon);
 	u16 GetMonHeartMax(struct Pokemon *mon);
 	void SetMonHeartValue(struct Pokemon *mon, u16 val);

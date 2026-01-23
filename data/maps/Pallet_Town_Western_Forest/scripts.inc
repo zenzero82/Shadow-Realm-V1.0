@@ -234,7 +234,7 @@ TestNameboxNPC::
     setflag FLAG_RECEIVED_SHADOW_MONITOR
     msgbox ShadowMonitor_Text_Given, MSGBOX_NPC
     closemessage
-    checkflag FLAG_RECEIVED_SNAG_MACHINE
+    checkflag FLAG_HAS_SNAG_MACHINE
     goto_if_eq SnagMachineAlreadyHas
     goto GiveSnagMachine
 
@@ -247,7 +247,7 @@ ShadowMonitorAlreadyHas::
 
 GiveSnagMachine::
     giveitem ITEM_SNAG_MACHINE
-    setflag FLAG_RECEIVED_SNAG_MACHINE
+    setflag FLAG_HAS_SNAG_MACHINE
     msgbox SnagMachine_Text_Given, MSGBOX_NPC
     closemessage
     release

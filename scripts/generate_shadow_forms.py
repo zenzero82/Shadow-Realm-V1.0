@@ -1,4 +1,5 @@
 import os
+import re
 import sys
 from pathlib import Path
 
@@ -211,6 +212,31 @@ SPECIAL_SHADOW_DIRECTORIES = {
 }
 SPECIAL_SHADOW_NO_OVERWORLD = {"mimikyu_busted"}
 
+def load_overworld_tile_counts():
+    path = BASE_DIR / "spritesheet_rules.mk"
+    if not path.exists():
+        return {}
+    pattern = re.compile(
+        r"\$\((?:POKEMONGFXDIR)\)/([A-Za-z0-9_]+)(?:/[^/]+)*/overworld\.4bpp"
+    )
+    lines = path.read_text().splitlines()
+    counts = {}
+    for i, line in enumerate(lines):
+        if "overworld.4bpp" not in line or "/shadow/overworld.4bpp" in line:
+            continue
+        match = pattern.search(line)
+        if not match:
+            continue
+        slug = match.group(1)
+        cmd_line = lines[i + 1] if i + 1 < len(lines) else ""
+        width_match = re.search(r"-mwidth\s+(\d+)", cmd_line)
+        height_match = re.search(r"-mheight\s+(\d+)", cmd_line)
+        if width_match and height_match:
+            counts[slug] = (int(width_match.group(1)), int(height_match.group(1)))
+    return counts
+
+OVERWORLD_TILE_COUNTS = load_overworld_tile_counts()
+
 species_map = {}
 with SPECIES_HEADER.open() as f:
     for line in f:
@@ -360,10 +386,12 @@ for raw_name, slug, species_constant in species_data:
         icon_file = find_graphics_file(path, ("icon",), exts=(".4bpp", ".4bpp.lz"))
     if overworld_file is None:
         overworld_file = find_graphics_file(path, ("overworld",), exts=(".4bpp", ".4bpp.lz"))
-    overworld_tile_counts = (4, 4)
     overworld_png = find_graphics_png(path, ("overworld",))
-    if overworld_png:
+    overworld_tile_counts = OVERWORLD_TILE_COUNTS.get(slug)
+    if overworld_tile_counts is None and overworld_png:
         overworld_tile_counts = png_tile_counts(overworld_png)
+    if overworld_tile_counts is None:
+        overworld_tile_counts = (4, 4)
     requires_overworld = slug not in SPECIAL_SHADOW_NO_OVERWORLD
     if (
         not front_file

@@ -1111,8 +1111,18 @@ EventScript_ShadowPurifyReady::
     releaseall
     end
 
+EventScript_ShadowPurifyReadyMultiple::
+    lockall
+    msgbox gText_ShadowPurifyMultipleReady, MSGBOX_DEFAULT
+    clearflag FLAG_SHADOW_MON_READY_TO_PURIFY
+    releaseall
+    end
+
 gText_ShadowPurifyReady::
     .string "One of your POKEMON is ready to open\nthe door to its heart!\p$"
+
+gText_ShadowPurifyMultipleReady::
+    .string "You have POKEMON that are ready to open\nthe door to their hearts!\p$"
 
 	.include "data/scripts/pc_transfer.inc"
 	.include "data/scripts/questionnaire.inc"

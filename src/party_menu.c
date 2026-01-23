@@ -5505,6 +5505,12 @@ void ItemUseCB_TMHM(u8 taskId, TaskFunc task)
     PlaySE(SE_SELECT);
     mon = &gPlayerParty[gPartyMenu.slotId];
 
+    if (GetMonData(mon, MON_DATA_IS_SHADOW, NULL))
+    {
+        DisplayLearnMoveMessageAndClose(taskId, gText_ShadowPokemonCantLearnMoves);
+        return;
+    }
+
     GetMonNickname(mon, gStringVar1);
     StringCopy(gStringVar2, GetMoveName(move));
 
@@ -6198,6 +6204,7 @@ void ItemUseCB_TimeFlute(u8 taskId, TaskFunc task)
     SetMonHeartMax(mon, 0);
     GetMonData(mon, MON_DATA_NICKNAME, sTimeFluteSavedNickname);
     gSkipEvolutionRenameForShadowPurification = TRUE;
+    gSkipShadowStoredExpGrantForPurification = TRUE;
 
     if (GetItemPocket(itemId) != POCKET_KEY_ITEMS)
         RemoveBagItem(itemId, 1);
@@ -6209,6 +6216,7 @@ static void CB2_TimeFluteReturn(void)
 {
     if (sTimeFluteSlotId >= PARTY_SIZE)
     {
+        gSkipShadowStoredExpGrantForPurification = FALSE;
         if (sTimeFluteReturnCallback != NULL)
             sTimeFluteReturnCallback();
         return;
@@ -6226,11 +6234,13 @@ static void CB2_TimeFluteReturn(void)
     SetMonData(mon, MON_DATA_SNAGGED, &snagged);
     u8 shadowAggro = 0;
     SetMonData(mon, MON_DATA_SHADOW_AGGRO, &shadowAggro);
+    Shadow_RemoveShadowMoves(mon);
     SetMonHeartValue(mon, 0);
     SetMonHeartMax(mon, 0);
     u16 shadowId = GetMonData(mon, MON_DATA_SHADOW_ID, NULL);
     if (shadowId != 0)
         Shdw_SetState(shadowId, SHDW_STATE_PURIFIED);
+    gSkipShadowStoredExpGrantForPurification = FALSE;
     u8 nationalRibbon = TRUE;
     SetMonData(mon, MON_DATA_NATIONAL_RIBBON, &nationalRibbon);
 

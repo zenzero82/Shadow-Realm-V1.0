@@ -24,6 +24,7 @@
 #include "dexnav.h"
 #include "dma3.h"
 #include "event_data.h"
+#include "constants/flags.h"
 #include "evolution_scene.h"
 #include "field_weather.h"
 #include "follower_npc.h"
@@ -3119,6 +3120,7 @@ static void BattleStartClearSetData(void)
 
     gBattleStruct->givenExpMons = 0;
     gBattleStruct->palaceFlags = 0;
+    gBattleStruct->shadowHintFlags = 0;
 
     gBattleResults.shinyWildMon = IsMonShiny(&gEnemyParty[0]);
 
@@ -3649,9 +3651,11 @@ static void DoBattleIntro(void)
         break;
     case BATTLE_INTRO_STATE_TRAINER_SEND_OUT_TEXT:
         if (gBattleTypeFlags & BATTLE_TYPE_RECORDED_LINK && !(gBattleTypeFlags & BATTLE_TYPE_RECORDED_IS_MASTER))
-            PrepareStringBattle(STRINGID_INTROSENDOUT, GetBattlerAtPosition(B_POSITION_PLAYER_LEFT));
+            battler = GetBattlerAtPosition(B_POSITION_PLAYER_LEFT);
         else
-            PrepareStringBattle(STRINGID_INTROSENDOUT, GetBattlerAtPosition(B_POSITION_OPPONENT_LEFT));
+            battler = GetBattlerAtPosition(B_POSITION_OPPONENT_LEFT);
+
+        PrepareStringBattle(STRINGID_INTROSENDOUT, battler);
         gBattleStruct->introState++;
         break;
     case BATTLE_INTRO_STATE_WAIT_FOR_TRAINER_SEND_OUT_TEXT:
@@ -3909,6 +3913,24 @@ static void TryDoEventsBeforeFirstTurn(void)
     case FIRST_TURN_EVENTS_OPPORTUNIST_2:
         if (AbilityBattleEffects(ABILITYEFFECT_OPPORTUNIST, 0, 0, 0, 0))
             return;
+        gBattleStruct->eventsBeforeFirstTurnState++;
+        break;
+    case FIRST_TURN_EVENTS_SHADOW_HINT:
+        if (!FlagGet(FLAG_HAS_SNAG_MACHINE) && !CheckBagHasItem(ITEM_SNAG_MACHINE, 1))
+        {
+            gBattleStruct->eventsBeforeFirstTurnState++;
+            break;
+        }
+        for (i = 0; i < gBattlersCount; i++)
+        {
+            if (GetBattlerSide(i) == B_SIDE_OPPONENT && gBattleMons[i].isShadow)
+            {
+                gBattleScripting.battler = i;
+                gBattleStruct->eventsBeforeFirstTurnState++;
+                BattleScriptExecute(BattleScript_ShadowPokemonHint);
+                return;
+            }
+        }
         gBattleStruct->eventsBeforeFirstTurnState++;
         break;
     case FIRST_TURN_EVENTS_END:

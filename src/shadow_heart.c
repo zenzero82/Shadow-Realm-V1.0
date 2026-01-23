@@ -4,7 +4,7 @@
 #include "shadow_heart.h"
 #include "constants/species.h"
 
-#define SHADOW_HEART_STEP_THRESHOLD 100
+#define SHADOW_HEART_STEP_THRESHOLD 256
 
 static void Shadow_DecayPartyHeartValues(u16 amount)
 {

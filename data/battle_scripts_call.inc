@@ -23,6 +23,15 @@ gBattleScript_PlayerCall_Shadow_ReverseEnded:
     end2
     .size gBattleScript_PlayerCall_Shadow_ReverseEnded, .-gBattleScript_PlayerCall_Shadow_ReverseEnded
 
+    .align 2
+.global BattleScript_ShadowPokemonHint
+.type BattleScript_ShadowPokemonHint, %object
+BattleScript_ShadowPokemonHint:
+    printstring STRINGID_SHADOW_POKEMON_SPOTTED
+    waitmessage B_WAIT_TIME_UNTIL_PRESS
+    end2
+.size BattleScript_ShadowPokemonHint, .-BattleScript_ShadowPokemonHint
+
     .popsection
 
 gBattleScript_ReverseModeTurnDmg::

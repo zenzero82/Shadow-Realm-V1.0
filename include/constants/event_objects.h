@@ -442,10 +442,22 @@
 #define OBJ_EVENT_GFX_TIERNO_GEN6           425
 #define OBJ_EVENT_GFX_TREVOR_GEN6           426
 #define OBJ_EVENT_GFX_XEROSIC_GEN6          427
+#define OBJ_EVENT_GFX_ARDOS            430
+#define OBJ_EVENT_GFX_DAKIM            431
+#define OBJ_EVENT_GFX_EIN              432
+#define OBJ_EVENT_GFX_ELDES            433
+#define OBJ_EVENT_GFX_EVICE            434
+#define OBJ_EVENT_GFX_GONZAP           435
+#define OBJ_EVENT_GFX_GREEVIL          436
+#define OBJ_EVENT_GFX_LOVRINA          437
+#define OBJ_EVENT_GFX_MICHAEL          438
+#define OBJ_EVENT_GFX_NASCOUR          439
+#define OBJ_EVENT_GFX_SNAGEM_GRUNT     440
+#define OBJ_EVENT_GFX_VENUS            441
 // NOTE: The maximum amount of object events has been expanded from 255 to 65535.
 // Since dynamic graphics ids still require at least 16 free values, the actual limit
 // is 65519, but even considering follower Pokémon, this should be more than enough :)
-#define NUM_OBJ_EVENT_GFX                                               431
+#define NUM_OBJ_EVENT_GFX                                               443
 
 
 // These are dynamic object gfx ids.
@@ -778,6 +790,18 @@
 //XD(Orre)
 #define OBJ_EVENT_PAL_TAG_WES                     0x1139   
 #define OBJ_EVENT_PAL_TAG_CIPHER_PEON_M           0x1140
+#define OBJ_EVENT_PAL_TAG_ARDOS             0x1141
+#define OBJ_EVENT_PAL_TAG_DAKIM             0x1142
+#define OBJ_EVENT_PAL_TAG_EIN               0x1143
+#define OBJ_EVENT_PAL_TAG_ELDES             0x1144
+#define OBJ_EVENT_PAL_TAG_EVICE             0x1145
+#define OBJ_EVENT_PAL_TAG_GONZAP            0x1146
+#define OBJ_EVENT_PAL_TAG_GREEVIL           0x1147
+#define OBJ_EVENT_PAL_TAG_LOVRINA           0x1148
+#define OBJ_EVENT_PAL_TAG_MICHAEL           0x1149
+#define OBJ_EVENT_PAL_TAG_NASCOUR           0x114A
+#define OBJ_EVENT_PAL_TAG_SNAGEM_GRUNT      0x114B
+#define OBJ_EVENT_PAL_TAG_VENUS             0x114C
 
 #if OW_FOLLOWERS_POKEBALLS
 // Vanilla

@@ -71,6 +71,10 @@
 
 #define BATTLE_BUFFER_LINK_SIZE 0x1000
 
+#define SHADOW_HINT_FLAG(battler) (1u << (battler))
+
+bool32 TryShowShadowPokemonHint(u32 battler);
+
 // Cleared each time a mon leaves the field, either by switching out or fainting
 struct DisableStruct
 {
@@ -621,6 +625,7 @@ struct BattleStruct
     u8 expOrderId:3;
     u8 expGetterBattlerId:2;
     u8 teamGotExpMsgPrinted:1; // The 'Rest of your team got msg' has been printed.
+    u8 shadowHintFlags;
     u8 givenExpMons; // Bits for enemy party's pokemon that gave exp to player's party.
     u8 expSentInMons; // As bits for player party mons - not including exp share mons.
     u8 wildVictorySong;

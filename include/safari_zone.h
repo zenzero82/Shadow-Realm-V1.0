@@ -11,6 +11,7 @@ void EnterSafariMode(void);
 void ExitSafariMode(void);
 
 bool8 SafariZoneTakeStep(void);
+u16 SafariZoneGetStepCounter(void);
 void SafariZoneRetirePrompt(void);
 
 void CB2_EndSafariBattle(void);

@@ -89,6 +89,11 @@ bool8 SafariZoneTakeStep(void)
     return FALSE;
 }
 
+u16 SafariZoneGetStepCounter(void)
+{
+    return sSafariZoneStepCounter;
+}
+
 void SafariZoneRetirePrompt(void)
 {
     ScriptContext_SetupScript(SafariZone_EventScript_RetirePrompt);

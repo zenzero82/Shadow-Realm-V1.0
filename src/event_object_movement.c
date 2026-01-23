@@ -23,6 +23,10 @@
 #include "gpu_regs.h"
 #include "graphics.h"
 #include "data/graphics/shadow_forms.h"
+
+#ifndef DEBUG_SHADOW_OVERWORLD_LOG
+#define DEBUG_SHADOW_OVERWORLD_LOG 1
+#endif
 #include "mauville_old_man.h"
 #include "metatile_behavior.h"
 #include "overworld.h"
@@ -200,7 +204,7 @@ static void SetPlayerAvatarObjectEventIdAndObjectId(u8, u8);
 static u8 UpdateSpritePalette(const struct SpritePalette *spritePalette, struct Sprite *sprite);
 static void ResetObjectEventFldEffData(struct ObjectEvent *);
 static u8 LoadSpritePaletteIfTagExists(const struct SpritePalette *);
-static u8 FindObjectEventPaletteIndexByTag(u16);
+static u16 FindObjectEventPaletteIndexByTag(u16);
 static bool8 ObjectEventDoesElevationMatch(struct ObjectEvent *, u8);
 static void SpriteCB_CameraObject(struct Sprite *);
 static void CameraObject_Init(struct Sprite *);
@@ -277,6 +281,14 @@ static void (*const sCameraObjectFuncs[])(struct Sprite *) = {
 #include "data/object_events/object_event_graphics.h"
 
 #if OW_POKEMON_OBJECT_EVENTS
+#if DEBUG_SHADOW_OVERWORLD_LOG
+EWRAM_DATA struct {
+    u16 species;
+    u16 baseSpecies;
+    const struct ObjectEventGraphicsInfo *graphicsInfo;
+    const struct SpriteFrameImage *picTable;
+} gShadowOverworldLog;
+#endif
 #include "data/graphics/shadow_forms_overworld.inc"
 #endif
 
@@ -555,10 +567,7 @@ static const struct SpritePalette sObjectEventSpritePalettes[] = {
     {gObjectEventPal_Lugia,                 OBJ_EVENT_PAL_TAG_LUGIA},
     {gObjectEventPal_RubySapphireBrendan,   OBJ_EVENT_PAL_TAG_RS_BRENDAN},
     {gObjectEventPal_RubySapphireMay,       OBJ_EVENT_PAL_TAG_RS_MAY},
-    //misc(NEW)
     {gObjectEventPal_HoopaRing,             OBJ_EVENT_PAL_TAG_HOOPA_RING},
-
-    //Kanto
     {gObjectEventPal_BrockGen1,             OBJ_EVENT_PAL_TAG_BROCK_GEN1},
     {gObjectEventPal_RocketGruntMGen1,      OBJ_EVENT_PAL_TAG_ROCKET_GRUNT_M_GEN1},
     {gObjectEventPal_RocketGruntFGen1,      OBJ_EVENT_PAL_TAG_ROCKET_GRUNT_F_GEN1},
@@ -588,7 +597,6 @@ static const struct SpritePalette sObjectEventSpritePalettes[] = {
     {gObjectEventPal_ProtonGen1,  OBJ_EVENT_PAL_TAG_PROTON_GEN1},
     {gObjectEventPal_SabrinaGen1,  OBJ_EVENT_PAL_TAG_SABRINA_GEN1},
     {gObjectEventPal_SurgeGen1,  OBJ_EVENT_PAL_TAG_SURGE_GEN1},
-    //Johto
     {gObjectEventPal_ArtistGen2,                    OBJ_EVENT_PAL_TAG_ARTIST_GEN2},
     {gObjectEventPal_AttendantFGen2,                OBJ_EVENT_PAL_TAG_ATTENDANT_F_GEN2},
     {gObjectEventPal_AttendantMGen2,                OBJ_EVENT_PAL_TAG_ATTENDANT_M_GEN2},
@@ -665,7 +673,6 @@ static const struct SpritePalette sObjectEventSpritePalettes[] = {
     {gObjectEventPal_WorkerFGen2,                   OBJ_EVENT_PAL_TAG_WORKER_F_GEN2},
     {gObjectEventPal_WorkerMGen2,                   OBJ_EVENT_PAL_TAG_WORKER_M_GEN2},
     {gObjectEventPal_Youngster2Gen2,                OBJ_EVENT_PAL_TAG_YOUNGSTER2_GEN2},
-    //Sinnoh
     {gObjectEventPal_DawnGen4,              OBJ_EVENT_PAL_TAG_DAWN_GEN4},
     {gObjectEventPal_LucasGen4,             OBJ_EVENT_PAL_TAG_LUCAS_GEN4},
     {gObjectEventPal_BarryGen4,             OBJ_EVENT_PAL_TAG_BARRY_GEN4},
@@ -680,8 +687,6 @@ static const struct SpritePalette sObjectEventSpritePalettes[] = {
     {gObjectEventPal_SaturnGen4,             OBJ_EVENT_PAL_TAG_SATURN_GEN4},
     {gObjectEventPal_CharonGen4,             OBJ_EVENT_PAL_TAG_CHARON_GEN4},
     {gObjectEventPal_RowanGen4,             OBJ_EVENT_PAL_TAG_ROWAN_GEN4},
-
-    //Unova
     {gObjectEventPal_BroniusGen5,         OBJ_EVENT_PAL_TAG_BRONIUS_GEN5},
     {gObjectEventPal_ColressGen5,         OBJ_EVENT_PAL_TAG_COLRESS_GEN5},
     {gObjectEventPal_GhetsisGen5,         OBJ_EVENT_PAL_TAG_GHETSIS_GEN5},
@@ -697,8 +702,6 @@ static const struct SpritePalette sObjectEventSpritePalettes[] = {
     {gObjectEventPal_RyokuGen5,           OBJ_EVENT_PAL_TAG_RYOKU_GEN5},
     {gObjectEventPal_ZinzolinGen5,        OBJ_EVENT_PAL_TAG_ZINZOLIN_GEN5},
     {gObjectEventPal_JuniperGen5,        OBJ_EVENT_PAL_TAG_JUNIPER_GEN5},
-
-    //Kalos 
     {gObjectEventPal_LysanderGen6, OBJ_EVENT_PAL_TAG_LYSANDER_GEN6},
     {gObjectEventPal_AlianaGen6, OBJ_EVENT_PAL_TAG_ALIANA_GEN6},
     {gObjectEventPal_AzGen6, OBJ_EVENT_PAL_TAG_AZ_GEN6},
@@ -715,7 +718,6 @@ static const struct SpritePalette sObjectEventSpritePalettes[] = {
     {gObjectEventPal_TiernoGen6, OBJ_EVENT_PAL_TAG_TIERNO_GEN6},
     {gObjectEventPal_TrevorGen6, OBJ_EVENT_PAL_TAG_TREVOR_GEN6},
     {gObjectEventPal_XerosicGen6, OBJ_EVENT_PAL_TAG_XEROSIC_GEN6},
-    //Alola
     {gObjectEventPal_ElioGen7, OBJ_EVENT_PAL_TAG_ELIO_GEN7},
     {gObjectEventPal_SeleneGen7, OBJ_EVENT_PAL_TAG_SELENE_GEN7},
     {gObjectEventPal_LillieGen7, OBJ_EVENT_PAL_TAG_LILLIE_GEN7},
@@ -730,7 +732,6 @@ static const struct SpritePalette sObjectEventSpritePalettes[] = {
     {gObjectEventPal_PlumeriaGen7, OBJ_EVENT_PAL_TAG_PLUMERIA_GEN7},
     {gObjectEventPal_SkullGruntMGen7, OBJ_EVENT_PAL_TAG_SKULL_GRUNT_M_GEN7},
     {gObjectEventPal_SkullGruntFGen7, OBJ_EVENT_PAL_TAG_SKULL_GRUNT_F_GEN7},
-    //Galar
     {gObjectEventPal_VictorGen8, OBJ_EVENT_PAL_TAG_VICTOR_GEN8},
     {gObjectEventPal_GloriaGen8, OBJ_EVENT_PAL_TAG_GLORIA_GEN8},
     {gObjectEventPal_HopGen8, OBJ_EVENT_PAL_TAG_HOP_GEN8},
@@ -740,16 +741,26 @@ static const struct SpritePalette sObjectEventSpritePalettes[] = {
     {gObjectEventPal_RoseGen8, OBJ_EVENT_PAL_TAG_ROSE_GEN8},
     {gObjectEventPal_OleanaGen8, OBJ_EVENT_PAL_TAG_OLEANA_GEN8},
     {gObjectEventPal_MagnoliaGen8, OBJ_EVENT_PAL_TAG_MAGNOLIA_GEN8},
-    //Paldea
     {gObjectEventPal_FlorianGen9, OBJ_EVENT_PAL_TAG_FLORIAN_GEN9},
     {gObjectEventPal_JulianaGen9, OBJ_EVENT_PAL_TAG_JULIANA_GEN9},
     {gObjectEventPal_NemonaGen9, OBJ_EVENT_PAL_TAG_NEMONA_GEN9},
     {gObjectEventPal_ArvenGen9, OBJ_EVENT_PAL_TAG_ARVEN_GEN9},
     {gObjectEventPal_PennyGen9, OBJ_EVENT_PAL_TAG_PENNY_GEN9},
     {gObjectEventPal_GeetaGen9, OBJ_EVENT_PAL_TAG_GEETA_GEN9},
-    //XD(Orre)
     {gObjectEventPal_Wes,                   OBJ_EVENT_PAL_TAG_WES},
     {gObjectEventPal_CipherPeonM,           OBJ_EVENT_PAL_TAG_CIPHER_PEON_M},
+    {gObjectEventPal_Ardos,                  OBJ_EVENT_PAL_TAG_ARDOS},
+    {gObjectEventPal_Dakim,                  OBJ_EVENT_PAL_TAG_DAKIM},
+    {gObjectEventPal_Ein,                    OBJ_EVENT_PAL_TAG_EIN},
+    {gObjectEventPal_Eldes,                  OBJ_EVENT_PAL_TAG_ELDES},
+    {gObjectEventPal_Evice,                  OBJ_EVENT_PAL_TAG_EVICE},
+    {gObjectEventPal_Gonzap,                 OBJ_EVENT_PAL_TAG_GONZAP},
+    {gObjectEventPal_Greevil,                OBJ_EVENT_PAL_TAG_GREEVIL},
+    {gObjectEventPal_Lovrina,                OBJ_EVENT_PAL_TAG_LOVRINA},
+    {gObjectEventPal_Michael,                OBJ_EVENT_PAL_TAG_MICHAEL},
+    {gObjectEventPal_Nascour,                OBJ_EVENT_PAL_TAG_NASCOUR},
+    {gObjectEventPal_SnagemGrunt,            OBJ_EVENT_PAL_TAG_SNAGEM_GRUNT},
+    {gObjectEventPal_Venus,                  OBJ_EVENT_PAL_TAG_VENUS},
 
 #if OW_FOLLOWERS_POKEBALLS
     {gObjectEventPal_MasterBall,            OBJ_EVENT_PAL_TAG_BALL_MASTER},
@@ -2234,6 +2245,8 @@ static const struct ObjectEventGraphicsInfo *GetShadowOverworldGraphicsInfo(u32 
     static struct ObjectEventGraphicsInfo sShadowGfxInfo;
     const struct SpriteFrameImage *shadowPicTable;
 
+    u32 baseSpecies = GET_BASE_SPECIES_ID(species);
+
     (void)shiny;
 
     if (!shadow || base == NULL)
@@ -2241,7 +2254,22 @@ static const struct ObjectEventGraphicsInfo *GetShadowOverworldGraphicsInfo(u32 
 
     shadowPicTable = GetShadowOverworldPicTable(species, female, shadow);
     if (shadowPicTable == NULL)
+    {
+#if DEBUG_SHADOW_OVERWORLD_LOG
+        gShadowOverworldLog.species = species;
+        gShadowOverworldLog.baseSpecies = baseSpecies;
+        gShadowOverworldLog.graphicsInfo = base;
+        gShadowOverworldLog.picTable = shadowPicTable;
+#endif
         return base;
+    }
+
+#if DEBUG_SHADOW_OVERWORLD_LOG
+    gShadowOverworldLog.species = species;
+    gShadowOverworldLog.baseSpecies = baseSpecies;
+    gShadowOverworldLog.graphicsInfo = &sShadowGfxInfo;
+    gShadowOverworldLog.picTable = shadowPicTable;
+#endif
 
     sShadowGfxInfo = *base;
     sShadowGfxInfo.images = shadowPicTable;
@@ -2397,7 +2425,7 @@ static void RefreshFollowerGraphics(struct ObjectEvent *objEvent)
     bool32 shadow = OW_SHADOW(objEvent);
     const struct ObjectEventGraphicsInfo *graphicsInfo = SpeciesToGraphicsInfo(species, shiny, female, shadow);
     struct Sprite *sprite = &gSprites[objEvent->spriteId];
-    u32 i = FindObjectEventPaletteIndexByTag(graphicsInfo->paletteTag);
+    u16 i = FindObjectEventPaletteIndexByTag(graphicsInfo->paletteTag);
 
     if (graphicsInfo->oam->size != sprite->oam.size)
     {
@@ -2426,7 +2454,7 @@ static void RefreshFollowerGraphics(struct ObjectEvent *objEvent)
         sprite->inUse = TRUE;
         sprite->oam.paletteNum = LoadDynamicFollowerPalette(species, shiny, female, shadow);
     }
-    else if (i != 0xFF)
+    else if (i != 0xFFFF)
     {
         UpdateSpritePalette(&sObjectEventSpritePalettes[i], sprite);
         if (gWeatherPtr->currWeather != WEATHER_FOG_HORIZONTAL) // don't want to weather blend in fog
@@ -3232,8 +3260,8 @@ static u8 UpdateSpritePalette(const struct SpritePalette *spritePalette, struct 
 // Find and update based on template's paletteTag
 u8 UpdateSpritePaletteByTemplate(const struct SpriteTemplate *template, struct Sprite *sprite)
 {
-    u8 i = FindObjectEventPaletteIndexByTag(template->paletteTag);
-    if (i == 0xFF)
+    u16 i = FindObjectEventPaletteIndexByTag(template->paletteTag);
+    if (i == 0xFFFF)
         return i;
     return UpdateSpritePalette(&sObjectEventSpritePalettes[i], sprite);
 }
@@ -3242,8 +3270,8 @@ u8 UpdateSpritePaletteByTemplate(const struct SpriteTemplate *template, struct S
 static void ObjectEventSetGraphics(struct ObjectEvent *objectEvent, const struct ObjectEventGraphicsInfo *graphicsInfo)
 {
     struct Sprite *sprite = &gSprites[objectEvent->spriteId];
-    u32 i = FindObjectEventPaletteIndexByTag(graphicsInfo->paletteTag);
-    if (i != 0xFF)
+    u16 i = FindObjectEventPaletteIndexByTag(graphicsInfo->paletteTag);
+    if (i != 0xFFFF)
         UpdateSpritePalette(&sObjectEventSpritePalettes[i], sprite);
 
     // If gfx size changes, we need to reallocate tiles
@@ -3486,7 +3514,7 @@ void FreeAndReserveObjectSpritePalettes(void)
 u8 LoadObjectEventPalette(u16 paletteTag)
 {
     u16 i = FindObjectEventPaletteIndexByTag(paletteTag);
-    if (i == 0xFF)
+    if (i == 0xFFFF)
         return i;
     return LoadSpritePaletteIfTagExists(&sObjectEventSpritePalettes[i]);
 }
@@ -3530,7 +3558,7 @@ static u8 LoadSpritePaletteIfTagExists(const struct SpritePalette *spritePalette
 void PatchObjectPalette(u16 paletteTag, u8 paletteSlot)
 {
     // paletteTag is assumed to exist in sObjectEventSpritePalettes
-    u8 paletteIndex = FindObjectEventPaletteIndexByTag(paletteTag);
+    u16 paletteIndex = FindObjectEventPaletteIndexByTag(paletteTag);
 
     LoadPalette(sObjectEventSpritePalettes[paletteIndex].data, OBJ_PLTT_ID(paletteSlot), PLTT_SIZE_4BPP);
 }
@@ -3545,16 +3573,18 @@ void PatchObjectPaletteRange(const u16 *paletteTags, u8 minSlot, u8 maxSlot)
     }
 }
 
-static u8 FindObjectEventPaletteIndexByTag(u16 tag)
+static u16 FindObjectEventPaletteIndexByTag(u16 tag)
 {
-    u8 i;
+    u16 i;
 
-    for (i = 0; sObjectEventSpritePalettes[i].tag != OBJ_EVENT_PAL_TAG_NONE; i++)
+    for (i = 0; i < ARRAY_COUNT(sObjectEventSpritePalettes); i++)
     {
+        if (sObjectEventSpritePalettes[i].tag == OBJ_EVENT_PAL_TAG_NONE)
+            break;
         if (sObjectEventSpritePalettes[i].tag == tag)
             return i;
     }
-    return 0xFF;
+    return 0xFFFF;
 }
 
 void LoadPlayerObjectReflectionPalette(u16 tag, u8 slot)
@@ -11190,8 +11220,8 @@ void SetVirtualObjectGraphics(u8 virtualObjId, u16 graphicsId)
         struct Sprite *sprite = &gSprites[spriteId];
         const struct ObjectEventGraphicsInfo *graphicsInfo = GetObjectEventGraphicsInfo(graphicsId);
         u16 tileNum = sprite->oam.tileNum;
-        u8 i = FindObjectEventPaletteIndexByTag(graphicsInfo->paletteTag);
-        if (i != 0xFF)
+        u16 i = FindObjectEventPaletteIndexByTag(graphicsInfo->paletteTag);
+        if (i != 0xFFFF)
             UpdateSpritePalette(&sObjectEventSpritePalettes[i], sprite);
 
         sprite->oam = *graphicsInfo->oam;

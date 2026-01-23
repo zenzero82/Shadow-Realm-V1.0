@@ -1055,3 +1055,40 @@ const u32 gObjectEventPic_Wes[] = INCBIN_U32("graphics/object_events/pics/xd/wes
 
 const u16 gObjectEventPal_CipherPeonM[] = INCBIN_U16("graphics/object_events/pics/xd/cipher_peonm.gbapal");
 const u32 gObjectEventPic_CipherPeonM[] = INCBIN_U32("graphics/object_events/pics/xd/cipher_peonm.4bpp");
+
+
+const u32 gObjectEventPic_Ardos[] = INCBIN_U32("graphics/object_events/pics/xd/ardos.4bpp");
+const u16 gObjectEventPal_Ardos[] = INCBIN_U16("graphics/object_events/pics/xd/ardos.gbapal");
+
+const u32 gObjectEventPic_Dakim[] = INCBIN_U32("graphics/object_events/pics/xd/dakim.4bpp");
+const u16 gObjectEventPal_Dakim[] = INCBIN_U16("graphics/object_events/pics/xd/dakim.gbapal");
+
+const u32 gObjectEventPic_Ein[] = INCBIN_U32("graphics/object_events/pics/xd/ein.4bpp");
+const u16 gObjectEventPal_Ein[] = INCBIN_U16("graphics/object_events/pics/xd/ein.gbapal");
+
+const u32 gObjectEventPic_Eldes[] = INCBIN_U32("graphics/object_events/pics/xd/eldes.4bpp");
+const u16 gObjectEventPal_Eldes[] = INCBIN_U16("graphics/object_events/pics/xd/eldes.gbapal");
+
+const u32 gObjectEventPic_Evice[] = INCBIN_U32("graphics/object_events/pics/xd/evice.4bpp");
+const u16 gObjectEventPal_Evice[] = INCBIN_U16("graphics/object_events/pics/xd/evice.gbapal");
+
+const u32 gObjectEventPic_Gonzap[] = INCBIN_U32("graphics/object_events/pics/xd/gonzap.4bpp");
+const u16 gObjectEventPal_Gonzap[] = INCBIN_U16("graphics/object_events/pics/xd/gonzap.gbapal");
+
+const u32 gObjectEventPic_Greevil[] = INCBIN_U32("graphics/object_events/pics/xd/greevil.4bpp");
+const u16 gObjectEventPal_Greevil[] = INCBIN_U16("graphics/object_events/pics/xd/greevil.gbapal");
+
+const u32 gObjectEventPic_Lovrina[] = INCBIN_U32("graphics/object_events/pics/xd/lovrina.4bpp");
+const u16 gObjectEventPal_Lovrina[] = INCBIN_U16("graphics/object_events/pics/xd/lovrina.gbapal");
+
+const u32 gObjectEventPic_Michael[] = INCBIN_U32("graphics/object_events/pics/xd/michael.4bpp");
+const u16 gObjectEventPal_Michael[] = INCBIN_U16("graphics/object_events/pics/xd/michael.gbapal");
+
+const u32 gObjectEventPic_Nascour[] = INCBIN_U32("graphics/object_events/pics/xd/nascour.4bpp");
+const u16 gObjectEventPal_Nascour[] = INCBIN_U16("graphics/object_events/pics/xd/nascour.gbapal");
+
+const u32 gObjectEventPic_SnagemGrunt[] = INCBIN_U32("graphics/object_events/pics/xd/snagem_grunt.4bpp");
+const u16 gObjectEventPal_SnagemGrunt[] = INCBIN_U16("graphics/object_events/pics/xd/snagem_grunt.gbapal");
+
+const u32 gObjectEventPic_Venus[] = INCBIN_U32("graphics/object_events/pics/xd/venus.4bpp");
+const u16 gObjectEventPal_Venus[] = INCBIN_U16("graphics/object_events/pics/xd/venus.gbapal");

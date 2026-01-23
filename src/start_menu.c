@@ -9,6 +9,7 @@
 #include "event_object_lock.h"
 #include "event_scripts.h"
 #include "fieldmap.h"
+#include "region_map.h"
 #include "field_effect.h"
 #include "field_player_avatar.h"
 #include "field_specials.h"
@@ -16,11 +17,13 @@
 #include "field_screen_effect.h"
 #include "frontier_pass.h"
 #include "frontier_util.h"
+#include "graphics.h"
 #include "gpu_regs.h"
 #include "international_string_util.h"
 #include "item_menu.h"
 #include "link.h"
 #include "load_save.h"
+#include "malloc.h"
 #include "main.h"
 #include "menu.h"
 #include "new_game.h"
@@ -35,6 +38,7 @@
 #include "scanline_effect.h"
 #include "script.h"
 #include "sound.h"
+#include "sprite.h"
 #include "start_menu.h"
 #include "strings.h"
 #include "string_util.h"
@@ -46,6 +50,7 @@
 #include "union_room.h"
 #include "dexnav.h"
 #include "wild_encounter.h"
+#include "rtc.h"
 #include "constants/battle_frontier.h"
 #include "constants/flags.h"
 #include "constants/rgb.h"
@@ -88,9 +93,57 @@ EWRAM_DATA static u8 sSafariBallsWindowId = 0;
 EWRAM_DATA static u8 sBattlePyramidFloorWindowId = 0;
 EWRAM_DATA static u8 sStartMenuCursorPos = 0;
 EWRAM_DATA static u8 sNumStartMenuActions = 0;
-EWRAM_DATA static u8 sCurrentStartMenuActions[9] = {0};
+EWRAM_DATA static u8 sCurrentStartMenuActions[16] = {0};
 EWRAM_DATA static s8 sInitStartMenuData[2] = {0};
 
+#define START_MENU_COLUMNS 2
+#define START_MENU_ROWS 3
+#define START_MENU_VISIBLE_ITEMS (START_MENU_COLUMNS * START_MENU_ROWS)
+#define START_MENU_PANEL_X 34
+#define START_MENU_PANEL_Y 41
+#define START_MENU_PANEL_H_SPACING 20
+#define START_MENU_PANEL_V_SPACING 6
+#define START_MENU_SCROLLBAR_X 235
+#define START_MENU_SCROLLBAR_Y 48
+#define START_MENU_SCROLLBAR_RANGE 62
+#define START_MENU_BG_TILE_SIZE 1312
+#define START_MENU_BG_TILEMAP_SIZE 1280
+#define START_MENU_SPRITE_NONE 0xFF
+
+enum StartMenuBWWindowIds
+{
+    WIN_TOPBAR_TIME,
+    WIN_TOPBAR,
+    WIN_ITEMS,
+    WIN_BOTTOMBAR,
+    WIN_COUNT
+};
+
+struct StartMenuBWResources
+{
+    u8 cursorPos;
+    u8 scrollOffset;
+    u8 numItems;
+    u8 numVisibleItems;
+    u8 visibleActions[START_MENU_VISIBLE_ITEMS];
+    u8 iconSpriteIds[START_MENU_VISIBLE_ITEMS];
+    u16 *bgTilemapBuffer;
+    bool8 returnToField;
+    bool8 fadingOut;
+    bool8 menuHidden;
+    s8 lastSecond;
+};
+
+EWRAM_DATA static struct StartMenuBWResources *sStartMenuBW = NULL;
+EWRAM_DATA bool8 gReturnToStartMenu = FALSE;
+EWRAM_DATA static u8 sStartMenuScrollOffset = 0;
+static bool8 sStartMenuExitToSave = FALSE;
+
+#define STARTMENU_CURSOR_POS (sStartMenuBW->cursorPos)
+#define STARTMENU_SCROLL_OFFSET (sStartMenuBW->scrollOffset)
+#define STARTMENU_NUM_ITEMS (sStartMenuBW->numItems)
+#define STARTMENU_NUM_VISIBLE (sStartMenuBW->numVisibleItems)
+#define STARTMENU_VISIBLE_ACTIONS (sStartMenuBW->visibleActions)
 EWRAM_DATA static u8 (*sSaveDialogCallback)(void) = NULL;
 EWRAM_DATA static u8 sSaveDialogTimer = 0;
 EWRAM_DATA static bool8 sSavingComplete = FALSE;
@@ -113,7 +166,6 @@ static bool8 StartMenuDebugCallback(void);
 static bool8 StartMenuDexNavCallback(void);
 
 // Menu callbacks
-static bool8 SaveStartCallback(void);
 static bool8 SaveCallback(void);
 static bool8 BattlePyramidRetireStartCallback(void);
 static bool8 BattlePyramidRetireReturnCallback(void);
@@ -139,11 +191,17 @@ static u8 BattlePyramidRetireYesNoCallback(void);
 static u8 BattlePyramidRetireInputCallback(void);
 
 // Task callbacks
-static void StartMenuTask(u8 taskId);
+static UNUSED void StartMenuTask(u8 taskId);
 static void SaveGameTask(u8 taskId);
+static void StartMenuBW_SaveGameTask(u8 taskId);
+static void Task_WaitForFadeStartMenuSave(u8 taskId);
 static void Task_SaveAfterLinkBattle(u8 taskId);
 static void Task_WaitForBattleTowerLinkSave(u8 taskId);
 static bool8 FieldCB_ReturnToFieldStartMenu(void);
+static void ReturnToFieldFromStartMenuSave(void);
+
+static void FieldCB_ReturnToFieldStartMenuSave(void);
+static void StartMenuBW_StartSaveFromField(void);
 
 static const struct WindowTemplate sWindowTemplate_SafariBalls = {
     .bg = 0,
@@ -245,6 +303,349 @@ static const struct WindowTemplate sSaveInfoWindowTemplate = {
     .baseBlock = 8
 };
 
+enum StartMenuBWBgIds
+{
+    BG_START_MENU_TEXT,
+    BG_START_MENU_BACKGROUND,
+};
+
+enum
+{
+    TAG_START_MENU_PANEL = 0x3000,
+    TAG_START_MENU_EXIT,
+    TAG_START_MENU_SCROLLBAR,
+    TAG_START_MENU_POKEDEX,
+    TAG_START_MENU_DEXNAV,
+    TAG_START_MENU_POKEMON,
+    TAG_START_MENU_BAG,
+    TAG_START_MENU_POKENAV,
+    TAG_START_MENU_PLAYER,
+    TAG_START_MENU_SAVE,
+    TAG_START_MENU_OPTIONS,
+    TAG_START_MENU_EXIT_OPTION,
+    TAG_START_MENU_RETIRE,
+    TAG_START_MENU_DEBUG,
+};
+
+struct StartMenuBWIcon
+{
+    struct SpriteSheet sheet;
+    struct SpritePalette palette;
+    struct SpriteTemplate template;
+};
+
+enum StartMenuBWIconId
+{
+    START_MENU_ICON_POKEDEX,
+    START_MENU_ICON_DEXNAV,
+    START_MENU_ICON_POKEMON,
+    START_MENU_ICON_BAG,
+    START_MENU_ICON_POKENAV,
+    START_MENU_ICON_PLAYER,
+    START_MENU_ICON_SAVE,
+    START_MENU_ICON_OPTIONS,
+    START_MENU_ICON_EXIT_OPTION,
+    START_MENU_ICON_RETIRE,
+    START_MENU_ICON_DEBUG,
+    START_MENU_ICON_COUNT,
+};
+
+static const u8 sStartMenuTextColors[] = {TEXT_COLOR_TRANSPARENT, TEXT_COLOR_WHITE, TEXT_COLOR_LIGHT_GRAY};
+
+static const u8 *const sStartMenuDayNames[] =
+{
+    gText_StartMenu_Sun,
+    gText_StartMenu_Mon,
+    gText_StartMenu_Tue,
+    gText_StartMenu_Wed,
+    gText_StartMenu_Thu,
+    gText_StartMenu_Fri,
+    gText_StartMenu_Sat,
+};
+
+static const struct BgTemplate sStartMenuBWBgTemplates[] =
+{
+    {
+        .bg = BG_START_MENU_TEXT,
+        .charBaseIndex = 0,
+        .mapBaseIndex = 30,
+        .screenSize = 0,
+        .paletteMode = 0,
+        .priority = 0,
+        .baseTile = 0
+    },
+    {
+        .bg = BG_START_MENU_BACKGROUND,
+        .charBaseIndex = 2,
+        .mapBaseIndex = 31,
+        .screenSize = 0,
+        .paletteMode = 0,
+        .priority = 1,
+        .baseTile = 0
+    },
+};
+
+static const struct WindowTemplate sStartMenuBWWindowTemplates[] =
+{
+    [WIN_TOPBAR_TIME] =
+    {
+        .bg = BG_START_MENU_TEXT,
+        .tilemapLeft = 0,
+        .tilemapTop = 0,
+        .width = 10,
+        .height = 4,
+        .paletteNum = 14,
+        .baseBlock = 1,
+    },
+    [WIN_TOPBAR] =
+    {
+        .bg = BG_START_MENU_TEXT,
+        .tilemapLeft = 10,
+        .tilemapTop = 0,
+        .width = 20,
+        .height = 4,
+        .paletteNum = 14,
+        .baseBlock = 42,
+    },
+    [WIN_ITEMS] =
+    {
+        .bg = BG_START_MENU_TEXT,
+        .tilemapLeft = 0,
+        .tilemapTop = 4,
+        .width = 30,
+        .height = 12,
+        .paletteNum = 14,
+        .baseBlock = 123,
+    },
+    [WIN_BOTTOMBAR] =
+    {
+        .bg = BG_START_MENU_TEXT,
+        .tilemapLeft = 0,
+        .tilemapTop = 16,
+        .width = 30,
+        .height = 4,
+        .paletteNum = 14,
+        .baseBlock = 484,
+    },
+    DUMMY_WIN_TEMPLATE,
+};
+
+static const struct SpriteSheet sStartMenuPanelSpriteSheet =
+{
+    .data = gStartMenuBWPanelTiles,
+    .size = 0x2000,
+    .tag = TAG_START_MENU_PANEL
+};
+
+static const struct SpritePalette sStartMenuPanelSpritePalette =
+{
+    .data = gStartMenuBWPanelPal,
+    .tag = TAG_START_MENU_PANEL
+};
+
+static const struct SpriteSheet sStartMenuExitSpriteSheet =
+{
+    .data = gStartMenuBWExitTiles,
+    .size = 0x400,
+    .tag = TAG_START_MENU_EXIT
+};
+
+static const struct SpritePalette sStartMenuExitSpritePalette =
+{
+    .data = gStartMenuBWExitPal,
+    .tag = TAG_START_MENU_EXIT
+};
+
+static const struct SpriteSheet sStartMenuScrollBarSpriteSheet =
+{
+    .data = gStartMenuBWScrollBarTiles,
+    .size = 0x200,
+    .tag = TAG_START_MENU_SCROLLBAR
+};
+
+static const struct SpritePalette sStartMenuScrollBarSpritePalette =
+{
+    .data = gStartMenuBWScrollBarPal,
+    .tag = TAG_START_MENU_SCROLLBAR
+};
+
+static const struct OamData sStartMenuPanelOamData =
+{
+    .shape = SPRITE_SHAPE(64x64),
+    .size = SPRITE_SIZE(64x64),
+    .priority = 1
+};
+
+static const struct OamData sStartMenuIconOamData =
+{
+    .shape = SPRITE_SHAPE(32x32),
+    .size = SPRITE_SIZE(32x32),
+    .priority = 0
+};
+
+static const struct OamData sStartMenuScrollBarOamData =
+{
+    .shape = SPRITE_SHAPE(32x32),
+    .size = SPRITE_SIZE(32x32),
+    .priority = 0
+};
+
+static const union AnimCmd sAnim_StartMenuPanelLeft_0[] =
+{
+    ANIMCMD_FRAME(0, 0),
+    ANIMCMD_END
+};
+
+static const union AnimCmd sAnim_StartMenuPanelLeft_1[] =
+{
+    ANIMCMD_FRAME(128, 0),
+    ANIMCMD_END
+};
+
+static const union AnimCmd *const sStartMenuPanelLeftAnims[] =
+{
+    sAnim_StartMenuPanelLeft_0,
+    sAnim_StartMenuPanelLeft_1
+};
+
+static const union AnimCmd sAnim_StartMenuPanelRight_0[] =
+{
+    ANIMCMD_FRAME(64, 0),
+    ANIMCMD_END
+};
+
+static const union AnimCmd sAnim_StartMenuPanelRight_1[] =
+{
+    ANIMCMD_FRAME(192, 0),
+    ANIMCMD_END
+};
+
+static const union AnimCmd *const sStartMenuPanelRightAnims[] =
+{
+    sAnim_StartMenuPanelRight_0,
+    sAnim_StartMenuPanelRight_1
+};
+
+static const union AnimCmd sAnim_StartMenuIcon_0[] =
+{
+    ANIMCMD_FRAME(0, 0),
+    ANIMCMD_END
+};
+
+static const union AnimCmd sAnim_StartMenuIcon_1[] =
+{
+    ANIMCMD_FRAME(16, 0),
+    ANIMCMD_END
+};
+
+static const union AnimCmd *const sStartMenuIconAnims[] =
+{
+    sAnim_StartMenuIcon_0,
+    sAnim_StartMenuIcon_1
+};
+
+static const union AnimCmd sAnim_StartMenuScrollBar[] =
+{
+    ANIMCMD_FRAME(0, 0),
+    ANIMCMD_END
+};
+
+static const union AnimCmd *const sStartMenuScrollBarAnims[] =
+{
+    sAnim_StartMenuScrollBar
+};
+
+static void PanelCallBack(struct Sprite *sprite);
+static void StartMenuIconCallback(struct Sprite *sprite);
+static void ScrollBarCallback(struct Sprite *sprite);
+
+static const struct SpriteTemplate sStartMenuPanelSpriteTemplate1 =
+{
+    .tileTag = TAG_START_MENU_PANEL,
+    .paletteTag = TAG_START_MENU_PANEL,
+    .oam = &sStartMenuPanelOamData,
+    .anims = sStartMenuPanelLeftAnims,
+    .images = NULL,
+    .affineAnims = gDummySpriteAffineAnimTable,
+    .callback = PanelCallBack,
+};
+
+static const struct SpriteTemplate sStartMenuPanelSpriteTemplate2 =
+{
+    .tileTag = TAG_START_MENU_PANEL,
+    .paletteTag = TAG_START_MENU_PANEL,
+    .oam = &sStartMenuPanelOamData,
+    .anims = sStartMenuPanelRightAnims,
+    .images = NULL,
+    .affineAnims = gDummySpriteAffineAnimTable,
+    .callback = PanelCallBack,
+};
+
+static const struct SpriteTemplate sStartMenuExitSpriteTemplate =
+{
+    .tileTag = TAG_START_MENU_EXIT,
+    .paletteTag = TAG_START_MENU_EXIT,
+    .oam = &sStartMenuIconOamData,
+    .anims = sStartMenuIconAnims,
+    .images = NULL,
+    .affineAnims = gDummySpriteAffineAnimTable,
+    .callback = PanelCallBack,
+};
+
+static const struct SpriteTemplate sStartMenuScrollBarSpriteTemplate =
+{
+    .tileTag = TAG_START_MENU_SCROLLBAR,
+    .paletteTag = TAG_START_MENU_SCROLLBAR,
+    .oam = &sStartMenuScrollBarOamData,
+    .anims = sStartMenuScrollBarAnims,
+    .images = NULL,
+    .affineAnims = gDummySpriteAffineAnimTable,
+    .callback = ScrollBarCallback,
+};
+
+#define START_MENU_ICON_ENTRY(tagId, tiles, pal) \
+    { \
+        .sheet = { .data = tiles, .size = 0x400, .tag = tagId }, \
+        .palette = { .data = pal, .tag = tagId }, \
+        .template = { .tileTag = tagId, .paletteTag = tagId, .oam = &sStartMenuIconOamData, .anims = sStartMenuIconAnims, .images = NULL, .affineAnims = gDummySpriteAffineAnimTable, .callback = StartMenuIconCallback } \
+    }
+
+static const struct StartMenuBWIcon sStartMenuBWIcons[] =
+{
+    [START_MENU_ICON_POKEDEX] = START_MENU_ICON_ENTRY(TAG_START_MENU_POKEDEX, gStartMenuBWPokedexTiles, gStartMenuBWPokedexPal),
+    [START_MENU_ICON_DEXNAV] = START_MENU_ICON_ENTRY(TAG_START_MENU_DEXNAV, gStartMenuBWDexnavTiles, gStartMenuBWDexnavPal),
+    [START_MENU_ICON_POKEMON] = START_MENU_ICON_ENTRY(TAG_START_MENU_POKEMON, gStartMenuBWPokemonTiles, gStartMenuBWPokemonPal),
+    [START_MENU_ICON_BAG] = START_MENU_ICON_ENTRY(TAG_START_MENU_BAG, gStartMenuBWBagTiles, gStartMenuBWBagPal),
+    [START_MENU_ICON_POKENAV] = START_MENU_ICON_ENTRY(TAG_START_MENU_POKENAV, gStartMenuBWPokenavTiles, gStartMenuBWPokenavPal),
+    [START_MENU_ICON_PLAYER] = START_MENU_ICON_ENTRY(TAG_START_MENU_PLAYER, gStartMenuBWPlayerTiles, gStartMenuBWPlayerPal),
+    [START_MENU_ICON_SAVE] = START_MENU_ICON_ENTRY(TAG_START_MENU_SAVE, gStartMenuBWSaveTiles, gStartMenuBWSavePal),
+    [START_MENU_ICON_OPTIONS] = START_MENU_ICON_ENTRY(TAG_START_MENU_OPTIONS, gStartMenuBWOptionsTiles, gStartMenuBWOptionsPal),
+    [START_MENU_ICON_EXIT_OPTION] = START_MENU_ICON_ENTRY(TAG_START_MENU_EXIT_OPTION, gStartMenuBWExitTiles, gStartMenuBWExitPal),
+    [START_MENU_ICON_RETIRE] = START_MENU_ICON_ENTRY(TAG_START_MENU_RETIRE, gStartMenuBWRetireTiles, gStartMenuBWRetirePal),
+    [START_MENU_ICON_DEBUG] = START_MENU_ICON_ENTRY(TAG_START_MENU_DEBUG, gStartMenuBWDebugTiles, gStartMenuBWDebugPal),
+};
+
+#undef START_MENU_ICON_ENTRY
+
+static const u8 sStartMenuActionIcons[] =
+{
+    [MENU_ACTION_POKEDEX] = START_MENU_ICON_POKEDEX,
+    [MENU_ACTION_POKEMON] = START_MENU_ICON_POKEMON,
+    [MENU_ACTION_BAG] = START_MENU_ICON_BAG,
+    [MENU_ACTION_POKENAV] = START_MENU_ICON_POKENAV,
+    [MENU_ACTION_PLAYER] = START_MENU_ICON_PLAYER,
+    [MENU_ACTION_SAVE] = START_MENU_ICON_SAVE,
+    [MENU_ACTION_OPTION] = START_MENU_ICON_OPTIONS,
+    [MENU_ACTION_EXIT] = START_MENU_ICON_EXIT_OPTION,
+    [MENU_ACTION_RETIRE_SAFARI] = START_MENU_ICON_RETIRE,
+    [MENU_ACTION_PLAYER_LINK] = START_MENU_ICON_PLAYER,
+    [MENU_ACTION_REST_FRONTIER] = START_MENU_ICON_SAVE,
+    [MENU_ACTION_RETIRE_FRONTIER] = START_MENU_ICON_RETIRE,
+    [MENU_ACTION_PYRAMID_BAG] = START_MENU_ICON_BAG,
+    [MENU_ACTION_DEBUG] = START_MENU_ICON_DEBUG,
+    [MENU_ACTION_DEXNAV] = START_MENU_ICON_DEXNAV,
+};
+
 // Local functions
 static void BuildStartMenuActions(void);
 static void AddStartMenuAction(u8 action);
@@ -262,7 +663,7 @@ static void RemoveExtraStartMenuWindows(void);
 static bool32 PrintStartMenuActions(s8 *pIndex, u32 count);
 static bool32 InitStartMenuStep(void);
 static void InitStartMenu(void);
-static void CreateStartMenuTask(TaskFunc followupFunc);
+static UNUSED void CreateStartMenuTask(TaskFunc followupFunc);
 static void InitSave(void);
 static u8 RunSaveCallback(void);
 static void ShowSaveMessage(const u8 *message, u8 (*saveCallback)(void));
@@ -279,13 +680,8 @@ static void ShowSaveInfoWindow(void);
 static void RemoveSaveInfoWindow(void);
 static void HideStartMenuWindow(void);
 static void HideStartMenuDebug(void);
-
-void SetDexPokemonPokenavFlags(void) // unused
-{
-    FlagSet(FLAG_SYS_POKEDEX_GET);
-    FlagSet(FLAG_SYS_POKEMON_GET);
-    FlagSet(FLAG_SYS_POKENAV_GET);
-}
+static bool8 StartMenuBW_WaitForFadeOut(void);
+static bool8 StartMenuBW_ExitToSave(void);
 
 static void BuildStartMenuActions(void)
 {
@@ -326,6 +722,9 @@ static void BuildStartMenuActions(void)
 
 static void AddStartMenuAction(u8 action)
 {
+    if (sNumStartMenuActions >= ARRAY_COUNT(sCurrentStartMenuActions))
+        return;
+
     AppendToList(sCurrentStartMenuActions, &sNumStartMenuActions, action);
 }
 
@@ -435,6 +834,551 @@ static void BuildMultiPartnerRoomStartMenu(void)
     AddStartMenuAction(MENU_ACTION_EXIT);
 }
 
+static void StartMenuBW_ClearTasksAndGraphicalStructs(void)
+{
+    ScanlineEffect_Stop();
+    ResetTasks();
+    ResetSpriteData();
+    ResetTempTileDataBuffers();
+    ResetPaletteFade();
+    FreeAllSpritePalettes();
+}
+
+static void StartMenuBW_ClearVramOamPlttRegs(void)
+{
+    DmaFill16(3, 0, VRAM, VRAM_SIZE);
+    DmaFill32(3, 0, OAM, OAM_SIZE);
+    DmaFill16(3, 0, PLTT, PLTT_SIZE);
+    SetGpuReg(REG_OFFSET_DISPCNT, 0);
+    SetGpuReg(REG_OFFSET_BG0CNT, 0);
+    SetGpuReg(REG_OFFSET_BG0HOFS, 0);
+    SetGpuReg(REG_OFFSET_BG0VOFS, 0);
+    SetGpuReg(REG_OFFSET_BG1CNT, 0);
+    SetGpuReg(REG_OFFSET_BG1HOFS, 0);
+    SetGpuReg(REG_OFFSET_BG1VOFS, 0);
+    SetGpuReg(REG_OFFSET_BG2CNT, 0);
+    SetGpuReg(REG_OFFSET_BG2HOFS, 0);
+    SetGpuReg(REG_OFFSET_BG2VOFS, 0);
+    SetGpuReg(REG_OFFSET_BG3CNT, 0);
+    SetGpuReg(REG_OFFSET_BG3HOFS, 0);
+    SetGpuReg(REG_OFFSET_BG3VOFS, 0);
+    SetGpuReg(REG_OFFSET_WIN0H, 0);
+    SetGpuReg(REG_OFFSET_WIN0V, 0);
+    SetGpuReg(REG_OFFSET_WININ, 0);
+    SetGpuReg(REG_OFFSET_WINOUT, 0);
+    SetGpuReg(REG_OFFSET_BLDCNT, 0);
+    SetGpuReg(REG_OFFSET_BLDALPHA, 0);
+    SetGpuReg(REG_OFFSET_BLDY, 0);
+}
+
+static void StartMenuBW_VBlankCB(void)
+{
+    LoadOam();
+    ProcessSpriteCopyRequests();
+    TransferPlttBuffer();
+}
+
+static void StartMenuBW_MainCB2(void)
+{
+    RunTasks();
+    AnimateSprites();
+    BuildOamBuffer();
+    UpdatePaletteFade();
+}
+
+static u8 StartMenuBW_GetMaxScrollOffset(void)
+{
+    u8 rows = (sNumStartMenuActions + START_MENU_COLUMNS - 1) / START_MENU_COLUMNS;
+    if (rows <= START_MENU_ROWS)
+        return 0;
+    return rows - START_MENU_ROWS;
+}
+
+static void StartMenuBW_BuildVisibleItems(void)
+{
+    u8 startIndex;
+    u8 count = 0;
+    u8 maxScroll = StartMenuBW_GetMaxScrollOffset();
+
+    STARTMENU_NUM_ITEMS = sNumStartMenuActions;
+    if (STARTMENU_SCROLL_OFFSET > maxScroll)
+        STARTMENU_SCROLL_OFFSET = maxScroll;
+
+    startIndex = STARTMENU_SCROLL_OFFSET * START_MENU_COLUMNS;
+    for (u8 i = 0; i < START_MENU_VISIBLE_ITEMS; i++)
+    {
+        if (startIndex + i >= sNumStartMenuActions)
+            break;
+        STARTMENU_VISIBLE_ACTIONS[i] = sCurrentStartMenuActions[startIndex + i];
+        count++;
+    }
+    STARTMENU_NUM_VISIBLE = count;
+    if (STARTMENU_NUM_VISIBLE != 0 && STARTMENU_CURSOR_POS >= STARTMENU_NUM_VISIBLE)
+        STARTMENU_CURSOR_POS = STARTMENU_NUM_VISIBLE - 1;
+}
+
+static void StartMenuBW_ClearWindow(u8 windowId)
+{
+    FillWindowPixelBuffer(windowId, PIXEL_FILL(0));
+}
+
+static void StartMenuBW_ClearWindows(void)
+{
+    for (u32 i = 0; i < WIN_COUNT; i++)
+        StartMenuBW_ClearWindow(i);
+}
+
+static void StartMenuBW_CommitWindow(u8 windowId)
+{
+    PutWindowTilemap(windowId);
+    CopyWindowToVram(windowId, COPYWIN_FULL);
+}
+
+static void StartMenuBW_CommitWindows(void)
+{
+    for (u32 i = 0; i < WIN_COUNT; i++)
+        StartMenuBW_CommitWindow(i);
+}
+
+static void PanelCallBack(struct Sprite *sprite)
+{
+    if (sprite->data[0] >= STARTMENU_NUM_VISIBLE && sprite->data[0] != START_MENU_SPRITE_NONE)
+        sprite->invisible = TRUE;
+    else
+        sprite->invisible = FALSE;
+
+    if (sprite->data[0] == STARTMENU_CURSOR_POS)
+        StartSpriteAnimIfDifferent(sprite, 1);
+    else
+        StartSpriteAnimIfDifferent(sprite, 0);
+}
+
+static void StartMenuIconCallback(struct Sprite *sprite)
+{
+    if (sprite->data[0] == STARTMENU_CURSOR_POS)
+    {
+        StartSpriteAnim(sprite, 1);
+        if (sprite->data[4] % 5 == 0)
+        {
+            if (sprite->data[1] == 0)
+                sprite->data[3] = 1;
+            else if (sprite->data[1] == 3)
+                sprite->data[3] = -1;
+            sprite->data[1] += sprite->data[3];
+            sprite->y = sprite->data[2] + sprite->data[1];
+        }
+        sprite->data[4]++;
+    }
+    else
+    {
+        sprite->y = sprite->data[2];
+        StartSpriteAnim(sprite, 0);
+    }
+}
+
+static void StartMenuBW_DrawPanels(void)
+{
+    u16 x;
+    u16 y;
+    u8 counter = 0;
+
+    LoadSpriteSheet(&sStartMenuPanelSpriteSheet);
+    LoadSpritePalette(&sStartMenuPanelSpritePalette);
+    for (u8 row = 0; row < START_MENU_ROWS; row++)
+    {
+        for (u8 col = 0; col < START_MENU_COLUMNS; col++)
+        {
+            x = START_MENU_PANEL_X + (START_MENU_PANEL_H_SPACING + (64 / 2) + 62) * col;
+            y = START_MENU_PANEL_Y + (START_MENU_PANEL_V_SPACING + 32) * row;
+            u8 spriteId1 = CreateSprite(&sStartMenuPanelSpriteTemplate1, x, y, 0);
+            u8 spriteId2 = CreateSprite(&sStartMenuPanelSpriteTemplate2, x + 64, y, 0);
+            gSprites[spriteId1].data[0] = counter;
+            gSprites[spriteId2].data[0] = counter;
+            counter++;
+        }
+    }
+
+    LoadSpriteSheet(&sStartMenuExitSpriteSheet);
+    LoadSpritePalette(&sStartMenuExitSpritePalette);
+    u8 spriteId = CreateSprite(&sStartMenuExitSpriteTemplate, 240 - 16, 160 - 11, 0);
+    gSprites[spriteId].data[0] = START_MENU_SPRITE_NONE;
+}
+
+static void StartMenuBW_DrawIcons(void)
+{
+    u16 x = 0;
+    u16 y = 0;
+    u8 counter = 0;
+
+    for (u8 i = 0; i < START_MENU_VISIBLE_ITEMS; i++)
+        sStartMenuBW->iconSpriteIds[i] = START_MENU_SPRITE_NONE;
+
+    for (u8 row = 0; row < START_MENU_ROWS; row++)
+    {
+        if (counter >= STARTMENU_NUM_VISIBLE)
+            break;
+        for (u8 col = 0; col < START_MENU_COLUMNS; col++)
+        {
+            if (counter >= STARTMENU_NUM_VISIBLE)
+                break;
+            x = (START_MENU_PANEL_X - 11) + (START_MENU_PANEL_H_SPACING - 2 + (64 / 2) + 64) * col;
+            y = (START_MENU_PANEL_Y - 3) + (START_MENU_PANEL_V_SPACING + 32) * row;
+            u8 action = STARTMENU_VISIBLE_ACTIONS[counter];
+            if (action >= ARRAY_COUNT(sStartMenuItems))
+            {
+                counter++;
+                continue;
+            }
+
+            if (action >= ARRAY_COUNT(sStartMenuActionIcons))
+            {
+                counter++;
+                continue;
+            }
+
+            u8 iconId = sStartMenuActionIcons[action];
+            if (iconId >= START_MENU_ICON_COUNT)
+            {
+                counter++;
+                continue;
+            }
+
+            const struct StartMenuBWIcon *icon = &sStartMenuBWIcons[iconId];
+            LoadSpriteSheet(&icon->sheet);
+            LoadSpritePalette(&icon->palette);
+            u8 spriteId = CreateSprite(&icon->template, x, y, 0);
+            gSprites[spriteId].data[0] = counter;
+            gSprites[spriteId].data[1] = 3;
+            gSprites[spriteId].data[2] = y;
+            gSprites[spriteId].data[3] = -1;
+            gSprites[spriteId].data[4] = 0;
+            sStartMenuBW->iconSpriteIds[counter] = spriteId;
+            counter++;
+        }
+    }
+}
+
+static void StartMenuBW_PrintMapName(void)
+{
+    GetMapName(gStringVar4, GetCurrentRegionMapSectionId(), 0);
+    AddTextPrinterParameterized4(WIN_BOTTOMBAR, FONT_NORMAL, 2, 13, 0, 0, sStartMenuTextColors, TEXT_SKIP_DRAW, gStringVar4);
+}
+
+static void StartMenuBW_PrintMenuItemsName(void)
+{
+    u16 x;
+    u16 y;
+    u8 counter = 0;
+
+    for (u8 row = 0; row < START_MENU_ROWS; row++)
+    {
+        if (counter >= STARTMENU_NUM_VISIBLE)
+            break;
+        for (u8 col = 0; col < START_MENU_COLUMNS; col++)
+        {
+            if (counter >= STARTMENU_NUM_VISIBLE)
+                break;
+            x = (START_MENU_PANEL_X + (START_MENU_PANEL_H_SPACING + (64 / 2) + 64) * col) + 8;
+            y = (START_MENU_PANEL_Y + (START_MENU_PANEL_V_SPACING + 32) * row) - 40;
+            u8 action = STARTMENU_VISIBLE_ACTIONS[counter];
+            if (action >= ARRAY_COUNT(sStartMenuItems))
+            {
+                counter++;
+                continue;
+            }
+            if (action == MENU_ACTION_PLAYER || action == MENU_ACTION_PLAYER_LINK)
+                AddTextPrinterParameterized4(WIN_ITEMS, FONT_NORMAL, x, y, 0, 0, sStartMenuTextColors, TEXT_SKIP_DRAW, gSaveBlock2Ptr->playerName);
+            else
+            {
+                StringExpandPlaceholders(gStringVar4, sStartMenuItems[action].text);
+                AddTextPrinterParameterized4(WIN_ITEMS, FONT_NORMAL, x, y, 0, 0, sStartMenuTextColors, TEXT_SKIP_DRAW, gStringVar4);
+            }
+            counter++;
+        }
+    }
+}
+
+static void StartMenuBW_CreateScrollbar(void)
+{
+    LoadSpriteSheet(&sStartMenuScrollBarSpriteSheet);
+    LoadSpritePalette(&sStartMenuScrollBarSpritePalette);
+    CreateSprite(&sStartMenuScrollBarSpriteTemplate, START_MENU_SCROLLBAR_X, START_MENU_SCROLLBAR_Y, 0);
+}
+
+static void ScrollBarCallback(struct Sprite *sprite)
+{
+    u8 maxScroll = StartMenuBW_GetMaxScrollOffset();
+    if (maxScroll == 0)
+    {
+        sprite->invisible = TRUE;
+        return;
+    }
+
+    sprite->invisible = FALSE;
+    sprite->y = START_MENU_SCROLLBAR_Y + (START_MENU_SCROLLBAR_RANGE * STARTMENU_SCROLL_OFFSET) / maxScroll;
+}
+
+static void StartMenuBW_UpdateTimeText(void)
+{
+    const u8 *amPmString = (gLocalTime.hours >= 12) ? gText_StartMenu_PM : gText_StartMenu_AM;
+    u8 displayHour = gLocalTime.hours % 12;
+
+    if (displayHour == 0)
+        displayHour = 12;
+
+    ConvertIntToDecimalStringN(gStringVar1, displayHour, STR_CONV_MODE_RIGHT_ALIGN, 2);
+    ConvertIntToDecimalStringN(gStringVar2, gLocalTime.minutes, STR_CONV_MODE_LEADING_ZEROS, 2);
+    StringCopy(gStringVar3, sStartMenuDayNames[GetDayOfWeek()]);
+    StringExpandPlaceholders(gStringVar4, gText_StartMenu_TimeBase_12Hr);
+
+    AddTextPrinterParameterized4(WIN_TOPBAR_TIME, FONT_NORMAL, 3, 0, 0, 0, sStartMenuTextColors, TEXT_SKIP_DRAW, gStringVar4);
+    AddTextPrinterParameterized4(WIN_TOPBAR_TIME, FONT_NORMAL, 63, 0, 0, 0, sStartMenuTextColors, TEXT_SKIP_DRAW, amPmString);
+}
+
+static void StartMenuBW_UpdateSafariZoneStats(void)
+{
+    ConvertIntToDecimalStringN(gStringVar1, gNumSafariBalls, STR_CONV_MODE_RIGHT_ALIGN, 2);
+    ConvertIntToDecimalStringN(gStringVar2, SafariZoneGetStepCounter(), STR_CONV_MODE_RIGHT_ALIGN, 3);
+    StringExpandPlaceholders(gStringVar4, gText_StartMenu_SafariZoneStats);
+    AddTextPrinterParameterized4(WIN_TOPBAR, FONT_NORMAL, 60, 0, 0, 0, sStartMenuTextColors, TEXT_SKIP_DRAW, gStringVar4);
+}
+
+static void StartMenuBW_LoadBgGfx(void)
+{
+    LoadBgTiles(BG_START_MENU_BACKGROUND, gStartMenuBWBgTiles, START_MENU_BG_TILE_SIZE, 0);
+    memcpy(sStartMenuBW->bgTilemapBuffer, gStartMenuBWBgTilemap, START_MENU_BG_TILEMAP_SIZE);
+    LoadPalette(gStartMenuBWBgPal, 0, 0x20);
+    Menu_LoadStdPalAt(BG_PLTT_ID(14));
+}
+
+static bool8 StartMenuBW_InitGui(void)
+{
+    ShowBg(BG_START_MENU_BACKGROUND);
+    CopyBgTilemapBufferToVram(BG_START_MENU_BACKGROUND);
+    StartMenuBW_ClearWindows();
+    StartMenuBW_DrawPanels();
+    StartMenuBW_DrawIcons();
+    StartMenuBW_PrintMapName();
+    StartMenuBW_PrintMenuItemsName();
+    if (GetSafariZoneFlag())
+        StartMenuBW_UpdateSafariZoneStats();
+    StartMenuBW_UpdateTimeText();
+    StartMenuBW_CreateScrollbar();
+    StartMenuBW_CommitWindows();
+    return TRUE;
+}
+
+static void StartMenuBW_RefreshMenuOptions(void)
+{
+    StartMenuBW_ClearWindow(WIN_ITEMS);
+    for (u8 i = 0; i < STARTMENU_NUM_VISIBLE; i++)
+    {
+        if (sStartMenuBW->iconSpriteIds[i] != START_MENU_SPRITE_NONE)
+            DestroySpriteAndFreeResources(&gSprites[sStartMenuBW->iconSpriteIds[i]]);
+        sStartMenuBW->iconSpriteIds[i] = START_MENU_SPRITE_NONE;
+    }
+    StartMenuBW_BuildVisibleItems();
+    StartMenuBW_DrawIcons();
+    StartMenuBW_PrintMenuItemsName();
+    StartMenuBW_CommitWindow(WIN_ITEMS);
+}
+
+static void StartMenuBW_Close(void)
+{
+    if (sStartMenuBW == NULL)
+        return;
+
+    sStartMenuCursorPos = STARTMENU_CURSOR_POS;
+    sStartMenuScrollOffset = STARTMENU_SCROLL_OFFSET;
+
+    FreeAllWindowBuffers();
+    UnsetBgTilemapBuffer(BG_START_MENU_BACKGROUND);
+    if (sStartMenuBW->bgTilemapBuffer != NULL)
+        Free(sStartMenuBW->bgTilemapBuffer);
+    ResetSpriteData();
+    FreeAllSpritePalettes();
+    Free(sStartMenuBW);
+    sStartMenuBW = NULL;
+}
+
+static void ReturnToFieldFromStartMenu(void)
+{
+    SetVBlankCallback(NULL);
+    SetHBlankCallback(NULL);
+    gFieldCallback = FieldCB_WarpExitFadeFromBlack;
+    CB2_ReturnToField();
+}
+
+static void ReturnToFieldFromStartMenuSave(void)
+{
+    SetVBlankCallback(NULL);
+    SetHBlankCallback(NULL);
+    gFieldCallback = FieldCB_ReturnToFieldStartMenuSave;
+    CB2_ReturnToField();
+}
+
+static void Task_WaitForFadeStartMenuSave(u8 taskId)
+{
+    if (!gPaletteFade.active)
+    {
+        DestroyTask(taskId);
+        StartMenuBW_StartSaveFromField();
+    }
+}
+
+static void FieldCB_ReturnToFieldStartMenuSave(void)
+{
+    FreezeObjectEvents();
+    PlayerFreeze();
+    StopPlayerAvatar();
+    LockPlayerFieldControls();
+    FadeInFromBlack();
+    CreateTask(Task_WaitForFadeStartMenuSave, 0x50);
+}
+
+static void StartMenuBW_StartSaveFromField(void)
+{
+    InitSave();
+    CreateTask(StartMenuBW_SaveGameTask, 0x50);
+}
+
+static void StartMenuBW_RequestExit(void)
+{
+    if (sStartMenuBW == NULL)
+        return;
+
+    sStartMenuBW->returnToField = TRUE;
+    if (!sStartMenuBW->fadingOut)
+    {
+        BeginNormalPaletteFade(PALETTES_ALL, 0, 0, 16, RGB_BLACK);
+        sStartMenuBW->fadingOut = TRUE;
+    }
+    gMenuCallback = StartMenuBW_WaitForFadeOut;
+}
+
+static bool8 StartMenuBW_ExitToSave(void)
+{
+    if (sStartMenuBW == NULL)
+        return FALSE;
+
+    sStartMenuExitToSave = TRUE;
+    sStartMenuBW->returnToField = TRUE;
+    return TRUE;
+}
+
+static bool8 StartMenuBW_WaitForFadeOut(void)
+{
+    if (!gPaletteFade.active)
+        return TRUE;
+
+    return FALSE;
+}
+
+static void Task_RunStartMenuCallback(u8 taskId)
+{
+    if (gMenuCallback != NULL && gMenuCallback() == TRUE)
+    {
+        if (sStartMenuBW != NULL && sStartMenuBW->returnToField)
+        {
+            StartMenuBW_Close();
+            if (sStartMenuExitToSave)
+            {
+                sStartMenuExitToSave = FALSE;
+                ReturnToFieldFromStartMenuSave();
+            }
+            else
+            {
+                ScriptUnfreezeObjectEvents();
+                UnlockPlayerFieldControls();
+                ReturnToFieldFromStartMenu();
+            }
+        }
+        else
+        {
+            StartMenuBW_Close();
+        }
+        DestroyTask(taskId);
+    }
+}
+
+static void CB2_StartMenuBW(void)
+{
+    switch (gMain.state)
+    {
+    case 0:
+        SetVBlankCallback(NULL);
+        StartMenuBW_ClearVramOamPlttRegs();
+        SetGpuReg(REG_OFFSET_DISPCNT, DISPCNT_MODE_0 | DISPCNT_OBJ_1D_MAP | DISPCNT_BG_ALL_ON | DISPCNT_OBJ_ON);
+        gMain.state++;
+        break;
+    case 1:
+        StartMenuBW_ClearTasksAndGraphicalStructs();
+        gMain.state++;
+        break;
+    case 2:
+        sStartMenuBW->bgTilemapBuffer = Alloc(0x1000);
+        ResetBgsAndClearDma3BusyFlags(0);
+        InitBgsFromTemplates(0, sStartMenuBWBgTemplates, ARRAY_COUNT(sStartMenuBWBgTemplates));
+        SetBgTilemapBuffer(BG_START_MENU_BACKGROUND, sStartMenuBW->bgTilemapBuffer);
+        gMain.state++;
+        break;
+    case 3:
+        BuildStartMenuActions();
+        StartMenuBW_BuildVisibleItems();
+        StartMenuBW_LoadBgGfx();
+        gMain.state++;
+        break;
+    case 4:
+        if (!FreeTempTileDataBuffersIfPossible())
+        {
+            ShowBg(BG_START_MENU_TEXT);
+            ShowBg(BG_START_MENU_BACKGROUND);
+            CopyBgTilemapBufferToVram(BG_START_MENU_BACKGROUND);
+            gMain.state++;
+        }
+        break;
+    case 5:
+        InitWindows(sStartMenuBWWindowTemplates);
+        DeactivateAllTextPrinters();
+        StartMenuBW_InitGui();
+        gMain.state++;
+        break;
+    case 6:
+        BeginNormalPaletteFade(PALETTES_ALL, 0, 16, 0, RGB_BLACK);
+        gMain.state++;
+        break;
+    case 7:
+        SetVBlankCallback(StartMenuBW_VBlankCB);
+        CreateTask(Task_RunStartMenuCallback, 0);
+        SetMainCallback2(StartMenuBW_MainCB2);
+        gMain.state = 0;
+        break;
+    }
+}
+
+static void StartMenuBW_Init(void)
+{
+    if (!gPaletteFade.active)
+    {
+        gMain.state = 0;
+        ResetBgsAndClearDma3BusyFlags(0);
+        CleanupOverworldWindowsAndTilemaps();
+        sStartMenuBW = AllocZeroed(sizeof(*sStartMenuBW));
+        if (sStartMenuBW == NULL)
+            return;
+        sStartMenuBW->cursorPos = sStartMenuCursorPos;
+        sStartMenuBW->scrollOffset = sStartMenuScrollOffset;
+        sStartMenuBW->returnToField = FALSE;
+        sStartMenuBW->fadingOut = FALSE;
+        sStartMenuBW->menuHidden = FALSE;
+        gReturnToStartMenu = FALSE;
+        sStartMenuBW->lastSecond = -1;
+        gMenuCallback = HandleStartMenuInput;
+        PlaySE(SE_PC_LOGIN);
+        SetMainCallback2(CB2_StartMenuBW);
+    }
+}
+
 static void ShowSafariBallsWindow(void)
 {
     sSafariBallsWindowId = AddWindow(&sWindowTemplate_SafariBalls);
@@ -463,17 +1407,7 @@ static void ShowPyramidFloorWindow(void)
 
 static void RemoveExtraStartMenuWindows(void)
 {
-    if (GetSafariZoneFlag())
-    {
-        ClearStdWindowAndFrameToTransparent(sSafariBallsWindowId, FALSE);
-        CopyWindowToVram(sSafariBallsWindowId, COPYWIN_GFX);
-        RemoveWindow(sSafariBallsWindowId);
-    }
-    if (InBattlePyramid())
-    {
-        ClearStdWindowAndFrameToTransparent(sBattlePyramidFloorWindowId, FALSE);
-        RemoveWindow(sBattlePyramidFloorWindowId);
-    }
+    // Legacy start menu windows are unused by the BW layout.
 }
 
 static bool32 PrintStartMenuActions(s8 *pIndex, u32 count)
@@ -482,13 +1416,28 @@ static bool32 PrintStartMenuActions(s8 *pIndex, u32 count)
 
     do
     {
-        if (sStartMenuItems[sCurrentStartMenuActions[index]].func.u8_void == StartMenuPlayerNameCallback)
+        u8 action = sCurrentStartMenuActions[index];
+
+        if (action >= ARRAY_COUNT(sStartMenuItems))
         {
-            PrintPlayerNameOnWindow(GetStartMenuWindowId(), sStartMenuItems[sCurrentStartMenuActions[index]].text, 8, (index << 4) + 9);
+            index++;
+            if (index >= sNumStartMenuActions)
+            {
+                *pIndex = index;
+                return TRUE;
+            }
+
+            count--;
+            continue;
+        }
+
+        if (sStartMenuItems[action].func.u8_void == StartMenuPlayerNameCallback)
+        {
+            PrintPlayerNameOnWindow(GetStartMenuWindowId(), sStartMenuItems[action].text, 8, (index << 4) + 9);
         }
         else
         {
-            StringExpandPlaceholders(gStringVar4, sStartMenuItems[sCurrentStartMenuActions[index]].text);
+            StringExpandPlaceholders(gStringVar4, sStartMenuItems[action].text);
             AddTextPrinterParameterized(GetStartMenuWindowId(), FONT_NORMAL, gStringVar4, 8, (index << 4) + 9, TEXT_SKIP_DRAW, NULL);
         }
 
@@ -548,19 +1497,20 @@ static bool32 InitStartMenuStep(void)
 
 static void InitStartMenu(void)
 {
-    sInitStartMenuData[0] = 0;
-    sInitStartMenuData[1] = 0;
-    while (!InitStartMenuStep())
-        ;
+    if (sStartMenuBW == NULL)
+        return;
+
+    BuildStartMenuActions();
+    StartMenuBW_RefreshMenuOptions();
 }
 
-static void StartMenuTask(u8 taskId)
+static UNUSED void StartMenuTask(u8 taskId)
 {
     if (InitStartMenuStep() == TRUE)
         SwitchTaskToFollowupFunc(taskId);
 }
 
-static void CreateStartMenuTask(TaskFunc followupFunc)
+static UNUSED void CreateStartMenuTask(TaskFunc followupFunc)
 {
     u8 taskId;
 
@@ -572,40 +1522,23 @@ static void CreateStartMenuTask(TaskFunc followupFunc)
 
 static bool8 FieldCB_ReturnToFieldStartMenu(void)
 {
-    if (InitStartMenuStep() == FALSE)
-    {
-        return FALSE;
-    }
-
     ReturnToFieldOpenStartMenu();
     return TRUE;
 }
 
 void ShowReturnToFieldStartMenu(void)
 {
-    sInitStartMenuData[0] = 0;
-    sInitStartMenuData[1] = 0;
     gFieldCallback2 = FieldCB_ReturnToFieldStartMenu;
 }
 
 void Task_ShowStartMenu(u8 taskId)
 {
-    struct Task *task = &gTasks[taskId];
+    if (InUnionRoom() == TRUE)
+        SetUsingUnionRoomStartMenu();
 
-    switch(task->data[0])
-    {
-    case 0:
-        if (InUnionRoom() == TRUE)
-            SetUsingUnionRoomStartMenu();
-
-        gMenuCallback = HandleStartMenuInput;
-        task->data[0]++;
-        break;
-    case 1:
-        if (gMenuCallback() == TRUE)
-            DestroyTask(taskId);
-        break;
-    }
+    gMenuCallback = HandleStartMenuInput;
+    StartMenuBW_Init();
+    DestroyTask(taskId);
 }
 
 void ShowStartMenu(void)
@@ -616,37 +1549,105 @@ void ShowStartMenu(void)
         PlayerFreeze();
         StopPlayerAvatar();
     }
-    CreateStartMenuTask(Task_ShowStartMenu);
+    StartMenuBW_Init();
     LockPlayerFieldControls();
 }
 
 static bool8 HandleStartMenuInput(void)
 {
-    if (JOY_NEW(DPAD_UP))
+    if (sStartMenuBW == NULL)
+        return FALSE;
+
+    if (sStartMenuBW->lastSecond != gLocalTime.seconds)
     {
-        PlaySE(SE_SELECT);
-        sStartMenuCursorPos = Menu_MoveCursor(-1);
+        sStartMenuBW->lastSecond = gLocalTime.seconds;
+        StartMenuBW_ClearWindow(WIN_TOPBAR_TIME);
+        StartMenuBW_UpdateTimeText();
+        StartMenuBW_CommitWindow(WIN_TOPBAR_TIME);
     }
 
-    if (JOY_NEW(DPAD_DOWN))
+    if (gPaletteFade.active)
+        return FALSE;
+
+    if (JOY_NEW(B_BUTTON | START_BUTTON))
     {
-        PlaySE(SE_SELECT);
-        sStartMenuCursorPos = Menu_MoveCursor(1);
+        PlaySE(SE_PC_OFF);
+        StartMenuBW_RequestExit();
+        return FALSE;
+    }
+
+    if (JOY_NEW(DPAD_RIGHT))
+    {
+        if ((STARTMENU_CURSOR_POS % START_MENU_COLUMNS) == 0
+            && STARTMENU_CURSOR_POS + 1 < STARTMENU_NUM_VISIBLE)
+        {
+            PlaySE(SE_SELECT);
+            STARTMENU_CURSOR_POS++;
+        }
+    }
+    else if (JOY_NEW(DPAD_LEFT))
+    {
+        if ((STARTMENU_CURSOR_POS % START_MENU_COLUMNS) == 1)
+        {
+            PlaySE(SE_SELECT);
+            STARTMENU_CURSOR_POS--;
+        }
+    }
+    else if (JOY_NEW(DPAD_UP))
+    {
+        u8 absoluteIndex = STARTMENU_SCROLL_OFFSET * START_MENU_COLUMNS + STARTMENU_CURSOR_POS;
+        if (absoluteIndex >= START_MENU_COLUMNS)
+        {
+            u8 newAbsolute = absoluteIndex - START_MENU_COLUMNS;
+            if (newAbsolute >= STARTMENU_SCROLL_OFFSET * START_MENU_COLUMNS)
+            {
+                PlaySE(SE_SELECT);
+                STARTMENU_CURSOR_POS -= START_MENU_COLUMNS;
+            }
+            else if (STARTMENU_SCROLL_OFFSET > 0)
+            {
+                PlaySE(SE_SELECT);
+                STARTMENU_SCROLL_OFFSET--;
+                StartMenuBW_RefreshMenuOptions();
+            }
+        }
+    }
+    else if (JOY_NEW(DPAD_DOWN))
+    {
+        u8 absoluteIndex = STARTMENU_SCROLL_OFFSET * START_MENU_COLUMNS + STARTMENU_CURSOR_POS;
+        u8 newAbsolute = absoluteIndex + START_MENU_COLUMNS;
+        if (newAbsolute < sNumStartMenuActions)
+        {
+            u8 visibleEnd = (STARTMENU_SCROLL_OFFSET + START_MENU_ROWS) * START_MENU_COLUMNS;
+            if (newAbsolute < visibleEnd)
+            {
+                PlaySE(SE_SELECT);
+                STARTMENU_CURSOR_POS += START_MENU_COLUMNS;
+            }
+            else
+            {
+                PlaySE(SE_SELECT);
+                STARTMENU_SCROLL_OFFSET++;
+                StartMenuBW_RefreshMenuOptions();
+            }
+        }
     }
 
     if (JOY_NEW(A_BUTTON))
     {
+        u8 action = STARTMENU_VISIBLE_ACTIONS[STARTMENU_CURSOR_POS];
+        if (action >= ARRAY_COUNT(sStartMenuItems))
+            return FALSE;
         PlaySE(SE_SELECT);
-        if (sStartMenuItems[sCurrentStartMenuActions[sStartMenuCursorPos]].func.u8_void == StartMenuPokedexCallback)
+        if (sStartMenuItems[action].func.u8_void == StartMenuPokedexCallback)
         {
             if (GetNationalPokedexCount(FLAG_GET_SEEN) == 0 && !FlagGet(FLAG_SYS_POKEDEX_GET))
                 return FALSE;
         }
-        if (sCurrentStartMenuActions[sStartMenuCursorPos] == MENU_ACTION_DEXNAV
-          && MapHasNoEncounterData())
+        if (action == MENU_ACTION_DEXNAV && MapHasNoEncounterData())
             return FALSE;
 
-        gMenuCallback = sStartMenuItems[sCurrentStartMenuActions[sStartMenuCursorPos]].func.u8_void;
+        gMenuCallback = sStartMenuItems[action].func.u8_void;
 
         if (gMenuCallback != StartMenuSaveCallback
             && gMenuCallback != StartMenuExitCallback
@@ -654,22 +1655,15 @@ static bool8 HandleStartMenuInput(void)
             && gMenuCallback != StartMenuSafariZoneRetireCallback
             && gMenuCallback != StartMenuBattlePyramidRetireCallback)
         {
-           FadeScreen(FADE_TO_BLACK, 0);
+            gReturnToStartMenu = TRUE;
+            FadeScreen(FADE_TO_BLACK, 0);
         }
 
         return FALSE;
     }
 
-    if (JOY_NEW(START_BUTTON | B_BUTTON))
-    {
-        RemoveExtraStartMenuWindows();
-        HideStartMenu();
-        return TRUE;
-    }
-
     return FALSE;
 }
-
 bool8 StartMenuPokedexCallback(void)
 {
     if (!gPaletteFade.active)
@@ -723,7 +1717,7 @@ static bool8 StartMenuPokeNavCallback(void)
         PlayRainStoppingSoundEffect();
         RemoveExtraStartMenuWindows();
         CleanupOverworldWindowsAndTilemaps();
-        SetMainCallback2(CB2_InitPokeNav);  // Display PokéNav
+        SetMainCallback2(CB2_InitPokeNav);  // Display Pok??Nav
 
         return TRUE;
     }
@@ -757,7 +1751,7 @@ static bool8 StartMenuSaveCallback(void)
     if (InBattlePyramid())
         RemoveExtraStartMenuWindows();
 
-    gMenuCallback = SaveStartCallback; // Display save menu
+    gMenuCallback = StartMenuBW_ExitToSave;
 
     return FALSE;
 }
@@ -780,15 +1774,13 @@ static bool8 StartMenuOptionCallback(void)
 
 static bool8 StartMenuExitCallback(void)
 {
-    RemoveExtraStartMenuWindows();
-    HideStartMenu(); // Hide start menu
+    StartMenuBW_RequestExit();
 
-    return TRUE;
+    return FALSE;
 }
 
 static bool8 StartMenuDebugCallback(void)
 {
-    RemoveExtraStartMenuWindows();
     HideStartMenuDebug(); // Hide start menu without enabling movement
 
     if (DEBUG_OVERWORLD_MENU)
@@ -797,23 +1789,21 @@ static bool8 StartMenuDebugCallback(void)
         Debug_ShowMainMenu();
     }
 
-return TRUE;
+    return TRUE;
 }
 
 static bool8 StartMenuSafariZoneRetireCallback(void)
 {
-    RemoveExtraStartMenuWindows();
-    HideStartMenu();
     SafariZoneRetirePrompt();
+    StartMenuBW_RequestExit();
 
-    return TRUE;
+    return FALSE;
 }
 
 static void HideStartMenuDebug(void)
 {
     PlaySE(SE_SELECT);
-    ClearStdWindowAndFrame(GetStartMenuWindowId(), TRUE);
-    RemoveStartMenuWindow();
+    StartMenuBW_Close();
 }
 
 static bool8 StartMenuLinkModePlayerNameCallback(void)
@@ -842,7 +1832,7 @@ void ShowBattlePyramidStartMenu(void)
 {
     ClearDialogWindowAndFrameToTransparent(0, FALSE);
     ScriptUnfreezeObjectEvents();
-    CreateStartMenuTask(Task_ShowStartMenu);
+    StartMenuBW_Init();
     LockPlayerFieldControls();
 }
 
@@ -861,13 +1851,6 @@ static bool8 StartMenuBattlePyramidBagCallback(void)
     return FALSE;
 }
 
-static bool8 SaveStartCallback(void)
-{
-    InitSave();
-    gMenuCallback = SaveCallback;
-
-    return FALSE;
-}
 
 static bool8 SaveCallback(void)
 {
@@ -876,17 +1859,15 @@ static bool8 SaveCallback(void)
     case SAVE_IN_PROGRESS:
         return FALSE;
     case SAVE_CANCELED: // Back to start menu
-        ClearDialogWindowAndFrameToTransparent(0, FALSE);
-        InitStartMenu();
+        ClearDialogWindowAndFrameToTransparent(0, TRUE);
         gMenuCallback = HandleStartMenuInput;
         return FALSE;
     case SAVE_SUCCESS:
     case SAVE_ERROR:    // Close start menu
         ClearDialogWindowAndFrameToTransparent(0, TRUE);
-        ScriptUnfreezeObjectEvents();
-        UnlockPlayerFieldControls();
         SoftResetInBattlePyramid();
-        return TRUE;
+        StartMenuBW_RequestExit();
+        return FALSE;
     }
 
     return FALSE;
@@ -913,17 +1894,15 @@ static bool8 BattlePyramidRetireCallback(void)
     switch (RunSaveCallback())
     {
     case SAVE_SUCCESS: // No (Stay in battle pyramid)
-        RemoveExtraStartMenuWindows();
         gMenuCallback = BattlePyramidRetireReturnCallback;
         return FALSE;
     case SAVE_IN_PROGRESS:
         return FALSE;
     case SAVE_CANCELED: // Yes (Retire from battle pyramid)
         ClearDialogWindowAndFrameToTransparent(0, TRUE);
-        ScriptUnfreezeObjectEvents();
-        UnlockPlayerFieldControls();
         ScriptContext_SetupScript(BattlePyramid_Retire);
-        return TRUE;
+        StartMenuBW_RequestExit();
+        return FALSE;
     }
 
     return FALSE;
@@ -984,6 +1963,29 @@ static void SaveGameTask(u8 taskId)
     ScriptContext_Enable();
 }
 
+static void StartMenuBW_SaveGameTask(u8 taskId)
+{
+    u8 status = RunSaveCallback();
+
+    if (status == SAVE_IN_PROGRESS)
+        return;
+
+    ClearDialogWindowAndFrameToTransparent(0, TRUE);
+    SoftResetInBattlePyramid();
+
+    if (status == SAVE_CANCELED)
+    {
+        ShowStartMenu();
+    }
+    else
+    {
+        ScriptUnfreezeObjectEvents();
+        UnlockPlayerFieldControls();
+    }
+
+    DestroyTask(taskId);
+}
+
 static void HideSaveMessageWindow(void)
 {
     ClearDialogWindowAndFrame(0, TRUE);
@@ -1032,8 +2034,6 @@ static bool8 SaveErrorTimer(void)
 
 static u8 SaveConfirmSaveCallback(void)
 {
-    ClearStdWindowAndFrame(GetStartMenuWindowId(), FALSE);
-    RemoveStartMenuWindow();
     ShowSaveInfoWindow();
 
     if (InBattlePyramid())
@@ -1220,8 +2220,6 @@ static void InitBattlePyramidRetire(void)
 
 static u8 BattlePyramidConfirmRetireCallback(void)
 {
-    ClearStdWindowAndFrame(GetStartMenuWindowId(), FALSE);
-    RemoveStartMenuWindow();
     ShowSaveMessage(gText_BattlePyramidConfirmRetire, BattlePyramidRetireYesNoCallback);
 
     return SAVE_IN_PROGRESS;
@@ -1429,7 +2427,7 @@ static void ShowSaveInfoWindow(void)
 
     if (FlagGet(FLAG_SYS_POKEDEX_GET) == TRUE)
     {
-        // Print Pokédex count
+        // Print Pok??dex count
         yOffset += 16;
         AddTextPrinterParameterized(sSaveInfoWindowId, FONT_NORMAL, gText_SavingPokedex, 0, yOffset, TEXT_SKIP_DRAW, NULL);
         BufferSaveMenuText(SAVE_MENU_CAUGHT, gStringVar4, color);
@@ -1475,10 +2473,7 @@ void SaveForBattleTowerLink(void)
 
 static void HideStartMenuWindow(void)
 {
-    ClearStdWindowAndFrame(GetStartMenuWindowId(), TRUE);
-    RemoveStartMenuWindow();
-    ScriptUnfreezeObjectEvents();
-    UnlockPlayerFieldControls();
+    StartMenuBW_RequestExit();
 }
 
 void HideStartMenu(void)
@@ -1506,3 +2501,38 @@ void Script_ForceSaveGame(struct ScriptContext *ctx)
     gMenuCallback = SaveCallback;
     sSaveDialogCallback = SaveSavingMessageCallback;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

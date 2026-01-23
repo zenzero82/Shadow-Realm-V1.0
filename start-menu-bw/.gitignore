@@ -1,0 +1,7 @@
+*.gba
+*.ini
+*.o
+*.i
+*.bin
+build
+__pycache__

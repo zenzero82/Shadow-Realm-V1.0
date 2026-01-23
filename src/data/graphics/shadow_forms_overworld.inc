@@ -1,788 +1,788 @@
 #if OW_POKEMON_OBJECT_EVENTS
 
 static const struct SpriteFrameImage sPicTable_PikachuShadow[] = {
-    overworld_ascending_frames(gObjectEventPic_PikachuShadow, 24, 4),
+    overworld_ascending_frames(gObjectEventPic_PikachuShadow, 4, 4),
 };
 #if P_GENDER_DIFFERENCES
 static const struct SpriteFrameImage sPicTable_PikachuFShadow[] = {
-    overworld_ascending_frames(gObjectEventPic_PikachuFShadow, 24, 4),
+    overworld_ascending_frames(gObjectEventPic_PikachuFShadow, 4, 4),
 };
 #endif
 
 static const struct SpriteFrameImage sPicTable_AbsolShadow[] = {
-    overworld_ascending_frames(gObjectEventPic_AbsolShadow, 24, 4),
+    overworld_ascending_frames(gObjectEventPic_AbsolShadow, 4, 4),
 };
 
 static const struct SpriteFrameImage sPicTable_AggronShadow[] = {
-    overworld_ascending_frames(gObjectEventPic_AggronShadow, 24, 4),
+    overworld_ascending_frames(gObjectEventPic_AggronShadow, 4, 4),
 };
 
 static const struct SpriteFrameImage sPicTable_AlakazamShadow[] = {
-    overworld_ascending_frames(gObjectEventPic_AlakazamShadow, 24, 4),
+    overworld_ascending_frames(gObjectEventPic_AlakazamShadow, 4, 4),
 };
 
 static const struct SpriteFrameImage sPicTable_AnnihilapeShadow[] = {
-    overworld_ascending_frames(gObjectEventPic_AnnihilapeShadow, 24, 4),
+    overworld_ascending_frames(gObjectEventPic_AnnihilapeShadow, 4, 4),
 };
 
 static const struct SpriteFrameImage sPicTable_AraquanidShadow[] = {
-    overworld_ascending_frames(gObjectEventPic_AraquanidShadow, 24, 4),
+    overworld_ascending_frames(gObjectEventPic_AraquanidShadow, 4, 4),
 };
 
 static const struct SpriteFrameImage sPicTable_ArcanineShadow[] = {
-    overworld_ascending_frames(gObjectEventPic_ArcanineShadow, 24, 4),
+    overworld_ascending_frames(gObjectEventPic_ArcanineShadow, 4, 4),
 };
 
 static const struct SpriteFrameImage sPicTable_ArceusShadow[] = {
-    overworld_ascending_frames(gObjectEventPic_ArceusShadow, 48, 8),
+    overworld_ascending_frames(gObjectEventPic_ArceusShadow, 8, 8),
 };
 
 static const struct SpriteFrameImage sPicTable_ArmarougeShadow[] = {
-    overworld_ascending_frames(gObjectEventPic_ArmarougeShadow, 24, 4),
+    overworld_ascending_frames(gObjectEventPic_ArmarougeShadow, 4, 4),
 };
 
 static const struct SpriteFrameImage sPicTable_ArticunoShadow[] = {
-    overworld_ascending_frames(gObjectEventPic_ArticunoShadow, 24, 4),
+    overworld_ascending_frames(gObjectEventPic_ArticunoShadow, 4, 4),
 };
 
 static const struct SpriteFrameImage sPicTable_AurorusShadow[] = {
-    overworld_ascending_frames(gObjectEventPic_AurorusShadow, 24, 4),
+    overworld_ascending_frames(gObjectEventPic_AurorusShadow, 4, 4),
 };
 
 static const struct SpriteFrameImage sPicTable_AzelfShadow[] = {
-    overworld_ascending_frames(gObjectEventPic_AzelfShadow, 24, 4),
+    overworld_ascending_frames(gObjectEventPic_AzelfShadow, 4, 4),
 };
 
 static const struct SpriteFrameImage sPicTable_BaxcaliburShadow[] = {
-    overworld_ascending_frames(gObjectEventPic_BaxcaliburShadow, 24, 4),
+    overworld_ascending_frames(gObjectEventPic_BaxcaliburShadow, 4, 4),
 };
 
 static const struct SpriteFrameImage sPicTable_BearticShadow[] = {
-    overworld_ascending_frames(gObjectEventPic_BearticShadow, 24, 4),
+    overworld_ascending_frames(gObjectEventPic_BearticShadow, 4, 4),
 };
 
 static const struct SpriteFrameImage sPicTable_BeedrillShadow[] = {
-    overworld_ascending_frames(gObjectEventPic_BeedrillShadow, 24, 4),
+    overworld_ascending_frames(gObjectEventPic_BeedrillShadow, 4, 4),
 };
 
 static const struct SpriteFrameImage sPicTable_BlacephalonShadow[] = {
-    overworld_ascending_frames(gObjectEventPic_BlacephalonShadow, 24, 4),
+    overworld_ascending_frames(gObjectEventPic_BlacephalonShadow, 4, 4),
 };
 
 static const struct SpriteFrameImage sPicTable_BlastoiseShadow[] = {
-    overworld_ascending_frames(gObjectEventPic_BlastoiseShadow, 24, 4),
+    overworld_ascending_frames(gObjectEventPic_BlastoiseShadow, 4, 4),
 };
 
 static const struct SpriteFrameImage sPicTable_BlazikenShadow[] = {
-    overworld_ascending_frames(gObjectEventPic_BlazikenShadow, 24, 4),
+    overworld_ascending_frames(gObjectEventPic_BlazikenShadow, 4, 4),
 };
 
 static const struct SpriteFrameImage sPicTable_BlisseyShadow[] = {
-    overworld_ascending_frames(gObjectEventPic_BlisseyShadow, 24, 4),
+    overworld_ascending_frames(gObjectEventPic_BlisseyShadow, 4, 4),
 };
 
 static const struct SpriteFrameImage sPicTable_BisharpShadow[] = {
-    overworld_ascending_frames(gObjectEventPic_BisharpShadow, 24, 4),
+    overworld_ascending_frames(gObjectEventPic_BisharpShadow, 4, 4),
 };
 
 static const struct SpriteFrameImage sPicTable_BuzzwoleShadow[] = {
-    overworld_ascending_frames(gObjectEventPic_BuzzwoleShadow, 24, 4),
+    overworld_ascending_frames(gObjectEventPic_BuzzwoleShadow, 4, 4),
 };
 
 static const struct SpriteFrameImage sPicTable_CalyrexShadow[] = {
-    overworld_ascending_frames(gObjectEventPic_CalyrexShadow, 24, 4),
+    overworld_ascending_frames(gObjectEventPic_CalyrexShadow, 4, 4),
 };
 
 static const struct SpriteFrameImage sPicTable_CameruptShadow[] = {
-    overworld_ascending_frames(gObjectEventPic_CameruptShadow, 24, 4),
+    overworld_ascending_frames(gObjectEventPic_CameruptShadow, 4, 4),
 };
 
 static const struct SpriteFrameImage sPicTable_CelesteelaShadow[] = {
-    overworld_ascending_frames(gObjectEventPic_CelesteelaShadow, 24, 4),
+    overworld_ascending_frames(gObjectEventPic_CelesteelaShadow, 4, 4),
 };
 
 static const struct SpriteFrameImage sPicTable_CentiskorchShadow[] = {
-    overworld_ascending_frames(gObjectEventPic_CentiskorchShadow, 24, 4),
+    overworld_ascending_frames(gObjectEventPic_CentiskorchShadow, 4, 4),
 };
 
 static const struct SpriteFrameImage sPicTable_CeruledgeShadow[] = {
-    overworld_ascending_frames(gObjectEventPic_CeruledgeShadow, 24, 4),
+    overworld_ascending_frames(gObjectEventPic_CeruledgeShadow, 4, 4),
 };
 
 static const struct SpriteFrameImage sPicTable_ChandelureShadow[] = {
-    overworld_ascending_frames(gObjectEventPic_ChandelureShadow, 24, 4),
+    overworld_ascending_frames(gObjectEventPic_ChandelureShadow, 4, 4),
 };
 
 static const struct SpriteFrameImage sPicTable_CharizardShadow[] = {
-    overworld_ascending_frames(gObjectEventPic_CharizardShadow, 24, 4),
+    overworld_ascending_frames(gObjectEventPic_CharizardShadow, 4, 4),
 };
 
 static const struct SpriteFrameImage sPicTable_ChesnaughtShadow[] = {
-    overworld_ascending_frames(gObjectEventPic_ChesnaughtShadow, 24, 4),
+    overworld_ascending_frames(gObjectEventPic_ChesnaughtShadow, 4, 4),
 };
 
 static const struct SpriteFrameImage sPicTable_ChienPaoShadow[] = {
-    overworld_ascending_frames(gObjectEventPic_ChienPaoShadow, 24, 4),
+    overworld_ascending_frames(gObjectEventPic_ChienPaoShadow, 4, 4),
 };
 
 static const struct SpriteFrameImage sPicTable_ChiYuShadow[] = {
-    overworld_ascending_frames(gObjectEventPic_ChiYuShadow, 24, 4),
+    overworld_ascending_frames(gObjectEventPic_ChiYuShadow, 4, 4),
 };
 
 static const struct SpriteFrameImage sPicTable_ClawitzerShadow[] = {
-    overworld_ascending_frames(gObjectEventPic_ClawitzerShadow, 24, 4),
+    overworld_ascending_frames(gObjectEventPic_ClawitzerShadow, 4, 4),
 };
 
 static const struct SpriteFrameImage sPicTable_ClodsireShadow[] = {
-    overworld_ascending_frames(gObjectEventPic_ClodsireShadow, 24, 4),
+    overworld_ascending_frames(gObjectEventPic_ClodsireShadow, 4, 4),
 };
 
 static const struct SpriteFrameImage sPicTable_CobalionShadow[] = {
-    overworld_ascending_frames(gObjectEventPic_CobalionShadow, 24, 4),
+    overworld_ascending_frames(gObjectEventPic_CobalionShadow, 4, 4),
 };
 
 static const struct SpriteFrameImage sPicTable_CopperajahShadow[] = {
-    overworld_ascending_frames(gObjectEventPic_CopperajahShadow, 24, 4),
+    overworld_ascending_frames(gObjectEventPic_CopperajahShadow, 4, 4),
 };
 
 static const struct SpriteFrameImage sPicTable_CorviknightShadow[] = {
-    overworld_ascending_frames(gObjectEventPic_CorviknightShadow, 24, 4),
+    overworld_ascending_frames(gObjectEventPic_CorviknightShadow, 4, 4),
 };
 
 static const struct SpriteFrameImage sPicTable_CresseliaShadow[] = {
-    overworld_ascending_frames(gObjectEventPic_CresseliaShadow, 24, 4),
+    overworld_ascending_frames(gObjectEventPic_CresseliaShadow, 4, 4),
 };
 
 static const struct SpriteFrameImage sPicTable_CrobatShadow[] = {
-    overworld_ascending_frames(gObjectEventPic_CrobatShadow, 24, 4),
+    overworld_ascending_frames(gObjectEventPic_CrobatShadow, 4, 4),
 };
 
 static const struct SpriteFrameImage sPicTable_DarkraiShadow[] = {
-    overworld_ascending_frames(gObjectEventPic_DarkraiShadow, 24, 4),
+    overworld_ascending_frames(gObjectEventPic_DarkraiShadow, 4, 4),
 };
 
 static const struct SpriteFrameImage sPicTable_DecidueyeShadow[] = {
-    overworld_ascending_frames(gObjectEventPic_DecidueyeShadow, 24, 4),
+    overworld_ascending_frames(gObjectEventPic_DecidueyeShadow, 4, 4),
 };
 
 static const struct SpriteFrameImage sPicTable_DeoxysShadow[] = {
-    overworld_ascending_frames(gObjectEventPic_DeoxysShadow, 24, 4),
+    overworld_ascending_frames(gObjectEventPic_DeoxysShadow, 4, 4),
 };
 
 static const struct SpriteFrameImage sPicTable_DelphoxShadow[] = {
-    overworld_ascending_frames(gObjectEventPic_DelphoxShadow, 24, 4),
+    overworld_ascending_frames(gObjectEventPic_DelphoxShadow, 4, 4),
 };
 
 static const struct SpriteFrameImage sPicTable_DialgaShadow[] = {
-    overworld_ascending_frames(gObjectEventPic_DialgaShadow, 48, 8),
+    overworld_ascending_frames(gObjectEventPic_DialgaShadow, 8, 8),
 };
 
 static const struct SpriteFrameImage sPicTable_DiancieShadow[] = {
-    overworld_ascending_frames(gObjectEventPic_DiancieShadow, 24, 4),
+    overworld_ascending_frames(gObjectEventPic_DiancieShadow, 4, 4),
 };
 
 static const struct SpriteFrameImage sPicTable_DonphanShadow[] = {
-    overworld_ascending_frames(gObjectEventPic_DonphanShadow, 24, 4),
+    overworld_ascending_frames(gObjectEventPic_DonphanShadow, 4, 4),
 };
 
 static const struct SpriteFrameImage sPicTable_DragalgeShadow[] = {
-    overworld_ascending_frames(gObjectEventPic_DragalgeShadow, 24, 4),
+    overworld_ascending_frames(gObjectEventPic_DragalgeShadow, 4, 4),
 };
 
 static const struct SpriteFrameImage sPicTable_DragoniteShadow[] = {
-    overworld_ascending_frames(gObjectEventPic_DragoniteShadow, 24, 4),
+    overworld_ascending_frames(gObjectEventPic_DragoniteShadow, 4, 4),
 };
 
 static const struct SpriteFrameImage sPicTable_DragapultShadow[] = {
-    overworld_ascending_frames(gObjectEventPic_DragapultShadow, 24, 4),
+    overworld_ascending_frames(gObjectEventPic_DragapultShadow, 4, 4),
 };
 
 static const struct SpriteFrameImage sPicTable_DrampaShadow[] = {
-    overworld_ascending_frames(gObjectEventPic_DrampaShadow, 24, 4),
+    overworld_ascending_frames(gObjectEventPic_DrampaShadow, 4, 4),
 };
 
 static const struct SpriteFrameImage sPicTable_DusknoirShadow[] = {
-    overworld_ascending_frames(gObjectEventPic_DusknoirShadow, 24, 4),
+    overworld_ascending_frames(gObjectEventPic_DusknoirShadow, 4, 4),
 };
 
 static const struct SpriteFrameImage sPicTable_EelektrossShadow[] = {
-    overworld_ascending_frames(gObjectEventPic_EelektrossShadow, 24, 4),
+    overworld_ascending_frames(gObjectEventPic_EelektrossShadow, 4, 4),
 };
 
 static const struct SpriteFrameImage sPicTable_ElectivireShadow[] = {
-    overworld_ascending_frames(gObjectEventPic_ElectivireShadow, 24, 4),
+    overworld_ascending_frames(gObjectEventPic_ElectivireShadow, 4, 4),
 };
 
 static const struct SpriteFrameImage sPicTable_EmboarShadow[] = {
-    overworld_ascending_frames(gObjectEventPic_EmboarShadow, 24, 4),
+    overworld_ascending_frames(gObjectEventPic_EmboarShadow, 4, 4),
 };
 
 static const struct SpriteFrameImage sPicTable_EmpoleonShadow[] = {
-    overworld_ascending_frames(gObjectEventPic_EmpoleonShadow, 24, 4),
+    overworld_ascending_frames(gObjectEventPic_EmpoleonShadow, 4, 4),
 };
 
 static const struct SpriteFrameImage sPicTable_EnamorusShadow[] = {
-    overworld_ascending_frames(gObjectEventPic_EnamorusShadow, 48, 8),
+    overworld_ascending_frames(gObjectEventPic_EnamorusShadow, 8, 8),
 };
 
 static const struct SpriteFrameImage sPicTable_EnteiShadow[] = {
-    overworld_ascending_frames(gObjectEventPic_EnteiShadow, 24, 4),
+    overworld_ascending_frames(gObjectEventPic_EnteiShadow, 4, 4),
 };
 
 static const struct SpriteFrameImage sPicTable_EternatusShadow[] = {
-    overworld_ascending_frames(gObjectEventPic_EternatusShadow, 24, 4),
+    overworld_ascending_frames(gObjectEventPic_EternatusShadow, 4, 4),
 };
 
 static const struct SpriteFrameImage sPicTable_FalinksShadow[] = {
-    overworld_ascending_frames(gObjectEventPic_FalinksShadow, 24, 4),
+    overworld_ascending_frames(gObjectEventPic_FalinksShadow, 4, 4),
 };
 
 static const struct SpriteFrameImage sPicTable_FeraligatrShadow[] = {
-    overworld_ascending_frames(gObjectEventPic_FeraligatrShadow, 24, 4),
+    overworld_ascending_frames(gObjectEventPic_FeraligatrShadow, 4, 4),
 };
 
 static const struct SpriteFrameImage sPicTable_FlygonShadow[] = {
-    overworld_ascending_frames(gObjectEventPic_FlygonShadow, 24, 4),
+    overworld_ascending_frames(gObjectEventPic_FlygonShadow, 4, 4),
 };
 
 static const struct SpriteFrameImage sPicTable_FlutterManeShadow[] = {
-    overworld_ascending_frames(gObjectEventPic_FlutterManeShadow, 24, 4),
+    overworld_ascending_frames(gObjectEventPic_FlutterManeShadow, 4, 4),
 };
 
 static const struct SpriteFrameImage sPicTable_GalvantulaShadow[] = {
-    overworld_ascending_frames(gObjectEventPic_GalvantulaShadow, 24, 4),
+    overworld_ascending_frames(gObjectEventPic_GalvantulaShadow, 4, 4),
 };
 
 static const struct SpriteFrameImage sPicTable_GarchompShadow[] = {
-    overworld_ascending_frames(gObjectEventPic_GarchompShadow, 24, 4),
+    overworld_ascending_frames(gObjectEventPic_GarchompShadow, 4, 4),
 };
 
 static const struct SpriteFrameImage sPicTable_GenesectShadow[] = {
-    overworld_ascending_frames(gObjectEventPic_GenesectShadow, 24, 4),
+    overworld_ascending_frames(gObjectEventPic_GenesectShadow, 4, 4),
 };
 
 static const struct SpriteFrameImage sPicTable_GholdengoShadow[] = {
-    overworld_ascending_frames(gObjectEventPic_GholdengoShadow, 24, 4),
+    overworld_ascending_frames(gObjectEventPic_GholdengoShadow, 4, 4),
 };
 
 static const struct SpriteFrameImage sPicTable_GiratinaShadow[] = {
-    overworld_ascending_frames(gObjectEventPic_GiratinaShadow, 48, 8),
+    overworld_ascending_frames(gObjectEventPic_GiratinaShadow, 8, 8),
 };
 
 static const struct SpriteFrameImage sPicTable_GolisopodShadow[] = {
-    overworld_ascending_frames(gObjectEventPic_GolisopodShadow, 24, 4),
+    overworld_ascending_frames(gObjectEventPic_GolisopodShadow, 4, 4),
 };
 
 static const struct SpriteFrameImage sPicTable_GoodraShadow[] = {
-    overworld_ascending_frames(gObjectEventPic_GoodraShadow, 24, 4),
+    overworld_ascending_frames(gObjectEventPic_GoodraShadow, 4, 4),
 };
 
 static const struct SpriteFrameImage sPicTable_GreatTuskShadow[] = {
-    overworld_ascending_frames(gObjectEventPic_GreatTuskShadow, 24, 4),
+    overworld_ascending_frames(gObjectEventPic_GreatTuskShadow, 4, 4),
 };
 
 static const struct SpriteFrameImage sPicTable_GreninjaShadow[] = {
-    overworld_ascending_frames(gObjectEventPic_GreninjaShadow, 24, 4),
+    overworld_ascending_frames(gObjectEventPic_GreninjaShadow, 4, 4),
 };
 
 static const struct SpriteFrameImage sPicTable_GrimmsnarlShadow[] = {
-    overworld_ascending_frames(gObjectEventPic_GrimmsnarlShadow, 24, 4),
+    overworld_ascending_frames(gObjectEventPic_GrimmsnarlShadow, 4, 4),
 };
 
 static const struct SpriteFrameImage sPicTable_GroudonShadow[] = {
-    overworld_ascending_frames(gObjectEventPic_GroudonShadow, 48, 8),
+    overworld_ascending_frames(gObjectEventPic_GroudonShadow, 8, 8),
 };
 
 static const struct SpriteFrameImage sPicTable_GuzzlordShadow[] = {
-    overworld_ascending_frames(gObjectEventPic_GuzzlordShadow, 24, 4),
+    overworld_ascending_frames(gObjectEventPic_GuzzlordShadow, 4, 4),
 };
 
 static const struct SpriteFrameImage sPicTable_GyaradosShadow[] = {
-    overworld_ascending_frames(gObjectEventPic_GyaradosShadow, 24, 4),
+    overworld_ascending_frames(gObjectEventPic_GyaradosShadow, 4, 4),
 };
 
 static const struct SpriteFrameImage sPicTable_HattereneShadow[] = {
-    overworld_ascending_frames(gObjectEventPic_HattereneShadow, 24, 4),
+    overworld_ascending_frames(gObjectEventPic_HattereneShadow, 4, 4),
 };
 
 static const struct SpriteFrameImage sPicTable_HeatranShadow[] = {
-    overworld_ascending_frames(gObjectEventPic_HeatranShadow, 24, 4),
+    overworld_ascending_frames(gObjectEventPic_HeatranShadow, 4, 4),
 };
 
 static const struct SpriteFrameImage sPicTable_HoOhShadow[] = {
-    overworld_ascending_frames(gObjectEventPic_HoOhShadow, 48, 8),
+    overworld_ascending_frames(gObjectEventPic_HoOhShadow, 8, 8),
 };
 
 static const struct SpriteFrameImage sPicTable_HonchkrowShadow[] = {
-    overworld_ascending_frames(gObjectEventPic_HonchkrowShadow, 24, 4),
+    overworld_ascending_frames(gObjectEventPic_HonchkrowShadow, 4, 4),
 };
 
 static const struct SpriteFrameImage sPicTable_HoopaShadow[] = {
-    overworld_ascending_frames(gObjectEventPic_HoopaShadow, 48, 8),
+    overworld_ascending_frames(gObjectEventPic_HoopaShadow, 8, 8),
 };
 
 static const struct SpriteFrameImage sPicTable_HoundoomShadow[] = {
-    overworld_ascending_frames(gObjectEventPic_HoundoomShadow, 24, 4),
+    overworld_ascending_frames(gObjectEventPic_HoundoomShadow, 4, 4),
 };
 
 static const struct SpriteFrameImage sPicTable_HydreigonShadow[] = {
-    overworld_ascending_frames(gObjectEventPic_HydreigonShadow, 24, 4),
+    overworld_ascending_frames(gObjectEventPic_HydreigonShadow, 4, 4),
 };
 
 static const struct SpriteFrameImage sPicTable_IncineroarShadow[] = {
-    overworld_ascending_frames(gObjectEventPic_IncineroarShadow, 24, 4),
+    overworld_ascending_frames(gObjectEventPic_IncineroarShadow, 4, 4),
 };
 
 static const struct SpriteFrameImage sPicTable_InfernapeShadow[] = {
-    overworld_ascending_frames(gObjectEventPic_InfernapeShadow, 24, 4),
+    overworld_ascending_frames(gObjectEventPic_InfernapeShadow, 4, 4),
 };
 
 static const struct SpriteFrameImage sPicTable_InteleonShadow[] = {
-    overworld_ascending_frames(gObjectEventPic_InteleonShadow, 24, 4),
+    overworld_ascending_frames(gObjectEventPic_InteleonShadow, 4, 4),
 };
 
 static const struct SpriteFrameImage sPicTable_IronBundleShadow[] = {
-    overworld_ascending_frames(gObjectEventPic_IronBundleShadow, 24, 4),
+    overworld_ascending_frames(gObjectEventPic_IronBundleShadow, 4, 4),
 };
 
 static const struct SpriteFrameImage sPicTable_IronCrownShadow[] = {
-    overworld_ascending_frames(gObjectEventPic_IronCrownShadow, 24, 4),
+    overworld_ascending_frames(gObjectEventPic_IronCrownShadow, 4, 4),
 };
 
 static const struct SpriteFrameImage sPicTable_IronHandsShadow[] = {
-    overworld_ascending_frames(gObjectEventPic_IronHandsShadow, 24, 4),
+    overworld_ascending_frames(gObjectEventPic_IronHandsShadow, 4, 4),
 };
 
 static const struct SpriteFrameImage sPicTable_IronTreadsShadow[] = {
-    overworld_ascending_frames(gObjectEventPic_IronTreadsShadow, 24, 4),
+    overworld_ascending_frames(gObjectEventPic_IronTreadsShadow, 4, 4),
 };
 
 static const struct SpriteFrameImage sPicTable_JirachiShadow[] = {
-    overworld_ascending_frames(gObjectEventPic_JirachiShadow, 24, 4),
+    overworld_ascending_frames(gObjectEventPic_JirachiShadow, 4, 4),
 };
 
 static const struct SpriteFrameImage sPicTable_KartanaShadow[] = {
-    overworld_ascending_frames(gObjectEventPic_KartanaShadow, 24, 4),
+    overworld_ascending_frames(gObjectEventPic_KartanaShadow, 4, 4),
 };
 
 static const struct SpriteFrameImage sPicTable_KeldeoShadow[] = {
-    overworld_ascending_frames(gObjectEventPic_KeldeoShadow, 24, 4),
+    overworld_ascending_frames(gObjectEventPic_KeldeoShadow, 4, 4),
 };
 
 static const struct SpriteFrameImage sPicTable_KingdraShadow[] = {
-    overworld_ascending_frames(gObjectEventPic_KingdraShadow, 24, 4),
+    overworld_ascending_frames(gObjectEventPic_KingdraShadow, 4, 4),
 };
 
 static const struct SpriteFrameImage sPicTable_KommoOShadow[] = {
-    overworld_ascending_frames(gObjectEventPic_KommoOShadow, 24, 4),
+    overworld_ascending_frames(gObjectEventPic_KommoOShadow, 4, 4),
 };
 
 static const struct SpriteFrameImage sPicTable_KoraidonShadow[] = {
-    overworld_ascending_frames(gObjectEventPic_KoraidonShadow, 48, 8),
+    overworld_ascending_frames(gObjectEventPic_KoraidonShadow, 8, 8),
 };
 
 static const struct SpriteFrameImage sPicTable_KrookodileShadow[] = {
-    overworld_ascending_frames(gObjectEventPic_KrookodileShadow, 24, 4),
+    overworld_ascending_frames(gObjectEventPic_KrookodileShadow, 4, 4),
 };
 
 static const struct SpriteFrameImage sPicTable_KyogreShadow[] = {
-    overworld_ascending_frames(gObjectEventPic_KyogreShadow, 48, 8),
+    overworld_ascending_frames(gObjectEventPic_KyogreShadow, 8, 8),
 };
 
 static const struct SpriteFrameImage sPicTable_KyuremShadow[] = {
-    overworld_ascending_frames(gObjectEventPic_KyuremShadow, 48, 8),
+    overworld_ascending_frames(gObjectEventPic_KyuremShadow, 4, 4),
 };
 
 static const struct SpriteFrameImage sPicTable_LandorusShadow[] = {
-    overworld_ascending_frames(gObjectEventPic_LandorusShadow, 24, 4),
+    overworld_ascending_frames(gObjectEventPic_LandorusShadow, 4, 4),
 };
 
 static const struct SpriteFrameImage sPicTable_LatiasShadow[] = {
-    overworld_ascending_frames(gObjectEventPic_LatiasShadow, 24, 4),
+    overworld_ascending_frames(gObjectEventPic_LatiasShadow, 8, 8),
 };
 
 static const struct SpriteFrameImage sPicTable_LatiosShadow[] = {
-    overworld_ascending_frames(gObjectEventPic_LatiosShadow, 24, 4),
+    overworld_ascending_frames(gObjectEventPic_LatiosShadow, 8, 8),
 };
 
 static const struct SpriteFrameImage sPicTable_LucarioShadow[] = {
-    overworld_ascending_frames(gObjectEventPic_LucarioShadow, 24, 4),
+    overworld_ascending_frames(gObjectEventPic_LucarioShadow, 4, 4),
 };
 
 static const struct SpriteFrameImage sPicTable_LunalaShadow[] = {
-    overworld_ascending_frames(gObjectEventPic_LunalaShadow, 24, 4),
+    overworld_ascending_frames(gObjectEventPic_LunalaShadow, 4, 4),
 };
 
 static const struct SpriteFrameImage sPicTable_MagearnaShadow[] = {
-    overworld_ascending_frames(gObjectEventPic_MagearnaShadow, 24, 4),
+    overworld_ascending_frames(gObjectEventPic_MagearnaShadow, 4, 4),
 };
 
 static const struct SpriteFrameImage sPicTable_MagnezoneShadow[] = {
-    overworld_ascending_frames(gObjectEventPic_MagnezoneShadow, 24, 4),
+    overworld_ascending_frames(gObjectEventPic_MagnezoneShadow, 4, 4),
 };
 
 static const struct SpriteFrameImage sPicTable_MalamarShadow[] = {
-    overworld_ascending_frames(gObjectEventPic_MalamarShadow, 24, 4),
+    overworld_ascending_frames(gObjectEventPic_MalamarShadow, 4, 4),
 };
 
 static const struct SpriteFrameImage sPicTable_ManaphyShadow[] = {
-    overworld_ascending_frames(gObjectEventPic_ManaphyShadow, 24, 4),
+    overworld_ascending_frames(gObjectEventPic_ManaphyShadow, 4, 4),
 };
 
 static const struct SpriteFrameImage sPicTable_ManectricShadow[] = {
-    overworld_ascending_frames(gObjectEventPic_ManectricShadow, 24, 4),
+    overworld_ascending_frames(gObjectEventPic_ManectricShadow, 4, 4),
 };
 
 static const struct SpriteFrameImage sPicTable_MarshadowShadow[] = {
-    overworld_ascending_frames(gObjectEventPic_MarshadowShadow, 24, 4),
+    overworld_ascending_frames(gObjectEventPic_MarshadowShadow, 4, 4),
 };
 
 static const struct SpriteFrameImage sPicTable_MeganiumShadow[] = {
-    overworld_ascending_frames(gObjectEventPic_MeganiumShadow, 24, 4),
+    overworld_ascending_frames(gObjectEventPic_MeganiumShadow, 4, 4),
 };
 
 static const struct SpriteFrameImage sPicTable_MelmetalShadow[] = {
-    overworld_ascending_frames(gObjectEventPic_MelmetalShadow, 24, 4),
+    overworld_ascending_frames(gObjectEventPic_MelmetalShadow, 4, 4),
 };
 
 static const struct SpriteFrameImage sPicTable_MeloettaShadow[] = {
-    overworld_ascending_frames(gObjectEventPic_MeloettaShadow, 24, 4),
+    overworld_ascending_frames(gObjectEventPic_MeloettaShadow, 4, 4),
 };
 
 static const struct SpriteFrameImage sPicTable_MespritShadow[] = {
-    overworld_ascending_frames(gObjectEventPic_MespritShadow, 24, 4),
+    overworld_ascending_frames(gObjectEventPic_MespritShadow, 4, 4),
 };
 
 static const struct SpriteFrameImage sPicTable_MeowscaradaShadow[] = {
-    overworld_ascending_frames(gObjectEventPic_MeowscaradaShadow, 24, 4),
+    overworld_ascending_frames(gObjectEventPic_MeowscaradaShadow, 4, 4),
 };
 
 static const struct SpriteFrameImage sPicTable_MewShadow[] = {
-    overworld_ascending_frames(gObjectEventPic_MewShadow, 24, 4),
+    overworld_ascending_frames(gObjectEventPic_MewShadow, 4, 4),
 };
 
 static const struct SpriteFrameImage sPicTable_MewtwoShadow[] = {
-    overworld_ascending_frames(gObjectEventPic_MewtwoShadow, 24, 4),
+    overworld_ascending_frames(gObjectEventPic_MewtwoShadow, 4, 4),
 };
 
 static const struct SpriteFrameImage sPicTable_MiloticShadow[] = {
-    overworld_ascending_frames(gObjectEventPic_MiloticShadow, 24, 4),
+    overworld_ascending_frames(gObjectEventPic_MiloticShadow, 4, 4),
 };
 
 static const struct SpriteFrameImage sPicTable_MimikyuShadow[] = {
-    overworld_ascending_frames(gObjectEventPic_MimikyuShadow, 24, 4),
+    overworld_ascending_frames(gObjectEventPic_MimikyuShadow, 4, 4),
 };
 
 static const struct SpriteFrameImage sPicTable_MiraidonShadow[] = {
-    overworld_ascending_frames(gObjectEventPic_MiraidonShadow, 48, 8),
+    overworld_ascending_frames(gObjectEventPic_MiraidonShadow, 8, 8),
 };
 
 static const struct SpriteFrameImage sPicTable_MoltresShadow[] = {
-    overworld_ascending_frames(gObjectEventPic_MoltresShadow, 24, 4),
+    overworld_ascending_frames(gObjectEventPic_MoltresShadow, 4, 4),
 };
 
 static const struct SpriteFrameImage sPicTable_NaganadelShadow[] = {
-    overworld_ascending_frames(gObjectEventPic_NaganadelShadow, 24, 4),
+    overworld_ascending_frames(gObjectEventPic_NaganadelShadow, 4, 4),
 };
 
 static const struct SpriteFrameImage sPicTable_NecrozmaShadow[] = {
-    overworld_ascending_frames(gObjectEventPic_NecrozmaShadow, 24, 4),
+    overworld_ascending_frames(gObjectEventPic_NecrozmaShadow, 4, 4),
 };
 
 static const struct SpriteFrameImage sPicTable_NidokingShadow[] = {
-    overworld_ascending_frames(gObjectEventPic_NidokingShadow, 24, 4),
+    overworld_ascending_frames(gObjectEventPic_NidokingShadow, 4, 4),
 };
 
 static const struct SpriteFrameImage sPicTable_NihilegoShadow[] = {
-    overworld_ascending_frames(gObjectEventPic_NihilegoShadow, 24, 4),
+    overworld_ascending_frames(gObjectEventPic_NihilegoShadow, 4, 4),
 };
 
 static const struct SpriteFrameImage sPicTable_ObstagoonShadow[] = {
-    overworld_ascending_frames(gObjectEventPic_ObstagoonShadow, 24, 4),
+    overworld_ascending_frames(gObjectEventPic_ObstagoonShadow, 4, 4),
 };
 
 static const struct SpriteFrameImage sPicTable_PalossandShadow[] = {
-    overworld_ascending_frames(gObjectEventPic_PalossandShadow, 24, 4),
+    overworld_ascending_frames(gObjectEventPic_PalossandShadow, 4, 4),
 };
 
 static const struct SpriteFrameImage sPicTable_PalkiaShadow[] = {
-    overworld_ascending_frames(gObjectEventPic_PalkiaShadow, 48, 8),
+    overworld_ascending_frames(gObjectEventPic_PalkiaShadow, 8, 8),
 };
 
 static const struct SpriteFrameImage sPicTable_PangoroShadow[] = {
-    overworld_ascending_frames(gObjectEventPic_PangoroShadow, 24, 4),
+    overworld_ascending_frames(gObjectEventPic_PangoroShadow, 4, 4),
 };
 
 static const struct SpriteFrameImage sPicTable_PecharuntShadow[] = {
-    overworld_ascending_frames(gObjectEventPic_PecharuntShadow, 24, 4),
+    overworld_ascending_frames(gObjectEventPic_PecharuntShadow, 4, 4),
 };
 
 static const struct SpriteFrameImage sPicTable_PheromosaShadow[] = {
-    overworld_ascending_frames(gObjectEventPic_PheromosaShadow, 24, 4),
+    overworld_ascending_frames(gObjectEventPic_PheromosaShadow, 4, 4),
 };
 
 static const struct SpriteFrameImage sPicTable_PrimarinaShadow[] = {
-    overworld_ascending_frames(gObjectEventPic_PrimarinaShadow, 24, 4),
+    overworld_ascending_frames(gObjectEventPic_PrimarinaShadow, 4, 4),
 };
 
 static const struct SpriteFrameImage sPicTable_QuaquavalShadow[] = {
-    overworld_ascending_frames(gObjectEventPic_QuaquavalShadow, 24, 4),
+    overworld_ascending_frames(gObjectEventPic_QuaquavalShadow, 4, 4),
 };
 
 static const struct SpriteFrameImage sPicTable_RaikouShadow[] = {
-    overworld_ascending_frames(gObjectEventPic_RaikouShadow, 24, 4),
+    overworld_ascending_frames(gObjectEventPic_RaikouShadow, 4, 4),
 };
 
 static const struct SpriteFrameImage sPicTable_RayquazaShadow[] = {
-    overworld_ascending_frames(gObjectEventPic_RayquazaShadow, 48, 8),
+    overworld_ascending_frames(gObjectEventPic_RayquazaShadow, 8, 8),
 };
 
 static const struct SpriteFrameImage sPicTable_RegiceShadow[] = {
-    overworld_ascending_frames(gObjectEventPic_RegiceShadow, 24, 4),
+    overworld_ascending_frames(gObjectEventPic_RegiceShadow, 4, 4),
 };
 
 static const struct SpriteFrameImage sPicTable_RegidragoShadow[] = {
-    overworld_ascending_frames(gObjectEventPic_RegidragoShadow, 24, 4),
+    overworld_ascending_frames(gObjectEventPic_RegidragoShadow, 4, 4),
 };
 
 static const struct SpriteFrameImage sPicTable_RegielekiShadow[] = {
-    overworld_ascending_frames(gObjectEventPic_RegielekiShadow, 24, 4),
+    overworld_ascending_frames(gObjectEventPic_RegielekiShadow, 4, 4),
 };
 
 static const struct SpriteFrameImage sPicTable_RegigigasShadow[] = {
-    overworld_ascending_frames(gObjectEventPic_RegigigasShadow, 48, 8),
+    overworld_ascending_frames(gObjectEventPic_RegigigasShadow, 8, 8),
 };
 
 static const struct SpriteFrameImage sPicTable_RegirockShadow[] = {
-    overworld_ascending_frames(gObjectEventPic_RegirockShadow, 24, 4),
+    overworld_ascending_frames(gObjectEventPic_RegirockShadow, 4, 4),
 };
 
 static const struct SpriteFrameImage sPicTable_RegisteelShadow[] = {
-    overworld_ascending_frames(gObjectEventPic_RegisteelShadow, 24, 4),
+    overworld_ascending_frames(gObjectEventPic_RegisteelShadow, 4, 4),
 };
 
 static const struct SpriteFrameImage sPicTable_ReuniclusShadow[] = {
-    overworld_ascending_frames(gObjectEventPic_ReuniclusShadow, 24, 4),
+    overworld_ascending_frames(gObjectEventPic_ReuniclusShadow, 4, 4),
 };
 
 static const struct SpriteFrameImage sPicTable_ReshiramShadow[] = {
-    overworld_ascending_frames(gObjectEventPic_ReshiramShadow, 48, 8),
+    overworld_ascending_frames(gObjectEventPic_ReshiramShadow, 8, 8),
 };
 
 static const struct SpriteFrameImage sPicTable_RhyperiorShadow[] = {
-    overworld_ascending_frames(gObjectEventPic_RhyperiorShadow, 24, 4),
+    overworld_ascending_frames(gObjectEventPic_RhyperiorShadow, 4, 4),
 };
 
 static const struct SpriteFrameImage sPicTable_RillaboomShadow[] = {
-    overworld_ascending_frames(gObjectEventPic_RillaboomShadow, 24, 4),
+    overworld_ascending_frames(gObjectEventPic_RillaboomShadow, 4, 4),
 };
 
 static const struct SpriteFrameImage sPicTable_SalamenceShadow[] = {
-    overworld_ascending_frames(gObjectEventPic_SalamenceShadow, 24, 4),
+    overworld_ascending_frames(gObjectEventPic_SalamenceShadow, 4, 4),
 };
 
 static const struct SpriteFrameImage sPicTable_SalazzleShadow[] = {
-    overworld_ascending_frames(gObjectEventPic_SalazzleShadow, 24, 4),
+    overworld_ascending_frames(gObjectEventPic_SalazzleShadow, 4, 4),
 };
 
 static const struct SpriteFrameImage sPicTable_SamurottShadow[] = {
-    overworld_ascending_frames(gObjectEventPic_SamurottShadow, 24, 4),
+    overworld_ascending_frames(gObjectEventPic_SamurottShadow, 4, 4),
 };
 
 static const struct SpriteFrameImage sPicTable_SceptileShadow[] = {
-    overworld_ascending_frames(gObjectEventPic_SceptileShadow, 24, 4),
+    overworld_ascending_frames(gObjectEventPic_SceptileShadow, 4, 4),
 };
 
 static const struct SpriteFrameImage sPicTable_ScreamTailShadow[] = {
-    overworld_ascending_frames(gObjectEventPic_ScreamTailShadow, 24, 4),
+    overworld_ascending_frames(gObjectEventPic_ScreamTailShadow, 4, 4),
 };
 
 static const struct SpriteFrameImage sPicTable_SerperiorShadow[] = {
-    overworld_ascending_frames(gObjectEventPic_SerperiorShadow, 24, 4),
+    overworld_ascending_frames(gObjectEventPic_SerperiorShadow, 4, 4),
 };
 
 static const struct SpriteFrameImage sPicTable_LugiaShadow[] = {
-    overworld_ascending_frames(gObjectEventPic_LugiaShadow, 48, 8),
+    overworld_ascending_frames(gObjectEventPic_LugiaShadow, 8, 8),
 };
 
 static const struct SpriteFrameImage sPicTable_SharpedoShadow[] = {
-    overworld_ascending_frames(gObjectEventPic_SharpedoShadow, 24, 4),
+    overworld_ascending_frames(gObjectEventPic_SharpedoShadow, 4, 4),
 };
 
 static const struct SpriteFrameImage sPicTable_SilvallyShadow[] = {
-    overworld_ascending_frames(gObjectEventPic_SilvallyShadow, 24, 4),
+    overworld_ascending_frames(gObjectEventPic_SilvallyShadow, 4, 4),
 };
 
 static const struct SpriteFrameImage sPicTable_SkarmoryShadow[] = {
-    overworld_ascending_frames(gObjectEventPic_SkarmoryShadow, 24, 4),
+    overworld_ascending_frames(gObjectEventPic_SkarmoryShadow, 4, 4),
 };
 
 static const struct SpriteFrameImage sPicTable_SkeledirgeShadow[] = {
-    overworld_ascending_frames(gObjectEventPic_SkeledirgeShadow, 24, 4),
+    overworld_ascending_frames(gObjectEventPic_SkeledirgeShadow, 4, 4),
 };
 
 static const struct SpriteFrameImage sPicTable_SnorlaxShadow[] = {
-    overworld_ascending_frames(gObjectEventPic_SnorlaxShadow, 24, 4),
+    overworld_ascending_frames(gObjectEventPic_SnorlaxShadow, 4, 4),
 };
 
 static const struct SpriteFrameImage sPicTable_SolgaleoShadow[] = {
-    overworld_ascending_frames(gObjectEventPic_SolgaleoShadow, 24, 4),
+    overworld_ascending_frames(gObjectEventPic_SolgaleoShadow, 4, 4),
 };
 
 static const struct SpriteFrameImage sPicTable_StakatakaShadow[] = {
-    overworld_ascending_frames(gObjectEventPic_StakatakaShadow, 24, 4),
+    overworld_ascending_frames(gObjectEventPic_StakatakaShadow, 4, 4),
 };
 
 static const struct SpriteFrameImage sPicTable_SteelixShadow[] = {
-    overworld_ascending_frames(gObjectEventPic_SteelixShadow, 48, 8),
+    overworld_ascending_frames(gObjectEventPic_SteelixShadow, 8, 8),
 };
 
 static const struct SpriteFrameImage sPicTable_SuicuneShadow[] = {
-    overworld_ascending_frames(gObjectEventPic_SuicuneShadow, 24, 4),
+    overworld_ascending_frames(gObjectEventPic_SuicuneShadow, 4, 4),
 };
 
 static const struct SpriteFrameImage sPicTable_SwampertShadow[] = {
-    overworld_ascending_frames(gObjectEventPic_SwampertShadow, 24, 4),
+    overworld_ascending_frames(gObjectEventPic_SwampertShadow, 4, 4),
 };
 
 static const struct SpriteFrameImage sPicTable_TapuBuluShadow[] = {
-    overworld_ascending_frames(gObjectEventPic_TapuBuluShadow, 24, 4),
+    overworld_ascending_frames(gObjectEventPic_TapuBuluShadow, 4, 4),
 };
 
 static const struct SpriteFrameImage sPicTable_TapuFiniShadow[] = {
-    overworld_ascending_frames(gObjectEventPic_TapuFiniShadow, 24, 4),
+    overworld_ascending_frames(gObjectEventPic_TapuFiniShadow, 4, 4),
 };
 
 static const struct SpriteFrameImage sPicTable_TapuKokoShadow[] = {
-    overworld_ascending_frames(gObjectEventPic_TapuKokoShadow, 24, 4),
+    overworld_ascending_frames(gObjectEventPic_TapuKokoShadow, 4, 4),
 };
 
 static const struct SpriteFrameImage sPicTable_TapuLeleShadow[] = {
-    overworld_ascending_frames(gObjectEventPic_TapuLeleShadow, 24, 4),
+    overworld_ascending_frames(gObjectEventPic_TapuLeleShadow, 4, 4),
 };
 
 static const struct SpriteFrameImage sPicTable_TalonflameShadow[] = {
-    overworld_ascending_frames(gObjectEventPic_TalonflameShadow, 24, 4),
+    overworld_ascending_frames(gObjectEventPic_TalonflameShadow, 4, 4),
 };
 
 static const struct SpriteFrameImage sPicTable_TerapagosShadow[] = {
-    overworld_ascending_frames(gObjectEventPic_TerapagosShadow, 24, 4),
+    overworld_ascending_frames(gObjectEventPic_TerapagosShadow, 4, 4),
 };
 
 static const struct SpriteFrameImage sPicTable_TerrakionShadow[] = {
-    overworld_ascending_frames(gObjectEventPic_TerrakionShadow, 24, 4),
+    overworld_ascending_frames(gObjectEventPic_TerrakionShadow, 4, 4),
 };
 
 static const struct SpriteFrameImage sPicTable_ThundurusShadow[] = {
-    overworld_ascending_frames(gObjectEventPic_ThundurusShadow, 24, 4),
+    overworld_ascending_frames(gObjectEventPic_ThundurusShadow, 8, 8),
 };
 
 static const struct SpriteFrameImage sPicTable_TingLuShadow[] = {
-    overworld_ascending_frames(gObjectEventPic_TingLuShadow, 24, 4),
+    overworld_ascending_frames(gObjectEventPic_TingLuShadow, 4, 4),
 };
 
 static const struct SpriteFrameImage sPicTable_TornadusShadow[] = {
-    overworld_ascending_frames(gObjectEventPic_TornadusShadow, 24, 4),
+    overworld_ascending_frames(gObjectEventPic_TornadusShadow, 8, 8),
 };
 
 static const struct SpriteFrameImage sPicTable_TorterraShadow[] = {
-    overworld_ascending_frames(gObjectEventPic_TorterraShadow, 24, 4),
+    overworld_ascending_frames(gObjectEventPic_TorterraShadow, 4, 4),
 };
 
 static const struct SpriteFrameImage sPicTable_ToxapexShadow[] = {
-    overworld_ascending_frames(gObjectEventPic_ToxapexShadow, 24, 4),
+    overworld_ascending_frames(gObjectEventPic_ToxapexShadow, 4, 4),
 };
 
 static const struct SpriteFrameImage sPicTable_TyphlosionShadow[] = {
-    overworld_ascending_frames(gObjectEventPic_TyphlosionShadow, 24, 4),
+    overworld_ascending_frames(gObjectEventPic_TyphlosionShadow, 4, 4),
 };
 
 static const struct SpriteFrameImage sPicTable_TyranitarShadow[] = {
-    overworld_ascending_frames(gObjectEventPic_TyranitarShadow, 24, 4),
+    overworld_ascending_frames(gObjectEventPic_TyranitarShadow, 4, 4),
 };
 
 static const struct SpriteFrameImage sPicTable_TyrantrumShadow[] = {
-    overworld_ascending_frames(gObjectEventPic_TyrantrumShadow, 24, 4),
+    overworld_ascending_frames(gObjectEventPic_TyrantrumShadow, 4, 4),
 };
 
 static const struct SpriteFrameImage sPicTable_UxieShadow[] = {
-    overworld_ascending_frames(gObjectEventPic_UxieShadow, 24, 4),
+    overworld_ascending_frames(gObjectEventPic_UxieShadow, 4, 4),
 };
 
 static const struct SpriteFrameImage sPicTable_VenusaurShadow[] = {
-    overworld_ascending_frames(gObjectEventPic_VenusaurShadow, 24, 4),
+    overworld_ascending_frames(gObjectEventPic_VenusaurShadow, 4, 4),
 };
 
 static const struct SpriteFrameImage sPicTable_VictiniShadow[] = {
-    overworld_ascending_frames(gObjectEventPic_VictiniShadow, 24, 4),
+    overworld_ascending_frames(gObjectEventPic_VictiniShadow, 4, 4),
 };
 
 static const struct SpriteFrameImage sPicTable_VikavoltShadow[] = {
-    overworld_ascending_frames(gObjectEventPic_VikavoltShadow, 24, 4),
+    overworld_ascending_frames(gObjectEventPic_VikavoltShadow, 4, 4),
 };
 
 static const struct SpriteFrameImage sPicTable_VirizionShadow[] = {
-    overworld_ascending_frames(gObjectEventPic_VirizionShadow, 24, 4),
+    overworld_ascending_frames(gObjectEventPic_VirizionShadow, 4, 4),
 };
 
 static const struct SpriteFrameImage sPicTable_VolcanionShadow[] = {
-    overworld_ascending_frames(gObjectEventPic_VolcanionShadow, 24, 4),
+    overworld_ascending_frames(gObjectEventPic_VolcanionShadow, 4, 4),
 };
 
 static const struct SpriteFrameImage sPicTable_VolcaronaShadow[] = {
-    overworld_ascending_frames(gObjectEventPic_VolcaronaShadow, 24, 4),
+    overworld_ascending_frames(gObjectEventPic_VolcaronaShadow, 4, 4),
 };
 
 static const struct SpriteFrameImage sPicTable_WalreinShadow[] = {
-    overworld_ascending_frames(gObjectEventPic_WalreinShadow, 24, 4),
+    overworld_ascending_frames(gObjectEventPic_WalreinShadow, 4, 4),
 };
 
 static const struct SpriteFrameImage sPicTable_WeavileShadow[] = {
-    overworld_ascending_frames(gObjectEventPic_WeavileShadow, 24, 4),
+    overworld_ascending_frames(gObjectEventPic_WeavileShadow, 4, 4),
 };
 
 static const struct SpriteFrameImage sPicTable_WoChienShadow[] = {
-    overworld_ascending_frames(gObjectEventPic_WoChienShadow, 24, 4),
+    overworld_ascending_frames(gObjectEventPic_WoChienShadow, 4, 4),
 };
 
 static const struct SpriteFrameImage sPicTable_XerneasShadow[] = {
-    overworld_ascending_frames(gObjectEventPic_XerneasShadow, 48, 8),
+    overworld_ascending_frames(gObjectEventPic_XerneasShadow, 8, 8),
 };
 
 static const struct SpriteFrameImage sPicTable_XurkitreeShadow[] = {
-    overworld_ascending_frames(gObjectEventPic_XurkitreeShadow, 24, 4),
+    overworld_ascending_frames(gObjectEventPic_XurkitreeShadow, 4, 4),
 };
 
 static const struct SpriteFrameImage sPicTable_YveltalShadow[] = {
-    overworld_ascending_frames(gObjectEventPic_YveltalShadow, 48, 8),
+    overworld_ascending_frames(gObjectEventPic_YveltalShadow, 8, 8),
 };
 
 static const struct SpriteFrameImage sPicTable_ZacianShadow[] = {
-    overworld_ascending_frames(gObjectEventPic_ZacianShadow, 24, 4),
+    overworld_ascending_frames(gObjectEventPic_ZacianShadow, 4, 4),
 };
 
 static const struct SpriteFrameImage sPicTable_ZamazentaShadow[] = {
-    overworld_ascending_frames(gObjectEventPic_ZamazentaShadow, 24, 4),
+    overworld_ascending_frames(gObjectEventPic_ZamazentaShadow, 4, 4),
 };
 
 static const struct SpriteFrameImage sPicTable_ZapdosShadow[] = {
-    overworld_ascending_frames(gObjectEventPic_ZapdosShadow, 24, 4),
+    overworld_ascending_frames(gObjectEventPic_ZapdosShadow, 4, 4),
 };
 
 static const struct SpriteFrameImage sPicTable_ZarudeShadow[] = {
-    overworld_ascending_frames(gObjectEventPic_ZarudeShadow, 24, 4),
+    overworld_ascending_frames(gObjectEventPic_ZarudeShadow, 4, 4),
 };
 
 static const struct SpriteFrameImage sPicTable_ZekromShadow[] = {
-    overworld_ascending_frames(gObjectEventPic_ZekromShadow, 48, 8),
+    overworld_ascending_frames(gObjectEventPic_ZekromShadow, 8, 8),
 };
 
 static const struct SpriteFrameImage sPicTable_ZeraoraShadow[] = {
-    overworld_ascending_frames(gObjectEventPic_ZeraoraShadow, 24, 4),
+    overworld_ascending_frames(gObjectEventPic_ZeraoraShadow, 4, 4),
 };
 
 static const struct SpriteFrameImage sPicTable_ZygardeShadow[] = {
-    overworld_ascending_frames(gObjectEventPic_ZygardeShadow, 48, 8),
+    overworld_ascending_frames(gObjectEventPic_ZygardeShadow, 4, 4),
 };
 
 static const struct SpriteFrameImage *const sShadowOverworldPicTables[NUM_SPECIES] = {

@@ -477,6 +477,18 @@ extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_GeetaGen9;
 //XD(Orre)
 extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_Wes;
 extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_CipherPeonM;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_Ardos;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_Dakim;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_Ein;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_Eldes;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_Evice;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_Gonzap;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_Greevil;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_Lovrina;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_Michael;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_Nascour;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_SnagemGrunt;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_Venus;
 
 const struct ObjectEventGraphicsInfo *const gObjectEventGraphicsInfoPointers[NUM_OBJ_EVENT_GFX] = {
     [OBJ_EVENT_GFX_BRENDAN_NORMAL] =           &gObjectEventGraphicsInfo_BrendanNormal,
@@ -926,7 +938,18 @@ const struct ObjectEventGraphicsInfo *const gObjectEventGraphicsInfoPointers[NUM
     //XD(Orre)
     [OBJ_EVENT_GFX_WES]   =                    &gObjectEventGraphicsInfo_Wes,
     [OBJ_EVENT_GFX_CIPHER_PEON_M] =             &gObjectEventGraphicsInfo_CipherPeonM,
-
+    [OBJ_EVENT_GFX_ARDOS] = &gObjectEventGraphicsInfo_Ardos,
+    [OBJ_EVENT_GFX_DAKIM] = &gObjectEventGraphicsInfo_Dakim,
+    [OBJ_EVENT_GFX_EIN] = &gObjectEventGraphicsInfo_Ein,
+    [OBJ_EVENT_GFX_ELDES] = &gObjectEventGraphicsInfo_Eldes,
+    [OBJ_EVENT_GFX_EVICE] = &gObjectEventGraphicsInfo_Evice,
+    [OBJ_EVENT_GFX_GONZAP] = &gObjectEventGraphicsInfo_Gonzap,
+    [OBJ_EVENT_GFX_GREEVIL] = &gObjectEventGraphicsInfo_Greevil,
+    [OBJ_EVENT_GFX_LOVRINA] = &gObjectEventGraphicsInfo_Lovrina,
+    [OBJ_EVENT_GFX_MICHAEL] = &gObjectEventGraphicsInfo_Michael,
+    [OBJ_EVENT_GFX_NASCOUR] = &gObjectEventGraphicsInfo_Nascour,
+    [OBJ_EVENT_GFX_SNAGEM_GRUNT] = &gObjectEventGraphicsInfo_SnagemGrunt,
+    [OBJ_EVENT_GFX_VENUS] = &gObjectEventGraphicsInfo_Venus,
 };
 
 const struct ObjectEventGraphicsInfo *const gMauvilleOldManGraphicsInfoPointers[] = {

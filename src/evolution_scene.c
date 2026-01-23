@@ -19,6 +19,7 @@
 #include "pokedex.h"
 #include "pokemon.h"
 #include "pokemon_summary_screen.h"
+#include "party_menu.h"
 #include "scanline_effect.h"
 #include "sound.h"
 #include "sprite.h"
@@ -43,6 +44,8 @@ struct EvoInfo
     u8 delayTimer;
     u16 savedPalette[48];
     bool8 isPurificationScene;
+    bool8 hadStoredExp;
+    bool8 storedExpMessageShown;
 };
 
 static EWRAM_DATA struct EvoInfo *sEvoStructPtr = NULL;
@@ -51,6 +54,7 @@ static bool8 sEvoIsPurificationScene = FALSE;
 
 COMMON_DATA void (*gCB2_AfterEvolution)(void) = NULL;
 COMMON_DATA bool8 gSkipEvolutionRenameForShadowPurification = FALSE;
+COMMON_DATA bool8 gSkipShadowStoredExpGrantForPurification = FALSE;
 
 #define sEvoCursorPos           gBattleCommunication[1] // when learning a new move
 #define sEvoGraphicsTaskId      gBattleCommunication[2]
@@ -257,6 +261,8 @@ void EvolutionScene(struct Pokemon *mon, u16 postEvoSpecies, bool8 canStopEvo, u
     gReservedSpritePaletteCount = 4;
 
     sEvoStructPtr = AllocZeroed(sizeof(struct EvoInfo));
+    sEvoStructPtr->hadStoredExp = FALSE;
+    sEvoStructPtr->storedExpMessageShown = FALSE;
     AllocateMonSpritesGfx();
 
     sEvoStructPtr->isPurificationScene = sEvoIsPurificationScene;
@@ -635,6 +641,7 @@ enum {
     EVOSTATE_RESTORE_SCREEN,
     EVOSTATE_EVO_MON_ANIM,
     EVOSTATE_SET_MON_EVOLVED,
+    EVOSTATE_PURIFICATION_EXP_AWARD,
     EVOSTATE_TRY_LEARN_MOVE,
     EVOSTATE_END,
     EVOSTATE_CANCEL,
@@ -799,7 +806,10 @@ static void Task_EvolutionScene(u8 taskId)
             StringExpandPlaceholders(gStringVar4, message);
             BattlePutTextOnWindow(gStringVar4, B_WIN_MSG);
             PlayBGM(MUS_EVOLVED);
-            gTasks[taskId].tState++;
+            if (sEvoStructPtr->isPurificationScene)
+                sEvoStructPtr->hadStoredExp = Shadow_GetStoredExp(mon) != 0;
+            else
+                sEvoStructPtr->hadStoredExp = FALSE;
             SetMonData(mon, MON_DATA_SPECIES, (void *)(&gTasks[taskId].tPostEvoSpecies));
             SetMonData(mon, MON_DATA_EVOLUTION_TRACKER, &zero);
             CalculateMonStats(mon);
@@ -808,6 +818,43 @@ static void Task_EvolutionScene(u8 taskId)
             GetSetPokedexFlag(SpeciesToNationalPokedexNum(gTasks[taskId].tPostEvoSpecies), FLAG_SET_SEEN);
             GetSetPokedexFlag(SpeciesToNationalPokedexNum(gTasks[taskId].tPostEvoSpecies), FLAG_SET_CAUGHT);
             IncrementGameStat(GAME_STAT_EVOLVED_POKEMON);
+            if (sEvoStructPtr->isPurificationScene && sEvoStructPtr->hadStoredExp)
+                gTasks[taskId].tState = EVOSTATE_PURIFICATION_EXP_AWARD;
+            else
+                gTasks[taskId].tState = EVOSTATE_TRY_LEARN_MOVE;
+        }
+        break;
+    case EVOSTATE_PURIFICATION_EXP_AWARD:
+        if (IsTextPrinterActive(0))
+            break;
+        if (!sEvoStructPtr->storedExpMessageShown)
+        {
+            sEvoStructPtr->storedExpMessageShown = TRUE;
+            u8 levelBefore = GetMonData(mon, MON_DATA_LEVEL, NULL);
+            u32 expGained = Shadow_GrantStoredExp(mon);
+            u32 expToShow = expGained;
+            u8 levelAfter = GetMonData(mon, MON_DATA_LEVEL, NULL);
+            if (expToShow == 0)
+            {
+                gTasks[taskId].tState = EVOSTATE_TRY_LEARN_MOVE;
+                break;
+            }
+            GetMonNickname(mon, gStringVar1);
+            ConvertIntToDecimalStringN(gStringVar2, expToShow, STR_CONV_MODE_LEFT_ALIGN, 6);
+            if (levelAfter > levelBefore)
+            {
+                ConvertIntToDecimalStringN(gStringVar3, levelAfter, STR_CONV_MODE_LEFT_ALIGN, 3);
+                StringExpandPlaceholders(gStringVar4, gText_PkmnGainedExpAndElevatedToLvVar3);
+            }
+            else
+            {
+                StringExpandPlaceholders(gStringVar4, gText_PkmnGainedExp);
+            }
+            BattlePutTextOnWindow(gStringVar4, B_WIN_MSG);
+        }
+        else
+        {
+            gTasks[taskId].tState = EVOSTATE_TRY_LEARN_MOVE;
         }
         break;
     case EVOSTATE_TRY_LEARN_MOVE:

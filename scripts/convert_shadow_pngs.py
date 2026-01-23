@@ -7,6 +7,29 @@ REPO_ROOT = Path(__file__).resolve().parent.parent
 TOOLS_GBAGFX = REPO_ROOT / "tools" / "gbagfx" / "gbagfx"
 SPECIAL_SPRITESHEET_OPTIONS = {
     "graphics/pokemon/arceus": ["-mwidth", "8", "-mheight", "8"],
+    "graphics/pokemon/dialga": ["-mwidth", "8", "-mheight", "8"],
+    "graphics/pokemon/enamorus": ["-mwidth", "8", "-mheight", "8"],
+    "graphics/pokemon/giratina": ["-mwidth", "8", "-mheight", "8"],
+    "graphics/pokemon/groudon": ["-mwidth", "8", "-mheight", "8"],
+    "graphics/pokemon/ho_oh": ["-mwidth", "8", "-mheight", "8"],
+    "graphics/pokemon/hoopa/unbound": ["-mwidth", "8", "-mheight", "8"],
+    "graphics/pokemon/koraidon": ["-mwidth", "8", "-mheight", "8"],
+    "graphics/pokemon/kyogre": ["-mwidth", "8", "-mheight", "8"],
+    "graphics/pokemon/kyurem": ["-mwidth", "8", "-mheight", "8"],
+    "graphics/pokemon/lugia": ["-mwidth", "8", "-mheight", "8"],
+    "graphics/pokemon/miraidon": ["-mwidth", "8", "-mheight", "8"],
+    "graphics/pokemon/palkia": ["-mwidth", "8", "-mheight", "8"],
+    "graphics/pokemon/rayquaza": ["-mwidth", "8", "-mheight", "8"],
+    "graphics/pokemon/regigigas": ["-mwidth", "8", "-mheight", "8"],
+    "graphics/pokemon/reshiram": ["-mwidth", "8", "-mheight", "8"],
+    "graphics/pokemon/steelix": ["-mwidth", "8", "-mheight", "8"],
+    "graphics/pokemon/xerneas": ["-mwidth", "8", "-mheight", "8"],
+    "graphics/pokemon/yveltal": ["-mwidth", "8", "-mheight", "8"],
+    "graphics/pokemon/zekrom": ["-mwidth", "8", "-mheight", "8"],
+    "graphics/pokemon/zygarde": ["-mwidth", "8", "-mheight", "8"],
+    "graphics/pokemon/mimikyu": ["-mwidth", "4", "-mheight", "4"],
+    "graphics/pokemon/pikachu/shadow": ["-mwidth", "4", "-mheight", "4"],
+
 }
 
 if not TOOLS_GBAGFX.exists():

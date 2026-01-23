@@ -2,6 +2,7 @@
 #include "malloc.h"
 #include "apprentice.h"
 #include "battle.h"
+#include "battle_util.h"
 #include "battle_ai_switch_items.h"
 #include "battle_anim.h"
 #include "battle_controllers.h"
@@ -2014,6 +2015,88 @@ void GiveBoxMonInitialMoveset(struct BoxPokemon *boxMon) //Credit: AsparagusEdua
     }
 }
 
+static bool32 MoveArrayContainsMove(u16 move, const u16 *moves)
+{
+    u8 i;
+
+    if (move == MOVE_NONE)
+        return FALSE;
+
+    for (i = 0; i < MAX_MON_MOVES; i++)
+    {
+        if (moves[i] == move)
+            return TRUE;
+    }
+    return FALSE;
+}
+
+static u16 GetPurificationReplacementMove(struct Pokemon *mon, const u16 *knownMoves, u32 level)
+{
+    u16 species = GetMonData(mon, MON_DATA_SPECIES, NULL);
+    const struct LevelUpMove *learnset = GetSpeciesLevelUpLearnset(species);
+    u16 replacement = MOVE_NONE;
+
+    if (learnset == NULL)
+        return MOVE_NONE;
+
+    for (u32 i = 0; learnset[i].move != LEVEL_UP_MOVE_END; i++)
+    {
+        if (learnset[i].level > level)
+            break;
+        u16 move = learnset[i].move;
+        if (move == MOVE_NONE || GetBattleMoveType(move) == TYPE_SHADOW)
+            continue;
+        if (MoveArrayContainsMove(move, knownMoves))
+            continue;
+        replacement = move;
+    }
+
+    return replacement;
+}
+
+static void ReplaceShadowMovesForPurifiedMon(struct Pokemon *mon)
+{
+    u16 moves[MAX_MON_MOVES];
+    u8 i;
+    u32 level = GetMonData(mon, MON_DATA_LEVEL, NULL);
+
+    if (mon == NULL)
+        return;
+
+    for (i = 0; i < MAX_MON_MOVES; i++)
+        moves[i] = GetMonData(mon, MON_DATA_MOVE1 + i, NULL);
+
+    for (i = 0; i < MAX_MON_MOVES; i++)
+    {
+        u16 move = moves[i];
+        if (move == MOVE_NONE)
+            continue;
+        if (GetBattleMoveType(move) != TYPE_SHADOW)
+            continue;
+
+        moves[i] = MOVE_NONE;
+        u16 replacement = GetPurificationReplacementMove(mon, moves, level);
+        if (replacement != MOVE_NONE)
+            moves[i] = replacement;
+    }
+
+    for (i = 0; i < MAX_MON_MOVES; i++)
+    {
+        u16 move = moves[i];
+        SetMonData(mon, MON_DATA_MOVE1 + i, &move);
+        u8 pp = move != MOVE_NONE ? GetMovePP(move) : 0;
+        SetMonData(mon, MON_DATA_PP1 + i, &pp);
+    }
+
+    u8 zero = 0;
+    SetMonData(mon, MON_DATA_PP_BONUSES, &zero);
+}
+
+void Shadow_RemoveShadowMoves(struct Pokemon *mon)
+{
+    ReplaceShadowMovesForPurifiedMon(mon);
+}
+
 u16 MonTryLearningNewMoveAtLevel(struct Pokemon *mon, bool32 firstMove, u32 level)
 {
     u32 retVal = MOVE_NONE;
@@ -2040,23 +2123,36 @@ u16 MonTryLearningNewMoveAtLevel(struct Pokemon *mon, bool32 firstMove, u32 leve
     //  For example, if Zacian or Zamazenta should learn Iron Head,
     //  they're prevented from doing if they have Behemoth Blade/Bash,
     //  since it transforms into them while in their Crowned forms.
-    const struct FormChange *formChanges = GetSpeciesFormChanges(species);
-
-    for (u32 i = 0; formChanges != NULL && formChanges[i].method != FORM_CHANGE_TERMINATOR; i++)
+    while (learnset[sLearningMoveTableID].level == level)
     {
-        if (formChanges[i].method == FORM_CHANGE_END_BATTLE
-            && learnset[sLearningMoveTableID].move == formChanges[i].param3)
+        u16 moveCandidate = learnset[sLearningMoveTableID].move;
+        if (moveCandidate == LEVEL_UP_MOVE_END)
+            return MOVE_NONE;
+        if (!GetMonData(mon, MON_DATA_IS_SHADOW, NULL) && GetBattleMoveType(moveCandidate) == TYPE_SHADOW)
         {
-            for (u32 j = 0; j < MAX_MON_MOVES; j++)
-            {
-                if (formChanges[i].param2 == GetMonData(mon, MON_DATA_MOVE1 + j))
-                    return MOVE_NONE;
-            }
+            sLearningMoveTableID++;
+            continue;
         }
+        break;
     }
 
     if (learnset[sLearningMoveTableID].level == level)
     {
+        const struct FormChange *formChanges = GetSpeciesFormChanges(species);
+
+        for (u32 i = 0; formChanges != NULL && formChanges[i].method != FORM_CHANGE_TERMINATOR; i++)
+        {
+            if (formChanges[i].method == FORM_CHANGE_END_BATTLE
+                && learnset[sLearningMoveTableID].move == formChanges[i].param3)
+            {
+                for (u32 j = 0; j < MAX_MON_MOVES; j++)
+                {
+                    if (formChanges[i].param2 == GetMonData(mon, MON_DATA_MOVE1 + j))
+                        return MOVE_NONE;
+                }
+            }
+        }
+
         gMoveToLearn = learnset[sLearningMoveTableID].move;
         sLearningMoveTableID++;
         retVal = GiveMoveToMon(mon, gMoveToLearn);
@@ -5848,6 +5944,9 @@ u8 GetMoveRelearnerMoves(struct Pokemon *mon, u16 *moves)
         if (learnset[i].move == LEVEL_UP_MOVE_END)
             break;
 
+        if (GetBattleMoveType(learnset[i].move) == TYPE_SHADOW)
+            continue;
+
         moveLevel = learnset[i].level;
 
         if (moveLevel <= level)
@@ -5906,6 +6005,9 @@ u8 GetNumberOfRelearnableMoves(struct Pokemon *mon)
 
         if (learnset[i].move == LEVEL_UP_MOVE_END)
             break;
+
+        if (GetBattleMoveType(learnset[i].move) == TYPE_SHADOW)
+            continue;
 
         moveLevel = learnset[i].level;
 
@@ -7549,10 +7651,38 @@ bool8 Shdw_AnyPartyMonPurificationReady(void)
     return FALSE;
 }
 
+EWRAM_DATA u8 gShadowPurifyReadyMonCount = 0;
+
 // Keep a global flag in sync that scripts can check
 void Shdw_UpdatePurifyReadyFlag(void)
 {
-    if (Shdw_AnyPartyMonPurificationReady())
+    u8 newReadyCount = 0;
+
+    for (u8 i = 0; i < PARTY_SIZE; i++)
+    {
+        struct Pokemon *mon = &gPlayerParty[i];
+        if (GetMonData(mon, MON_DATA_SPECIES, NULL) == SPECIES_NONE)
+            continue;
+
+        struct Shadowdata *shadowData = &mon->box.nickData.shadowData;
+        if (Shdw_IsPurificationReady(mon))
+        {
+            if (!shadowData->readyMessageShown)
+            {
+                newReadyCount++;
+                shadowData->readyMessageShown = TRUE;
+            }
+        }
+        else
+        {
+            if (shadowData->readyMessageShown)
+                shadowData->readyMessageShown = FALSE;
+        }
+    }
+
+    gShadowPurifyReadyMonCount = newReadyCount;
+
+    if (newReadyCount > 0)
         FlagSet(FLAG_SHADOW_MON_READY_TO_PURIFY);
     else
         FlagClear(FLAG_SHADOW_MON_READY_TO_PURIFY);
@@ -7600,7 +7730,7 @@ void Shdw_SetState(u16 shadowId, u8 state)
     if (!IsValidShadowID(shadowId))
         return;
     gSaveBlock1Ptr->shadowMonStates[shadowId] = state;
-    if (state == SHDW_STATE_PURIFIED)
+    if (state == SHDW_STATE_PURIFIED && !gSkipShadowStoredExpGrantForPurification)
         Shadow_GrantStoredExpForShadowId(shadowId);
 }
 
@@ -7634,6 +7764,9 @@ void Shdw_OnSnagMon(struct Pokemon *mon)
     // Make sure MON_DATA_SNAGGED stays in sync too
     u8 snagged = TRUE;
     SetMonData(mon, MON_DATA_SNAGGED, &snagged);
+    struct Shadowdata *shadowData = &mon->box.nickData.shadowData;
+    shadowData->storedExp = 0;
+    shadowData->readyMessageShown = FALSE;
 }
 
 #define SHADOW_STORED_EXP_MAX 0xFFFFFFFF
@@ -7670,25 +7803,25 @@ u32 Shadow_GetStoredExp(const struct Pokemon *mon)
     return mon->box.nickData.shadowData.storedExp;
 }
 
-void Shadow_GrantStoredExp(struct Pokemon *mon)
+u32 Shadow_GrantStoredExp(struct Pokemon *mon)
 {
     if (mon == NULL)
-        return;
+        return 0;
 
     u32 storedExp = Shadow_TakeStoredExp(mon);
     if (storedExp == 0)
-        return;
+        return 0;
 
     u16 species = GetMonData(mon, MON_DATA_SPECIES, NULL);
     if (species == SPECIES_NONE)
-        return;
+        return 0;
 
     u32 growthRate = gSpeciesInfo[species].growthRate;
     u32 currentExp = GetMonData(mon, MON_DATA_EXP, NULL);
     u32 maxExp = gExperienceTables[growthRate][MAX_LEVEL];
 
     if (currentExp >= maxExp)
-        return;
+        return 0;
 
     if (storedExp > maxExp - currentExp)
         storedExp = maxExp - currentExp;
@@ -7696,6 +7829,7 @@ void Shadow_GrantStoredExp(struct Pokemon *mon)
     currentExp += storedExp;
     SetMonData(mon, MON_DATA_EXP, &currentExp);
     CalculateMonStats(mon);
+    return storedExp;
 }
 
 

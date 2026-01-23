@@ -6548,7 +6548,7 @@
       "height": 9,
       "border_width": 2,
       "border_height": 2,
-      "primary_tileset": "gTileset_johto_building",
+      "primary_tileset": "gTileset_kanto_inside",
       "secondary_tileset": "gTileset_daycare2",
       "border_filepath": "data/layouts/lavender_house1/border.bin",
       "blockdata_filepath": "data/layouts/lavender_house1/map.bin"
@@ -6584,7 +6584,7 @@
       "height": 10,
       "border_width": 2,
       "border_height": 2,
-      "primary_tileset": "gTileset_johto_building",
+      "primary_tileset": "gTileset_kanto_inside",
       "secondary_tileset": "gTileset_cafe",
       "border_filepath": "data/layouts/celadon_house1/border.bin",
       "blockdata_filepath": "data/layouts/celadon_house1/map.bin"
@@ -6656,7 +6656,7 @@
       "height": 16,
       "border_width": 2,
       "border_height": 2,
-      "primary_tileset": "gTileset_johto_building",
+      "primary_tileset": "gTileset_kanto_inside",
       "secondary_tileset": "gTileset_departmentstore",
       "border_filepath": "data/layouts/celadon_department1f/border.bin",
       "blockdata_filepath": "data/layouts/celadon_department1f/map.bin"
@@ -6668,7 +6668,7 @@
       "height": 14,
       "border_width": 2,
       "border_height": 2,
-      "primary_tileset": "gTileset_johto_building",
+      "primary_tileset": "gTileset_kanto_inside",
       "secondary_tileset": "gTileset_gamecorner",
       "border_filepath": "data/layouts/celadon_gamecorner/border.bin",
       "blockdata_filepath": "data/layouts/celadon_gamecorner/map.bin"
@@ -6680,7 +6680,7 @@
       "height": 15,
       "border_width": 2,
       "border_height": 2,
-      "primary_tileset": "gTileset_johto_building",
+      "primary_tileset": "gTileset_kanto_inside",
       "secondary_tileset": "gTileset_departmentstore",
       "border_filepath": "data/layouts/celadon_department2f/border.bin",
       "blockdata_filepath": "data/layouts/celadon_department2f/map.bin"
@@ -6692,7 +6692,7 @@
       "height": 15,
       "border_width": 2,
       "border_height": 2,
-      "primary_tileset": "gTileset_johto_building",
+      "primary_tileset": "gTileset_kanto_inside",
       "secondary_tileset": "gTileset_departmentstore",
       "border_filepath": "data/layouts/celadon_department3f/border.bin",
       "blockdata_filepath": "data/layouts/celadon_department3f/map.bin"
@@ -6704,7 +6704,7 @@
       "height": 15,
       "border_width": 2,
       "border_height": 2,
-      "primary_tileset": "gTileset_johto_building",
+      "primary_tileset": "gTileset_kanto_inside",
       "secondary_tileset": "gTileset_departmentstore",
       "border_filepath": "data/layouts/celadon_department4f/border.bin",
       "blockdata_filepath": "data/layouts/celadon_department4f/map.bin"
@@ -6716,7 +6716,7 @@
       "height": 14,
       "border_width": 2,
       "border_height": 2,
-      "primary_tileset": "gTileset_johto_building",
+      "primary_tileset": "gTileset_kanto_inside",
       "secondary_tileset": "gTileset_departmentstore",
       "border_filepath": "data/layouts/celadon_departmentroofday/border.bin",
       "blockdata_filepath": "data/layouts/celadon_departmentroofday/map.bin"
@@ -6728,7 +6728,7 @@
       "height": 15,
       "border_width": 2,
       "border_height": 2,
-      "primary_tileset": "gTileset_johto_building",
+      "primary_tileset": "gTileset_kanto_inside",
       "secondary_tileset": "gTileset_departmentstore",
       "border_filepath": "data/layouts/celadon_department5f/border.bin",
       "blockdata_filepath": "data/layouts/celadon_department5f/map.bin"
@@ -6764,7 +6764,7 @@
       "height": 28,
       "border_width": 2,
       "border_height": 2,
-      "primary_tileset": "gTileset_johto_building",
+      "primary_tileset": "gTileset_kanto_inside",
       "secondary_tileset": "gTileset_Goldenrod_TrainStation",
       "border_filepath": "data/layouts/saffron_trainstation/border.bin",
       "blockdata_filepath": "data/layouts/saffron_trainstation/map.bin"
@@ -6776,7 +6776,7 @@
       "height": 16,
       "border_width": 2,
       "border_height": 2,
-      "primary_tileset": "gTileset_johto_building",
+      "primary_tileset": "gTileset_kanto_inside",
       "secondary_tileset": "gTileset_EcruteakTheater",
       "border_filepath": "data/layouts/saffron_fightingdojo/border.bin",
       "blockdata_filepath": "data/layouts/saffron_fightingdojo/map.bin"
@@ -6824,7 +6824,7 @@
       "height": 10,
       "border_width": 2,
       "border_height": 2,
-      "primary_tileset": "gTileset_johto_building",
+      "primary_tileset": "gTileset_kanto_inside",
       "secondary_tileset": "gTileset_oaks_lab",
       "border_filepath": "data/layouts/saffron_copycatshouse1f/border.bin",
       "blockdata_filepath": "data/layouts/saffron_copycatshouse1f/map.bin"
@@ -6836,7 +6836,7 @@
       "height": 9,
       "border_width": 2,
       "border_height": 2,
-      "primary_tileset": "gTileset_johto_building",
+      "primary_tileset": "gTileset_kanto_inside",
       "secondary_tileset": "gTileset_reds",
       "border_filepath": "data/layouts/saffron_copycatshouse2f/border.bin",
       "blockdata_filepath": "data/layouts/saffron_copycatshouse2f/map.bin"

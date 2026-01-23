@@ -8,5 +8,6 @@ void TradeEvolutionScene(struct Pokemon *mon, u16 postEvoSpecies, u8 preEvoSprit
 
 extern void (*gCB2_AfterEvolution)(void);
 extern bool8 gSkipEvolutionRenameForShadowPurification;
+extern bool8 gSkipShadowStoredExpGrantForPurification;
 
 #endif // GUARD_EVOLUTION_SCENE_H

@@ -210,6 +210,17 @@ extern const u8 gText_MenuExit[];
 extern const u8 gText_MenuRetire[];
 extern const u8 gText_MenuRest[];
 extern const u8 gText_MenuDexNav[];
+extern const u8 gText_StartMenu_Sun[];
+extern const u8 gText_StartMenu_Mon[];
+extern const u8 gText_StartMenu_Tue[];
+extern const u8 gText_StartMenu_Wed[];
+extern const u8 gText_StartMenu_Thu[];
+extern const u8 gText_StartMenu_Fri[];
+extern const u8 gText_StartMenu_Sat[];
+extern const u8 gText_StartMenu_AM[];
+extern const u8 gText_StartMenu_PM[];
+extern const u8 gText_StartMenu_TimeBase_12Hr[];
+extern const u8 gText_StartMenu_SafariZoneStats[];
 extern const u8 gText_Floor1[];
 extern const u8 gText_Floor2[];
 extern const u8 gText_Floor3[];
@@ -349,6 +360,7 @@ extern const u8 gText_PauseUntilPress[];
 extern const u8 gText_ShadowPokemonCantBreed[];
 extern const u8 gText_ShadowPokemonCantLearnMoves[];
 extern const u8 gText_TimeFluteShadowOnly[];
+extern const u8 gText_OhThatsShadowPokemon[];
 extern const u8 gText_CantUseUntilNewBadge[];
 extern const u8 gText_ReturnToHealingSpot[];
 extern const u8 gText_EscapeFromHere[];
@@ -2433,3 +2445,4 @@ extern const u8 gText_Rename[]; // change nickname from summary screen
 extern const u8 gText_CannotSendMonToBoxHM[];
 
 #endif // GUARD_STRINGS_H
+

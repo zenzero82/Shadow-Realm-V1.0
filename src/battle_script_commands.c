@@ -61,6 +61,7 @@
 #include "constants/rgb.h"
 #include "constants/songs.h"
 #include "constants/trainer_slide.h"
+#include "constants/flags.h"
 #include "constants/trainers.h"
 #include "battle_util.h"
 #include "constants/pokemon.h"
@@ -3068,6 +3069,19 @@ static void Cmd_waitmessage(void)
         if (!gBattleCommunication[MSG_DISPLAY])
         {
             gBattlescriptCurrInstr = cmd->nextInstr;
+        }
+        else if (cmd->time == B_WAIT_TIME_UNTIL_PRESS)
+        {
+            if (gTestRunnerHeadless)
+            {
+                gBattlescriptCurrInstr = cmd->nextInstr;
+                gBattleCommunication[MSG_DISPLAY] = 0;
+            }
+            else if (!IsTextPrinterActive(B_WIN_MSG) && JOY_NEW(A_BUTTON | B_BUTTON))
+            {
+                gBattlescriptCurrInstr = cmd->nextInstr;
+                gBattleCommunication[MSG_DISPLAY] = 0;
+            }
         }
         else
         {
@@ -7679,6 +7693,8 @@ static void Cmd_switchindataupdate(void)
     gBattleMons[battler].types[1] = gSpeciesInfo[gBattleMons[battler].species].types[1];
     gBattleMons[battler].types[2] = TYPE_MYSTERY;
     gBattleMons[battler].ability = GetAbilityBySpecies(gBattleMons[battler].species, gBattleMons[battler].abilityNum);
+
+    TryShowShadowPokemonHint(battler);
     #if TESTING
     if (gTestRunnerEnabled)
     {
@@ -8240,11 +8256,27 @@ static void UpdateSentMonFlags(u32 battler)
 {
     UpdateSentPokesToOpponentValue(battler);
 
+    gBattleStruct->shadowHintFlags &= ~SHADOW_HINT_FLAG(battler);
+
     gHitMarker &= ~HITMARKER_FAINTED(battler);
     gSpecialStatuses[battler].faintedHasReplacement = FALSE;
 
     if (!BattlerHasAi(battler))
         gBattleStruct->appearedInBattle |= 1u << gBattlerPartyIndexes[battler];
+}
+
+bool32 TryShowShadowPokemonHint(u32 battler)
+{
+    if (GetBattlerSide(battler) != B_SIDE_OPPONENT)
+        return FALSE;
+    if (!gBattleMons[battler].isShadow)
+        return FALSE;
+    if (gBattleStruct->shadowHintFlags & SHADOW_HINT_FLAG(battler))
+        return FALSE;
+    gBattleStruct->shadowHintFlags |= SHADOW_HINT_FLAG(battler);
+    gBattleScripting.battler = battler;
+    BattleScriptCall(BattleScript_ShadowPokemonHint);
+    return TRUE;
 }
 
 static bool32 DoSwitchInEffectsForBattler(u32 battler)

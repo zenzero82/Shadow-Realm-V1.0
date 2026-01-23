@@ -890,6 +890,7 @@
     "VictoryRoadKanto_1F",
     "VictoryRoadKanto_B1F",
     "VictoryRoadKanto_B2F",
+    "WesHideout_Entrance",
     "WesHideout_Underground"
   ],
   "gMapGroup_IndoorNewBark": [
@@ -1050,7 +1051,5 @@
     "TohjoFalls_Cavern",
     "TohjoFalls_GiovanniRoom"
   ],
-  "gMapGroup_ShadowRealm": [
-    "WesHideout_Entrance"
-  ]
+  "gMapGroup_ShadowRealm": []
 }
