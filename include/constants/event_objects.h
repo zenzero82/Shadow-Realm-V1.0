@@ -5,6 +5,7 @@
 #include "constants/map_event_ids.h"
 
 #define OBJ_EVENT_GFX_BRENDAN_NORMAL               0
+#define OBJ_EVENT_GFX_RED_NORMAL                    OBJ_EVENT_GFX_BRENDAN_NORMAL
 #define OBJ_EVENT_GFX_BRENDAN_MACH_BIKE            1
 #define OBJ_EVENT_GFX_BRENDAN_SURFING              2
 #define OBJ_EVENT_GFX_BRENDAN_FIELD_MOVE           3

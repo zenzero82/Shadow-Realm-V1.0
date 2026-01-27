@@ -73,7 +73,7 @@
 #define FLAG_VIRIDIAN_FOREST_PLASMA_SCENE_DONE 0x32 // Persistent flag for the Plasma scene
 #define FLAG_UNUSED_0x032    FLAG_VIRIDIAN_FOREST_PLASMA_SCENE_DONE
 #define FLAG_HIDE_ROUTE_24_ZANDER  0x33 // hides Zander after his fight
-#define FLAG_UNUSED_0x034    0x34 // Unused Flag
+#define FLAG_OAKS_LAB_FORCE_INTRO    0x34 // auto-run lab intro after Leo scene
 #define FLAG_UNUSED_0x035    0x35 // Unused Flag
 #define FLAG_UNUSED_0x036    0x36 // Unused Flag
 #define FLAG_UNUSED_0x037    0x37 // Unused Flag
@@ -144,7 +144,7 @@
 #define FLAG_UNUSED_RS_LEGENDARY_BATTLE_DONE 0x71 // Unused Flag. Used in R/S to indicate whether player defeated or caught Groudon/Kyogre in Cave of Origin.
 #define FLAG_SCOTT_CALL_BATTLE_FRONTIER      0x72 // Used in order to activate a phone call from Scott, inviting the player to the SS Tidal.
 #define FLAG_RECEIVED_METEORITE              0x73
-#define FLAG_ADVENTURE_STARTED               0x74 // RECEIVED Pokédex.
+#define FLAG_ADVENTURE_STARTED               0x74 // RECEIVED PokÃ©dex.
 #define FLAG_DEFEATED_MAGMA_SPACE_CENTER     0x75 // Set when Team Magma is defeated at Mossdeep's Space Center.
 #define FLAG_MET_HIDDEN_POWER_GIVER          0x76
 
@@ -1445,7 +1445,7 @@
 #define FLAG_SYS_SAFARI_MODE                        (SYSTEM_FLAGS + 0x2C)
 #define FLAG_SYS_CRUISE_MODE                        (SYSTEM_FLAGS + 0x2D)
 
-#define FLAG_UNUSED_0x88E                           (SYSTEM_FLAGS + 0x2E) // Unused Flag
+#define FLAG_SYS_NOT_SOMEONES_PC                   (SYSTEM_FLAGS + 0x2E)
 #define FLAG_UNUSED_0x88F                           (SYSTEM_FLAGS + 0x2F) // Unused Flag
 
 #define FLAG_SYS_TV_HOME                            (SYSTEM_FLAGS + 0x30)

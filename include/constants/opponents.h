@@ -54,11 +54,18 @@
 #define TRAINER_SURGE                    47
 #define TRAINER_TWINS2                   48
 #define TRAINER_YOUNGSTER2               49
+#define TRAINER_VF_BUGCATCHER1           50
+#define TRAINER_VF_BUGCATCHER2           51
+#define TRAINER_VF_BUGCATCHER3           52
+#define TRAINER_VF_ROCKET                53
+#define TRAINER_VF_PLASMA                54
+
+
 
 // NOTE: Because each Trainer uses a flag to determine when they are defeated, there is only space for 9 additional trainers before trainer flag space overflows
 //       More space can be made by shifting flags around in constants/flags.h or changing how trainer flags are handled
 //       MAX_TRAINERS_COUNT can be increased but will take up additional saveblock space
-#define TRAINERS_COUNT                      50
+#define TRAINERS_COUNT                      55
 #define MAX_TRAINERS_COUNT                  1000
 #define TRAINER_PARTNER(partner)           (MAX_TRAINERS_COUNT + partner)
 

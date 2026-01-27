@@ -458,8 +458,9 @@
 #define TRAINER_CLASS_JUGGLER        0x52
 #define TRAINER_CLASS_PSYCHIC_M      0x53
 #define TRAINER_CLASS_TEAM_SNAGEM    0x54
+#define TRAINER_CLASS_KANTO_LEADER   0x55
 
-#define TRAINER_CLASS_COUNT          0x55
+#define TRAINER_CLASS_COUNT          0x56
 
 #define TRAINER_ENCOUNTER_MUSIC_MALE         0 // standard male encounter music
 #define TRAINER_ENCOUNTER_MUSIC_FEMALE       1 // standard female encounter music
@@ -477,6 +478,7 @@
 #define TRAINER_ENCOUNTER_MUSIC_RICH        13 // Rich Boys and Gentlemen
 #define TRAINER_ENCOUNTER_MUSIC_CIPHER_PEON 14
 #define TRAINER_ENCOUNTER_MUSIC_TEAM_ROCKET 15
+#define TRAINER_ENCOUNTER_MUSIC_GYM_LEADER  16
 
 #define F_TRAINER_FEMALE (1 << 7)
 

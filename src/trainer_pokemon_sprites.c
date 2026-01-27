@@ -73,6 +73,22 @@ static bool16 DecompressPic(u16 species, u32 personality, bool8 isFrontPic, u8 *
     return FALSE;
 }
 
+static bool16 DecompressPic_ShadowAware(u16 species, u32 personality, bool8 isFrontPic, u8 *dest, bool8 isTrainer, bool8 isShadow)
+{
+    if (!isTrainer)
+    {
+        HandleLoadSpecialPokePic_ShadowAware(isFrontPic, dest, species, personality, isShadow);
+    }
+    else
+    {
+        if (isFrontPic)
+            DecompressPicFromTable(&gTrainerSprites[species].frontPic, dest);
+        else
+            DecompressPicFromTable(&gTrainerBacksprites[species].backPic, dest);
+    }
+    return FALSE;
+}
+
 static void LoadPicPaletteByTagOrSlot(u16 species, bool8 isShiny, u32 personality, u8 paletteSlot, u16 paletteTag, bool8 isTrainer)
 {
     if (!isTrainer)
@@ -86,6 +102,37 @@ static void LoadPicPaletteByTagOrSlot(u16 species, bool8 isShiny, u32 personalit
         {
             sCreatingSpriteTemplate.paletteTag = paletteTag;
             LoadSpritePaletteWithTag(GetMonSpritePalFromSpeciesAndPersonality(species, isShiny, personality), species);
+        }
+    }
+    else
+    {
+        if (paletteTag == TAG_NONE)
+        {
+            sCreatingSpriteTemplate.paletteTag = TAG_NONE;
+            LoadPalette(gTrainerSprites[species].palette.data, OBJ_PLTT_ID(paletteSlot), PLTT_SIZE_4BPP);
+        }
+        else
+        {
+            sCreatingSpriteTemplate.paletteTag = paletteTag;
+            LoadSpritePalette(&gTrainerSprites[species].palette);
+        }
+    }
+}
+
+static void LoadPicPaletteByTagOrSlot_ShadowAware(u16 species, bool8 isShiny, u32 personality, u8 paletteSlot, u16 paletteTag, bool8 isTrainer, bool8 isShadow)
+{
+    if (!isTrainer)
+    {
+        if (paletteTag == TAG_NONE)
+        {
+            sCreatingSpriteTemplate.paletteTag = TAG_NONE;
+            LoadPalette(GetMonSpritePalFromSpeciesAndPersonality_ShadowAware(species, isShiny, personality, isShadow),
+                        OBJ_PLTT_ID(paletteSlot), PLTT_SIZE_4BPP);
+        }
+        else
+        {
+            sCreatingSpriteTemplate.paletteTag = paletteTag;
+            LoadSpritePaletteWithTag(GetMonSpritePalFromSpeciesAndPersonality_ShadowAware(species, isShiny, personality, isShadow), species);
         }
     }
     else
@@ -162,6 +209,60 @@ static u16 CreatePicSprite(u16 species, bool8 isShiny, u32 personality, bool8 is
     sCreatingSpriteTemplate.affineAnims = gDummySpriteAffineAnimTable;
     sCreatingSpriteTemplate.callback = DummyPicSpriteCallback;
     LoadPicPaletteByTagOrSlot(species, isShiny, personality, paletteSlot, paletteTag, isTrainer);
+    spriteId = CreateSprite(&sCreatingSpriteTemplate, x, y, 0);
+    if (paletteTag == TAG_NONE)
+        gSprites[spriteId].oam.paletteNum = paletteSlot;
+    sSpritePics[i].frames = framePics;
+    sSpritePics[i].images = images;
+    sSpritePics[i].paletteTag = paletteTag;
+    sSpritePics[i].spriteId = spriteId;
+    sSpritePics[i].active = TRUE;
+    return spriteId;
+}
+
+static u16 CreatePicSprite_ShadowAware(u16 species, bool8 isShiny, u32 personality, bool8 isFrontPic, s16 x, s16 y, u8 paletteSlot, u16 paletteTag, bool8 isTrainer, bool8 isShadow)
+{
+    u8 i;
+    u8 *framePics;
+    struct SpriteFrameImage *images;
+    int j;
+    u8 spriteId;
+
+    for (i = 0; i < PICS_COUNT; i ++)
+    {
+        if (!sSpritePics[i].active)
+            break;
+    }
+    if (i == PICS_COUNT)
+        return 0xFFFF;
+
+    framePics = Alloc(PIC_SPRITE_SIZE * MAX_PIC_FRAMES);
+    if (!framePics)
+        return 0xFFFF;
+
+    images = Alloc(sizeof(struct SpriteFrameImage) * MAX_PIC_FRAMES);
+    if (!images)
+    {
+        Free(framePics);
+        return 0xFFFF;
+    }
+    if (DecompressPic_ShadowAware(species, personality, isFrontPic, framePics, isTrainer, isShadow))
+    {
+        // debug trap?
+        return 0xFFFF;
+    }
+    for (j = 0; j < MAX_PIC_FRAMES; j ++)
+    {
+        images[j].data = framePics + PIC_SPRITE_SIZE * j;
+        images[j].size = PIC_SPRITE_SIZE;
+    }
+    sCreatingSpriteTemplate.tileTag = TAG_NONE;
+    sCreatingSpriteTemplate.oam = &sOamData_Normal;
+    AssignSpriteAnimsTable(isTrainer);
+    sCreatingSpriteTemplate.images = images;
+    sCreatingSpriteTemplate.affineAnims = gDummySpriteAffineAnimTable;
+    sCreatingSpriteTemplate.callback = DummyPicSpriteCallback;
+    LoadPicPaletteByTagOrSlot_ShadowAware(species, isShiny, personality, paletteSlot, paletteTag, isTrainer, isShadow);
     spriteId = CreateSprite(&sCreatingSpriteTemplate, x, y, 0);
     if (paletteTag == TAG_NONE)
         gSprites[spriteId].oam.paletteNum = paletteSlot;
@@ -303,6 +404,11 @@ static u16 CreateTrainerCardSprite(u16 species, bool8 isShiny, u32 personality, 
 u16 CreateMonPicSprite(u16 species, bool8 isShiny, u32 personality, bool8 isFrontPic, s16 x, s16 y, u8 paletteSlot, u16 paletteTag)
 {
     return CreatePicSprite(species, isShiny, personality, isFrontPic, x, y, paletteSlot, paletteTag, FALSE);
+}
+
+u16 CreateMonPicSprite_ShadowAware(u16 species, bool8 isShiny, u32 personality, bool8 isFrontPic, s16 x, s16 y, u8 paletteSlot, u16 paletteTag, bool8 isShadow)
+{
+    return CreatePicSprite_ShadowAware(species, isShiny, personality, isFrontPic, x, y, paletteSlot, paletteTag, FALSE, isShadow);
 }
 
 u16 FreeAndDestroyMonPicSprite(u16 spriteId)

@@ -41,6 +41,7 @@
 #include "secret_base.h"
 #include "player_pc.h"
 #include "field_specials.h"
+#include "field_screen_effect.h"
 #include "berry_powder.h"
 #include "mystery_gift.h"
 #include "union_room_chat.h"

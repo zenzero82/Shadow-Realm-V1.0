@@ -1382,7 +1382,7 @@ void UpdateAmbientCry(s16 *state, u16 *delayCounter)
             }
         }
         // Ambient cries after the first one take between 1200-2399 frames (~20-40 seconds)
-        // If the player has a Pokémon with the ability Swarm in their party, the time is halved to 600-1199 frames (~10-20 seconds)
+        // If the player has a PokÃ©mon with the ability Swarm in their party, the time is halved to 600-1199 frames (~10-20 seconds)
         *delayCounter = ((Random() % 1200) + 1200) / divBy;
         *state = AMB_CRY_WAIT;
         break;
@@ -1394,7 +1394,7 @@ void UpdateAmbientCry(s16 *state, u16 *delayCounter)
         }
         break;
     case AMB_CRY_IDLE:
-        // No land/water Pokémon on this map
+        // No land/water PokÃ©mon on this map
         break;
     }
 }
@@ -1405,7 +1405,7 @@ static void ChooseAmbientCrySpecies(void)
      && gSaveBlock1Ptr->location.mapNum == MAP_NUM(MAP_ROUTE130))
      && !IsMirageIslandPresent())
     {
-        // Only play water Pokémon cries on this route
+        // Only play water PokÃ©mon cries on this route
         // when Mirage Island is not present
         sIsAmbientCryWaterMon = TRUE;
         sAmbientCrySpecies = GetLocalWaterMon();
@@ -1793,7 +1793,7 @@ void CB2_NewGame(void)
     PlayTimeCounter_Start();
     ScriptContext_Init();
     UnlockPlayerFieldControls();
-    //gFieldCallback = ExecuteTruckSequence;
+    gFieldCallback = FieldCB_NewGameWarpExit;
     gFieldCallback2 = NULL;
     DoMapLoadLoop(&gMain.state);
     SetFieldVBlankCallback();

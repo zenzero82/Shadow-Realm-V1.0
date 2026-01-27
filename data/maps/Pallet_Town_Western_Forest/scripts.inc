@@ -1,20 +1,63 @@
-@ Pallet Town Western Forest – intro monologue triggered by coord events
+@ Pallet Town Western Forest intro monologue triggered by coord events
 @ Uses FLAG_WEST_FOREST_INTRO_DONE (define in flags.h)
 
 Pallet_Town_Western_Forest_MapScripts::
+    map_script MAP_SCRIPT_ON_TRANSITION, Pallet_Town_Western_Forest_OnTransition
+    map_script MAP_SCRIPT_ON_LOAD, Pallet_Town_Western_Forest_OnLoad
+    map_script MAP_SCRIPT_ON_FRAME_TABLE, Pallet_Town_Western_Forest_OnFrame
     .byte 0
 
+Pallet_Town_Western_Forest_OnTransition::
+    checkflag FLAG_WEST_FOREST_INTRO_DONE
+    goto_if_eq Pallet_Town_Western_Forest_OnTransition_Done
+    hideobjectat LOCALID_PLAYER, MAP_PALLET_TOWN_WESTERN_FOREST
+    hideobjectat 1, MAP_PALLET_TOWN_WESTERN_FOREST
+Pallet_Town_Western_Forest_OnTransition_Done:
+    end
+
+Pallet_Town_Western_Forest_OnLoad::
+    setvar VAR_TEMP_1, 0
+    checkflag FLAG_WEST_FOREST_INTRO_DONE
+    goto_if_eq Pallet_Town_Western_Forest_OnLoad_Done
+    hideobjectat LOCALID_PLAYER, MAP_PALLET_TOWN_WESTERN_FOREST
+    hideobjectat 1, MAP_PALLET_TOWN_WESTERN_FOREST
+Pallet_Town_Western_Forest_OnLoad_Done:
+    end
+
+Pallet_Town_Western_Forest_OnFrame::
+    map_script_2 VAR_TEMP_1, 0, Pallet_Town_Western_Forest_EventScript_StartIntro
+    .2byte 0
+
 @ ---------------- INTRO SEQUENCE (called by coord events) ----------------
+
+Pallet_Town_Western_Forest_EventScript_StartIntro::
+    setvar VAR_TEMP_1, 1
+    checkflag FLAG_WEST_FOREST_INTRO_DONE
+    goto_if_eq Pallet_Town_Western_Forest_Intro_Done
+
+    lockall
+    setvar VAR_TEMP_0, 1
+    setobjectxy LOCALID_PLAYER, 5, 4
+    setobjectxyperm LOCALID_PLAYER, 5, 4
+    showobjectat 1, MAP_PALLET_TOWN_WESTERN_FOREST
+    showobjectat LOCALID_PLAYER, MAP_PALLET_TOWN_WESTERN_FOREST
+    applymovement OBJ_EVENT_ID_PLAYER, Pallet_Town_Western_Forest_Mov_StepFromPortal
+    waitmovement 0
+    goto Pallet_Town_Western_Forest_EventScript_IntroCore
 
 Pallet_Town_Western_Forest_EventScript_Intro::
     @ Only run once per save
     checkflag FLAG_WEST_FOREST_INTRO_DONE
     goto_if_eq Pallet_Town_Western_Forest_Intro_Done
 
-    setflag FLAG_WEST_FOREST_INTRO_DONE
-    setflag FLAG_HIDE_OAKS_LAB_LEO
     lock
     faceplayer
+    goto Pallet_Town_Western_Forest_EventScript_IntroCore
+
+Pallet_Town_Western_Forest_EventScript_IntroCore::
+    setflag FLAG_WEST_FOREST_INTRO_DONE
+    setflag FLAG_HIDE_OAKS_LAB_LEO
+    setvar VAR_TEMP_0, 1
 
     @ First bit of inner monologue (PLAYER)
     setspeaker SP_NAME_PLAYER
@@ -35,12 +78,16 @@ Pallet_Town_Western_Forest_EventScript_Intro::
     setflag FLAG_SYS_B_DASH
     setflag FLAG_RECEIVED_RUNNING_SHOES
 
-    release
+    releaseall
 Pallet_Town_Western_Forest_Intro_Done:
     end
 
 
 @ ---------------- MOVEMENTS ----------------
+
+Pallet_Town_Western_Forest_Mov_StepFromPortal:
+    walk_down
+    step_end
 
 Pallet_Town_Western_Forest_Mov_Exclaim_FaceUp:
     emote_exclamation_mark
@@ -63,7 +110,7 @@ Pallet_Town_Western_Forest_Text_Player_IntroThought2:
 
 
 @ ================================
-@ WEST FOREST – BADGE TEST NPC
+@ WEST FOREST BADGE TEST NPC
 @ ================================
 @ Attach this script to an NPC in Porymap:
 @   Script: WestForest_EventScript_BadgeTester
@@ -71,7 +118,7 @@ Pallet_Town_Western_Forest_Text_Player_IntroThought2:
 @ Gives once:
 @   - Hoenn Badge 1  -> FLAG_BADGE01_GET
 @   - Kanto Badge 1  -> FLAG_BADGE09_GET
-@   - PokéNav unlock -> FLAG_SYS_POKENAV_GET (and friends)
+@   - PokeNav unlock -> FLAG_SYS_POKENAV_GET (and friends)
 @ Tracked by:
 @   FLAG_WEST_FOREST_BADGE_TEST_DONE
 
@@ -113,7 +160,7 @@ WestForest_EventScript_BadgeTester::
 	setflag FLAG_RECEIVED_HM_FLY 
     giveitem ITEM_HM02
 
-    @ PokéNav
+    @ PokeNav
 	setflag FLAG_SYS_POKENAV_GET
     setflag FLAG_RECEIVED_POKENAV
 
@@ -155,7 +202,7 @@ WestForest_Text_BadgeTester_After:
 
 
 @ ================================
-@ WEST FOREST – PORTAL WARP (TEMP)
+@ WEST FOREST PORTAL WARP (TEMP)
 @ ================================
 @ Attach this script to your portal object in Porymap:
 @   Script: Pallet_Town_Western_Forest_EventScript_Portal_ToNewBark
@@ -185,7 +232,7 @@ Pallet_Town_Western_Forest_Text_PortalAsk:
     .string "Warp to NEW BARK TOWN?$"
 
 @ ================================
-@ WEST FOREST – PORTAL WARP (HOENN)
+@ WEST FOREST PORTAL WARP (HOENN)
 @ ================================
 @ Attach this script to your 2nd portal object in Porymap:
 @   Script: Pallet_Town_Western_Forest_EventScript_Portal_ToLittleroot
@@ -263,7 +310,7 @@ TestText:
     .string "Yo wassup!$"
 
 ShadowMonitor_Text_Given:
-    .string "Here's the Shadow Monitor I found.\pIt keeps track of every Shadow\nPokémon you snag.$"
+    .string "Here's the Shadow Monitor I found.\pIt keeps track of every Shadow\nPokemon you snag.$"
 
 ShadowMonitor_Text_AlreadyHave:
     .string "You already grabbed the Shadow\nMonitor, but thanks for checking!$"

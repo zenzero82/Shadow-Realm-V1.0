@@ -24,6 +24,8 @@ enum {
     COPYWIN_FULL,
 };
 
+#define COPYWIN_BOTH COPYWIN_FULL
+
 struct WindowTemplate
 {
     u8 bg;

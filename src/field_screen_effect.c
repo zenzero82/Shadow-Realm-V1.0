@@ -1696,3 +1696,10 @@ bool32 IsDirectionalStairWarpMetatileBehavior(u16 metatileBehavior, u8 playerDir
     }
     return FALSE;
 }
+
+void FieldCB_NewGameWarpExit(void)
+{
+    SetPlayerVisibility(FALSE);
+    FieldCB_DefaultWarpExit();
+}
+

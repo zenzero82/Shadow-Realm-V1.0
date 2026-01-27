@@ -5495,6 +5495,7 @@ void AdjustFriendship(struct Pokemon *mon, u8 event)
             if (!(gBattleTypeFlags & BATTLE_TYPE_TRAINER))
                 return;
             if (!(opponentTrainerClass == TRAINER_CLASS_LEADER
+                || opponentTrainerClass == TRAINER_CLASS_KANTO_LEADER
                 || opponentTrainerClass == TRAINER_CLASS_ELITE_FOUR
                 || opponentTrainerClass == TRAINER_CLASS_CHAMPION))
                 return;
@@ -6100,6 +6101,8 @@ u16 GetBattleBGM(void)
         case TRAINER_CLASS_AQUA_ADMIN:
         case TRAINER_CLASS_MAGMA_ADMIN:
             return MUS_VS_AQUA_MAGMA;
+        case TRAINER_CLASS_KANTO_LEADER:
+            return MUS_HG_VS_GYM_LEADER_KANTO;
         case TRAINER_CLASS_LEADER:
             return MUS_VS_GYM_LEADER;
         case TRAINER_CLASS_CHAMPION:

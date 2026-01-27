@@ -73,7 +73,7 @@ PalletTown_EventScript_OaksLabSign::
     end
 
 @ ==============================
-@ ROUTE 1 AIDE – LEO
+@ ROUTE 1 AIDE - LEO
 @ ==============================
 
 PalletTown_EventScript_Route1AideTalk::
@@ -107,6 +107,7 @@ PalletTown_EventScript_Route1AideTrigger0::
 
     setflag FLAG_MET_ROUTE1_AIDE
     setflag FLAG_HIDE_PALLET_LEO
+    setflag FLAG_OAKS_LAB_FORCE_INTRO
 
     applymovement 1, PalletTown_Move_Leo_Path
     applymovement OBJ_EVENT_ID_PLAYER, PalletTown_Move_Player_Path
@@ -114,6 +115,7 @@ PalletTown_EventScript_Route1AideTrigger0::
 
     clearflag FLAG_HIDE_OAKS_LAB_LEO
     warp MAP_OAKS_LAB, 5, 12
+    waitstate
 
     releaseall
     end
@@ -144,6 +146,7 @@ PalletTown_EventScript_Route1AideTrigger1::
 
     setflag FLAG_MET_ROUTE1_AIDE
     setflag FLAG_HIDE_PALLET_LEO
+    setflag FLAG_OAKS_LAB_FORCE_INTRO
 
     applymovement 1, PalletTown_Move_Leo_Path
     applymovement OBJ_EVENT_ID_PLAYER, PalletTown_Move_Player_Path
@@ -151,6 +154,7 @@ PalletTown_EventScript_Route1AideTrigger1::
 
     clearflag FLAG_HIDE_OAKS_LAB_LEO
     warp MAP_OAKS_LAB, 5, 12
+    waitstate
 
     releaseall
     end
@@ -231,7 +235,7 @@ PalletTown_Move_Player_Path:
 PalletTown_Text_Teacher:
     .string "I'm a teacher here in town.\p"
     .string "Lately my students keep talking about\n"
-    .string "portals opening and Pokémon on the\l"
+    .string "portals opening and POKEMON on the\l"
     .string "news that should not even exist in KANTO.\p"
     .string "I just hope all these anomalies do not\n"
     .string "reach our quiet little town.$"
@@ -268,17 +272,15 @@ PalletTown_Text_Route1Aide_Intro:
     .string "the news, I am a little on edge.$"
 
 PalletTown_Text_Route1Aide_SawMan:
-    .string "Hey, you there!\p"
-    .string "I just saw something terrifying on\n"
-    .string "Route 1.\p"
-    .string "A strange man caught a Pokémon and\n"
-    .string "clamped some device onto it.\p"
-    .string "Its eyes went empty and it started\n"
-    .string "glowing a dark purple before it went\l"
-    .string "wild.\p"
-    .string "That was not normal training at all.\p"
-    .string "Come with me to the lab.\n"
-    .string "The other aide needs to hear this, and\l"
-    .string "maybe the Professor's notes can help us\l"
-    .string "understand what is going on.$"
-
+    .string "NO WAY!\p"
+    .string "I have no idea who you are, but did\n"
+    .string "you see what just happened?!\p"
+    .string "A strange man on Route 1 just captured\n"
+    .string "an innocent POKEMON and clamped some\l"
+    .string "strange device to it.\p"
+    .string "It started to give off a strange aura\n"
+    .string "and even changed colors!\p"
+    .string "Its behavior is starting to change\n"
+    .string "as well...\p"
+    .string "I have to inform Nia. Please come with\n"
+    .string "me quickly!$"

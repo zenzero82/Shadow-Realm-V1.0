@@ -352,7 +352,7 @@ gSongTable::
 	song dummy_song_header, 0, 0
 	song dummy_song_header, 0, 0
 	song mus_littleroot_test, 0, 0
-	song mus_gsc_route38, 0, 0
+	song mus_hg_vs_gym_leader, 0, 0
 	song mus_caught, 0, 0
 	song mus_victory_wild, 0, 0
 	song mus_victory_gym_leader, 0, 0
@@ -503,7 +503,7 @@ gSongTable::
 	song mus_hg_route3, 0, 0
 	song mus_hg_route11, 0, 0
 	song mus_rg_victory_road, 0, 0
-	song mus_rg_vs_gym_leader, 0, 0
+	song mus_hg_vs_gym_leader_kanto, 0, 0
 	song mus_rg_vs_trainer, 0, 0
 	song mus_rg_vs_wild, 0, 0
 	song mus_rg_vs_champion, 0, 0
@@ -518,7 +518,7 @@ gSongTable::
 	song mus_hg_celadon, 0, 0
 	song mus_rg_victory_trainer, 0, 0
 	song mus_rg_victory_wild, 0, 0
-	song mus_rg_victory_gym_leader, 0, 0
+	song mus_hg_victory_gym_leader, 0, 0
 	song mus_hg_vermilion, 0, 0
 	song mus_hg_pewter, 0, 0
 	song mus_rg_encounter_rival, 0, 0

@@ -80,7 +80,7 @@ Gender: Male
 Music: TRAINER_ENCOUNTER_MUSIC_MALE
 Double Battle: No
 
-pikachu
+XD003 (pikachu)
 Level: 4
 Nature: ADAMANT
 IVs: 0 HP / 0 Atk / 0 Def / 0 SpA / 0 SpD / 0 Spe
@@ -98,9 +98,20 @@ Music: TRAINER_ENCOUNTER_MUSIC_TEAM_ROCKET
 Meowth
 Level: 1
 
+=== TRAINER_GIOVANNI_1 ===
+Name: GIOVANNI
+Class: Team Rocket
+Pic: GIOVANNI
+Gender: Male
+Music: TRAINER_ENCOUNTER_MUSIC_TEAM_ROCKET
+
+Rattata
+Level: 5
+
 === TRAINER_BROCK_KANTO ===
 Name: BROCK
-Class: LEADER
+Class: Kanto Leader
+Music: Gym Leader
 Pic: BROCK_KANTO
 Gender: Male
 
@@ -122,14 +133,6 @@ Nature: HARDY
 
 Sudowoodo 
 Level: 17
-Nature: HARDY
-- Tackle
-- Defense Curl
-- Rock Throw
-- Sand Attack
-
-Croagunk 
-Level: 18
 Nature: HARDY
 - Tackle
 - Defense Curl
@@ -183,7 +186,8 @@ Level: 5
 
 === TRAINER_BLAINE ===
 Name: BLAINE
-Class: LEADER
+Class: Kanto Leader
+Music: Gym Leader
 Pic: BLAINE
 Gender: Male
 
@@ -255,7 +259,8 @@ Level: 5
 
 === TRAINER_ERIKA ===
 Name: ERIKA
-Class: LEADER
+Class: Kanto Leader
+Music: Gym Leader
 Pic: ERIKA
 Gender: Male
 
@@ -291,7 +296,8 @@ Level: 5
 
 === TRAINER_JANINE ===
 Name: JANINE
-Class: LEADER
+Class: Kanto Leader
+Music: Gym Leader
 Pic: JANINE
 Gender: Male
 
@@ -408,7 +414,8 @@ Level: 5
 
 === TRAINER_MISTY ===
 Name: MISTY
-Class: Cooltrainer
+Class: Kanto Leader
+Music: Gym Leader
 Pic: MISTY
 Gender: Male
 
@@ -462,7 +469,8 @@ Level: 5
 
 === TRAINER_SABRINA ===
 Name: SABRINA
-Class: LEADER
+Class: Kanto Leader
+Music: Gym Leader
 Pic: SABRINA
 Gender: Male
 
@@ -507,7 +515,8 @@ Level: 5
 
 === TRAINER_SURGE ===
 Name: LT SURGE
-Class: LEADER
+Class: Kanto Leader
+Music: Gym Leader
 Pic: SURGE
 Gender: Male
 
@@ -537,7 +546,7 @@ Name: ZANDER
 Class: TRAINER_CLASS_TEAM_ROCKET     
 Pic: ROCKET_GRUNT_M  
 Gender: Male
-Music: TRAINER_ENCOUNTER_MUSIC_MALE
+Music: TRAINER_ENCOUNTER_MUSIC_TEAM_ROCKET
 Double Battle: No
 
 Mimikyu
@@ -550,3 +559,76 @@ Heart Gauge: 5000
 - Shadow Half
 - Shadow Sky
 - Shadow Wave
+
+=== TRAINER_VF_BUGCATCHER1 ===
+Name: Neil
+Class: BUG_CATCHER
+Pic: BUG_CATCHER
+Gender: Male
+
+Caterpie
+Level: 5
+
+Weedle
+Level: 6
+
+Metapod
+Level: 7
+
+=== TRAINER_VF_BUGCATCHER2 ===
+Name: Rick
+Class: BUG_CATCHER
+Pic: BUG_CATCHER
+Gender: Male
+
+Cutiefly
+Level: 6
+
+Grubbin
+Level: 6
+
+Joltik
+Level: 6
+
+=== TRAINER_VF_BUGCATCHER3 ===
+Name: Jamal
+Class: BUG_CATCHER
+Pic: BUG_CATCHER
+Gender: Male
+
+Venipede
+Level: 7
+
+Venonat
+Level: 7
+
+Paras
+Level: 7
+
+=== TRAINER_VF_ROCKET ===
+Name: Travis
+Class: TRAINER_CLASS_TEAM_ROCKET     
+Pic: ROCKET_GRUNT_M  
+Gender: Male
+Music: TRAINER_ENCOUNTER_MUSIC_TEAM_ROCKET
+Double Battle: No
+
+Koffing
+Level: 8
+
+Ekans
+Level: 9
+
+=== TRAINER_VF_PLASMA ===
+Name: Corvin
+Class: Team Plasma
+Pic: PLASMA_GRUNT_M_GEN5
+Gender: Male
+Music: TRAINER_ENCOUNTER_MUSIC_TEAM_ROCKET
+Double Battle: No
+
+Trubbish
+Level: 8
+
+Scraggy
+Level: 9

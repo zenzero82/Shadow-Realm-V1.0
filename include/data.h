@@ -4,7 +4,10 @@
 #include "constants/moves.h"
 #include "constants/trainers.h"
 #include "constants/battle.h"
+#include "constants/pokemon.h"
 #include "difficulty.h"
+
+extern const u8 gSpeciesNames[][POKEMON_NAME_LENGTH + 1];
 
 #define MAX_TRAINER_ITEMS 4
 

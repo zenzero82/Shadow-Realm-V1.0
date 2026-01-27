@@ -1,0 +1,4 @@
+# variables
+
+ROM_CODE ?= BPRE
+OFFSET ?= 0x08F03600

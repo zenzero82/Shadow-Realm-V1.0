@@ -281,7 +281,7 @@
 // Music
 #define START_MUS                   350
 #define MUS_LITTLEROOT_TEST             350 // MUS_TETSUJI          // Unused, likely a test track.
-#define MUS_GSC_ROUTE38                 351 // MUS_FIELD13          // Unused, likely a test track.
+#define MUS_HG_VS_GYM_LEADER            351 
 #define MUS_CAUGHT                      352 // MUS_KACHI22
 #define MUS_VICTORY_WILD                353 // MUS_KACHI2
 #define MUS_VICTORY_GYM_LEADER          354 // MUS_KACHI3           // Also used in Frontier Brain victories.
@@ -433,7 +433,7 @@
 #define MUS_HG_ROUTE3                   499 // MUS_RG_LOAD02
 #define MUS_HG_ROUTE11                  500 // MUS_RG_LOAD03
 #define MUS_RG_VICTORY_ROAD             501 // MUS_RG_CHAMP_R
-#define MUS_RG_VS_GYM_LEADER            502 // MUS_RG_VS_GYM
+#define MUS_HG_VS_GYM_LEADER_KANTO      502 // MUS_RG_VS_GYM
 #define MUS_RG_VS_TRAINER               503 // MUS_RG_VS_TORE
 #define MUS_RG_VS_WILD                  504 // MUS_RG_VS_YASEI
 #define MUS_RG_VS_CHAMPION              505 // MUS_RG_VS_LAST
@@ -448,7 +448,7 @@
 #define MUS_HG_CELADON                  514 // MUS_RG_TAMAMUSI
 #define MUS_RG_VICTORY_TRAINER          515 // MUS_RG_WIN_TRE       // Identical to MUS_VICTORY_TRAINER.
 #define MUS_RG_VICTORY_WILD             516 // MUS_RG_WIN_YASEI     // Identical to MUS_VICTORY_WILD.
-#define MUS_RG_VICTORY_GYM_LEADER       517 // MUS_RG_WIN_GYM       // Identical to MUS_VICTORY_GYM_LEADER.
+#define MUS_HG_VICTORY_GYM_LEADER       517 // MUS_RG_WIN_GYM       // Identical to MUS_VICTORY_GYM_LEADER.
 #define MUS_HG_VERMILLION              518 // MUS_RG_KUCHIBA
 #define MUS_HG_PEWTER                   519 // MUS_RG_NIBI
 #define MUS_RG_ENCOUNTER_RIVAL          520 // MUS_RG_RIVAL1

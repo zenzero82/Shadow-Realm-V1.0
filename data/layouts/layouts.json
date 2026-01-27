@@ -5324,7 +5324,7 @@
       "height": 14,
       "border_width": 2,
       "border_height": 2,
-      "primary_tileset": "gTileset_kanto_inside",
+      "primary_tileset": "gTileset_johto_building",
       "secondary_tileset": "gTileset_oaks_lab",
       "border_filepath": "data/layouts/Oaks_Lab/border.bin",
       "blockdata_filepath": "data/layouts/Oaks_Lab/map.bin"

@@ -1,0 +1,222 @@
+332:        __("0123456789+-"),
+349:        sNamingScreenData->templateNum = templateNum;
+350:        sNamingScreenData->monSpeciesOrPlayerGender = monSpeciesOrPlayerGender;
+351:        sNamingScreenData->monGender = monGender;
+352:        sNamingScreenData->monPersonality = monPersonality;
+353:        sNamingScreenData->destBuffer = destBuffer;
+354:        sNamingScreenData->returnCallback = returnCallback;
+407:    sNamingScreenData->state = 0;
+408:    sNamingScreenData->bg2vOffset = 0;
+409:    sNamingScreenData->bldAlphaTg = 16;
+410:    sNamingScreenData->template = sNamingScreenTemplates[sNamingScreenData->templateNum];
+411:    sNamingScreenData->currentPage = sNamingScreenData->template->initialPage;
+412:    sNamingScreenData->inputCharBaseXPos = (240 - sNamingScreenData->template->maxChars * 8) / 2 + 6;
+413:    sNamingScreenData->keyRepeatStartDelayCopy = gKeyRepeatStartDelay;
+414:    memset(sNamingScreenData->textBuffer, 0xFF, sizeof(sNamingScreenData->textBuffer));
+415:    if (sNamingScreenData->template->copyExistingString != 0)
+416:        StringCopy(sNamingScreenData->textBuffer, sNamingScreenData->destBuffer);
+455:    for (i = 0; i < NELEMS(NamingScreenWindowTemplate) - 1; i++)
+456:        sNamingScreenData->windows[i] = AddWindow(&NamingScreenWindowTemplate[i]);
+476:	//if (gSaveBlock2Ptr->optionsLanguage == ENG)
+478:	//if (gSaveBlock2Ptr->optionsLanguage == SPA)
+492:    switch (sNamingScreenData->state)
+531:    sNamingScreenData->currentPage = KBPAGE_LETTERS_UPPER;
+536:    sNamingScreenData->state++;
+546:        sNamingScreenData->state++;
+562:        sNamingScreenData->state = MAIN_STATE_HANDLE_INPUT;
+572:    if (sNamingScreenData->templateNum == NAMING_SCREEN_CAUGHT_MON &&
+576:        sNamingScreenData->state = MAIN_STATE_UPDATE_SENT_TO_PC_MESSAGE;
+581:        sNamingScreenData->state = MAIN_STATE_BEGIN_FADE_OUT;
+589:    sNamingScreenData->state++;
+597:        if (sNamingScreenData->templateNum == NAMING_SCREEN_PLAYER)
+599:        SetMainCallback2(sNamingScreenData->returnCallback);
+615:        StringCopy(gStringVar2, sNamingScreenData->destBuffer);
+620:        StringCopy(gStringVar2, sNamingScreenData->destBuffer);
+628:    //if (gSaveBlock2Ptr->optionsLanguage == ENG)
+630:    //if (gSaveBlock2Ptr->optionsLanguage == SPA)
+643:        sNamingScreenData->state = MAIN_STATE_BEGIN_FADE_OUT;
+654:    sNamingScreenData->state = MAIN_STATE_WAIT_PAGE_SWAP;
+665:        sNamingScreenData->state = MAIN_STATE_HANDLE_INPUT;
+666:        sNamingScreenData->currentPage++;
+667:        sNamingScreenData->currentPage %= 3;
+676://--------------------------------------------------
+678://--------------------------------------------------
+714:    sNamingScreenData->bldAlphaTg = 16;
+715:    sNamingScreenData->bg2vOffset = 0;
+716:    task->tState++;
+722:    u8 a = sNamingScreenData->bldAlphaTg;
+724:    u8 c = sNamingScreenData->bg2vOffset;
+725:	task->tFrameCount += 1;
+727:	sNamingScreenData->bldAlphaTg = a - 1;
+728:	sNamingScreenData->bg2vOffset = c - 2;
+729:	if ((a - 1) == 0)
+731:		task->tState++;
+738:	u8 prevPage = sNamingScreenData->currentPage;
+757:	task->tState++;
+763:	u8 a = sNamingScreenData->bldAlphaTg;
+765:	task->tFrameCount += 1;
+767:	++sNamingScreenData->bldAlphaTg;
+768:	sNamingScreenData->bg2vOffset += 2;
+772:		task->tState++;
+786://--------------------------------------------------
+788://--------------------------------------------------
+793://--------------------------------------------------
+795://--------------------------------------------------
+799:	if (sprite->animEnded)
+801:    sprite->invisible = (sprite->data[4] & 0xFF);
+802:    if (sprite->data[1] == FILE_COUNT - 1)
+803:        sprite->invisible = TRUE;
+804:    if (sprite->invisible || (sprite->data[4] & 0xFF00) == 0
+805:     || sprite->data[0] != sprite->data[2] || sprite->data[1] != sprite->data[3])
+807:        sprite->data[5] = 0;
+808:        sprite->data[6] = 1;
+809:        sprite->data[7] = 2;
+811:    sprite->data[7]--;
+812:    if (sprite->data[7] == 0)
+814:        sprite->data[5] += sprite->data[6];
+815:        if (sprite->data[5] == 16 || sprite->data[5] == 0)
+816:            sprite->data[6] = -sprite->data[6];
+817:        sprite->data[7] = 2;
+819:    if ((sprite->data[4] & 0xFF00) != 0)
+821:        s8 gb = sprite->data[5];
+822:        s8 r = sprite->data[5] >> 1;
+831:    const s16 arr[] = {0, -4, -2, -1};
+833:    if (sprite->data[0] == 0 || --sprite->data[0] == 0)
+835:        sprite->data[0] = 8;
+836:        sprite->data[1] = (sprite->data[1] + 1) & 3;
+838:    sprite->pos2.x = arr[sprite->data[1]];
+847:    if (var != (u8)sprite->data[0])
+849:        sprite->pos2.y = 0;
+850:        sprite->data[1] = 0;
+851:        sprite->data[2] = 0;
+855:        sprite->pos2.y = arr[sprite->data[1]];
+856:        sprite->data[2]++;
+857:        if (sprite->data[2] > 8)
+859:            sprite->data[1] = (sprite->data[1] + 1) & 3;
+860:            sprite->data[2] = 0;
+874:    sNamingScreenData->cursorSpriteId = CreateSprite(&gSpriteTemplate_Cursor, 38, 88, 1);
+876:    gSprites[sNamingScreenData->cursorSpriteId].oam.priority = 1;
+877:    gSprites[sNamingScreenData->cursorSpriteId].oam.objMode = ST_OAM_OBJ_BLEND;
+878:    gSprites[sNamingScreenData->cursorSpriteId].data[6] = 1;
+879:    gSprites[sNamingScreenData->cursorSpriteId].data[6] = 2;
+891:    return sKeyboardSymbolPositions[sNamingScreenData->currentPage][x];
+896:    struct Sprite *cursorSprite = &gSprites[sNamingScreenData->cursorSpriteId];
+898:    cursorSprite->pos1.x = CursorColToKeyboardCol(x) * 8 + 28;
+899:    cursorSprite->pos1.y = y * 24 + 80;
+900:    cursorSprite->data[2] = cursorSprite->data[0];
+901:    cursorSprite->data[3] = cursorSprite->data[1];
+902:    cursorSprite->data[0] = x;
+903:    cursorSprite->data[1] = y;
+908:    struct Sprite *cursorSprite = &gSprites[sNamingScreenData->cursorSpriteId];
+910:    *x = cursorSprite->data[0];
+911:    *y = cursorSprite->data[1];
+918:	SetCursorPos(4, FILE_COUNT - 1);
+925:	SetCursorPos(3, FILE_COUNT - 1);
+930:    gSprites[sNamingScreenData->cursorSpriteId].data[4] &= ~0xFF;
+931:    gSprites[sNamingScreenData->cursorSpriteId].data[4] |= a;
+932:    StartSpriteAnim(&gSprites[sNamingScreenData->cursorSpriteId], 0);
+937:    gSprites[sNamingScreenData->cursorSpriteId].data[4] &= 0xFF;
+938:    gSprites[sNamingScreenData->cursorSpriteId].data[4] |= a << 8;
+943:    StartSpriteAnim(&gSprites[sNamingScreenData->cursorSpriteId], 1);
+948:    return gSprites[sNamingScreenData->cursorSpriteId].animEnded;
+959:    if (cursorY < FILE_COUNT - 1)
+971:    xPos = sNamingScreenData->inputCharBaseXPos - 5;
+975:    xPos = sNamingScreenData->inputCharBaseXPos;
+976:    for (i = 0; i < sNamingScreenData->template->maxChars; i++, xPos += 8)
+985://--------------------------------------------------
+987://--------------------------------------------------
+999:    sIconFunctions[sNamingScreenData->template->iconFunction]();
+1012:    rivalGfxId = GetRivalAvatarGraphicsIdByStateIdAndGender(0, sNamingScreenData->monSpeciesOrPlayerGender);
+1032:    spriteId = CreateMonIcon(sNamingScreenData->monSpeciesOrPlayerGender, SpriteCallbackDummy, 0x28, 0x1A, 0, sNamingScreenData->monPersonality, 1);
+1075:	if (sNamingScreenData->currentPage == KBPAGE_LETTERS_LOWER)
+1077:	if (sNamingScreenData->currentPage == KBPAGE_LETTERS_UPPER)
+1079:	if (sNamingScreenData->currentPage == KBPAGE_SYMBOLS)
+1104:		if (cursorY == FILE_COUNT - 1)
+1144:            sNamingScreenData->state = MAIN_STATE_MOVE_TO_OK_BUTTON;
+1146:		if (sNamingScreenData->currentPage == KBPAGE_LETTERS_UPPER && GetTextCaretPosition() == 1)
+1147:			sNamingScreenData->state = MAIN_STATE_START_PAGE_SWAP;
+1155:	if (sNamingScreenData->currentPage == KBPAGE_LETTERS_UPPER)
+1159:		sNamingScreenData->currentPage = KBPAGE_SYMBOLS;
+1168:	if (sNamingScreenData->currentPage == KBPAGE_LETTERS_LOWER)
+1172:		sNamingScreenData->currentPage = KBPAGE_LETTERS_UPPER;
+1181:	if (sNamingScreenData->currentPage == KBPAGE_SYMBOLS)
+1185:		sNamingScreenData->currentPage = KBPAGE_LETTERS_LOWER;
+1206:        sNamingScreenData->state = MAIN_STATE_6;
+1215:    sNamingScreenData->state = MAIN_STATE_START_PAGE_SWAP;
+1219://--------------------------------------------------
+1221://--------------------------------------------------
+1268:    task->tKeyboardEvent = 0;
+1273:    task->tKeyboardEvent = 0;
+1276:        task->tKeyboardEvent = KBEVENT_PRESSED_A;
+1279:        task->tKeyboardEvent = KBEVENT_PRESSED_B;
+1283:        task->tKeyboardEvent = KBEVENT_PRESSED_SELECT;
+1286:        task->tKeyboardEvent = KBEVENT_PRESSED_START;
+1295:    task->tKeyboardEvent = 0;
+1304:        -1,   //left
+1310:        -1,   //up
+1342:		cursorY = FILE_COUNT - 1;
+1343:	if (cursorY > FILE_COUNT - 1)
+1349:		if (cursorY == FILE_COUNT - 1)
+1352:            task->tKbFunctionKey = cursorX;
+1355:        else if (prevCursorY == FILE_COUNT - 1)
+1361:    if (cursorY == FILE_COUNT - 1)
+1370:            task->tKbFunctionKey = FNKEY_CASE_UPPER;
+1372:            task->tKbFunctionKey = FNKEY_CASE_LOWER;
+1374:            task->tKbFunctionKey = FNKEY_CASE_OTHER;
+1376:            task->tKbFunctionKey = FNKEY_BACK;
+1378:            task->tKbFunctionKey = FNKEY_OK;
+1383:			cursorX = COLUMN_COUNT - 1;
+1384:		if (cursorX > COLUMN_COUNT - 1)
+1396:    //if (gSaveBlock2Ptr->optionsLanguage == ENG)
+1398:		FillWindowPixelBuffer(sNamingScreenData->windows[3], PIXEL_FILL(0));
+1399:		AddTextPrinterParameterized3(sNamingScreenData->windows[3], 1, 1, 1, sNamingScreenTextColor, TEXT_SPEED_FF, sNamingScreenData->template->title);
+1401:	/*if (gSaveBlock2Ptr->optionsLanguage == SPA)
+1403:		FillWindowPixelBuffer(sNamingScreenData->windows[3], PIXEL_FILL(0));
+1404:		AddTextPrinterParameterized3(sNamingScreenData->windows[3], 1, 1, 1, sNamingScreenTextColor, TEXT_SPEED_FF, sNamingScreenData->template->titleSpa);
+1406:	CopyWindowToVram(sNamingScreenData->windows[3], COPYWIN_BOTH);
+1407:	PutWindowTilemap(sNamingScreenData->windows[3]);
+1414:    //if (gSaveBlock2Ptr->optionsLanguage == ENG)
+1416:		StringCopy(buffer, gSpeciesNames[sNamingScreenData->monSpeciesOrPlayerGender]);
+1417:		StringAppendN(buffer, sNamingScreenData->template->title, 15);
+1419:    /*if (gSaveBlock2Ptr->optionsLanguage == SPA)
+1421:		StringCopy(buffer, sNamingScreenData->template->titleSpa);
+1422:		StringAppendN(buffer, gSpeciesNames[sNamingScreenData->monSpeciesOrPlayerGender], 15);
+1425:	FillWindowPixelBuffer(sNamingScreenData->windows[3], PIXEL_FILL(0));
+1426:	AddTextPrinterParameterized3(sNamingScreenData->windows[3], 1, 1, 1, sNamingScreenTextColor, TEXT_SPEED_FF, buffer);
+1427:	CopyWindowToVram(sNamingScreenData->windows[3], COPYWIN_BOTH);
+1428:	PutWindowTilemap(sNamingScreenData->windows[3]);
+1441:    sPrintTitleFuncs[sNamingScreenData->templateNum]();
+1451:    sAddGenderIconFuncs[sNamingScreenData->template->addGenderIcon]();
+1471:    if (sNamingScreenData->monGender != MON_GENDERLESS)
+1473:        if (sNamingScreenData->monGender == MON_FEMALE)
+1478:        AddTextPrinterParameterized3(sNamingScreenData->windows[2], 2, 104, 1, sGenderColors[gender], TEXT_SPEED_FF, genderSymbol);
+1484:    return gNamingScreenChars[sNamingScreenData->currentPage][y][x];
+1491:    for (i = 0; i < sNamingScreenData->template->maxChars; i++)
+1493:        if (sNamingScreenData->textBuffer[i] == EOS)
+1496:    return sNamingScreenData->template->maxChars - 1;
+1503:    for (i = sNamingScreenData->template->maxChars - 1; i > 0; i--)
+1505:        if (sNamingScreenData->textBuffer[i] != EOS)
+1518:    sNamingScreenData->textBuffer[index] = CHAR_SPACE;
+1521:    sNamingScreenData->textBuffer[index] = EOS;
+1538:    if (GetPreviousTextCaretPosition() != sNamingScreenData->template->maxChars - 1)
+1548:    sNamingScreenData->textBuffer[index] = ch;
+1553:    // Copy from the first non-whitespace character
+1556:    for (i = 0; i < sNamingScreenData->template->maxChars; i++)
+1558:        if (sNamingScreenData->textBuffer[i] != CHAR_SPACE && sNamingScreenData->textBuffer[i] != EOS)
+1560:            StringCopyN(sNamingScreenData->destBuffer, sNamingScreenData->textBuffer, sNamingScreenData->template->maxChars + 1);
+1584:    u8 maxChars = sNamingScreenData->template->maxChars;
+1585:    u16 xpos = sNamingScreenData->inputCharBaseXPos - 0x40;
+1587:    FillWindowPixelBuffer(sNamingScreenData->windows[2], PIXEL_FILL(0));
+1591:        temp[0] = sNamingScreenData->textBuffer[i];
+1595:		AddTextPrinterParameterized3(sNamingScreenData->windows[2], 2, i * 8 + xpos + xoff, 1, sNamingScreenTextColor, TEXT_SPEED_FF, temp);
+1599:    CopyWindowToVram(sNamingScreenData->windows[2], COPYWIN_GFX);
+1600:    PutWindowTilemap(sNamingScreenData->windows[2]);
+1627:    SetGpuReg(REG_OFFSET_BG2VOFS, sNamingScreenData->bg2vOffset);
+1682://--------------------------------------------------
+1683:// Forward-declared variables
+1684://--------------------------------------------------
+1762:        .x = -8,
+1763:        .y = -12,
+1769:        .x = -8,
+1770:        .y = -4,
+1776:        .x = -8,

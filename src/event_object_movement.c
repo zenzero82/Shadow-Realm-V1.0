@@ -3430,6 +3430,25 @@ const struct ObjectEventGraphicsInfo *GetObjectEventGraphicsInfo(u16 graphicsId)
     return gObjectEventGraphicsInfoPointers[graphicsId];
 }
 
+void MakeObjectTemplateFromObjectEventGraphicsInfo(u16 graphicsId, void (*callback)(struct Sprite *), struct SpriteTemplate *spriteTemplate, const struct SubspriteTable **subspriteTables)
+{
+    const struct ObjectEventGraphicsInfo *graphicsInfo = GetObjectEventGraphicsInfo(graphicsId);
+
+    if (graphicsInfo == NULL)
+        return;
+
+    spriteTemplate->tileTag = graphicsInfo->tileTag;
+    spriteTemplate->paletteTag = graphicsInfo->paletteTag;
+    spriteTemplate->oam = graphicsInfo->oam;
+    spriteTemplate->anims = graphicsInfo->anims;
+    spriteTemplate->images = graphicsInfo->images;
+    spriteTemplate->affineAnims = graphicsInfo->affineAnims;
+    spriteTemplate->callback = callback;
+
+    if (subspriteTables != NULL)
+        *subspriteTables = graphicsInfo->subspriteTables;
+}
+
 static void SetObjectEventDynamicGraphicsId(struct ObjectEvent *objectEvent)
 {
     if (objectEvent->graphicsId >= OBJ_EVENT_GFX_VARS && objectEvent->graphicsId <= OBJ_EVENT_GFX_VAR_F)

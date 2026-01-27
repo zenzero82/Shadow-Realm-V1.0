@@ -8,13 +8,30 @@
 .set LOCALID_ZORUABALL, 4
 .set LOCALID_LEO, 5
 
+
 Oaks_Lab_MapScripts::
 	map_script MAP_SCRIPT_ON_LOAD, OaksLab_EventScript_OnLoad
+	map_script MAP_SCRIPT_ON_FRAME_TABLE, OaksLab_EventScript_OnFrame
 	.byte 0
 
 OaksLab_EventScript_OnLoad::
-	call OaksLab_EventScript_ApplyPostStarterState
-	return
+    setvar VAR_TEMP_1, 0
+    call OaksLab_EventScript_ApplyPostStarterState
+    end
+
+OaksLab_EventScript_OnFrame::
+    map_script_2 VAR_TEMP_1, 0, OaksLab_EventScript_CheckAutoIntro
+    .2byte 0
+
+OaksLab_EventScript_CheckAutoIntro::
+    setvar VAR_TEMP_1, 1
+    checkflag FLAG_OAKS_LAB_FORCE_INTRO
+    goto_if_eq OaksLab_EventScript_CheckAutoIntro_Run
+    end
+
+OaksLab_EventScript_CheckAutoIntro_Run::
+    clearflag FLAG_OAKS_LAB_FORCE_INTRO
+    goto OaksLab_EventScript_LeoIntro
 
 @ ==============================
 @ SPEAKER STRINGS (unique labels)
@@ -66,7 +83,7 @@ OaksLab_EventScript_Nia_PostStarter::
     end
 
 @ ---------------- LEO TALK SCRIPT ----------------
-@ Assign this script to Leo’s object (local id 5) in Porymap.
+@ Assign this script to Leo's object (local id 5) in Porymap.
 
 OaksLab_EventScript_Leo_Talk::
     lock
@@ -130,18 +147,51 @@ OaksLab_LeoIntro_HaveSeenRoute1:
     applymovement OBJ_EVENT_ID_PLAYER, OaksLab_Move_Player_Up6
     waitmovement 0
 
-    @ Nia faces down to address player during scene
+    @ Keep Leo/Nia facing north until Leo addresses Nia
+    turnobject LOCALID_LEO, DIR_NORTH
+    turnobject LOCALID_NIA, DIR_NORTH
+
+    playse SE_PIN
+    applymovement LOCALID_NIA, OaksLab_Move_Nia_ExclaimFaceDown
+    waitmovement 0
+
     turnobject LOCALID_NIA, DIR_SOUTH
+    turnobject LOCALID_LEO, DIR_NORTH
+
+    setspeaker OaksLab_Speaker_Leo
+    msgbox OaksLab_Text_Leo_EnterLab, MSGBOX_DEFAULT
+    closemessage
+
+    turnobject LOCALID_NIA, DIR_NORTH
 
     setspeaker OaksLab_Speaker_Nia
     msgbox OaksLab_Text_OakEmailIntro, MSGBOX_DEFAULT
     closemessage
 
+    turnobject LOCALID_NIA, DIR_SOUTH
+
     turnobject LOCALID_LEO, DIR_SOUTH
+
     setspeaker OaksLab_Speaker_Leo
-    msgbox OaksLab_Text_Leo_AfterNia, MSGBOX_DEFAULT
+    msgbox OaksLab_Text_Leo_ToPlayer, MSGBOX_DEFAULT
     closemessage
 
+    setspeaker OaksLab_Speaker_Nia
+    msgbox OaksLab_Text_Aide_PointToStarters, MSGBOX_DEFAULT
+    closemessage
+
+    setspeaker OaksLab_Speaker_Leo
+    msgbox OaksLab_Text_Leo_GrantNationalDex, MSGBOX_DEFAULT
+    closemessage
+
+    checkflag FLAG_SYS_POKEDEX_GET
+    goto_if_eq OaksLab_LeoIntro_AfterDex
+    setflag FLAG_SYS_NATIONAL_DEX
+    special EnableNationalPokedex
+    setflag FLAG_SYS_POKEDEX_GET
+    special SetUnlockedPokedexFlags
+
+OaksLab_LeoIntro_AfterDex:
     setflag FLAG_OAKS_LAB_LEO_SCENE_DONE
     setflag FLAG_HIDE_PALLET_LEO
 
@@ -171,9 +221,13 @@ OaksLab_Move_Player_Up6:
     walk_up
     step_end
 
+OaksLab_Move_Nia_ExclaimFaceDown:
+    emote_exclamation_mark
+    step_end
+
 @ ---------------- STARTER POKEBALLS ----------------
 
-@ ---------- RALTS Poké Ball ----------
+@ ---------- RALTS Poke Ball ----------
 OaksLab_EventScript_StarterBall_Ralts::
     checkflag FLAG_MET_ROUTE1_AIDE
     goto_if_eq OaksLab_StarterBall_Ralts_Ready
@@ -203,7 +257,7 @@ OaksLab_StarterBall_Ralts_Ready:
     goto_if_eq OaksLab_EventScript_ChoseStarter
     goto OaksLab_EventScript_DeclinedStarter
 
-@ ---------- HONEDGE Poké Ball ----------
+@ ---------- HONEDGE Poke Ball ----------
 OaksLab_EventScript_StarterBall_Honedge::
     checkflag FLAG_MET_ROUTE1_AIDE
     goto_if_eq OaksLab_StarterBall_Honedge_Ready
@@ -233,7 +287,7 @@ OaksLab_StarterBall_Honedge_Ready:
     goto_if_eq OaksLab_EventScript_ChoseStarter
     goto OaksLab_EventScript_DeclinedStarter
 
-@ ---------- ZORUA Poké Ball ----------
+@ ---------- ZORUA Poke Ball ----------
 OaksLab_EventScript_StarterBall_Zorua::
     checkflag FLAG_MET_ROUTE1_AIDE
     goto_if_eq OaksLab_StarterBall_Zorua_Ready
@@ -334,76 +388,86 @@ OaksLab_EventScript_SetPostStarterState::
 	checkflag FLAG_OAKS_LAB_POST_STARTER_STATE
 	goto_if_eq OaksLab_EventScript_SetPostStarterState_Done
 	setflag FLAG_OAKS_LAB_POST_STARTER_STATE
-	call OaksLab_EventScript_ApplyPostStarterState
 OaksLab_EventScript_SetPostStarterState_Done::
 	return
 
 OaksLab_EventScript_ApplyPostStarterState::
-	checkflag FLAG_OAKS_LAB_POST_STARTER_STATE
-	goto_if_eq OaksLab_EventScript_ApplyPostStarterState_Done
-	setobjectxy LOCALID_LEO, 2, 10
-	setobjectxyperm LOCALID_LEO, 2, 10
-	setobjectmovementtype LOCALID_LEO, MOVEMENT_TYPE_WANDER_AROUND
-	setobjectxy LOCALID_NIA, 7, 2
-	setobjectxyperm LOCALID_NIA, 7, 2
-	setobjectmovementtype LOCALID_NIA, MOVEMENT_TYPE_FACE_UP
-	turnobject LOCALID_NIA, DIR_NORTH
-OaksLab_EventScript_ApplyPostStarterState_Done::
-	return
-
+    checkflag FLAG_OAKS_LAB_POST_STARTER_STATE
+    goto_if_eq OaksLab_EventScript_ApplyPostStarterState_Apply
+    return
+OaksLab_EventScript_ApplyPostStarterState_Apply::
+    setobjectxy LOCALID_LEO, 2, 10
+    setobjectxyperm LOCALID_LEO, 2, 10
+    setobjectmovementtype LOCALID_LEO, MOVEMENT_TYPE_WANDER_AROUND
+    setobjectxy LOCALID_NIA, 7, 2
+    setobjectxyperm LOCALID_NIA, 7, 2
+    setobjectmovementtype LOCALID_NIA, MOVEMENT_TYPE_FACE_UP
+    turnobject LOCALID_NIA, DIR_NORTH
+    return
 @ ---------------- TEXT ----------------
 
 OaksLab_Text_FindCoworker:
-    .string "Oh, hello.\p"
-    .string "My coworker LEO went to check something\n"
-    .string "near Route 1 and has not come back yet.\p"
-    .string "He saw a report about portals on the\n"
-    .string "news and wanted to see if anything\l"
-    .string "strange was happening nearby.$"
+    .string "You're not with them, are you??\p"
+    .string "Sorry, I've been on high alert since\n"
+    .string "the Professor went missing.\p"
+    .string "Can you please find my partner LEO?\n"
+    .string "He went out to look for clues and has\l"
+    .string "been gone for quite some time.\p"
+    .string "I'm trying to see if the Professor left\n"
+    .string "any hints on his PC.$"
+OaksLab_Text_Leo_EnterLab:
+    .string "Nia! It seems that issue the Professor\n"
+    .string "has been researching has made its way\n"
+    .string "to Pallet Town!\p"
+    .string "One of those people just captured a\n"
+    .string "POKEMON and transformed it!$"
 
 OaksLab_Text_OakEmailIntro:
-    .string "So you met LEO outside?\p"
-    .string "He said a strange man used a device on\n"
-    .string "a Pokemon and it went out of control.\p"
-    .string "Before Professor OAK vanished, he\n"
-    .string "sent one final email:\p"
-    .string "Cipher is on the move.\n"
-    .string "They have learned to twist Pokemon\l"
-    .string "hearts into something unnatural.\p"
-    .string "If someone appears from the portal,\n"
-    .string "entrust them with one of my partners.$"
+    .string "Oh no! This is not good.\p"
+    .string "We may not be out of luck, though.\p"
+    .string "The Professor got an email from\n"
+    .string "a colleague. It says:\p"
+    .string "A trainer arrived through a portal.\n"
+    .string "Give them one of the POKEMON that\l"
+    .string "Oak was studying...$"
 
+OaksLab_Text_Leo_ToPlayer:
+    .string "Who did you say you were?\p"
+    .string "...Ah, I see. You don't know how you\n"
+    .string "got here, and you came through a\l"
+    .string "strange portal.\p"
+    .string "...You're the one! Please, you have to\n"
+    .string "help us!\p"
+    .string "The POKEMON the Professor was studying\n"
+    .string "are on the table.$"
 OaksLab_Text_Aide_PointToStarters:
-    .string "Those three Pokeballs on\n"
-    .string "the table each contain a partner Pokemon.\p"
-    .string "Take a look at them and choose the\n"
-    .string "one you feel drawn to.$"
-
+    .string "Leo, you should also give him a\n"
+    .string "POKEDEX.\p"
+    .string "I think the Professor will be okay\n"
+    .string "with giving it to this trainer if he\l"
+    .string "trusts him with a partner.$"
 OaksLab_Text_Leo_AfterNia:
-    .string "You heard her.\p"
-    .string "Pick a partner from the table.\p"
-    .string "It is too dangerous on Route 1 without\n"
-    .string "a Pokemon at your side.$"
-
+    .string "Now please, help us find the Professor\n"
+    .string "and stop these evil people!$"
 OaksLab_Text_Leo_PostStarter:
-    .string "Good choice.\p"
-    .string "I hope the Professor knows what he's\n"
-    .string "doing entrusting a partner to a\l"
-    .string "stranger.$"
-
+    .string "I hope the Professor was right to\n"
+    .string "entrust a POKEMON to you.\p"
+    .string "There has been so much strange activity\n"
+    .string "lately. I have trust issues...$"
 OaksLab_Text_Leo_GrantNationalDex:
-    .string "Take this National Pokédex too.\p"
-    .string "It will help you catalog every Pokemon\n"
-    .string "you encounter out there.$"
-
+    .string "Ah, yes. Good point.\p"
+    .string "Like she said, take this and use it\n"
+    .string "on your journey.\p"
+    .string "It can really help document the strange\n"
+    .string "appearance of POKEMON in this region.$"
 OaksLab_Text_Nia_PostStarter:
-    .string "The professor disappeared some time back\n"
-    .string "through a portal.\p"
-    .string "To be honest, we have no idea what is\n"
-    .string "going on.\p"
-    .string "He was researching a new type of Pokemon\n"
-    .string "transformation though...$"
-
+    .string "We don't know much about what is\n"
+    .string "happening.\p"
+    .string "We do know that Professor OAK was\n"
+    .string "studying this odd transformation and\l"
+    .string "said he was close to solving the case.\p"
+    .string "Next thing we know, he just disappeared\n"
+    .string "from the lab!$"
 OaksLab_Text_Ball_Ralts_Inspect:
     .string "Do you want to select RALTS\nas your starter?$"
 

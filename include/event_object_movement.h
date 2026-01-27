@@ -2,6 +2,7 @@
 #define GUARD_EVENT_OBJECT_MOVEMENT_H
 
 #include "constants/event_object_movement.h"
+#include "sprite.h"
 
 #if OW_POKEMON_OBJECT_EVENTS == FALSE && OW_FOLLOWERS_ENABLED == TRUE
 #error "OW_POKEMON_OBJECT_EVENTS needs to be TRUE in order for OW_FOLLOWERS_ENABLED to work."
@@ -162,6 +163,7 @@ void ObjectEventSetGraphicsId(struct ObjectEvent *objectEvent, u16 graphicsId);
 void ObjectEventTurn(struct ObjectEvent *objectEvent, u8 direction);
 void ObjectEventTurnByLocalIdAndMap(u8 localId, u8 mapNum, u8 mapGroup, u8 direction);
 const struct ObjectEventGraphicsInfo *GetObjectEventGraphicsInfo(u16 graphicsId);
+void MakeObjectTemplateFromObjectEventGraphicsInfo(u16 graphicsId, void (*callback)(struct Sprite *), struct SpriteTemplate *spriteTemplate, const struct SubspriteTable **subspriteTables);
 void SetObjectInvisibility(u8 localId, u8 mapNum, u8 mapGroup, bool8 invisible);
 void FreeAndReserveObjectSpritePalettes(void);
 u8 LoadObjectEventPalette(u16 paletteTag);

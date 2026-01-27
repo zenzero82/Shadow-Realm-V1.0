@@ -24,7 +24,7 @@
       "movement_range_y": 0,
       "trainer_type": "TRAINER_TYPE_NONE",
       "trainer_sight_or_berry_tree_id": "0",
-      "script": "PalletTown_RedsHouse_1F_EventScript_Mom",
+      "script": "PalletTown_RedsHouse_1F_EventScript_MomTalk",
       "flag": "0"
     }
   ],
@@ -52,7 +52,7 @@
       "elevation": 0,
       "var": "VAR_TEMP_0",
       "var_value": "0",
-      "script": "PalletTown_RedsHouse_1F_EventScript_Mom"
+      "script": "PalletTown_RedsHouse_1F_EventScript_MomTrigger"
     },
     {
       "type": "trigger",
@@ -61,7 +61,7 @@
       "elevation": 0,
       "var": "VAR_TEMP_0",
       "var_value": "0",
-      "script": "PalletTown_RedsHouse_1F_EventScript_Mom"
+      "script": "PalletTown_RedsHouse_1F_EventScript_MomTrigger"
     },
     {
       "type": "trigger",
@@ -70,7 +70,7 @@
       "elevation": 0,
       "var": "VAR_TEMP_0",
       "var_value": "0",
-      "script": "PalletTown_RedsHouse_1F_EventScript_Mom"
+      "script": "PalletTown_RedsHouse_1F_EventScript_MomTrigger"
     }
   ],
   "bg_events": [

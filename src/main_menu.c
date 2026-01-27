@@ -876,12 +876,14 @@ static bool8 HandleMainMenuInput(u8 taskId)
     {
         tCurrItem--;
         sCurrItemAndOptionMenuCheck = tCurrItem;
+        PlaySE(SE_SELECT);
         return TRUE;
     }
     else if (JOY_NEW(DPAD_DOWN) && tCurrItem < menuItemCount - 1)
     {
         tCurrItem++;
         sCurrItemAndOptionMenuCheck = tCurrItem;
+        PlaySE(SE_SELECT);
         return TRUE;
     }
 
@@ -1220,16 +1222,18 @@ static void LoadMonIcon(u8 anim)
     u8 spriteId;
     u32 personality;
     u16 species;
+    bool8 isShadow;
 
     LoadMonIconPalettes();
     for (i = 0; i < gPlayerPartyCount; i++)
     {
         species = GetMonData(&gPlayerParty[i], MON_DATA_SPECIES, NULL);
         personality = GetMonData(&gPlayerParty[i], MON_DATA_PERSONALITY, NULL);
+        isShadow = GetMonData(&gPlayerParty[i], MON_DATA_IS_SHADOW, NULL);
         if (anim == 0)
-            spriteId = CreateMonIcon(species, SpriteCallbackDummy, 32 * i + 40, 88, 0, personality, FALSE);
+            spriteId = CreateMonIcon(species, SpriteCallbackDummy, 32 * i + 40, 88, 0, personality, isShadow);
         else
-            spriteId = CreateMonIcon(species, SpriteCB_MonIcon, 32 * i + 40, 88, 0, personality, FALSE);
+            spriteId = CreateMonIcon(species, SpriteCB_MonIcon, 32 * i + 40, 88, 0, personality, isShadow);
         StartSpriteAnim(&gSprites[spriteId], 0);
     }
 }
@@ -2401,11 +2405,11 @@ static void Task_GenderThenName(u8 taskId)
 
             // Step 3: go straight to player naming, then into CB2_NewGame
             DoNamingScreen(
-                0,                               // 0 = player (use numeric to avoid missing macros)
+                NAMING_SCREEN_PLAYER,
                 gSaveBlock2Ptr->playerName,
-                0,                               // species (unused for player)
-                gSaveBlock2Ptr->playerGender,    // for the UI
-                0,                               // initial page
+                gSaveBlock2Ptr->playerGender,    // used for the player icon: stores the chosen gender
+                0,
+                0,
                 CB2_NewGame                      // return callback -> your existing New Game flow
             );
 
@@ -2417,8 +2421,6 @@ static void Task_GenderThenName(u8 taskId)
 #undef tWindowInitDone
 
 #undef tTimer
-
-
 
 
 
