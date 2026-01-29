@@ -28,6 +28,7 @@
 #include "item.h"
 #include "item_icon.h"
 #include "item_use.h"
+#include "party_menu.h"
 #include "event_data.h"
 #include "constants/flags.h"
 #include "test_runner.h"
@@ -92,19 +93,17 @@ void ShadowHud_SyncForBattler(u8 battler)
 // battle_interface.c (top of file, after includes)
 static bool8 IsOpponentShadowNow(u8 battler)
 {
-    u16 species = gBattleMons[battler].species;
-    if (gBattleSpritesDataPtr->battlerData[battler].transformSpecies != SPECIES_NONE)
-        species = gBattleSpritesDataPtr->battlerData[battler].transformSpecies;
-
     if (GetBattlerSide(battler) != B_SIDE_OPPONENT)
         return FALSE;
 
-#if (B_ENEMY_MON_SHADOW_STYLE >= GEN_4) && (P_GBA_STYLE_SPECIES_GFX == FALSE)
-    // Same predicate PR #4128 uses for enemy shadow floor
-    return (gSpeciesInfo[SanitizeSpeciesId(species)].suppressEnemyShadow == FALSE);
-#else
-    return (gSpeciesInfo[SanitizeSpeciesId(species)].enemyMonElevation != 0);
-#endif
+    // Shadow HUD palette should reflect the Shadow Pokémon flag, not the floor shadow style.
+    if (gBattlerPartyIndexes[battler] < PARTY_SIZE)
+    {
+        struct Pokemon *party = GetBattlerParty(battler);
+        return GetMonData(&party[gBattlerPartyIndexes[battler]], MON_DATA_IS_SHADOW);
+    }
+
+    return gBattleMons[battler].isShadow;
 }
 
 enum
@@ -1899,8 +1898,7 @@ static void UpdateNickInHealthbox(u8 healthboxSpriteId, struct Pokemon *mon)
         mon = illusionMon;
 
     StringCopy(gDisplayedStringBattle, gText_HealthboxNickname);
-    GetMonData(mon, MON_DATA_NICKNAME, nickname);
-    StringGet_Nickname(nickname);
+    GetMonNickname(mon, nickname);
     ptr = StringAppend(gDisplayedStringBattle, nickname);
 
     gender = GetMonGender(mon);

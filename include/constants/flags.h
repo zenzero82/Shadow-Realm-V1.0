@@ -74,21 +74,21 @@
 #define FLAG_UNUSED_0x032    FLAG_VIRIDIAN_FOREST_PLASMA_SCENE_DONE
 #define FLAG_HIDE_ROUTE_24_ZANDER  0x33 // hides Zander after his fight
 #define FLAG_OAKS_LAB_FORCE_INTRO    0x34 // auto-run lab intro after Leo scene
-#define FLAG_UNUSED_0x035    0x35 // Unused Flag
-#define FLAG_UNUSED_0x036    0x36 // Unused Flag
-#define FLAG_UNUSED_0x037    0x37 // Unused Flag
-#define FLAG_UNUSED_0x038    0x38 // Unused Flag
-#define FLAG_UNUSED_0x039    0x39 // Unused Flag
-#define FLAG_UNUSED_0x03A    0x3A // Unused Flag
-#define FLAG_UNUSED_0x03B    0x3B // Unused Flag
-#define FLAG_UNUSED_0x03C    0x3C // Unused Flag
-#define FLAG_UNUSED_0x03D    0x3D // Unused Flag
-#define FLAG_UNUSED_0x03E    0x3E // Unused Flag
-#define FLAG_UNUSED_0x03F    0x3F // Unused Flag
-#define FLAG_UNUSED_0x040    0x40 // Unused Flag
-#define FLAG_UNUSED_0x041    0x41 // Unused Flag
-#define FLAG_UNUSED_0x042    0x42 // Unused Flag
-#define FLAG_UNUSED_0x043    0x43 // Unused Flag
+#define FLAG_WES_HIDEOUT_TALKED_BIRCH   0x35
+#define FLAG_WES_HIDEOUT_TALKED_ELM     0x36
+#define FLAG_WES_HIDEOUT_TALKED_KUKUI   0x37
+#define FLAG_WES_HIDEOUT_TALKED_SYCAMORE 0x38
+#define FLAG_WES_HIDEOUT_TALKED_MAGNOLIA 0x39
+#define FLAG_WES_HIDEOUT_TALKED_ROWAN   0x3A
+#define FLAG_WES_HIDEOUT_TALKED_JUNIPER 0x3B
+#define FLAG_WES_HIDEOUT_TEAM_BRIEFED   0x3C
+#define FLAG_CERULEAN_MISTY_MICHAEL_SCENE_DONE 0x3D
+#define FLAG_ROUTE_24_ZANDER_DEFEATED 0x3E // Zander defeated on Route 24
+#define FLAG_HIDE_ROUTE_25_MICHAEL 0x3F // Hide Michael on Route 25
+#define FLAG_HIDE_ROUTE_25_SYLVEON 0x40 // Hide Sylveon on Route 25
+#define FLAG_HIDE_CERULEAN_MISTY   0x41 // Hide Misty in Cerulean City
+#define FLAG_HIDE_CERULEAN_MICHAEL 0x42 // Hide Michael in Cerulean City
+#define FLAG_ROUTE_25_MICHAEL_INTRO_DONE 0x43 // Route 25 Michael intro done
 #define FLAG_UNUSED_0x044    0x44 // Unused Flag
 #define FLAG_UNUSED_0x045    0x45 // Unused Flag
 #define FLAG_UNUSED_0x046    0x46 // Unused Flag
@@ -1232,14 +1232,14 @@
 #define FLAG_ITEM_SAFARI_ZONE_SOUTH_EAST_BIG_PEARL                  0x492
 
 
-#define FLAG_UNUSED_0x497                                           0x497 // Unused Flag
-#define FLAG_UNUSED_0x498                                           0x498 // Unused Flag
-#define FLAG_UNUSED_0x499                                           0x499 // Unused Flag
-#define FLAG_UNUSED_0x49A                                           0x49A // Unused Flag
-#define FLAG_UNUSED_0x49B                                           0x49B // Unused Flag
-#define FLAG_UNUSED_0x49C                                           0x49C // Unused Flag
-#define FLAG_UNUSED_0x49D                                           0x49D // Unused Flag
-#define FLAG_UNUSED_0x49E                                           0x49E // Unused Flag
+#define FLAG_ITEM_VIRIDIAN_FOREST_POTION                            0x497
+#define FLAG_ITEM_VIRIDIAN_FOREST_ESCAPE_ROPE                       0x498
+#define FLAG_ITEM_VIRIDIAN_FOREST_TIME_FLUTE                        0x499
+#define FLAG_ITEM_VIRIDIAN_FOREST_PARALYZE_HEAL                     0x49A
+#define FLAG_ITEM_VIRIDIAN_FOREST_POKE_BALL                         0x49B
+#define FLAG_ITEM_VIRIDIAN_FOREST_ANTIDOTE                          0x49C
+#define FLAG_HIDE_PEWTER_GYM_BROCK_BALL                             0x49D
+#define FLAG_HIDE_PEWTER_GYM_BROCK_CROAGUNK                         0x49E
 #define FLAG_UNUSED_0x49F                                           0x49F // Unused Flag
 #define FLAG_UNUSED_0x4A0                                           0x4A0 // Unused Flag
 #define FLAG_UNUSED_0x4A1                                           0x4A1 // Unused Flag
@@ -1356,7 +1356,7 @@
 #define FLAG_SYS_POKEMON_GET                         (SYSTEM_FLAGS + 0x0) // FLAG_0x860
 #define FLAG_SYS_POKEDEX_GET                         (SYSTEM_FLAGS + 0x1)
 #define FLAG_SYS_POKENAV_GET                         (SYSTEM_FLAGS + 0x2)
-#define FLAG_UNUSED_0x863                            (SYSTEM_FLAGS + 0x3) // Unused Flag
+#define FLAG_SYS_DEFAULT_HEAL_SET                  (SYSTEM_FLAGS + 0x3)
 #define FLAG_SYS_GAME_CLEAR                          (SYSTEM_FLAGS + 0x4)
 #define FLAG_SYS_CHAT_USED                           (SYSTEM_FLAGS + 0x5)
 #define FLAG_UNLOCKED_TRENDY_SAYINGS                 (SYSTEM_FLAGS + 0x6)

@@ -2421,6 +2421,12 @@ extern const u8 gText_YourName[];
 extern const u8 gText_BoxName[];
 extern const u8 gText_PkmnsNickname[];
 extern const u8 gText_TellHimTheWords[];
+extern const u8 gText_RivalsName[];
+extern const u8 gText_AlphabetUpperLower[];
+extern const u8 gText_MonSentToBoxInSomeonesPC[];
+extern const u8 gText_MonSentToBoxInBillsPC[];
+extern const u8 gText_MonSentToBoxSomeonesBoxFull[];
+extern const u8 gText_MonSentToBoxBillsBoxFull[];
 
 // Exp. Share
 extern const u8 gText_ExpShareOn[];
@@ -2445,4 +2451,3 @@ extern const u8 gText_Rename[]; // change nickname from summary screen
 extern const u8 gText_CannotSendMonToBoxHM[];
 
 #endif // GUARD_STRINGS_H
-

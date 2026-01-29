@@ -640,7 +640,7 @@ ViridianCity_Text_GymGrunt_After:
     .string "The boss has no time\n"
     .string "for weaklings.\p"
     .string "Come back when this city actually belongs\n"
-    .string "to the League again... if that ever\n"
+    .string "to the League again... if that ever\l"
     .string "happens.$"
 
 ViridianCity_Text_Gonzap_Intro:

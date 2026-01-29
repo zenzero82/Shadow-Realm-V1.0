@@ -455,10 +455,13 @@
 #define OBJ_EVENT_GFX_NASCOUR          439
 #define OBJ_EVENT_GFX_SNAGEM_GRUNT     440
 #define OBJ_EVENT_GFX_VENUS            441
+#define OBJ_EVENT_GFX_ASH              442
+#define OBJ_EVENT_GFX_IRONMASK         443
+#define OBJ_EVENT_GFX_MIRROR_B         444
 // NOTE: The maximum amount of object events has been expanded from 255 to 65535.
 // Since dynamic graphics ids still require at least 16 free values, the actual limit
 // is 65519, but even considering follower Pokémon, this should be more than enough :)
-#define NUM_OBJ_EVENT_GFX                                               443
+#define NUM_OBJ_EVENT_GFX                                               446
 
 
 // These are dynamic object gfx ids.
@@ -735,6 +738,7 @@
 #define OBJ_EVENT_PAL_TAG_RYOKU_GEN5           0x1258
 #define OBJ_EVENT_PAL_TAG_ZINZOLIN_GEN5        0x1259
 #define OBJ_EVENT_PAL_TAG_JUNIPER_GEN5         0x1941
+#define OBJ_EVENT_PAL_TAG_PROF_BIRCH           0x1942
 
 //Kalos (Gen 6)
 #define OBJ_EVENT_PAL_TAG_LYSANDER_GEN6     0x192A
@@ -789,20 +793,23 @@
 #define OBJ_EVENT_PAL_TAG_PENNY_GEN9               0x1928
 #define OBJ_EVENT_PAL_TAG_GEETA_GEN9               0x1929
 //XD(Orre)
-#define OBJ_EVENT_PAL_TAG_WES                     0x1139   
-#define OBJ_EVENT_PAL_TAG_CIPHER_PEON_M           0x1140
-#define OBJ_EVENT_PAL_TAG_ARDOS             0x1141
-#define OBJ_EVENT_PAL_TAG_DAKIM             0x1142
-#define OBJ_EVENT_PAL_TAG_EIN               0x1143
-#define OBJ_EVENT_PAL_TAG_ELDES             0x1144
-#define OBJ_EVENT_PAL_TAG_EVICE             0x1145
-#define OBJ_EVENT_PAL_TAG_GONZAP            0x1146
-#define OBJ_EVENT_PAL_TAG_GREEVIL           0x1147
-#define OBJ_EVENT_PAL_TAG_LOVRINA           0x1148
-#define OBJ_EVENT_PAL_TAG_MICHAEL           0x1149
-#define OBJ_EVENT_PAL_TAG_NASCOUR           0x114A
-#define OBJ_EVENT_PAL_TAG_SNAGEM_GRUNT      0x114B
-#define OBJ_EVENT_PAL_TAG_VENUS             0x114C
+#define OBJ_EVENT_PAL_TAG_WES                     0x1A00
+#define OBJ_EVENT_PAL_TAG_CIPHER_PEON_M           0x1A01
+#define OBJ_EVENT_PAL_TAG_ARDOS                   0x1A02
+#define OBJ_EVENT_PAL_TAG_DAKIM                   0x1A03
+#define OBJ_EVENT_PAL_TAG_EIN                     0x1A04
+#define OBJ_EVENT_PAL_TAG_ELDES                   0x1A05
+#define OBJ_EVENT_PAL_TAG_EVICE                   0x1A06
+#define OBJ_EVENT_PAL_TAG_GONZAP                  0x1A07
+#define OBJ_EVENT_PAL_TAG_GREEVIL                 0x1A08
+#define OBJ_EVENT_PAL_TAG_LOVRINA                 0x1A09
+#define OBJ_EVENT_PAL_TAG_MICHAEL                 0x1A0A
+#define OBJ_EVENT_PAL_TAG_NASCOUR                 0x1A0B
+#define OBJ_EVENT_PAL_TAG_SNAGEM_GRUNT            0x1A0C
+#define OBJ_EVENT_PAL_TAG_VENUS                   0x1A0D
+#define OBJ_EVENT_PAL_TAG_ASH                     0x1A0E
+#define OBJ_EVENT_PAL_TAG_IRONMASK                0x1A0F
+#define OBJ_EVENT_PAL_TAG_MIRROR_B                0x1A10
 
 #if OW_FOLLOWERS_POKEBALLS
 // Vanilla
@@ -845,6 +852,7 @@
 #define OBJ_EVENT_PAL_TAG_LIGHT_2                 0x8002
 #define OBJ_EVENT_PAL_TAG_EMOTES                  0x8003
 #define OBJ_EVENT_PAL_TAG_NEON_LIGHT              0x8004
+#define OBJ_EVENT_PAL_TAG_EMOTE_ICONS             0x8005
 // Not a real OW palette tag; used for the white flash applied to followers
 #define OBJ_EVENT_PAL_TAG_WHITE                   (OBJ_EVENT_PAL_TAG_NONE - 1)
 #define OBJ_EVENT_PAL_TAG_NONE                    0x11FF

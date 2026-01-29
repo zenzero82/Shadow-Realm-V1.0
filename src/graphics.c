@@ -2031,32 +2031,29 @@ const u32 gStorageSystemPartyMenu_Tilemap[] = INCBIN_U32("graphics/pokemon_stora
 
 // naming screen
 
-const u16 gNamingScreenMenu_Pal[6][16] =
+const u8 gNamingScreenCursorTiles[]            = INCBIN_U8("graphics/naming_screen/cursor.4bpp");
+const u8 gNamingScreenActiveCursorSmallTiles[] = INCBIN_U8("graphics/naming_screen/active_cursor_small.4bpp");
+const u8 gNamingScreenActiveCursorBigTiles[]   = INCBIN_U8("graphics/naming_screen/active_cursor_big.4bpp");
+const u8 gNamingScreenUnderscoreTiles[]        = INCBIN_U8("graphics/naming_screen/underscore.4bpp");
+const u32 gNamingScreenBGTiles[]               = INCBIN_U32("graphics/naming_screen/tiles.4bpp.lz");
+const u32 gNamingScreenBGMap[]                 = INCBIN_U32("graphics/naming_screen/bg.bin.lz");
+const u32 gNamingScreenButtonsEng[]            = INCBIN_U32("graphics/naming_screen/buttons_eng.bin.lz");
+const u32 gNamingScreenCharUpperMap[]          = INCBIN_U32("graphics/naming_screen/letters_uppers.bin.lz");
+const u32 gNamingScreenCharLowerMap[]          = INCBIN_U32("graphics/naming_screen/letters_lowers.bin.lz");
+const u32 gNamingScreenCharOtherMap[]          = INCBIN_U32("graphics/naming_screen/symbols.bin.lz");
+const u16 gNamingScreenTextPal[]               = INCBIN_U16("graphics/naming_screen/text.gbapal");
+const u16 gNamingScreenPal[]                   = INCBIN_U16("graphics/naming_screen/bg.gbapal");
+const u16 gNamingScreenSelPal[]                = INCBIN_U16("graphics/naming_screen/button_selected.gbapal");
+const u16 gSpriteImage_PcIcon0[]               = INCBIN_U16("graphics/naming_screen/pc_icon/0.4bpp");
+const u16 gSpriteImage_PcIcon1[]               = INCBIN_U16("graphics/naming_screen/pc_icon/1.4bpp");
+const u16 gNamingScreenPalettes[][16] =
 {
-    INCBIN_U16("graphics/naming_screen/menu.gbapal"),
-    INCBIN_U16("graphics/naming_screen/page_swap_upper.gbapal"),
-    INCBIN_U16("graphics/naming_screen/page_swap_lower.gbapal"),
-    INCBIN_U16("graphics/naming_screen/page_swap_others.gbapal"),
-    INCBIN_U16("graphics/naming_screen/buttons.gbapal"),
+    INCBIN_U16("graphics/naming_screen/pc_icon/0.gbapal"),
+    INCBIN_U16("graphics/naming_screen/underscore.gbapal"),
     INCBIN_U16("graphics/naming_screen/cursor.gbapal"),
 };
-const u32 gNamingScreenMenu_Gfx[]                = INCBIN_U32("graphics/naming_screen/menu.4bpp.lz");
-const u32 gNamingScreenPageSwapFrame_Gfx[]       = INCBIN_U32("graphics/naming_screen/page_swap_frame.4bpp");
-const u32 gNamingScreenBackButton_Gfx[]          = INCBIN_U32("graphics/naming_screen/back_button.4bpp");
-const u32 gNamingScreenOKButton_Gfx[]            = INCBIN_U32("graphics/naming_screen/ok_button.4bpp");
-const u32 gNamingScreenPageSwapUpper_Gfx[]       = INCBIN_U32("graphics/naming_screen/page_swap_upper.4bpp");
-const u32 gNamingScreenPageSwapLower_Gfx[]       = INCBIN_U32("graphics/naming_screen/page_swap_lower.4bpp");
-const u32 gNamingScreenPageSwapOthers_Gfx[]      = INCBIN_U32("graphics/naming_screen/page_swap_others.4bpp");
-const u32 gNamingScreenCursor_Gfx[]              = INCBIN_U32("graphics/naming_screen/cursor.4bpp");
-const u32 gNamingScreenCursorSquished_Gfx[]      = INCBIN_U32("graphics/naming_screen/cursor_squished.4bpp");
-const u32 gNamingScreenCursorFilled_Gfx[]        = INCBIN_U32("graphics/naming_screen/cursor_filled.4bpp");
-const u32 gNamingScreenPageSwapButton_Gfx[]      = INCBIN_U32("graphics/naming_screen/page_swap_button.4bpp");
-const u32 gNamingScreenInputArrow_Gfx[]          = INCBIN_U32("graphics/naming_screen/input_arrow.4bpp");
-const u32 gNamingScreenUnderscore_Gfx[]          = INCBIN_U32("graphics/naming_screen/underscore.4bpp");
-const u32 gNamingScreenBackground_Tilemap[]      = INCBIN_U32("graphics/naming_screen/background.bin.lz");
-const u32 gNamingScreenKeyboardUpper_Tilemap[]   = INCBIN_U32("graphics/naming_screen/keyboard_upper.bin.lz");
-const u32 gNamingScreenKeyboardLower_Tilemap[]   = INCBIN_U32("graphics/naming_screen/keyboard_lower.bin.lz");
-const u32 gNamingScreenKeyboardSymbols_Tilemap[] = INCBIN_U32("graphics/naming_screen/keyboard_symbols.bin.lz");
+const u16 gRivalSpriteTiles[] = INCBIN_U16("graphics/interface/naming_screen_83E1980.4bpp");
+const u16 gRivalSpritePalette[] = INCBIN_U16("graphics/interface/naming_screen_83E1980.gbapal");
 
 // union room chat
 const u16 gUnionRoomChat_Background_Pal[] = INCBIN_U16("graphics/union_room_chat/background.gbapal");
@@ -2179,4 +2176,3 @@ const u32 gBattleIcons_Gfx1[] = INCBIN_U32("graphics/types/battle_icons1.4bpp.lz
 const u32 gBattleIcons_Gfx2[] = INCBIN_U32("graphics/types/battle_icons2.4bpp.lz");
 const u16 gBattleIcons_Pal1[] = INCBIN_U16("graphics/types/battle_icons1.gbapal");
 const u16 gBattleIcons_Pal2[] = INCBIN_U16("graphics/types/battle_icons2.gbapal");
-

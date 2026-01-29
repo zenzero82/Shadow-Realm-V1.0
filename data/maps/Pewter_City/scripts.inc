@@ -291,9 +291,9 @@ PewterCity_Text_BrockWes_PrePlayer_Wes:
     .string "Cipher, the trail goes cold.$"
 
 PewterCity_Text_BrockWes_PrePlayer_Brock2:
-    .string "If Cipher and Rocket are working together...\p"
-    .string "Then innocent Pokemon are the ones who\n"
-    .string "pay the price.$"
+    .string "If Cipher and Rocket are working\n"
+    .string "together then innocent Pokemon are\l"
+    .string "the ones who pay the price.$"
 
 PewterCity_Text_Wes_SeePlayer:
     .string "Hm?$"

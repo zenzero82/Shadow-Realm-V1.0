@@ -128,7 +128,7 @@ static s16 SeekToNextMonInBox(struct BoxPokemon *boxMons, u8 curIndex, u8 maxInd
 static s8 AdvanceMultiBattleMonIndex(s8 direction);
 static void ShowSprite(struct Pokemon *mon);
 static void EvIvPrintText(struct Pokemon *mon);
-static void ShowPokemonPic2(u16 species, bool8 isShiny, u32 personality, u8 x, u8 y);
+static void ShowPokemonPic2(u16 species, bool8 isShiny, u32 personality, bool8 isShadow, u8 x, u8 y);
 static void Task_ScriptShowMonPic(u8 taskId);
 static void HidePokemonPic2(u8 taskId);
 
@@ -799,6 +799,7 @@ static void ShowSprite(struct Pokemon *mon)
     u8 isEgg    = GetMonData(mon, MON_DATA_IS_EGG, NULL);
     u32 personality = GetMonData(mon, MON_DATA_PERSONALITY, NULL);
     bool8 isShiny = IsMonShiny(mon);
+    bool8 isShadow = GetMonData(mon, MON_DATA_IS_SHADOW, NULL);
 
     //imprime el sprite del pokémon, si es un huevo no suena grito.
     //Print the sprite of the pokémon, if it is an egg it does not sound a scream.
@@ -806,12 +807,12 @@ static void ShowSprite(struct Pokemon *mon)
     {
         if (ShouldIgnoreDeoxysForm(3, gEvIv->cursorPos))
             species = SPECIES_DEOXYS;
-        ShowPokemonPic2(species, isShiny, personality, PICMON_X, PICMON_Y);
+        ShowPokemonPic2(species, isShiny, personality, isShadow, PICMON_X, PICMON_Y);
         PlayCry_Normal(species, 0);
     }
     else
     {
-        ShowPokemonPic2(SPECIES_EGG, FALSE, 0, PICMON_X, PICMON_Y);
+        ShowPokemonPic2(SPECIES_EGG, FALSE, 0, FALSE, PICMON_X, PICMON_Y);
     }
 }
 
@@ -826,21 +827,21 @@ void HidePokemonPic2(u8 taskId)
     task->tState = 2;
 }
 
-static u8 CreateMonSprite_Field(u16 species, bool8 isShiny, u32 personality, s16 x, s16 y, u8 subpriority)
+static u8 CreateMonSprite_Field(u16 species, bool8 isShiny, u32 personality, bool8 isShadow, s16 x, s16 y, u8 subpriority)
 {
     (void)subpriority;
-    u16 spriteId = CreateMonPicSprite(species, isShiny, personality, TRUE, x, y, 0, TAG_NONE);
+    u16 spriteId = CreateMonPicSprite_ShadowAware(species, isShiny, personality, TRUE, x, y, 0, TAG_NONE, isShadow);
     if (spriteId == 0xFFFF)
         return MAX_SPRITES;
     else
         return spriteId;
 }
 
-static void ShowPokemonPic2(u16 species, bool8 isShiny, u32 personality, u8 x, u8 y)
+static void ShowPokemonPic2(u16 species, bool8 isShiny, u32 personality, bool8 isShadow, u8 x, u8 y)
 {
     u8 spriteId;
 
-    spriteId = CreateMonSprite_Field(species, isShiny, personality, 8 * x + 40, 8 * y + 40, FALSE);
+    spriteId = CreateMonSprite_Field(species, isShiny, personality, isShadow, 8 * x + 40, 8 * y + 40, FALSE);
     gEvIv->spriteTaskId = CreateTask(Task_ScriptShowMonPic, 80);
 
     gSprites[spriteId].hFlip = SPRITE_VIEW_DIRECTION;

@@ -44,15 +44,6 @@
 #include "trainer_see.h"
 #include "trainer_hill.h"
 
-#if OW_POKEMON_OBJECT_EVENTS
-extern const u32 gObjectEventPic_PikachuShadow[];
-#if OW_PKMN_OBJECTS_SHARE_PALETTES == FALSE
-extern const u16 gOverworldPalette_PikachuShadow[];
-#endif
-#if P_GENDER_DIFFERENCES
-extern const u32 gObjectEventPic_PikachuFShadow[];
-#endif
-#endif
 #include "util.h"
 #include "wild_encounter.h"
 #include "constants/event_object_movement.h"
@@ -72,6 +63,12 @@ extern const u32 gObjectEventPic_PikachuFShadow[];
 #include "constants/trainer_types.h"
 #include "constants/union_room.h"
 #include "constants/weather.h"
+
+extern const u8 gText_ShadowFollowerClosedOff[];
+extern const u8 gText_ShadowFollowerStartingHappier[];
+extern const u8 gText_ShadowFollowerShowingEmotion[];
+extern const u8 gText_ShadowFollowerReadyCommand[];
+extern const u8 gText_ShadowFollowerOpenHeart[];
 
 #define SPECIAL_LOCALIDS_START (min(LOCALID_CAMERA, \
                                 min(LOCALID_PLAYER, \
@@ -702,6 +699,7 @@ static const struct SpritePalette sObjectEventSpritePalettes[] = {
     {gObjectEventPal_RyokuGen5,           OBJ_EVENT_PAL_TAG_RYOKU_GEN5},
     {gObjectEventPal_ZinzolinGen5,        OBJ_EVENT_PAL_TAG_ZINZOLIN_GEN5},
     {gObjectEventPal_JuniperGen5,        OBJ_EVENT_PAL_TAG_JUNIPER_GEN5},
+    {gObjectEventPal_ProfBirch,          OBJ_EVENT_PAL_TAG_PROF_BIRCH},
     {gObjectEventPal_LysanderGen6, OBJ_EVENT_PAL_TAG_LYSANDER_GEN6},
     {gObjectEventPal_AlianaGen6, OBJ_EVENT_PAL_TAG_ALIANA_GEN6},
     {gObjectEventPal_AzGen6, OBJ_EVENT_PAL_TAG_AZ_GEN6},
@@ -761,6 +759,9 @@ static const struct SpritePalette sObjectEventSpritePalettes[] = {
     {gObjectEventPal_Nascour,                OBJ_EVENT_PAL_TAG_NASCOUR},
     {gObjectEventPal_SnagemGrunt,            OBJ_EVENT_PAL_TAG_SNAGEM_GRUNT},
     {gObjectEventPal_Venus,                  OBJ_EVENT_PAL_TAG_VENUS},
+    {gObjectEventPal_Ash,                    OBJ_EVENT_PAL_TAG_ASH},
+    {gObjectEventPal_Ironmask,               OBJ_EVENT_PAL_TAG_IRONMASK},
+    {gObjectEventPal_MirrorB,                OBJ_EVENT_PAL_TAG_MIRROR_B},
 
 #if OW_FOLLOWERS_POKEBALLS
     {gObjectEventPal_MasterBall,            OBJ_EVENT_PAL_TAG_BALL_MASTER},
@@ -798,6 +799,7 @@ static const struct SpritePalette sObjectEventSpritePalettes[] = {
     {gObjectEventPaletteLight,              OBJ_EVENT_PAL_TAG_LIGHT},
     {gObjectEventPaletteLight2,             OBJ_EVENT_PAL_TAG_LIGHT_2},
     {gObjectEventPaletteEmotes,             OBJ_EVENT_PAL_TAG_EMOTES},
+    {gObjectEventPaletteEmoteIcons,         OBJ_EVENT_PAL_TAG_EMOTE_ICONS},
     {gObjectEventPaletteNeonLight,          OBJ_EVENT_PAL_TAG_NEON_LIGHT},
 #ifdef BUGFIX
     {NULL,                                  OBJ_EVENT_PAL_TAG_NONE},
@@ -2765,6 +2767,48 @@ void GetFollowerAction(struct ScriptContext *ctx) // Essentially a big switch fo
     // Set the script to the very end; we'll be calling another script dynamically
     ScriptJump(ctx, EventScript_FollowerEnd);
     species = GetMonData(mon, MON_DATA_SPECIES);
+    if (GetMonData(mon, MON_DATA_IS_SHADOW))
+    {
+        u16 heartMax = GetMonHeartMax(mon);
+        if (heartMax != 0)
+        {
+            u16 heartVal = GetMonHeartValue(mon);
+            u8 section = GetHeartGaugeSection(heartVal, heartMax);
+            const u8 *text = gText_ShadowFollowerClosedOff;
+            u8 emotion = FOLLOWER_EMOTION_ANGRY;
+
+            switch (section)
+            {
+            case HEART_GAUGE_FULL:
+                text = gText_ShadowFollowerClosedOff;
+                emotion = FOLLOWER_EMOTION_ANGRY;
+                break;
+            case HEART_SECTION_4:
+                text = gText_ShadowFollowerStartingHappier;
+                emotion = FOLLOWER_EMOTION_UPSET;
+                break;
+            case HEART_SECTION_3:
+                text = gText_ShadowFollowerShowingEmotion;
+                emotion = FOLLOWER_EMOTION_PENSIVE;
+                break;
+            case HEART_SECTION_2:
+            case HEART_SECTION_1:
+                text = gText_ShadowFollowerReadyCommand;
+                emotion = FOLLOWER_EMOTION_HAPPY;
+                break;
+            case HEART_GAUGE_EMPTY:
+            default:
+                text = gText_ShadowFollowerOpenHeart;
+                emotion = FOLLOWER_EMOTION_LOVE;
+                break;
+            }
+
+            ObjectEventEmote(objEvent, emotion);
+            ctx->data[0] = (u32) text;
+            ScriptCall(ctx, EventScript_FollowerGeneric);
+            return;
+        }
+    }
     multi = GetMonData(mon, MON_DATA_FRIENDSHIP);
     if (multi > 80)
     {

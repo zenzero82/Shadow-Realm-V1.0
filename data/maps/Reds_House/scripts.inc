@@ -56,7 +56,9 @@ PalletTown_RedsHouse_1F_EventScript_MomSpeech::
 	return
 
 PalletTown_RedsHouse_1F_EventScript_TV::
+	playbgm MUS_NEWSORRE, FALSE
 	msgbox RedsHouse_Text_TV, MSGBOX_SIGN
+	fadedefaultbgm
 	end
 
 RedsHouse_Move_Mom_ExclaimFaceDown:

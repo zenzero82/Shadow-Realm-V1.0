@@ -252,6 +252,14 @@ void HandleLoadSpecialPokePic(bool32 isFrontPic, void *dest, s32 species, u32 pe
     LoadSpecialPokePic(dest, species, personality, isFrontPic);
 }
 
+static u32 GetLz77UncompressedSize(const u32 *src)
+{
+    const u8 *bytes = (const u8 *)src;
+    if (bytes[0] != 0x10)
+        return 0;
+    return (u32)bytes[1] | ((u32)bytes[2] << 8) | ((u32)bytes[3] << 16);
+}
+
 // ===== Shadow graphics override (opt-in) =====
 // This swaps graphics for Shadow Pokémon (MON_DATA_IS_SHADOW) without turning
 // them into forms/species. Call sites that should keep normal graphics (e.g.
@@ -274,6 +282,12 @@ void LoadSpecialPokePic_ShadowAware(void *dest, s32 species, u32 personality, bo
     if (src != NULL)
     {
         DecompressDataWithHeaderWram(src, dest);
+        if (isFrontPic)
+        {
+            u32 size = GetLz77UncompressedSize(src);
+            if (size == MON_PIC_SIZE && MAX_MON_PIC_FRAMES > 1)
+                memcpy((u8 *)dest + MON_PIC_SIZE, dest, MON_PIC_SIZE);
+        }
         if (species == SPECIES_SPINDA && isFrontPic)
         {
             DrawSpindaSpots(personality, dest, FALSE);

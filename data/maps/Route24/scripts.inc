@@ -1,5 +1,23 @@
 Route24_MapScripts::
+	map_script MAP_SCRIPT_ON_TRANSITION, Route24_EventScript_SetZanderVisibility
 	.byte 0
+
+Route24_EventScript_SetZanderVisibility::
+	setvar VAR_TEMP_0, 1
+	checkflag FLAG_ROUTE_24_ZANDER_DEFEATED
+	goto_if_eq Route24_EventScript_SetZanderVisibility_Done
+	checkflag FLAG_HAS_SNAG_MACHINE
+	goto_if_eq Route24_EventScript_ShowZander
+	setflag FLAG_HIDE_ROUTE_24_ZANDER
+	end
+
+Route24_EventScript_ShowZander::
+	clearflag FLAG_HIDE_ROUTE_24_ZANDER
+	end
+
+Route24_EventScript_SetZanderVisibility_Done::
+	setflag FLAG_HIDE_ROUTE_24_ZANDER
+	end
 
 Route24_Speaker_Zander:
 	.string "Zander$"
@@ -20,6 +38,7 @@ Route24_EventScript_Zander::
 Route24_EventScript_Zander_AfterBattle::
 	msgbox Route24_Text_Zander_PostBattle, MSGBOX_DEFAULT
 	closemessage
+	setflag FLAG_ROUTE_24_ZANDER_DEFEATED
 	setflag FLAG_HIDE_ROUTE_24_ZANDER
 	removeobject 2
 	releaseall
@@ -33,20 +52,23 @@ Route24_EventScript_Zander_Done::
 @ ======================
 
 Route24_Text_Zander_Intro:
-	.string "You look sharp, but you still smell like a rookie.\p"
-	.string "Team Rocket brought a Shadow POKEMON up to these hills.\p"
-	.string "Defeat me and you earn the first real shot to snag it.\p"
-	.string "This is the only window before we lock it away.$"
+	.string "You look sharp, but you still smell\n"
+	.string "like a rookie.\p"
+	.string "Team Rocket brought a Shadow POKEMON\n"
+	.string "up to these hills.\p"
+	.string "Defeat me and you earn the first real\n"
+	.string "shot to snag it.\p"
+	.string "This is the only window before\n"
+	.string "we lock it away.$"
 
 Route24_Text_Zander_BattleCue:
 	.string "We don't hand our Shadow POKEMON to amateurs!\p"
 	.string "Take it, {PLAYER}!$"
 
 Route24_Text_Zander_Defeated:
-	.string "You beat me, but that Shadow POKEMON won't leave our side yet.\p"
+	.string "You beat me, but Shadow POKEMON\n"
+	.string "won't leave our side yet.\p"
 	.string "You're stepping into deep water, kid.$"
 
 Route24_Text_Zander_PostBattle:
-	.string "My boss is going to be furious.\p"
-	.string "You just unlocked a chance to snag that Shadow POKEMON.\p"
-	.string "Keep the Snag Machine ready and don't let it vanish.$"
+	.string "My boss is going to be furious!$"

@@ -1861,3 +1861,7 @@ gText_ShadowPurifyMultipleReady::
 	.include "data/maps/WesHideout_Entrance/scripts.inc"
 
 	.include "data/maps/WesHideout_Underground/scripts.inc"
+
+	.include "data/maps/Mirorb_Lair/scripts.inc"
+
+	.include "data/maps/Shadow_Realm/scripts.inc"

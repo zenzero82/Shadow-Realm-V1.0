@@ -48,7 +48,7 @@ for png in png_files:
 
     rel_dir = str(png.parent.relative_to(REPO_ROOT))
     extra_opts = []
-    if png.name == "overworld.png":
+    if png.name in ("overworld.png", "overworldf.png"):
         for prefix, opts in SPECIAL_SPRITESHEET_OPTIONS.items():
             if rel_dir.startswith(prefix):
                 extra_opts = opts

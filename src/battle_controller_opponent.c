@@ -403,20 +403,10 @@ static void SwitchIn_ShowHealthbox(u32 battler)
         // Ensure the appropriate shader palette is loaded again for the new Pokémon
         ShdwLoadHealthboxPalette(battler);
 
-        // Choose & apply the correct HUD palette now
+        // Choose & apply the correct HUD palette now (Shadow Pokémon flag, not floor shadow style)
         {
-            u16 species = gBattleMons[battler].species;
-            if (gBattleSpritesDataPtr->battlerData[battler].transformSpecies != SPECIES_NONE)
-                species = gBattleSpritesDataPtr->battlerData[battler].transformSpecies;
-
-        #if (B_ENEMY_MON_SHADOW_STYLE >= GEN_4) && (P_GBA_STYLE_SPECIES_GFX == FALSE)
-            const bool8 isShadow = (GetBattlerSide(battler) == B_SIDE_OPPONENT)
-                                && (gSpeciesInfo[SanitizeSpeciesId(species)].suppressEnemyShadow == FALSE);
-        #else
-            const bool8 isShadow = (GetBattlerSide(battler) == B_SIDE_OPPONENT)
-                                && (gSpeciesInfo[SanitizeSpeciesId(species)].enemyMonElevation != 0);
-        #endif
-
+            struct Pokemon *party = GetBattlerParty(battler);
+            const bool8 isShadow = GetMonData(&party[gBattlerPartyIndexes[battler]], MON_DATA_IS_SHADOW);
             BattleHud_ApplyHealthboxPalette(battler, isShadow);
         }
 

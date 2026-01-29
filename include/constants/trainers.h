@@ -194,7 +194,16 @@
 #define TRAINER_PIC_LOOKER_GEN5          161
 #define TRAINER_PIC_ZINZOLIN_GEN5        162
 
-#define TRAINER_PIC_COUNT                 163
+#define TRAINER_PIC_WES                  163
+#define TRAINER_PIC_EVICE                164
+#define TRAINER_PIC_GONZAP               165
+#define TRAINER_PIC_SNAGEM               166
+#define TRAINER_PIC_ASH                  167
+#define TRAINER_PIC_EIN                  168
+#define TRAINER_PIC_LOVRINA              169
+#define TRAINER_PIC_MIRROR_B             170
+
+#define TRAINER_PIC_COUNT                 171
 
 // The player back pics are assumed to alternate according to the gender values (MALE/FEMALE)
 #define TRAINER_BACK_PIC_BRENDAN                0
@@ -459,8 +468,9 @@
 #define TRAINER_CLASS_PSYCHIC_M      0x53
 #define TRAINER_CLASS_TEAM_SNAGEM    0x54
 #define TRAINER_CLASS_KANTO_LEADER   0x55
+#define TRAINER_CLASS_WANDERER       0x56
 
-#define TRAINER_CLASS_COUNT          0x56
+#define TRAINER_CLASS_COUNT          0x57
 
 #define TRAINER_ENCOUNTER_MUSIC_MALE         0 // standard male encounter music
 #define TRAINER_ENCOUNTER_MUSIC_FEMALE       1 // standard female encounter music
@@ -479,6 +489,7 @@
 #define TRAINER_ENCOUNTER_MUSIC_CIPHER_PEON 14
 #define TRAINER_ENCOUNTER_MUSIC_TEAM_ROCKET 15
 #define TRAINER_ENCOUNTER_MUSIC_GYM_LEADER  16
+#define TRAINER_ENCOUNTER_MUSIC_MIRRORB     17
 
 #define F_TRAINER_FEMALE (1 << 7)
 

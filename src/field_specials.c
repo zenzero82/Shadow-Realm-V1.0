@@ -4350,7 +4350,7 @@ void UseBlankMessageToCancelPokemonPic(void)
 
 void EnterCode(void)
 {
-    DoNamingScreen(NAMING_SCREEN_CODE, gStringVar2, 0, 0, 0, CB2_ReturnToFieldContinueScript);
+    DoNamingScreen(NAMING_SCREEN_CODE, gStringVar2, 0, 0, 0, FALSE, CB2_ReturnToFieldContinueScript);
 }
 
 void GetCodeFeedback(void)

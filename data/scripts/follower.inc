@@ -7,6 +7,21 @@ gText_FollowerLostInThought::
 gText_FollowerDefault::
 	.string "ERROR 404: Script not found.$"
 
+gText_ShadowFollowerClosedOff::
+	.string "{STR_VAR_1} is completely closed off to you.$"
+
+gText_ShadowFollowerStartingHappier::
+	.string "{STR_VAR_1} is starting to seem... happier... I think.$"
+
+gText_ShadowFollowerShowingEmotion::
+	.string "{STR_VAR_1} is starting to show some emotion.\nIt's eager to lead.$"
+
+gText_ShadowFollowerReadyCommand::
+	.string "{STR_VAR_1} is ready to take your command!$"
+
+gText_ShadowFollowerOpenHeart::
+	.string "{STR_VAR_1} is ready to open its heart!$"
+
 gText_WantsToFly::
 	.string "{STR_VAR_1} looks up at the\nsky restlessly.\pWould you like to use FLY?$"
 

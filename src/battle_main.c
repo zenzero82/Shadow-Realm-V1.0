@@ -381,6 +381,19 @@ const struct TrainerClass gTrainerClasses[TRAINER_CLASS_COUNT] =
     [TRAINER_CLASS_TEAM_SKULL] = {_("TEAM SKULL") },
     [TRAINER_CLASS_TEAM_FLARE] = {_("TEAM FLARE") },
     [TRAINER_CLASS_TEAM_GALACTIC] = {_("GALACTIC") },
+    [TRAINER_CLASS_NURSE] = { _("NURSE") },
+    [TRAINER_CLASS_POLICEMAN] = { _("POLICEMAN") },
+    [TRAINER_CLASS_ROCKET_ADMIN] = { _("ROCKET ADMIN"), 10 },
+    [TRAINER_CLASS_SAGE] = { _("SAGE"), 8 },
+    [TRAINER_CLASS_ENGINEER] = { _("ENGINEER"), 8 },
+    [TRAINER_CLASS_FIREBREATHER] = { _("FIREBREATHER"), 8 },
+    [TRAINER_CLASS_KIMONO_GIRL] = { _("KIMONO GIRL"), 8 },
+    [TRAINER_CLASS_BIKER] = { _("BIKER"), 8 },
+    [TRAINER_CLASS_MYSTERY_MAN] = { _("MYSTERY MAN") },
+    [TRAINER_CLASS_BURGLAR] = { _("BURGLAR"), 8 },
+    [TRAINER_CLASS_JUGGLER] = { _("JUGGLER"), 8 },
+    [TRAINER_CLASS_PSYCHIC_M] = { _("PSYCHIC♂"), 6 },
+    [TRAINER_CLASS_WANDERER] = { _("WANDERER") },
 };
 
 static void (*const sTurnActionsFuncsTable[])(void) =
@@ -2022,7 +2035,12 @@ u8 CreateNPCTrainerPartyFromTrainer(struct Pokemon *party, const struct Trainer 
                 SetMonHeartValue(&party[i], partyData[monIndex].heartGauge);
                 SetMonHeartMax(&party[i], partyData[monIndex].heartGauge);
             }
-            else if (partyData[monIndex].nickname != NULL)
+            if (party >= gEnemyParty && party < gEnemyParty + PARTY_SIZE)
+            {
+                bool8 snagged = FALSE;
+                SetMonData(&party[i], MON_DATA_SNAGGED, &snagged);
+            }
+            if (!partyData[monIndex].isShadow && partyData[monIndex].nickname != NULL)
             {
                 SetMonData(&party[i], MON_DATA_NICKNAME, partyData[monIndex].nickname);
             }

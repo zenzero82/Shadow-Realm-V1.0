@@ -136,6 +136,7 @@ Palkia
 Pangoro
 Pecharunt
 Pheromosa
+Pikachu
 Primarina
 Quaquaval
 Raikou
@@ -369,7 +370,6 @@ for raw_name, slug, species_constant in species_data:
     palette_candidates = [
         "normal.gbapal",
         "shadow.gbapal",
-        "shadow.pal",
         f"{slug}_shadow.pal",
     ]
     for candidate in palette_candidates:
@@ -456,6 +456,12 @@ def generate_shadow_forms_inc(entries):
         lines.append(
             f"const u8 gMonIcon_{camel}Shadow[] = INCBIN_U8(\"{entry['icon_file'].as_posix()}\");"
         )
+        if entry["has_female_icon"]:
+            lines.append("#if P_GENDER_DIFFERENCES && P_CUSTOM_GENDER_DIFF_ICONS")
+            lines.append(
+                f"const u8 gMonIcon_{camel}FShadow[] = INCBIN_U8(\"{entry['female_icon_file'].as_posix()}\");"
+            )
+            lines.append("#endif")
         if entry["has_female_forms"]:
             lines.append("#if P_GENDER_DIFFERENCES")
             lines.append(

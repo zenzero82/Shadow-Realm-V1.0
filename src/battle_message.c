@@ -18,6 +18,7 @@
 #include "recorded_battle.h"
 #include "string_util.h"
 #include "strings.h"
+#include "party_menu.h"
 #include "test_runner.h"
 #include "text.h"
 #include "trainer_hill.h"
@@ -83,6 +84,8 @@ static const u8 sText_WildPkmnAppeared[] = _("You encountered a wild {B_OPPONENT
 static const u8 sText_LegendaryPkmnAppeared[] = _("You encountered a wild {B_OPPONENT_MON1_NAME}!\p");
 static const u8 sText_WildPkmnAppearedPause[] = _("You encountered a wild {B_OPPONENT_MON1_NAME}!{PAUSE 127}");
 static const u8 sText_TwoWildPkmnAppeared[] = _("Oh! A wild {B_OPPONENT_MON1_NAME} and {B_OPPONENT_MON2_NAME} appeared!\p");
+static const u8 sText_WildPkmnAppearedMidBattle[] = _("The wild {B_OPPONENT_MON1_NAME} appeared!\p");
+static const u8 sText_WildPkmnFledMidBattle[] = _("The wild {B_OPPONENT_MON1_NAME} fled!\p");
 static const u8 sText_Trainer1WantsToBattle[] = _("You are challenged by {B_TRAINER1_NAME_WITH_CLASS}!\p");
 static const u8 sText_LinkTrainerWantsToBattle[] = _("You are challenged by {B_LINK_OPPONENT1_NAME}!");
 static const u8 sText_TwoLinkTrainersWantToBattle[] = _("You are challenged by {B_LINK_OPPONENT1_NAME} and {B_LINK_OPPONENT2_NAME}!");
@@ -2226,7 +2229,11 @@ void BufferStringBattle(enum StringID stringID, u32 battler)
         }
         else
         {
-            if (TRAINER_BATTLE_PARAM.opponentA == TRAINER_LINK_OPPONENT || gBattleTypeFlags & BATTLE_TYPE_RECORDED_LINK)
+            if (!(gBattleTypeFlags & BATTLE_TYPE_TRAINER))
+            {
+                stringPtr = sText_WildPkmnFledMidBattle;
+            }
+            else if (TRAINER_BATTLE_PARAM.opponentA == TRAINER_LINK_OPPONENT || gBattleTypeFlags & BATTLE_TYPE_RECORDED_LINK)
             {
                 if (gBattleTypeFlags & BATTLE_TYPE_MULTI)
                     stringPtr = sText_LinkTrainer2WithdrewPkmn;
@@ -2253,7 +2260,14 @@ void BufferStringBattle(enum StringID stringID, u32 battler)
         }
         else
         {
-            if (gBattleTypeFlags & (BATTLE_TYPE_LINK | BATTLE_TYPE_RECORDED_LINK))
+            if (!(gBattleTypeFlags & BATTLE_TYPE_TRAINER))
+            {
+                if (IsDoubleBattle() && IsValidForBattle(GetBattlerMon(BATTLE_PARTNER(gBattleScripting.battler))))
+                    stringPtr = sText_TwoWildPkmnAppeared;
+                else
+                    stringPtr = sText_WildPkmnAppearedMidBattle;
+            }
+            else if (gBattleTypeFlags & (BATTLE_TYPE_LINK | BATTLE_TYPE_RECORDED_LINK))
             {
                 if (gBattleTypeFlags & BATTLE_TYPE_TOWER_LINK_MULTI)
                 {
@@ -2439,8 +2453,7 @@ static void GetBattlerNick(u32 battler, u8 *dst)
 
     if (illusionMon != NULL)
         mon = illusionMon;
-    GetMonData(mon, MON_DATA_NICKNAME, dst);
-    StringGet_Nickname(dst);
+    GetMonNickname(mon, dst);
 }
 
 #define HANDLE_NICKNAME_STRING_CASE(battler)                            \
@@ -3274,7 +3287,7 @@ void ExpandBattleTextBuffPlaceholders(const u8 *src, u8 *dst)
         case B_BUFF_MON_NICK_WITH_PREFIX_LOWER: // poke nick with lowercase prefix
             if (IsOnPlayerSide(src[srcID + 1]))
             {
-                GetMonData(&gPlayerParty[src[srcID + 2]], MON_DATA_NICKNAME, nickname);
+                GetMonNickname(&gPlayerParty[src[srcID + 2]], nickname);
             }
             else
             {
@@ -3293,9 +3306,8 @@ void ExpandBattleTextBuffPlaceholders(const u8 *src, u8 *dst)
                         StringAppend(dst, sText_WildPkmnPrefix);
                 }
 
-                GetMonData(&gEnemyParty[src[srcID + 2]], MON_DATA_NICKNAME, nickname);
+                GetMonNickname(&gEnemyParty[src[srcID + 2]], nickname);
             }
-            StringGet_Nickname(nickname);
             StringAppend(dst, nickname);
             srcID += 3;
             break;
@@ -3321,10 +3333,9 @@ void ExpandBattleTextBuffPlaceholders(const u8 *src, u8 *dst)
             else
             {
                 if (IsOnPlayerSide(src[srcID + 1]))
-                    GetMonData(&gPlayerParty[src[srcID + 2]], MON_DATA_NICKNAME, dst);
+                    GetMonNickname(&gPlayerParty[src[srcID + 2]], dst);
                 else
-                    GetMonData(&gEnemyParty[src[srcID + 2]], MON_DATA_NICKNAME, dst);
-                StringGet_Nickname(dst);
+                    GetMonNickname(&gEnemyParty[src[srcID + 2]], dst);
             }
             srcID += 3;
             break;

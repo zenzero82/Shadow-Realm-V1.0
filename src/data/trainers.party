@@ -85,7 +85,7 @@ Level: 4
 Nature: ADAMANT
 IVs: 0 HP / 0 Atk / 0 Def / 0 SpA / 0 SpD / 0 Spe
 Shadow: Yes
-Shadow ID: 1
+Shadow ID: 3
 Heart Gauge: 5000
 - Shadow Rush
 
@@ -146,13 +146,13 @@ Pic: CAMPER_KANTO
 Gender: Male
 
 Geodude 
-Level: 7
+Level: 1
 Nature: HARDY
 - Tackle
 - Tail Whip
 
-Geodude
-Level: 7
+Roggenrola
+Level: 1
 Nature: HARDY
 - Peck
 - Growl
@@ -567,13 +567,13 @@ Pic: BUG_CATCHER
 Gender: Male
 
 Caterpie
-Level: 5
+Level: 1
 
 Weedle
-Level: 6
+Level: 1
 
 Metapod
-Level: 7
+Level: 1
 
 === TRAINER_VF_BUGCATCHER2 ===
 Name: Rick
@@ -582,13 +582,13 @@ Pic: BUG_CATCHER
 Gender: Male
 
 Cutiefly
-Level: 6
+Level: 1
 
 Grubbin
-Level: 6
+Level: 1
 
 Joltik
-Level: 6
+Level: 1
 
 === TRAINER_VF_BUGCATCHER3 ===
 Name: Jamal
@@ -597,13 +597,13 @@ Pic: BUG_CATCHER
 Gender: Male
 
 Venipede
-Level: 7
+Level: 1
 
 Venonat
-Level: 7
+Level: 1
 
 Paras
-Level: 7
+Level: 1
 
 === TRAINER_VF_ROCKET ===
 Name: Travis
@@ -614,10 +614,10 @@ Music: TRAINER_ENCOUNTER_MUSIC_TEAM_ROCKET
 Double Battle: No
 
 Koffing
-Level: 8
+Level: 1
 
 Ekans
-Level: 9
+Level: 1
 
 === TRAINER_VF_PLASMA ===
 Name: Corvin
@@ -628,7 +628,149 @@ Music: TRAINER_ENCOUNTER_MUSIC_TEAM_ROCKET
 Double Battle: No
 
 Trubbish
-Level: 8
+Level: 1
 
 Scraggy
-Level: 9
+Level: 1
+
+=== TRAINER_RT3_YOUNGSTER1 ===
+Name: YOUNGSTER1
+Class: TRAINER_CLASS_YOUNGSTER
+Pic: YOUNGSTER
+Gender: Male
+
+Roggenrola
+Level: 1
+
+Woobat
+Level: 1
+
+=== TRAINER_RT3_YOUNGSTER2 ===
+Name: YOUNGSTER
+Class: TRAINER_CLASS_YOUNGSTER
+Pic: YOUNGSTER
+Gender: Male
+
+Mudbray
+Level: 1
+
+Minccino
+Level: 1
+
+=== TRAINER_RT3_LASS ===
+Name: LASS
+Class: TRAINER_CLASS_LASS
+Pic: LASS
+Gender: Female
+
+Jigglypuff
+Level: 1
+
+Stufful
+Level: 1
+
+=== TRAINER_RT3_FIREBREATHER ===
+Name: Olio
+Class: TRAINER_CLASS_FIREBREATHER
+Pic: FIREBREATHER
+Gender: Male
+
+Morelull
+Level: 1
+
+Audino
+Level: 1
+
+=== TRAINER_TEMP_MIROR_B ===
+Name: MIROR B
+Class: WANDERER
+Pic: MIRROR_B
+Gender: Male
+Music: TRAINER_ENCOUNTER_MUSIC_MIRRORB
+
+Blacephalon
+Level: 50
+
+=== TRAINER_RT4_BLACK_BELT ===
+Name: RYU
+Class: TRAINER_CLASS_BLACK_BELT
+Pic: BLACK_BELT
+Gender: Male
+
+Ponyta
+Level: 1
+
+Emolga
+Level: 1
+
+=== TRAINER_RT4_ROCKER ===
+Name: AMP
+Class: TRAINER_CLASS_GUITARIST
+Pic: GUITARIST
+Gender: Male
+
+Deerling
+Level: 1
+
+Stufful
+Level: 1
+
+=== TRAINER_RT4_PICNICKER1 ===
+Name: LILY
+Class: TRAINER_CLASS_PICNICKER
+Pic: PICNICKER
+Gender: Female
+
+Petilil
+Level: 1
+
+SPECIES_PONYTA_GALAR
+Level: 1
+
+=== TRAINER_RT4_PICNICKER2 ===
+Name: MIA
+Class: TRAINER_CLASS_PICNICKER
+Pic: PICNICKER
+Gender: Female
+
+Emolga
+Level: 1
+
+Deerling
+Level: 1
+
+=== TRAINER_RT4_BRENDAN1 ===
+Name: BRENDAN
+Class: TRAINER_CLASS_RIVAL
+Pic: BRENDAN
+Gender: Male
+
+Stufful
+Level: 1
+
+Petilil
+Level: 1
+
+=== TRAINER_RT4_BRENDAN2 ===
+Name: BRENDAN
+Class: TRAINER_CLASS_RIVAL
+Pic: BRENDAN
+Gender: Male
+
+SPECIES_PONYTA_GALAR
+Level: 1
+
+Emolga
+Level: 1
+
+=== TRAINER_RT4_BRENDAN3 ===
+Name: BRENDAN
+Class: TRAINER_CLASS_RIVAL
+Pic: BRENDAN
+Gender: Male
+
+Ponyta
+Level: 1
+
+Deerling
+Level: 1

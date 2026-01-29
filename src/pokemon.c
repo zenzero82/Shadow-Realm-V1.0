@@ -2596,6 +2596,26 @@ u32 GetBoxMonData3(struct BoxPokemon *boxMon, s32 field, u8 *data)
                 StringCopy(data, gText_EggNickname);
                 retVal = StringLength(data);
             }
+            else if (substruct3->isShadow)
+            {
+                u16 shadowId = boxMon->nickData.shadowData.shadowID;
+                static const u8 sText_XD[] = _("XD");
+
+                if (shadowId <= 200)
+                {
+                    StringCopy(data, sText_XD);
+                    ConvertIntToDecimalStringN(data + 2, shadowId, STR_CONV_MODE_LEADING_ZEROS, 3);
+                    retVal = StringLength(data);
+                }
+                else
+                {
+                    u32 species = boxMon->isBadEgg ? SPECIES_EGG : substruct0->species;
+                    for (retVal = 0; retVal < POKEMON_NAME_LENGTH; retVal++)
+                        data[retVal] = gSpeciesInfo[species].speciesName[retVal];
+
+                    data[retVal] = EOS;
+                }
+            }
             else if (boxMon->language == LANGUAGE_JAPANESE)
             {
                 data[0] = EXT_CTRL_CODE_BEGIN;
@@ -2607,14 +2627,6 @@ u32 GetBoxMonData3(struct BoxPokemon *boxMon, s32 field, u8 *data)
 
                 data[retVal++] = EXT_CTRL_CODE_BEGIN;
                 data[retVal++] = EXT_CTRL_CODE_ENG;
-                data[retVal] = EOS;
-            }
-            else if (substruct3->isShadow)
-            {
-                u32 species = boxMon->isBadEgg ? SPECIES_EGG : substruct0->species;
-                for (retVal = 0; retVal < POKEMON_NAME_LENGTH; retVal++)
-                    data[retVal] = gSpeciesInfo[species].speciesName[retVal];
-
                 data[retVal] = EOS;
             }
             else
@@ -6125,6 +6137,8 @@ u16 GetBattleBGM(void)
             return MUS_VS_FRONTIER_BRAIN;
         case TRAINER_CLASS_CIPHER_PEON:
             return MUS_CIPHER_PEON_BATTLE;
+        case TRAINER_CLASS_WANDERER:
+            return MUS_MIRRORB;
         default:
             return MUS_VS_TRAINER;
         }
@@ -7667,6 +7681,9 @@ void Shdw_UpdatePurifyReadyFlag(void)
         if (GetMonData(mon, MON_DATA_SPECIES, NULL) == SPECIES_NONE)
             continue;
 
+        if (!GetMonData(mon, MON_DATA_IS_SHADOW, NULL))
+            continue;
+
         struct Shadowdata *shadowData = &mon->box.nickData.shadowData;
         if (Shdw_IsPurificationReady(mon))
         {
@@ -7848,11 +7865,11 @@ void GiveStarterMon(void)
     if (species == SPECIES_NONE)
         return;
 
-    /* Create a level 5 Pokemon with no fixed IVs or personality */
+    /* Create a level 5 Pokemon with perfect IVs and no fixed personality */
     CreateMon(&mon,
               species,
               5,                  /* level */
-              0,                  /* fixedIV */
+              31,                 /* fixedIV */
               FALSE,              /* hasFixedPersonality */
               0,                  /* fixedPersonality */
               OT_ID_PLAYER_ID,    /* OT id type */

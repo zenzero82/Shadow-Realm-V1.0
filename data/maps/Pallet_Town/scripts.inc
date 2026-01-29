@@ -56,6 +56,15 @@ PalletTown_EventScript_Fatman::
     release
     end
 
+PalletTown_EventScript_Yungoos::
+    lock
+    faceplayer
+    waitse
+    playmoncry SPECIES_YUNGOOS, CRY_MODE_NORMAL
+    waitmoncry
+    release
+    end
+
 PalletTown_EventScript_TownSign::
     msgbox PalletTown_Text_Sign, MSGBOX_SIGN
     end

@@ -489,6 +489,9 @@ extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_Michael;
 extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_Nascour;
 extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_SnagemGrunt;
 extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_Venus;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_Ash;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_MirrorB;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_Ironmask;
 
 const struct ObjectEventGraphicsInfo *const gObjectEventGraphicsInfoPointers[NUM_OBJ_EVENT_GFX] = {
     [OBJ_EVENT_GFX_BRENDAN_NORMAL] =           &gObjectEventGraphicsInfo_BrendanNormal,
@@ -950,6 +953,9 @@ const struct ObjectEventGraphicsInfo *const gObjectEventGraphicsInfoPointers[NUM
     [OBJ_EVENT_GFX_NASCOUR] = &gObjectEventGraphicsInfo_Nascour,
     [OBJ_EVENT_GFX_SNAGEM_GRUNT] = &gObjectEventGraphicsInfo_SnagemGrunt,
     [OBJ_EVENT_GFX_VENUS] = &gObjectEventGraphicsInfo_Venus,
+    [OBJ_EVENT_GFX_ASH] = &gObjectEventGraphicsInfo_Ash,
+    [OBJ_EVENT_GFX_IRONMASK] = &gObjectEventGraphicsInfo_Ironmask,
+    [OBJ_EVENT_GFX_MIRROR_B] = &gObjectEventGraphicsInfo_MirrorB,
 };
 
 const struct ObjectEventGraphicsInfo *const gMauvilleOldManGraphicsInfoPointers[] = {

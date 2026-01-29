@@ -1401,6 +1401,9 @@ void PlayTrainerEncounterMusic(void)
         case TRAINER_ENCOUNTER_MUSIC_GYM_LEADER:
             music = MUS_RG_ENCOUNTER_GYM_LEADER;
             break;
+        case TRAINER_ENCOUNTER_MUSIC_MIRRORB:
+            music = MUS_MIRRORB;
+            break;
         default:
             music = MUS_ENCOUNTER_SUSPICIOUS;
         }

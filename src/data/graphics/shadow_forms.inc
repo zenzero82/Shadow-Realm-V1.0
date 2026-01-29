@@ -1,3 +1,21 @@
+const u32 gMonFrontPic_PikachuShadow[] = INCBIN_U32("graphics/pokemon/pikachu/shadow/anim_front.4bpp.lz");
+const u32 gMonBackPic_PikachuShadow[] = INCBIN_U32("graphics/pokemon/pikachu/shadow/back.4bpp.lz");
+const u16 gMonPalette_PikachuShadow[] = INCBIN_U16("graphics/pokemon/pikachu/shadow/pikachu_shadow.pal");
+const u8 gMonIcon_PikachuShadow[] = INCBIN_U8("graphics/pokemon/pikachu/shadow/icon.4bpp");
+#if P_GENDER_DIFFERENCES && P_CUSTOM_GENDER_DIFF_ICONS
+const u8 gMonIcon_PikachuFShadow[] = INCBIN_U8("graphics/pokemon/pikachu/shadow/iconf.4bpp");
+#endif
+#if P_GENDER_DIFFERENCES
+const u32 gMonFrontPic_PikachuFShadow[] = INCBIN_U32("graphics/pokemon/pikachu/shadow/anim_frontf.4bpp.lz");
+const u32 gMonBackPic_PikachuFShadow[] = INCBIN_U32("graphics/pokemon/pikachu/shadow/backf.4bpp.lz");
+#endif
+#if OW_POKEMON_OBJECT_EVENTS
+const u32 gObjectEventPic_PikachuShadow[] = INCBIN_COMP("graphics/pokemon/pikachu/shadow/overworld.4bpp");
+#if P_GENDER_DIFFERENCES
+const u32 gObjectEventPic_PikachuFShadow[] = INCBIN_COMP("graphics/pokemon/pikachu/shadow/overworldf.4bpp");
+#endif
+#endif
+
 const u32 gMonFrontPic_AbsolShadow[] = INCBIN_U32("graphics/pokemon/absol/shadow/anim_front.4bpp.lz");
 const u32 gMonBackPic_AbsolShadow[] = INCBIN_U32("graphics/pokemon/absol/shadow/back.4bpp.lz");
 const u16 gMonPalette_AbsolShadow[] = INCBIN_U16("graphics/pokemon/absol/shadow/absol_shadow.pal");

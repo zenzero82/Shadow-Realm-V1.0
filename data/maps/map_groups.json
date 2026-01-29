@@ -1051,5 +1051,8 @@
     "TohjoFalls_Cavern",
     "TohjoFalls_GiovanniRoom"
   ],
-  "gMapGroup_ShadowRealm": []
+  "gMapGroup_ShadowRealm": [
+    "Shadow_Realm",
+    "Mirorb_Lair"
+  ]
 }

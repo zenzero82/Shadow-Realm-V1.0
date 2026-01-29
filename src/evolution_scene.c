@@ -72,6 +72,7 @@ static void StartBgAnimation(bool8 isLink);
 static void StopBgAnimation(void);
 static void Task_AnimateBg(u8 taskId);
 static void RestoreBgAfterAnim(void);
+static u8 GetLevelFromExp(u16 species, u32 exp);
 
 static const u16 sUnusedPal1[] = INCBIN_U16("graphics/evolution_scene/unused_1.gbapal");
 static const u32 sBgAnim_Gfx[] = INCBIN_U32("graphics/evolution_scene/bg.4bpp.lz");
@@ -333,6 +334,16 @@ void EvolutionScene(struct Pokemon *mon, u16 postEvoSpecies, bool8 canStopEvo, u
     SetVBlankCallback(VBlankCB_EvolutionScene);
     m4aMPlayAllStop();
     SetMainCallback2(CB2_EvolutionSceneUpdate);
+}
+
+static u8 GetLevelFromExp(u16 species, u32 exp)
+{
+    s32 level = 1;
+
+    while (level <= MAX_LEVEL && gExperienceTables[gSpeciesInfo[species].growthRate][level] <= exp)
+        level++;
+
+    return level - 1;
 }
 
 static void CB2_EvolutionSceneLoadGraphics(void)
@@ -833,7 +844,9 @@ static void Task_EvolutionScene(u8 taskId)
             u8 levelBefore = GetMonData(mon, MON_DATA_LEVEL, NULL);
             u32 expGained = Shadow_GrantStoredExp(mon);
             u32 expToShow = expGained;
-            u8 levelAfter = GetMonData(mon, MON_DATA_LEVEL, NULL);
+            u16 species = GetMonData(mon, MON_DATA_SPECIES, NULL);
+            u32 expAfter = GetMonData(mon, MON_DATA_EXP, NULL);
+            u8 levelAfter = GetLevelFromExp(species, expAfter);
             if (expToShow == 0)
             {
                 gTasks[taskId].tState = EVOSTATE_TRY_LEARN_MOVE;

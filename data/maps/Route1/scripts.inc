@@ -37,12 +37,11 @@ Route1_EventScript_OldManDrivenOut::
 @ Route 1 – Cipher Peon Torkin scripted encounter
 @ ---------------------------------------------------------
 @ Coord events (set these in Porymap):
-@   (10,34) -> Route1_EventScript_TorkinTrigger0
-@   (10,33) -> Route1_EventScript_TorkinTrigger1
-@   (10,32) -> Route1_EventScript_TorkinTrigger2
+@   (12,35) -> Route1_EventScript_TorkinTrigger0
+@   (13,35) -> Route1_EventScript_TorkinTrigger1
 @
 @ Torkin overworld object:
-@   Local ID 1 at (9,33), with flag FLAG_HIDE_ROUTE1_TORKIN
+@   Local ID 3 at (11,33), with flag FLAG_HIDE_ROUTE1_TORKIN
 @ =========================================================
 
 Route1_EventScript_TorkinTrigger0::
@@ -50,8 +49,8 @@ Route1_EventScript_TorkinTrigger0::
     goto_if_eq Route1_EventScript_TorkinTrigger_Done
 
     lockall
-    @ From (10,34) -> (10,33), then face left
-    applymovement OBJ_EVENT_ID_PLAYER, Route1_Move_Player_FromTrigger0
+    setvar VAR_TEMP_0, 0
+    applymovement OBJ_EVENT_ID_PLAYER, Route1_Move_Player_FaceNorth
     waitmovement 0
     goto Route1_EventScript_Torkin
 
@@ -60,18 +59,8 @@ Route1_EventScript_TorkinTrigger1::
     goto_if_eq Route1_EventScript_TorkinTrigger_Done
 
     lockall
-    @ Already on (10,33), just face left
-    applymovement OBJ_EVENT_ID_PLAYER, Route1_Move_Player_FromTrigger1
-    waitmovement 0
-    goto Route1_EventScript_Torkin
-
-Route1_EventScript_TorkinTrigger2::
-    checkflag FLAG_HIDE_ROUTE1_TORKIN
-    goto_if_eq Route1_EventScript_TorkinTrigger_Done
-
-    lockall
-    @ From (10,32) -> (10,33), face left
-    applymovement OBJ_EVENT_ID_PLAYER, Route1_Move_Player_FromTrigger2
+    setvar VAR_TEMP_0, 1
+    applymovement OBJ_EVENT_ID_PLAYER, Route1_Move_Player_FaceNorth
     waitmovement 0
     goto Route1_EventScript_Torkin
 
@@ -82,12 +71,26 @@ Route1_EventScript_TorkinTrigger_Done::
 @ Exclamation -> intro text -> battle (no-intro) -> post-battle -> retreat
 
 Route1_EventScript_Torkin::
-    @ Player is now at (10,33) facing left
-    @ Torkin (local ID 1) is at (9,33)
+    @ Player is at the trigger tile, facing north
+    @ Torkin (local ID 3) is at (11,33)
 
     playse SE_PIN
-    applymovement 1, Route1_Move_Torkin_ExclaimTurn
+    goto_if_eq VAR_TEMP_0, 0, Route1_EventScript_Torkin_ApproachFromTrigger0
+    goto_if_eq VAR_TEMP_0, 1, Route1_EventScript_Torkin_ApproachFromTrigger1
+    applymovement 3, Route1_Move_Torkin_ExclaimTurn
     waitmovement 0
+    goto Route1_EventScript_Torkin_AfterApproach
+
+Route1_EventScript_Torkin_ApproachFromTrigger0::
+    applymovement 3, Route1_Move_Torkin_Approach_FromTrigger0
+    waitmovement 0
+    goto Route1_EventScript_Torkin_AfterApproach
+
+Route1_EventScript_Torkin_ApproachFromTrigger1::
+    applymovement 3, Route1_Move_Torkin_Approach_FromTrigger1
+    waitmovement 0
+
+Route1_EventScript_Torkin_AfterApproach::
 
     setspeaker Route1_Speaker_Torkin
     msgbox Route1_Text_TorkinIntro, MSGBOX_DEFAULT
@@ -97,7 +100,7 @@ Route1_EventScript_Torkin::
     trainerbattle_no_intro TRAINER_TORKIN, Route1_Text_TorkinDefeated
 
     @ Ensure player is still facing Torkin after battle
-    applymovement OBJ_EVENT_ID_PLAYER, Route1_Move_Player_FaceLeft
+    applymovement OBJ_EVENT_ID_PLAYER, Route1_Move_Player_FaceNorth
     waitmovement 0
 
     setspeaker Route1_Speaker_Torkin
@@ -105,10 +108,10 @@ Route1_EventScript_Torkin::
     closemessage
 
     @ Torkin retreats: your custom path, then vanish + flag
-    applymovement 1, Route1_Move_Torkin_Leave
+    applymovement 3, Route1_Move_Torkin_Leave
     waitmovement 0
     setflag FLAG_HIDE_ROUTE1_TORKIN
-    removeobject 1
+    removeobject 3
 
     releaseall
     end
@@ -122,26 +125,26 @@ Route1_Move_Torkin_ExclaimTurn:
     face_right           @ turn to face the player on the right
     step_end
 
-@ Player: just face left in place
-Route1_Move_Player_FaceLeft:
-    face_left
-    step_end
-
-@ From (10,34) -> (10,33), face left
-Route1_Move_Player_FromTrigger0:
-    walk_up
-    face_left
-    step_end
-
-@ From (10,33) -> stay, face left
-Route1_Move_Player_FromTrigger1:
-    face_left
-    step_end
-
-@ From (10,32) -> (10,33), face left
-Route1_Move_Player_FromTrigger2:
+@ From (11,33) -> (12,34), face down
+Route1_Move_Torkin_Approach_FromTrigger0:
+    emote_exclamation_mark
+    walk_right
     walk_down
-    face_left
+    face_down
+    step_end
+
+@ From (11,33) -> (13,34), face down
+Route1_Move_Torkin_Approach_FromTrigger1:
+    emote_exclamation_mark
+    walk_right
+    walk_right
+    walk_down
+    face_down
+    step_end
+
+@ Player: just face north in place
+Route1_Move_Player_FaceNorth:
+    face_up
     step_end
 
 @ From (9,33): your leave path
@@ -149,6 +152,11 @@ Route1_Move_Torkin_Leave:
     walk_left
     walk_left
     walk_left
+    walk_left
+    walk_left
+    walk_left
+    walk_up
+    walk_up
     walk_up
     walk_up
     walk_up

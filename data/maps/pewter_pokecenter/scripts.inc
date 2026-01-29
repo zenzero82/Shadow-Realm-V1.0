@@ -1,4 +1,5 @@
 pewter_pokecenter_MapScripts::
+	map_script MAP_SCRIPT_ON_TRANSITION, pewter_pokecenter_OnTransition
 	.byte 0
 
 pewter_pokecenter_EventScript_Nurse::
@@ -40,3 +41,15 @@ pewter_pokecenter_Move_Nurse_Bow:
 	face_down
 	delay_4
 	step_end
+pewter_pokecenter_EventScript_Chansey::
+	lock
+	faceplayer
+	waitse
+	playmoncry SPECIES_CHANSEY, CRY_MODE_NORMAL
+	waitmoncry
+	release
+	end
+
+pewter_pokecenter_OnTransition:
+	setrespawn HEAL_LOCATION_PEWTER_CITY
+	end

@@ -1,6 +1,12 @@
 	.align 2
 pewter_gym_MapScripts::
+    map_script MAP_SCRIPT_ON_TRANSITION, PewterGym_EventScript_OnEnter
     .byte 0
+
+PewterGym_EventScript_OnEnter::
+    setflag FLAG_HIDE_PEWTER_GYM_BROCK_BALL
+    setflag FLAG_HIDE_PEWTER_GYM_BROCK_CROAGUNK
+    end
 
 PewterGym_Speaker_Brock:
     .string "Brock$"
@@ -11,12 +17,26 @@ PewterGym_Speaker_Jerry:
 PewterGym_Speaker_GymGuy:
     .string "Gym Guy$"
 
+@ Local IDs from map.json:
+@   1 = Brock
+@   2 = Jerry
+@   3 = Gym Guy
+@   4 = Brock's Poke Ball
+@   5 = Brock's Croagunk
+.set LOCALID_BROCK,          1
+.set LOCALID_JERRY,          2
+.set LOCALID_GYM_GUY,        3
+.set LOCALID_BROCK_BALL,     4
+.set LOCALID_BROCK_CROAGUNK, 5
+
 
 PewterCity_Gym_EventScript_Jerry::
-    lockall
-    faceplayer
     setspeaker PewterGym_Speaker_Jerry
-    trainerbattle_single TRAINER_CAMPER_KANTO, PewterCity_Gym_Text_CamperJerry_Seen, PewterCity_Gym_Text_CamperJerry_Beaten
+    trainerbattle_single TRAINER_CAMPER_KANTO, PewterCity_Gym_Text_CamperJerry_Seen, PewterCity_Gym_Text_CamperJerry_Beaten, PewterCity_Gym_EventScript_Jerry_After
+    end
+
+PewterCity_Gym_EventScript_Jerry_After::
+    setspeaker PewterGym_Speaker_Jerry
     msgbox PewterCity_Gym_Text_CamperJerry_AfterBattle, MSGBOX_AUTOCLOSE
     closemessage
     releaseall
@@ -29,6 +49,8 @@ PewterCity_Gym_EventScript_Brock::
     goto_if_set FLAG_BADGE09_GET, PewterCity_Gym_EventScript_Brock_Defeated
 
     msgbox PewterCity_Gym_Text_Brock_Intro, MSGBOX_DEFAULT
+    call PewterCity_Gym_EventScript_Brock_CroagunkIntro
+    msgbox PewterCity_Gym_Text_Brock_Apology, MSGBOX_DEFAULT
     trainerbattle_no_intro TRAINER_BROCK_KANTO, PewterCity_Gym_Text_Brock_WinLoss
 
     message PewterCity_Gym_Text_ReceivedBoulderBadge
@@ -41,6 +63,35 @@ PewterCity_Gym_EventScript_Brock::
     closemessage
     release
     end
+
+PewterCity_Gym_EventScript_Brock_CroagunkIntro::
+    clearflag FLAG_HIDE_PEWTER_GYM_BROCK_CROAGUNK
+    addobject LOCALID_BROCK_CROAGUNK
+    showobjectat LOCALID_BROCK_CROAGUNK, MAP_PEWTER_GYM
+    playse SE_BALL_OPEN
+    applymovement LOCALID_BROCK_CROAGUNK, PewterGym_Move_Croagunk_ExitBall
+    waitmovement 0
+    turnobject LOCALID_BROCK_CROAGUNK, DIR_SOUTH
+    playmoncry SPECIES_CROAGUNK, CRY_MODE_NORMAL
+    waitmoncry
+
+    turnobject LOCALID_BROCK, DIR_EAST
+    msgbox PewterCity_Gym_Text_Brock_Croagunk, MSGBOX_DEFAULT
+
+    applymovement LOCALID_BROCK_CROAGUNK, PewterGym_Move_Croagunk_ReturnBall
+    waitmovement 0
+    removeobject LOCALID_BROCK_CROAGUNK
+    setflag FLAG_HIDE_PEWTER_GYM_BROCK_CROAGUNK
+    faceplayer
+    return
+
+PewterGym_Move_Croagunk_ExitBall:
+    exit_pokeball
+    step_end
+
+PewterGym_Move_Croagunk_ReturnBall:
+    enter_pokeball
+    step_end
 
 PewterCity_Gym_EventScript_Brock_Defeated::
     setspeaker PewterGym_Speaker_Brock
@@ -94,6 +145,12 @@ PewterCity_Gym_Text_Brock_Intro:
     .string "Show me you can stand strong against\n"
     .string "what CIPHER and ROCKET are planning.$"
 
+PewterCity_Gym_Text_Brock_Croagunk:
+    .string "Hey! I told you to stop doing that!$"
+
+PewterCity_Gym_Text_Brock_Apology:
+    .string "Sorry about that. Now, let's battle.$"
+
 PewterCity_Gym_Text_Brock_WinLoss:
     .string "Your POKEMON's power and resolve\n"
     .string "broke right through my rock-solid\n"
@@ -109,8 +166,8 @@ PewterCity_Gym_Text_Brock_FightDone:
     .string "The world is huge. There are\n"
     .string "many strong trainers out there.\p"
     .string "If you keep growing like this, you'll\n"
-    .string "be ready for whatever CIPHER throws\n"
-    .string "at this region.$"
+    .string "be ready for whatever CIPHER throws\l"
+    .string "our way.$"
 
 PewterCity_Gym_Text_CamperJerry_Seen:
     .string "The trainers in this GYM usually use\n"
@@ -133,7 +190,7 @@ PewterCity_Gym_Text_Guide:
     .string "ROCKET in VIRIDIAN, portals, CIPHER…\n"
     .string "KANTO's in a bad way right now.\p"
     .string "BROCK's still here holding the line.\n"
-    .string "If you can match his resolve, you'll be\n"
+    .string "If you can match his resolve, you'll be\l"
     .string "a real contender.$"
 
 PewterCity_Gym_Text_Guide_Win:
@@ -153,3 +210,7 @@ PewterCity_Gym_Text_GymStatuePlayerWon:
     .string "LEADER: BROCK\p"
     .string "WINNING TRAINERS:\n"
     .string "RED, BLUE, {PLAYER}$"
+
+PewterGym_Move_Croagunk_Appear:
+    jump_in_place_down
+    step_end

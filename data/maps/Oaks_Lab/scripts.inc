@@ -246,8 +246,8 @@ OaksLab_StarterBall_Ralts_Ready:
     lock
     faceplayer
 
-    setvar VAR_PLAYER_STARTER_SPECIES, SPECIES_RALTS
-    setvar VAR_0x8004, SPECIES_RALTS
+    setvar VAR_PLAYER_STARTER_SPECIES, SPECIES_IMPIDIMP
+    setvar VAR_0x8004, SPECIES_IMPIDIMP
 
     showmonpic VAR_PLAYER_STARTER_SPECIES, 10, 3
     playmoncry VAR_PLAYER_STARTER_SPECIES, CRY_MODE_NORMAL
@@ -306,8 +306,8 @@ OaksLab_StarterBall_Zorua_Ready:
     lock
     faceplayer
 
-    setvar VAR_PLAYER_STARTER_SPECIES, SPECIES_ZORUA
-    setvar VAR_0x8004, SPECIES_ZORUA
+    setvar VAR_PLAYER_STARTER_SPECIES, SPECIES_SLOWPOKE_GALAR
+    setvar VAR_0x8004, SPECIES_SLOWPOKE_GALAR
 
     showmonpic VAR_PLAYER_STARTER_SPECIES, 10, 3
     playmoncry VAR_PLAYER_STARTER_SPECIES, CRY_MODE_NORMAL
@@ -349,9 +349,9 @@ OaksLab_EventScript_HideBall_Zorua::
     return
 
 OaksLab_EventScript_HideChosenBall::
-    call_if_eq VAR_PLAYER_STARTER_SPECIES, SPECIES_RALTS,   OaksLab_EventScript_HideBall_Ralts
-    call_if_eq VAR_PLAYER_STARTER_SPECIES, SPECIES_HONEDGE, OaksLab_EventScript_HideBall_Honedge
-    call_if_eq VAR_PLAYER_STARTER_SPECIES, SPECIES_ZORUA,   OaksLab_EventScript_HideBall_Zorua
+    call_if_eq VAR_PLAYER_STARTER_SPECIES, SPECIES_IMPIDIMP,        OaksLab_EventScript_HideBall_Ralts
+    call_if_eq VAR_PLAYER_STARTER_SPECIES, SPECIES_HONEDGE,         OaksLab_EventScript_HideBall_Honedge
+    call_if_eq VAR_PLAYER_STARTER_SPECIES, SPECIES_SLOWPOKE_GALAR,  OaksLab_EventScript_HideBall_Zorua
     return
 
 OaksLab_EventScript_ChoseStarter::
@@ -469,13 +469,13 @@ OaksLab_Text_Nia_PostStarter:
     .string "Next thing we know, he just disappeared\n"
     .string "from the lab!$"
 OaksLab_Text_Ball_Ralts_Inspect:
-    .string "Do you want to select RALTS\nas your starter?$"
+    .string "Do you want to select IMPIDIMP\nas your starter?$"
 
 OaksLab_Text_Ball_Honedge_Inspect:
     .string "Do you want to select HONEDGE\nas your starter?$"
 
 OaksLab_Text_Ball_Zorua_Inspect:
-    .string "Do you want to select ZORUA\nas your starter?$"
+    .string "Do you want to select GALARIAN SLOWPOKE\nas your starter?$"
 
 OaksLab_Text_StarterBall_NotYet:
     .string "It seems like there is a Pokemon inside.\p"

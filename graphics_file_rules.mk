@@ -653,7 +653,7 @@ $(POKEDEXGFXDIR)/region_map_affine.8bpp: %.8bpp: %.png
 	$(GFX) $< $@ -num_tiles 233 -Wnum_tiles
 
 $(NAMINGGFXDIR)/cursor.4bpp: %.4bpp: %.png
-	$(GFX) $< $@ -num_tiles 5 -Wnum_tiles
+	$(GFX) $< $@ -num_tiles 8 -Wnum_tiles
 
 $(NAMINGGFXDIR)/cursor_squished.4bpp: %.4bpp: %.png
 	$(GFX) $< $@ -num_tiles 5 -Wnum_tiles

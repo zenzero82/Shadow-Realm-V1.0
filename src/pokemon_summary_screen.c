@@ -14,6 +14,7 @@
 #include "contest_effect.h"
 #include "data.h"
 #include "daycare.h"
+#include "party_menu.h"
 #include "decompress.h"
 #include "dynamic_placeholder_text_util.h"
 #include "event_data.h"
@@ -65,6 +66,7 @@
 #include "constants/rgb.h"
 #include "constants/songs.h"
 #include "constants/species.h"
+#include "constants/characters.h"
 
 // Extracts the upper 16 bits of a 32-bit number
 #define HIHALF(n) (((n) & 0xFFFF0000) >> 16)
@@ -73,6 +75,13 @@
 #define LOHALF(n) ((n) & 0xFFFF)
 
 #define TEXT_SPEED_FF 0xFF
+#define PSS_MOVE_DESC_FONT_ID 2
+#define PSS_MOVE_DESC_TEXT_X 7
+#define PSS_MOVE_DESC_TEXT_Y 62
+#define PSS_MOVE_DESC_WINDOW_WIDTH_TILES 15
+#define PSS_MOVE_DESC_WINDOW_WIDTH_PX (PSS_MOVE_DESC_WINDOW_WIDTH_TILES * 8)
+#define PSS_MOVE_DESC_MAX_WIDTH_PX (PSS_MOVE_DESC_WINDOW_WIDTH_PX - PSS_MOVE_DESC_TEXT_X - 1)
+#define PSS_MOVE_DESC_WORD_BUF_SIZE 256
 
 // Internal summary screen modes (separate from SUMMARY_MODE_* in the public header)
 enum
@@ -109,6 +118,8 @@ enum
 #define PSS_PAGE_MOVES      PSS_PAGE_BATTLE_MOVES
 #define PSS_PAGE_MOVES_INFO PSS_PAGE_CONTEST_MOVES
 
+#define SUMMARY_PAGE_TILEMAP_SIZE 0x800
+
 #define TAG_PSS_UNK_64 0x64
 #define TAG_PSS_UNK_6E 0x6E
 #define TAG_PSS_UNK_78 0x78
@@ -140,6 +151,8 @@ static const u8 gText_PSS_SpDef[] = _("Sp. Def");
 static const u8 gText_PSS_Speed[] = _("Speed");
 static const u8 gText_PSS_ExpPoints[] = _("Exp. Points");
 static const u8 gText_PSS_ToNextLv[] = _("To Next Lv.");
+static const u8 gText_PSS_StoredExp[] = _("Stored Exp");
+static const u8 gText_PSS_LvAfterPure[] = _("Lv After Pure");
 static const u8 gText_PSS_TrainerMemo[] = _("Trainer Memo");
 static const u8 gText_PSS_Ability[] = _("Ability");
 static const u8 gText_PSS_Category[] = _("Category");
@@ -242,6 +255,8 @@ static void CB2_ReturnToSummaryFromRename(void);
 static bool8 PSS_CanUseMoveRelearner(void);
 static void PSS_BeginMoveRelearnerFromSummary(void);
 static void CB2_StartMoveRelearnerFromSummary(void);
+static void PSS_InitTilemapCache(void);
+static void PSS_FreeTilemapCache(void);
 static void sub_813ACF8(u8 invisible);
 static void sub_813AEB0(u8 invisible);
 static void sub_813A0E8(u8 invisible);
@@ -282,6 +297,7 @@ static void PSS_PrintMoveNamesAndPP(u8 i);
 static void PSS_CheckIfMonIsEgg(void);
 static void PSS_PrintExpPointAndNextLvTexts(void);
 static void PSS_ShowAttackInfo(void);
+static void PSS_CopyMoveDescriptionWrapped(u8 *dst, const u8 *src);
 static void PSS_ShowEggInfo(void);
 static void PSS_BufferNatureString(void);
 static void PSS_GetMetLevelString(u8 *output);
@@ -521,6 +537,10 @@ static bool8 sExpBarIsShadow;
 static struct SummaryScreenEvIvContext sEvIvContext;
 static bool8 sEvIvContextActive = FALSE;
 static struct SummaryScreenRenameContext sRenameContext;
+static u16 *sSummaryPageTilemaps[PSS_PAGE_COUNT];
+static u16 *sSummaryPageTilemapEgg;
+static u16 *sSummaryMovesTilemap;
+static bool8 sSummaryTilemapCacheReady = FALSE;
 static bool8 sSummaryScreenOverridePageActive = FALSE;
 static u8 sSummaryScreenOverridePage;
 static MainCallback sSummaryScreenExitCallbackOverride = NULL;
@@ -1032,7 +1052,7 @@ static const struct WindowTemplate sMovesInfoWindowTemplate[] =
         .tilemapLeft = 15,
         .tilemapTop = 6,
         .width = 15,
-        .height = 14,
+        .height = 15,
         .paletteNum = 6,
         .baseBlock = 181
     },
@@ -1496,6 +1516,7 @@ static void PSS_ShowPokemonSummaryScreen(struct Pokemon * party, u8 cursorPos, u
         sMonSummaryScreen->isEgg = TRUE;
 
     sMonSummaryScreen->unk3300[0] = 0xff;
+    PSS_InitTilemapCache();
     SetMainCallback2(sub_8135C34);
 }
 
@@ -1604,6 +1625,57 @@ void SummaryScreen_ReturnFromEvIv(u8 cursorPos)
     sEvIvContextActive = FALSE;
 }
 
+static void PSS_InitTilemapCache(void)
+{
+    u8 i;
+
+    if (sSummaryTilemapCacheReady)
+        return;
+
+    for (i = 0; i < PSS_PAGE_COUNT; i++)
+        sSummaryPageTilemaps[i] = AllocZeroed(SUMMARY_PAGE_TILEMAP_SIZE);
+
+    sSummaryPageTilemapEgg = AllocZeroed(SUMMARY_PAGE_TILEMAP_SIZE);
+    sSummaryMovesTilemap = AllocZeroed(SUMMARY_PAGE_TILEMAP_SIZE);
+
+    for (i = 0; i < PSS_PAGE_COUNT; i++)
+    {
+        if (sSummaryPageTilemaps[i] == NULL)
+        {
+            PSS_FreeTilemapCache();
+            return;
+        }
+    }
+
+    if (sSummaryPageTilemapEgg == NULL || sSummaryMovesTilemap == NULL)
+    {
+        PSS_FreeTilemapCache();
+        return;
+    }
+
+    LZ77UnCompWram(gMapSummaryScreenPokemonInfo, sSummaryPageTilemaps[PSS_PAGE_INFO]);
+    LZ77UnCompWram(gMapSummaryScreenEgg, sSummaryPageTilemapEgg);
+    LZ77UnCompWram(gMapSummaryScreenPokemonSkills, sSummaryPageTilemaps[PSS_PAGE_SKILLS]);
+    LZ77UnCompWram(gMapSummaryScreenKnownMoves, sSummaryPageTilemaps[PSS_PAGE_MOVES]);
+    LZ77UnCompWram(gMapSummaryScreenMovesInfo, sSummaryPageTilemaps[PSS_PAGE_MOVES_INFO]);
+    LZ77UnCompWram(gMapSummaryScreenMoves, sSummaryMovesTilemap);
+
+    sSummaryTilemapCacheReady = TRUE;
+}
+
+static void PSS_FreeTilemapCache(void)
+{
+    u8 i;
+
+    for (i = 0; i < PSS_PAGE_COUNT; i++)
+        FREE_AND_SET_NULL_IF_SET(sSummaryPageTilemaps[i]);
+
+    FREE_AND_SET_NULL_IF_SET(sSummaryPageTilemapEgg);
+    FREE_AND_SET_NULL_IF_SET(sSummaryMovesTilemap);
+
+    sSummaryTilemapCacheReady = FALSE;
+}
+
 static bool8 PSS_CanRenameMon(void)
 {
 #if P_SUMMARY_SCREEN_RENAME
@@ -1650,6 +1722,7 @@ static void CB2_StartRenameFromSummary(void)
                        GetBoxMonData(boxMon, MON_DATA_SPECIES, NULL),
                        GetBoxMonGender(boxMon),
                        GetBoxMonData(boxMon, MON_DATA_PERSONALITY, NULL),
+                       GetBoxMonData(boxMon, MON_DATA_IS_SHADOW, NULL),
                        CB2_ReturnToSummaryFromRename);
     }
     else
@@ -1662,6 +1735,7 @@ static void CB2_StartRenameFromSummary(void)
                        GetMonData(mon, MON_DATA_SPECIES, NULL),
                        GetMonGender(mon),
                        GetMonData(mon, MON_DATA_PERSONALITY, NULL),
+                       GetMonData(mon, MON_DATA_IS_SHADOW, NULL),
                        CB2_ReturnToSummaryFromRename);
     }
 }
@@ -2545,7 +2619,7 @@ static void PSS_GetDataPokemon(void)
     sMonSummaryScreen->typeIcons[0] = gSpeciesInfo[dexNum].types[0];
     sMonSummaryScreen->typeIcons[1] = gSpeciesInfo[dexNum].types[1];
 
-    GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_NICKNAME, tempStr);
+    GetMonNickname(&sMonSummaryScreen->currentMon, tempStr);
     StringCopyN_Multibyte(sMonSummaryScreen->summary.nickname, tempStr, POKEMON_NAME_LENGTH);
     sMonSummaryScreen->summary.nickname[POKEMON_NAME_LENGTH] = EOS;
 
@@ -2588,6 +2662,16 @@ static void PSS_GetDataPokemon(void)
 #define MACRO_8136350_0(x) (63 - StringLength((x)) * 6)
 #define MACRO_8136350_1(x) (27 - StringLength((x)) * 6)
 
+static u8 PSS_GetLevelFromExp(u16 species, u32 exp)
+{
+    s32 level = 1;
+
+    while (level <= MAX_LEVEL && gExperienceTables[gSpeciesInfo[species].growthRate][level] <= exp)
+        level++;
+
+    return level - 1;
+}
+
 static void PSS_GetStatsPokemon(void)
 {
     u8 tempStr[20];
@@ -2629,20 +2713,54 @@ static void PSS_GetStatsPokemon(void)
     ConvertIntToDecimalStringN(sMonSummaryScreen->summary.unk309C[PSS_STAT_SPE], statValue, STR_CONV_MODE_LEFT_ALIGN, 3);
     sUnknown_203B144->unk0C = MACRO_8136350_1(sMonSummaryScreen->summary.unk309C[PSS_STAT_SPE]);
 
-    exp = GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_EXP);
-    ConvertIntToDecimalStringN(sMonSummaryScreen->summary.unk31A4, exp, STR_CONV_MODE_LEFT_ALIGN, 7);
-    sUnknown_203B144->unk0E = MACRO_8136350_0(sMonSummaryScreen->summary.unk31A4);
-
-    level = GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_LEVEL);
-    expToNextLevel = 0;
-    if (level < 100)
     {
-        species = GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_SPECIES);
-        expToNextLevel = gExperienceTables[gSpeciesInfo[species].growthRate][level + 1] - exp;
-    }
+        bool8 isShadow = GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_IS_SHADOW);
+        exp = GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_EXP);
 
-    ConvertIntToDecimalStringN(sMonSummaryScreen->summary.unk31B0, expToNextLevel, STR_CONV_MODE_LEFT_ALIGN, 7);
-    sUnknown_203B144->unk10 = MACRO_8136350_0(sMonSummaryScreen->summary.unk31B0);
+        if (isShadow)
+        {
+            u32 storedExp = Shadow_GetStoredExp(&sMonSummaryScreen->currentMon);
+            u32 growthRate;
+            u32 maxExp;
+            u32 expAfter;
+            u8 levelAfter;
+
+            ConvertIntToDecimalStringN(sMonSummaryScreen->summary.unk31A4, storedExp, STR_CONV_MODE_LEFT_ALIGN, 7);
+            sUnknown_203B144->unk0E = MACRO_8136350_0(sMonSummaryScreen->summary.unk31A4);
+
+            species = GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_SPECIES);
+            growthRate = gSpeciesInfo[species].growthRate;
+            maxExp = gExperienceTables[growthRate][MAX_LEVEL];
+            expAfter = exp;
+            if (expAfter < maxExp)
+            {
+                if (storedExp > maxExp - expAfter)
+                    expAfter = maxExp;
+                else
+                    expAfter += storedExp;
+            }
+
+            levelAfter = PSS_GetLevelFromExp(species, expAfter);
+            ConvertIntToDecimalStringN(sMonSummaryScreen->summary.unk31B0, levelAfter, STR_CONV_MODE_LEFT_ALIGN, 3);
+            sUnknown_203B144->unk10 = MACRO_8136350_0(sMonSummaryScreen->summary.unk31B0);
+        }
+        else
+        {
+            ConvertIntToDecimalStringN(sMonSummaryScreen->summary.unk31A4, exp, STR_CONV_MODE_LEFT_ALIGN, 7);
+            sUnknown_203B144->unk0E = MACRO_8136350_0(sMonSummaryScreen->summary.unk31A4);
+
+            level = GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_LEVEL);
+            expToNextLevel = 0;
+            if (level < 100)
+            {
+                species = GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_SPECIES);
+                expToNextLevel = gExperienceTables[gSpeciesInfo[species].growthRate][level + 1] - exp;
+            }
+
+            ConvertIntToDecimalStringN(sMonSummaryScreen->summary.unk31B0, expToNextLevel, STR_CONV_MODE_LEFT_ALIGN, 7);
+            sUnknown_203B144->unk10 = MACRO_8136350_0(sMonSummaryScreen->summary.unk31B0);
+        }
+    }
 
     type = GetAbilityBySpecies(GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_SPECIES),
                                GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_ABILITY_NUM));
@@ -2935,10 +3053,13 @@ static void PSS_ShowInfoPokemon(void)
 static void PSS_ShowMonStats(void)
 {
     u8 nature = GetNature(&sMonSummaryScreen->currentMon);
+    bool8 isShadow = GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_IS_SHADOW);
+    const u8 *expLabel = isShadow ? gText_PSS_StoredExp : gText_PSS_ExpPoints;
+    const u8 *nextLabel = isShadow ? gText_PSS_LvAfterPure : gText_PSS_ToNextLv;
 
     AddTextPrinterParameterized3(sMonSummaryScreen->window[3], 2, 10, 4, sPSSTextColours[WHITE], TEXT_SPEED_FF, gText_PSS_HP);
-    AddTextPrinterParameterized3(sMonSummaryScreen->window[3], 2, 10, 76, sPSSTextColours[WHITE], TEXT_SPEED_FF, gText_PSS_ExpPoints);
-    AddTextPrinterParameterized3(sMonSummaryScreen->window[3], 2, 10, 90, sPSSTextColours[WHITE], TEXT_SPEED_FF, gText_PSS_ToNextLv);
+    AddTextPrinterParameterized3(sMonSummaryScreen->window[3], 2, 10, 76, sPSSTextColours[WHITE], TEXT_SPEED_FF, expLabel);
+    AddTextPrinterParameterized3(sMonSummaryScreen->window[3], 2, 10, 90, sPSSTextColours[WHITE], TEXT_SPEED_FF, nextLabel);
     AddTextPrinterParameterized3(sMonSummaryScreen->window[3], 2, 10, 16, sPSSTextColours[WHITE + sPSSNatureStatTable[nature][0]], TEXT_SPEED_FF, gText_PSS_Attack);
     AddTextPrinterParameterized3(sMonSummaryScreen->window[3], 2, 10, 28, sPSSTextColours[WHITE + sPSSNatureStatTable[nature][1]], TEXT_SPEED_FF, gText_PSS_Defense);
     AddTextPrinterParameterized3(sMonSummaryScreen->window[3], 2, 10, 40, sPSSTextColours[WHITE + sPSSNatureStatTable[nature][3]], TEXT_SPEED_FF, gText_PSS_SpAtk);
@@ -3200,8 +3321,12 @@ static void PSS_ShowEggInfo(void)
 
 static void PSS_PrintExpPointAndNextLvTexts(void)
 {
-	AddTextPrinterParameterized3(sMonSummaryScreen->window[4], 2, 26,  7, sPSSTextColours[DARK], TEXT_SPEED_FF, gText_8419C4D);
-	AddTextPrinterParameterized3(sMonSummaryScreen->window[4], 2, 26, 20, sPSSTextColours[DARK], TEXT_SPEED_FF, gText_8419C59);
+    bool8 isShadow = GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_IS_SHADOW);
+    const u8 *expLabel = isShadow ? gText_PSS_StoredExp : gText_8419C4D;
+    const u8 *nextLabel = isShadow ? gText_PSS_LvAfterPure : gText_8419C59;
+
+	AddTextPrinterParameterized3(sMonSummaryScreen->window[4], 2, 26,  7, sPSSTextColours[DARK], TEXT_SPEED_FF, expLabel);
+	AddTextPrinterParameterized3(sMonSummaryScreen->window[4], 2, 26, 20, sPSSTextColours[DARK], TEXT_SPEED_FF, nextLabel);
 }
 
 static void PSS_ShowAttackInfo(void)
@@ -3209,6 +3334,7 @@ static void PSS_ShowAttackInfo(void)
     if (sUnknown_203B16D < 5)
     {
         u8 category;
+        const u8 *moveDesc;
 
         if (sMonSummaryScreen->mode != PSS_MODE_SELECT_MOVE && sUnknown_203B16D == 4)
             return;
@@ -3224,11 +3350,83 @@ static void PSS_ShowAttackInfo(void)
 		AddTextPrinterParameterized4(sMonSummaryScreen->window[4], 2, 14, 17, 0, -2, sPSSTextColours[WHITE], TEXT_SPEED_FF, gText_PSS_Power);
 		AddTextPrinterParameterized4(sMonSummaryScreen->window[4], 2, 14, 32, 0, -2, sPSSTextColours[WHITE], TEXT_SPEED_FF, gText_PSS_Accuracy);
 		AddTextPrinterParameterized4(sMonSummaryScreen->window[4], 2, 10, 48, 0, -2, sPSSTextColours[WHITE], TEXT_SPEED_FF, gText_PSS_Effect);
-		AddTextPrinterParameterized4(sMonSummaryScreen->window[4], 2,  7, 63, 0, -2, sPSSTextColours[DARK], TEXT_SPEED_FF,
-                                             GetMoveDescription(sMonSummaryScreen->currentMove[sUnknown_203B16D]));
+        moveDesc = GetMoveDescription(sMonSummaryScreen->currentMove[sUnknown_203B16D]);
+        PSS_CopyMoveDescriptionWrapped(gStringVar4, moveDesc);
+		AddTextPrinterParameterized4(sMonSummaryScreen->window[4], PSS_MOVE_DESC_FONT_ID, PSS_MOVE_DESC_TEXT_X, PSS_MOVE_DESC_TEXT_Y, 0, -2, sPSSTextColours[DARK], TEXT_SPEED_FF, gStringVar4);
 
         PutWindowTilemap(sMonSummaryScreen->window[4]);
     }
+}
+
+static void PSS_CopyMoveDescriptionWrapped(u8 *dst, const u8 *src)
+{
+    u32 lineWidth = 0;
+    u32 spaceWidth = GetStringWidth(PSS_MOVE_DESC_FONT_ID, gText_Space, 0);
+    u8 wordBuf[PSS_MOVE_DESC_WORD_BUF_SIZE];
+
+    while (*src != EOS)
+    {
+        if (*src == CHAR_NEWLINE)
+        {
+            *dst++ = *src++;
+            lineWidth = 0;
+            continue;
+        }
+
+        if (*src == CHAR_SPACE)
+        {
+            src++;
+            continue;
+        }
+
+        u8 *wordPtr = wordBuf;
+
+        while (*src != EOS && *src != CHAR_NEWLINE && *src != CHAR_SPACE)
+        {
+            if (*src == EXT_CTRL_CODE_BEGIN)
+            {
+                u8 code = src[1];
+                u8 len = GetExtCtrlCodeLength(code);
+                for (u8 i = 0; i < len + 1; i++)
+                {
+                    if ((u32)(wordPtr - wordBuf) < PSS_MOVE_DESC_WORD_BUF_SIZE - 1)
+                        *wordPtr++ = *src;
+                    src++;
+                }
+                continue;
+            }
+            if ((u32)(wordPtr - wordBuf) < PSS_MOVE_DESC_WORD_BUF_SIZE - 1)
+                *wordPtr++ = *src;
+            src++;
+        }
+
+        if (wordPtr == wordBuf)
+            continue;
+
+        *wordPtr = EOS;
+
+        u32 wordWidth = GetStringWidth(PSS_MOVE_DESC_FONT_ID, wordBuf, 0);
+
+        if (lineWidth != 0)
+        {
+            if (lineWidth + spaceWidth + wordWidth > PSS_MOVE_DESC_MAX_WIDTH_PX)
+            {
+                *dst++ = CHAR_NEWLINE;
+                lineWidth = 0;
+            }
+            else
+            {
+                *dst++ = CHAR_SPACE;
+                lineWidth += spaceWidth;
+            }
+        }
+
+        for (u8 *word = wordBuf; *word != EOS; word++)
+            *dst++ = *word;
+        lineWidth += wordWidth;
+    }
+
+    *dst = EOS;
 }
 
 static void PSS_AddTextToWin5(void)
@@ -3357,6 +3555,7 @@ static void sub_8137E64(u8 taskId)
 
     gLastViewedMonIndex = GetLastViewedMonIndex();
 
+    PSS_FreeTilemapCache();
     FREE_AND_SET_NULL_IF_SET(sMonSummaryScreen);
     FREE_AND_SET_NULL_IF_SET(sUnknown_203B144);
 }
@@ -3500,31 +3699,52 @@ static void sub_8138538(void)
     case PSS_PAGE_INFO:
         if (!sMonSummaryScreen->isEgg)
         {
-            LZ77UnCompVram(gMapSummaryScreenPokemonInfo, (void *)(VRAM + 0xF000));
+            if (sSummaryTilemapCacheReady && sSummaryPageTilemaps[PSS_PAGE_INFO] != NULL)
+                CpuCopy16(sSummaryPageTilemaps[PSS_PAGE_INFO], (void *)(VRAM + 0xF000), SUMMARY_PAGE_TILEMAP_SIZE);
+            else
+                LZ77UnCompVram(gMapSummaryScreenPokemonInfo, (void *)(VRAM + 0xF000));
         }
         else
         {
-            LZ77UnCompVram(gMapSummaryScreenEgg, (void *)(VRAM + 0xF000));
+            if (sSummaryTilemapCacheReady && sSummaryPageTilemapEgg != NULL)
+                CpuCopy16(sSummaryPageTilemapEgg, (void *)(VRAM + 0xF000), SUMMARY_PAGE_TILEMAP_SIZE);
+            else
+                LZ77UnCompVram(gMapSummaryScreenEgg, (void *)(VRAM + 0xF000));
         }
 		PSS_SetInvisibleHpBar(1);
 		PSS_SetInvisibleExpBar(1);
         break;
     case PSS_PAGE_SKILLS:
-        LZ77UnCompVram(gMapSummaryScreenPokemonSkills, (void *)(VRAM + 0xF000));
+        if (sSummaryTilemapCacheReady && sSummaryPageTilemaps[PSS_PAGE_SKILLS] != NULL)
+            CpuCopy16(sSummaryPageTilemaps[PSS_PAGE_SKILLS], (void *)(VRAM + 0xF000), SUMMARY_PAGE_TILEMAP_SIZE);
+        else
+            LZ77UnCompVram(gMapSummaryScreenPokemonSkills, (void *)(VRAM + 0xF000));
 		PSS_SetInvisibleHpBar(0);
 		PSS_SetInvisibleExpBar(0);
 		HideBg(3);
         break;
     case PSS_PAGE_MOVES:
-        LZ77UnCompVram(gMapSummaryScreenKnownMoves, (void *)(VRAM + 0xF000));
-        LZ77UnCompVram(gMapSummaryScreenMoves, (void *)(VRAM + 0xE000));
+        if (sSummaryTilemapCacheReady && sSummaryPageTilemaps[PSS_PAGE_MOVES] != NULL)
+            CpuCopy16(sSummaryPageTilemaps[PSS_PAGE_MOVES], (void *)(VRAM + 0xF000), SUMMARY_PAGE_TILEMAP_SIZE);
+        else
+            LZ77UnCompVram(gMapSummaryScreenKnownMoves, (void *)(VRAM + 0xF000));
+        if (sSummaryTilemapCacheReady && sSummaryMovesTilemap != NULL)
+            CpuCopy16(sSummaryMovesTilemap, (void *)(VRAM + 0xE000), SUMMARY_PAGE_TILEMAP_SIZE);
+        else
+            LZ77UnCompVram(gMapSummaryScreenMoves, (void *)(VRAM + 0xE000));
 		PSS_SetInvisibleHpBar(1);
 		PSS_SetInvisibleExpBar(1);
 		ShowBg(3);
         break;
     case PSS_PAGE_MOVES_INFO:
-		LZ77UnCompVram(gMapSummaryScreenMovesInfo, (void *)(VRAM + 0xF000));
-        LZ77UnCompVram(gMapSummaryScreenMoves, (void *)(VRAM + 0xE000));
+        if (sSummaryTilemapCacheReady && sSummaryPageTilemaps[PSS_PAGE_MOVES_INFO] != NULL)
+            CpuCopy16(sSummaryPageTilemaps[PSS_PAGE_MOVES_INFO], (void *)(VRAM + 0xF000), SUMMARY_PAGE_TILEMAP_SIZE);
+        else
+		    LZ77UnCompVram(gMapSummaryScreenMovesInfo, (void *)(VRAM + 0xF000));
+        if (sSummaryTilemapCacheReady && sSummaryMovesTilemap != NULL)
+            CpuCopy16(sSummaryMovesTilemap, (void *)(VRAM + 0xE000), SUMMARY_PAGE_TILEMAP_SIZE);
+        else
+            LZ77UnCompVram(gMapSummaryScreenMoves, (void *)(VRAM + 0xE000));
 		PSS_SetInvisibleHpBar(1);
 		PSS_SetInvisibleExpBar(1);
 		ShowBg(3);

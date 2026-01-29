@@ -558,6 +558,11 @@ static void Cmd_handlefurycutter(void);
 static void Cmd_setembargo(void);
 static void Cmd_presentdamagecalculation(void);
 static void Cmd_setsafeguard(void);
+
+// Store snagged HP/status so the captured mon can be restored later.
+static u16 sSnaggedMonHp[PARTY_SIZE];
+static u32 sSnaggedMonStatus[PARTY_SIZE];
+static bool8 sSnaggedMonHasData[PARTY_SIZE];
 static void Cmd_magnitudedamagecalculation(void);
 static void Cmd_jumpifnopursuitswitchdmg(void);
 static void Cmd_tryrestorehpberry(void);
@@ -4665,7 +4670,7 @@ static void Cmd_tryfaintmon(void)
         else
         {
             destinyBondBattler = gBattlerAttacker;
-            if (gBattleMons[gBattlerTarget].snagged == TRUE)
+            if (!IsOnPlayerSide(gBattlerTarget) && gBattleMons[gBattlerTarget].snagged == TRUE)
                 faintScript = BattleScript_ShowCaughtTargetAsFainted;
             else
                 faintScript = BattleScript_FaintTarget;
@@ -8992,6 +8997,12 @@ static void Cmd_drawpartystatussummary(void)
         return;
 
     battler = GetBattlerForBattleScript(cmd->battler);
+
+    if (!(gBattleTypeFlags & BATTLE_TYPE_TRAINER) && !IsOnPlayerSide(battler))
+    {
+        gBattlescriptCurrInstr = cmd->nextInstr;
+        return;
+    }
     party = GetBattlerParty(battler);
 
     for (i = 0; i < PARTY_SIZE; i++)
@@ -9020,6 +9031,12 @@ static void Cmd_hidepartystatussummary(void)
     CMD_ARGS(u8 battler);
 
     u32 battler = GetBattlerForBattleScript(cmd->battler);
+
+    if (!(gBattleTypeFlags & BATTLE_TYPE_TRAINER) && !IsOnPlayerSide(battler))
+    {
+        gBattlescriptCurrInstr = cmd->nextInstr;
+        return;
+    }
     BtlController_EmitHidePartyStatusSummary(battler, B_COMM_TO_CONTROLLER);
     MarkBattlerForControllerExec(battler);
 
@@ -11769,7 +11786,17 @@ static void Cmd_various(void)
         {
             if (GetMonData(&gEnemyParty[i], MON_DATA_SNAGGED))
             {
-                
+                if (!sSnaggedMonHasData[i])
+                {
+                    bool8 snagged = FALSE;
+                    SetMonData(&gEnemyParty[i], MON_DATA_SNAGGED, &snagged);
+                    continue;
+                }
+
+                SetMonData(&gEnemyParty[i], MON_DATA_HP, &sSnaggedMonHp[i]);
+                SetMonData(&gEnemyParty[i], MON_DATA_STATUS, &sSnaggedMonStatus[i]);
+                sSnaggedMonHasData[i] = FALSE;
+
                 if (GiveMonToPlayer(&gEnemyParty[i]) != MON_GIVEN_TO_PARTY)
                 {
                     if (!ShouldShowBoxWasFullMessage())
@@ -16076,7 +16103,12 @@ static void Cmd_handleballthrow(void)
             if (gBattleTypeFlags & BATTLE_TYPE_TRAINER)
             {
                 bool8 snagFlag = TRUE;
-                struct Pokemon *mon = &gEnemyParty[gBattlerPartyIndexes[gBattlerTarget]];
+                u8 partyIndex = gBattlerPartyIndexes[gBattlerTarget];
+                struct Pokemon *mon = &gEnemyParty[partyIndex];
+
+                sSnaggedMonHp[partyIndex] = gBattleMons[gBattlerTarget].hp;
+                sSnaggedMonStatus[partyIndex] = gBattleMons[gBattlerTarget].status1;
+                sSnaggedMonHasData[partyIndex] = TRUE;
 
                 gBattleMons[gBattlerTarget].snagged = TRUE;
                 gBattleMons[gBattlerTarget].hp = 0;
@@ -16155,7 +16187,12 @@ static void Cmd_handleballthrow(void)
                 if (gBattleTypeFlags & BATTLE_TYPE_TRAINER)
                 {
                     bool8 snagFlag = TRUE;
-                    struct Pokemon *mon = &gEnemyParty[gBattlerPartyIndexes[gBattlerTarget]];
+                    u8 partyIndex = gBattlerPartyIndexes[gBattlerTarget];
+                    struct Pokemon *mon = &gEnemyParty[partyIndex];
+
+                    sSnaggedMonHp[partyIndex] = gBattleMons[gBattlerTarget].hp;
+                    sSnaggedMonStatus[partyIndex] = gBattleMons[gBattlerTarget].status1;
+                    sSnaggedMonHasData[partyIndex] = TRUE;
 
                     gBattleMons[gBattlerTarget].snagged = TRUE;
                     gBattleMons[gBattlerTarget].hp = 0;
@@ -16549,6 +16586,7 @@ static void Cmd_trygivecaughtmonnick(void)
                            GetMonData(GetBattlerMon(gBattlerTarget), MON_DATA_SPECIES),
                            GetMonGender(GetBattlerMon(gBattlerTarget)),
                            GetMonData(GetBattlerMon(gBattlerTarget), MON_DATA_PERSONALITY, NULL),
+                           GetMonData(GetBattlerMon(gBattlerTarget), MON_DATA_IS_SHADOW, NULL),
                            callback);
 
             gBattleCommunication[MULTIUSE_STATE]++;

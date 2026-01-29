@@ -2257,3 +2257,17 @@ static const struct SpriteFrameImage sPicTable_Venus[] =
     overworld_ascending_frames(gObjectEventPic_Venus, 2, 4),
 };
 
+static const struct SpriteFrameImage sPicTable_AshXD[] =
+{
+    overworld_ascending_frames(gObjectEventPic_Ash, 2, 4),
+};
+
+static const struct SpriteFrameImage sPicTable_Ironmask[] =
+{
+    overworld_ascending_frames(gObjectEventPic_Ironmask, 2, 4),
+};
+
+static const struct SpriteFrameImage sPicTable_MirrorB[] =
+{
+    overworld_ascending_frames(gObjectEventPic_MirrorB, 2, 4),
+};

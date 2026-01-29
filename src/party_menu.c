@@ -34,6 +34,7 @@
 #include "item.h"
 #include "item_menu.h"
 #include "item_use.h"
+#include "line_break.h"
 #include "caps.h"
 #include "link.h"
 #include "link_rfu.h"
@@ -161,6 +162,8 @@ enum {
 #define MENU_DIR_LEFT    -2
 
 #define HM_MOVES_END 0xFFFF
+#define PARTY_MENU_MSG_MAX_WIDTH 208
+#define PARTY_MENU_MSG_MAX_LINES 2
 
 static const u16 sHMMoves[] =
 {
@@ -1972,8 +1975,28 @@ static s8 GetNewSlotDoubleLayout(s8 slotId, s8 movementDir)
     }
 }
 
+static bool8 TryGetShadowXDNickname(struct Pokemon *mon, u8 *dest)
+{
+    u16 shadowId;
+    static const u8 sText_XD[] = _("XD");
+
+    if (!GetMonData(mon, MON_DATA_IS_SHADOW, NULL))
+        return FALSE;
+
+    shadowId = GetMonData(mon, MON_DATA_SHADOW_ID, NULL);
+    if (shadowId > 200)
+        return FALSE;
+
+    StringCopy(dest, sText_XD);
+    ConvertIntToDecimalStringN(dest + 2, shadowId, STR_CONV_MODE_LEADING_ZEROS, 3);
+    return TRUE;
+}
+
 u8 *GetMonNickname(struct Pokemon *mon, u8 *dest)
 {
+    if (TryGetShadowXDNickname(mon, dest))
+        return dest;
+
     GetMonData(mon, MON_DATA_NICKNAME, dest);
     return StringGet_Nickname(dest);
 }
@@ -2892,9 +2915,15 @@ static u8 DisplaySelectionWindow(u8 windowType)
 
 static void PrintMessage(const u8 *text)
 {
+    u8 *buffer = gStringVar4;
+
+    if (text != gStringVar4)
+        StringCopy(buffer, text);
+    StripLineBreaks(buffer);
+    BreakStringAutomatic(buffer, PARTY_MENU_MSG_MAX_WIDTH, PARTY_MENU_MSG_MAX_LINES, FONT_NORMAL, SHOW_SCROLL_PROMPT);
     DrawStdFrameWithCustomTileAndPalette(WIN_MSG, FALSE, 0x4F, 13);
     gTextFlags.canABSpeedUpPrint = TRUE;
-    AddTextPrinterParameterized2(WIN_MSG, FONT_NORMAL, text, GetPlayerTextSpeedDelay(), 0, TEXT_COLOR_DARK_GRAY, TEXT_COLOR_WHITE, TEXT_COLOR_LIGHT_GRAY);
+    AddTextPrinterParameterized2(WIN_MSG, FONT_NORMAL, buffer, GetPlayerTextSpeedDelay(), 0, TEXT_COLOR_DARK_GRAY, TEXT_COLOR_WHITE, TEXT_COLOR_LIGHT_GRAY);
 }
 
 static void PartyMenuDisplayYesNoMenu(void)
@@ -6212,6 +6241,17 @@ void ItemUseCB_TimeFlute(u8 taskId, TaskFunc task)
     BeginPurificationScene(mon, gPartyMenu.slotId);
 }
 
+static bool8 IsShadowDefaultNickname(u16 shadowId, const u8 *nickname)
+{
+    static const u8 sText_XD[] = _("XD");
+    u8 expected[POKEMON_NAME_BUFFER_SIZE];
+    if (shadowId == 0 || shadowId > 200)
+        return FALSE;
+    StringCopy(expected, sText_XD);
+    ConvertIntToDecimalStringN(expected + 2, shadowId, STR_CONV_MODE_LEADING_ZEROS, 3);
+    return StringCompare(expected, nickname) == 0;
+}
+
 static void CB2_TimeFluteReturn(void)
 {
     if (sTimeFluteSlotId >= PARTY_SIZE)
@@ -6223,13 +6263,14 @@ static void CB2_TimeFluteReturn(void)
     }
 
     struct Pokemon *mon = &gPlayerParty[sTimeFluteSlotId];
-    if (sTimeFluteSavedNickname[0] != EOS)
-    {
-        SetMonData(mon, MON_DATA_NICKNAME, sTimeFluteSavedNickname);
-        sTimeFluteSavedNickname[0] = EOS;
-    }
+    u16 shadowId = GetMonData(mon, MON_DATA_SHADOW_ID, NULL);
+    bool8 useSpeciesNickname = FALSE;
+    if (sTimeFluteSavedNickname[0] != EOS && IsShadowDefaultNickname(shadowId, sTimeFluteSavedNickname))
+        useSpeciesNickname = TRUE;
     u8 isShadow = FALSE;
     SetMonData(mon, MON_DATA_IS_SHADOW, &isShadow);
+    // Recalculate level/stats from EXP now that the mon is no longer shadow.
+    CalculateMonStats(mon);
     u8 snagged = FALSE;
     SetMonData(mon, MON_DATA_SNAGGED, &snagged);
     u8 shadowAggro = 0;
@@ -6237,7 +6278,14 @@ static void CB2_TimeFluteReturn(void)
     Shadow_RemoveShadowMoves(mon);
     SetMonHeartValue(mon, 0);
     SetMonHeartMax(mon, 0);
-    u16 shadowId = GetMonData(mon, MON_DATA_SHADOW_ID, NULL);
+    if (sTimeFluteSavedNickname[0] != EOS)
+    {
+        if (useSpeciesNickname)
+            SetMonData(mon, MON_DATA_NICKNAME, GetSpeciesName(GetMonData(mon, MON_DATA_SPECIES, NULL)));
+        else
+            SetMonData(mon, MON_DATA_NICKNAME, sTimeFluteSavedNickname);
+        sTimeFluteSavedNickname[0] = EOS;
+    }
     if (shadowId != 0)
         Shdw_SetState(shadowId, SHDW_STATE_PURIFIED);
     gSkipShadowStoredExpGrantForPurification = FALSE;

@@ -78,6 +78,7 @@ static bool8 sIsScriptedWildDouble;
 extern const SpecialFunc gSpecials[];
 extern const u8 *gStdScripts[];
 extern const u8 *gStdScripts_End[];
+void SetSpeaker(struct ScriptContext *ctx);
 
 static void CloseBrailleWindow(void);
 static void DynamicMultichoiceSortList(struct ListMenuItem *items, u32 count);
@@ -3274,5 +3275,11 @@ bool8 ScrCmd_setwildshadowbattle(struct ScriptContext *ctx)
         sIsScriptedWildDouble = TRUE;
     }
 
+    return FALSE;
+}
+
+bool8 ScrCmd_setspeaker(struct ScriptContext *ctx)
+{
+    SetSpeaker(ctx);
     return FALSE;
 }

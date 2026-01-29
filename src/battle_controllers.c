@@ -1644,7 +1644,7 @@ static u32 GetBattlerMonData(u32 battler, struct Pokemon *party, u32 monId, u8 *
         battleMon.shadowID = GetMonData(&party[monId], MON_DATA_SHADOW_ID);
         battleMon.heartVal = GetMonData(&party[monId], MON_DATA_HEART_VALUE);
         battleMon.heartMax = GetMonData(&party[monId], MON_DATA_HEART_MAX);
-        GetMonData(&party[monId], MON_DATA_NICKNAME, nickname);
+        GetMonNickname(&party[monId], nickname);
         StringCopy_Nickname(battleMon.nickname, nickname);
         GetMonData(&party[monId], MON_DATA_OT_NAME, battleMon.otName);
         src = (u8 *)&battleMon;

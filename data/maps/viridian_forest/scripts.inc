@@ -17,12 +17,12 @@
 .set LOCALID_BUGCATCHER_6,    6
 .set LOCALID_BUGCATCHER_7,    7
 
-.set LOCALID_ITEMBALL_1,      8
-.set LOCALID_ITEMBALL_2,      9
-.set LOCALID_ITEMBALL_3,     10
-.set LOCALID_ITEMBALL_4,     11
-.set LOCALID_ITEMBALL_5,     12
-.set LOCALID_ITEMBALL_6,     13
+.set LOCALID_ITEMBALL_POTION1,       8
+.set LOCALID_ITEMBALL_ESCAPE_ROPE,   9
+.set LOCALID_ITEMBALL_TIME_FLUTE,   10
+.set LOCALID_ITEMBALL_PARALYZE_HEAL, 11
+.set LOCALID_ITEMBALL_POKE_BALL,    12
+.set LOCALID_ITEMBALL_ANTIDOTE,     13
 
 @ -------------------------
 @ Map Scripts
@@ -70,16 +70,20 @@ ViridianForest_EventScript_TriggerScene_Done::
 
 @ ============================================================
 @ ZINZOLIN + PROTON CONVERSATION
-@ After talk: walk 3 steps forward (down) and vanish forever
+@ After talk: walk 3 steps up and vanish forever
 @ ============================================================
 
 ViridianForest_EventScript_ZinzolinProtonTalk::
+    setspeaker ViridianForest_Speaker_Proton
+    msgbox ViridianForest_Text_Proton_1, MSGBOX_DEFAULT
+    closemessage
+
     setspeaker ViridianForest_Speaker_Zinzolin
     msgbox ViridianForest_Text_Zinzolin_1, MSGBOX_DEFAULT
     closemessage
 
     setspeaker ViridianForest_Speaker_Proton
-    msgbox ViridianForest_Text_Proton_1, MSGBOX_DEFAULT
+    msgbox ViridianForest_Text_Proton_2, MSGBOX_DEFAULT
     closemessage
 
     setspeaker ViridianForest_Speaker_Zinzolin
@@ -87,11 +91,11 @@ ViridianForest_EventScript_ZinzolinProtonTalk::
     closemessage
 
     setspeaker ViridianForest_Speaker_Proton
-    msgbox ViridianForest_Text_Proton_2, MSGBOX_DEFAULT
+    msgbox ViridianForest_Text_Proton_3, MSGBOX_DEFAULT
     closemessage
 
-    applymovement LOCALID_PROTON,   ViridianForest_Mov_WalkDown3
-    applymovement LOCALID_ZINZOLIN, ViridianForest_Mov_WalkDown3
+    applymovement LOCALID_PROTON,   ViridianForest_Mov_WalkUp3
+    applymovement LOCALID_ZINZOLIN, ViridianForest_Mov_WalkUp3
     waitmovement 0
 
     setflag FLAG_VIRIDIAN_FOREST_PLASMA_SCENE_DONE
@@ -102,10 +106,10 @@ ViridianForest_EventScript_ZinzolinProtonTalk::
     return
 
 
-ViridianForest_Mov_WalkDown3:
-    walk_down
-    walk_down
-    walk_down
+ViridianForest_Mov_WalkUp3:
+    walk_up
+    walk_up
+    walk_up
     step_end
 
 
@@ -130,29 +134,38 @@ ViridianForest_Speaker_Plasma:
 @ ---------- TEXT (Scene) ----------
 
 ViridianForest_Text_Zinzolin_1:
-    .string "This forest is crawling with eyes.\p"
-    .string "Even the bugs are listening.$"
+    .string "Indeed. We should be cautious what we\n"
+    .string "discuss here. It may not be as private\l"
+    .string "as we think.$"
 
 ViridianForest_Text_Proton_1:
-    .string "Let them listen.\p"
-    .string "The Kanto branch moves when we say it\n"
-    .string "moves.$"
+    .string "I see you have agreed to partner with\n"
+    .string "us. We know what you stand for and\l"
+    .string "your goals.\p"
+    .string "I believe we will make a good\n"
+    .string "partnership.$"
 
 ViridianForest_Text_Zinzolin_2:
-    .string "The plan is simple.\p"
-    .string "Snagem built what we need.\p"
-    .string "We take it, and we don't ask twice.$"
+    .string "Yes, we are nearly finished gathering\n"
+    .string "the biggest threats to our scheme.\p"
+    .string "The sages have taken over the KANTO\n"
+    .string "locations.\p"
+    .string "I am on my way to secure the final\n"
+    .string "bird.$"
 ViridianForest_Text_Proton_2:
-    .string "Gonzap thinks he's a partner.\p"
-    .string "He's a tool.\p"
-    .string "Once we get the device, Kanto becomes\n"
-    .string "the testing ground.$"
+    .string "No matter. We know that SNAGEM is a\n"
+    .string "bunch of good for nothings.\p"
+    .string "We need them only to help dispatch the\n"
+    .string "corrupted ones.\p"
+    .string "Then we are free to do as we\n"
+    .string "please.$"
+
+ViridianForest_Text_Proton_3:
+    .string "Very good. Let us be on our way then.$"
 @ ============================================================
 @ Bug Catchers (Trainers) - ALL use setspeaker
 @ ============================================================
 ViridianForest_EventScript_BugCatcher5::
-    lock
-    faceplayer
     setspeaker ViridianForest_Speaker_BugCatcher
     trainerbattle_single TRAINER_VF_BUGCATCHER1, ViridianForest_Text_BugCatcher5_Intro, ViridianForest_Text_BugCatcher5_Defeat, ViridianForest_EventScript_BugCatcher5_After
     end
@@ -172,8 +185,6 @@ ViridianForest_Text_BugCatcher5_Defeat:
 ViridianForest_Text_BugCatcher5_After:
     .string "Even the bugs can feel it in the air.$"
 ViridianForest_EventScript_BugCatcher6::
-    lock
-    faceplayer
     setspeaker ViridianForest_Speaker_BugCatcher
     trainerbattle_single TRAINER_VF_BUGCATCHER2, ViridianForest_Text_BugCatcher6_Intro, ViridianForest_Text_BugCatcher6_Defeat, ViridianForest_EventScript_BugCatcher6_After
     end
@@ -193,8 +204,6 @@ ViridianForest_Text_BugCatcher6_Defeat:
 ViridianForest_Text_BugCatcher6_After:
     .string "Maybe it was just the wind...$"
 ViridianForest_EventScript_BugCatcher7::
-    lock
-    faceplayer
     setspeaker ViridianForest_Speaker_BugCatcher
     trainerbattle_single TRAINER_VF_BUGCATCHER3, ViridianForest_Text_BugCatcher7_Intro, ViridianForest_Text_BugCatcher7_Defeat, ViridianForest_EventScript_BugCatcher7_After
     end
@@ -219,8 +228,6 @@ ViridianForest_Text_BugCatcher7_After:
 @ GRUNTS BEHIND THEM
 @ ============================================================
 ViridianForest_EventScript_RocketGrunt_Trainer::
-    lock
-    faceplayer
     setspeaker ViridianForest_Speaker_GruntRocket
     trainerbattle_single TRAINER_VF_ROCKET, ViridianForest_Text_RocketGrunt_Intro, ViridianForest_Text_RocketGrunt_Defeat, ViridianForest_EventScript_RocketGrunt_After
     end
@@ -241,8 +248,6 @@ ViridianForest_Text_RocketGrunt_Defeat:
 ViridianForest_Text_RocketGrunt_After:
     .string "Orders are orders. I'm out.$"
 ViridianForest_EventScript_PlasmaGrunt_Trainer::
-    lock
-    faceplayer
     setspeaker ViridianForest_Speaker_Plasma
     trainerbattle_single TRAINER_VF_PLASMA, ViridianForest_Text_PlasmaGrunt_Intro, ViridianForest_Text_PlasmaGrunt_Defeat, ViridianForest_EventScript_PlasmaGrunt_After
     end
@@ -266,24 +271,37 @@ ViridianForest_Text_PlasmaGrunt_After:
 
 ViridianForest_EventScript_Item_Potion1::
     finditem ITEM_POTION
+    goto_if_eq VAR_0x8007, FALSE, ViridianForest_EventScript_Item_Done
+    removeobject LOCALID_ITEMBALL_POTION1
+ViridianForest_EventScript_Item_Done::
     end
 
 ViridianForest_EventScript_Item_PokeBall::
     finditem ITEM_POKE_BALL
+    goto_if_eq VAR_0x8007, FALSE, ViridianForest_EventScript_Item_Done
+    removeobject LOCALID_ITEMBALL_POKE_BALL
     end
 
 ViridianForest_EventScript_Item_Antidote::
     finditem ITEM_ANTIDOTE
+    goto_if_eq VAR_0x8007, FALSE, ViridianForest_EventScript_Item_Done
+    removeobject LOCALID_ITEMBALL_ANTIDOTE
     end
 
 ViridianForest_EventScript_Item_ParalyzeHeal::
     finditem ITEM_PARALYZE_HEAL
+    goto_if_eq VAR_0x8007, FALSE, ViridianForest_EventScript_Item_Done
+    removeobject LOCALID_ITEMBALL_PARALYZE_HEAL
     end
 
 ViridianForest_EventScript_Item_Time_Flute::
     finditem ITEM_TIME_FLUTE
+    goto_if_eq VAR_0x8007, FALSE, ViridianForest_EventScript_Item_Done
+    removeobject LOCALID_ITEMBALL_TIME_FLUTE
     end
 
 ViridianForest_EventScript_Item_EscapeRope::
     finditem ITEM_ESCAPE_ROPE
+    goto_if_eq VAR_0x8007, FALSE, ViridianForest_EventScript_Item_Done
+    removeobject LOCALID_ITEMBALL_ESCAPE_ROPE
     end

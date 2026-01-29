@@ -27,6 +27,7 @@
 #include "follower_npc.h"
 #include "gpu_regs.h"
 #include "heal_location.h"
+#include "constants/heal_locations.h"
 #include "io_reg.h"
 #include "item.h"
 #include "item_icon.h"
@@ -383,6 +384,12 @@ void DoWhiteOut(void)
     RunScriptImmediately(EventScript_WhiteOut);
     HealPlayerParty();
     Overworld_ResetStateAfterWhiteOut();
+    if (!FlagGet(FLAG_SYS_DEFAULT_HEAL_SET))
+    {
+        if (GetHealLocationIndexByWarpData(&gSaveBlock1Ptr->lastHealLocation) == HEAL_LOCATION_PETALBURG_CITY)
+            SetLastHealLocationWarp(HEAL_LOCATION_PALLET_TOWN);
+        FlagSet(FLAG_SYS_DEFAULT_HEAL_SET);
+    }
     SetWarpDestinationToLastHealLocation();
     WarpIntoMap();
 }
@@ -3731,7 +3738,6 @@ bool8 ScrFunc_settimeofday(struct ScriptContext *ctx)
     SetTimeOfDay(ScriptReadByte(ctx));
     return FALSE;
 }
-
 
 
 

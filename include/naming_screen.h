@@ -14,6 +14,6 @@ enum {
 
 extern void BattleMainCB2(void);
 
-void DoNamingScreen(u8 templateNum, u8 *destBuffer, u16 monSpecies, u16 monGender, u32 monPersonality, MainCallback returnCallback);
+void DoNamingScreen(u8 templateNum, u8 *destBuffer, u16 monSpecies, u16 monGender, u32 monPersonality, bool8 isShadow, MainCallback returnCallback);
 
 #endif // GUARD_NAMING_SCREEN_H

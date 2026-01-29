@@ -123,6 +123,7 @@ const u32 gObjectEventPic_Man4[] = INCBIN_U32("graphics/object_events/pics/peopl
 const u32 gObjectEventPic_Man5[] = INCBIN_U32("graphics/object_events/pics/people/man_5.4bpp");
 const u32 gObjectEventPic_Nurse[] = INCBIN_U32("graphics/object_events/pics/people/nurse.4bpp");
 const u32 gObjectEventPic_ProfBirch[] = INCBIN_U32("graphics/object_events/pics/people/prof_birch.4bpp");
+const u16 gObjectEventPal_ProfBirch[] = INCBIN_U16("graphics/object_events/pics/people/prof_birch.gbapal");
 const u32 gObjectEventPic_ReporterM[] = INCBIN_U32("graphics/object_events/pics/people/reporter_m.4bpp");
 const u32 gObjectEventPic_ReporterF[] = INCBIN_U32("graphics/object_events/pics/people/reporter_f.4bpp");
 const u32 gObjectEventPic_MauvilleOldMan1[] = INCBIN_U32("graphics/object_events/pics/people/mauville_old_man_1.4bpp");
@@ -420,6 +421,7 @@ const u16 gObjectEventPaletteLight2[] = INCBIN_U16("graphics/object_events/palet
 const u16 gObjectEventPal_Substitute[] = INCBIN_U16("graphics/object_events/pics/pokemon_old/substitute.gbapal");
 
 const u16 gObjectEventPaletteEmotes[] = INCBIN_U16("graphics/misc/emotes.gbapal");
+const u16 gObjectEventPaletteEmoteIcons[] = INCBIN_U16("graphics/field_effects/palettes/emotion_icons.gbapal");
 const u16 gObjectEventPaletteNeonLight[] = INCBIN_U16("graphics/object_events/palettes/neon_light.gbapal");
 
 #if OW_FOLLOWERS_POKEBALLS
@@ -1092,3 +1094,12 @@ const u16 gObjectEventPal_SnagemGrunt[] = INCBIN_U16("graphics/object_events/pic
 
 const u32 gObjectEventPic_Venus[] = INCBIN_U32("graphics/object_events/pics/xd/venus.4bpp");
 const u16 gObjectEventPal_Venus[] = INCBIN_U16("graphics/object_events/pics/xd/venus.gbapal");
+
+const u32 gObjectEventPic_Ash[] = INCBIN_U32("graphics/object_events/pics/xd/ash.4bpp");
+const u16 gObjectEventPal_Ash[] = INCBIN_U16("graphics/object_events/pics/xd/ash.gbapal");
+
+const u32 gObjectEventPic_Ironmask[] = INCBIN_U32("graphics/object_events/pics/xd/ironmask.4bpp");
+const u16 gObjectEventPal_Ironmask[] = INCBIN_U16("graphics/object_events/pics/xd/ironmask.gbapal");
+
+const u32 gObjectEventPic_MirrorB[] = INCBIN_U32("graphics/object_events/pics/xd/mirror_b.4bpp");
+const u16 gObjectEventPal_MirrorB[] = INCBIN_U16("graphics/object_events/pics/xd/mirror_b.gbapal");

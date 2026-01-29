@@ -475,25 +475,27 @@
 #define MUS_NEWSORRE                    591
 #define MUS_MIRRORB                     592
 #define MUS_ORRETRAINER                 593
+#define MUS_MIRRORB_RETRO_GROOVE        594
 
 // HeartGold Johto overworld themes
-#define MUS_HG_NEW_BARK                 594  // mus_hg_new_bark.mid
-#define MUS_HG_CHERRYGROVE              595  // mus_hg_cherrygrove.mid
-#define MUS_HG_VIOLET                   596  // mus_hg_violet.mid
-#define MUS_HG_AZALEA                   597  // mus_hg_azalea.mid
-#define MUS_HG_GOLDENROD                598  // mus_hg_goldenrod.mid
-#define MUS_HG_ECRUTEAK                 599  // mus_hg_ecruteak.mid
-#define MUS_HG_CIANWOOD                 600  // mus_hg_cianwood.mid
+#define MUS_HG_NEW_BARK                 595  // mus_hg_new_bark.mid
+#define MUS_HG_CHERRYGROVE              596  // mus_hg_cherrygrove.mid
+#define MUS_HG_VIOLET                   597  // mus_hg_violet.mid
+#define MUS_HG_AZALEA                   598  // mus_hg_azalea.mid
+#define MUS_HG_GOLDENROD                599  // mus_hg_goldenrod.mid
+#define MUS_HG_ECRUTEAK                 600  // mus_hg_ecruteak.mid
+#define MUS_HG_CIANWOOD                 601  // mus_hg_cianwood.mid
 
-#define MUS_HG_ROUTE29                  601  // mus_hg_route29.mid
-#define MUS_HG_ROUTE30                  602  // mus_hg_route30.mid
-#define MUS_HG_ROUTE34                  603  // mus_hg_route34.mid
-#define MUS_HG_ROUTE38                  604  // mus_hg_route38.mid
-#define MUS_HG_ROUTE42                  605  // mus_hg_route42.mid
-#define MUS_HG_ROUTE47                  606  // mus_hg_route42.mid
+#define MUS_HG_ROUTE29                  602  // mus_hg_route29.mid
+#define MUS_HG_ROUTE30                  603  // mus_hg_route30.mid
+#define MUS_HG_ROUTE34                  604  // mus_hg_route34.mid
+#define MUS_HG_ROUTE38                  605  // mus_hg_route38.mid
+#define MUS_HG_ROUTE42                  606  // mus_hg_route42.mid
+#define MUS_HG_ROUTE47                  607  // mus_hg_route42.mid
+#define MUS_PYRITE                     608  // mus_pyrite.mid
 
 
-#define END_MUS                     MUS_HG_ROUTE47
+#define END_MUS                     MUS_PYRITE
 
 // These PH_* constants are phoneme sounds used by the "bard" NPC (see src/bard_music.c and src/mauville_old_man.c).
 // Each comes in a triplet of PH_*_BLEND, PH_*_HELD, and PH_*_SOLO, and the name of each triplet incorporates the English phonetic sound it represents.

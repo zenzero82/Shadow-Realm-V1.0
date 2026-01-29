@@ -595,6 +595,7 @@ gSongTable::
 	song mus_newsorre, 0, 0
 	song mus_mirrorb, 0, 0
 	song mus_orretrainer, 0, 0
+	song mus_mirrorb_retro_groove, 0, 0
 	song mus_hg_new_bark, 0, 0
 	song mus_hg_cherrygrove, 0, 0
 	song mus_hg_violet, 0, 0
@@ -608,6 +609,7 @@ gSongTable::
 	song mus_hg_route38, 0, 0
 	song mus_hg_route42, 0, 0
 	song mus_hg_route47, 0, 0
+	song mus_pyrite, 0, 0
 
 
 	.align 2
