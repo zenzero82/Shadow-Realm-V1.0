@@ -38,6 +38,7 @@
 #include "constants/event_bg.h"
 #include "constants/event_objects.h"
 #include "constants/field_poison.h"
+#include "constants/region_map_sections.h"
 #include "constants/map_types.h"
 #include "constants/metatile_behaviors.h"
 #include "constants/songs.h"
@@ -57,6 +58,44 @@ static const u8 *GetInteractedObjectEventScript(struct MapPosition *, u8, u8);
 static const u8 *GetInteractedBackgroundEventScript(struct MapPosition *, u8, u8);
 static const u8 *GetInteractedMetatileScript(struct MapPosition *, u8, u8);
 static const u8 *GetInteractedWaterScript(struct MapPosition *, u8, u8);
+
+static const u8 *GetKantoBookshelfScript(u16 mapSecId)
+{
+    switch (mapSecId)
+    {
+    case MAPSEC_PALLET_TOWN:
+        return Kanto_Furniture_EventScript_Bookshelf_Pallet;
+    case MAPSEC_VIRIDIAN_CITY:
+        return Kanto_Furniture_EventScript_Bookshelf_Viridian;
+    case MAPSEC_PEWTER_CITY:
+        return Kanto_Furniture_EventScript_Bookshelf_Pewter;
+    case MAPSEC_CERULEAN_CITY:
+        return Kanto_Furniture_EventScript_Bookshelf_Cerulean;
+    case MAPSEC_LAVENDER_TOWN:
+        return Kanto_Furniture_EventScript_Bookshelf_Lavender;
+    default:
+        return NULL;
+    }
+}
+
+static const u8 *GetKantoTVScript(u16 mapSecId)
+{
+    switch (mapSecId)
+    {
+    case MAPSEC_PALLET_TOWN:
+        return Kanto_Furniture_EventScript_TV_Pallet;
+    case MAPSEC_VIRIDIAN_CITY:
+        return Kanto_Furniture_EventScript_TV_Viridian;
+    case MAPSEC_PEWTER_CITY:
+        return Kanto_Furniture_EventScript_TV_Pewter;
+    case MAPSEC_CERULEAN_CITY:
+        return Kanto_Furniture_EventScript_TV_Cerulean;
+    case MAPSEC_LAVENDER_TOWN:
+        return Kanto_Furniture_EventScript_TV_Lavender;
+    default:
+        return NULL;
+    }
+}
 static bool32 TrySetupDiveDownScript(void);
 static bool32 TrySetupDiveEmergeScript(void);
 static bool8 TryStartStepBasedScript(struct MapPosition *, u16, u16);
@@ -471,7 +510,10 @@ static const u8 *GetInteractedMetatileScript(struct MapPosition *position, u8 me
     s8 elevation;
 
     if (MetatileBehavior_IsPlayerFacingTVScreen(metatileBehavior, direction) == TRUE)
-        return EventScript_TV;
+    {
+        const u8 *script = GetKantoTVScript(gMapHeader.regionMapSectionId);
+        return script != NULL ? script : EventScript_TV;
+    }
     if (MetatileBehavior_IsPC(metatileBehavior) == TRUE)
         return EventScript_PC;
     if (MetatileBehavior_IsClosedSootopolisDoor(metatileBehavior) == TRUE)
@@ -491,7 +533,10 @@ static const u8 *GetInteractedMetatileScript(struct MapPosition *position, u8 me
     if (MetatileBehavior_IsPictureBookShelf(metatileBehavior) == TRUE)
         return EventScript_PictureBookShelf;
     if (MetatileBehavior_IsBookShelf(metatileBehavior) == TRUE)
-        return EventScript_BookShelf;
+    {
+        const u8 *script = GetKantoBookshelfScript(gMapHeader.regionMapSectionId);
+        return script != NULL ? script : EventScript_BookShelf;
+    }
     if (MetatileBehavior_IsPokeCenterBookShelf(metatileBehavior) == TRUE)
         return EventScript_PokemonCenterBookShelf;
     if (MetatileBehavior_IsVase(metatileBehavior) == TRUE)

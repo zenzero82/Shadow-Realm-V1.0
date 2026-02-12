@@ -5,27 +5,49 @@
 #include "malloc.h"
 #include "palette.h"
 #include "pokedex_area_region_map.h"
+#include "region_map.h"
+#include "constants/regions.h"
 
 static EWRAM_DATA u8 *sPokedexAreaMapBgNum = NULL;
 
 static const u16 ALIGNED(4) sPokedexAreaMap_Pal[] = INCBIN_U16("graphics/pokedex/region_map.gbapal");
 static const u32 sPokedexAreaMap_Gfx[] = INCBIN_U32("graphics/pokedex/region_map.8bpp.lz");
 static const u32 sPokedexAreaMap_Tilemap[] = INCBIN_U32("graphics/pokedex/region_map.bin.lz");
+static const u32 sPokedexAreaMap_KantoGfx[] = INCBIN_U32("graphics/pokedex/region_map_kanto.8bpp.lz");
+static const u32 sPokedexAreaMap_KantoTilemap[] = INCBIN_U32("graphics/pokedex/region_map_kanto.bin.lz");
+static const u32 sPokedexAreaMap_JohtoGfx[] = INCBIN_U32("graphics/pokedex/region_map_johto.8bpp.lz");
+static const u32 sPokedexAreaMap_JohtoTilemap[] = INCBIN_U32("graphics/pokedex/region_map_johto.bin.lz");
 static const u32 sPokedexAreaMapAffine_Gfx[] = INCBIN_U32("graphics/pokedex/region_map_affine.8bpp.lz");
 static const u32 sPokedexAreaMapAffine_Tilemap[] = INCBIN_U32("graphics/pokedex/region_map_affine.bin.lz");
 
 void LoadPokedexAreaMapGfx(const struct PokedexAreaMapTemplate *template)
 {
     u8 mode;
+    u8 region;
     void *tilemap;
+    const u32 *mapGfx = sPokedexAreaMap_Gfx;
+    const u32 *mapTilemap = sPokedexAreaMap_Tilemap;
+
     sPokedexAreaMapBgNum = Alloc(sizeof(sPokedexAreaMapBgNum));
     mode = template->mode;
+    region = RegionMap_GetRegionFromMapGroup(gSaveBlock1Ptr->location.mapGroup);
+
+    if (region == REGION_KANTO)
+    {
+        mapGfx = sPokedexAreaMap_KantoGfx;
+        mapTilemap = sPokedexAreaMap_KantoTilemap;
+    }
+    else if (region == REGION_JOHTO)
+    {
+        mapGfx = sPokedexAreaMap_JohtoGfx;
+        mapTilemap = sPokedexAreaMap_JohtoTilemap;
+    }
 
     if (mode == 0)
     {
         SetBgAttribute(template->bg, BG_ATTR_METRIC, 0);
-        DecompressAndCopyTileDataToVram(template->bg, sPokedexAreaMap_Gfx, 0, template->offset, 0);
-        tilemap = DecompressAndCopyTileDataToVram(template->bg, sPokedexAreaMap_Tilemap, 0, 0, 1);
+        DecompressAndCopyTileDataToVram(template->bg, mapGfx, 0, template->offset, 0);
+        tilemap = DecompressAndCopyTileDataToVram(template->bg, mapTilemap, 0, 0, 1);
         AddValToTilemapBuffer(tilemap, template->offset, 32, 32, FALSE); // template->offset is always 0, so this does nothing.
     }
     else

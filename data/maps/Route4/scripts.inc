@@ -6,13 +6,16 @@ Route4_MapScripts::
 @ =========================================================
 
 Route4_Speaker_BlackBelt:
-	.string "BLACK BELT$"
+	.string "RYU$"
 
 Route4_Speaker_Rocker:
-	.string "ROCKER$"
+	.string "AMP$"
 
-Route4_Speaker_Picnicker:
-	.string "PICNICKER$"
+Route4_Speaker_Picnicker1:
+	.string "LILY$"
+
+Route4_Speaker_Picnicker2:
+	.string "MIA$"
 
 Route4_Speaker_Brendan:
 	.string "BRENDAN$"
@@ -46,24 +49,24 @@ Route4_EventScript_Rocker_After::
 	end
 
 Route4_EventScript_Picnicker1::
-	setspeaker Route4_Speaker_Picnicker
+	setspeaker Route4_Speaker_Picnicker1
 	trainerbattle_single TRAINER_RT4_PICNICKER1, Route4_Text_Picnicker1_Intro, Route4_Text_Picnicker1_Defeat, Route4_EventScript_Picnicker1_After
 	end
 
 Route4_EventScript_Picnicker1_After::
-	setspeaker Route4_Speaker_Picnicker
+	setspeaker Route4_Speaker_Picnicker1
 	msgbox Route4_Text_Picnicker1_After, MSGBOX_NPC
 	closemessage
 	release
 	end
 
 Route4_EventScript_Picnicker2::
-	setspeaker Route4_Speaker_Picnicker
+	setspeaker Route4_Speaker_Picnicker2
 	trainerbattle_single TRAINER_RT4_PICNICKER2, Route4_Text_Picnicker2_Intro, Route4_Text_Picnicker2_Defeat, Route4_EventScript_Picnicker2_After
 	end
 
 Route4_EventScript_Picnicker2_After::
-	setspeaker Route4_Speaker_Picnicker
+	setspeaker Route4_Speaker_Picnicker2
 	msgbox Route4_Text_Picnicker2_After, MSGBOX_NPC
 	closemessage
 	release

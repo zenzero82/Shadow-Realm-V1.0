@@ -38,6 +38,8 @@
 #include "fldeff_misc.h"
 #include "field_control_avatar.h"
 #include "mirage_tower.h"
+#include "constants/map_groups.h"
+#include "constants/maps.h"
 #include "pokedex.h"
 #include "field_screen_effect.h"
 #include "data.h"
@@ -1338,10 +1340,38 @@ void ShowTrainerCantBattleSpeech(void)
     ShowFieldMessage(GetTrainerCantBattleSpeech());
 }
 
+static bool32 IsCurrentMapInKanto(void)
+{
+    u8 mapGroup = gSaveBlock1Ptr->location.mapGroup;
+
+    switch (mapGroup)
+    {
+    case MAP_GROUP(MAP_PALLET_TOWN):           // gMapGroup_Kanto
+    case MAP_GROUP(MAP_ROUTE1):                // gMapGroup_Kanto_Routes
+    case MAP_GROUP(MAP_REDS_HOUSE):            // gMapGroup_IndoorPallet
+    case MAP_GROUP(MAP_VIRIDIAN_POKECENTER):   // gMapGroup_IndoorViridian
+    case MAP_GROUP(MAP_PEWTER_POKECENTER):     // gMapGroup_IndoorPewter
+    case MAP_GROUP(MAP_CERULEAN_POKECENTER):   // gMapGroup_IndoorCerulean
+    case MAP_GROUP(MAP_VERMILION_POKECENTER):  // gMapGroup_IndoorVermilion
+    case MAP_GROUP(MAP_LAVENDER_POKECENTER):   // gMapGroup_IndoorLavender
+    case MAP_GROUP(MAP_CELADON_POKECENTER):    // gMapGroup_IndoorCeladon
+    case MAP_GROUP(MAP_SAFFRON_POKECENTER):    // gMapGroup_IndoorSaffron
+    case MAP_GROUP(MAP_FUCHSIA_POKECENTER):    // gMapGroup_IndoorFuchsia
+    case MAP_GROUP(MAP_CINNABAR_POKECENTER):   // gMapGroup_IndoorCinnabar
+    case MAP_GROUP(MAP_INDIGOPLATEAU_POKECENTER): // gMapGroup_IndoorIndigo
+    case MAP_GROUP(MAP_ROUTE2_ENTRANCE1):      // gMapGroup_IndoorKantoRoutes
+    case MAP_GROUP(MAP_MT_MOON_CAVE):          // gMapGroup_KantoDungeons
+        return TRUE;
+    default:
+        return FALSE;
+    }
+}
+
 void PlayTrainerEncounterMusic(void)
 {
     u16 trainerId;
     u16 music;
+    bool32 isKanto = IsCurrentMapInKanto();
 
     if (gApproachingTrainerId == 0)
         trainerId = TRAINER_BATTLE_PARAM.opponentA;
@@ -1354,13 +1384,13 @@ void PlayTrainerEncounterMusic(void)
         switch (GetTrainerEncounterMusicId(trainerId))
         {
         case TRAINER_ENCOUNTER_MUSIC_MALE:
-            music = MUS_ENCOUNTER_MALE;
+            music = isKanto ? MUS_HG_ENCOUNTER_BOY_2 : MUS_ENCOUNTER_MALE;
             break;
         case TRAINER_ENCOUNTER_MUSIC_FEMALE:
-            music = MUS_ENCOUNTER_FEMALE;
+            music = isKanto ? MUS_HG_ENCOUNTER_GIRL_2 : MUS_ENCOUNTER_FEMALE;
             break;
         case TRAINER_ENCOUNTER_MUSIC_GIRL:
-            music = MUS_ENCOUNTER_GIRL;
+            music = isKanto ? MUS_HG_ENCOUNTER_GIRL_2 : MUS_ENCOUNTER_GIRL;
             break;
         case TRAINER_ENCOUNTER_MUSIC_INTENSE:
             music = MUS_ENCOUNTER_INTENSE;
@@ -1393,7 +1423,7 @@ void PlayTrainerEncounterMusic(void)
             music = MUS_ENCOUNTER_RICH;
             break;
         case TRAINER_ENCOUNTER_MUSIC_CIPHER_PEON:
-            music = MUS_ENCOUNTER_SUSPICIOUS;
+            music = MUS_CIPHER_ENCOUNTER;
             break;
         case TRAINER_ENCOUNTER_MUSIC_TEAM_ROCKET:
             music = MUS_HG_ENCOUNTER_ROCKET;

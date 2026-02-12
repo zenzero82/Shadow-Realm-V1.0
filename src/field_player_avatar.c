@@ -978,6 +978,7 @@ static void CheckAcroBikeCollision(s16 x, s16 y, u8 metatileBehavior, u8 *collis
     }
 }
 
+#ifdef LOCALID_FARAWAY_ISLAND_MEW
 bool8 IsPlayerCollidingWithFarawayIslandMew(u8 direction)
 {
     u8 mewObjectId;
@@ -1011,6 +1012,12 @@ bool8 IsPlayerCollidingWithFarawayIslandMew(u8 direction)
     }
     return FALSE;
 }
+#else
+bool8 IsPlayerCollidingWithFarawayIslandMew(u8 direction)
+{
+    return FALSE;
+}
+#endif
 
 void SetPlayerAvatarTransitionFlags(u16 transitionFlags)
 {

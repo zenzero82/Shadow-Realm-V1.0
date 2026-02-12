@@ -38,15 +38,24 @@ ViridianForest_EventScript_Enter::
 
     @ If scene already happened, keep them gone on reload
     checkflag FLAG_VIRIDIAN_FOREST_PLASMA_SCENE_DONE
-    goto_if_eq ViridianForest_Enter_Done
+    call_if_eq VAR_RESULT, TRUE, ViridianForest_Enter_HideSceneNPCs
+    checktrainerflag TRAINER_VF_ROCKET
+    call_if_eq VAR_RESULT, TRUE, ViridianForest_Enter_HideRocketGrunt
     end
 
-ViridianForest_Enter_Done::
+ViridianForest_Enter_HideSceneNPCs::
     hideobjectat LOCALID_PROTON,   MAP_VIRIDIAN_FOREST
     hideobjectat LOCALID_ZINZOLIN, MAP_VIRIDIAN_FOREST
+    hideobjectat LOCALID_PLASMA_GRUNT, MAP_VIRIDIAN_FOREST
     removeobject LOCALID_PROTON
     removeobject LOCALID_ZINZOLIN
-    end
+    removeobject LOCALID_PLASMA_GRUNT
+    return
+
+ViridianForest_Enter_HideRocketGrunt::
+    hideobjectat LOCALID_ROCKET_GRUNT, MAP_VIRIDIAN_FOREST
+    removeobject LOCALID_ROCKET_GRUNT
+    return
 
 
 @ ============================================================
@@ -74,9 +83,10 @@ ViridianForest_EventScript_TriggerScene_Done::
 @ ============================================================
 
 ViridianForest_EventScript_ZinzolinProtonTalk::
-    setspeaker ViridianForest_Speaker_Proton
-    msgbox ViridianForest_Text_Proton_1, MSGBOX_DEFAULT
-    closemessage
+	playbgm MUS_CIPHER_ENCOUNTER, FALSE
+	setspeaker ViridianForest_Speaker_Proton
+	msgbox ViridianForest_Text_Proton_1, MSGBOX_DEFAULT
+	closemessage
 
     setspeaker ViridianForest_Speaker_Zinzolin
     msgbox ViridianForest_Text_Zinzolin_1, MSGBOX_DEFAULT
@@ -96,17 +106,28 @@ ViridianForest_EventScript_ZinzolinProtonTalk::
 
     applymovement LOCALID_PROTON,   ViridianForest_Mov_WalkUp3
     applymovement LOCALID_ZINZOLIN, ViridianForest_Mov_WalkUp3
+    applymovement LOCALID_PLASMA_GRUNT, ViridianForest_Mov_WalkUp3_Delay
     waitmovement 0
 
     setflag FLAG_VIRIDIAN_FOREST_PLASMA_SCENE_DONE
     hideobjectat LOCALID_PROTON,   MAP_VIRIDIAN_FOREST
-    hideobjectat LOCALID_ZINZOLIN, MAP_VIRIDIAN_FOREST
-    removeobject LOCALID_PROTON
-    removeobject LOCALID_ZINZOLIN
-    return
+	hideobjectat LOCALID_ZINZOLIN, MAP_VIRIDIAN_FOREST
+	hideobjectat LOCALID_PLASMA_GRUNT, MAP_VIRIDIAN_FOREST
+	removeobject LOCALID_PROTON
+	removeobject LOCALID_ZINZOLIN
+	removeobject LOCALID_PLASMA_GRUNT
+	fadedefaultbgm
+	return
 
 
 ViridianForest_Mov_WalkUp3:
+    walk_up
+    walk_up
+    walk_up
+    step_end
+
+ViridianForest_Mov_WalkUp3_Delay:
+    delay_16
     walk_up
     walk_up
     walk_up
@@ -121,14 +142,20 @@ ViridianForest_Speaker_Zinzolin:
 ViridianForest_Speaker_Proton:
     .string "PROTON$"
 
-ViridianForest_Speaker_BugCatcher:
-    .string "BUG CATCHER$"
+ViridianForest_Speaker_Neil:
+    .string "Neil$"
+
+ViridianForest_Speaker_Rick:
+    .string "Rick$"
+
+ViridianForest_Speaker_Jamal:
+    .string "Jamal$"
 
 ViridianForest_Speaker_GruntRocket:
-    .string "GRUNT$"
+    .string "TRAVIS$"
 
 ViridianForest_Speaker_Plasma:
-    .string "PLASMA$"
+    .string "CORVIN$"
 
 
 @ ---------- TEXT (Scene) ----------
@@ -139,8 +166,8 @@ ViridianForest_Text_Zinzolin_1:
     .string "as we think.$"
 
 ViridianForest_Text_Proton_1:
-    .string "I see you have agreed to partner with\n"
-    .string "us. We know what you stand for and\l"
+    .string "I see you have agreed to join us.\n"
+    .string "We know what you stand for and\l"
     .string "your goals.\p"
     .string "I believe we will make a good\n"
     .string "partnership.$"
@@ -166,11 +193,13 @@ ViridianForest_Text_Proton_3:
 @ Bug Catchers (Trainers) - ALL use setspeaker
 @ ============================================================
 ViridianForest_EventScript_BugCatcher5::
-    setspeaker ViridianForest_Speaker_BugCatcher
+    setspeaker ViridianForest_Speaker_Neil
     trainerbattle_single TRAINER_VF_BUGCATCHER1, ViridianForest_Text_BugCatcher5_Intro, ViridianForest_Text_BugCatcher5_Defeat, ViridianForest_EventScript_BugCatcher5_After
+    goto ViridianForest_EventScript_BugCatcher5_After
     end
 ViridianForest_EventScript_BugCatcher5_After::
-    setspeaker ViridianForest_Speaker_BugCatcher
+    settrainerflag TRAINER_VF_BUGCATCHER1
+    setspeaker ViridianForest_Speaker_Neil
     msgbox ViridianForest_Text_BugCatcher5_After, MSGBOX_NPC
     closemessage
     release
@@ -185,17 +214,19 @@ ViridianForest_Text_BugCatcher5_Defeat:
 ViridianForest_Text_BugCatcher5_After:
     .string "Even the bugs can feel it in the air.$"
 ViridianForest_EventScript_BugCatcher6::
-    setspeaker ViridianForest_Speaker_BugCatcher
+    setspeaker ViridianForest_Speaker_Rick
     trainerbattle_single TRAINER_VF_BUGCATCHER2, ViridianForest_Text_BugCatcher6_Intro, ViridianForest_Text_BugCatcher6_Defeat, ViridianForest_EventScript_BugCatcher6_After
+    goto ViridianForest_EventScript_BugCatcher6_After
     end
 ViridianForest_EventScript_BugCatcher6_After::
-    setspeaker ViridianForest_Speaker_BugCatcher
+    settrainerflag TRAINER_VF_BUGCATCHER2
+    setspeaker ViridianForest_Speaker_Rick
     msgbox ViridianForest_Text_BugCatcher6_After, MSGBOX_NPC
     closemessage
     release
     end
 ViridianForest_Text_BugCatcher6_Intro:
-    .string "My CATERPIE got scared for no reason.\p"
+    .string "My bugs got scared for no reason.\p"
     .string "Then the air felt cold.\p"
     .string "Like something opened and shut,\n"
     .string "right between the trees.$"
@@ -204,66 +235,71 @@ ViridianForest_Text_BugCatcher6_Defeat:
 ViridianForest_Text_BugCatcher6_After:
     .string "Maybe it was just the wind...$"
 ViridianForest_EventScript_BugCatcher7::
-    setspeaker ViridianForest_Speaker_BugCatcher
+    setspeaker ViridianForest_Speaker_Jamal
     trainerbattle_single TRAINER_VF_BUGCATCHER3, ViridianForest_Text_BugCatcher7_Intro, ViridianForest_Text_BugCatcher7_Defeat, ViridianForest_EventScript_BugCatcher7_After
+    goto ViridianForest_EventScript_BugCatcher7_After
     end
 ViridianForest_EventScript_BugCatcher7_After::
-    setspeaker ViridianForest_Speaker_BugCatcher
+    settrainerflag TRAINER_VF_BUGCATCHER3
+    setspeaker ViridianForest_Speaker_Jamal
     msgbox ViridianForest_Text_BugCatcher7_After, MSGBOX_NPC
     closemessage
     release
     end
 ViridianForest_Text_BugCatcher7_Intro:
-    .string "Hold up! Before you go deeper,\n"
-    .string "tell me you felt it too.\p"
     .string "I heard two men talking up ahead.\n"
     .string "Names like Zinzolin and Proton.\p"
-    .string "They said something about Snagem\n"
+    .string "They said something about SNAGEM\n"
     .string "and taking what they need.$"
 ViridianForest_Text_BugCatcher7_Defeat:
     .string "Okay, okay! You can pass.$"
 ViridianForest_Text_BugCatcher7_After:
     .string "Those names... I've got a bad feeling.$"
 @ ============================================================
-@ GRUNTS BEHIND THEM
+@ TRAVIS (SINGLE TRAINER)
 @ ============================================================
 ViridianForest_EventScript_RocketGrunt_Trainer::
     setspeaker ViridianForest_Speaker_GruntRocket
     trainerbattle_single TRAINER_VF_ROCKET, ViridianForest_Text_RocketGrunt_Intro, ViridianForest_Text_RocketGrunt_Defeat, ViridianForest_EventScript_RocketGrunt_After
+    goto ViridianForest_EventScript_RocketGrunt_After
     end
+
 ViridianForest_EventScript_RocketGrunt_After::
+    settrainerflag TRAINER_VF_ROCKET
+    setflag FLAG_HIDE_VIRIDIAN_FOREST_ROCKET_GRUNT
     setspeaker ViridianForest_Speaker_GruntRocket
-    msgbox ViridianForest_Text_RocketGrunt_After, MSGBOX_NPC
+    msgbox ViridianForest_Text_RocketGrunt_After, MSGBOX_DEFAULT
     closemessage
-    release
+    hideobjectat LOCALID_ROCKET_GRUNT, MAP_VIRIDIAN_FOREST
+    removeobject LOCALID_ROCKET_GRUNT
+    fadescreenswapbuffers FADE_TO_BLACK
+    fadescreenswapbuffers FADE_FROM_BLACK
+    releaseall
     end
+
 ViridianForest_Text_RocketGrunt_Intro:
     .string "No tourists past this point.\p"
     .string "Orders are orders.\p"
     .string "You didn't see anything.\n"
-    .string "You didn't hear anything.\p"
-    .string "Walk away.$"
+    .string "You didn't hear anything.$"
+
 ViridianForest_Text_RocketGrunt_Defeat:
     .string "Gah! I wasn't supposed to lose!$"
+
 ViridianForest_Text_RocketGrunt_After:
-    .string "Orders are orders. I'm out.$"
-ViridianForest_EventScript_PlasmaGrunt_Trainer::
-    setspeaker ViridianForest_Speaker_Plasma
-    trainerbattle_single TRAINER_VF_PLASMA, ViridianForest_Text_PlasmaGrunt_Intro, ViridianForest_Text_PlasmaGrunt_Defeat, ViridianForest_EventScript_PlasmaGrunt_After
-    end
-ViridianForest_EventScript_PlasmaGrunt_After::
-    setspeaker ViridianForest_Speaker_Plasma
-    msgbox ViridianForest_Text_PlasmaGrunt_After, MSGBOX_NPC
-    closemessage
-    release
-    end
+    .string "We're done here... for now.$"
+
 ViridianForest_Text_PlasmaGrunt_Intro:
-    .string "You're early.\p"
-    .string "Don't ruin the schedule.$"
+    .string "You better not be trying to\p"
+    .string "interfere with our plans.$"
+
 ViridianForest_Text_PlasmaGrunt_Defeat:
     .string "Ngh... you're in the way!$"
+
 ViridianForest_Text_PlasmaGrunt_After:
-    .string "Stay out of this forest.$"
+    .string "This forest isn't safe. Stay back.$"
+
+
 @ ============================================================
 @ VIRIDIAN FOREST - ITEM PICKUPS (Poke Ball objects) - ITEM PICKUPS (Poke Ball objects)  ITEM PICKUPS (Pok Ball objects)
 @ Set each Pok Ball object's Script in Porymap to one of these.

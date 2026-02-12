@@ -14,6 +14,7 @@
 #include "fldeff.h"
 #include "follower_npc.h"
 #include "gpu_regs.h"
+#include "heal_location.h"
 #include "main.h"
 #include "malloc.h"
 #include "mirage_tower.h"
@@ -35,6 +36,7 @@
 #include "constants/event_object_movement.h"
 #include "constants/field_effects.h"
 #include "constants/flags.h"
+#include "constants/heal_locations.h"
 #include "constants/metatile_behaviors.h"
 #include "constants/rgb.h"
 #include "constants/songs.h"
@@ -260,6 +262,7 @@ static const u16 sNewGameBirch_Pal[16] = INCBIN_U16("graphics/birch_speech/birch
 
 static const u32 sPokeballGlow_Gfx[] = INCBIN_U32("graphics/field_effects/pics/pokeball_glow.4bpp");
 static const u16 sPokeballGlow_Pal[16] = INCBIN_U16("graphics/field_effects/palettes/pokeball_glow.gbapal");
+static const u16 sPokecenterMonitor_Gfx[] = INCBIN_U16("graphics/field_effects/pics/pokemoncenter_monitor.4bpp");
 static const u32 sPokecenterMonitor0_Gfx[] = INCBIN_U32("graphics/field_effects/pics/pokecenter_monitor/0.4bpp");
 static const u32 sPokecenterMonitor1_Gfx[] = INCBIN_U32("graphics/field_effects/pics/pokecenter_monitor/1.4bpp");
 static const u32 sHofMonitorBig_Gfx[] = INCBIN_U32("graphics/field_effects/pics/hof_monitor_big.4bpp");
@@ -407,6 +410,14 @@ static const struct SpriteFrameImage sPicTable_PokecenterMonitor[] =
     obj_frame_tiles(sPokecenterMonitor1_Gfx)
 };
 
+static const struct SpriteFrameImage sPicTable_PokecenterMonitor_KantoJohto[] =
+{
+    {sPokecenterMonitor_Gfx + 0x000, 0x100},
+    {sPokecenterMonitor_Gfx + 0x080, 0x100},
+    {sPokecenterMonitor_Gfx + 0x100, 0x100},
+    {sPokecenterMonitor_Gfx + 0x180, 0x100}
+};
+
 static const struct SpriteFrameImage sPicTable_HofMonitorBig[] =
 {
     obj_frame_tiles(sHofMonitorBig_Gfx)
@@ -552,6 +563,17 @@ static const struct SpriteTemplate sSpriteTemplate_PokecenterMonitor =
     .oam = &sOam_16x16,
     .anims = sAnims_Flicker,
     .images = sPicTable_PokecenterMonitor,
+    .affineAnims = gDummySpriteAffineAnimTable,
+    .callback = SpriteCB_PokecenterMonitor
+};
+
+static const struct SpriteTemplate sSpriteTemplate_PokecenterMonitor_KantoJohto =
+{
+    .tileTag = TAG_NONE,
+    .paletteTag = FLDEFF_PAL_TAG_GENERAL_0,
+    .oam = &sOam_32x16,
+    .anims = sAnims_Flicker,
+    .images = sPicTable_PokecenterMonitor_KantoJohto,
     .affineAnims = gDummySpriteAffineAnimTable,
     .callback = SpriteCB_PokecenterMonitor
 };
@@ -1289,15 +1311,29 @@ static void SpriteCB_PokeballGlow(struct Sprite *sprite)
     }
 }
 
+static bool8 ShouldUseKantoJohtoPokecenterMonitor(void)
+{
+    u32 healLocation = GetHealLocationIndexByMap(gSaveBlock1Ptr->location.mapGroup, gSaveBlock1Ptr->location.mapNum);
+    return (healLocation >= HEAL_LOCATION_PEWTER_CITY);
+}
+
 static u8 CreatePokecenterMonitorSprite(s16 x, s16 y)
 {
     u8 spriteId;
     struct Sprite *sprite;
-    spriteId = CreateSpriteAtEnd(&sSpriteTemplate_PokecenterMonitor, x, y, 0);
+    bool8 useKantoJohto = ShouldUseKantoJohtoPokecenterMonitor();
+
+    if (useKantoJohto)
+        x += 4;
+
+    spriteId = CreateSpriteAtEnd(useKantoJohto ? &sSpriteTemplate_PokecenterMonitor_KantoJohto
+                                               : &sSpriteTemplate_PokecenterMonitor,
+                                 x, y, 0);
     sprite = &gSprites[spriteId];
     sprite->oam.priority = 2;
     sprite->invisible = TRUE;
-    SetSubspriteTables(sprite, &sSubspriteTable_PokecenterMonitor);
+    if (!useKantoJohto)
+        SetSubspriteTables(sprite, &sSubspriteTable_PokecenterMonitor);
     return spriteId;
 }
 

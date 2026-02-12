@@ -115,6 +115,11 @@ bool8 IsRegionMapZoomed(void);
 void TrySetPlayerIconBlink(void);
 void BlendRegionMap(u16 color, u32 coeff);
 void SetRegionMapDataForZoom(void);
+u8 RegionMap_GetRegionFromMapSecId(u16 mapSecId);
+u8 RegionMap_GetRegionFromMapGroup(u8 mapGroup);
+void RegionMap_SetRegionFromMapGroup(u8 mapGroup);
+u8 RegionMap_GetCurrentRegion(void);
+void RegionMap_CycleRegion(void);
 
 //Pokenav Fly funcs
 u32 FilterFlyDestination(struct RegionMap* regionMap);

@@ -54,7 +54,7 @@
 extern const u8 EventScript_ResetAllMapFlags[];
 
 static void ClearFrontierRecord(void);
-static void WarpToTruck(void);
+static void WarpToOaksLab(void);
 static void ResetMiniGamesRecords(void);
 static void ResetItemFlags(void);
 static void ResetDexNav(void);
@@ -131,9 +131,9 @@ static void ClearFrontierRecord(void)
     gSaveBlock2Ptr->frontier.opponentNames[1][0] = EOS;
 }
 
-static void WarpToTruck(void)
+static void WarpToOaksLab(void)
 {
-    SetWarpDestination(MAP_GROUP(MAP_PALLET_TOWN_WESTERN_FOREST), MAP_NUM(MAP_PALLET_TOWN_WESTERN_FOREST), WARP_ID_NONE, -1, -1);
+    SetWarpDestination(MAP_GROUP(MAP_OAKS_LAB), MAP_NUM(MAP_OAKS_LAB), WARP_ID_NONE, 2, 2);
     WarpIntoMap();
 }
 
@@ -200,7 +200,7 @@ void NewGameInitData(void)
     InitDewfordTrend();
     ResetFanClub();
     ResetLotteryCorner();
-    WarpToTruck();
+    WarpToOaksLab();
     RunScriptImmediately(EventScript_ResetAllMapFlags);
     ResetMiniGamesRecords();
     InitUnionRoomChatRegisteredTexts();

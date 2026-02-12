@@ -30,6 +30,7 @@
 #include "mail.h"
 #include "event_data.h"
 #include "pokemon_storage_system.h"
+#include "region_map.h"
 #include "task.h"
 #include "naming_screen.h"
 #include "battle_setup.h"
@@ -38,6 +39,7 @@
 #include "rtc.h"
 #include "party_menu.h"
 #include "battle_arena.h"
+#include "constants/regions.h"
 #include "battle_pike.h"
 #include "battle_pyramid.h"
 #include "field_specials.h"
@@ -69,6 +71,36 @@
 #include "data/battle_move_effects.h"
 #include "pokemon.h"
 
+
+static u16 GetVictoryWildBgmForRegion(void)
+{
+    u8 region = RegionMap_GetRegionFromMapSecId(gMapHeader.regionMapSectionId);
+
+    switch (region)
+    {
+    case REGION_KANTO:
+        return MUS_RG_VICTORY_WILD;
+    case REGION_JOHTO:
+        return MUS_HG_VICTORY_WILD;
+    default:
+        return MUS_VICTORY_WILD;
+    }
+}
+
+static u16 GetVictoryTrainerBgmForRegion(void)
+{
+    u8 region = RegionMap_GetRegionFromMapSecId(gMapHeader.regionMapSectionId);
+
+    switch (region)
+    {
+    case REGION_KANTO:
+        return MUS_RG_VICTORY_TRAINER;
+    case REGION_JOHTO:
+        return MUS_HG_VICTORY_TRAINER;
+    default:
+        return MUS_VICTORY_TRAINER;
+    }
+}
 
 // table to avoid ugly powing on gba (courtesy of doesnt)
 // this returns (i^2.5)/4
@@ -5099,7 +5131,7 @@ static void Cmd_getexp(void)
                     && !gBattleStruct->wildVictorySong)
                 {
                     BattleStopLowHpSound();
-                    PlayBGM(MUS_VICTORY_WILD);
+                    PlayBGM(GetVictoryWildBgmForRegion());
                     gBattleStruct->wildVictorySong++;
                 }
 
@@ -10632,7 +10664,7 @@ static void Cmd_various(void)
     case VARIOUS_PLAY_TRAINER_DEFEATED_MUSIC:
     {
         VARIOUS_ARGS();
-        BtlController_EmitPlayFanfareOrBGM(battler, B_COMM_TO_CONTROLLER, MUS_VICTORY_TRAINER, TRUE);
+        BtlController_EmitPlayFanfareOrBGM(battler, B_COMM_TO_CONTROLLER, GetVictoryTrainerBgmForRegion(), TRUE);
         MarkBattlerForControllerExec(battler);
         break;
     }

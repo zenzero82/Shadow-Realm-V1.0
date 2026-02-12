@@ -146,31 +146,33 @@ ViridianCity_EventScript_JJ_Trigger1::
     goto_if_eq ViridianCity_EventScript_JJ_Trigger_Done
 
     lockall
-    applymovement OBJ_EVENT_ID_PLAYER, ViridianCity_Move_Player_JJ_Stay
+    applymovement OBJ_EVENT_ID_PLAYER, ViridianCity_Move_Player_JJ_FaceNorth
     waitmovement 0
     goto ViridianCity_EventScript_JJ_Encounter
 
 ViridianCity_EventScript_JJ_Trigger_Done::
     end
 
+ViridianCity_EventScript_JJ_Talk::
+    checkflag FLAG_VIRIDIAN_JJ_BATTLE_DONE
+    goto_if_eq ViridianCity_EventScript_JJ_Trigger_Done
+    lockall
+    goto ViridianCity_EventScript_JJ_Encounter
+
 ViridianCity_EventScript_JJ_Encounter::
+    playbgm MUS_HG_ENCOUNTER_ROCKET, FALSE
     playse SE_PIN
     applymovement 1, ViridianCity_Move_Jessie_Exclaim
+    applymovement 2, ViridianCity_Move_Jessie_Exclaim
     waitmovement 0
-
-    @ DIR_SOUTH = 1
-    turnobject 1, 1
-    turnobject 2, 1
 
     setspeaker Viridian_Speaker_JJ_Unison
     msgbox ViridianCity_Text_JJ_BattleIntro, MSGBOX_DEFAULT
     closemessage
-
+    trainerbattle_no_intro TRAINER_JJ_VIRIDIAN, ViridianCity_Text_JJ_Defeated
     applymovement OBJ_EVENT_ID_PLAYER, ViridianCity_Move_Player_JJ_FaceNorth
     waitmovement 0
-
-    trainerbattle_single TRAINER_JJ_VIRIDIAN, ViridianCity_Text_JJ_BattleCue, ViridianCity_Text_JJ_Defeated, ViridianCity_EventScript_JJ_AfterBattle
-    end
+    goto ViridianCity_EventScript_JJ_AfterBattle
 
 ViridianCity_EventScript_HideJJGroup::
     setflag FLAG_HIDE_VIRIDIAN_JJ_GROUP
@@ -220,7 +222,7 @@ ViridianCity_Move_Player_JJ_FaceNorth:
 
 ViridianCity_EventScript_GymTrigger2::
     checkflag FLAG_VIRIDIAN_GONZAP_SCENE_DONE
-    goto_if_eq ViridianCity_EventScript_Gym_Already
+    goto_if_eq ViridianCity_GymTrigger_Done
 
     lockall
     setvar VAR_0x8004, 0   @ Trigger 2
@@ -228,11 +230,14 @@ ViridianCity_EventScript_GymTrigger2::
 
 ViridianCity_EventScript_GymTrigger3::
     checkflag FLAG_VIRIDIAN_GONZAP_SCENE_DONE
-    goto_if_eq ViridianCity_EventScript_Gym_Already
+    goto_if_eq ViridianCity_GymTrigger_Done
 
     lockall
     setvar VAR_0x8004, 1   @ Trigger 3
     goto ViridianCity_EventScript_GymScene
+
+ViridianCity_GymTrigger_Done::
+    end
 
 ViridianCity_EventScript_Gym_Already::
     lock
@@ -276,8 +281,22 @@ ViridianCity_GymScene_SpawnGonzap::
     applymovement 5, ViridianCity_Move_Gonzap_ExitGym
     waitmovement 0
 
-    @ DIR_SOUTH = 1
-    turnobject 5, 1
+    compare VAR_0x8004, 0
+    goto_if_eq ViridianCity_GymScene_FaceGonzap_T2
+    goto ViridianCity_GymScene_FaceGonzap_T3
+
+ViridianCity_GymScene_FaceGonzap_T2::
+    turnobject 4, DIR_WEST
+    turnobject 5, DIR_WEST
+    turnobject OBJ_EVENT_ID_PLAYER, DIR_EAST
+    goto ViridianCity_GymScene_Gonzap_Talk
+
+ViridianCity_GymScene_FaceGonzap_T3::
+    turnobject 4, DIR_EAST
+    turnobject 5, DIR_EAST
+    turnobject OBJ_EVENT_ID_PLAYER, DIR_WEST
+
+ViridianCity_GymScene_Gonzap_Talk::
     setspeaker Viridian_Speaker_Gonzap
     msgbox ViridianCity_Text_Gonzap_Intro, MSGBOX_DEFAULT
     closemessage
@@ -608,15 +627,14 @@ ViridianCity_Text_JJ_BattleIntro:
     .string "James!\p"
     .string "Team Rocket blasts off at the speed of\n"
     .string "light!\p"
-
     .string "Surrender now or prepare to fight!$"
 
 ViridianCity_Text_JJ_BattleCue:
-    .string "Jessie & James challenge you!$"
+    .string "Surrender now or prepare to fight!$"
 
 ViridianCity_Text_JJ_Defeated:
-    .string "How did we lose to a rookie?!\p"
-    .string "We need a shadow pokemon...$"
+    .string "How did we lose to a twerp?!\p"
+    .string "Maybe Meowth needs to convert.$"
 
 @ Old label kept, but now unused (we split into Jessie/James)
 ViridianCity_Text_JJ_PostBattle:
@@ -626,10 +644,11 @@ ViridianCity_Text_James_PostBattle:
     .string "Hmph! Don't get used to this.$"
 
 ViridianCity_Text_Jessie_PostBattle:
-    .string "That darn OAK and his meddling\n"
-    .string "research...\p"
-    .string "Team Rocket will fix everything in\n"
-    .string "our favor.\p"
+    .string "We're TEAM ROCKETS newest recruits,\n"
+    .string "we can't go to the boss with a\l"
+    .string "bad report already.\p"
+    .string "We will get stronger and take\n"
+    .string "you down!\p"
     .string "Just you wait, twerp.$"
 
 ViridianCity_Text_GymGrunt_Before:
@@ -637,11 +656,8 @@ ViridianCity_Text_GymGrunt_Before:
     .string "The boss is in an intense meeting.$"
 
 ViridianCity_Text_GymGrunt_After:
-    .string "The boss has no time\n"
-    .string "for weaklings.\p"
-    .string "Come back when this city actually belongs\n"
-    .string "to the League again... if that ever\l"
-    .string "happens.$"
+    .string "The boss has no time for\n"
+    .string "weaklings like you, hahaha.$"
 
 ViridianCity_Text_Gonzap_Intro:
     .string "So this is the KANTO branch\n"
@@ -660,13 +676,11 @@ ViridianCity_Text_Grunt1:
     .string "This place used to be full of sleepy\n"
     .string "old timers and fresh faced kids.\p"
     .string "We cleared them out in one night.\n"
-    .string "Now Viridian belongs to Team Rocket.$"
+    .string "Now Viridian belongs to TEAM ROCKET.$"
 
 ViridianCity_Text_Grunt2:
-    .string "Orders are simple: nobody in or out\n"
-    .string "unless the boss says so.\p"
-    .string "The League can whine all they want.\n"
-    .string "They are not getting past us this time.$"
+    .string "Orders are simply this, nobody in or out\n"
+    .string "unless the boss says so.$"
 
 ViridianCity_Text_Grunt3:
     .string "You are wondering where everyone went?\p"
@@ -675,11 +689,9 @@ ViridianCity_Text_Grunt3:
     .string "Smart ones stay out of our way.$"
 
 ViridianCity_Text_Grunt4:
-    .string "Giovanni is not the only one giving\n"
-    .string "orders anymore.\p"
     .string "Big guys from other regions came in\n"
     .string "talking about shadow potential.\p"
-    .string "I do not get it.\n"
+    .string "I don't get it.\n"
     .string "I just follow the paycheck.$"
 
 ViridianCity_Text_Grunt5:
@@ -692,17 +704,14 @@ ViridianCity_Text_Grunt5:
 ViridianCity_Text_Grunt6:
     .string "Keep walking, kid.\p"
     .string "If the boss wanted random trainers\n"
-    .string "poking around, we would not be here.\p"
-    .string "Go train on Route 2 or something.$"
+    .string "poking around, we would not be here.$"
 
 ViridianCity_Text_Grunt7:
-    .string "Heard a rumor that some Rocket labs\n"
+    .string "Heard a rumor that some ROCKET labs\n"
     .string "are testing hearts of Pokemon.\p"
-    .string "I do not ask questions.\n"
-    .string "If you do, you do not last long.$"
+    .string "Whatever that means.$"
 
 ViridianCity_Text_Grunt8:
     .string "You look confused.\n"
     .string "Like you just dropped in from nowhere.\p"
-    .string "Bad time to get lost in Kanto, kid.\n"
-    .string "The world is changing, and not for you.$"
+    .string "Bad time to get lost in Kanto, kid.$"

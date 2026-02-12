@@ -360,6 +360,7 @@ extern const u8 gText_PauseUntilPress[];
 extern const u8 gText_ShadowPokemonCantBreed[];
 extern const u8 gText_ShadowPokemonCantLearnMoves[];
 extern const u8 gText_TimeFluteShadowOnly[];
+extern const u8 gText_NicknamePurifyPrompt[];
 extern const u8 gText_OhThatsShadowPokemon[];
 extern const u8 gText_CantUseUntilNewBadge[];
 extern const u8 gText_ReturnToHealingSpot[];

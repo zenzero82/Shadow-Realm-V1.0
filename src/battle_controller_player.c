@@ -12,6 +12,7 @@
 #include "battle_gimmick.h"
 #include "bg.h"
 #include "data.h"
+#include "event_data.h"
 #include "item.h"
 #include "item_menu.h"
 #include "link.h"
@@ -37,6 +38,7 @@
 #include "constants/battle_move_effects.h"
 #include "constants/battle_partner.h"
 #include "constants/hold_effects.h"
+#include "constants/flags.h"
 #include "constants/items.h"
 #include "constants/moves.h"
 #include "constants/party_menu.h"
@@ -1722,14 +1724,17 @@ static void MoveSelectionDisplayMoveNames(u32 battler)
 
     for (i = 0; i < MAX_MON_MOVES; i++)
     {
+        u32 move = moveInfo->moves[i];
+        u32 displayMove = move;
         MoveSelectionDestroyCursorAt(i);
         if (IsGimmickSelected(battler, GIMMICK_DYNAMAX) || GetActiveGimmick(battler) == GIMMICK_DYNAMAX)
-            StringCopy(gDisplayedStringBattle, GetMoveName(GetMaxMove(battler, moveInfo->moves[i])));
-        else
-            StringCopy(gDisplayedStringBattle, GetMoveName(moveInfo->moves[i]));
+            displayMove = GetMaxMove(battler, move);
+
+        StringCopy(gDisplayedStringBattle, GetMoveName(displayMove));
         // Prints on windows B_WIN_MOVE_NAME_1, B_WIN_MOVE_NAME_2, B_WIN_MOVE_NAME_3, B_WIN_MOVE_NAME_4
         BattlePutTextOnWindow(gDisplayedStringBattle, i + B_WIN_MOVE_NAME_1);
-        if (moveInfo->moves[i] != MOVE_NONE)
+
+        if (move != MOVE_NONE)
             gNumberOfMovesToChoose++;
     }
 }
@@ -2104,7 +2109,10 @@ static void PlayerHandleChooseAction(u32 battler)
     TryRestoreLastUsedBall();
     ActionSelectionCreateCursorAt(gActionSelectionCursor[battler], 0);
     PREPARE_MON_NICK_BUFFER(gBattleTextBuff1, battler, gBattlerPartyIndexes[battler]);
-    BattleStringExpandPlaceholdersToDisplayedString(gText_WhatWillPkmnDo);
+    if (gBattleTypeFlags & BATTLE_TYPE_TRAINER)
+        BattleStringExpandPlaceholdersToDisplayedString(gText_WhatWillPkmnDo);
+    else
+        BattleStringExpandPlaceholdersToDisplayedString(gText_WhatWillPkmnDoCall);
 
     if (B_SHOW_PARTNER_TARGET && gBattleTypeFlags & BATTLE_TYPE_INGAME_PARTNER && IsBattlerAlive(B_POSITION_PLAYER_RIGHT))
     {
@@ -2450,6 +2458,8 @@ static void PlayerHandleBattleDebug(u32 battler)
     // 1) Give balls for testing snag / catching
     AddBagItem(ITEM_POKE_BALL, 50);
     AddBagItem(ITEM_MASTER_BALL, 50);
+    FlagSet(FLAG_SYS_POKENAV_GET);
+    FlagSet(FLAG_RECEIVED_POKENAV);
 
     // 2) Toggle Reverse Mode on the active player mon if it's a Shadow mon
     //    (relies on the Shadow fields we pulled in from the Shadow PR)

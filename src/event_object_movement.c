@@ -9089,6 +9089,33 @@ bool8 MovementAction_ClearAffineAnim_Step0(struct ObjectEvent *objectEvent, stru
     return TRUE;
 }
 
+bool8 MovementAction_StartAffineAnim0_Step0(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+{
+    sprite->affineAnimPaused = FALSE;
+    StartSpriteAffineAnimIfDifferent(sprite, 0);
+    sprite->sActionFuncId = 1;
+    return FALSE;
+}
+
+bool8 MovementAction_StartAffineAnim1_Step0(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+{
+    sprite->affineAnimPaused = FALSE;
+    StartSpriteAffineAnimIfDifferent(sprite, 1);
+    sprite->sActionFuncId = 1;
+    return FALSE;
+}
+
+bool8 MovementAction_WaitAffineAnim_Step1(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+{
+    if (sprite->affineAnimEnded)
+    {
+        sprite->affineAnimPaused = TRUE;
+        sprite->sActionFuncId = 2;
+        return TRUE;
+    }
+    return FALSE;
+}
+
 bool8 MovementAction_HideReflection_Step0(struct ObjectEvent *objectEvent, struct Sprite *sprite)
 {
     objectEvent->hideReflection = TRUE;

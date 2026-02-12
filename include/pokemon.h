@@ -700,6 +700,11 @@ extern const struct NatureInfo gNaturesInfo[];
 extern const u16 gTutorMoves[];
 #endif // P_TUTOR_MOVES_ARRAY
 
+static inline u8 GetSpeciesType(u16 species, u8 typeIndex)
+{
+    return gSpeciesInfo[species].types[typeIndex];
+}
+
 void ZeroBoxMonData(struct BoxPokemon *boxMon);
 void ZeroMonData(struct Pokemon *mon);
 void ZeroPlayerPartyMons(void);

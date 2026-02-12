@@ -20,6 +20,7 @@ CeruleanCity_EventScript_CityEnter::
 
 #define LOCALID_MISTY 1
 #define LOCALID_MICHAEL 2
+#define LOCALID_CERULEAN_GATE_OFFICER 29
 
 @ =================================================
 @ SPEAKER DEFINITIONS
@@ -38,7 +39,7 @@ CeruleanCity_Speaker_Boy:
     .string "KYLE$"
 
 CeruleanCity_Speaker_Guard:
-    .string "GARRETT$"
+    .string "ROCKET$"
 
 CeruleanCity_Speaker_Slowbro:
     .string "SLOWBRO$"
@@ -59,21 +60,24 @@ CeruleanCity_Speaker_Boy2:
     .string "NICK$"
 
 CeruleanCity_Speaker_RocketGruntF:
-    .string "ROCKET$"
+    .string "OFFICER$"
 
 CeruleanCity_Speaker_RocketGruntM:
-    .string "ROCKET$"
+    .string "OFFICER$"
 
 CeruleanCity_Speaker_PlasmaGruntF:
-    .string "PLASMA$"
+    .string "OFFICER$"
 
 CeruleanCity_Speaker_PlasmaGruntM:
-    .string "PLASMA$"
+    .string "OFFICER$"
 
 CeruleanCity_Speaker_Policeman1:
     .string "OFFICER$"
 
 CeruleanCity_Speaker_Policeman2:
+    .string "OFFICER$"
+
+CeruleanCity_Speaker_PoliceGate:
     .string "OFFICER$"
 
 @ =================================================
@@ -96,22 +100,27 @@ CeruleanCity_EventScript_Michael::
 
 CeruleanCity_EventScript_MistyMichael_Trigger_West_North::
     setvar VAR_0x8004, 0
+    call CeruleanCity_EventScript_PlayerFaceMichaelFromTrigger
     goto CeruleanCity_EventScript_MistyMichael_Trigger
 
 CeruleanCity_EventScript_MistyMichael_Trigger_West_South::
     setvar VAR_0x8004, 1
+    call CeruleanCity_EventScript_PlayerFaceMichaelFromTrigger
     goto CeruleanCity_EventScript_MistyMichael_Trigger
 
 CeruleanCity_EventScript_MistyMichael_Trigger_East_North::
     setvar VAR_0x8004, 2
+    call CeruleanCity_EventScript_PlayerFaceMichaelFromTrigger
     goto CeruleanCity_EventScript_MistyMichael_Trigger
 
 CeruleanCity_EventScript_MistyMichael_Trigger_East_South::
     setvar VAR_0x8004, 3
+    call CeruleanCity_EventScript_PlayerFaceMichaelFromTrigger
     goto CeruleanCity_EventScript_MistyMichael_Trigger
 
 CeruleanCity_EventScript_MistyMichael_Trigger_South::
     setvar VAR_0x8004, 4
+    call CeruleanCity_EventScript_PlayerFaceMichaelFromTrigger
     goto CeruleanCity_EventScript_MistyMichael_Trigger
 
 CeruleanCity_EventScript_MistyMichael_Trigger::
@@ -125,12 +134,11 @@ CeruleanCity_EventScript_MistyMichael_Trigger_End::
     end
 
 CeruleanCity_EventScript_MistyMichael_Scene::
-    call CeruleanCity_EventScript_MistyMichael_FaceFromTrigger
     setspeaker CeruleanCity_Speaker_Misty
-    msgbox CeruleanCity_Text_Misty_Argue, MSGBOX_NPC
+    msgbox CeruleanCity_Text_Misty_Argue, MSGBOX_DEFAULT
     closemessage
     setspeaker CeruleanCity_Speaker_Michael
-    msgbox CeruleanCity_Text_Michael_Argue, MSGBOX_NPC
+    msgbox CeruleanCity_Text_Michael_Argue, MSGBOX_DEFAULT
     closemessage
     playse SE_PIN
     applymovement LOCALID_MISTY, Common_Movement_ExclamationMark
@@ -153,6 +161,7 @@ CeruleanCity_EventScript_MistyMichael_Scene::
     removeobject LOCALID_MICHAEL
     fadescreen FADE_FROM_BLACK
     call CeruleanCity_EventScript_PlayerWalkToMistyFromTrigger
+    turnobject LOCALID_PLAYER, DIR_NORTH
     applymovement LOCALID_MISTY, Common_Movement_FacePlayer
     waitmovement 0
     setspeaker CeruleanCity_Speaker_Misty
@@ -249,6 +258,29 @@ CeruleanCity_EventScript_PlayerWalkToMisty_South::
     waitmovement 0
     return
 
+CeruleanCity_EventScript_PlayerFaceMichaelFromTrigger::
+    compare VAR_0x8004, 0
+    goto_if_eq CeruleanCity_EventScript_PlayerFaceMichael_West
+    compare VAR_0x8004, 1
+    goto_if_eq CeruleanCity_EventScript_PlayerFaceMichael_West
+    compare VAR_0x8004, 2
+    goto_if_eq CeruleanCity_EventScript_PlayerFaceMichael_East
+    compare VAR_0x8004, 3
+    goto_if_eq CeruleanCity_EventScript_PlayerFaceMichael_East
+    goto CeruleanCity_EventScript_PlayerFaceMichael_South
+
+CeruleanCity_EventScript_PlayerFaceMichael_West::
+    turnobject LOCALID_PLAYER, DIR_EAST
+    return
+
+CeruleanCity_EventScript_PlayerFaceMichael_East::
+    turnobject LOCALID_PLAYER, DIR_WEST
+    return
+
+CeruleanCity_EventScript_PlayerFaceMichael_South::
+    turnobject LOCALID_PLAYER, DIR_NORTH
+    return
+
 CeruleanCity_Movement_PlayerToMisty_WestNorth:
     walk_down
     walk_down
@@ -277,6 +309,10 @@ CeruleanCity_Movement_PlayerToMisty_EastSouth:
 
 CeruleanCity_Movement_PlayerToMisty_South:
     walk_up
+    step_end
+
+CeruleanCity_Movement_PlayerStepDown:
+    walk_down
     step_end
 
 
@@ -314,7 +350,7 @@ CeruleanCity_EventScript_Boy::
 
 CeruleanCity_EventScript_Guard::
     setspeaker CeruleanCity_Speaker_Guard
-    msgbox CeruleanCity_Text_ThisIsCeruleanCave, MSGBOX_NPC
+    msgbox CeruleanCity_Text_RocketCaveWarning, MSGBOX_NPC
     end
 
 
@@ -409,6 +445,21 @@ CeruleanCity_EventScript_Policeman2::
     msgbox CeruleanCity_Text_Policeman2, MSGBOX_NPC
     end
 
+CeruleanCity_EventScript_CaveGate_Block::
+    lockall
+    checkflag FLAG_CERULEAN_MISTY_MICHAEL_SCENE_DONE
+    goto_if_eq CeruleanCity_EventScript_CaveGate_Block_End
+    turnobject LOCALID_CERULEAN_GATE_OFFICER, DIR_EAST
+    turnobject LOCALID_PLAYER, DIR_WEST
+    setspeaker CeruleanCity_Speaker_PoliceGate
+    msgbox CeruleanCity_Text_PoliceGate_Block, MSGBOX_NPC
+    closemessage
+    applymovement LOCALID_PLAYER, CeruleanCity_Movement_PlayerStepDown
+    waitmovement 0
+CeruleanCity_EventScript_CaveGate_Block_End::
+    releaseall
+    end
+
 CeruleanCity_EventScript_Light::
     msgbox CeruleanCity_Text_Light, MSGBOX_SIGN
     end
@@ -421,6 +472,7 @@ CeruleanCity_EventScript_Light::
 CeruleanCity_EventScript_Pokemon_Koffing::
     lock
     faceplayer
+    waitse
     playmoncry SPECIES_KOFFING, CRY_MODE_NORMAL
     waitmoncry
     release
@@ -429,6 +481,7 @@ CeruleanCity_EventScript_Pokemon_Koffing::
 CeruleanCity_EventScript_Pokemon_Grimer::
     lock
     faceplayer
+    waitse
     playmoncry SPECIES_GRIMER, CRY_MODE_NORMAL
     waitmoncry
     release
@@ -437,6 +490,7 @@ CeruleanCity_EventScript_Pokemon_Grimer::
 CeruleanCity_EventScript_Pokemon_Trubbish::
     lock
     faceplayer
+    waitse
     playmoncry SPECIES_TRUBBISH, CRY_MODE_NORMAL
     waitmoncry
     release
@@ -445,6 +499,7 @@ CeruleanCity_EventScript_Pokemon_Trubbish::
 CeruleanCity_EventScript_Pokemon_Scraggy::
     lock
     faceplayer
+    waitse
     playmoncry SPECIES_SCRAGGY, CRY_MODE_NORMAL
     waitmoncry
     release
@@ -453,6 +508,7 @@ CeruleanCity_EventScript_Pokemon_Scraggy::
 CeruleanCity_EventScript_Pokemon_Slowpoke::
     lock
     faceplayer
+    waitse
     playmoncry SPECIES_SLOWPOKE, CRY_MODE_NORMAL
     waitmoncry
     release
@@ -461,6 +517,7 @@ CeruleanCity_EventScript_Pokemon_Slowpoke::
 CeruleanCity_EventScript_Pokemon_Diglett::
     lock
     faceplayer
+    waitse
     playmoncry SPECIES_DIGLETT, CRY_MODE_NORMAL
     waitmoncry
     release
@@ -496,14 +553,11 @@ CeruleanCity_EventScript_CapeSign::
 @ TEXT (Shadow Realm storyline)
 @ =================================================
 
-CeruleanCity_Text_ThisIsCeruleanCave::
-    .string "This is CERULEAN CAVE.\p"
-    .string "Strong POKeMON live inside...\n"
-    .string "but that's not the only danger.\p"
-    .string "People keep reporting POKeMON with a\n"
-    .string "strange 'shadow' look in the area.\p"
-    .string "Until the LEAGUE clears it, nobody\n"
-    .string "is allowed in.$"
+CeruleanCity_Text_RocketCaveWarning::
+    .string "Hey! This is ROCKET business.\p"
+    .string "We've got orders to watch this cave\n"
+    .string "until our contact returns.\p"
+    .string "If you want answers, move along.$"
 
 CeruleanCity_Text_CooltrainerM1:
     .string "ROUTE 9 to the east?\p"
@@ -636,39 +690,50 @@ CeruleanCity_Text_Michael_Repeat:
 
 CeruleanCity_Text_BugCatcher:
     .string "Even the bugs are hiding lately.\n"
-    .string "The air feels... wrong.\l"
-    .string "CIPHER must be close.$"
+    .string "The police won't stop patrolling.\l"
+    .string "Something's up in CERULEAN.$"
 
 CeruleanCity_Text_Boy2:
     .string "MISTY hasn't been in the GYM.\n"
-    .string "Everyone's whispering about the\l"
-    .string "CAPE and some new group.$"
+    .string "The CAPE trail is closed, and\l"
+    .string "the cops look nervous.$"
 
 CeruleanCity_Text_RocketGruntF:
-    .string "Don't lump us in with CIPHER.\n"
-    .string "They're worse than ROCKET.\l"
-    .string "Way worse.$"
+    .string "CERULEAN is under police watch.\n"
+    .string "Too many crimes and break-ins lately.\l"
+    .string "Stay alert.$"
 
 CeruleanCity_Text_RocketGruntM:
-    .string "Orders came down to stand by.\n"
-    .string "Those guys in black? Not ours.\l"
-    .string "Not anymore.$"
+    .string "We're locking down the main road.\n"
+    .string "No one passes without a reason.\l"
+    .string "It's for your safety.$"
 
 CeruleanCity_Text_PlasmaGruntF:
-    .string "The SAGES told us to hold this\n"
-    .string "street. No questions.$"
+    .string "Reports say ROCKET and another\n"
+    .string "crew are moving around the CAPE.\l"
+    .string "Stay inside after dark.$"
 
 CeruleanCity_Text_PlasmaGruntM:
-    .string "We are securing the perimeter.\n"
-    .string "Move along.$"
+    .string "We're stretched thin, kid.\n"
+    .string "If you see something, say something.$"
 
 CeruleanCity_Text_Policeman1:
-    .string "Keep the CAPE trail clear at\n"
-    .string "night. We're stretched thin.$"
+    .string "The CAPE trail is closed for now.\n"
+    .string "Too much trouble up there.$"
 
 CeruleanCity_Text_Policeman2:
-    .string "If you see anything strange,\n"
-    .string "report it immediately.$"
+    .string "We're investigating a crime wave.\n"
+    .string "Report anything suspicious.$"
+
+CeruleanCity_Text_PoliceGate_Block:
+    .string "Hey kid, this route might be\n"
+    .string "dangerous.\p"
+    .string "We have reports of TEAM ROCKET and\n"
+    .string "an unknown accomplice going in and\l"
+    .string "out of CERULEAN CAVE.\p"
+    .string "MICHAEL hasn't come back this way\n"
+    .string "yet, so I can't let anyone pass\n"
+    .string "without his word.$"
 
 CeruleanCity_Text_Light:
     .string "Portable lights. Someone set\n"

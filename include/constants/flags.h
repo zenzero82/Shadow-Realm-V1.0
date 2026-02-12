@@ -89,17 +89,18 @@
 #define FLAG_HIDE_CERULEAN_MISTY   0x41 // Hide Misty in Cerulean City
 #define FLAG_HIDE_CERULEAN_MICHAEL 0x42 // Hide Michael in Cerulean City
 #define FLAG_ROUTE_25_MICHAEL_INTRO_DONE 0x43 // Route 25 Michael intro done
-#define FLAG_UNUSED_0x044    0x44 // Unused Flag
-#define FLAG_UNUSED_0x045    0x45 // Unused Flag
-#define FLAG_UNUSED_0x046    0x46 // Unused Flag
-#define FLAG_UNUSED_0x047    0x47 // Unused Flag
-#define FLAG_UNUSED_0x048    0x48 // Unused Flag
-#define FLAG_UNUSED_0x049    0x49 // Unused Flag
+#define FLAG_HIDE_VIRIDIAN_FOREST_ROCKET_GRUNT      0x44
+#define FLAG_HIDE_VIRIDIAN_FOREST_PLASMA_GRUNT      0x45
+#define FLAG_HIDE_OAKS_LAB_NIA        0x46 // hides Nia inside Oak's Lab (object 1)
+#define FLAG_HIDE_OAKS_LAB_OAK        0x47 // hides Oak during/after intro (object 6)
+#define FLAG_HIDE_OAKS_LAB_HOOPA_RING 0x48 // hides Hoopa Ring in Oak's Lab (object 7)
+#define FLAG_OAKS_LAB_NEWGAME_INTRO_DONE 0x49
 #define FLAG_UNUSED_0x04A    0x4A // Unused Flag
 #define FLAG_UNUSED_0x04B    0x4B // Unused Flag
 #define FLAG_UNUSED_0x04C    0x4C // Unused Flag
 #define FLAG_UNUSED_0x04D    0x4D // Unused Flag
 #define FLAG_UNUSED_0x04E    0x4E // Unused Flag
+#define FLAG_HIDE_ROUTE1_LEO FLAG_UNUSED_0x04A // hides Leo on Route 1
 
 // Scripts
 #define FLAG_HIDE_SKY_PILLAR_TOP_RAYQUAZA_STILL  0x50
@@ -1240,8 +1241,8 @@
 #define FLAG_ITEM_VIRIDIAN_FOREST_ANTIDOTE                          0x49C
 #define FLAG_HIDE_PEWTER_GYM_BROCK_BALL                             0x49D
 #define FLAG_HIDE_PEWTER_GYM_BROCK_CROAGUNK                         0x49E
-#define FLAG_UNUSED_0x49F                                           0x49F // Unused Flag
-#define FLAG_UNUSED_0x4A0                                           0x4A0 // Unused Flag
+#define FLAG_ITEM_MT_MOON_OUTSIDE_MOON_STONE                        0x49F
+#define FLAG_HIDE_MT_MOON_OUTSIDE_ARIANA                            0x4A0
 #define FLAG_UNUSED_0x4A1                                           0x4A1 // Unused Flag
 #define FLAG_UNUSED_0x4A2                                           0x4A2 // Unused Flag
 #define FLAG_UNUSED_0x4A3                                           0x4A3 // Unused Flag

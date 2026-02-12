@@ -739,7 +739,7 @@ struct BattleStruct
     u8 ackBallUseBtn:1; // Used for the last used ball feature
     u8 ballSwapped:1; // Used for the last used ball feature
     u8 throwingPokeBall:1;
-    u8 ballSpriteIds[2];    // item gfx, window gfx
+    u8 ballSpriteIds[3];    // item gfx, window gfx, call window gfx
     u8 moveInfoSpriteId; // move info, window gfx
     u8 appearedInBattle; // Bitfield to track which Pokemon appeared in battle. Used for Burmy's form change
     u8 skyDropTargets[MAX_BATTLERS_COUNT]; // For Sky Drop, to account for if multiple Pokemon use Sky Drop in a double battle.

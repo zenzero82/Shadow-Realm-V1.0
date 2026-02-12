@@ -8,19 +8,19 @@ gText_FollowerDefault::
 	.string "ERROR 404: Script not found.$"
 
 gText_ShadowFollowerClosedOff::
-	.string "{STR_VAR_1} is completely closed off to you.$"
+	.string "{STR_VAR_1} keeps its heart\nclosed for now.$"
 
 gText_ShadowFollowerStartingHappier::
-	.string "{STR_VAR_1} is starting to seem... happier... I think.$"
+	.string "{STR_VAR_1} seems a bit happier.\nMaybe it's opening up.$"
 
 gText_ShadowFollowerShowingEmotion::
-	.string "{STR_VAR_1} is starting to show some emotion.\nIt's eager to lead.$"
+	.string "{STR_VAR_1} shows some emotion.\nIt's eager to lead.$"
 
 gText_ShadowFollowerReadyCommand::
-	.string "{STR_VAR_1} is ready to take your command!$"
+	.string "{STR_VAR_1} is ready to\nfollow your command!$"
 
 gText_ShadowFollowerOpenHeart::
-	.string "{STR_VAR_1} is ready to open its heart!$"
+	.string "{STR_VAR_1} is ready to\nopen its heart!$"
 
 gText_WantsToFly::
 	.string "{STR_VAR_1} looks up at the\nsky restlessly.\pWould you like to use FLY?$"

@@ -801,11 +801,16 @@ void HandleAction_Call(void)
     gBattlerAttacker         = battler;
     gBattlerTarget           = battler;
     gBattleScripting.battler = battler;
+    gCurrentMove             = MOVE_NONE;
+    gChosenMove              = MOVE_NONE;
 
     if (!gBattleMons[battler].isShadow)
     {
-        // ✅ Non-shadow: use the known-good stock script with accuracy boost + anim
-        gBattlescriptCurrInstr = BattleScript_TrainerCallToMonNormal;
+        // Non-shadow: use a simple player call script (avoids move-end side effects)
+        if (GetBattlerSide(battler) == B_SIDE_PLAYER)
+            gBattlescriptCurrInstr = gBattleScript_PlayerCall_NonShadow;
+        else
+            gBattlescriptCurrInstr = BattleScript_TrainerCallToMonNormal;
     }
     else
     {

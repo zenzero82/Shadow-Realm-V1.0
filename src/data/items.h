@@ -14153,8 +14153,8 @@ const struct Item gItemsInfo[] =
         .pocket = POCKET_KEY_ITEMS,
         .type = ITEM_USE_FIELD,
         .fieldUseFunc = ItemUseOutOfBattle_ShadowMonitor,
-        .iconPic = gItemIcon_TownMap,
-        .iconPalette = gItemIconPalette_TownMap,
+        .iconPic = gItemIcon_ShadowMonitor,
+        .iconPalette = gItemIconPalette_ShadowMonitor,
     },
 
     [ITEM_TIME_FLUTE] =
@@ -14170,8 +14170,8 @@ const struct Item gItemsInfo[] =
         .type = ITEM_USE_PARTY_MENU,
         .fieldUseFunc = ItemUseOutOfBattle_TimeFlute,
         .effect = gItemEffect_EvoItem,
-        .iconPic = gItemIcon_PokeFlute,
-        .iconPalette = gItemIconPalette_PokeFlute,
+        .iconPic = gItemIcon_TimeFlute,
+        .iconPalette = gItemIconPalette_TimeFlute,
     },
     [ITEM_SNAG_MACHINE] =
     {

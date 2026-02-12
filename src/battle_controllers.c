@@ -11,9 +11,11 @@
 #include "battle_setup.h"
 #include "battle_tv.h"
 #include "cable_club.h"
+#include "decompress.h"
 #include "event_object_movement.h"
 #include "link.h"
 #include "link_rfu.h"
+#include "malloc.h"
 #include "m4a.h"
 #include "palette.h"
 #include "party_menu.h"
@@ -30,6 +32,13 @@
 
 static EWRAM_DATA u8 sLinkSendTaskId = 0;
 static EWRAM_DATA u8 sLinkReceiveTaskId = 0;
+static EWRAM_DATA u8 sTrainerFrontPicBottomSpriteIds[MAX_SPRITES] = {0};
+static EWRAM_DATA u16 sTrainerFrontPicBottomTileTags[MAX_SPRITES] = {0};
+
+#define TRAINER_PIC_TALL_BOTTOM_TAG_BASE 0xF100
+#define TRAINER_PIC_TALL_BOTTOM_TAG(spriteId) (TRAINER_PIC_TALL_BOTTOM_TAG_BASE + (spriteId))
+#define TRAINER_PIC_TALL_BOTTOM_Y_OFFSET ((TRAINER_PIC_HEIGHT / 2) + (TRAINER_PIC_TALL_BOTTOM_SPRITE_HEIGHT / 2))
+#define TRAINER_PIC_TALL_Y_OFFSET (-13)
 
 COMMON_DATA void (*gBattlerControllerFuncs[MAX_BATTLERS_COUNT])(u32 battler) = {0};
 COMMON_DATA u8 gBattleControllerData[MAX_BATTLERS_COUNT] = {0}; // Used by the battle controllers to store misc sprite/task IDs for each battler
@@ -47,6 +56,177 @@ static void SpriteCB_FreeOpponentSprite(struct Sprite *sprite);
 static u32 ReturnAnimIdForBattler(bool32 isPlayerSide, u32 specificBattler);
 static void LaunchKOAnimation(u32 battlerId, u16 animId, bool32 isFront);
 static void AnimateMonAfterKnockout(u32 battler);
+static bool32 TryCreateTallTrainerFrontPic(u16 trainerPicId, u8 battler, s16 xPos, s16 yPos, s32 subpriority, u8 *spriteId);
+static u8 CreateTrainerFrontPicWithTallSupport(u16 trainerPicId, u8 battler, s16 xPos, s16 yPos, s32 subpriority);
+static void DestroyTrainerFrontPicBottomSprite(u8 topSpriteId);
+static void SyncTallTrainerFrontPicPalette(u8 topSpriteId);
+static void SpriteCB_TallTrainerFrontPicFollow(struct Sprite *sprite);
+
+static bool32 IsTrainerFrontPicTall(u16 trainerPicId)
+{
+    return gTrainerFrontPicTallTable[trainerPicId].data != NULL;
+}
+
+static void SetTrainerFrontPicBottomSprite(u8 topSpriteId, u8 bottomSpriteId, u16 tileTag)
+{
+    if (topSpriteId >= MAX_SPRITES)
+        return;
+
+    sTrainerFrontPicBottomSpriteIds[topSpriteId] = bottomSpriteId;
+    sTrainerFrontPicBottomTileTags[topSpriteId] = tileTag;
+}
+
+static void DestroyTrainerFrontPicBottomSprite(u8 topSpriteId)
+{
+    u8 bottomSpriteId;
+
+    if (topSpriteId >= MAX_SPRITES)
+        return;
+
+    bottomSpriteId = sTrainerFrontPicBottomSpriteIds[topSpriteId];
+    if (bottomSpriteId != SPRITE_NONE)
+    {
+        if (gSprites[bottomSpriteId].inUse)
+            DestroySprite(&gSprites[bottomSpriteId]);
+        if (sTrainerFrontPicBottomTileTags[topSpriteId] != TAG_NONE)
+            FreeSpriteTilesByTag(sTrainerFrontPicBottomTileTags[topSpriteId]);
+    }
+
+    sTrainerFrontPicBottomSpriteIds[topSpriteId] = SPRITE_NONE;
+    sTrainerFrontPicBottomTileTags[topSpriteId] = TAG_NONE;
+}
+
+static void SyncTallTrainerFrontPicPalette(u8 topSpriteId)
+{
+    u8 bottomSpriteId;
+
+    if (topSpriteId >= MAX_SPRITES)
+        return;
+
+    bottomSpriteId = sTrainerFrontPicBottomSpriteIds[topSpriteId];
+    if (bottomSpriteId != SPRITE_NONE && gSprites[bottomSpriteId].inUse)
+        gSprites[bottomSpriteId].oam.paletteNum = gSprites[topSpriteId].oam.paletteNum;
+}
+
+static void SpriteCB_TallTrainerFrontPicFollow(struct Sprite *sprite)
+{
+    u8 topSpriteId = sprite->data[0];
+
+    if (topSpriteId >= MAX_SPRITES || !gSprites[topSpriteId].inUse)
+    {
+        if (topSpriteId < MAX_SPRITES && sTrainerFrontPicBottomSpriteIds[topSpriteId] == (u8)(sprite - gSprites))
+        {
+            if (sTrainerFrontPicBottomTileTags[topSpriteId] != TAG_NONE)
+                FreeSpriteTilesByTag(sTrainerFrontPicBottomTileTags[topSpriteId]);
+            sTrainerFrontPicBottomSpriteIds[topSpriteId] = SPRITE_NONE;
+            sTrainerFrontPicBottomTileTags[topSpriteId] = TAG_NONE;
+        }
+        DestroySprite(sprite);
+        return;
+    }
+
+    sprite->x = gSprites[topSpriteId].x;
+    sprite->y = gSprites[topSpriteId].y + TRAINER_PIC_TALL_BOTTOM_Y_OFFSET;
+    sprite->x2 = gSprites[topSpriteId].x2;
+    sprite->y2 = gSprites[topSpriteId].y2;
+    sprite->hFlip = gSprites[topSpriteId].hFlip;
+    sprite->invisible = gSprites[topSpriteId].invisible;
+    sprite->subpriority = gSprites[topSpriteId].subpriority;
+    sprite->oam.paletteNum = gSprites[topSpriteId].oam.paletteNum;
+}
+
+static bool32 TryCreateTallTrainerFrontPic(u16 trainerPicId, u8 battler, s16 xPos, s16 yPos, s32 subpriority, u8 *spriteId)
+{
+    u8 position;
+    u8 *tallBuffer;
+    u8 *bottomBuffer;
+    u16 tileTag;
+    struct SpriteSheet sheet;
+    struct SpriteTemplate template;
+    u8 bottomSpriteId;
+
+    if (!IsTrainerFrontPicTall(trainerPicId))
+        return FALSE;
+
+    position = GetBattlerPosition(battler);
+    tallBuffer = AllocZeroed(TRAINER_PIC_TALL_SIZE);
+    bottomBuffer = AllocZeroed(TRAINER_PIC_TALL_BOTTOM_SPRITE_SIZE);
+    if (tallBuffer == NULL || bottomBuffer == NULL)
+    {
+        if (tallBuffer != NULL)
+            Free(tallBuffer);
+        if (bottomBuffer != NULL)
+            Free(bottomBuffer);
+        return FALSE;
+    }
+
+    DecompressPicFromTable(&gTrainerFrontPicTallTable[trainerPicId], tallBuffer);
+    memcpy(gMonSpritesGfxPtr->spritesGfx[position], tallBuffer, TRAINER_PIC_SIZE);
+    memcpy(bottomBuffer, tallBuffer + TRAINER_PIC_SIZE, TRAINER_PIC_TALL_BOTTOM_SIZE);
+    Free(tallBuffer);
+
+    LoadSpritePalette(&gTrainerSprites[trainerPicId].palette);
+    SetMultiuseSpriteTemplateToTrainerFront(trainerPicId, position);
+    if (subpriority == -1)
+        subpriority = GetBattlerSpriteSubpriority(battler);
+
+    *spriteId = CreateSprite(&gMultiuseSpriteTemplate, xPos, yPos + TRAINER_PIC_TALL_Y_OFFSET, subpriority);
+    if (*spriteId >= MAX_SPRITES)
+    {
+        Free(bottomBuffer);
+        return FALSE;
+    }
+
+    tileTag = TRAINER_PIC_TALL_BOTTOM_TAG(*spriteId);
+    sheet.data = bottomBuffer;
+    sheet.size = TRAINER_PIC_TALL_BOTTOM_SPRITE_SIZE;
+    sheet.tag = tileTag;
+    LoadSpriteSheet(&sheet);
+    Free(bottomBuffer);
+    if (GetSpriteTileStartByTag(tileTag) == TAG_NONE)
+    {
+        DestroySprite(&gSprites[*spriteId]);
+        return FALSE;
+    }
+
+    template.tileTag = tileTag;
+    template.paletteTag = gTrainerSprites[trainerPicId].palette.tag;
+    template.oam = &gOamData_AffineOff_ObjNormal_64x32;
+    template.anims = gAnims_Trainer;
+    template.images = NULL;
+    template.affineAnims = gDummySpriteAffineAnimTable;
+    template.callback = SpriteCB_TallTrainerFrontPicFollow;
+
+    bottomSpriteId = CreateSprite(&template, xPos, yPos + TRAINER_PIC_TALL_Y_OFFSET + TRAINER_PIC_TALL_BOTTOM_Y_OFFSET, subpriority);
+    if (bottomSpriteId >= MAX_SPRITES)
+    {
+        DestroySprite(&gSprites[*spriteId]);
+        FreeSpriteTilesByTag(tileTag);
+        return FALSE;
+    }
+
+    gSprites[bottomSpriteId].data[0] = *spriteId;
+    gSprites[bottomSpriteId].oam.paletteNum = IndexOfSpritePaletteTag(gTrainerSprites[trainerPicId].palette.tag);
+    SetTrainerFrontPicBottomSprite(*spriteId, bottomSpriteId, tileTag);
+    return TRUE;
+}
+
+static u8 CreateTrainerFrontPicWithTallSupport(u16 trainerPicId, u8 battler, s16 xPos, s16 yPos, s32 subpriority)
+{
+    u8 spriteId;
+
+    if (TryCreateTallTrainerFrontPic(trainerPicId, battler, xPos, yPos, subpriority, &spriteId))
+        return spriteId;
+
+    DecompressTrainerFrontPic(trainerPicId, battler);
+    SetMultiuseSpriteTemplateToTrainerFront(trainerPicId, GetBattlerPosition(battler));
+    if (subpriority == -1)
+        subpriority = GetBattlerSpriteSubpriority(battler);
+    spriteId = CreateSprite(&gMultiuseSpriteTemplate, xPos, yPos, subpriority);
+    if (spriteId < MAX_SPRITES)
+        SetTrainerFrontPicBottomSprite(spriteId, SPRITE_NONE, TAG_NONE);
+    return spriteId;
+}
 
 void HandleLinkBattleSetup(void)
 {
@@ -2350,10 +2530,13 @@ static void Controller_HandleTrainerSlideBack(u32 battler)
 {
     if (gSprites[gBattleStruct->trainerSlideSpriteIds[battler]].callback == SpriteCallbackDummy)
     {
+        u8 spriteId = gBattleStruct->trainerSlideSpriteIds[battler];
+
+        DestroyTrainerFrontPicBottomSprite(spriteId);
         if (!IsOnPlayerSide(battler))
-            FreeTrainerFrontPicPalette(gSprites[gBattleStruct->trainerSlideSpriteIds[battler]].oam.affineParam);
-        FreeSpriteOamMatrix(&gSprites[gBattleStruct->trainerSlideSpriteIds[battler]]);
-        DestroySprite(&gSprites[gBattleStruct->trainerSlideSpriteIds[battler]]);
+            FreeTrainerFrontPicPalette(gSprites[spriteId].oam.affineParam);
+        FreeSpriteOamMatrix(&gSprites[spriteId]);
+        DestroySprite(&gSprites[spriteId]);
         BattleControllerComplete(battler);
     }
 }
@@ -2583,16 +2766,9 @@ void BtlController_HandleDrawTrainerPic(u32 battler, u32 trainerPicId, bool32 is
 {
     if (!IsOnPlayerSide(battler)) // Always the front sprite for the opponent.
     {
-        DecompressTrainerFrontPic(trainerPicId, battler);
-        SetMultiuseSpriteTemplateToTrainerFront(trainerPicId, GetBattlerPosition(battler));
-        if (subpriority == -1)
-            subpriority = GetBattlerSpriteSubpriority(battler);
-        gBattleStruct->trainerSlideSpriteIds[battler] = CreateSprite(&gMultiuseSpriteTemplate,
-                                                   xPos,
-                                                   yPos,
-                                                   subpriority);
-
+        gBattleStruct->trainerSlideSpriteIds[battler] = CreateTrainerFrontPicWithTallSupport(trainerPicId, battler, xPos, yPos, subpriority);
         gSprites[gBattleStruct->trainerSlideSpriteIds[battler]].oam.paletteNum = IndexOfSpritePaletteTag(gTrainerSprites[trainerPicId].palette.tag);
+        SyncTallTrainerFrontPicPalette(gBattleStruct->trainerSlideSpriteIds[battler]);
         gSprites[gBattleStruct->trainerSlideSpriteIds[battler]].x2 = -DISPLAY_WIDTH;
         gSprites[gBattleStruct->trainerSlideSpriteIds[battler]].sSpeedX = 2;
         gSprites[gBattleStruct->trainerSlideSpriteIds[battler]].oam.affineParam = trainerPicId;
@@ -2601,16 +2777,9 @@ void BtlController_HandleDrawTrainerPic(u32 battler, u32 trainerPicId, bool32 is
     {
         if (isFrontPic)
         {
-            DecompressTrainerFrontPic(trainerPicId, battler);
-            SetMultiuseSpriteTemplateToTrainerFront(trainerPicId, GetBattlerPosition(battler));
-            if (subpriority == -1)
-                subpriority = GetBattlerSpriteSubpriority(battler);
-            gBattleStruct->trainerSlideSpriteIds[battler] = CreateSprite(&gMultiuseSpriteTemplate,
-                                                             xPos,
-                                                             yPos,
-                                                             subpriority);
-
+            gBattleStruct->trainerSlideSpriteIds[battler] = CreateTrainerFrontPicWithTallSupport(trainerPicId, battler, xPos, yPos, subpriority);
             gSprites[gBattleStruct->trainerSlideSpriteIds[battler]].oam.paletteNum = IndexOfSpritePaletteTag(gTrainerSprites[trainerPicId].palette.tag);
+            SyncTallTrainerFrontPicPalette(gBattleStruct->trainerSlideSpriteIds[battler]);
             gSprites[gBattleStruct->trainerSlideSpriteIds[battler]].oam.affineMode = ST_OAM_AFFINE_OFF;
             gSprites[gBattleStruct->trainerSlideSpriteIds[battler]].hFlip = 1;
             gSprites[gBattleStruct->trainerSlideSpriteIds[battler]].y2 = 48;
@@ -2625,6 +2794,7 @@ void BtlController_HandleDrawTrainerPic(u32 battler, u32 trainerPicId, bool32 is
                                                              xPos,
                                                              yPos,
                                                              subpriority);
+            SetTrainerFrontPicBottomSprite(gBattleStruct->trainerSlideSpriteIds[battler], SPRITE_NONE, TAG_NONE);
             if ((gBattleTypeFlags & BATTLE_TYPE_SAFARI) && GetBattlerPosition(battler) == B_POSITION_PLAYER_LEFT)
                 gBattlerSpriteIds[battler] = gBattleStruct->trainerSlideSpriteIds[battler];
 
@@ -2651,6 +2821,7 @@ void BtlController_HandleTrainerSlide(u32 battler, u32 trainerPicId)
                                                          80,
                                                          (8 - gTrainerBacksprites[trainerPicId].coordinates.size) * 4 + 80,
                                                          30);
+        SetTrainerFrontPicBottomSprite(gBattleStruct->trainerSlideSpriteIds[battler], SPRITE_NONE, TAG_NONE);
         if ((gBattleTypeFlags & BATTLE_TYPE_SAFARI) && GetBattlerPosition(battler) == B_POSITION_PLAYER_LEFT)
             gBattlerSpriteIds[battler] = gBattleStruct->trainerSlideSpriteIds[battler];
         gSprites[gBattleStruct->trainerSlideSpriteIds[battler]].oam.paletteNum = battler;
@@ -2659,11 +2830,10 @@ void BtlController_HandleTrainerSlide(u32 battler, u32 trainerPicId)
     }
     else
     {
-        DecompressTrainerFrontPic(trainerPicId, battler);
-        SetMultiuseSpriteTemplateToTrainerFront(trainerPicId, GetBattlerPosition(battler));
-        gBattleStruct->trainerSlideSpriteIds[battler] = CreateSprite(&gMultiuseSpriteTemplate, 176, 40, 0);
+        gBattleStruct->trainerSlideSpriteIds[battler] = CreateTrainerFrontPicWithTallSupport(trainerPicId, battler, 176, 40, 0);
         gSprites[gBattleStruct->trainerSlideSpriteIds[battler]].oam.affineParam = trainerPicId;
         gSprites[gBattleStruct->trainerSlideSpriteIds[battler]].oam.paletteNum = IndexOfSpritePaletteTag(gTrainerSprites[trainerPicId].palette.tag);
+        SyncTallTrainerFrontPicPalette(gBattleStruct->trainerSlideSpriteIds[battler]);
         gSprites[gBattleStruct->trainerSlideSpriteIds[battler]].x2 = 96;
         gSprites[gBattleStruct->trainerSlideSpriteIds[battler]].x += 32;
         gSprites[gBattleStruct->trainerSlideSpriteIds[battler]].sSpeedX = -2;
@@ -3061,8 +3231,10 @@ static void Task_StartSendOutAnim(u8 taskId)
 static void SpriteCB_FreePlayerSpriteLoadMonSprite(struct Sprite *sprite)
 {
     u8 battler = sprite->sBattlerId;
+    u8 spriteId = sprite - gSprites;
 
     // Free player trainer sprite
+    DestroyTrainerFrontPicBottomSprite(spriteId);
     FreeSpriteOamMatrix(sprite);
     FreeSpritePaletteByTag(GetSpritePaletteTagByPaletteNum(sprite->oam.paletteNum));
     DestroySprite(sprite);
@@ -3074,6 +3246,9 @@ static void SpriteCB_FreePlayerSpriteLoadMonSprite(struct Sprite *sprite)
 
 static void SpriteCB_FreeOpponentSprite(struct Sprite *sprite)
 {
+    u8 spriteId = sprite - gSprites;
+
+    DestroyTrainerFrontPicBottomSprite(spriteId);
     FreeTrainerFrontPicPalette(sprite->oam.affineParam);
     FreeSpriteOamMatrix(sprite);
     DestroySprite(sprite);

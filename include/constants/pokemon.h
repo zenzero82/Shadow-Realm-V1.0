@@ -243,6 +243,12 @@
 #define BODY_COLOR_WHITE    8
 #define BODY_COLOR_PINK     9
 
+enum BodyColor
+{
+    BODY_COLOR_ENUM_MIN = 0,
+    BODY_COLOR_ENUM_MAX = 9,
+};
+
 #define F_SUMMARY_SCREEN_FLIP_SPRITE 0x80
 
 #define EVOLUTIONS_END                    0xFFFF // Not an actual evolution, used to mark the end of an evolution array.

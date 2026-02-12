@@ -9,6 +9,8 @@
 #include "constants/field_effects.h"
 #include "constants/metatile_behaviors.h"
 
+#ifdef LOCALID_FARAWAY_ISLAND_MEW
+
 static u8 GetValidMewMoveDirection(u8);
 static bool8 ShouldMewMoveNorth(struct ObjectEvent *, u8);
 static bool8 ShouldMewMoveSouth(struct ObjectEvent *, u8);
@@ -462,3 +464,39 @@ static u8 GetRandomMewDirectionCandidate(u8 numDirections)
 {
     return sMewDirectionCandidates[VarGet(VAR_FARAWAY_ISLAND_STEP_COUNTER) % numDirections];
 }
+
+#else
+
+u32 GetMewMoveDirection(void)
+{
+    return DIR_NONE;
+}
+
+bool8 ObjectEventIsFarawayIslandMew(struct ObjectEvent *objectEvent)
+{
+    return FALSE;
+}
+
+bool8 IsMewPlayingHideAndSeek(void)
+{
+    return FALSE;
+}
+
+bool8 ShouldMewShakeGrass(struct ObjectEvent *objectEvent)
+{
+    return FALSE;
+}
+
+void SetMewAboveGrass(void)
+{
+}
+
+void DestroyMewEmergingGrassSprite(void)
+{
+}
+
+void UpdateFarawayIslandStepCounter(void)
+{
+}
+
+#endif

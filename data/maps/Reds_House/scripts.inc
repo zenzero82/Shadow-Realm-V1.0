@@ -4,6 +4,9 @@ Reds_House_MapScripts::
 Speaker_RedsMom:
 	.string "Red's Mom$"
 
+Speaker_Broadcaster:
+	.string "Broadcaster$"
+
 PalletTown_RedsHouse_1F_EventScript_MomTrigger::
 	checkflag FLAG_REDS_HOUSE_MOM_INTRO_DONE
 	goto_if_eq PalletTown_RedsHouse_1F_EventScript_MomTrigger_Done
@@ -56,6 +59,7 @@ PalletTown_RedsHouse_1F_EventScript_MomSpeech::
 	return
 
 PalletTown_RedsHouse_1F_EventScript_TV::
+	setspeaker Speaker_Broadcaster
 	playbgm MUS_NEWSORRE, FALSE
 	msgbox RedsHouse_Text_TV, MSGBOX_SIGN
 	fadedefaultbgm
@@ -67,11 +71,11 @@ RedsHouse_Move_Mom_ExclaimFaceDown:
 	step_end
 
 RedsHouse_Text_MomIntro_1:
-	.string "Oh! Is that you, RED??\n"
+	.string "Oh! Is that you, RED??\p"
 	.string "Sorry, who are you?\p"
-	.string "Came through a portal, you say?\n"
+	.string "...Came through a portal, you say?\n"
 	.string "Ah, it's part of the strange\l"
-	.string "activities on the news!$"
+	.string "activities happening in KANTO!$"
 
 RedsHouse_Text_MomIntro_2:
 	.string "I thought you were my son RED\n"
@@ -82,14 +86,21 @@ RedsHouse_Text_MomIntro_3:
 	.string "He doesn't answer much ever since\n"
 	.string "he became Champion, and I am worried\l"
 	.string "about him with all these crazy things\l"
-	.string "going on.$"
+	.string "going on.\p"
+	.string "Speaking of crazy things, you must be\n"
+	.string "so tired and confused right now.\p"
+	.string "You can use his bed to rest if you want.\p"
+	.string "It's not like he's ever home to use it.$"
 
 RedsHouse_Text_MomRepeatLine:
-	.string "If you run into him, can you please\n"
+	.string "If you see RED, can you please\n"
 	.string "tell him to come home and visit!$"
 
 RedsHouse_Text_TV:
-	.string "The news is talking about strange\n"
-	.string "portals and suspicious\l"
-	.string "people appearing in KANTO...\p"
-	.string "It's hard to understand what's going on.$"
+	.string "PROF. OAK has been missing for \n"
+	.string "quite some time.\p"
+	.string "Since he has been gone we have\l"
+	.string "seen an increase in ROCKET activity.\p"
+	.string "They seem to have invaded\n"
+	.string "VIRIDIAN CITY.\l"
+	.string "Please be safe out there.$"

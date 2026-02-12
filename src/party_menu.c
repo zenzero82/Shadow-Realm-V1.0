@@ -6265,6 +6265,13 @@ static void CB2_TimeFluteReturn(void)
     struct Pokemon *mon = &gPlayerParty[sTimeFluteSlotId];
     u16 shadowId = GetMonData(mon, MON_DATA_SHADOW_ID, NULL);
     bool8 useSpeciesNickname = FALSE;
+    if (sTimeFluteSavedNickname[0] != EOS)
+    {
+        u8 currentNickname[POKEMON_NAME_LENGTH + 1];
+        GetMonData(mon, MON_DATA_NICKNAME, currentNickname);
+        if (StringCompareWithoutExtCtrlCodes(currentNickname, sTimeFluteSavedNickname) != 0)
+            sTimeFluteSavedNickname[0] = EOS;
+    }
     if (sTimeFluteSavedNickname[0] != EOS && IsShadowDefaultNickname(shadowId, sTimeFluteSavedNickname))
         useSpeciesNickname = TRUE;
     u8 isShadow = FALSE;

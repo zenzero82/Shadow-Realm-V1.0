@@ -7,6 +7,15 @@ static const union AnimCmd sAnim_StayStill[] =
     ANIMCMD_JUMP(0),
 };
 
+static const union AnimCmd sAnim_HoopaRingSpin[] =
+{
+    ANIMCMD_FRAME(0, 8),
+    ANIMCMD_FRAME(1, 8),
+    ANIMCMD_FRAME(2, 8),
+    ANIMCMD_FRAME(3, 8),
+    ANIMCMD_JUMP(0),
+};
+
 static const union AnimCmd sAnim_QuintyPlumpFaceSouth[] =
 {
     ANIMCMD_FRAME(0, 16),
@@ -1079,6 +1088,27 @@ static const union AffineAnimCmd sAffineAnim_KyogreGroudon_DipWest[] =
     AFFINEANIMCMD_END,
 };
 
+static const union AffineAnimCmd sAffineAnim_HoopaRingGrow[] =
+{
+    AFFINEANIMCMD_FRAME(0x900, 0x900, 0, 0),   // Start tiny (inverse scale)
+    AFFINEANIMCMD_FRAME(0, 0, -2, 6),          // Hold small, slight spin
+    AFFINEANIMCMD_FRAME(-0x40, -0x40, -4, 32), // Grow to full size, spin CCW
+    AFFINEANIMCMD_END,
+};
+
+static const union AffineAnimCmd sAffineAnim_HoopaRingShrink[] =
+{
+    AFFINEANIMCMD_FRAME(0x100, 0x100, 0, 0), // Start full size
+    AFFINEANIMCMD_FRAME(0x40, 0x40, 4, 32),  // Shrink to small, spin CW
+    AFFINEANIMCMD_END,
+};
+
+static const union AffineAnimCmd *const sAffineAnimTable_HoopaRing[] =
+{
+    sAffineAnim_HoopaRingGrow,
+    sAffineAnim_HoopaRingShrink,
+};
+
 static const union AnimCmd sAnim_HoOhFlapWings[] =
 {
     ANIMCMD_FRAME(3, 8),
@@ -1096,6 +1126,29 @@ static const union AnimCmd sAnim_HoOhStayStill[] =
 
 static const union AnimCmd *const sAnimTable_Inanimate[] = {
     [ANIM_STAY_STILL] = sAnim_StayStill,
+};
+
+static const union AnimCmd *const sAnimTable_HoopaRing[] = {
+    [ANIM_STD_FACE_SOUTH] = sAnim_HoopaRingSpin,
+    [ANIM_STD_FACE_NORTH] = sAnim_HoopaRingSpin,
+    [ANIM_STD_FACE_WEST] = sAnim_HoopaRingSpin,
+    [ANIM_STD_FACE_EAST] = sAnim_HoopaRingSpin,
+    [ANIM_STD_GO_SOUTH] = sAnim_HoopaRingSpin,
+    [ANIM_STD_GO_NORTH] = sAnim_HoopaRingSpin,
+    [ANIM_STD_GO_WEST] = sAnim_HoopaRingSpin,
+    [ANIM_STD_GO_EAST] = sAnim_HoopaRingSpin,
+    [ANIM_STD_GO_FAST_SOUTH] = sAnim_HoopaRingSpin,
+    [ANIM_STD_GO_FAST_NORTH] = sAnim_HoopaRingSpin,
+    [ANIM_STD_GO_FAST_WEST] = sAnim_HoopaRingSpin,
+    [ANIM_STD_GO_FAST_EAST] = sAnim_HoopaRingSpin,
+    [ANIM_STD_GO_FASTER_SOUTH] = sAnim_HoopaRingSpin,
+    [ANIM_STD_GO_FASTER_NORTH] = sAnim_HoopaRingSpin,
+    [ANIM_STD_GO_FASTER_WEST] = sAnim_HoopaRingSpin,
+    [ANIM_STD_GO_FASTER_EAST] = sAnim_HoopaRingSpin,
+    [ANIM_STD_GO_FASTEST_SOUTH] = sAnim_HoopaRingSpin,
+    [ANIM_STD_GO_FASTEST_NORTH] = sAnim_HoopaRingSpin,
+    [ANIM_STD_GO_FASTEST_WEST] = sAnim_HoopaRingSpin,
+    [ANIM_STD_GO_FASTEST_EAST] = sAnim_HoopaRingSpin,
 };
 
 static const union AnimCmd *const sAnimTable_QuintyPlump[] = {

@@ -1831,6 +1831,9 @@ const u16 gItemIconPalette_DowsingMachine[] = INCBIN_U16("graphics/items/icon_pa
 const u32 gItemIcon_SnagMachine[] = INCBIN_U32("graphics/items/icons/snag_machine.4bpp.lz");
 const u16 gItemIconPalette_SnagMachine[] = INCBIN_U16("graphics/items/icon_palettes/snag_machine.gbapal");
 
+const u32 gItemIcon_ShadowMonitor[] = INCBIN_U32("graphics/items/icons/shadow_monitor.4bpp.lz");
+const u16 gItemIconPalette_ShadowMonitor[] = INCBIN_U16("graphics/items/icon_palettes/shadow_monitor.gbapal");
+
 const u32 gItemIcon_TownMap[] = INCBIN_U32("graphics/items/icons/town_map.4bpp.lz");
 const u16 gItemIconPalette_TownMap[] = INCBIN_U16("graphics/items/icon_palettes/town_map.gbapal");
 
@@ -1866,6 +1869,9 @@ const u16 gItemIconPalette_SootSack[] = INCBIN_U16("graphics/items/icon_palettes
 
 const u32 gItemIcon_PokeFlute[] = INCBIN_U32("graphics/items/icons/poke_flute.4bpp.lz");
 const u16 gItemIconPalette_PokeFlute[] = INCBIN_U16("graphics/items/icon_palettes/poke_flute.gbapal");
+
+const u32 gItemIcon_TimeFlute[] = INCBIN_U32("graphics/items/icons/time_flute.4bpp.lz");
+const u16 gItemIconPalette_TimeFlute[] = INCBIN_U16("graphics/items/icon_palettes/time_flute.gbapal");
 
 const u32 gItemIcon_FameChecker[] = INCBIN_U32("graphics/items/icons/fame_checker.4bpp.lz");
 const u16 gItemIconPalette_FameChecker[] = INCBIN_U16("graphics/items/icon_palettes/fame_checker.gbapal");

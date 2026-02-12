@@ -71,13 +71,26 @@
 #define TRAINER_RT4_BRENDAN1             64
 #define TRAINER_RT4_BRENDAN2             65
 #define TRAINER_RT4_BRENDAN3             66
+#define TRAINER_LOOKER_CERULEAN          67
+#define TRAINER_RT25_YOUNGSTER1          68
+#define TRAINER_RT25_LADY                69
+#define TRAINER_RT25_COOLTRAINER_F       70
+#define TRAINER_RT25_YOUNGSTER2          71
+#define TRAINER_RT25_CAMPER              72
+#define TRAINER_RT25_LASS                73
+#define TRAINER_RT25_SUPER_NERD          74
+#define TRAINER_RT25_COOLTRAINER_M       75
+#define TRAINER_CERULEAN_GYM_SWIMMER_M   76
+#define TRAINER_CERULEAN_GYM_SWIMMER_F1  77
+#define TRAINER_CERULEAN_GYM_SWIMMER_F2  78
+#define TRAINER_EIN                      79
 
 
 
 // NOTE: Because each Trainer uses a flag to determine when they are defeated, there is only space for 9 additional trainers before trainer flag space overflows
 //       More space can be made by shifting flags around in constants/flags.h or changing how trainer flags are handled
 //       MAX_TRAINERS_COUNT can be increased but will take up additional saveblock space
-#define TRAINERS_COUNT                      67
+#define TRAINERS_COUNT                      80
 #define MAX_TRAINERS_COUNT                  1000
 #define TRAINER_PARTNER(partner)           (MAX_TRAINERS_COUNT + partner)
 

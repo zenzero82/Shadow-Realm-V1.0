@@ -65,6 +65,24 @@ PalletTown_EventScript_Yungoos::
     release
     end
 
+PalletTown_EventScript_Pidgey::
+    lock
+    faceplayer
+    waitse
+    playmoncry SPECIES_PIDGEY, CRY_MODE_NORMAL
+    waitmoncry
+    release
+    end
+
+PalletTown_EventScript_Pikipek::
+    lock
+    faceplayer
+    waitse
+    playmoncry SPECIES_PIKIPEK, CRY_MODE_NORMAL
+    waitmoncry
+    release
+    end
+
 PalletTown_EventScript_TownSign::
     msgbox PalletTown_Text_Sign, MSGBOX_SIGN
     end
@@ -122,6 +140,9 @@ PalletTown_EventScript_Route1AideTrigger0::
     applymovement OBJ_EVENT_ID_PLAYER, PalletTown_Move_Player_Path
     waitmovement 0
 
+    opendoor 16, 13
+    waitdooranim
+
     clearflag FLAG_HIDE_OAKS_LAB_LEO
     warp MAP_OAKS_LAB, 5, 12
     waitstate
@@ -160,6 +181,9 @@ PalletTown_EventScript_Route1AideTrigger1::
     applymovement 1, PalletTown_Move_Leo_Path
     applymovement OBJ_EVENT_ID_PLAYER, PalletTown_Move_Player_Path
     waitmovement 0
+
+    opendoor 16, 13
+    waitdooranim
 
     clearflag FLAG_HIDE_OAKS_LAB_LEO
     warp MAP_OAKS_LAB, 5, 12
@@ -244,19 +268,16 @@ PalletTown_Move_Player_Path:
 PalletTown_Text_Teacher:
     .string "I'm a teacher here in town.\p"
     .string "Lately my students keep talking about\n"
-    .string "portals opening and POKEMON on the\l"
-    .string "news that should not even exist in KANTO.\p"
-    .string "I just hope all these anomalies do not\n"
-    .string "reach our quiet little town.$"
+    .string "POKEMON on the news that should\l"
+    .string "not even exist in KANTO.$"
 
 PalletTown_Text_Fisher:
     .string "Technology is incredible... and a little\n"
     .string "terrifying right now.\p"
-    .string "The news shows footage from all over the\n"
-    .string "world - Gyms, evil teams, even other\l"
-    .string "regions bleeding into each other.\p"
+    .string "The news has been covering a lot\n"
+    .string "of strange stories lately.\p"
     .string "Sometimes the broadcast glitches like it\n"
-    .string "is coming from more than one timeline.$"
+    .string "was being hacked.$"
 
 PalletTown_Text_Sign:
     .string "PALLET TOWN\p"
@@ -267,7 +288,7 @@ PalletTown_Text_RedsHouseSign:
     .string "RED'S HOUSE$"
 
 PalletTown_Text_BluesHouseSign:
-    .string "BLUE'S HOUSE$"
+    .string "GARY'S HOUSE$"
 
 PalletTown_Text_OaksLabSign:
     .string "OAK POKEMON\n"
@@ -285,11 +306,12 @@ PalletTown_Text_Route1Aide_SawMan:
     .string "I have no idea who you are, but did\n"
     .string "you see what just happened?!\p"
     .string "A strange man on Route 1 just captured\n"
-    .string "an innocent POKEMON and clamped some\l"
-    .string "strange device to it.\p"
+    .string "an innocent POKEMON with some strange\l"
+    .string "looking POKeBALL.\p"
+    .string "He sent it back out and it looks weird!\p"
     .string "It started to give off a strange aura\n"
     .string "and even changed colors!\p"
-    .string "Its behavior is starting to change\n"
+    .string "Its behavior seems like it's different\n"
     .string "as well...\p"
     .string "I have to inform Nia. Please come with\n"
     .string "me quickly!$"

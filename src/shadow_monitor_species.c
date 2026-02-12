@@ -1,6 +1,7 @@
 #include "global.h"
 #include "constants/shadow.h"
 #include "constants/species.h"
+#include "constants/trainers.h"
 #include "shadow_monitor_species.h"
 
 // Add per-ID mappings here so the shadow monitor can resolve every shadow ID
@@ -227,10 +228,38 @@ const u16 gShadowMonitorIdList[MAX_SHADOW_MON_IDS] =
     [106] = 107,
 };
 
+struct ShadowMonitorTrainerMap
+{
+    u16 shadowId;
+    u16 trainerId;
+};
+
+static const struct ShadowMonitorTrainerMap sShadowMonitorTrainerMap[] =
+{
+    {3, TRAINER_TORKIN},
+    {49, TRAINER_ROCKET_GRUNT_M_1},
+};
+
 u16 GetShadowMonitorSpecies(u16 shadowId)
 {
     if (shadowId == 0 || shadowId > MAX_SHADOW_MON_IDS)
         return SPECIES_NONE;
 
     return gShadowMonitorSpeciesList[shadowId - 1];
+}
+
+u16 GetShadowMonitorTrainerId(u16 shadowId)
+{
+    u32 i;
+
+    if (shadowId == 0 || shadowId > MAX_SHADOW_MON_IDS)
+        return TRAINER_NONE;
+
+    for (i = 0; i < ARRAY_COUNT(sShadowMonitorTrainerMap); i++)
+    {
+        if (sShadowMonitorTrainerMap[i].shadowId == shadowId)
+            return sShadowMonitorTrainerMap[i].trainerId;
+    }
+
+    return TRAINER_NONE;
 }

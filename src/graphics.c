@@ -1307,6 +1307,7 @@ const u16 gBattleAnimSpritePal_ShadowParticles[] = INCBIN_U16("graphics/battle_a
 const u16 gBattleAnimSpritePal_ReverseParticles[] = INCBIN_U16("graphics/battle_anims/sprites/shadowparticles_reverse.gbapal");
 
 #include "data/graphics/trainers.h"
+#include "data/graphics/trainers_tall.h"
 
 const u32 gBattleVSFrame_Gfx[] = INCBIN_U32("graphics/battle_transitions/vs_frame.4bpp.lz");
 const u32 gBattleVSFrame_Tilemap[] = INCBIN_U32("graphics/battle_transitions/vs_frame.bin.lz");
@@ -1929,6 +1930,8 @@ const u32 gPokenavHeader_Gfx[] = INCBIN_U32("graphics/pokenav/header.4bpp.lz"); 
 const u32 gPokenavHeader_Tilemap[] = INCBIN_U32("graphics/pokenav/header.bin.lz");
 
 const u16 gPokenavLeftHeader_Pal[] = INCBIN_U16("graphics/pokenav/left_headers/palette.gbapal");
+const u16 gPokenavLeftHeaderKantoMap_Pal[] = INCBIN_U16("graphics/pokenav/left_headers/kantolh.gbapal");
+const u16 gPokenavLeftHeaderJohtoMap_Pal[] = INCBIN_U16("graphics/pokenav/left_headers/johtolh.gbapal");
 const u32 gPokenavLeftHeaderBeauty_Gfx[] = INCBIN_U32("graphics/pokenav/left_headers/beauty.4bpp.lz");
 const u32 gPokenavLeftHeaderSmart_Gfx[] = INCBIN_U32("graphics/pokenav/left_headers/smart.4bpp.lz");
 const u32 gPokenavLeftHeaderCondition_Gfx[] = INCBIN_U32("graphics/pokenav/left_headers/condition.4bpp.lz");
@@ -1936,6 +1939,8 @@ const u32 gPokenavLeftHeaderCute_Gfx[] = INCBIN_U32("graphics/pokenav/left_heade
 const u32 gPokenavLeftHeaderMatchCall_Gfx[] = INCBIN_U32("graphics/pokenav/left_headers/match_call.4bpp.lz");
 const u32 gPokenavLeftHeaderMainMenu_Gfx[] = INCBIN_U32("graphics/pokenav/left_headers/main_menu.4bpp.lz");
 const u32 gPokenavLeftHeaderHoennMap_Gfx[] = INCBIN_U32("graphics/pokenav/left_headers/hoenn_map.4bpp.lz");
+const u32 gPokenavLeftHeaderKantoMap_Gfx[] = INCBIN_U32("graphics/pokenav/left_headers/kanto_map.4bpp.lz");
+const u32 gPokenavLeftHeaderJohtoMap_Gfx[] = INCBIN_U32("graphics/pokenav/left_headers/johto_map.4bpp.lz");
 const u32 gPokenavLeftHeaderRibbons_Gfx[] = INCBIN_U32("graphics/pokenav/left_headers/ribbons.4bpp.lz");
 const u32 gPokenavLeftHeaderSearch_Gfx[] = INCBIN_U32("graphics/pokenav/left_headers/search.4bpp.lz");
 const u32 gPokenavLeftHeaderTough_Gfx[] = INCBIN_U32("graphics/pokenav/left_headers/tough.4bpp.lz");

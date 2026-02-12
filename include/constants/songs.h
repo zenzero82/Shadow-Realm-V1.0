@@ -494,8 +494,19 @@
 #define MUS_HG_ROUTE47                  607  // mus_hg_route42.mid
 #define MUS_PYRITE                     608  // mus_pyrite.mid
 
+#define MUS_HG_VS_TRAINER_KANTO         609  // mus_hg_vs_trainer_kanto.mid
+#define MUS_HG_VS_WILD_KANTO            610  // mus_hg_vs_wild_kanto.mid
+#define MUS_HG_ENCOUNTER_BOY_2          611  // mus_hg_encounter_boy_2.mid
+#define MUS_HG_ENCOUNTER_GIRL_2         612  // mus_hg_encounter_girl_2.mid
+#define MUS_HG_VICTORY_WILD             613  // mus_hg_victory_wild.mid
+#define MUS_HG_VICTORY_TRAINER          614  // mus_hg_victory_trainer.mid
+#define MUS_SHADOW_TITLE                615  // shadow_title.mid
+#define MUS_CIPHER_ENCOUNTER            616  // cipher_encounter.mid
+#define MUS_BATTLE_TEAM_GALACTIC        617  // mus_battle_team_galactic.mid
+#define MUS_BATTLE_TEAM_PLASMA          618  // mus_battle_team_plasma.mid
+#define MUS_BATTLE_TEAM_FLARE           619  // mus_battle_team_flare.mid
 
-#define END_MUS                     MUS_PYRITE
+#define END_MUS                     MUS_BATTLE_TEAM_FLARE
 
 // These PH_* constants are phoneme sounds used by the "bard" NPC (see src/bard_music.c and src/mauville_old_man.c).
 // Each comes in a triplet of PH_*_BLEND, PH_*_HELD, and PH_*_SOLO, and the name of each triplet incorporates the English phonetic sound it represents.

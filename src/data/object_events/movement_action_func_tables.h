@@ -175,6 +175,9 @@ u8 MovementAction_SetFixedPriority_Step0(struct ObjectEvent *, struct Sprite *);
 u8 MovementAction_ClearFixedPriority_Step0(struct ObjectEvent *, struct Sprite *);
 u8 MovementAction_InitAffineAnim_Step0(struct ObjectEvent *, struct Sprite *);
 u8 MovementAction_ClearAffineAnim_Step0(struct ObjectEvent *, struct Sprite *);
+u8 MovementAction_StartAffineAnim0_Step0(struct ObjectEvent *, struct Sprite *);
+u8 MovementAction_StartAffineAnim1_Step0(struct ObjectEvent *, struct Sprite *);
+u8 MovementAction_WaitAffineAnim_Step1(struct ObjectEvent *, struct Sprite *);
 u8 MovementAction_HideReflection_Step0(struct ObjectEvent *, struct Sprite *);
 u8 MovementAction_ShowReflection_Step0(struct ObjectEvent *, struct Sprite *);
 u8 MovementAction_WalkDownStartAffine_Step0(struct ObjectEvent *, struct Sprite *);
@@ -387,6 +390,8 @@ u8 (*const gMovementActionFuncs_SetFixedPriority[])(struct ObjectEvent *, struct
 u8 (*const gMovementActionFuncs_ClearFixedPriority[])(struct ObjectEvent *, struct Sprite *);
 u8 (*const gMovementActionFuncs_InitAffineAnim[])(struct ObjectEvent *, struct Sprite *);
 u8 (*const gMovementActionFuncs_ClearAffineAnim[])(struct ObjectEvent *, struct Sprite *);
+u8 (*const gMovementActionFuncs_StartAffineAnim0[])(struct ObjectEvent *, struct Sprite *);
+u8 (*const gMovementActionFuncs_StartAffineAnim1[])(struct ObjectEvent *, struct Sprite *);
 u8 (*const gMovementActionFuncs_HideReflection[])(struct ObjectEvent *, struct Sprite *);
 u8 (*const gMovementActionFuncs_ShowReflection[])(struct ObjectEvent *, struct Sprite *);
 u8 (*const gMovementActionFuncs_WalkDownStartAffine[])(struct ObjectEvent *, struct Sprite *);
@@ -561,6 +566,8 @@ u8 (*const *const gMovementActionFuncs[])(struct ObjectEvent *, struct Sprite *)
     [MOVEMENT_ACTION_CLEAR_FIXED_PRIORITY] = gMovementActionFuncs_ClearFixedPriority,
     [MOVEMENT_ACTION_INIT_AFFINE_ANIM] = gMovementActionFuncs_InitAffineAnim,
     [MOVEMENT_ACTION_CLEAR_AFFINE_ANIM] = gMovementActionFuncs_ClearAffineAnim,
+    [MOVEMENT_ACTION_START_AFFINE_ANIM_0] = gMovementActionFuncs_StartAffineAnim0,
+    [MOVEMENT_ACTION_START_AFFINE_ANIM_1] = gMovementActionFuncs_StartAffineAnim1,
     [MOVEMENT_ACTION_HIDE_REFLECTION] = gMovementActionFuncs_HideReflection,
     [MOVEMENT_ACTION_SHOW_REFLECTION] = gMovementActionFuncs_ShowReflection,
     [MOVEMENT_ACTION_WALK_DOWN_START_AFFINE] = gMovementActionFuncs_WalkDownStartAffine,
@@ -1274,6 +1281,18 @@ u8 (*const gMovementActionFuncs_InitAffineAnim[])(struct ObjectEvent *, struct S
 u8 (*const gMovementActionFuncs_ClearAffineAnim[])(struct ObjectEvent *, struct Sprite *) = {
     MovementAction_ClearAffineAnim_Step0,
     MovementAction_Finish,
+};
+
+u8 (*const gMovementActionFuncs_StartAffineAnim0[])(struct ObjectEvent *, struct Sprite *) = {
+    MovementAction_StartAffineAnim0_Step0,
+    MovementAction_WaitAffineAnim_Step1,
+    MovementAction_PauseSpriteAnim,
+};
+
+u8 (*const gMovementActionFuncs_StartAffineAnim1[])(struct ObjectEvent *, struct Sprite *) = {
+    MovementAction_StartAffineAnim1_Step0,
+    MovementAction_WaitAffineAnim_Step1,
+    MovementAction_PauseSpriteAnim,
 };
 
 u8 (*const gMovementActionFuncs_HideReflection[])(struct ObjectEvent *, struct Sprite *) = {

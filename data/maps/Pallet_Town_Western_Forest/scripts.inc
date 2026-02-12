@@ -1,9 +1,13 @@
 @ Pallet Town Western Forest intro monologue triggered by coord events
 @ Uses FLAG_WEST_FOREST_INTRO_DONE (define in flags.h)
 
+.set LOCALID_HOOPA_RING, 1
+.set LOCALID_EIN, 2
+
 Pallet_Town_Western_Forest_MapScripts::
     map_script MAP_SCRIPT_ON_TRANSITION, Pallet_Town_Western_Forest_OnTransition
     map_script MAP_SCRIPT_ON_LOAD, Pallet_Town_Western_Forest_OnLoad
+    map_script MAP_SCRIPT_ON_WARP_INTO_MAP_TABLE, Pallet_Town_Western_Forest_OnWarp
     map_script MAP_SCRIPT_ON_FRAME_TABLE, Pallet_Town_Western_Forest_OnFrame
     .byte 0
 
@@ -11,17 +15,29 @@ Pallet_Town_Western_Forest_OnTransition::
     checkflag FLAG_WEST_FOREST_INTRO_DONE
     goto_if_eq Pallet_Town_Western_Forest_OnTransition_Done
     hideobjectat LOCALID_PLAYER, MAP_PALLET_TOWN_WESTERN_FOREST
-    hideobjectat 1, MAP_PALLET_TOWN_WESTERN_FOREST
+    hideobjectat LOCALID_HOOPA_RING, MAP_PALLET_TOWN_WESTERN_FOREST
 Pallet_Town_Western_Forest_OnTransition_Done:
     end
 
 Pallet_Town_Western_Forest_OnLoad::
     setvar VAR_TEMP_1, 0
+    setvar VAR_TEMP_2, 0
     checkflag FLAG_WEST_FOREST_INTRO_DONE
     goto_if_eq Pallet_Town_Western_Forest_OnLoad_Done
     hideobjectat LOCALID_PLAYER, MAP_PALLET_TOWN_WESTERN_FOREST
-    hideobjectat 1, MAP_PALLET_TOWN_WESTERN_FOREST
+    hideobjectat LOCALID_HOOPA_RING, MAP_PALLET_TOWN_WESTERN_FOREST
 Pallet_Town_Western_Forest_OnLoad_Done:
+    end
+
+Pallet_Town_Western_Forest_OnWarp::
+    map_script_2 VAR_TEMP_2, 0, Pallet_Town_Western_Forest_EventScript_HidePlayerOnWarp
+    .2byte 0
+
+Pallet_Town_Western_Forest_EventScript_HidePlayerOnWarp::
+    checkflag FLAG_WEST_FOREST_INTRO_DONE
+    goto_if_eq Pallet_Town_Western_Forest_OnWarp_Done
+    hideobjectat LOCALID_PLAYER, MAP_PALLET_TOWN_WESTERN_FOREST
+Pallet_Town_Western_Forest_OnWarp_Done:
     end
 
 Pallet_Town_Western_Forest_OnFrame::
@@ -37,11 +53,18 @@ Pallet_Town_Western_Forest_EventScript_StartIntro::
 
     lockall
     setvar VAR_TEMP_0, 1
-    setobjectxy LOCALID_PLAYER, 5, 4
-    setobjectxyperm LOCALID_PLAYER, 5, 4
-    showobjectat 1, MAP_PALLET_TOWN_WESTERN_FOREST
+
+    @ Player emerges from the portal
+    setobjectxy LOCALID_PLAYER, 5, 3
+    setobjectxyperm LOCALID_PLAYER, 5, 3
+    setobjectxy LOCALID_HOOPA_RING, 5, 4
+    setobjectxyperm LOCALID_HOOPA_RING, 5, 4
+    showobjectat LOCALID_HOOPA_RING, MAP_PALLET_TOWN_WESTERN_FOREST
+    delay 16
     showobjectat LOCALID_PLAYER, MAP_PALLET_TOWN_WESTERN_FOREST
-    applymovement OBJ_EVENT_ID_PLAYER, Pallet_Town_Western_Forest_Mov_StepFromPortal
+    applymovement OBJ_EVENT_ID_PLAYER, Pallet_Town_Western_Forest_Mov_StepFromPortal_First
+    waitmovement 0
+    applymovement OBJ_EVENT_ID_PLAYER, Pallet_Town_Western_Forest_Mov_StepFromPortal_Second
     waitmovement 0
     goto Pallet_Town_Western_Forest_EventScript_IntroCore
 
@@ -85,13 +108,23 @@ Pallet_Town_Western_Forest_Intro_Done:
 
 @ ---------------- MOVEMENTS ----------------
 
-Pallet_Town_Western_Forest_Mov_StepFromPortal:
+Pallet_Town_Western_Forest_Mov_StepFromPortal_First:
+    walk_down
+    step_end
+
+Pallet_Town_Western_Forest_Mov_StepFromPortal_Second:
     walk_down
     step_end
 
 Pallet_Town_Western_Forest_Mov_Exclaim_FaceUp:
     emote_exclamation_mark
     face_up
+    step_end
+
+Pallet_Town_Western_Forest_Mov_PortalGrowSpin:
+    init_affine_anim
+    start_affine_anim_0
+    clear_affine_anim
     step_end
 
 @ ---------------- TEXT ----------------
@@ -210,26 +243,13 @@ WestForest_Text_BadgeTester_After:
 Pallet_Town_Western_Forest_EventScript_Portal_ToNewBark::
     lock
     faceplayer
-    msgbox Pallet_Town_Western_Forest_Text_PortalAsk, MSGBOX_YESNO
-    goto_if_eq VAR_RESULT, FALSE, Pallet_Town_Western_Forest_PortalNo
-
-    closemessage
-    fadescreenswapbuffers FADE_TO_BLACK
-
-    @ REPLACE THIS with the real MAP_* constant you find in maps.h
-    warp MAP_NEW_BARK_TOWN, WARP_ID_NONE, 21, 17
-
-    waitstate
-    end
-
-Pallet_Town_Western_Forest_PortalNo::
+    msgbox Pallet_Town_Western_Forest_Text_PortalAsk, MSGBOX_DEFAULT
     closemessage
     release
     end
 
 Pallet_Town_Western_Forest_Text_PortalAsk:
-    .string "The portal is humming...\p"
-    .string "Warp to NEW BARK TOWN?$"
+    .string "The portal is humming...$"
 
 @ ================================
 @ WEST FOREST PORTAL WARP (HOENN)
@@ -264,6 +284,34 @@ Pallet_Town_Western_Forest_Text_PortalAsk_Littleroot:
 
 
 @==============================================
+@ TRAINER TEST (EIN)
+@==============================================
+
+Pallet_Town_Western_Forest_Speaker_Ein:
+    .string "EIN$"
+
+Pallet_Town_Western_Forest_EventScript_Ein::
+    setspeaker Pallet_Town_Western_Forest_Speaker_Ein
+    trainerbattle_single TRAINER_EIN, Pallet_Town_Western_Forest_Text_Ein_Intro, Pallet_Town_Western_Forest_Text_Ein_Defeat, Pallet_Town_Western_Forest_EventScript_Ein_After
+    end
+
+Pallet_Town_Western_Forest_EventScript_Ein_After::
+    setspeaker Pallet_Town_Western_Forest_Speaker_Ein
+    msgbox Pallet_Town_Western_Forest_Text_Ein_After, MSGBOX_NPC
+    closemessage
+    release
+    end
+
+Pallet_Town_Western_Forest_Text_Ein_Intro:
+    .string "So you're the one testing that new\n"
+    .string "trainer front sprite? Show me.$"
+
+Pallet_Town_Western_Forest_Text_Ein_Defeat:
+    .string "Hmph... the sprite worked.$"
+
+Pallet_Town_Western_Forest_Text_Ein_After:
+    .string "Looks good in battle.\p"
+    .string "Let's keep moving.$"
 
 Speaker_Jeremy:
     .string "JEREMY$"
@@ -320,4 +368,3 @@ SnagMachine_Text_Given:
 
 SnagMachine_Text_AlreadyHave:
     .string "You already have the Snag\nMachine, so I can't give it again!$"
-

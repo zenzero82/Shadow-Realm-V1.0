@@ -106,6 +106,8 @@ EWRAM_DATA static s8 sInitStartMenuData[2] = {0};
 #define START_MENU_SCROLLBAR_X 235
 #define START_MENU_SCROLLBAR_Y 48
 #define START_MENU_SCROLLBAR_RANGE 62
+#define START_MENU_EXIT_Y_OFFSET 4
+#define START_MENU_EXIT_OPTION_Y_OFFSET 4
 #define START_MENU_BG_TILE_SIZE 1312
 #define START_MENU_BG_TILEMAP_SIZE 1280
 #define START_MENU_SPRITE_NONE 0xFF
@@ -446,7 +448,7 @@ static const struct SpritePalette sStartMenuPanelSpritePalette =
 static const struct SpriteSheet sStartMenuExitSpriteSheet =
 {
     .data = gStartMenuBWExitTiles,
-    .size = 0x400,
+    .size = 0x100,
     .tag = TAG_START_MENU_EXIT
 };
 
@@ -480,6 +482,13 @@ static const struct OamData sStartMenuIconOamData =
 {
     .shape = SPRITE_SHAPE(32x32),
     .size = SPRITE_SIZE(32x32),
+    .priority = 0
+};
+
+static const struct OamData sStartMenuExitOamData =
+{
+    .shape = SPRITE_SHAPE(16x32),
+    .size = SPRITE_SIZE(16x32),
     .priority = 0
 };
 
@@ -544,6 +553,17 @@ static const union AnimCmd *const sStartMenuIconAnims[] =
     sAnim_StartMenuIcon_1
 };
 
+static const union AnimCmd sAnim_StartMenuExit[] =
+{
+    ANIMCMD_FRAME(0, 0),
+    ANIMCMD_END
+};
+
+static const union AnimCmd *const sStartMenuExitAnims[] =
+{
+    sAnim_StartMenuExit
+};
+
 static const union AnimCmd sAnim_StartMenuScrollBar[] =
 {
     ANIMCMD_FRAME(0, 0),
@@ -585,8 +605,8 @@ static const struct SpriteTemplate sStartMenuExitSpriteTemplate =
 {
     .tileTag = TAG_START_MENU_EXIT,
     .paletteTag = TAG_START_MENU_EXIT,
-    .oam = &sStartMenuIconOamData,
-    .anims = sStartMenuIconAnims,
+    .oam = &sStartMenuExitOamData,
+    .anims = sStartMenuExitAnims,
     .images = NULL,
     .affineAnims = gDummySpriteAffineAnimTable,
     .callback = PanelCallBack,
@@ -620,7 +640,7 @@ static const struct StartMenuBWIcon sStartMenuBWIcons[] =
     [START_MENU_ICON_PLAYER] = START_MENU_ICON_ENTRY(TAG_START_MENU_PLAYER, gStartMenuBWPlayerTiles, gStartMenuBWPlayerPal),
     [START_MENU_ICON_SAVE] = START_MENU_ICON_ENTRY(TAG_START_MENU_SAVE, gStartMenuBWSaveTiles, gStartMenuBWSavePal),
     [START_MENU_ICON_OPTIONS] = START_MENU_ICON_ENTRY(TAG_START_MENU_OPTIONS, gStartMenuBWOptionsTiles, gStartMenuBWOptionsPal),
-    [START_MENU_ICON_EXIT_OPTION] = START_MENU_ICON_ENTRY(TAG_START_MENU_EXIT_OPTION, gStartMenuBWExitTiles, gStartMenuBWExitPal),
+    [START_MENU_ICON_EXIT_OPTION] = START_MENU_ICON_ENTRY(TAG_START_MENU_EXIT_OPTION, gStartMenuBWExitOptionTiles, gStartMenuBWExitOptionPal),
     [START_MENU_ICON_RETIRE] = START_MENU_ICON_ENTRY(TAG_START_MENU_RETIRE, gStartMenuBWRetireTiles, gStartMenuBWRetirePal),
     [START_MENU_ICON_DEBUG] = START_MENU_ICON_ENTRY(TAG_START_MENU_DEBUG, gStartMenuBWDebugTiles, gStartMenuBWDebugPal),
 };
@@ -1000,7 +1020,7 @@ static void StartMenuBW_DrawPanels(void)
 
     LoadSpriteSheet(&sStartMenuExitSpriteSheet);
     LoadSpritePalette(&sStartMenuExitSpritePalette);
-    u8 spriteId = CreateSprite(&sStartMenuExitSpriteTemplate, 240 - 16, 160 - 11, 0);
+    u8 spriteId = CreateSprite(&sStartMenuExitSpriteTemplate, 240 - 16, 160 - 11 + START_MENU_EXIT_Y_OFFSET, 0);
     gSprites[spriteId].data[0] = START_MENU_SPRITE_NONE;
 }
 
@@ -1043,6 +1063,8 @@ static void StartMenuBW_DrawIcons(void)
                 continue;
             }
 
+            if (iconId == START_MENU_ICON_EXIT_OPTION)
+                y += START_MENU_EXIT_OPTION_Y_OFFSET;
             const struct StartMenuBWIcon *icon = &sStartMenuBWIcons[iconId];
             LoadSpriteSheet(&icon->sheet);
             LoadSpritePalette(&icon->palette);

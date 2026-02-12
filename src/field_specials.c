@@ -135,9 +135,11 @@ static void ScrollableMultichoice_RemoveScrollArrows(u8);
 static void Task_ScrollableMultichoice_WaitReturnToList(u8);
 static void Task_ScrollableMultichoice_ReturnToList(u8);
 static void ShowFrontierExchangeCornerItemIcon(u16);
+#ifdef LOCALID_BIRTH_ISLAND_EXTERIOR_ROCK
 static void Task_DeoxysRockInteraction(u8);
 static void ChangeDeoxysRockLevel(u8);
 static void WaitForDeoxysRockMovement(u8);
+#endif
 static void Task_LinkRetireStatusWithBattleTowerPartner(u8);
 static void Task_LoopWingFlapSE(u8);
 static void Task_CloseBattlePikeCurtain(u8);
@@ -919,6 +921,13 @@ void StorePlayerCoordsInVars(void)
     gSpecialVar_0x8005 = gSaveBlock1Ptr->pos.y;
 }
 
+void SetCameraFocusCoordsFromVars(void)
+{
+    SetCameraFocusCoords(gSpecialVar_0x8004 + MAP_OFFSET, gSpecialVar_0x8005 + MAP_OFFSET);
+    ResetFieldCamera();
+    DrawWholeMapView();
+}
+
 u8 GetPlayerTrainerIdOnesDigit(void)
 {
     return (u16)((gSaveBlock2Ptr->playerTrainerId[1] << 8) | gSaveBlock2Ptr->playerTrainerId[0]) % 10;
@@ -1299,6 +1308,304 @@ void RemoveCameraObject(void)
 {
     CameraObjectSetFollowedSpriteId(GetPlayerAvatarSpriteId());
     RemoveObjectEventByLocalIdAndMap(LOCALID_CAMERA, gSaveBlock1Ptr->location.mapNum, gSaveBlock1Ptr->location.mapGroup);
+}
+
+static u8 GetObjectEventIdFromSpecialLocalId(void)
+{
+    u8 objectEventId;
+
+    if (gSpecialVar_0x8004 == 0)
+        return OBJECT_EVENTS_COUNT;
+
+    objectEventId = GetObjectEventIdByLocalIdAndMap(gSpecialVar_0x8004,
+                                                    gSaveBlock1Ptr->location.mapNum,
+                                                    gSaveBlock1Ptr->location.mapGroup);
+    if (objectEventId == OBJECT_EVENTS_COUNT)
+        return OBJECT_EVENTS_COUNT;
+
+    return objectEventId;
+}
+
+static u8 GetObjectEventIdFromSpecialTargetLocalId(void)
+{
+    u16 localId = gSpecialVar_0x8000;
+
+    if (localId == 0)
+        return OBJECT_EVENTS_COUNT;
+
+    if (localId == LOCALID_PLAYER)
+        return GetObjectEventIdByLocalIdAndMap(LOCALID_PLAYER,
+                                               gSaveBlock1Ptr->location.mapNum,
+                                               gSaveBlock1Ptr->location.mapGroup);
+
+    return GetObjectEventIdByLocalIdAndMap(localId,
+                                           gSaveBlock1Ptr->location.mapNum,
+                                           gSaveBlock1Ptr->location.mapGroup);
+}
+
+static void Task_WaitObjectEventAffineAnim(u8 taskId)
+{
+    u8 objectEventId = gTasks[taskId].data[0];
+    bool8 hideWhenDone = gTasks[taskId].data[1];
+    bool8 resetAffine = gTasks[taskId].data[2];
+    s16 *counter = &gTasks[taskId].data[3];
+    bool8 showWhenStarted = gTasks[taskId].data[4];
+
+    if (objectEventId == OBJECT_EVENTS_COUNT)
+    {
+        ScriptContext_Enable();
+        DestroyTask(taskId);
+        return;
+    }
+
+    struct ObjectEvent *objectEvent = &gObjectEvents[objectEventId];
+    struct Sprite *sprite = &gSprites[objectEvent->spriteId];
+
+    if (showWhenStarted && !sprite->affineAnimBeginning)
+    {
+        objectEvent->invisible = FALSE;
+        gTasks[taskId].data[4] = FALSE;
+    }
+
+    if (!sprite->affineAnimEnded)
+    {
+        // Fail-safe: don't block the script forever if the anim never ends.
+        if (++(*counter) < 120)
+            return;
+        sprite->affineAnimEnded = TRUE;
+    }
+
+    if (hideWhenDone)
+        objectEvent->invisible = TRUE;
+
+    FreeOamMatrix(sprite->oam.matrixNum);
+    sprite->oam.affineMode = ST_OAM_AFFINE_OFF;
+    CalcCenterToCornerVec(sprite, sprite->oam.shape, sprite->oam.size, sprite->oam.affineMode);
+
+    if (resetAffine)
+        sprite->affineAnims = GetObjectEventGraphicsInfo(objectEvent->graphicsId)->affineAnims;
+
+    ScriptContext_Enable();
+    DestroyTask(taskId);
+}
+
+static const union AffineAnimCmd sAffineAnim_PortalGrowSpin[] =
+{
+    AFFINEANIMCMD_FRAME(0x900, 0x900, 0, 0),    // Start tiny (inverse scale)
+    AFFINEANIMCMD_FRAME(0, 0, -2, 6),           // Hold small, slight spin
+    AFFINEANIMCMD_FRAME(-0x40, -0x40, -4, 32),  // Spin CCW and grow to full size
+    AFFINEANIMCMD_END,
+};
+
+static const union AffineAnimCmd sAffineAnim_PortalShrinkSpin[] =
+{
+    AFFINEANIMCMD_FRAME(0x100, 0x100, 0, 0),  // Start full size
+    AFFINEANIMCMD_FRAME(0x40, 0x40, 4, 32),   // Spin CW and shrink down
+    AFFINEANIMCMD_END,
+};
+
+static const union AffineAnimCmd sAffineAnim_PortalAbsorbShrinkSpin[] =
+{
+    AFFINEANIMCMD_FRAME(0x100, 0x100, 0, 0),  // Start normal size
+    AFFINEANIMCMD_FRAME(0x40, 0x40, 4, 32),   // Spin CW and shrink down
+    AFFINEANIMCMD_END,
+};
+
+static const union AffineAnimCmd *const sAffineAnimTable_PortalSpin[] =
+{
+    sAffineAnim_PortalGrowSpin,
+    sAffineAnim_PortalShrinkSpin,
+};
+
+static const union AffineAnimCmd *const sAffineAnimTable_PortalAbsorb[] =
+{
+    sAffineAnim_PortalAbsorbShrinkSpin,
+};
+
+void StartHoopaRingGrow(void)
+{
+    u8 objectEventId = GetObjectEventIdFromSpecialLocalId();
+
+    if (objectEventId == OBJECT_EVENTS_COUNT)
+        return;
+
+    struct Sprite *sprite = &gSprites[gObjectEvents[objectEventId].spriteId];
+    const struct ObjectEventGraphicsInfo *graphicsInfo = GetObjectEventGraphicsInfo(gObjectEvents[objectEventId].graphicsId);
+
+    sprite->oam.affineMode = ST_OAM_AFFINE_DOUBLE;
+    sprite->subspriteMode = SUBSPRITES_OFF;
+    sprite->subspriteTableNum = 0;
+    sprite->affineAnims = graphicsInfo->affineAnims;
+    sprite->animPaused = FALSE;
+    sprite->affineAnimPaused = FALSE;
+    StartSpriteAnim(sprite, ANIM_STD_FACE_SOUTH);
+    InitSpriteAffineAnim(sprite);
+    StartSpriteAffineAnim(sprite, 0);
+    CalcCenterToCornerVec(sprite, sprite->oam.shape, sprite->oam.size, sprite->oam.affineMode);
+}
+
+void StartHoopaRingShrink(void)
+{
+    u8 objectEventId = GetObjectEventIdFromSpecialLocalId();
+
+    if (objectEventId == OBJECT_EVENTS_COUNT)
+        return;
+
+    struct Sprite *sprite = &gSprites[gObjectEvents[objectEventId].spriteId];
+    const struct ObjectEventGraphicsInfo *graphicsInfo = GetObjectEventGraphicsInfo(gObjectEvents[objectEventId].graphicsId);
+
+    sprite->oam.affineMode = ST_OAM_AFFINE_DOUBLE;
+    sprite->subspriteMode = SUBSPRITES_OFF;
+    sprite->subspriteTableNum = 0;
+    sprite->affineAnims = graphicsInfo->affineAnims;
+    sprite->animPaused = FALSE;
+    sprite->affineAnimPaused = FALSE;
+    StartSpriteAnim(sprite, ANIM_STD_FACE_SOUTH);
+    InitSpriteAffineAnim(sprite);
+    StartSpriteAffineAnim(sprite, 1);
+    CalcCenterToCornerVec(sprite, sprite->oam.shape, sprite->oam.size, sprite->oam.affineMode);
+}
+
+void Special_HoopaRingSpawnGrow(void)
+{
+    u8 objectEventId = GetObjectEventIdFromSpecialLocalId();
+    u8 taskId;
+
+    if (objectEventId == OBJECT_EVENTS_COUNT)
+    {
+        ScriptContext_Enable();
+        return;
+    }
+
+    if (gSpecialVar_0x8001 || gSpecialVar_0x8002)
+    {
+        TryMoveObjectEventToMapCoords(gSpecialVar_0x8004,
+                                      gSaveBlock1Ptr->location.mapNum,
+                                      gSaveBlock1Ptr->location.mapGroup,
+                                      gSpecialVar_0x8001,
+                                      gSpecialVar_0x8002);
+        SetObjEventTemplateCoords(gSpecialVar_0x8004, gSpecialVar_0x8001, gSpecialVar_0x8002);
+    }
+
+    SetObjectInvisibility(gSpecialVar_0x8004,
+                          gSaveBlock1Ptr->location.mapNum,
+                          gSaveBlock1Ptr->location.mapGroup,
+                          TRUE);
+    StartHoopaRingGrow();
+    {
+        struct Sprite *sprite = &gSprites[gObjectEvents[objectEventId].spriteId];
+        sprite->invisible = TRUE;
+        if (sprite->oam.matrixNum != 0xFF)
+            SetOamMatrixRotationScaling(sprite->oam.matrixNum, 0x900, 0x900, 0);
+    }
+    SetObjectInvisibility(gSpecialVar_0x8004,
+                          gSaveBlock1Ptr->location.mapNum,
+                          gSaveBlock1Ptr->location.mapGroup,
+                          FALSE);
+    gSprites[gObjectEvents[objectEventId].spriteId].invisible = FALSE;
+
+    taskId = CreateTask(Task_WaitObjectEventAffineAnim, 8);
+    if (taskId == TASK_NONE)
+    {
+        ScriptContext_Enable();
+        return;
+    }
+    gTasks[taskId].data[0] = objectEventId;
+}
+
+void Special_HoopaRingShrinkDespawn(void)
+{
+    u8 objectEventId = GetObjectEventIdFromSpecialLocalId();
+    u8 taskId;
+
+    if (objectEventId == OBJECT_EVENTS_COUNT)
+    {
+        ScriptContext_Enable();
+        return;
+    }
+
+    StartHoopaRingShrink();
+
+    taskId = CreateTask(Task_WaitObjectEventAffineAnim, 8);
+    if (taskId == TASK_NONE)
+    {
+        ScriptContext_Enable();
+        return;
+    }
+    gTasks[taskId].data[0] = objectEventId;
+    gTasks[taskId].data[1] = TRUE;
+}
+
+void Special_ObjectEventAbsorb(void)
+{
+    u8 objectEventId = GetObjectEventIdFromSpecialTargetLocalId();
+    u8 taskId;
+
+    if (objectEventId == OBJECT_EVENTS_COUNT)
+    {
+        ScriptContext_Enable();
+        return;
+    }
+
+    struct ObjectEvent *objectEvent = &gObjectEvents[objectEventId];
+    struct Sprite *sprite = &gSprites[objectEvent->spriteId];
+
+    sprite->oam.affineMode = ST_OAM_AFFINE_DOUBLE;
+    sprite->subspriteMode = SUBSPRITES_OFF;
+    sprite->subspriteTableNum = 0;
+    sprite->affineAnims = sAffineAnimTable_PortalAbsorb;
+    sprite->animPaused = TRUE;
+    sprite->affineAnimPaused = FALSE;
+    sprite->invisible = TRUE;
+    InitSpriteAffineAnim(sprite);
+    StartSpriteAffineAnim(sprite, 0);
+    if (sprite->oam.matrixNum != 0xFF)
+        SetOamMatrixRotationScaling(sprite->oam.matrixNum, 0x100, 0x100, 0);
+    CalcCenterToCornerVec(sprite, sprite->oam.shape, sprite->oam.size, sprite->oam.affineMode);
+    sprite->invisible = FALSE;
+
+    taskId = CreateTask(Task_WaitObjectEventAffineAnim, 8);
+    if (taskId == TASK_NONE)
+    {
+        ScriptContext_Enable();
+        return;
+    }
+    gTasks[taskId].data[0] = objectEventId;
+    gTasks[taskId].data[1] = TRUE;
+    gTasks[taskId].data[2] = TRUE;
+}
+
+void SetObjectEventPortalAffineAnims(void)
+{
+    u8 objectEventId = GetObjectEventIdFromSpecialLocalId();
+
+    if (objectEventId == OBJECT_EVENTS_COUNT)
+        return;
+
+    gSprites[gObjectEvents[objectEventId].spriteId].affineAnims = sAffineAnimTable_PortalSpin;
+}
+
+void SetObjectEventPortalAbsorbAffineAnims(void)
+{
+    u8 objectEventId = GetObjectEventIdFromSpecialLocalId();
+
+    if (objectEventId == OBJECT_EVENTS_COUNT)
+        return;
+
+    gSprites[gObjectEvents[objectEventId].spriteId].affineAnims = sAffineAnimTable_PortalAbsorb;
+}
+
+void ResetObjectEventAffineAnims(void)
+{
+    u8 objectEventId = GetObjectEventIdFromSpecialLocalId();
+
+    if (objectEventId == OBJECT_EVENTS_COUNT)
+        return;
+
+    struct ObjectEvent *objectEvent = &gObjectEvents[objectEventId];
+    const struct ObjectEventGraphicsInfo *graphicsInfo = GetObjectEventGraphicsInfo(objectEvent->graphicsId);
+
+    gSprites[objectEvent->spriteId].affineAnims = graphicsInfo->affineAnims;
 }
 
 u8 GetPokeblockNameByMonNature(void)
@@ -3201,6 +3508,7 @@ void ScrollableMultichoice_ClosePersistentMenu(void)
 #undef tListTaskId
 #undef tTaskId
 
+#ifdef LOCALID_BIRTH_ISLAND_EXTERIOR_ROCK
 #define DEOXYS_ROCK_LEVELS 11
 
 void DoDeoxysRockInteraction(void)
@@ -3336,6 +3644,21 @@ void SetDeoxysRockPalette(void)
     // Set faded to all black, weather blending handled during fade-in
     CpuFill16(RGB_BLACK, &gPlttBufferFaded[OBJ_PLTT_ID(paletteNum)], PLTT_SIZE_4BPP);
 }
+#else
+void DoDeoxysRockInteraction(void)
+{
+    gSpecialVar_Result = DEOXYS_ROCK_FAILED;
+    ScriptContext_Enable();
+}
+
+void IncrementBirthIslandRockStepCount(void)
+{
+}
+
+void SetDeoxysRockPalette(void)
+{
+}
+#endif
 
 void SetPCBoxToSendMon(u8 boxId)
 {

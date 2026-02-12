@@ -38,6 +38,7 @@
 #include "main.h"
 #include "malloc.h"
 #include "m4a.h"
+#include "region_map.h"
 #include "palette.h"
 #include "party_menu.h"
 #include "pokeball.h"
@@ -71,6 +72,7 @@
 #include "constants/items.h"
 #include "constants/moves.h"
 #include "constants/party_menu.h"
+#include "constants/regions.h"
 #include "constants/rgb.h"
 #include "constants/songs.h"
 #include "constants/trainer_slide.h"
@@ -394,6 +396,8 @@ const struct TrainerClass gTrainerClasses[TRAINER_CLASS_COUNT] =
     [TRAINER_CLASS_JUGGLER] = { _("JUGGLER"), 8 },
     [TRAINER_CLASS_PSYCHIC_M] = { _("PSYCHIC♂"), 6 },
     [TRAINER_CLASS_WANDERER] = { _("WANDERER") },
+    [TRAINER_CLASS_CIPHER_ADMIN] = { _("CIPHER ADMIN"), 10 },
+    [TRAINER_CLASS_SNAGEM_HEAD] = { _("SNAGEM HEAD"), 20 },
 };
 
 static void (*const sTurnActionsFuncsTable[])(void) =
@@ -4284,10 +4288,6 @@ static void HandleTurnActionSelectionState(void)
                         gChosenActionByBattler[battler] = B_ACTION_USE_MOVE;
                         gBattleCommunication[battler] = STATE_WAIT_ACTION_CONFIRMED_STANDBY;
                     }
-                    else if (gChosenActionByBattler[GetPartnerBattler(battler)] == B_ACTION_CALL)
-                    {
-                        RecordedBattle_ClearBattlerAction(GetPartnerBattler(battler), 1);
-                    }
                     else
                     {
                         gBattleStruct->itemPartyIndex[battler] = PARTY_SIZE;
@@ -5461,6 +5461,21 @@ static void RunTurnActionsFunctions(void)
     }
 }
 
+static u16 GetVictoryTrainerBgmForRegion(void)
+{
+    u8 region = RegionMap_GetRegionFromMapSecId(gMapHeader.regionMapSectionId);
+
+    switch (region)
+    {
+    case REGION_KANTO:
+        return MUS_RG_VICTORY_TRAINER;
+    case REGION_JOHTO:
+        return MUS_HG_VICTORY_TRAINER;
+    default:
+        return MUS_VICTORY_TRAINER;
+    }
+}
+
 static void HandleEndTurn_BattleWon(void)
 {
     gCurrentActionFuncId = 0;
@@ -5510,7 +5525,7 @@ static void HandleEndTurn_BattleWon(void)
             PlayBGM(MUS_VICTORY_GYM_LEADER);
             break;
         default:
-            PlayBGM(MUS_VICTORY_TRAINER);
+            PlayBGM(GetVictoryTrainerBgmForRegion());
             break;
         }
     }

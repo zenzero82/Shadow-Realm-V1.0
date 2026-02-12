@@ -172,7 +172,7 @@ static const u8 gText_8419C92[] = _("Select");
 static const u8 gText_8419CA2[] = _("Cancel");
 static const u8 gText_8419CA9[] = _("Forget");
 static const u8 gText_PSS_RenameA[] = _("{A_BUTTON} RENAME");
-static const u8 gText_PSS_RelearnA[] = _("{A_BUTTON} RELEARN");
+static const u8 gText_PSS_RelearnL[] = _("{L_BUTTON} RELEARN");
 static const u8 gText_PSS_EvIv[] = _("EV-IV");
 static const u8 gText_8419C4D[] = _("Exp. Points");
 static const u8 gText_8419C59[] = _("To Next Lv.");
@@ -1681,6 +1681,8 @@ static bool8 PSS_CanRenameMon(void)
 #if P_SUMMARY_SCREEN_RENAME
     if (sMonSummaryScreen->isEgg)
         return FALSE;
+    if (GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_IS_SHADOW))
+        return FALSE;
     if (sMonSummaryScreen->isEnemyParty)
         return FALSE;
     if (gMain.inBattle || gReceivedRemoteLinkPlayers)
@@ -1832,7 +1834,14 @@ u32 sub_81347A4(u8 a0)
             return TRUE;
 
         if (gSaveBlock2Ptr->optionsButtonMode == OPTIONS_BUTTON_MODE_LR && JOY_NEW(L_BUTTON))
+        {
+            if (sMonSummaryScreen->curPageIndex == PSS_PAGE_MOVES
+                && sUnknown_203B16D == 4
+                && sMonSummaryScreen->unk3268 != TRUE
+                && PSS_CanUseMoveRelearner())
+                return FALSE;
             return TRUE;
+        }
 
         break;
     }
@@ -2192,7 +2201,7 @@ static void sub_81351A0(u8 taskId)
     case 4:
 		PSS_AddTextToWin0(gText_8419C39);
         if (PSS_CanUseMoveRelearner())
-            PSS_AddTextToWin1(gText_PSS_RelearnA);
+            PSS_AddTextToWin1(gText_PSS_RelearnL);
         else
 		    PSS_AddTextToWin1(gText_8419C82);
         break;
@@ -3507,7 +3516,7 @@ static void sub_8137D28(u8 curPageIndex)
     case PSS_PAGE_MOVES:
         PSS_AddTextToWin0(gText_8419C39);
         if (PSS_CanUseMoveRelearner())
-            PSS_AddTextToWin1(gText_PSS_RelearnA);
+            PSS_AddTextToWin1(gText_PSS_RelearnL);
         else
             PSS_AddTextToWin1(gText_8419C82);
         PSS_AddTextToWin2(gText_8419C45);
@@ -3967,16 +3976,20 @@ static void sub_8138CD8(u8 id)
                 return;
             }
         }
+        else if (JOY_NEW(L_BUTTON))
+        {
+            if (sUnknown_203B16D == 4 && sMonSummaryScreen->unk3268 != TRUE && PSS_CanUseMoveRelearner())
+            {
+                PlaySE(SE_SELECT);
+                PSS_BeginMoveRelearnerFromSummary();
+                return;
+            }
+        }
         else if (JOY_NEW(A_BUTTON))
         {
             PlaySE(SE_SELECT);
             if (sUnknown_203B16D == 4)
             {
-                if (sMonSummaryScreen->unk3268 != TRUE && PSS_CanUseMoveRelearner())
-                {
-                    PSS_BeginMoveRelearnerFromSummary();
-                    return;
-                }
                 sUnknown_203B16D = 0;
                 sUnknown_203B16E = 0;
                 sMonSummaryScreen->unk3268 = FALSE;

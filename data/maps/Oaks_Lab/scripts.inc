@@ -7,6 +7,8 @@
 .set LOCALID_HONEDGEBALL, 3
 .set LOCALID_ZORUABALL, 4
 .set LOCALID_LEO, 5
+.set LOCALID_OAK, 6
+.set LOCALID_HOOPA_RING, 7
 
 
 Oaks_Lab_MapScripts::
@@ -16,6 +18,16 @@ Oaks_Lab_MapScripts::
 
 OaksLab_EventScript_OnLoad::
     setvar VAR_TEMP_1, 0
+    checkflag FLAG_OAKS_LAB_NEWGAME_INTRO_DONE
+    goto_if_eq OaksLab_EventScript_OnLoad_AfterIntro
+    checkflag FLAG_WEST_FOREST_INTRO_DONE
+    goto_if_eq OaksLab_EventScript_OnLoad_AfterIntro
+    hideobjectat LOCALID_PLAYER, MAP_OAKS_LAB
+    setflag FLAG_HIDE_OAKS_LAB_NIA
+    setflag FLAG_HIDE_OAKS_LAB_LEO
+    clearflag FLAG_HIDE_OAKS_LAB_OAK
+    setflag FLAG_HIDE_OAKS_LAB_HOOPA_RING
+OaksLab_EventScript_OnLoad_AfterIntro:
     call OaksLab_EventScript_ApplyPostStarterState
     end
 
@@ -25,6 +37,12 @@ OaksLab_EventScript_OnFrame::
 
 OaksLab_EventScript_CheckAutoIntro::
     setvar VAR_TEMP_1, 1
+    checkflag FLAG_OAKS_LAB_NEWGAME_INTRO_DONE
+    goto_if_eq OaksLab_EventScript_CheckAutoIntro_Default
+    checkflag FLAG_WEST_FOREST_INTRO_DONE
+    goto_if_eq OaksLab_EventScript_CheckAutoIntro_Default
+    goto OaksLab_EventScript_NewGameIntro
+OaksLab_EventScript_CheckAutoIntro_Default:
     checkflag FLAG_OAKS_LAB_FORCE_INTRO
     goto_if_eq OaksLab_EventScript_CheckAutoIntro_Run
     end
@@ -43,6 +61,97 @@ OaksLab_Speaker_Leo:
 OaksLab_Speaker_Nia:
     .string "Prof. Aide Nia$"
 
+OaksLab_Speaker_Oak:
+    .string "Professor Oak$"
+
+@ ---------------- NEW GAME INTRO ----------------
+
+OaksLab_EventScript_NewGameIntro::
+    setvar VAR_TEMP_1, 1
+    checkflag FLAG_OAKS_LAB_NEWGAME_INTRO_DONE
+    goto_if_eq OaksLab_EventScript_NewGameIntro_Done
+
+    lockall
+    hideobjectat LOCALID_PLAYER, MAP_OAKS_LAB
+    setflag FLAG_HIDE_OAKS_LAB_NIA
+    setflag FLAG_HIDE_OAKS_LAB_LEO
+    clearflag FLAG_HIDE_OAKS_LAB_OAK
+    setflag FLAG_HIDE_OAKS_LAB_HOOPA_RING
+    showobjectat LOCALID_OAK, MAP_OAKS_LAB
+
+    setobjectxy LOCALID_PLAYER, 2, 2
+    setobjectxyperm LOCALID_PLAYER, 2, 2
+    setvar VAR_0x8004, 2
+    setvar VAR_0x8005, 2
+    special SetCameraFocusCoordsFromVars
+    special SpawnCameraObject
+    setobjectxy LOCALID_CAMERA, 2, 2
+
+    setspeaker OaksLab_Speaker_Oak
+    msgbox OaksLab_Text_Oak_Intro, MSGBOX_DEFAULT
+    closemessage
+
+    applymovement LOCALID_OAK, OaksLab_Move_Oak_Down2
+    applymovement LOCALID_CAMERA, OaksLab_Move_Camera_OakFollow
+    waitmovement 0
+
+    clearflag FLAG_HIDE_OAKS_LAB_HOOPA_RING
+    addobject LOCALID_HOOPA_RING
+    setobjectxy LOCALID_HOOPA_RING, 2, 3
+    setobjectxyperm LOCALID_HOOPA_RING, 2, 3
+    showobjectat LOCALID_HOOPA_RING, MAP_OAKS_LAB
+
+    delay 12
+    hideobjectat LOCALID_OAK, MAP_OAKS_LAB
+    hideobjectat LOCALID_HOOPA_RING, MAP_OAKS_LAB
+
+    applymovement LOCALID_CAMERA, OaksLab_Move_Camera_ToNia
+    waitmovement 0
+    setobjectxy LOCALID_PLAYER, 4, 12
+    setobjectxyperm LOCALID_PLAYER, 4, 12
+    clearflag FLAG_HIDE_OAKS_LAB_NIA
+    addobject LOCALID_NIA
+    setobjectxy LOCALID_NIA, 5, 12
+    showobjectat LOCALID_NIA, MAP_OAKS_LAB
+    applymovement LOCALID_NIA, OaksLab_Move_Nia_EnterLab
+    waitmovement 0
+    playse SE_PIN
+    applymovement LOCALID_NIA, OaksLab_Move_Nia_ExclaimFaceUp
+    waitmovement 0
+    setspeaker OaksLab_Speaker_Nia
+    msgbox OaksLab_Text_Nia_FindOak, MSGBOX_DEFAULT
+    closemessage
+
+    fadescreen FADE_TO_BLACK
+    msgbox OaksLab_Text_SixMonthsLater, MSGBOX_DEFAULT
+    closemessage
+
+    special RemoveCameraObject
+
+    setflag FLAG_OAKS_LAB_NEWGAME_INTRO_DONE
+    setflag FLAG_HIDE_OAKS_LAB_OAK
+    setflag FLAG_HIDE_OAKS_LAB_HOOPA_RING
+    clearflag FLAG_HIDE_OAKS_LAB_NIA
+
+    warp MAP_PALLET_TOWN_WESTERN_FOREST, WARP_ID_NONE, 5, 5
+    waitstate
+    end
+
+OaksLab_EventScript_NewGameIntro_Done::
+    end
+
+OaksLab_EventScript_Oak_Talk::
+    lock
+    faceplayer
+    setspeaker OaksLab_Speaker_Oak
+    msgbox OaksLab_Text_Oak_Busy, MSGBOX_DEFAULT
+    closemessage
+    release
+    end
+
+OaksLab_EventScript_HoopaRing::
+    end
+
 @ ---------------- NIA MAIN SCRIPT ----------------
 
 OaksLab_EventScript_Aide_Main::
@@ -50,7 +159,7 @@ OaksLab_EventScript_Aide_Main::
     faceplayer
 
     @ Post-starter
-    checkflag FLAG_SYS_POKEMON_GET
+    checkflag FLAG_OAKS_LAB_POST_STARTER_STATE
     goto_if_eq OaksLab_EventScript_Nia_PostStarter
 
     @ After Route 1, before starter
@@ -107,6 +216,7 @@ OaksLab_EventScript_Leo_Talk_HasStarter::
     closemessage
     msgbox OaksLab_Text_Leo_GrantNationalDex, MSGBOX_DEFAULT
     closemessage
+    call OaksLab_EventScript_ReceivePokedex
     setflag FLAG_SYS_NATIONAL_DEX
     special EnableNationalPokedex
     setflag FLAG_SYS_POKEDEX_GET
@@ -123,8 +233,65 @@ OaksLab_EventScript_Leo_PostStarter::
     release
     end
 
+@ ---------------- EXIT BLOCKER ----------------
+@ Prevent leaving until starter chosen (after Leo intro scene)
+
+OaksLab_EventScript_ExitLab::
+    checkflag FLAG_MET_ROUTE1_AIDE
+    goto_if_eq OaksLab_EventScript_ExitLab_AfterLeo
+    end
+
+OaksLab_EventScript_ExitLab_AfterLeo::
+    checkflag FLAG_SYS_POKEMON_GET
+    goto_if_eq OaksLab_EventScript_ExitLab_Allow
+
+    checkflag FLAG_OAKS_LAB_LEO_SCENE_DONE
+    goto_if_eq OaksLab_EventScript_ExitLab_Block
+
+    end
+
+OaksLab_EventScript_ExitLab_Block::
+    lockall
+    applymovement OBJ_EVENT_ID_PLAYER, OaksLab_Move_Player_StepBackUp
+    waitmovement 0
+    turnobject LOCALID_LEO, DIR_SOUTH
+    setspeaker OaksLab_Speaker_Leo
+    msgbox OaksLab_Text_Leo_BlockExit, MSGBOX_DEFAULT
+    closemessage
+    releaseall
+    end
+
+OaksLab_EventScript_ExitLab_Allow::
+    end
+
+@ ---------------- POKEDEX RECEIVE ----------------
+
+OaksLab_EventScript_ReceivePokedex::
+    playfanfare MUS_OBTAIN_ITEM
+    message OaksLab_Text_ReceivedPokedex
+    waitfanfare
+    return
+
+@ ---------------- BG SIGN SCRIPTS ----------------
+
+OaksLab_EventScript_OaksPC::
+    msgbox OaksLab_Text_OaksPC, MSGBOX_SIGN
+    end
+
+OaksLab_EventScript_Bookshelf_Collection::
+    msgbox OaksLab_Text_Bookshelf_Collection, MSGBOX_SIGN
+    end
+
+OaksLab_EventScript_Bookshelf_Studies::
+    msgbox OaksLab_Text_Bookshelf_Studies, MSGBOX_SIGN
+    end
+
+OaksLab_EventScript_Bookshelf_XD::
+    msgbox OaksLab_Text_Bookshelf_XD, MSGBOX_SIGN
+    end
+
 @ ---------------- INSIDE-LAB LEO INTRO SCENE ----------------
-@ Coord event on (5,11) calls this.
+@ Coord event on (5,10) calls this.
 
 OaksLab_EventScript_LeoIntro::
     @ If Route 1 scene has NOT happened yet, do nothing.
@@ -186,6 +353,7 @@ OaksLab_LeoIntro_HaveSeenRoute1:
 
     checkflag FLAG_SYS_POKEDEX_GET
     goto_if_eq OaksLab_LeoIntro_AfterDex
+    call OaksLab_EventScript_ReceivePokedex
     setflag FLAG_SYS_NATIONAL_DEX
     special EnableNationalPokedex
     setflag FLAG_SYS_POKEDEX_GET
@@ -221,8 +389,72 @@ OaksLab_Move_Player_Up6:
     walk_up
     step_end
 
+OaksLab_Move_Player_StepBackUp:
+    walk_up
+    step_end
+
 OaksLab_Move_Nia_ExclaimFaceDown:
     emote_exclamation_mark
+    step_end
+
+OaksLab_Move_Oak_Down2:
+    walk_down
+    walk_down
+    step_end
+
+OaksLab_Move_Player_CamToOak:
+    walk_left
+    walk_left
+    walk_left
+    walk_up
+    walk_up
+    walk_up
+    walk_up
+    walk_up
+    step_end
+
+OaksLab_Move_Player_CamToNia:
+    walk_down
+    walk_down
+    walk_down
+    walk_down
+    walk_down
+    walk_down
+    walk_down
+    walk_down
+    walk_down
+    walk_down
+    walk_right
+    walk_right
+    walk_right
+    step_end
+
+OaksLab_Move_Camera_OakFollow:
+    walk_down
+    walk_down
+    step_end
+
+OaksLab_Move_Camera_ToNia:
+    walk_right
+    walk_right
+    walk_right
+    walk_down
+    walk_down
+    walk_down
+    walk_down
+    walk_down
+    walk_down
+    walk_down
+    step_end
+
+OaksLab_Move_Nia_EnterLab:
+    walk_up
+    walk_up
+    step_end
+
+OaksLab_Move_Nia_ExclaimFaceUp:
+    emote_exclamation_mark
+    face_up
     step_end
 
 @ ---------------- STARTER POKEBALLS ----------------
@@ -250,6 +482,7 @@ OaksLab_StarterBall_Ralts_Ready:
     setvar VAR_0x8004, SPECIES_IMPIDIMP
 
     showmonpic VAR_PLAYER_STARTER_SPECIES, 10, 3
+    waitse
     playmoncry VAR_PLAYER_STARTER_SPECIES, CRY_MODE_NORMAL
 
     msgbox OaksLab_Text_Ball_Ralts_Inspect, MSGBOX_YESNO
@@ -280,6 +513,7 @@ OaksLab_StarterBall_Honedge_Ready:
     setvar VAR_0x8004, SPECIES_HONEDGE
 
     showmonpic VAR_PLAYER_STARTER_SPECIES, 10, 3
+    waitse
     playmoncry VAR_PLAYER_STARTER_SPECIES, CRY_MODE_NORMAL
 
     msgbox OaksLab_Text_Ball_Honedge_Inspect, MSGBOX_YESNO
@@ -310,6 +544,7 @@ OaksLab_StarterBall_Zorua_Ready:
     setvar VAR_0x8004, SPECIES_SLOWPOKE_GALAR
 
     showmonpic VAR_PLAYER_STARTER_SPECIES, 10, 3
+    waitse
     playmoncry VAR_PLAYER_STARTER_SPECIES, CRY_MODE_NORMAL
 
     msgbox OaksLab_Text_Ball_Zorua_Inspect, MSGBOX_YESNO
@@ -449,6 +684,9 @@ OaksLab_Text_Aide_PointToStarters:
 OaksLab_Text_Leo_AfterNia:
     .string "Now please, help us find the Professor\n"
     .string "and stop these evil people!$"
+OaksLab_Text_Leo_BlockExit:
+    .string "Hey! Route 1 is dangerous.\p"
+    .string "Please pick a partner before you go!$"
 OaksLab_Text_Leo_PostStarter:
     .string "I hope the Professor was right to\n"
     .string "entrust a POKEMON to you.\p"
@@ -499,3 +737,40 @@ OaksLab_Text_ChoseStarter:
 
 OaksLab_Text_Receive_Starter_Generic:
     .string "You received {STR_VAR_1}!$"
+
+OaksLab_Text_ReceivedPokedex:
+    .string "You received the POKEDEX!$"
+
+OaksLab_Text_OaksPC:
+    .string "OAK's PC is full of notes on\n"
+    .string "SHADOW POKeMON research.\p"
+    .string "There are detailed studies on the\n"
+    .string "starter POKeMON too.$"
+
+OaksLab_Text_Bookshelf_Collection:
+    .string "A large collection of books on\n"
+    .string "POKeMON habitats and biology.$"
+
+OaksLab_Text_Bookshelf_Studies:
+    .string "Stacks of research papers on\n"
+    .string "evolution and training methods.$"
+
+OaksLab_Text_Bookshelf_XD:
+    .string "A draft titled XD catches your eye.\p"
+    .string "It mentions a strange new POKeMON form.$"
+
+OaksLab_Text_Oak_Intro:
+    .string "That's got to be it! I finally\n"
+    .string "understand what is causing the\n"
+    .string "strange phenomenon in these POKEMON.\p"
+    .string "I need to call the others and\n"
+    .string "schedule a meeting.$"
+
+OaksLab_Text_Nia_FindOak:
+    .string "Professor? Huh, wonder where he went.$"
+
+OaksLab_Text_SixMonthsLater:
+    .string "Six months later...$"
+
+OaksLab_Text_Oak_Busy:
+    .string "OAK is busy at his PC.$"

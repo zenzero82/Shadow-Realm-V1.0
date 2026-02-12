@@ -493,8 +493,8 @@ gSongTable::
 	song mus_hg_lavender, 0, 0
 	song mus_rg_cycling, 0, 0
 	song mus_hg_encounter_rocket, 0, 0
-	song mus_rg_encounter_girl, 0, 0
-	song mus_rg_encounter_boy, 0, 0
+	song mus_dummy, 0, 0
+	song mus_dummy, 0, 0
 	song mus_rg_hall_of_fame, 0, 0
 	song mus_hg_viridian_forest, 0, 0
 	song mus_hg_mt_moon_square, 0, 0
@@ -504,8 +504,8 @@ gSongTable::
 	song mus_hg_route11, 0, 0
 	song mus_rg_victory_road, 0, 0
 	song mus_hg_vs_gym_leader_kanto, 0, 0
-	song mus_rg_vs_trainer, 0, 0
-	song mus_rg_vs_wild, 0, 0
+	song mus_dummy, 0, 0
+	song mus_dummy, 0, 0
 	song mus_rg_vs_champion, 0, 0
 	song mus_hg_pallet, 0, 0
 	song mus_rg_oak_lab, 0, 0
@@ -610,6 +610,17 @@ gSongTable::
 	song mus_hg_route42, 0, 0
 	song mus_hg_route47, 0, 0
 	song mus_pyrite, 0, 0
+	song mus_hg_vs_trainer_kanto, 0, 0
+	song mus_hg_vs_wild_kanto, 0, 0
+	song mus_hg_encounter_boy_2, 0, 0
+	song mus_hg_encounter_girl_2, 0, 0
+	song mus_hg_victory_wild, 0, 0
+	song mus_hg_victory_trainer, 0, 0
+	song shadow_title, 0, 0
+	song cipher_encounter, 0, 0
+	song mus_battle_team_galactic, 0, 0
+	song mus_battle_team_plasma, 0, 0
+	song mus_battle_team_flare, 0, 0
 
 
 	.align 2

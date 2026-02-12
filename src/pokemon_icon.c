@@ -181,8 +181,11 @@ u8 CreateMonIcon(u16 species, void (*callback)(struct Sprite *), s16 x, s16 y, u
     if (useShadowIcon)
     {
         LoadShadowMonIconPalette(iconSpecies);
-        if (IndexOfSpritePaletteTag(POKE_ICON_SHADOW_PAL_TAG) == 0xFF)
+        u8 palIndex = IndexOfSpritePaletteTag(POKE_ICON_SHADOW_PAL_TAG);
+        if (palIndex == 0xFF)
             LoadSpritePalette(&gMonIconPaletteTable[gMonIconShadowPaletteIndex]);
+        else
+            LoadSpritePaletteInSlot(&gMonIconPaletteTable[gMonIconShadowPaletteIndex], palIndex);
         iconTemplate.paletteTag = POKE_ICON_SHADOW_PAL_TAG;
     }
     else

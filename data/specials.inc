@@ -162,6 +162,7 @@ gSpecials::
 	def_special ShowFieldMessageStringVar4
 	def_special DrawWholeMapView
 	def_special StorePlayerCoordsInVars
+	def_special SetCameraFocusCoordsFromVars
 	def_special MauvilleGymDeactivatePuzzle
 	def_special PetalburgGymSlideOpenRoomDoors
 	def_special PetalburgGymUnlockRoomDoors
@@ -296,6 +297,14 @@ gSpecials::
 	def_special ShowGlassWorkshopMenu
 	def_special SpawnCameraObject
 	def_special RemoveCameraObject
+	def_special StartHoopaRingGrow
+	def_special StartHoopaRingShrink
+	def_special Special_HoopaRingSpawnGrow
+	def_special Special_HoopaRingShrinkDespawn
+	def_special Special_ObjectEventAbsorb
+	def_special SetObjectEventPortalAffineAnims
+	def_special SetObjectEventPortalAbsorbAffineAnims
+	def_special ResetObjectEventAffineAnims
 	def_special GetPokeblockNameByMonNature
 	def_special GetSecretBaseNearbyMapName
 	def_special CheckRelicanthWailord

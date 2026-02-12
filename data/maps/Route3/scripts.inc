@@ -5,38 +5,41 @@ Route3_MapScripts::
 @ SPEAKER DEFINITIONS (Namebox)
 @ =========================================================
 
-Route3_Speaker_Youngster:
+Route3_Speaker_Youngster1:
+	.string "YOUNGSTER1$"
+
+Route3_Speaker_Youngster2:
 	.string "YOUNGSTER$"
 
 Route3_Speaker_Lass:
 	.string "LASS$"
 
 Route3_Speaker_Firebreather:
-	.string "FIREBREATHER$"
+	.string "Otis$"
 
 @ =========================================================
 @ TRAINERS
 @ =========================================================
 
 Route3_EventScript_Youngster1::
-	setspeaker Route3_Speaker_Youngster
+	setspeaker Route3_Speaker_Youngster1
 	trainerbattle_single TRAINER_RT3_YOUNGSTER1, Route3_Text_Youngster1_Intro, Route3_Text_Youngster1_Defeat, Route3_EventScript_Youngster1_After
 	end
 
 Route3_EventScript_Youngster1_After::
-	setspeaker Route3_Speaker_Youngster
+	setspeaker Route3_Speaker_Youngster1
 	msgbox Route3_Text_Youngster1_After, MSGBOX_NPC
 	closemessage
 	release
 	end
 
 Route3_EventScript_Youngster2::
-	setspeaker Route3_Speaker_Youngster
+	setspeaker Route3_Speaker_Youngster2
 	trainerbattle_single TRAINER_RT3_YOUNGSTER2, Route3_Text_Youngster2_Intro, Route3_Text_Youngster2_Defeat, Route3_EventScript_Youngster2_After
 	end
 
 Route3_EventScript_Youngster2_After::
-	setspeaker Route3_Speaker_Youngster
+	setspeaker Route3_Speaker_Youngster2
 	msgbox Route3_Text_Youngster2_After, MSGBOX_NPC
 	closemessage
 	release
@@ -55,6 +58,7 @@ Route3_EventScript_Lass_After::
 	end
 
 Route3_EventScript_Firebreather::
+	setspeaker Route3_Speaker_Firebreather
 	trainerbattle_single TRAINER_RT3_FIREBREATHER, Route3_Text_Firebreather_Intro, Route3_Text_Firebreather_Defeat, Route3_EventScript_Firebreather_After
 	end
 

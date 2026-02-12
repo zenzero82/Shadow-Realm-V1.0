@@ -100,6 +100,7 @@ WesHideout_Underground_EventScript_Sycamore::
 	checkflag FLAG_WES_HIDEOUT_TALKED_SYCAMORE
 	goto_if_eq WesHideout_Underground_EventScript_Sycamore_After
 	call WesHideout_Underground_EventScript_MagnoliaSycamore_Intro
+	call WesHideout_Underground_EventScript_GiveShadowMonitor
 	setflag FLAG_WES_HIDEOUT_TALKED_SYCAMORE
 	setflag FLAG_WES_HIDEOUT_TALKED_MAGNOLIA
 	setflag FLAG_WES_HIDEOUT_TEAM_BRIEFED
@@ -120,6 +121,7 @@ WesHideout_Underground_EventScript_Magnolia::
 	checkflag FLAG_WES_HIDEOUT_TALKED_MAGNOLIA
 	goto_if_eq WesHideout_Underground_EventScript_Magnolia_After
 	call WesHideout_Underground_EventScript_MagnoliaSycamore_Intro
+	call WesHideout_Underground_EventScript_GiveShadowMonitor
 	setflag FLAG_WES_HIDEOUT_TALKED_SYCAMORE
 	setflag FLAG_WES_HIDEOUT_TALKED_MAGNOLIA
 	setflag FLAG_WES_HIDEOUT_TEAM_BRIEFED
@@ -139,6 +141,17 @@ WesHideout_Underground_EventScript_Rowan::
 	lock
 	faceplayer
 	goto WesHideout_Underground_EventScript_Rowan_Talk_Object
+
+WesHideout_Underground_EventScript_GiveShadowMonitor::
+	checkflag FLAG_RECEIVED_SHADOW_MONITOR
+	goto_if_eq WesHideout_Underground_EventScript_GiveShadowMonitor_Done
+	setspeaker WesHideout_Underground_Speaker_Sycamore
+	giveitem ITEM_SHADOW_MONITOR
+	setflag FLAG_RECEIVED_SHADOW_MONITOR
+	msgbox WesHideout_Underground_Text_Sycamore_ShadowMonitor_Given, MSGBOX_NPC
+	closemessage
+WesHideout_Underground_EventScript_GiveShadowMonitor_Done::
+	return
 
 WesHideout_Underground_EventScript_Rowan_Talk_Object::
 	setspeaker WesHideout_Underground_Speaker_Rowan
@@ -479,10 +492,10 @@ WesHideout_Underground_Text_Kukui_After:
 	.string "for some time.$"
 
 WesHideout_Underground_Text_Sycamore_After:
-	.string "The SHADOW MONITOR is still in\n"
-	.string "development. We'll let you know.\p"
-	.string "We'll announce it when it's ready.\n"
-	.string "Check back soon!$"
+	.string "Use the SHADOW MONITOR to track\n"
+	.string "Shadow POKeMON you snag.\p"
+	.string "Bring me data when you can.\n"
+	.string "It will help us refine it.$"
 
 WesHideout_Underground_Text_Magnolia_After:
 	.string "It's about time to take CIPHER down!\n"
@@ -615,8 +628,8 @@ WesHideout_Underground_Text_MagSycamore_Player6:
 WesHideout_Underground_Text_MagSycamore_Player7:
 	.string "With help from WES, MICHAEL, ETHAN,\n"
 	.string "and LYRA, we built a SHADOW MONITOR.\p"
-	.string "It is still in development.\n"
-	.string "It will track Shadow POKEMON.\p"
+	.string "It's ready now.\n"
+	.string "It will track Shadow POKeMON.\p"
 	.string "It will also track the trainers who\n"
 	.string "have them.$"
 
@@ -625,6 +638,11 @@ WesHideout_Underground_Text_MagSycamore_Player8:
 	.string "we can keep adding to the monitor.\p"
 	.string "We'll snag every Shadow POKEMON.\n"
 	.string "With everyone helping, CIPHER falls.$"
+
+WesHideout_Underground_Text_Sycamore_ShadowMonitor_Given:
+	.string "Here, take the SHADOW MONITOR.\p"
+	.string "It will help you track Shadow POKeMON\n"
+	.string "and the trainers who hold them.$"
 
 WesHideout_Underground_Text_MagSycamore_Player9:
 	.string "It's about time to take CIPHER down!\n"

@@ -26,6 +26,14 @@ PewterCity_Speaker_Hank:
 PewterCity_Speaker_Mila:
     .string "Mila$"
 
+PewterCity_Speaker_Elias:
+    .string "Elias$"
+PewterCity_Speaker_Nina:
+    .string "Nina$"
+PewterCity_Speaker_Tess:
+    .string "Tess$"
+
+
 
 @ --------------------
 @ Signs / existing NPCs
@@ -83,6 +91,94 @@ PewterCity_EventScript_Kid::
     release
     end
 
+PewterCity_EventScript_BrockTalk::
+    lock
+    faceplayer
+    goto_if_set FLAG_PEWTER_BROCK_WES_SCENE_DONE, PewterCity_EventScript_BrockTalk_Known
+    setspeaker PewterCity_Speaker_Brock_Unknown
+    msgbox PewterCity_Text_BrockTalk_Unknown, MSGBOX_DEFAULT
+    closemessage
+    release
+    end
+
+PewterCity_EventScript_BrockTalk_Known::
+    setspeaker PewterCity_Speaker_Brock
+    msgbox PewterCity_Text_BrockTalk_Known, MSGBOX_DEFAULT
+    closemessage
+    release
+    end
+
+PewterCity_EventScript_WesTalk::
+    lock
+    faceplayer
+    goto_if_set FLAG_PEWTER_BROCK_WES_SCENE_DONE, PewterCity_EventScript_WesTalk_Known
+    setspeaker PewterCity_Speaker_Wes_Unknown
+    msgbox PewterCity_Text_WesTalk_Unknown, MSGBOX_DEFAULT
+    closemessage
+    release
+    end
+
+PewterCity_EventScript_WesTalk_Known::
+    setspeaker PewterCity_Speaker_Wes
+    msgbox PewterCity_Text_WesTalk_Known, MSGBOX_DEFAULT
+    closemessage
+    release
+    end
+
+PewterCity_EventScript_OldMan::
+    lock
+    faceplayer
+    setspeaker PewterCity_Speaker_Elias
+    msgbox PewterCity_Text_OldMan, MSGBOX_DEFAULT
+    closemessage
+    release
+    end
+
+PewterCity_EventScript_Lass::
+    lock
+    faceplayer
+    setspeaker PewterCity_Speaker_Nina
+    msgbox PewterCity_Text_Lass, MSGBOX_DEFAULT
+    closemessage
+    release
+    end
+
+PewterCity_EventScript_Twin::
+    lock
+    faceplayer
+    setspeaker PewterCity_Speaker_Tess
+    msgbox PewterCity_Text_Twin, MSGBOX_DEFAULT
+    closemessage
+    release
+    end
+
+PewterCity_EventScript_Geodude::
+    lock
+    faceplayer
+    waitse
+    playmoncry SPECIES_GEODUDE, CRY_MODE_NORMAL
+    waitmoncry
+    release
+    end
+
+PewterCity_EventScript_Graveler::
+    lock
+    faceplayer
+    waitse
+    playmoncry SPECIES_GRAVELER, CRY_MODE_NORMAL
+    waitmoncry
+    release
+    end
+
+PewterCity_EventScript_Rockruff::
+    lock
+    faceplayer
+    waitse
+    playmoncry SPECIES_ROCKRUFF, CRY_MODE_NORMAL
+    waitmoncry
+    release
+    end
+
 
 PewterCity_Text_Sign:
     .string "PEWTER CITY\n"
@@ -94,9 +190,10 @@ PewterCity_Text_GymSign:
     .string "The Rock Solid POKEMON Trainer$"
 
 PewterCity_Text_MuseumSign:
-    .string "There's a notice here...\p"
-    .string "PEWTER MUSEUM OF SCIENCE is closed for\n"
-    .string "renovations...$"
+    .string "PEWTER MUSEUM OF SCIENCE\n"
+    .string "OPEN DAILY\p"
+    .string "Fossils, space, and rare stones on\n"
+    .string "display.$"
 
 PewterCity_Text_MtMoonGiftShopSign:
     .string "There's a notice here...\p"
@@ -120,6 +217,37 @@ PewterCity_Text_Kid:
     .string "My dad says the TV glitches like it's\n"
     .string "showing a different world.\p"
     .string "That sounds scary... but kinda cool too.$"
+
+PewterCity_Text_BrockTalk_Unknown:
+    .string "...We should make sure the city is\n"
+    .string "calm before the next challenge.$"
+
+PewterCity_Text_BrockTalk_Known:
+    .string "I'll be at the GYM if you want to test\n"
+    .string "your strength.$"
+
+PewterCity_Text_WesTalk_Unknown:
+    .string "Hold on. I need to be sure you're not\n"
+    .string "with them.$"
+
+PewterCity_Text_WesTalk_Known:
+    .string "Keep your eyes open on ROUTE 3.\n"
+    .string "The shadows move fast there.$"
+
+PewterCity_Text_OldMan:
+    .string "Pewter's stones are steady, but the\n"
+    .string "world feels shaken.\p"
+    .string "Stock up before you head for MT. MOON.$"
+
+PewterCity_Text_Lass:
+    .string "The MUSEUM is my favorite spot.\p"
+    .string "They say new exhibits are coming in\n"
+    .string "from the mountain.$"
+
+PewterCity_Text_Twin:
+    .string "I count the rocks by the GYM for fun!\n"
+    .string "There are sooo many!$"
+
 
 
 @ =====================================================
@@ -281,17 +409,17 @@ PewterCity_Move_Wes_Leave:
 @ ---------------------
 
 PewterCity_Text_BrockWes_PrePlayer_Brock:
-    .string "Team Rocket's activity in KANTO is\n"
+    .string "TEAM ROCKET'S activity in KANTO is\n"
     .string "getting worse by the day.\p"
     .string "Ever since PROF. OAK vanished, the\n"
     .string "League's been scrambling.$"
 
 PewterCity_Text_BrockWes_PrePlayer_Wes:
     .string "And every time someone gets close to\n"
-    .string "Cipher, the trail goes cold.$"
+    .string "CIPHER, the trail goes cold.$"
 
 PewterCity_Text_BrockWes_PrePlayer_Brock2:
-    .string "If Cipher and Rocket are working\n"
+    .string "If CIPHER and ROCKET are working\n"
     .string "together then innocent Pokemon are\l"
     .string "the ones who pay the price.$"
 
@@ -303,7 +431,7 @@ PewterCity_Text_Brock_SeePlayer:
 
 PewterCity_Text_Wes_Interrogate:
     .string "I haven't seen you around PEWTER.\p"
-    .string "You with TEAM ROCKET... or Cipher?$"
+    .string "You with TEAM ROCKET... or CIPHER?$"
 
 PewterCity_Text_Brock_TrustsPlayer:
     .string "Answer carefully.\p"
@@ -318,19 +446,19 @@ PewterCity_Text_Wes_IntroName:
     .string "Used to run with TEAM SNAGEM.$"
 
 PewterCity_Text_Wes_Backstory:
-    .string "We helped steal Pokemon so Cipher could\n"
+    .string "We helped steal Pokemon so CIPHER could\n"
     .string "twist their hearts.\p"
-    .string "I walked away from all that.\p"
+    .string "I wanted out from all that.\p"
     .string "Then one day, everything shifted.\p"
     .string "One battle, one explosion... and when I\n"
     .string "came to, I was here in KANTO.\p"
     .string "RED and a kid named MICHAEL helped me\n"
     .string "get my bearings.\p"
     .string "We set up a base near CERULEAN CITY to\n"
-    .string "watch what Cipher and Rocket are doing.$"
+    .string "watch what CIPHER and ROCKET are doing.$"
 
 PewterCity_Text_Wes_Challenge:
-    .string "If you really want to help stop Cipher,\n"
+    .string "If you really want to help stop CIPHER,\n"
     .string "I need to know you can handle yourself.\p"
     .string "PEWTER's GYM LEADER is strong.\n"
     .string "Beat him, and I'll take you seriously.\p"
@@ -340,11 +468,11 @@ PewterCity_Text_Wes_Challenge:
 
 PewterCity_Text_Brock_IntroName:
     .string "I'm BROCK, PEWTER CITY's GYM LEADER.\p"
-    .string "If you want to stand against Cipher,\n"
+    .string "If you want to stand against CIPHER,\n"
     .string "show me your resolve.$"
 
 PewterCity_Text_Brock_ToGym:
-    .string "I've battled RED, BLUE, and plenty of\n"
+    .string "I've battled RED, GARY, and plenty of\n"
     .string "strong trainers.\p"
     .string "When you're ready, come to the GYM.\n"
     .string "I'll be waiting.$"
@@ -353,7 +481,7 @@ PewterCity_Text_Wes_HeadOut:
     .string "Don't keep me waiting, kid.\p"
     .string "Beat BROCK, then head for CERULEAN.\p"
     .string "If you can handle that, maybe we can\n"
-    .string "fight Cipher together.$"
+    .string "fight CIPHER together.$"
 
 
 @ -------------------------------

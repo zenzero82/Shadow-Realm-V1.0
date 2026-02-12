@@ -9,10 +9,10 @@ PewterGym_EventScript_OnEnter::
     end
 
 PewterGym_Speaker_Brock:
-    .string "Brock$"
+    .string "BROCK$"
 
 PewterGym_Speaker_Jerry:
-    .string "Camper Jerry$"
+    .string "JERRY$"
 
 PewterGym_Speaker_GymGuy:
     .string "Gym Guy$"
@@ -50,6 +50,7 @@ PewterCity_Gym_EventScript_Brock::
 
     msgbox PewterCity_Gym_Text_Brock_Intro, MSGBOX_DEFAULT
     call PewterCity_Gym_EventScript_Brock_CroagunkIntro
+    faceplayer
     msgbox PewterCity_Gym_Text_Brock_Apology, MSGBOX_DEFAULT
     trainerbattle_no_intro TRAINER_BROCK_KANTO, PewterCity_Gym_Text_Brock_WinLoss
 
@@ -72,6 +73,7 @@ PewterCity_Gym_EventScript_Brock_CroagunkIntro::
     applymovement LOCALID_BROCK_CROAGUNK, PewterGym_Move_Croagunk_ExitBall
     waitmovement 0
     turnobject LOCALID_BROCK_CROAGUNK, DIR_SOUTH
+    waitse
     playmoncry SPECIES_CROAGUNK, CRY_MODE_NORMAL
     waitmoncry
 
@@ -80,9 +82,9 @@ PewterCity_Gym_EventScript_Brock_CroagunkIntro::
 
     applymovement LOCALID_BROCK_CROAGUNK, PewterGym_Move_Croagunk_ReturnBall
     waitmovement 0
+    faceplayer
     removeobject LOCALID_BROCK_CROAGUNK
     setflag FLAG_HIDE_PEWTER_GYM_BROCK_CROAGUNK
-    faceplayer
     return
 
 PewterGym_Move_Croagunk_ExitBall:
@@ -99,6 +101,15 @@ PewterCity_Gym_EventScript_Brock_Defeated::
     closemessage
     release
     end
+
+PewterCity_Gym_EventScript_Onix::
+	lock
+	faceplayer
+	waitse
+	playmoncry SPECIES_ONIX, CRY_MODE_NORMAL
+	waitmoncry
+	release
+	end
 
 @ ============================
 @ GYM GUIDE
@@ -167,13 +178,18 @@ PewterCity_Gym_Text_Brock_FightDone:
     .string "many strong trainers out there.\p"
     .string "If you keep growing like this, you'll\n"
     .string "be ready for whatever CIPHER throws\l"
-    .string "our way.$"
+    .string "our way.\p"
+    .string "Also, a bit off topic but the\n"
+    .string "GYM GUY here seems to be from a\l"
+    .string "different timeline.\p"
+    .string "He keeps saying that BLUE defeated\n"
+    .string "me before but I don't know\l"
+    .string "who that is...$"
 
 PewterCity_Gym_Text_CamperJerry_Seen:
     .string "The trainers in this GYM usually use\n"
     .string "rock-type POKEMON.\p"
-    .string "But lately, we've been training for\n"
-    .string "stranger threats.\p"
+    .string "We've been training for any threats.\p"
     .string "Battles here can go long.\n"
     .string "You ready for that?$"
 
@@ -186,8 +202,7 @@ PewterCity_Gym_Text_CamperJerry_AfterBattle:
     .string "run when CIPHER or ROCKET show up.$"
 
 PewterCity_Gym_Text_Guide:
-    .string "Yo! CHAMP in the making!\p"
-    .string "ROCKET in VIRIDIAN, portals, CIPHER…\n"
+    .string "Yo! CHAMP in the making!\n"
     .string "KANTO's in a bad way right now.\p"
     .string "BROCK's still here holding the line.\n"
     .string "If you can match his resolve, you'll be\l"
@@ -203,13 +218,14 @@ PewterCity_Gym_Text_GymStatue:
     .string "PEWTER POKEMON GYM\n"
     .string "LEADER: BROCK\p"
     .string "WINNING TRAINERS:\n"
-    .string "RED, BLUE$"
+    .string "RED, BLUE, WES$"
 
 PewterCity_Gym_Text_GymStatuePlayerWon:
     .string "PEWTER POKEMON GYM\n"
     .string "LEADER: BROCK\p"
     .string "WINNING TRAINERS:\n"
-    .string "RED, BLUE, {PLAYER}$"
+    .string "RED, BLUE, WES, {PLAYER}$"
+
 
 PewterGym_Move_Croagunk_Appear:
     jump_in_place_down

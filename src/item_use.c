@@ -37,6 +37,7 @@
 #include "sound.h"
 #include "strings.h"
 #include "pokedex.h"
+#include "shadow_monitor.h"
 #include "string_util.h"
 #include "task.h"
 #include "text.h"

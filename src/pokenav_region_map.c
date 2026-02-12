@@ -72,6 +72,7 @@ static void SetCityZoomTextInvisibility(bool32);
 static void Task_ChangeBgYForZoom(u8 taskId);
 static void UpdateCityZoomTextPosition(void);
 static void SpriteCB_CityZoomText(struct Sprite *sprite);
+static bool32 TryToggleRegionMap(struct Pokenav_RegionMapGfx *state);
 static u32 LoopedTask_UpdateInfoAfterCursorMove(s32);
 static u32 LoopedTask_RegionMapZoomOut(s32);
 static u32 LoopedTask_RegionMapZoomIn(s32);
@@ -210,6 +211,10 @@ u32 GetRegionMapCallback(void)
 static u32 HandleRegionMapInput(struct Pokenav_RegionMapMenu *state)
 {
     struct RegionMap* regionMap = GetSubstructPtr(POKENAV_SUBSTRUCT_REGION_MAP);
+    struct Pokenav_RegionMapGfx *gfx = GetSubstructPtr(POKENAV_SUBSTRUCT_REGION_MAP_ZOOM);
+
+    if (TryToggleRegionMap(gfx))
+        return POKENAV_MAP_FUNC_NONE;
 
     switch (DoRegionMapInputCallback())
     {
@@ -233,6 +238,11 @@ static u32 HandleRegionMapInput(struct Pokenav_RegionMapMenu *state)
 
 static u32 HandleRegionMapInputZoomDisabled(struct Pokenav_RegionMapMenu *state)
 {
+    struct Pokenav_RegionMapGfx *gfx = GetSubstructPtr(POKENAV_SUBSTRUCT_REGION_MAP_ZOOM);
+
+    if (TryToggleRegionMap(gfx))
+        return POKENAV_MAP_FUNC_NONE;
+
     if (JOY_NEW(B_BUTTON))
     {
         state->callback = GetExitRegionMapMenuId;
@@ -769,6 +779,27 @@ static void SetCityZoomTextInvisibility(bool32 invisible)
     struct Pokenav_RegionMapGfx *state = GetSubstructPtr(POKENAV_SUBSTRUCT_REGION_MAP_ZOOM);
     for (i = 0; i < (int)ARRAY_COUNT(state->cityZoomTextSprites); i++)
         state->cityZoomTextSprites[i]->invisible = invisible;
+}
+
+static bool32 TryToggleRegionMap(struct Pokenav_RegionMapGfx *state)
+{
+    u32 menuGfxId;
+
+    if (!JOY_NEW(SELECT_BUTTON))
+        return FALSE;
+
+    RegionMap_CycleRegion();
+    UpdateMapSecInfoWindow(state);
+    UpdateRegionMapHelpBarText();
+
+    if (IsRegionMapZoomed())
+        menuGfxId = POKENAV_GFX_MAP_MENU_ZOOMED_IN;
+    else
+        menuGfxId = POKENAV_GFX_MAP_MENU_ZOOMED_OUT;
+
+    LoadLeftHeaderGfxForIndex(menuGfxId);
+    UpdateRegionMapRightHeaderTiles(menuGfxId);
+    return TRUE;
 }
 
 void UpdateRegionMapHelpBarText(void)

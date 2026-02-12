@@ -19,14 +19,22 @@
 #define SHADOW_MON_STATS_WIDTH 10
 #define SHADOW_MON_STATS_ROWS 4
 
+extern EWRAM_DATA bool8 gIsShadowMonitorOpen;
+
 struct ShadowMonitorInfo
 {
     bool8 found;
     bool8 isSnagged;
+    u8 location;
+    u8 boxId;
     u16 heartValue;
     u16 heartMax;
     u8 trainerName[PLAYER_NAME_LENGTH + 1];
 };
+
+#define SHADOW_MON_LOCATION_NONE  0
+#define SHADOW_MON_LOCATION_PARTY 1
+#define SHADOW_MON_LOCATION_BOX   2
 
 void CB2_OpenShadowMonitor(void);
 void BuildShadowMonitorList(void);

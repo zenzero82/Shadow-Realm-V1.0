@@ -77,7 +77,7 @@ Name: TORKIN
 Class: TRAINER_CLASS_CIPHER_PEON       
 Pic: CIPHER_PEON_M      
 Gender: Male
-Music: TRAINER_ENCOUNTER_MUSIC_MALE
+Music: TRAINER_ENCOUNTER_MUSIC_CIPHER_PEON
 Double Battle: No
 
 XD003 (pikachu)
@@ -636,7 +636,7 @@ Level: 1
 === TRAINER_RT3_YOUNGSTER1 ===
 Name: YOUNGSTER1
 Class: TRAINER_CLASS_YOUNGSTER
-Pic: YOUNGSTER
+Pic: YOUNGSTER2
 Gender: Male
 
 Roggenrola
@@ -648,7 +648,7 @@ Level: 1
 === TRAINER_RT3_YOUNGSTER2 ===
 Name: YOUNGSTER
 Class: TRAINER_CLASS_YOUNGSTER
-Pic: YOUNGSTER
+Pic: YOUNGSTER2
 Gender: Male
 
 Mudbray
@@ -670,7 +670,7 @@ Stufful
 Level: 1
 
 === TRAINER_RT3_FIREBREATHER ===
-Name: Olio
+Name: Otis
 Class: TRAINER_CLASS_FIREBREATHER
 Pic: FIREBREATHER
 Gender: Male
@@ -690,6 +690,16 @@ Music: TRAINER_ENCOUNTER_MUSIC_MIRRORB
 
 Blacephalon
 Level: 50
+
+=== TRAINER_EIN ===
+Name: EIN
+Class: TRAINER_CLASS_CIPHER_ADMIN
+Pic: EIN
+Gender: Male
+Music: TRAINER_ENCOUNTER_MUSIC_CIPHER_PEON
+
+Rattata
+Level: 5
 
 === TRAINER_RT4_BLACK_BELT ===
 Name: RYU
@@ -773,4 +783,154 @@ Ponyta
 Level: 1
 
 Deerling
+Level: 1
+
+=== TRAINER_LOOKER_CERULEAN ===
+Name: LOOKER
+Class: TRAINER_CLASS_POLICEMAN
+Pic: LOOKER_GEN5
+Gender: Male
+
+Growlithe
+Level: 18
+Nature: BRAVE
+- Bite
+- Ember
+
+Croagunk
+Level: 19
+Nature: ADAMANT
+- Low Kick
+- Mud-Slap
+
+=== TRAINER_RT25_YOUNGSTER1 ===
+Name: TIM
+Class: TRAINER_CLASS_YOUNGSTER
+Pic: YOUNGSTER2
+Gender: Male
+
+Pidgey
+Level: 1
+
+Rattata
+Level: 1
+
+=== TRAINER_RT25_LADY ===
+Name: MARIE
+Class: TRAINER_CLASS_LADY
+Pic: LADY
+Gender: Female
+
+Clefairy
+Level: 1
+
+Jigglypuff
+Level: 1
+
+=== TRAINER_RT25_COOLTRAINER_F ===
+Name: KARA
+Class: TRAINER_CLASS_COOLTRAINER
+Pic: COOLTRAINER_F
+Gender: Female
+
+Eevee
+Level: 1
+
+Vulpix
+Level: 1
+
+=== TRAINER_RT25_YOUNGSTER2 ===
+Name: BEN
+Class: TRAINER_CLASS_YOUNGSTER
+Pic: YOUNGSTER2
+Gender: Male
+
+Spearow
+Level: 1
+
+SPECIES_NIDORAN_M
+Level: 1
+
+=== TRAINER_RT25_CAMPER ===
+Name: COLE
+Class: TRAINER_CLASS_CAMPER
+Pic: CAMPER
+Gender: Male
+
+Sandshrew
+Level: 1
+
+Mankey
+Level: 1
+
+=== TRAINER_RT25_LASS ===
+Name: NINA
+Class: TRAINER_CLASS_LASS
+Pic: LASS
+Gender: Female
+
+SPECIES_NIDORAN_F
+Level: 1
+
+Bellsprout
+Level: 1
+
+=== TRAINER_RT25_SUPER_NERD ===
+Name: DEX
+Class: TRAINER_CLASS_COOLTRAINER
+Pic: SUPER_NERD
+Gender: Male
+
+Magnemite
+Level: 1
+
+Voltorb
+Level: 1
+
+=== TRAINER_RT25_COOLTRAINER_M ===
+Name: RYAN
+Class: TRAINER_CLASS_COOLTRAINER
+Pic: COOLTRAINER_M
+Gender: Male
+
+Growlithe
+Level: 1
+
+Poliwag
+Level: 1
+
+=== TRAINER_CERULEAN_GYM_SWIMMER_M ===
+Name: TYLER
+Class: TRAINER_CLASS_SWIMMER_M
+Pic: SWIMMER_M
+Gender: Male
+
+Poliwag
+Level: 1
+
+Horsea
+Level: 1
+
+=== TRAINER_CERULEAN_GYM_SWIMMER_F1 ===
+Name: MAYA
+Class: TRAINER_CLASS_SWIMMER_F
+Pic: SWIMMER_F
+Gender: Female
+
+Goldeen
+Level: 1
+
+Staryu
+Level: 1
+
+=== TRAINER_CERULEAN_GYM_SWIMMER_F2 ===
+Name: KARA
+Class: TRAINER_CLASS_SWIMMER_F
+Pic: SWIMMER_F
+Gender: Female
+
+Psyduck
+Level: 1
+
+Magikarp
 Level: 1

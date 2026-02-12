@@ -5,6 +5,7 @@
 #include "constants/songs.h"
 #include "constants/trainers.h"
 #include "constants/flags.h"
+#include "constants/event_objects.h"
 #include "data.h"
 #include "decompress.h"
 #include "event_data.h"
@@ -205,6 +206,7 @@ static void LoadOverWorld(u8 anim);
 static void LoadMonIcon(u8 anim);
 static void LoadUserFrameToBg(u8 bgId);
 static void SetStdFrame0OnBg(u8 bgId);
+static void MainMenu_BlankScreen(void);
 static void PrintMainMenuItem(const u8 *string, u8 left, u8 top, u8 textColor);
 static void MainMenu_DrawWindow(const struct WindowTemplate *template);
 static void MainMenu_EraseWindow(const struct WindowTemplate *template);
@@ -272,6 +274,9 @@ static void NewGameBirchSpeech_CreateDialogueWindowBorder(u8, u8, u8, u8, u8, u8
 // add these near the other forward declarations
 static void CB2_NewGame_GenderName(void);
 static void Task_GenderThenName(u8 taskId);
+static void UpdateGenderSelectionSprites(u8 taskId);
+static void PrintNewGameFlowText(void);
+static void PrepareNewGameFlowTextWindow(void);
 
 // .rodata
 
@@ -298,6 +303,39 @@ static const u8 gText_MainMenuMysteryEvents[] UNUSED = _("MYSTERY EVENTS");
 static const u8 gText_WirelessNotConnected[] = _("The Wireless Adapter is not\nconnected.");
 static const u8 gText_MysteryGiftCantUse[] = _("MYSTERY GIFT can't be used while\nthe Wireless Adapter is attached.");
 static const u8 gText_MysteryEventsCantUse[] = _("MYSTERY EVENTS can't be used while\nthe Wireless Adapter is attached.");
+static const u16 sNewGameTextPal[16] = {
+    RGB(0, 0, 0),
+    RGB(31, 31, 31),
+    RGB(22, 22, 22),
+    RGB(12, 12, 12),
+    RGB(0, 0, 0),
+    RGB(0, 0, 0),
+    RGB(0, 0, 0),
+    RGB(0, 0, 0),
+    RGB(0, 0, 0),
+    RGB(0, 0, 0),
+    RGB(0, 0, 0),
+    RGB(0, 0, 0),
+    RGB(0, 0, 0),
+    RGB(0, 0, 0),
+    RGB(0, 0, 0),
+    RGB(0, 0, 0),
+};
+static const u8 sText_NewGameIntroStory[] = _(
+    "Welcome to POKEMON THE SHADOW REALM.\p"
+    "A brand new story that pulls the\n"
+    "Shadow mechanics from fan favorites\l"
+    "POKEMON COLOSSEUM & XD.\p"
+    "This game is a free fan hack and is\n"
+    "absolutely not for sale.\p"
+    "As of now it's a one-man project,\n"
+    "so it will take some time to finish.\l"
+    "Hope you enjoy the demo!$"
+);
+static const u8 sText_NewGameChooseGender[] = _(
+    "First choose your gender.\n"
+    "Use LEFT/RIGHT to choose, then press A."
+);
 
 static const u8 gText_ContinueMenuPlayer[] = _("PLAYER");
 static const u8 gText_ContinueMenuTime[] = _("TIME");
@@ -930,11 +968,13 @@ static void Task_HandleMainMenuAPressed(u8 taskId)
         {
         case ACTION_NEW_GAME:
         default:
+            MainMenu_BlankScreen();
             gPlttBufferUnfaded[0] = RGB_BLACK;
             gPlttBufferFaded[0] = RGB_BLACK;
             SetMainCallback2(CB2_NewGame_GenderName);
             break;
         case ACTION_CONTINUE:
+            MainMenu_BlankScreen();
             gPlttBufferUnfaded[0] = RGB_BLACK;
             gPlttBufferFaded[0] = RGB_BLACK;
             SetMainCallback2(CB2_ContinueSavedGame);
@@ -960,6 +1000,7 @@ static void Task_HandleMainMenuBPressed(u8 taskId)
     {
         sCurrItemAndOptionMenuCheck = 0;
         DestroyAllSprites();
+        MainMenu_BlankScreen();
         FreeAllWindowBuffers();
         SetMainCallback2(CB2_InitTitleScreen);
         DestroyTask(taskId);
@@ -1195,6 +1236,23 @@ static void PrintTeam(void)
     PrintMainMenuItem(gText_MainMenuTeam, 24, 56, 0);
 }
 
+static void MainMenu_BlankScreen(void)
+{
+    ClearWindowTilemap(MAIN_MENU_BW_WINDOW_TEXT);
+    ClearWindowTilemap(MAIN_MENU_BW_WINDOW_ERROR);
+    FillBgTilemapBufferRect(0, 0, 0, 0, DISPLAY_TILE_WIDTH, DISPLAY_TILE_HEIGHT, 0);
+    FillBgTilemapBufferRect(1, 0, 0, 0, DISPLAY_TILE_WIDTH, DISPLAY_TILE_HEIGHT, 0);
+    FillBgTilemapBufferRect(2, 0, 0, 0, DISPLAY_TILE_WIDTH, DISPLAY_TILE_HEIGHT, 0);
+    CopyBgTilemapBufferToVram(0);
+    CopyBgTilemapBufferToVram(1);
+    CopyBgTilemapBufferToVram(2);
+    HideBg(0);
+    HideBg(1);
+    HideBg(2);
+    HideBg(3);
+    SetGpuReg(REG_OFFSET_DISPCNT, 0);
+}
+
 static void DestroyAllSprites(void)
 {
     ResetSpriteData();
@@ -1308,7 +1366,7 @@ static void MainMenu_EraseWindow(const struct WindowTemplate *windowTemplate)
 static void UNUSED Task_NewGameBirchSpeech_Init(u8 taskId)
 {
     SetGpuReg(REG_OFFSET_DISPCNT, 0);
-    SetGpuReg(REG_OFFSET_DISPCNT, DISPCNT_OBJ_ON | DISPCNT_OBJ_1D_MAP);
+    SetGpuReg(REG_OFFSET_DISPCNT, DISPCNT_OBJ_ON | DISPCNT_OBJ_1D_MAP | DISPCNT_BG0_ON);
     InitBgFromTemplate(&sBirchBgTemplate);
     SetGpuReg(REG_OFFSET_WIN0H, 0);
     SetGpuReg(REG_OFFSET_WIN0V, 0);
@@ -1836,7 +1894,7 @@ static void CB2_NewGameBirchSpeech_ReturnFromNamingScreen(void)
 
     ResetBgsAndClearDma3BusyFlags(0);
     SetGpuReg(REG_OFFSET_DISPCNT, 0);
-    SetGpuReg(REG_OFFSET_DISPCNT, DISPCNT_OBJ_ON | DISPCNT_OBJ_1D_MAP);
+    SetGpuReg(REG_OFFSET_DISPCNT, DISPCNT_BG0_ON | DISPCNT_OBJ_ON | DISPCNT_OBJ_1D_MAP);
     InitBgsFromTemplates(0, sMainMenuBgTemplates, ARRAY_COUNT(sMainMenuBgTemplates));
     InitBgFromTemplate(&sBirchBgTemplate);
     SetVBlankCallback(NULL);
@@ -2345,87 +2403,178 @@ static void Task_NewGameBirchSpeech_ReturnFromNamingScreenShowTextbox(u8 taskId)
         gTasks[taskId].func = Task_NewGameBirchSpeech_SoItsPlayerName;
     }
 }
-// --- Minimal gender -> naming screen (no Birch scene) ---
+// --- New Game story -> gender select -> naming screen ---
 
-#define tWindowInitDone data[0]
+#define tState data[0]
+#define tSelectedGender data[1]
+#define tMaleSpriteId data[2]
+#define tFemaleSpriteId data[3]
+#define tSpritesCreated data[4]
+#define tMaleOwSpriteId data[5]
+#define tFemaleOwSpriteId data[6]
 
 static void CB2_NewGame_GenderName(void)
 {
-    // Basic UI reset (same pattern used elsewhere in this file)
     ResetBgsAndClearDma3BusyFlags(0);
     SetGpuReg(REG_OFFSET_DISPCNT, 0);
+    SetGpuReg(REG_OFFSET_WIN0H, 0);
+    SetGpuReg(REG_OFFSET_WIN0V, 0);
+    SetGpuReg(REG_OFFSET_WININ, 0);
+    SetGpuReg(REG_OFFSET_WINOUT, 0);
+    SetGpuReg(REG_OFFSET_BLDCNT, 0);
+    SetGpuReg(REG_OFFSET_BLDALPHA, 0);
+    SetGpuReg(REG_OFFSET_BLDY, 0);
+    SetGpuReg(REG_OFFSET_BG0HOFS, 0);
+    SetGpuReg(REG_OFFSET_BG0VOFS, 0);
+    SetGpuReg(REG_OFFSET_BG1HOFS, 0);
+    SetGpuReg(REG_OFFSET_BG1VOFS, 0);
+    SetGpuReg(REG_OFFSET_BG2HOFS, 0);
+    SetGpuReg(REG_OFFSET_BG2VOFS, 0);
     ResetTasks();
     ResetSpriteData();
     FreeAllSpritePalettes();
     ResetAllPicSprites();
 
-    // Reuse main menu BG/window helpers already defined in this file
     InitBgsFromTemplates(0, sMainMenuBgTemplates, ARRAY_COUNT(sMainMenuBgTemplates));
     ShowBg(0);
     HideBg(1);
+    SetGpuReg(REG_OFFSET_DISPCNT, DISPCNT_BG0_ON | DISPCNT_OBJ_ON | DISPCNT_OBJ_1D_MAP);
+    FillBgTilemapBufferRect(0, 0, 0, 0, DISPLAY_TILE_WIDTH, DISPLAY_TILE_HEIGHT, 0);
+    CopyBgTilemapBufferToVram(0);
     InitWindows(sNewGameBirchSpeechTextWindows);
     LoadMainMenuWindowFrameTiles(0, 0xF3);
     LoadMessageBoxGfx(0, BIRCH_DLG_BASE_TILE_NUM, BG_PLTT_ID(15));
+    LoadPalette(sNewGameTextPal, BG_PLTT_ID(15), sizeof(sNewGameTextPal));
     BeginNormalPaletteFade(PALETTES_ALL, 0, 16, 0, RGB_BLACK);
 
-    {
-        u8 taskId = CreateTask(Task_GenderThenName, 0);
-        gTasks[taskId].tWindowInitDone = 0;
-    }
+    CreateTask(Task_GenderThenName, 0);
 
     SetVBlankCallback(VBlankCB_MainMenu);
-    SetMainCallback2(CB2_MainMenu); // run tasks & fades as usual
+    SetMainCallback2(CB2_MainMenu);
 }
 
 static void Task_GenderThenName(u8 taskId)
 {
-    // Step 1: prompt + show Boy/Girl menu once
-    if (!gTasks[taskId].tWindowInitDone && !gPaletteFade.active)
+    switch (gTasks[taskId].tState)
     {
-        NewGameBirchSpeech_ShowDialogueWindow(0, 1);
-        NewGameBirchSpeech_ClearWindow(0);
-        StringCopy(gStringVar4, (const u8 *)"Boy or Girl?");
-        AddTextPrinterForMessage(TRUE);
+    case 0:
+        if (!gPaletteFade.active)
+        {
+            PrepareNewGameFlowTextWindow();
+            StringCopy(gStringVar4, sText_NewGameIntroStory);
+            PrintNewGameFlowText();
+            gTasks[taskId].tState = 1;
+        }
+        break;
+    case 1:
+        if (!RunTextPrintersAndIsPrinter0Active())
+        {
+            if (JOY_NEW(A_BUTTON | B_BUTTON))
+            {
+                PrepareNewGameFlowTextWindow();
+                StringCopy(gStringVar4, sText_NewGameChooseGender);
+                PrintNewGameFlowText();
+                gTasks[taskId].tState = 2;
+            }
+        }
+        break;
+    case 2:
+        if (!RunTextPrintersAndIsPrinter0Active())
+        {
+            if (!gTasks[taskId].tSpritesCreated)
+            {
+                gTasks[taskId].tMaleSpriteId = CreateTrainerSprite(FacilityClassToPicIndex(FACILITY_CLASS_BRENDAN), 56, 64, 0, NULL);
+                gTasks[taskId].tFemaleSpriteId = CreateTrainerSprite(FacilityClassToPicIndex(FACILITY_CLASS_MAY), 184, 64, 0, NULL);
+                gTasks[taskId].tMaleOwSpriteId = CreateObjectGraphicsSprite(OBJ_EVENT_GFX_BRENDAN_NORMAL, SpriteCallbackDummy, 24, 88, 0);
+                gTasks[taskId].tFemaleOwSpriteId = CreateObjectGraphicsSprite(OBJ_EVENT_GFX_MAY_NORMAL, SpriteCallbackDummy, 216, 88, 0);
+                gSprites[gTasks[taskId].tMaleSpriteId].oam.priority = 0;
+                gSprites[gTasks[taskId].tFemaleSpriteId].oam.priority = 0;
+                gSprites[gTasks[taskId].tMaleOwSpriteId].oam.priority = 0;
+                gSprites[gTasks[taskId].tFemaleOwSpriteId].oam.priority = 0;
+                StartSpriteAnim(&gSprites[gTasks[taskId].tMaleOwSpriteId], ANIM_STD_GO_SOUTH);
+                StartSpriteAnim(&gSprites[gTasks[taskId].tFemaleOwSpriteId], ANIM_STD_GO_SOUTH);
+                gTasks[taskId].tSelectedGender = MALE;
+                gTasks[taskId].tSpritesCreated = 1;
+                UpdateGenderSelectionSprites(taskId);
+            }
+            gTasks[taskId].tState = 3;
+        }
+        break;
+    case 3:
+        if (JOY_NEW(DPAD_LEFT) || JOY_NEW(DPAD_RIGHT))
+        {
+            gTasks[taskId].tSelectedGender = (gTasks[taskId].tSelectedGender == MALE) ? FEMALE : MALE;
+            PlaySE(SE_SELECT);
+            UpdateGenderSelectionSprites(taskId);
+        }
 
-        NewGameBirchSpeech_ShowGenderMenu();  // draws the list
-        gTasks[taskId].tWindowInitDone = 1;
-        return;
-    }
-
-    if (!gTasks[taskId].tWindowInitDone)
-        return;
-
-    // Step 2: read input; MALE/FEMALE or -1 if none
-    {
-        s8 input = NewGameBirchSpeech_ProcessGenderMenuInput();
-        if (input == MALE || input == FEMALE)
+        if (JOY_NEW(A_BUTTON))
         {
             PlaySE(SE_SELECT);
-            gSaveBlock2Ptr->playerGender = input;
-
-            // Step 3: go straight to player naming, then into CB2_NewGame
+            gSaveBlock2Ptr->playerGender = gTasks[taskId].tSelectedGender;
+            BeginNormalPaletteFade(PALETTES_ALL, 0, 0, 16, RGB_BLACK);
+            gTasks[taskId].tState = 4;
+        }
+        break;
+    case 4:
+        if (!gPaletteFade.active)
+        {
+            FreeAllWindowBuffers();
+            DestroySprite(&gSprites[gTasks[taskId].tMaleSpriteId]);
+            DestroySprite(&gSprites[gTasks[taskId].tFemaleSpriteId]);
+            DestroySprite(&gSprites[gTasks[taskId].tMaleOwSpriteId]);
+            DestroySprite(&gSprites[gTasks[taskId].tFemaleOwSpriteId]);
+            ResetAllPicSprites();
+            NewGameBirchSpeech_SetDefaultPlayerName(Random() % NUM_PRESET_NAMES);
+            DestroyTask(taskId);
             DoNamingScreen(
                 NAMING_SCREEN_PLAYER,
                 gSaveBlock2Ptr->playerName,
-                gSaveBlock2Ptr->playerGender,    // used for the player icon: stores the chosen gender
+                gSaveBlock2Ptr->playerGender,
                 0,
                 0,
                 FALSE,
-                CB2_NewGame                      // return callback -> your existing New Game flow
+                CB2_NewGame
             );
-
-            DestroyTask(taskId); // naming screen owns the flow now
         }
+        break;
     }
 }
 
-#undef tWindowInitDone
+static void UpdateGenderSelectionSprites(u8 taskId)
+{
+    u8 maleSpriteId = gTasks[taskId].tMaleSpriteId;
+    u8 femaleSpriteId = gTasks[taskId].tFemaleSpriteId;
+
+    if (gTasks[taskId].tSelectedGender == MALE)
+    {
+        gSprites[maleSpriteId].y = 56;
+        gSprites[femaleSpriteId].y = 72;
+    }
+    else
+    {
+        gSprites[maleSpriteId].y = 72;
+        gSprites[femaleSpriteId].y = 56;
+    }
+}
+
+static void PrintNewGameFlowText(void)
+{
+    gTextFlags.canABSpeedUpPrint = TRUE;
+    AddTextPrinterParameterized2(0, FONT_NORMAL, gStringVar4, GetPlayerTextSpeedDelay(), NULL, TEXT_COLOR_WHITE, TEXT_COLOR_TRANSPARENT, TEXT_COLOR_LIGHT_GRAY);
+}
+
+static void PrepareNewGameFlowTextWindow(void)
+{
+    NewGameBirchSpeech_ShowDialogueWindow(0, 1);
+    FillWindowPixelBuffer(0, PIXEL_FILL(0));
+    CopyWindowToVram(0, COPYWIN_GFX);
+}
+
+#undef tState
+#undef tSelectedGender
+#undef tMaleSpriteId
+#undef tFemaleSpriteId
+#undef tSpritesCreated
 
 #undef tTimer
-
-
-
-
-
-
-

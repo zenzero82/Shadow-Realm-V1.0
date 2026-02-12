@@ -24,6 +24,7 @@
 #include "wild_encounter.h"
 #include "window.h"
 #include "constants/region_map_sections.h"
+#include "constants/map_types.h"
 #include "constants/rgb.h"
 #include "constants/songs.h"
 #include "config/pokedex_plus_hgss.h"
@@ -108,6 +109,7 @@ struct
     /*0xFBC*/ u8 areaUnknownGraphicsBuffer[0x600];
     /*0xFC0*/ u8 areaScreenLabelIds[NUM_LABEL_WINDOWS];
     /*0xFC8*/ u8 areaState;
+    /*0xFC9*/ u8 region;
 } static EWRAM_DATA *sPokedexAreaScreen = NULL;
 
 EWRAM_DATA u8 gAreaTimeOfDay = 0;
@@ -133,6 +135,7 @@ static void ShowEncounterInfoLabel(void);
 static void ShowAreaUnknownLabel(void);
 static void PrintAreaLabelText(const u8 *text, enum PokedexAreaLabels labelId, int textXPos);
 static void ClearAreaWindowLabel(enum PokedexAreaLabels labelId);
+static bool8 IsOverworldAreaMapType(u8 mapType);
 
 bool32 ShouldShowAreaUnknownLabel(void);
 
@@ -265,6 +268,20 @@ static void ResetDrawAreaGlowState(void)
     sPokedexAreaScreen->drawAreaGlowState = 0;
 }
 
+static bool8 IsOverworldAreaMapType(u8 mapType)
+{
+    switch (mapType)
+    {
+    case MAP_TYPE_TOWN:
+    case MAP_TYPE_CITY:
+    case MAP_TYPE_ROUTE:
+    case MAP_TYPE_OCEAN_ROUTE:
+        return TRUE;
+    default:
+        return FALSE;
+    }
+}
+
 static bool8 DrawAreaGlow(void)
 {
     switch (sPokedexAreaScreen->drawAreaGlowState)
@@ -326,16 +343,18 @@ static void FindMapsWithMon(u16 species)
     {
         if (species == sFeebasData[i][0])
         {
-            switch (sFeebasData[i][1])
-            {
-            case MAP_GROUP_TOWNS_AND_ROUTES:
-                SetAreaHasMon(sFeebasData[i][1], sFeebasData[i][2]);
-                break;
-            case MAP_GROUP_DUNGEONS:
-            case MAP_GROUP_SPECIAL_AREA:
-                SetSpecialMapHasMon(sFeebasData[i][1], sFeebasData[i][2]);
-                break;
-            }
+            u8 mapGroup = sFeebasData[i][1];
+            u8 mapNum = sFeebasData[i][2];
+            const struct MapHeader *mapHeader;
+
+            if (RegionMap_GetRegionFromMapGroup(mapGroup) != sPokedexAreaScreen->region)
+                continue;
+
+            mapHeader = Overworld_GetMapHeaderByGroupAndId(mapGroup, mapNum);
+            if (IsOverworldAreaMapType(mapHeader->mapType))
+                SetAreaHasMon(mapGroup, mapNum);
+            else
+                SetSpecialMapHasMon(mapGroup, mapNum);
         }
     }
 
@@ -344,16 +363,18 @@ static void FindMapsWithMon(u16 species)
     {
         if (MapHasSpecies(&gWildMonHeaders[i].encounterTypes[gAreaTimeOfDay], species))
         {
-            switch (gWildMonHeaders[i].mapGroup)
-            {
-            case MAP_GROUP_TOWNS_AND_ROUTES:
-                SetAreaHasMon(gWildMonHeaders[i].mapGroup, gWildMonHeaders[i].mapNum);
-                break;
-            case MAP_GROUP_DUNGEONS:
-            case MAP_GROUP_SPECIAL_AREA:
-                SetSpecialMapHasMon(gWildMonHeaders[i].mapGroup, gWildMonHeaders[i].mapNum);
-                break;
-            }
+            u8 mapGroup = gWildMonHeaders[i].mapGroup;
+            u8 mapNum = gWildMonHeaders[i].mapNum;
+            const struct MapHeader *mapHeader;
+
+            if (RegionMap_GetRegionFromMapGroup(mapGroup) != sPokedexAreaScreen->region)
+                continue;
+
+            mapHeader = Overworld_GetMapHeaderByGroupAndId(mapGroup, mapNum);
+            if (IsOverworldAreaMapType(mapHeader->mapType))
+                SetAreaHasMon(mapGroup, mapNum);
+            else
+                SetSpecialMapHasMon(mapGroup, mapNum);
         }
     }
 
@@ -366,6 +387,8 @@ static void FindMapsWithMon(u16 species)
             // This is a roamer's species, show where this roamer is currently
             struct OverworldArea *roamerLocation = &sPokedexAreaScreen->overworldAreasWithMons[sPokedexAreaScreen->numOverworldAreas];
             GetRoamerLocation(i, &roamerLocation->mapGroup, &roamerLocation->mapNum);
+            if (RegionMap_GetRegionFromMapGroup(roamerLocation->mapGroup) != sPokedexAreaScreen->region)
+                continue;
             roamerLocation->regionMapSectionId = Overworld_GetMapHeaderByGroupAndId(roamerLocation->mapGroup, roamerLocation->mapNum)->regionMapSectionId;
             sPokedexAreaScreen->numOverworldAreas++;
         }
@@ -718,6 +741,8 @@ void DisplayPokedexAreaScreen(u16 species, u8 *screenSwitchState, enum TimeOfDay
     sPokedexAreaScreen->species = species;
     sPokedexAreaScreen->screenSwitchState = screenSwitchState;
     sPokedexAreaScreen->areaState = areaState;
+    sPokedexAreaScreen->region = RegionMap_GetRegionFromMapGroup(gSaveBlock1Ptr->location.mapGroup);
+    RegionMap_SetRegionFromMapGroup(gSaveBlock1Ptr->location.mapGroup);
     gAreaTimeOfDay = timeOfDay;
     screenSwitchState[0] = 0;
 

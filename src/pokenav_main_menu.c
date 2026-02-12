@@ -12,6 +12,8 @@
 #include "gpu_regs.h"
 #include "menu.h"
 #include "dma3.h"
+#include "region_map.h"
+#include "constants/regions.h"
 
 struct Pokenav_MainMenu
 {
@@ -53,6 +55,8 @@ static u32 LoopedTask_SlideMenuHeaderDown(s32);
 static void DrawHelpBar(u32);
 static void SpriteCB_SpinningPokenav(struct Sprite *);
 static u32 LoopedTask_InitPokenavMenu(s32);
+static const u32 *GetRegionMapLeftHeaderGfx(void);
+static const u16 *GetRegionMapLeftHeaderPal(void);
 
 static const u16 sSpinningPokenav_Pal[] = INCBIN_U16("graphics/pokenav/nav_icon.gbapal");
 static const u32 sSpinningPokenav_Gfx[] = INCBIN_U32("graphics/pokenav/nav_icon.4bpp.lz");
@@ -85,13 +89,15 @@ static const struct WindowTemplate sHelpBarWindowTemplate[] =
     DUMMY_WIN_TEMPLATE
 };
 
+static const u8 sText_HelpbarMaps[] = _("MAPS");
+
 static const u8 *const sHelpBarTexts[HELPBAR_COUNT] =
 {
     [HELPBAR_NONE]                  = COMPOUND_STRING("{CLEAR 0x80}"),
-    [HELPBAR_MAP_ZOOMED_OUT]        = COMPOUND_STRING("{A_BUTTON}ZOOM {B_BUTTON}CANCEL"),
-    [HELPBAR_MAP_ZOOMED_IN]         = COMPOUND_STRING("{A_BUTTON}FULL {B_BUTTON}CANCEL"),
-    [HELPBAR_MAP_ZOOMED_OUT_CANFLY] = COMPOUND_STRING("{A_BUTTON}ZOOM {B_BUTTON}CANCEL {R_BUTTON}FLY"),
-    [HELPBAR_MAP_ZOOMED_IN_CANFLY]  = COMPOUND_STRING("{A_BUTTON}FULL {B_BUTTON}CANCEL {R_BUTTON}FLY"),
+    [HELPBAR_MAP_ZOOMED_OUT]        = COMPOUND_STRING("{A_BUTTON}ZOOM {B_BUTTON}CANCEL {SELECT_BUTTON}"),
+    [HELPBAR_MAP_ZOOMED_IN]         = COMPOUND_STRING("{A_BUTTON}FULL {B_BUTTON}CANCEL {SELECT_BUTTON}"),
+    [HELPBAR_MAP_ZOOMED_OUT_CANFLY] = COMPOUND_STRING("{A_BUTTON}ZOOM {B_BUTTON}CANCEL {R_BUTTON}FLY {SELECT_BUTTON}"),
+    [HELPBAR_MAP_ZOOMED_IN_CANFLY]  = COMPOUND_STRING("{A_BUTTON}FULL {B_BUTTON}CANCEL {R_BUTTON}FLY {SELECT_BUTTON}"),
     [HELPBAR_CONDITION_MON_LIST]    = COMPOUND_STRING("{A_BUTTON}CONDITION {B_BUTTON}CANCEL"),
     [HELPBAR_CONDITION_MON_STATUS]  = COMPOUND_STRING("{A_BUTTON}MARKINGS {B_BUTTON}CANCEL"),
     [HELPBAR_CONDITION_MARKINGS]    = COMPOUND_STRING("{A_BUTTON}SELECT MARK {B_BUTTON}CANCEL"),
@@ -562,9 +568,25 @@ static void InitHelpBar(void)
 void PrintHelpBarText(u32 textId)
 {
     struct Pokenav_MainMenu *menu = GetSubstructPtr(POKENAV_SUBSTRUCT_MAIN_MENU);
+    u32 mapsX = 0;
+    u32 mapsWidth = 0;
+    bool32 showMaps = FALSE;
 
     DrawHelpBar(menu->helpBarWindowId);
     AddTextPrinterParameterized3(menu->helpBarWindowId, FONT_NORMAL, 0, 1, sHelpBarTextColors, 0, sHelpBarTexts[textId]);
+
+    if (textId == HELPBAR_MAP_ZOOMED_OUT || textId == HELPBAR_MAP_ZOOMED_IN
+        || textId == HELPBAR_MAP_ZOOMED_OUT_CANFLY || textId == HELPBAR_MAP_ZOOMED_IN_CANFLY)
+        showMaps = TRUE;
+
+    if (showMaps)
+    {
+        mapsWidth = GetStringWidth(FONT_SMALL, sText_HelpbarMaps, -1);
+        mapsX = GetStringWidth(FONT_NORMAL, sHelpBarTexts[textId], -1) + 1;
+        if (mapsX + mapsWidth > 0x80)
+            mapsX = 0x80 - mapsWidth;
+        AddTextPrinterParameterized3(menu->helpBarWindowId, FONT_SMALL, mapsX, 1, sHelpBarTextColors, 0, sText_HelpbarMaps);
+    }
 }
 
 bool32 WaitForHelpBar(void)
@@ -677,15 +699,23 @@ static void LoadLeftHeaderGfxForMenu(u32 menuGfxId)
 {
     struct Pokenav_MainMenu *menu;
     u32 size, tag;
+    const u16 *pal;
+    const u32 *gfx;
 
     if (menuGfxId >= POKENAV_GFX_SUBMENUS_START)
         return;
 
     menu = GetSubstructPtr(POKENAV_SUBSTRUCT_MAIN_MENU);
     tag = sMenuLeftHeaderSpriteSheets[menuGfxId].tag;
-    size = GetDecompressedDataSize(sMenuLeftHeaderSpriteSheets[menuGfxId].data);
-    LoadPalette(&gPokenavLeftHeader_Pal[tag * 16], OBJ_PLTT_ID(IndexOfSpritePaletteTag(1)), PLTT_SIZE_4BPP);
-    DecompressDataWithHeaderWram(sMenuLeftHeaderSpriteSheets[menuGfxId].data, menu->leftHeaderMenuBuffer);
+    gfx = sMenuLeftHeaderSpriteSheets[menuGfxId].data;
+    pal = &gPokenavLeftHeader_Pal[tag * 16];
+    if (menuGfxId == POKENAV_GFX_MAP_MENU_ZOOMED_OUT || menuGfxId == POKENAV_GFX_MAP_MENU_ZOOMED_IN)
+        pal = GetRegionMapLeftHeaderPal();
+    if (menuGfxId == POKENAV_GFX_MAP_MENU_ZOOMED_OUT || menuGfxId == POKENAV_GFX_MAP_MENU_ZOOMED_IN)
+        gfx = GetRegionMapLeftHeaderGfx();
+    size = GetDecompressedDataSize(gfx);
+    LoadPalette(pal, OBJ_PLTT_ID(IndexOfSpritePaletteTag(1)), PLTT_SIZE_4BPP);
+    DecompressDataWithHeaderWram(gfx, menu->leftHeaderMenuBuffer);
     RequestDma3Copy(menu->leftHeaderMenuBuffer, (void *)OBJ_VRAM0 + (GetSpriteTileStartByTag(2) * 32), size, 1);
     menu->leftHeaderSprites[1]->oam.tileNum = GetSpriteTileStartByTag(2) + sMenuLeftHeaderSpriteSheets[menuGfxId].size;
 
@@ -693,6 +723,32 @@ static void LoadLeftHeaderGfxForMenu(u32 menuGfxId)
         menu->leftHeaderSprites[1]->x2 = 56;
     else
         menu->leftHeaderSprites[1]->x2 = 64;
+}
+
+static const u32 *GetRegionMapLeftHeaderGfx(void)
+{
+    switch (RegionMap_GetCurrentRegion())
+    {
+    case REGION_KANTO:
+        return gPokenavLeftHeaderKantoMap_Gfx;
+    case REGION_JOHTO:
+        return gPokenavLeftHeaderJohtoMap_Gfx;
+    default:
+        return gPokenavLeftHeaderHoennMap_Gfx;
+    }
+}
+
+static const u16 *GetRegionMapLeftHeaderPal(void)
+{
+    switch (RegionMap_GetCurrentRegion())
+    {
+    case REGION_KANTO:
+        return gPokenavLeftHeaderKantoMap_Pal;
+    case REGION_JOHTO:
+        return gPokenavLeftHeaderJohtoMap_Pal;
+    default:
+        return &gPokenavLeftHeader_Pal[0];
+    }
 }
 
 static void LoadLeftHeaderGfxForSubMenu(u32 menuGfxId)

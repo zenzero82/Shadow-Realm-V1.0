@@ -469,8 +469,10 @@
 #define TRAINER_CLASS_TEAM_SNAGEM    0x54
 #define TRAINER_CLASS_KANTO_LEADER   0x55
 #define TRAINER_CLASS_WANDERER       0x56
+#define TRAINER_CLASS_CIPHER_ADMIN   0x57
+#define TRAINER_CLASS_SNAGEM_HEAD    0x58
 
-#define TRAINER_CLASS_COUNT          0x57
+#define TRAINER_CLASS_COUNT          0x59
 
 #define TRAINER_ENCOUNTER_MUSIC_MALE         0 // standard male encounter music
 #define TRAINER_ENCOUNTER_MUSIC_FEMALE       1 // standard female encounter music

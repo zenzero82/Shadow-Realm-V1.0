@@ -899,7 +899,7 @@ static void Task_EvolutionScene(u8 taskId)
             else // no move to learn, or evolution was canceled
             {
                 BeginNormalPaletteFade(PALETTES_ALL, 0, 0, 0x10, RGB_BLACK);
-                gTasks[taskId].tState++;
+                gTasks[taskId].tState = EVOSTATE_END;
             }
         }
         break;
@@ -1137,6 +1137,7 @@ static void Task_EvolutionScene(u8 taskId)
         break;
     }
 }
+
 
 // States for the main switch in Task_TradeEvolutionScene
 enum {

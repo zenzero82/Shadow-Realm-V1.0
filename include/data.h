@@ -14,6 +14,12 @@ extern const u8 gSpeciesNames[][POKEMON_NAME_LENGTH + 1];
 #define TRAINER_PIC_WIDTH 64
 #define TRAINER_PIC_HEIGHT 64
 #define TRAINER_PIC_SIZE (TRAINER_PIC_WIDTH * TRAINER_PIC_HEIGHT / 2)
+#define TRAINER_PIC_TALL_HEIGHT 80
+#define TRAINER_PIC_TALL_SIZE (TRAINER_PIC_WIDTH * TRAINER_PIC_TALL_HEIGHT / 2)
+#define TRAINER_PIC_TALL_BOTTOM_HEIGHT 16
+#define TRAINER_PIC_TALL_BOTTOM_SIZE (TRAINER_PIC_WIDTH * TRAINER_PIC_TALL_BOTTOM_HEIGHT / 2)
+#define TRAINER_PIC_TALL_BOTTOM_SPRITE_HEIGHT 32
+#define TRAINER_PIC_TALL_BOTTOM_SPRITE_SIZE (TRAINER_PIC_WIDTH * TRAINER_PIC_TALL_BOTTOM_SPRITE_HEIGHT / 2)
 
 // Red and Leaf's back pics have 5 frames, but this is presumably irrelevant in the places this is used.
 #define MAX_TRAINER_PIC_FRAMES 4
@@ -185,6 +191,7 @@ extern const union AnimCmd sAnim_GeneralFrame3[];
 extern const union AnimCmd *const gAnims_MonPic[];
 extern const union AnimCmd *const gAnims_Trainer[];
 extern const struct TrainerSprite gTrainerSprites[];
+extern const struct CompressedSpriteSheet gTrainerFrontPicTallTable[TRAINER_PIC_COUNT];
 extern const struct TrainerBacksprite gTrainerBacksprites[];
 extern const u16 gTrainerPicToTrainerBackPic[];
 

@@ -75,7 +75,7 @@
       "flag": "0"
     },
     {
-      "graphics_id": "OBJ_EVENT_GFX_COOLTRAINER_F_GEN2",
+      "graphics_id": "OBJ_EVENT_GFX_ROCKET_GRUNT_M_GEN1",
       "x": 10,
       "y": 13,
       "elevation": 0,
@@ -244,7 +244,7 @@
       "flag": "0"
     },
     {
-      "graphics_id": "OBJ_EVENT_GFX_ROCKET_GRUNT_F_GEN1",
+      "graphics_id": "OBJ_EVENT_GFX_POLICEMAN_GEN2",
       "x": 23,
       "y": 35,
       "elevation": 0,
@@ -257,7 +257,7 @@
       "flag": "0"
     },
     {
-      "graphics_id": "OBJ_EVENT_GFX_SPECIES(KOFFING)",
+      "graphics_id": "OBJ_EVENT_GFX_SPECIES(ARCANINE)",
       "x": 24,
       "y": 35,
       "elevation": 0,
@@ -270,7 +270,7 @@
       "flag": "0"
     },
     {
-      "graphics_id": "OBJ_EVENT_GFX_SPECIES(GRIMER)",
+      "graphics_id": "OBJ_EVENT_GFX_SPECIES(ROCKRUFF)",
       "x": 25,
       "y": 35,
       "elevation": 0,
@@ -283,7 +283,7 @@
       "flag": "0"
     },
     {
-      "graphics_id": "OBJ_EVENT_GFX_ROCKET_GRUNT_M_GEN1",
+      "graphics_id": "OBJ_EVENT_GFX_POLICEMAN_GEN2",
       "x": 26,
       "y": 35,
       "elevation": 0,
@@ -296,7 +296,7 @@
       "flag": "0"
     },
     {
-      "graphics_id": "OBJ_EVENT_GFX_PLASMAGRUNTF_GEN5",
+      "graphics_id": "OBJ_EVENT_GFX_POLICEMAN_GEN2",
       "x": 37,
       "y": 35,
       "elevation": 0,
@@ -309,7 +309,7 @@
       "flag": "0"
     },
     {
-      "graphics_id": "OBJ_EVENT_GFX_SPECIES(TRUBBISH)",
+      "graphics_id": "OBJ_EVENT_GFX_SPECIES(BOLTUND)",
       "x": 38,
       "y": 35,
       "elevation": 0,
@@ -322,7 +322,7 @@
       "flag": "0"
     },
     {
-      "graphics_id": "OBJ_EVENT_GFX_SPECIES(SCRAGGY)",
+      "graphics_id": "OBJ_EVENT_GFX_SPECIES(GROWLITHE)",
       "x": 39,
       "y": 35,
       "elevation": 0,
@@ -335,7 +335,7 @@
       "flag": "0"
     },
     {
-      "graphics_id": "OBJ_EVENT_GFX_PLASMAGRUNTM_GEN5",
+      "graphics_id": "OBJ_EVENT_GFX_POLICEMAN_GEN2",
       "x": 40,
       "y": 35,
       "elevation": 0,
@@ -397,6 +397,19 @@
       "trainer_type": "TRAINER_TYPE_NONE",
       "trainer_sight_or_berry_tree_id": "0",
       "script": "CeruleanCity_EventScript_Pokemon_Diglett",
+      "flag": "0"
+    },
+    {
+      "graphics_id": "OBJ_EVENT_GFX_POLICEMAN_GEN2",
+      "x": 31,
+      "y": 5,
+      "elevation": 0,
+      "movement_type": "MOVEMENT_TYPE_FACE_DOWN",
+      "movement_range_x": 0,
+      "movement_range_y": 0,
+      "trainer_type": "TRAINER_TYPE_NONE",
+      "trainer_sight_or_berry_tree_id": "0",
+      "script": "CeruleanCity_EventScript_CaveGate_Block",
       "flag": "0"
     }
   ],
@@ -510,6 +523,24 @@
       "var": "VAR_TEMP_0",
       "var_value": "0",
       "script": "CeruleanCity_EventScript_MistyMichael_Trigger_West_North"
+    },
+    {
+      "type": "trigger",
+      "x": 32,
+      "y": 5,
+      "elevation": 0,
+      "var": "VAR_TEMP_0",
+      "var_value": "0",
+      "script": "CeruleanCity_EventScript_CaveGate_Block"
+    },
+    {
+      "type": "trigger",
+      "x": 33,
+      "y": 5,
+      "elevation": 0,
+      "var": "VAR_TEMP_0",
+      "var_value": "0",
+      "script": "CeruleanCity_EventScript_CaveGate_Block"
     }
   ],
   "bg_events": [

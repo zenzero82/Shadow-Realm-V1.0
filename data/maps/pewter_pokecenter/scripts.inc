@@ -50,6 +50,41 @@ pewter_pokecenter_EventScript_Chansey::
 	release
 	end
 
+pewter_pokecenter_Speaker_Mel:
+	.string "Mel$"
+
+pewter_pokecenter_Speaker_Toby:
+	.string "Toby$"
+
+pewter_pokecenter_EventScript_Beauty::
+	lock
+	faceplayer
+	setspeaker pewter_pokecenter_Speaker_Mel
+	msgbox pewter_pokecenter_Text_Beauty, MSGBOX_DEFAULT
+	closemessage
+	release
+	end
+
+pewter_pokecenter_EventScript_BugCatcher::
+	lock
+	faceplayer
+	setspeaker pewter_pokecenter_Speaker_Toby
+	msgbox pewter_pokecenter_Text_BugCatcher, MSGBOX_DEFAULT
+	closemessage
+	release
+	end
+
 pewter_pokecenter_OnTransition:
 	setrespawn HEAL_LOCATION_PEWTER_CITY
 	end
+
+pewter_pokecenter_Text_Beauty:
+	.string "The NURSE here is the best.\p"
+	.string "Everyone comes back from ROUTE 3\n"
+	.string "tired and dusty.$"
+
+pewter_pokecenter_Text_BugCatcher:
+	.string "I wanted to see the MUSEUM, but they\n"
+	.string "say it's still being fixed up.\p"
+	.string "Guess I'll train my bugs in the city\n"
+	.string "for now.$"

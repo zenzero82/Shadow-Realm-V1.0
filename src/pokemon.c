@@ -61,6 +61,8 @@
 #include "constants/item_effects.h"
 #include "constants/items.h"
 #include "constants/layouts.h"
+#include "constants/map_groups.h"
+#include "constants/maps.h"
 #include "constants/moves.h"
 #include "constants/regions.h"
 #include "constants/songs.h"
@@ -3382,21 +3384,33 @@ void SetBoxMonData(struct BoxPokemon *boxMon, s32 field, const void *dataArg)
             SET8(substruct3->isShadow);
             break;
         case MON_DATA_REVERSE_MODE:
+            if (!substruct3->isShadow)
+                break;
             SET8(boxMon->nickData.shadowData.isReverse);
             break;
         case MON_DATA_SHADOW_ID:
+            if (!substruct3->isShadow)
+                break;
             SET8(boxMon->nickData.shadowData.shadowID);
             break;
         case MON_DATA_SHADOW_AGGRO:
+            if (!substruct3->isShadow)
+                break;
             SET8(boxMon->nickData.shadowData.shadowAggro);
             break;
         case MON_DATA_HEART_VALUE:
+            if (!substruct3->isShadow)
+                break;
             SET16(boxMon->nickData.shadowData.heartValue);
             break;
         case MON_DATA_HEART_MAX:
+            if (!substruct3->isShadow)
+                break;
             SET16(boxMon->nickData.shadowData.heartMax);
             break;
         case MON_DATA_SNAGGED:
+            if (!substruct3->isShadow)
+                break;
             SET8(boxMon->nickData.shadowData.snagFlag);
             break;
         case MON_DATA_IVS:
@@ -6066,6 +6080,33 @@ bool32 IsSpeciesInHoennDex(u16 species)
         return TRUE;
 }
 
+static bool32 IsCurrentMapInKanto(void)
+{
+    u8 mapGroup = gSaveBlock1Ptr->location.mapGroup;
+
+    switch (mapGroup)
+    {
+    case MAP_GROUP(MAP_PALLET_TOWN):           // gMapGroup_Kanto
+    case MAP_GROUP(MAP_ROUTE1):                // gMapGroup_Kanto_Routes
+    case MAP_GROUP(MAP_REDS_HOUSE):            // gMapGroup_IndoorPallet
+    case MAP_GROUP(MAP_VIRIDIAN_POKECENTER):   // gMapGroup_IndoorViridian
+    case MAP_GROUP(MAP_PEWTER_POKECENTER):     // gMapGroup_IndoorPewter
+    case MAP_GROUP(MAP_CERULEAN_POKECENTER):   // gMapGroup_IndoorCerulean
+    case MAP_GROUP(MAP_VERMILION_POKECENTER):  // gMapGroup_IndoorVermilion
+    case MAP_GROUP(MAP_LAVENDER_POKECENTER):   // gMapGroup_IndoorLavender
+    case MAP_GROUP(MAP_CELADON_POKECENTER):    // gMapGroup_IndoorCeladon
+    case MAP_GROUP(MAP_SAFFRON_POKECENTER):    // gMapGroup_IndoorSaffron
+    case MAP_GROUP(MAP_FUCHSIA_POKECENTER):    // gMapGroup_IndoorFuchsia
+    case MAP_GROUP(MAP_CINNABAR_POKECENTER):   // gMapGroup_IndoorCinnabar
+    case MAP_GROUP(MAP_INDIGOPLATEAU_POKECENTER): // gMapGroup_IndoorIndigo
+    case MAP_GROUP(MAP_ROUTE2_ENTRANCE1):      // gMapGroup_IndoorKantoRoutes
+    case MAP_GROUP(MAP_MT_MOON_CAVE):          // gMapGroup_KantoDungeons
+        return TRUE;
+    default:
+        return FALSE;
+    }
+}
+
 u16 GetBattleBGM(void)
 {
     if (gBattleTypeFlags & BATTLE_TYPE_LEGENDARY)
@@ -6136,16 +6177,26 @@ u16 GetBattleBGM(void)
         case TRAINER_CLASS_PYRAMID_KING:
             return MUS_VS_FRONTIER_BRAIN;
         case TRAINER_CLASS_CIPHER_PEON:
+        case TRAINER_CLASS_CIPHER_ADMIN:
             return MUS_CIPHER_PEON_BATTLE;
         case TRAINER_CLASS_WANDERER:
             return MUS_MIRRORB;
+        case TRAINER_CLASS_TEAM_ROCKET:
+        case TRAINER_CLASS_ROCKET_ADMIN:
+            return MUS_HG_VS_ROCKET;
+        case TRAINER_CLASS_TEAM_GALACTIC:
+            return MUS_BATTLE_TEAM_GALACTIC;
+        case TRAINER_CLASS_TEAM_PLASMA:
+            return MUS_BATTLE_TEAM_PLASMA;
+        case TRAINER_CLASS_TEAM_FLARE:
+            return MUS_BATTLE_TEAM_FLARE;
         default:
-            return MUS_VS_TRAINER;
+            return IsCurrentMapInKanto() ? MUS_HG_VS_TRAINER_KANTO : MUS_VS_TRAINER;
         }
     }
     else
     {
-        return MUS_VS_WILD;
+        return IsCurrentMapInKanto() ? MUS_HG_VS_WILD_KANTO : MUS_VS_WILD;
     }
 }
 
