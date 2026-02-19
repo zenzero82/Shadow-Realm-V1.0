@@ -996,8 +996,9 @@
 #define ITEM_STRANGE_BALL 829
 #define ITEM_SNAG_MACHINE 830
 #define ITEM_TIME_FLUTE 831
+#define ITEM_DARK_BALL 832
 
-#define ITEMS_COUNT 832
+#define ITEMS_COUNT 833
 #define ITEM_FIELD_ARROW ITEMS_COUNT
 
 // A special item id associated with "Cancel"/"Exit" etc. in a list of items or decorations

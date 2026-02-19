@@ -29,6 +29,13 @@ static void WindowFunc_ClearNamebox(u8, u8, u8, u8, u8, u8);
 void TrySpawnNamebox(u32 tileNum)
 {
     u8 *strbuf = AllocZeroed(32 * sizeof(u8));
+    if (IsMatchCallTaskActive())
+    {
+        if (strbuf)
+            Free(strbuf);
+        DestroyNamebox();
+        return;
+    }
     if ((OW_FLAG_SUPPRESS_NAME_BOX != 0 && FlagGet(OW_FLAG_SUPPRESS_NAME_BOX)) || gSpeakerName == NULL || !strbuf)
     {
         // Re-check again in case anything but !strbuf is TRUE.

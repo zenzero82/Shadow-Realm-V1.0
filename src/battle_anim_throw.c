@@ -156,6 +156,7 @@ static const struct CaptureStar sCaptureStars[] =
 #define TAG_PARTICLES_PARKBALL    65055
 #define TAG_PARTICLES_BEASTBALL   65056
 #define TAG_PARTICLES_CHERISHBALL 65057
+#define TAG_PARTICLES_DARKBALL    65058
 
 static const struct CompressedSpriteSheet sBallParticleSpriteSheets[] =
 {
@@ -187,6 +188,7 @@ static const struct CompressedSpriteSheet sBallParticleSpriteSheets[] =
     [BALL_PARK]     = {gBattleAnimSpriteGfx_Particles,      0x100, TAG_PARTICLES_PARKBALL},
     [BALL_BEAST]    = {gBattleAnimSpriteGfx_Particles,      0x100, TAG_PARTICLES_BEASTBALL},
     [BALL_CHERISH]  = {gBattleAnimSpriteGfx_Particles2,     0x100, TAG_PARTICLES_CHERISHBALL},
+    [BALL_DARK]     = {gBattleAnimSpriteGfx_Particles,      0x100, TAG_PARTICLES_DARKBALL},
 };
 
 static const struct SpritePalette sBallParticlePalettes[] =
@@ -219,6 +221,7 @@ static const struct SpritePalette sBallParticlePalettes[] =
     [BALL_PARK]     = {gBattleAnimSpritePal_CircleImpact,   TAG_PARTICLES_PARKBALL},
     [BALL_BEAST]    = {gBattleAnimSpritePal_CircleImpact,   TAG_PARTICLES_BEASTBALL},
     [BALL_CHERISH]  = {gBattleAnimSpritePal_Particles2,     TAG_PARTICLES_CHERISHBALL},
+    [BALL_DARK]     = {gBattleAnimSpritePal_CircleImpact,   TAG_PARTICLES_DARKBALL},
 };
 
 static const union AnimCmd sAnim_RegularBall[] =
@@ -303,6 +306,7 @@ static const u8 sBallParticleAnimNums[POKEBALL_COUNT] =
     [BALL_PARK]    = 5,
     [BALL_BEAST]   = 5,
     [BALL_CHERISH] = 0,
+    [BALL_DARK]    = 0,
 };
 
 static const TaskFunc sBallParticleAnimationFuncs[POKEBALL_COUNT] =
@@ -336,6 +340,7 @@ static const TaskFunc sBallParticleAnimationFuncs[POKEBALL_COUNT] =
     [BALL_PARK]    = UltraBallOpenParticleAnimation,
     [BALL_BEAST]   = UltraBallOpenParticleAnimation,
     [BALL_CHERISH] = MasterBallOpenParticleAnimation,
+    [BALL_DARK]    = PokeBallOpenParticleAnimation,
 };
 
 static const struct SpriteTemplate sBallParticleSpriteTemplates[POKEBALL_COUNT] =
@@ -592,6 +597,15 @@ static const struct SpriteTemplate sBallParticleSpriteTemplates[POKEBALL_COUNT] 
         .affineAnims = gDummySpriteAffineAnimTable,
         .callback = SpriteCallbackDummy,
     },
+    [BALL_DARK] = {
+        .tileTag = TAG_PARTICLES_DARKBALL,
+        .paletteTag = TAG_PARTICLES_DARKBALL,
+        .oam = &gOamData_AffineOff_ObjNormal_8x8,
+        .anims = sAnims_BallParticles,
+        .images = NULL,
+        .affineAnims = gDummySpriteAffineAnimTable,
+        .callback = SpriteCallbackDummy,
+    },
 };
 
 const u16 gBallOpenFadeColors[] =
@@ -625,6 +639,7 @@ const u16 gBallOpenFadeColors[] =
     [BALL_PARK] = RGB(31, 31, 15),
     [BALL_BEAST] = RGB(31, 31, 15),
     [BALL_CHERISH] = RGB(25, 4, 3),
+    [BALL_DARK] = RGB(16, 23, 30),
 };
 
 const struct SpriteTemplate gPokeblockSpriteTemplate =
@@ -903,12 +918,17 @@ void AnimTask_SwitchOutBallEffect(u8 taskId)
 {
     u8 spriteId;
     enum PokeBall ballId;
+    struct Pokemon *mon;
     u8 x, y;
     u8 priority, subpriority;
     u32 selectedPalettes;
 
     spriteId = gBattlerSpriteIds[gBattleAnimAttacker];
-    ballId = GetMonData(GetBattlerMon(gBattleAnimAttacker), MON_DATA_POKEBALL);
+    mon = GetBattlerMon(gBattleAnimAttacker);
+    ballId = ItemIdToBallId(GetMonData(mon, MON_DATA_POKEBALL));
+    if (GetBattlerSide(gBattleAnimAttacker) == B_SIDE_OPPONENT
+        && GetMonData(mon, MON_DATA_IS_SHADOW))
+        ballId = BALL_DARK;
 
     switch (gTasks[taskId].data[0])
     {
@@ -1769,10 +1789,16 @@ static void SpriteCB_Ball_Block_Step(struct Sprite *sprite)
 
 static void LoadBallParticleGfx(u8 ballId)
 {
+    u32 palIndex = IndexOfSpritePaletteTag(sBallParticlePalettes[ballId].tag);
+
+    if (palIndex == 0xFF)
+        palIndex = LoadSpritePalette(&sBallParticlePalettes[ballId]);
+    else
+        LoadPalette(sBallParticlePalettes[ballId].data, OBJ_PLTT_ID(palIndex), PLTT_SIZE_4BPP);
+
     if (GetSpriteTileStartByTag(sBallParticleSpriteSheets[ballId].tag) == 0xFFFF)
     {
         LoadCompressedSpriteSheetUsingHeap(&sBallParticleSpriteSheets[ballId]);
-        LoadSpritePalette(&sBallParticlePalettes[ballId]);
     }
 }
 
@@ -2772,4 +2798,3 @@ static void CB_CriticalCaptureThrownBallMovement(struct Sprite *sprite)
         sprite->callback = SpriteCB_Ball_Bounce_Step;
     }
 }
-

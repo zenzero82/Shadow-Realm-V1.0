@@ -9,10 +9,10 @@ u32 GetCurrentLevelCap(void)
 {
     static const u32 sLevelCapFlagMap[][2] =
     {
-        {FLAG_BADGE01_GET, 15},
-        {FLAG_BADGE02_GET, 19},
-        {FLAG_BADGE03_GET, 24},
-        {FLAG_BADGE04_GET, 29},
+        {FLAG_BADGE09_GET, 16},
+        {FLAG_BADGE10_GET, 20},
+        {FLAG_BADGE17_GET, 24},
+        {FLAG_BADGE18_GET, 28},
         {FLAG_BADGE05_GET, 31},
         {FLAG_BADGE06_GET, 33},
         {FLAG_BADGE07_GET, 42},
@@ -21,13 +21,28 @@ u32 GetCurrentLevelCap(void)
     };
 
     u32 i;
+    u8 levelCapMode = gSaveBlock2Ptr->optionsLevelCap;
+
+    if (levelCapMode > OPTIONS_LEVEL_CAP_HARD)
+        levelCapMode = OPTIONS_LEVEL_CAP_NORMAL;
+
+    if (levelCapMode == OPTIONS_LEVEL_CAP_OFF)
+        return MAX_LEVEL;
 
     if (B_LEVEL_CAP_TYPE == LEVEL_CAP_FLAG_LIST)
     {
         for (i = 0; i < ARRAY_COUNT(sLevelCapFlagMap); i++)
         {
             if (!FlagGet(sLevelCapFlagMap[i][0]))
+            {
+                if (levelCapMode == OPTIONS_LEVEL_CAP_HARD)
+                {
+                    if (i == 0)
+                        return sLevelCapFlagMap[0][1];
+                    return sLevelCapFlagMap[i - 1][1];
+                }
                 return sLevelCapFlagMap[i][1];
+            }
         }
     }
     else if (B_LEVEL_CAP_TYPE == LEVEL_CAP_VARIABLE)

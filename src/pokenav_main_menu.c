@@ -57,6 +57,8 @@ static void SpriteCB_SpinningPokenav(struct Sprite *);
 static u32 LoopedTask_InitPokenavMenu(s32);
 static const u32 *GetRegionMapLeftHeaderGfx(void);
 static const u16 *GetRegionMapLeftHeaderPal(void);
+static const u32 *GetRegionMapHeaderGfx(void);
+static const u16 *GetRegionMapHeaderPal(void);
 
 static const u16 sSpinningPokenav_Pal[] = INCBIN_U16("graphics/pokenav/nav_icon.gbapal");
 static const u32 sSpinningPokenav_Gfx[] = INCBIN_U32("graphics/pokenav/nav_icon.4bpp.lz");
@@ -341,8 +343,6 @@ bool32 WaitForPokenavShutdownFade(void)
 
 static u32 LoopedTask_InitPokenavMenu(s32 state)
 {
-    struct Pokenav_MainMenu *menu;
-
     switch (state)
     {
     case 0:
@@ -350,16 +350,13 @@ static u32 LoopedTask_InitPokenavMenu(s32 state)
         FreeAllWindowBuffers();
         ResetBgsAndClearDma3BusyFlags(0);
         InitBgsFromTemplates(0, gPokenavMainMenuBgTemplates, ARRAY_COUNT(gPokenavMainMenuBgTemplates));
+        FillBgTilemapBufferRect(0, 0, 0, 0, DISPLAY_TILE_WIDTH, DISPLAY_TILE_HEIGHT, 0);
+        CopyBgTilemapBufferToVram(0);
         ResetBgPositions();
         ResetTempTileDataBuffers();
         return LT_INC_AND_CONTINUE;
     case 1:
-        menu = GetSubstructPtr(POKENAV_SUBSTRUCT_MAIN_MENU);
-        DecompressAndCopyTileDataToVram(0, &gPokenavHeader_Gfx, 0, 0, 0);
-        SetBgTilemapBuffer(0, menu->tilemapBuffer);
-        CopyToBgTilemapBuffer(0, &gPokenavHeader_Tilemap, 0, 0);
-        CopyPaletteIntoBufferUnfaded(gPokenavHeader_Pal, BG_PLTT_ID(0), PLTT_SIZE_4BPP);
-        CopyBgTilemapBufferToVram(0);
+        UpdateRegionMapHeaderGfx();
         return LT_INC_AND_PAUSE;
     case 2:
         if (FreeTempTileDataBuffersIfPossible())
@@ -587,6 +584,9 @@ void PrintHelpBarText(u32 textId)
             mapsX = 0x80 - mapsWidth;
         AddTextPrinterParameterized3(menu->helpBarWindowId, FONT_SMALL, mapsX, 1, sHelpBarTextColors, 0, sText_HelpbarMaps);
     }
+
+    PutWindowTilemap(menu->helpBarWindowId);
+    CopyWindowToVram(menu->helpBarWindowId, COPYWIN_FULL);
 }
 
 bool32 WaitForHelpBar(void)
@@ -695,6 +695,20 @@ void UpdateRegionMapRightHeaderTiles(u32 menuGfxId)
         menu->leftHeaderSprites[1]->oam.tileNum = GetSpriteTileStartByTag(2) + 64;
 }
 
+void UpdateRegionMapHeaderGfx(void)
+{
+    struct Pokenav_MainMenu *menu = GetSubstructPtr(POKENAV_SUBSTRUCT_MAIN_MENU);
+
+    if (menu == NULL)
+        return;
+
+    DecompressAndCopyTileDataToVram(0, GetRegionMapHeaderGfx(), 0, 0, 0);
+    SetBgTilemapBuffer(0, menu->tilemapBuffer);
+    CopyToBgTilemapBuffer(0, &gPokenavHeader_Tilemap, 0, 0);
+    LoadPalette(GetRegionMapHeaderPal(), BG_PLTT_ID(0), PLTT_SIZE_4BPP);
+    CopyBgTilemapBufferToVram(0);
+}
+
 static void LoadLeftHeaderGfxForMenu(u32 menuGfxId)
 {
     struct Pokenav_MainMenu *menu;
@@ -748,6 +762,32 @@ static const u16 *GetRegionMapLeftHeaderPal(void)
         return gPokenavLeftHeaderJohtoMap_Pal;
     default:
         return &gPokenavLeftHeader_Pal[0];
+    }
+}
+
+static const u32 *GetRegionMapHeaderGfx(void)
+{
+    switch (RegionMap_GetCurrentRegion())
+    {
+    case REGION_KANTO:
+        return gPokenavHeaderKanto_Gfx;
+    case REGION_JOHTO:
+        return gPokenavHeaderJohto_Gfx;
+    default:
+        return gPokenavHeader_Gfx;
+    }
+}
+
+static const u16 *GetRegionMapHeaderPal(void)
+{
+    switch (RegionMap_GetCurrentRegion())
+    {
+    case REGION_KANTO:
+        return gPokenavHeaderKanto_Pal;
+    case REGION_JOHTO:
+        return gPokenavHeaderJohto_Pal;
+    default:
+        return gPokenavHeader_Pal;
     }
 }
 

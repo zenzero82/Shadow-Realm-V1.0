@@ -98,6 +98,7 @@ static void ResetBldCnt(void);
 static void InitMenuOptionGlow(void);
 static void Task_CurrentMenuOptionGlow(u8);
 static void SetMenuOptionGlow(void);
+static void ClearPokenavMessageBoxFill(u8 *tilemap);
 
 static const u16 sPokenavBgDotsPal[] = INCBIN_U16("graphics/pokenav/bg_dots.gbapal");
 static const u32 sPokenavBgDotsTiles[] = INCBIN_U32("graphics/pokenav/bg_dots.4bpp.lz");
@@ -269,7 +270,7 @@ static const struct WindowTemplate sOptionDescWindowTemplate =
 
 static const u8 *const sPageDescriptions[] =
 {
-    [POKENAV_MENUITEM_MAP]                     = COMPOUND_STRING("Check the map of the HOENN region"),
+    [POKENAV_MENUITEM_MAP]                     = COMPOUND_STRING("Check the REGION MAPS"),
     [POKENAV_MENUITEM_CONDITION]               = COMPOUND_STRING("Check POKéMON in detail."),
     [POKENAV_MENUITEM_MATCH_CALL]              = COMPOUND_STRING("Call a registered TRAINER."),
     [POKENAV_MENUITEM_RIBBONS]                 = COMPOUND_STRING("Check obtained RIBBONS."),
@@ -458,8 +459,10 @@ static u32 LoopedTask_OpenMenu(s32 state)
     case 0:
         InitBgTemplates(sPokenavMainMenuBgTemplates, ARRAY_COUNT(sPokenavMainMenuBgTemplates));
         DecompressAndCopyTileDataToVram(1, gPokenavMessageBox_Gfx, 0, 0, 0);
+        CpuFill16(0, (void *)BG_CHAR_ADDR(1) + TILE_OFFSET_4BPP(0x1FF), TILE_SIZE_4BPP);
         SetBgTilemapBuffer(1, gfx->bg1TilemapBuffer);
         CopyToBgTilemapBuffer(1, gPokenavMessageBox_Tilemap, 0, 0);
+        ClearPokenavMessageBoxFill(gfx->bg1TilemapBuffer);
         CopyBgTilemapBufferToVram(1);
         CopyPaletteIntoBufferUnfaded(gPokenavMessageBox_Pal, BG_PLTT_ID(1), PLTT_SIZE_4BPP);
         ChangeBgX(1, 0, BG_COORD_SET);
@@ -1369,6 +1372,33 @@ static void SetMenuOptionGlow(void)
     CpuFill16(0, gScanlineEffectRegBuffers[1], DISPLAY_HEIGHT * 2);
     CpuFill16(RGB(16, 23, 28), &gScanlineEffectRegBuffers[0][r4], 0x20);
     CpuFill16(RGB(16, 23, 28), &gScanlineEffectRegBuffers[1][r4], 0x20);
+}
+
+static void ClearPokenavMessageBoxFill(u8 *tilemap)
+{
+    const u16 blank = 0x1FF;
+    const u16 fillPal0 = 0x0003;
+    const u16 fillPal1 = 0x1003;
+    u16 *tilemap16 = (u16 *)tilemap;
+    u32 x;
+    u32 y;
+
+    // Keep only the message box tiles (cols 2-27, rows 16-19); blank everything else.
+    for (y = 0; y < DISPLAY_TILE_HEIGHT; y++)
+    {
+        for (x = 0; x < DISPLAY_TILE_WIDTH; x++)
+        {
+            u32 i = y * DISPLAY_TILE_WIDTH + x;
+            if (y < 16 || y > 19 || x < 2 || x > 27)
+            {
+                tilemap16[i] = blank;
+            }
+            else if (tilemap16[i] == fillPal0 || tilemap16[i] == fillPal1)
+            {
+                tilemap16[i] = blank;
+            }
+        }
+    }
 }
 
 void ResetBldCnt_(void)

@@ -1273,6 +1273,7 @@ static const struct BgTemplate sInfoScreen_BgTemplate[] =
 #define WIN_CRY_WAVE 2
 #define WIN_VU_METER 3
 #define WIN_NAVIGATION_BUTTONS 4
+#define FOOTPRINT_COLOR_IDX 2
 
 static const struct WindowTemplate sInfoScreen_WindowTemplates[] =
 {
@@ -2350,6 +2351,10 @@ static void LoadPokedexBgPalette(bool8 isSearchResults)
         LoadPalette(GetOverworldTextboxPalettePtr(), 0xF0, 32);
     }
 
+    {
+        u16 footprintColor = RGB(0, 0, 0);
+        LoadPalette(&footprintColor, BG_PLTT_ID(15) + FOOTPRINT_COLOR_IDX, PLTT_SIZEOF(1));
+    }
 }
 
 

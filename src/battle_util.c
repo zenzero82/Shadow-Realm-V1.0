@@ -14,6 +14,7 @@
 #include "pokemon.h"
 #include "international_string_util.h"
 #include "item.h"
+#include "pokeball.h"
 #include "util.h"
 #include "battle_scripts.h"
 #include "random.h"
@@ -842,13 +843,6 @@ void HandleAction_Call(void)
 
         if (gBattleMons[battler].isReverse)
         {
-            // Clear reverse flag here in C
-            gBattleMons[battler].isReverse = FALSE;
-            if (GetBattlerSide(battler) != B_SIDE_OPPONENT)
-            {
-                u8 reverseFlag = FALSE;
-                SetMonData(&gPlayerParty[gBattlerPartyIndexes[battler]], MON_DATA_REVERSE_MODE, &reverseFlag);
-            }
             gBattlescriptCurrInstr = gBattleScript_PlayerCall_Shadow_ReverseEnded;
         }
         else
@@ -4429,8 +4423,11 @@ u32 AbilityBattleEffects(u32 caseID, u32 battler, u32 ability, u32 special, u32 
                 }
                 break;
             case ABILITY_BALL_FETCH:
+            {
+                u8 ballId = ItemIdToBallId(gLastUsedBall);
+
                 if (gBattleMons[battler].item == ITEM_NONE
-                    && gBattleResults.catchAttempts[gLastUsedBall - ITEM_ULTRA_BALL] >= 1
+                    && gBattleResults.catchAttempts[ballId] >= 1
                     && !gHasFetchedBall)
                 {
                     gBattleScripting.battler = battler;
@@ -4442,6 +4439,7 @@ u32 AbilityBattleEffects(u32 caseID, u32 battler, u32 ability, u32 special, u32 
                     effect++;
                 }
                 break;
+            }
             case ABILITY_HUNGER_SWITCH:
                 if (TryBattleFormChange(battler, FORM_CHANGE_BATTLE_TURN_END))
                 {

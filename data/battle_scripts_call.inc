@@ -20,6 +20,7 @@ gBattleScript_PlayerCall_Shadow_ReverseEnded:
     playanimation BS_ATTACKER B_ANIM_CALL_REVERSE_MODE
     printstring STRINGID_SHADOWCAMETOSENSES
     waitmessage B_WAIT_TIME_SHORT
+    callnative BS_ClearReverseModeAfterCall
     end2
     .size gBattleScript_PlayerCall_Shadow_ReverseEnded, .-gBattleScript_PlayerCall_Shadow_ReverseEnded
 

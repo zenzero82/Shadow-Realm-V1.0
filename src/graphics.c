@@ -708,6 +708,15 @@ const u16 gBattleInterface_BallStatusBarPal[] = INCBIN_U16("graphics/battle_inte
 const u16 gBattleInterface_BallDisplayPal[] = INCBIN_U16("graphics/battle_interface/ball_display.gbapal");
 
 const u16 gBattleInterface_ShadowMenuPal[] = INCBIN_U16("graphics/battle_interface/shadow_menu.gbapal");
+const u16 gBattleInterface_ShadowMenuReversePal[] = INCBIN_U16("graphics/battle_interface/shadow_menu_reverse.gbapal");
+const u16 gBattleInterface_ShadowMenuOpponentPal[] = INCBIN_U16("graphics/battle_interface/healthbox_singles_opponent_shadow.gbapal");
+const u16 gBattleInterface_ShadowMenuOpponentReversePal[] = INCBIN_U16("graphics/battle_interface/healthbox_singles_opponent_shadow_reverse.gbapal");
+
+const u16 gBattleInterface_HealthboxFramePal[] = INCBIN_U16("graphics/battle_interface/healthbox_frame.gbapal");
+const u16 gBattleInterface_HealthboxFrameShadowPal[] = INCBIN_U16("graphics/battle_interface/healthbox_frame_shadow.gbapal");
+const u16 gBattleInterface_HealthboxFrameShadowOpponentPal[] = INCBIN_U16("graphics/battle_interface/healthbox_frame_shadow_opponent.gbapal");
+const u16 gBattleInterface_HealthboxFrameShadowReversePal[] = INCBIN_U16("graphics/battle_interface/healthbox_frame_shadow_reverse.gbapal");
+const u16 gBattleInterface_HealthboxFrameShadowOpponentReversePal[] = INCBIN_U16("graphics/battle_interface/healthbox_frame_shadow_opponent_reverse.gbapal");
 
 const u8 gHealthboxElementsGfxTable[] = INCBIN_U8("graphics/battle_interface/hpbar.4bpp",
                                                   "graphics/battle_interface/expbar.4bpp",
@@ -992,6 +1001,8 @@ const u32 gHealthboxSafariGfx[] = INCBIN_U32("graphics/battle_interface/healthbo
 
 // Shadow Mon Healthbox Sprite (HEART instead of EXP)
 const u32 gHealthboxSinglesPlayerShadowGfx[] = INCBIN_U32("graphics/battle_interface/healthbox_singles_player_shadow.4bpp.lz");
+const u32 gHealthboxSinglesOpponentShadowGfx[] = INCBIN_U32("graphics/battle_interface/healthbox_singles_opponent_shadow.4bpp.lz");
+const u32 gHealthboxBlankLargeGfx[] = INCBIN_U32("graphics/battle_interface/healthbox_blank_0x1000.4bpp.lz");
 
 const u32 gUnusedGfx_Shadow[] = INCBIN_U32("graphics/unused/shadow.4bpp.lz");
 const u16 gUnusedPal_Shadow[] = INCBIN_U16("graphics/unused/shadow.gbapal");
@@ -1928,6 +1939,10 @@ const u16 gPokenavOptions_Pal[] = INCBIN_U16("graphics/pokenav/options/options.g
 const u16 gPokenavHeader_Pal[] = INCBIN_U16("graphics/pokenav/header.gbapal");
 const u32 gPokenavHeader_Gfx[] = INCBIN_U32("graphics/pokenav/header.4bpp.lz"); // TODO: use width 9 and makefile rule for cleanliness, make wasnt behaving, didnt want to apply num_tiles to this
 const u32 gPokenavHeader_Tilemap[] = INCBIN_U32("graphics/pokenav/header.bin.lz");
+const u16 gPokenavHeaderKanto_Pal[] = INCBIN_U16("graphics/pokenav/header_kanto.gbapal");
+const u32 gPokenavHeaderKanto_Gfx[] = INCBIN_U32("graphics/pokenav/header_kanto.4bpp.lz");
+const u16 gPokenavHeaderJohto_Pal[] = INCBIN_U16("graphics/pokenav/header_johto.gbapal");
+const u32 gPokenavHeaderJohto_Gfx[] = INCBIN_U32("graphics/pokenav/header_johto.4bpp.lz");
 
 const u16 gPokenavLeftHeader_Pal[] = INCBIN_U16("graphics/pokenav/left_headers/palette.gbapal");
 const u16 gPokenavLeftHeaderKantoMap_Pal[] = INCBIN_U16("graphics/pokenav/left_headers/kantolh.gbapal");
@@ -2155,8 +2170,8 @@ const u16 gMonIconPalettes[][16] =
 
 const u16 gMonIconPalette_Shadow[] = INCBIN_U16("graphics/pokemon/pikachu/shadow/shadow.gbapal");
 
-const u16 gTitleScreenBgPalettes[]         = INCBIN_U16("graphics/title_screen/pokemon_logo.gbapal",
-                                                        "graphics/title_screen/rayquaza_and_clouds.gbapal");
+const u16 gTitleScreenBgPalettes[]         = INCBIN_U16("graphics/title_screen/pokemon_logo.gbapal");
+const u16 gTitleScreenNewTitlePal[]        = INCBIN_U16("graphics/title_screen/new_title.gbapal");
 const u16 gTitleScreenEmeraldVersionPal[]  = INCBIN_U16("graphics/title_screen/emerald_version.gbapal");
 const u32 gTitleScreenCloudsTilemap[]      = INCBIN_U32("graphics/title_screen/clouds.bin.lz");
 const u32 gTitleScreenPokemonLogoGfx[]     = INCBIN_U32("graphics/title_screen/pokemon_logo.8bpp.lz");

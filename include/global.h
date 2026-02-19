@@ -18,6 +18,7 @@
 #include "constants/pokemon.h"
 #include "constants/easy_chat.h"
 #include "constants/trainer_hill.h"
+#include "constants/item.h"
 #include "constants/items.h"
 #include "config/save.h"
 #include "constants/shadow.h"
@@ -582,7 +583,9 @@ struct SaveBlock2
              //u16 padding1:4;
              //u16 padding2;
     /*0x18*/ struct Pokedex pokedex;
-    /*0x90*/ u8 filler_90[0x8];
+    /*0x90*/ u8 optionsShinyOdds;
+    /*0x91*/ u8 optionsLevelCap;
+    /*0x92*/ u8 filler_92[0x6];
     /*0x98*/ struct Time localTimeOffset;
     /*0xA0*/ struct Time lastBerryTreeUpdate;
     /*0xA8*/ u32 gcnLinkFlags; // Read by Pokémon Colosseum/XD
@@ -1068,11 +1071,16 @@ struct SaveBlock1
     /*0x496*/ u16 registeredItem; // registered for use with SELECT button
     /*0x498*/ struct ItemSlot pcItems[PC_ITEMS_COUNT];
     /*0x560*/ struct ItemSlot bagPocket_Items[BAG_ITEMS_COUNT];
-    /*0x5D8*/ struct ItemSlot bagPocket_KeyItems[BAG_KEYITEMS_COUNT];
-    /*0x650*/ struct ItemSlot bagPocket_PokeBalls[BAG_POKEBALLS_COUNT];
-    /*0x690*/ struct ItemSlot bagPocket_TMHM[BAG_TMHM_COUNT];
-    /*0x790*/ struct ItemSlot bagPocket_Berries[BAG_BERRIES_COUNT];
-    /*0x848*/ struct Pokeblock pokeblocks[POKEBLOCKS_COUNT];
+    /*0x5D8*/ struct ItemSlot bagPocket_PokeBalls[BAG_POKEBALLS_COUNT];
+    /*0x618*/ struct ItemSlot bagPocket_Medicine[BAG_MEDICINE_COUNT];
+    /*0x718*/ struct ItemSlot bagPocket_TMHM[BAG_TMHM_COUNT];
+    /*0x818*/ struct ItemSlot bagPocket_Berries[BAG_BERRIES_COUNT];
+    /*0x8D0*/ struct ItemSlot bagPocket_BattleItems[BAG_BATTLE_ITEMS_COUNT];
+    /*0x948*/ struct ItemSlot bagPocket_KeyItems[BAG_KEYITEMS_COUNT];
+    /*0x9C0*/ struct ItemSlot bagPocket_Treasures[BAG_TREASURES_COUNT];
+    /*0xA60*/ u16 bagFavoriteItems[BAG_FAVORITES_COUNT];
+    /*0xAE0*/ u8 bagPocketSortModes[POCKETS_COUNT];
+    /*0xAE8*/ struct Pokeblock pokeblocks[POKEBLOCKS_COUNT];
 #if FREE_EXTRA_SEEN_FLAGS_SAVEBLOCK1 == FALSE
     /*0x988*/ u8 filler1[0x34]; // Previously Dex Flags, feel free to remove.
 #endif //FREE_EXTRA_SEEN_FLAGS_SAVEBLOCK1

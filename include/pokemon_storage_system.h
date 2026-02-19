@@ -1,7 +1,7 @@
 #ifndef GUARD_POKEMON_STORAGE_SYSTEM_H
 #define GUARD_POKEMON_STORAGE_SYSTEM_H
 
-#define TOTAL_BOXES_COUNT       14
+#define TOTAL_BOXES_COUNT       35
 #define IN_BOX_ROWS             5 // Number of rows, 6 Pokémon per row
 #define IN_BOX_COLUMNS          6 // Number of columns, 5 Pokémon per column
 #define IN_BOX_COUNT            (IN_BOX_ROWS * IN_BOX_COLUMNS)
@@ -19,11 +19,10 @@ ROWS        0   1   2   3   4   5
 
 struct PokemonStorage
 {
-    /*0x0000*/ u8 currentBox;
-    /*0x0001*/ struct BoxPokemon boxes[TOTAL_BOXES_COUNT][IN_BOX_COUNT];
-    /*0x8344*/ u8 boxNames[TOTAL_BOXES_COUNT][BOX_NAME_LENGTH + 1];
-    /*0x83C2*/ u8 boxWallpapers[TOTAL_BOXES_COUNT];
-    /*0x8432*/ struct Pokemon fusions[MAX_FUSION_STORAGE];
+    u8 currentBox;
+    u8 boxNames[TOTAL_BOXES_COUNT][BOX_NAME_LENGTH + 1];
+    u8 boxWallpapers[TOTAL_BOXES_COUNT];
+    struct Pokemon fusions[MAX_FUSION_STORAGE];
 };
 
 extern struct PokemonStorage *gPokemonStoragePtr;
@@ -36,7 +35,12 @@ u16 CountPartyAliveNonEggMons_IgnoreVar0x8004Slot(void);
 u8 CountPartyMons(void);
 u8 *StringCopyAndFillWithSpaces(u8 *dst, const u8 *src, u16 n);
 void ShowPokemonStorageSystemPC(void);
+void ShowPokemonStorageSystemMoveMonsFromParty(void);
 void ResetPokemonStorageSystem(void);
+void InitBoxStorageCache(void);
+bool8 SaveBoxStorageToFlash(void);
+void ClearBoxStorageData(void);
+void MarkBoxStorageDirty(u8 boxId);
 s16 CompactPartySlots(void);
 u8 StorageGetCurrentBox(void);
 u32 GetBoxMonDataAt(u8 boxId, u8 boxPosition, s32 request);

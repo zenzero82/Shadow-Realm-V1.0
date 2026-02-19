@@ -287,6 +287,14 @@ graphics/pokemon_jump/bg.4bpp: %.4bpp: %.png
 graphics/pokenav/region_map/map.8bpp: %.8bpp: %.png
 	$(GFX) $< $@ -num_tiles 233 -Wnum_tiles
 
+graphics/pokenav/region_map/kanto_map.8bpp: %.8bpp: %.png
+	$(GFX) $< $@
+	python3 tools/remap_pal_indices.py $@ graphics/pokenav/region_map/kanto_map.pal graphics/pokenav/region_map/map.pal 112
+
+graphics/pokenav/region_map/johtomap.8bpp: %.8bpp: %.png
+	$(GFX) $< $@
+	python3 tools/remap_pal_indices.py $@ graphics/pokenav/region_map/johtomap.pal graphics/pokenav/region_map/map.pal 112
+
 $(MISCGFXDIR)/japanese_hof.4bpp: %.4bpp: %.png
 	$(GFX) $< $@ -num_tiles 29 -Wnum_tiles
 
@@ -383,6 +391,9 @@ $(BATTRANSGFXDIR)/vs_frame.4bpp: %.4bpp: %.png
 
 graphics/party_menu/bg.4bpp: %.4bpp: %.png
 	$(GFX) $< $@ -num_tiles 62 -Wnum_tiles
+
+graphics/party_menu/bg.gbapal: graphics/party_menu/bg.png
+	$(GFX) $< $@
 
 $(TYPESGFXDIR)/move_types.4bpp: $(types:%=$(TYPESGFXDIR)/%.4bpp) $(contest_types:%=$(TYPESGFXDIR)/contest_%.4bpp)
 	@cat $^ >$@
@@ -648,6 +659,14 @@ $(PKNAVGFXDIR)/match_call/ui.4bpp: %.4bpp: %.png
 
 $(POKEDEXGFXDIR)/region_map.8bpp: %.8bpp: %.png
 	$(GFX) $< $@ -num_tiles 232 -Wnum_tiles
+
+$(POKEDEXGFXDIR)/region_map_kanto.8bpp: %.8bpp: %.png
+	$(GFX) $< $@
+	python3 tools/remap_pal_indices.py $@ graphics/pokenav/region_map/kanto_map.pal $(POKEDEXGFXDIR)/region_map.pal 112
+
+$(POKEDEXGFXDIR)/region_map_johto.8bpp: %.8bpp: %.png
+	$(GFX) $< $@
+	python3 tools/remap_pal_indices.py $@ graphics/pokenav/region_map/johtomap.pal $(POKEDEXGFXDIR)/region_map.pal 112
 
 $(POKEDEXGFXDIR)/region_map_affine.8bpp: %.8bpp: %.png
 	$(GFX) $< $@ -num_tiles 233 -Wnum_tiles

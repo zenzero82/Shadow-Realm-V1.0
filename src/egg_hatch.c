@@ -1,5 +1,6 @@
 #include "global.h"
 #include "pokemon.h"
+#include "pokeball.h"
 #include "egg_hatch.h"
 #include "pokedex.h"
 #include "constants/items.h"
@@ -335,7 +336,7 @@ static void CreateHatchedMon(struct Pokemon *egg, struct Pokemon *temp)
     markings = GetMonData(egg, MON_DATA_MARKINGS);
     pokerus = GetMonData(egg, MON_DATA_POKERUS);
     isModernFatefulEncounter = GetMonData(egg, MON_DATA_MODERN_FATEFUL_ENCOUNTER);
-    ball = GetMonData(egg, MON_DATA_POKEBALL);
+    ball = ItemIdToBallId(GetMonData(egg, MON_DATA_POKEBALL));
 
     CreateMon(temp, species, EGG_HATCH_LEVEL, USE_RANDOM_IVS, TRUE, personality, OT_ID_PLAYER_ID, 0);
 

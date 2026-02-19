@@ -77,6 +77,16 @@
 
 extern const u16 gMonPalette_PikachuShadow[];
 
+static u32 GetShinyOddsThreshold(void)
+{
+    u8 selection = gSaveBlock2Ptr->optionsShinyOdds;
+
+    if (selection >= OPTIONS_SHINY_ODDS_COUNT)
+        selection = OPTIONS_SHINY_ODDS_8192;
+
+    return SHINY_ODDS << selection;
+}
+
 
 #define FRIENDSHIP_EVO_THRESHOLD ((P_FRIENDSHIP_EVO_THRESHOLD >= GEN_8) ? 160 : 220)
 
@@ -695,11 +705,11 @@ const struct NatureInfo gNaturesInfo[NUM_NATURES] =
 const u8 gShadowAggressionTable[NUM_AGGRO_LEVELS][HEART_GAUGE_LEVELS] = 
 {
     [SHADOW_AGGRO_NONE]         = { 0,  0,  0,  0,  0,  0},
-    [SHADOW_AGGRO_VERY_LOW]     = {15, 10,  5,  2,  0,  0},
-    [SHADOW_AGGRO_LOW]          = {20, 15, 10,  5,  0,  0},
-    [SHADOW_AGGRO_MEDIUM]       = {30, 20, 15, 10,  0,  0},
-    [SHADOW_AGGRO_HIGH]         = {40, 25, 15, 10,  0,  0},
-    [SHADOW_AGGRO_VERY_HIGH]    = {50, 35, 20, 10,  0,  0},
+    [SHADOW_AGGRO_VERY_LOW]     = { 2,  5, 10, 15, 15, 15},
+    [SHADOW_AGGRO_LOW]          = { 5, 10, 15, 20, 20, 20},
+    [SHADOW_AGGRO_MEDIUM]       = {10, 15, 20, 30, 30, 30},
+    [SHADOW_AGGRO_HIGH]         = {10, 15, 25, 50, 50, 50},
+    [SHADOW_AGGRO_VERY_HIGH]    = {10, 20, 35, 50, 50, 50},
     [SHADOW_AGGRO_TEST]         = {80, 80, 80, 80, 80, 80},
 };
 
@@ -1050,7 +1060,7 @@ static const u32 sCompressedStatuses[] =
 STATIC_ASSERT(NUM_SPECIES < (1 << 11), PokemonSubstruct0_species_TooSmall);
 STATIC_ASSERT(NUMBER_OF_MON_TYPES + 1 <= (1 << 5), PokemonSubstruct0_teraType_TooSmall);
 STATIC_ASSERT(ITEMS_COUNT < (1 << 10), PokemonSubstruct0_heldItem_TooSmall);
-STATIC_ASSERT(MAX_LEVEL <= 100, PokemonSubstruct0_experience_PotentiallTooSmall); // Maximum of ~2 million exp.
+STATIC_ASSERT(MAX_LEVEL <= 125, PokemonSubstruct0_experience_PotentiallTooSmall); // Maximum of ~3.7 million exp.
 STATIC_ASSERT(POKEBALL_COUNT <= (1 << 6), PokemonSubstruct0_pokeball_TooSmall);
 STATIC_ASSERT(MOVES_COUNT_ALL < (1 << 11), PokemonSubstruct1_moves_TooSmall);
 STATIC_ASSERT(ARRAY_COUNT(sCompressedStatuses) <= (1 << 4), PokemonSubstruct3_compressedStatus_TooSmall);
@@ -1180,6 +1190,7 @@ void CreateBoxMon(struct BoxPokemon *boxMon, u16 species, u8 level, u8 fixedIV, 
         else
         {
             u32 totalRerolls = 0;
+            u32 shinyOdds = GetShinyOddsThreshold();
             if (CheckBagHasItem(ITEM_SHINY_CHARM, 1))
                 totalRerolls += I_SHINY_CHARM_ADDITIONAL_ROLLS;
             if (LURE_STEP_COUNT != 0)
@@ -1189,13 +1200,13 @@ void CreateBoxMon(struct BoxPokemon *boxMon, u16 species, u8 level, u8 fixedIV, 
             if (gDexNavSpecies)
                 totalRerolls += CalculateDexNavShinyRolls();
 
-            while (GET_SHINY_VALUE(value, personality) >= SHINY_ODDS && totalRerolls > 0)
+            while (GET_SHINY_VALUE(value, personality) >= shinyOdds && totalRerolls > 0)
             {
                 personality = Random32();
                 totalRerolls--;
             }
 
-            isShiny = GET_SHINY_VALUE(value, personality) < SHINY_ODDS;
+            isShiny = GET_SHINY_VALUE(value, personality) < shinyOdds;
         }
     }
 
@@ -3580,10 +3591,11 @@ u8 CopyMonToPC(struct Pokemon *mon)
         for (boxPos = 0; boxPos < IN_BOX_COUNT; boxPos++)
         {
             struct BoxPokemon *checkingMon = GetBoxedMonPtr(boxNo, boxPos);
-            if (GetBoxMonData(checkingMon, MON_DATA_SPECIES, NULL) == SPECIES_NONE)
+            if (checkingMon != NULL
+                && GetBoxMonData(checkingMon, MON_DATA_SPECIES, NULL) == SPECIES_NONE)
             {
                 MonRestorePP(mon);
-                CopyMon(checkingMon, &mon->box, sizeof(mon->box));
+                SetBoxMonAt(boxNo, boxPos, &mon->box);
                 gSpecialVar_MonBoxId = boxNo;
                 gSpecialVar_MonBoxPos = boxPos;
                 if (GetPCBoxToSendMon() != boxNo)

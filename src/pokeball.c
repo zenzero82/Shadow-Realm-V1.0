@@ -9,6 +9,7 @@
 #include "pokemon.h"
 #include "sound.h"
 #include "sprite.h"
+#include "palette.h"
 #include "task.h"
 #include "trig.h"
 #include "util.h"
@@ -45,6 +46,7 @@ static void SpriteCB_HealthboxSlideInDelayed(struct Sprite *sprite);
 static void SpriteCB_HealthboxSlideIn(struct Sprite *sprite);
 static void SpriteCB_HitAnimHealthoxEffect(struct Sprite *sprite);
 static u16 GetBattlerPokeballItemId(u8 battler);
+static void ApplyBallSpritePalette(u8 ballId, u8 spriteId);
 
 // rom const data
 
@@ -76,6 +78,7 @@ static u16 GetBattlerPokeballItemId(u8 battler);
 #define GFX_TAG_PARK_BALL    55025
 #define GFX_TAG_BEAST_BALL   55026
 #define GFX_TAG_CHERISH_BALL 55027
+#define GFX_TAG_DARK_BALL    55028
 
 const struct CompressedSpriteSheet gBallSpriteSheets[POKEBALL_COUNT] =
 {
@@ -107,6 +110,7 @@ const struct CompressedSpriteSheet gBallSpriteSheets[POKEBALL_COUNT] =
     [BALL_PARK]    = {gBallGfx_Park,    384, GFX_TAG_PARK_BALL},
     [BALL_BEAST]   = {gBallGfx_Beast,   384, GFX_TAG_BEAST_BALL},
     [BALL_CHERISH] = {gBallGfx_Cherish, 384, GFX_TAG_CHERISH_BALL},
+    [BALL_DARK]    = {gBallGfx_Dark,    384, GFX_TAG_DARK_BALL},
 };
 
 const struct SpritePalette gBallSpritePalettes[POKEBALL_COUNT] =
@@ -139,6 +143,7 @@ const struct SpritePalette gBallSpritePalettes[POKEBALL_COUNT] =
     [BALL_PARK]    = {gBallPal_Park,    GFX_TAG_PARK_BALL},
     [BALL_BEAST]   = {gBallPal_Beast,   GFX_TAG_BEAST_BALL},
     [BALL_CHERISH] = {gBallPal_Cherish, GFX_TAG_CHERISH_BALL},
+    [BALL_DARK]    = {gBallPal_Dark,    GFX_TAG_DARK_BALL},
 };
 
 static const struct OamData sBallOamData =
@@ -536,6 +541,16 @@ const struct SpriteTemplate gBallSpriteTemplates[POKEBALL_COUNT] =
         .affineAnims = sAffineAnim_BallRotate,
         .callback = SpriteCB_BallThrow,
     },
+    [BALL_DARK] =
+    {
+        .tileTag = GFX_TAG_DARK_BALL,
+        .paletteTag = GFX_TAG_DARK_BALL,
+        .oam = &sBallOamData,
+        .anims = sBallAnimSequences,
+        .images = NULL,
+        .affineAnims = sAffineAnim_BallRotate,
+        .callback = SpriteCB_BallThrow,
+    },
 };
 
 #define tFrames          data[0]
@@ -582,6 +597,8 @@ static void Task_DoPokeballSendOutAnim(u8 taskId)
     gSprites[ballSpriteId].data[0] = 0x80;
     gSprites[ballSpriteId].data[1] = 0;
     gSprites[ballSpriteId].data[7] = throwCaseId;
+    if (ballId == BALL_DARK && !IsBattlerPlayer(battler))
+        ApplyBallSpritePalette(ballId, ballSpriteId);
 
     switch (throwCaseId)
     {
@@ -1553,11 +1570,17 @@ static void SpriteCB_HitAnimHealthoxEffect(struct Sprite *sprite)
 void LoadBallGfx(u8 ballId)
 {
     u16 var;
+    u32 palIndex;
+
+    palIndex = IndexOfSpritePaletteTag(gBallSpritePalettes[ballId].tag);
+    if (palIndex == 0xFF)
+        palIndex = LoadSpritePalette(&gBallSpritePalettes[ballId]);
+    else
+        LoadPalette(gBallSpritePalettes[ballId].data, OBJ_PLTT_ID(palIndex), PLTT_SIZE_4BPP);
 
     if (GetSpriteTileStartByTag(gBallSpriteSheets[ballId].tag) == 0xFFFF)
     {
         LoadCompressedSpriteSheetUsingHeap(&gBallSpriteSheets[ballId]);
-        LoadSpritePalette(&gBallSpritePalettes[ballId]);
     }
 
     switch (ballId)
@@ -1566,10 +1589,24 @@ void LoadBallGfx(u8 ballId)
     case BALL_NET ... BALL_NEST:
     case BALL_REPEAT:
     case BALL_SAFARI:
+    case BALL_DARK:
         var = GetSpriteTileStartByTag(gBallSpriteSheets[ballId].tag);
         DecompressDataWithHeaderVram(gOpenPokeballGfx, (void *)(OBJ_VRAM0 + 0x100 + var * 32));
         break;
     }
+}
+
+static void ApplyBallSpritePalette(u8 ballId, u8 spriteId)
+{
+    u32 palIndex = IndexOfSpritePaletteTag(gBallSpritePalettes[ballId].tag);
+
+    if (palIndex == 0xFF)
+        palIndex = LoadSpritePalette(&gBallSpritePalettes[ballId]);
+    if (palIndex == 0xFF)
+        palIndex = gSprites[spriteId].oam.paletteNum & 0xF;
+
+    gSprites[spriteId].oam.paletteNum = palIndex;
+    LoadPalette(gBallSpritePalettes[ballId].data, OBJ_PLTT_ID(palIndex), PLTT_SIZE_4BPP);
 }
 
 void FreeBallGfx(u8 ballId)
@@ -1582,16 +1619,29 @@ static u16 GetBattlerPokeballItemId(u8 battler)
 {
     struct Pokemon *illusionMon;
     struct Pokemon *mon = GetBattlerMon(battler);
+    bool8 isShadow = GetMonData(mon, MON_DATA_IS_SHADOW);
 
     illusionMon = GetIllusionMonPtr(battler);
     if (illusionMon != NULL)
         mon = illusionMon;
 
-    return GetMonData(mon, MON_DATA_POKEBALL);
+    if (GetBattlerSide(battler) == B_SIDE_OPPONENT && isShadow)
+    {
+        return BALL_DARK;
+    }
+
+    return ItemIdToBallId(GetMonData(mon, MON_DATA_POKEBALL));
 }
 
 enum PokeBall ItemIdToBallId(u32 ballItem)
 {
+    if (ballItem < POKEBALL_COUNT)
+        return ballItem;
+
+    // Legacy save data could store ITEM_DARK_BALL in an 8-bit field.
+    if (ballItem == (ITEM_DARK_BALL & 0xFF) && ballItem != ITEM_DARK_BALL)
+        return BALL_DARK;
+
     enum PokeBall secondaryId = GetItemSecondaryId(ballItem);
 
     if (secondaryId <= BALL_STRANGE || secondaryId >= POKEBALL_COUNT)

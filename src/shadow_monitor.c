@@ -76,7 +76,10 @@ bool8 ShadowMonitorPopulateInfo(u16 shadowId, struct ShadowMonitorInfo *info)
     {
         for (slot = 0; slot < IN_BOX_COUNT; slot++)
         {
-            struct BoxPokemon *boxMon = &gPokemonStoragePtr->boxes[box][slot];
+            struct BoxPokemon *boxMon = GetBoxedMonPtr(box, slot);
+
+            if (boxMon == NULL)
+                continue;
 
             if (GetBoxMonData(boxMon, MON_DATA_SPECIES, NULL) == SPECIES_NONE)
                 continue;

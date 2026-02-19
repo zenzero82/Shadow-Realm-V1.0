@@ -13,3 +13,20 @@ Route4_Pokecenter_EventScript_Chansey::
 Route4_Pokecenter_OnTransition:
 	setrespawn HEAL_LOCATION_ROUTE4
 	end
+
+Route4_Pokecenter_EventScript_Bookshelf1::
+	msgbox Route4_Pokecenter_Text_Bookshelf1, MSGBOX_SIGN
+	end
+
+Route4_Pokecenter_EventScript_Bookshelf2::
+	msgbox Route4_Pokecenter_Text_Bookshelf2, MSGBOX_SIGN
+	end
+
+Route4_Pokecenter_EventScript_WallMap::
+	goto EventScript_RegionMap
+
+Route4_Pokecenter_Text_Bookshelf1:
+	.string "MT. MOON trail guide.$"
+
+Route4_Pokecenter_Text_Bookshelf2:
+	.string "ROUTE 4 wild POKEMON.$"

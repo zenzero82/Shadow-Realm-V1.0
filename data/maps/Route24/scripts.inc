@@ -28,19 +28,22 @@ Route24_EventScript_Zander::
 
 	lock
 	faceplayer
+	playbgm MUS_HG_ENCOUNTER_ROCKET, FALSE
 	setspeaker Route24_Speaker_Zander
 	msgbox Route24_Text_Zander_Intro, MSGBOX_DEFAULT
 	closemessage
 
-	trainerbattle_single TRAINER_ROCKET_GRUNT_M_1, Route24_Text_Zander_BattleCue, Route24_Text_Zander_Defeated, Route24_EventScript_Zander_AfterBattle
-	end
+	trainerbattle_no_intro TRAINER_ROCKET_GRUNT_M_1, Route24_Text_Zander_Defeated
+	goto Route24_EventScript_Zander_AfterBattle
 
 Route24_EventScript_Zander_AfterBattle::
 	msgbox Route24_Text_Zander_PostBattle, MSGBOX_DEFAULT
 	closemessage
 	setflag FLAG_ROUTE_24_ZANDER_DEFEATED
 	setflag FLAG_HIDE_ROUTE_24_ZANDER
+	fadescreenswapbuffers FADE_TO_BLACK
 	removeobject 2
+	fadescreenswapbuffers FADE_FROM_BLACK
 	releaseall
 	end
 

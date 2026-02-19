@@ -203,7 +203,12 @@
 #define TRAINER_PIC_LOVRINA              169
 #define TRAINER_PIC_MIRROR_B             170
 
-#define TRAINER_PIC_COUNT                 171
+// Johto (Gen 2)
+#define TRAINER_PIC_LASS_GEN2            171
+#define TRAINER_PIC_ACE_TRAINER_GEN2M    172
+#define TRAINER_PIC_ACE_TRAINER_GEN2F    173
+
+#define TRAINER_PIC_COUNT                 174
 
 // The player back pics are assumed to alternate according to the gender values (MALE/FEMALE)
 #define TRAINER_BACK_PIC_BRENDAN                0
@@ -471,8 +476,10 @@
 #define TRAINER_CLASS_WANDERER       0x56
 #define TRAINER_CLASS_CIPHER_ADMIN   0x57
 #define TRAINER_CLASS_SNAGEM_HEAD    0x58
+#define TRAINER_CLASS_SUPER_NERD     0x59
+#define TRAINER_CLASS_ACE_TRAINER    0x5A
 
-#define TRAINER_CLASS_COUNT          0x59
+#define TRAINER_CLASS_COUNT          0x5B
 
 #define TRAINER_ENCOUNTER_MUSIC_MALE         0 // standard male encounter music
 #define TRAINER_ENCOUNTER_MUSIC_FEMALE       1 // standard female encounter music

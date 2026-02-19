@@ -185,7 +185,7 @@ ALL_LEARNABLES_JSON := $(LEARNSET_HELPERS_BUILD_DIR)/all_learnables.json
 WILD_ENCOUNTERS_TOOL_DIR := $(TOOLS_DIR)/wild_encounters
 AUTO_GEN_TARGETS += $(DATA_SRC_SUBDIR)/wild_encounters.h
 
-SHADOW_GRAPHICS_DIRS := graphics/pokemon/*/shadow graphics/pokemon/pokemon/*/shadow
+SHADOW_GRAPHICS_DIRS := graphics/pokemon/*/shadow graphics/pokemon/*/*/shadow graphics/pokemon/pokemon/*/shadow graphics/pokemon/pokemon/*/*/shadow
 SHADOW_GRAPHICS_PNGS := $(wildcard $(addsuffix /*.png,$(SHADOW_GRAPHICS_DIRS)))
 SHADOW_GRAPHICS_PALS := $(wildcard $(addsuffix /*.pal,$(SHADOW_GRAPHICS_DIRS)))
 AUTO_GEN_TARGETS += src/data/shadow_graphics_assets.generated src/data/shadow_forms.generated

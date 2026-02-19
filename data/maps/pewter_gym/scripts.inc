@@ -50,7 +50,7 @@ PewterCity_Gym_EventScript_Brock::
 
     msgbox PewterCity_Gym_Text_Brock_Intro, MSGBOX_DEFAULT
     call PewterCity_Gym_EventScript_Brock_CroagunkIntro
-    faceplayer
+    turnobject LOCALID_BROCK, DIR_SOUTH
     msgbox PewterCity_Gym_Text_Brock_Apology, MSGBOX_DEFAULT
     trainerbattle_no_intro TRAINER_BROCK_KANTO, PewterCity_Gym_Text_Brock_WinLoss
 
@@ -82,7 +82,7 @@ PewterCity_Gym_EventScript_Brock_CroagunkIntro::
 
     applymovement LOCALID_BROCK_CROAGUNK, PewterGym_Move_Croagunk_ReturnBall
     waitmovement 0
-    faceplayer
+    turnobject LOCALID_BROCK, DIR_SOUTH
     removeobject LOCALID_BROCK_CROAGUNK
     setflag FLAG_HIDE_PEWTER_GYM_BROCK_CROAGUNK
     return

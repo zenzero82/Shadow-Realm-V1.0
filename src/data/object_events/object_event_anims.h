@@ -1090,16 +1090,15 @@ static const union AffineAnimCmd sAffineAnim_KyogreGroudon_DipWest[] =
 
 static const union AffineAnimCmd sAffineAnim_HoopaRingGrow[] =
 {
-    AFFINEANIMCMD_FRAME(0x900, 0x900, 0, 0),   // Start tiny (inverse scale)
-    AFFINEANIMCMD_FRAME(0, 0, -2, 6),          // Hold small, slight spin
-    AFFINEANIMCMD_FRAME(-0x40, -0x40, -4, 32), // Grow to full size, spin CCW
+    AFFINEANIMCMD_FRAME(0x10, 0x10, 0, 0),     // Start tiny
+    AFFINEANIMCMD_FRAME(0x4, 0x4, -2, 64),     // Grow steadily to full size
     AFFINEANIMCMD_END,
 };
 
 static const union AffineAnimCmd sAffineAnim_HoopaRingShrink[] =
 {
-    AFFINEANIMCMD_FRAME(0x100, 0x100, 0, 0), // Start full size
-    AFFINEANIMCMD_FRAME(0x40, 0x40, 4, 32),  // Shrink to small, spin CW
+    AFFINEANIMCMD_FRAME(0x100, 0x100, 0, 0),  // Start full size
+    AFFINEANIMCMD_FRAME(-0x4, -0x4, 2, 60),   // Shrink steadily to tiny size
     AFFINEANIMCMD_END,
 };
 

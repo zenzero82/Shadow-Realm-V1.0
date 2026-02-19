@@ -103,6 +103,8 @@ static void SetDefaultOptions(void)
     gSaveBlock2Ptr->optionsBattleStyle = OPTIONS_BATTLE_STYLE_SHIFT;
     gSaveBlock2Ptr->optionsBattleSceneOff = FALSE;
     gSaveBlock2Ptr->regionMapZoom = FALSE;
+    gSaveBlock2Ptr->optionsShinyOdds = OPTIONS_SHINY_ODDS_8192;
+    gSaveBlock2Ptr->optionsLevelCap = OPTIONS_LEVEL_CAP_NORMAL;
 }
 
 static void ClearPokedexFlags(void)

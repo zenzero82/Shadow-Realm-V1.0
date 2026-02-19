@@ -63,6 +63,8 @@ extern const u32 gBallGfx_Beast[];
 extern const u16 gBallPal_Beast[];
 extern const u32 gBallGfx_Cherish[];
 extern const u16 gBallPal_Cherish[];
+extern const u32 gBallGfx_Dark[];
+extern const u16 gBallPal_Dark[];
 extern const u32 gOpenPokeballGfx[];
 
 // Pokémon gfx
@@ -430,6 +432,8 @@ extern const u32 gItemIcon_BeastBall[];
 extern const u16 gItemIconPalette_BeastBall[];
 extern const u32 gItemIcon_CherishBall[];
 extern const u16 gItemIconPalette_CherishBall[];
+extern const u32 gItemIcon_DarkBall[];
+extern const u16 gItemIconPalette_DarkBall[];
 // Medicine
 extern const u32 gItemIcon_Potion[];
 extern const u16 gItemIconPalette_Potion[];
@@ -2007,6 +2011,10 @@ extern const u16 gPokenavLeftHeaderJohtoMap_Pal[];
 extern const u16 gPokenavHeader_Pal[];
 extern const u32 gPokenavHeader_Gfx[];
 extern const u32 gPokenavHeader_Tilemap[];
+extern const u16 gPokenavHeaderKanto_Pal[];
+extern const u32 gPokenavHeaderKanto_Gfx[];
+extern const u16 gPokenavHeaderJohto_Pal[];
+extern const u32 gPokenavHeaderJohto_Gfx[];
 extern const u32 gPokenavLeftHeaderHoennMap_Gfx[];
 extern const u32 gPokenavLeftHeaderKantoMap_Gfx[];
 extern const u32 gPokenavLeftHeaderJohtoMap_Gfx[];
@@ -2060,7 +2068,13 @@ extern const u32 gBattleInterface_BallStatusBarGfx[];
 extern const u8 gBattleInterface_BallDisplayGfx[];
 extern const u16 gBattleInterface_BallStatusBarPal[];
 extern const u16 gBattleInterface_ShadowMenuPal[];
+extern const u16 gBattleInterface_ShadowMenuReversePal[];
 extern const u16 gBattleInterface_BallDisplayPal[];
+extern const u16 gBattleInterface_HealthboxFramePal[];
+extern const u16 gBattleInterface_HealthboxFrameShadowPal[];
+extern const u16 gBattleInterface_HealthboxFrameShadowOpponentPal[];
+extern const u16 gBattleInterface_HealthboxFrameShadowReversePal[];
+extern const u16 gBattleInterface_HealthboxFrameShadowOpponentReversePal[];
 extern const u8 gHealthboxElementsGfxTable[][32];
 
 extern const u8 gNamingScreenCursorTiles[];
@@ -2097,9 +2111,14 @@ extern const u32 gHealthboxDoublesPlayerGfx[];
 extern const u32 gHealthboxDoublesOpponentGfx[];
 extern const u32 gHealthboxSafariGfx[];
 extern const u32 gHealthboxSinglesPlayerShadowGfx[];
+extern const u32 gHealthboxSinglesOpponentShadowGfx[];
+extern const u32 gHealthboxBlankLargeGfx[];
 extern const u32 gBlankGfxCompressed[];
 extern const u16 gBattleInterface_BallStatusBarPal[];
 extern const u16 gBattleInterface_ShadowMenuPal[];
+extern const u16 gBattleInterface_ShadowMenuReversePal[];
+extern const u16 gBattleInterface_ShadowMenuOpponentPal[];
+extern const u16 gBattleInterface_ShadowMenuOpponentReversePal[];
 extern const u16 gBattleInterface_BallDisplayPal[];
 
 extern const u32 gSwapLineGfx[];
@@ -2119,6 +2138,7 @@ extern const u32 gTitleScreenPokemonLogoGfx[];
 extern const u32 gTitleScreenPokemonLogoTilemap[];
 extern const u32 gTitleScreenCloudsTilemap[];
 extern const u16 gTitleScreenBgPalettes[];
+extern const u16 gTitleScreenNewTitlePal[];
 extern const u16 gTitleScreenPressStartPal[];
 extern const u16 gTitleScreenEmeraldVersionPal[];
 

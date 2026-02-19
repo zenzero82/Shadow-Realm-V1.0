@@ -63,7 +63,7 @@
       "movement_range_y": 0,
       "trainer_type": "TRAINER_TYPE_NONE",
       "trainer_sight_or_berry_tree_id": "0",
-      "script": "WesHideout_Underground_EventScript_Sycamore",
+      "script": "NULL",
       "flag": "0"
     },
     {
@@ -76,7 +76,7 @@
       "movement_range_y": 0,
       "trainer_type": "TRAINER_TYPE_NONE",
       "trainer_sight_or_berry_tree_id": "0",
-      "script": "WesHideout_Underground_EventScript_Magnolia",
+      "script": "NULL",
       "flag": "0"
     },
     {
@@ -142,6 +142,24 @@
       "var": "VAR_TEMP_0",
       "var_value": "0",
       "script": "WesHideout_Underground_EventScript_RowanTrigger_2"
+    },
+    {
+      "type": "trigger",
+      "x": 22,
+      "y": 19,
+      "elevation": 0,
+      "var": "VAR_TEMP_1",
+      "var_value": "0",
+      "script": "WesHideout_Underground_EventScript_Magnolia"
+    },
+    {
+      "type": "trigger",
+      "x": 23,
+      "y": 19,
+      "elevation": 0,
+      "var": "VAR_TEMP_1",
+      "var_value": "0",
+      "script": "WesHideout_Underground_EventScript_Sycamore"
     }
   ],
   "bg_events": []

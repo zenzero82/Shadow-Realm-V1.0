@@ -161,11 +161,12 @@ CeruleanCity_EventScript_MistyMichael_Scene::
     removeobject LOCALID_MICHAEL
     fadescreen FADE_FROM_BLACK
     call CeruleanCity_EventScript_PlayerWalkToMistyFromTrigger
-    turnobject LOCALID_PLAYER, DIR_NORTH
+    applymovement LOCALID_PLAYER, Common_Movement_FaceUp
+    waitmovement 0
     applymovement LOCALID_MISTY, Common_Movement_FacePlayer
     waitmovement 0
     setspeaker CeruleanCity_Speaker_Misty
-    msgbox CeruleanCity_Text_Misty_AfterScene, MSGBOX_NPC
+    msgbox CeruleanCity_Text_Misty_AfterScene, MSGBOX_DEFAULT
     closemessage
     setflag FLAG_CERULEAN_MISTY_MICHAEL_SCENE_DONE
     releaseall

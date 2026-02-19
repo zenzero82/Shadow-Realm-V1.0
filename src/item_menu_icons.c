@@ -99,9 +99,12 @@ static const union AnimCmd *const sBagSpriteAnimTable[] =
     [POCKET_NONE]       = sSpriteAnim_Bag_Closed,
     [POCKET_ITEMS]      = sSpriteAnim_Bag_Items,
     [POCKET_POKE_BALLS] = sSpriteAnim_Bag_Pokeballs,
+    [POCKET_MEDICINE]   = sSpriteAnim_Bag_Items,
     [POCKET_TM_HM]      = sSpriteAnim_Bag_TMsHMs,
     [POCKET_BERRIES]    = sSpriteAnim_Bag_Berries,
+    [POCKET_BATTLE_ITEMS] = sSpriteAnim_Bag_Items,
     [POCKET_KEY_ITEMS]  = sSpriteAnim_Bag_KeyItems,
+    [POCKET_TREASURES]  = sSpriteAnim_Bag_Items,
 };
 
 static const union AffineAnimCmd sSpriteAffineAnim_BagNormal[] =
@@ -460,15 +463,19 @@ void RemoveBagSprite(u8 id)
 void AddBagVisualSprite(u8 bagPocketId)
 {
     u8 *spriteId = &gBagMenu->spriteIds[ITEMMENUSPRITE_BAG];
-    *spriteId = CreateSprite(&sBagSpriteTemplate, 68, 66, 0);
-    SetBagVisualPocketId(bagPocketId, FALSE);
+    (void)bagPocketId;
+    *spriteId = SPRITE_NONE;
 }
 
 #define sPocketId data[0]
 
 void SetBagVisualPocketId(u8 bagPocketId, bool8 isSwitchingPockets)
 {
-    struct Sprite *sprite = &gSprites[gBagMenu->spriteIds[ITEMMENUSPRITE_BAG]];
+    u8 spriteId = gBagMenu->spriteIds[ITEMMENUSPRITE_BAG];
+    struct Sprite *sprite;
+    if (spriteId == SPRITE_NONE)
+        return;
+    sprite = &gSprites[spriteId];
     if (isSwitchingPockets)
     {
         sprite->y2 = -5;
@@ -499,7 +506,11 @@ static void SpriteCB_BagVisualSwitchingPockets(struct Sprite *sprite)
 
 void ShakeBagSprite(void)
 {
-    struct Sprite *sprite = &gSprites[gBagMenu->spriteIds[ITEMMENUSPRITE_BAG]];
+    u8 spriteId = gBagMenu->spriteIds[ITEMMENUSPRITE_BAG];
+    struct Sprite *sprite;
+    if (spriteId == SPRITE_NONE)
+        return;
+    sprite = &gSprites[spriteId];
     if (sprite->affineAnimEnded)
     {
         StartSpriteAffineAnim(sprite, ANIM_BAG_SHAKE);

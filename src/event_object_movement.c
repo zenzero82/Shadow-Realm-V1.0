@@ -7991,7 +7991,7 @@ static void ObjectEventSetPokeballGfx(struct ObjectEvent *objEvent)
     {
         struct Pokemon *mon = GetFirstLiveMon();
         if (mon)
-            ball = GetMonData(mon, MON_DATA_POKEBALL);
+            ball = ItemIdToBallId(GetMonData(mon, MON_DATA_POKEBALL));
     }
 
     if (ball != BALL_POKE && ball < POKEBALL_COUNT)

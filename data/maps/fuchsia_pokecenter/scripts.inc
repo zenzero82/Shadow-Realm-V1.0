@@ -13,3 +13,20 @@ fuchsia_pokecenter_EventScript_Chansey::
 fuchsia_pokecenter_OnTransition:
 	setrespawn HEAL_LOCATION_FUCHSIA_CITY
 	end
+
+fuchsia_pokecenter_EventScript_Bookshelf1::
+	msgbox fuchsia_pokecenter_Text_Bookshelf1, MSGBOX_SIGN
+	end
+
+fuchsia_pokecenter_EventScript_Bookshelf2::
+	msgbox fuchsia_pokecenter_Text_Bookshelf2, MSGBOX_SIGN
+	end
+
+fuchsia_pokecenter_EventScript_WallMap::
+	goto EventScript_RegionMap
+
+fuchsia_pokecenter_Text_Bookshelf1:
+	.string "A SAFARI ZONE guide.$"
+
+fuchsia_pokecenter_Text_Bookshelf2:
+	.string "Notes on the FUCHSIA WARDEN.$"

@@ -326,7 +326,7 @@ static const u8 sText_NewGameIntroStory[] = _(
     "A brand new story that pulls the\n"
     "Shadow mechanics from fan favorites\l"
     "POKEMON COLOSSEUM & XD.\p"
-    "This game is a free fan hack and is\n"
+    "This game is a free rom hack and is\n"
     "absolutely not for sale.\p"
     "As of now it's a one-man project,\n"
     "so it will take some time to finish.\l"
@@ -600,7 +600,7 @@ static const u8 *const sMalePresetNames[] = {
 };
 
 static const u8 *const sFemalePresetNames[] = {
-    COMPOUND_STRING("KIMMY"),
+    COMPOUND_STRING("KRIS"),
 };
 
 // The number of male vs. female names is assumed to be the same.
@@ -971,7 +971,9 @@ static void Task_HandleMainMenuAPressed(u8 taskId)
             MainMenu_BlankScreen();
             gPlttBufferUnfaded[0] = RGB_BLACK;
             gPlttBufferFaded[0] = RGB_BLACK;
-            SetMainCallback2(CB2_NewGame_GenderName);
+            OptionMenu_SetNewGameSetup(TRUE);
+            gMain.savedCallback = CB2_NewGame_GenderName;
+            SetMainCallback2(CB2_InitOptionMenu);
             break;
         case ACTION_CONTINUE:
             MainMenu_BlankScreen();
@@ -981,6 +983,7 @@ static void Task_HandleMainMenuAPressed(u8 taskId)
             DestroyTask(taskId);
             break;
         case ACTION_OPTION:
+            OptionMenu_SetNewGameSetup(FALSE);
             gMain.savedCallback = CB2_ReinitMainMenu;
             SetMainCallback2(CB2_InitOptionMenu);
             DestroyTask(taskId);

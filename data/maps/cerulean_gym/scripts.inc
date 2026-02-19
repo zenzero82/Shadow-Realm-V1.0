@@ -20,7 +20,23 @@ cerulean_gym_EventScript_Misty::
 	lock
 	faceplayer
 	setspeaker cerulean_gym_Speaker_Misty
-	msgbox cerulean_gym_Text_Misty, MSGBOX_DEFAULT
+	goto_if_set FLAG_BADGE10_GET, cerulean_gym_EventScript_Misty_Defeated
+
+	msgbox cerulean_gym_Text_Misty_Intro, MSGBOX_DEFAULT
+	trainerbattle_no_intro TRAINER_MISTY, cerulean_gym_Text_Misty_WinLoss
+
+	message cerulean_gym_Text_Misty_ReceivedCascadeBadge
+	waitmessage
+	call Common_EventScript_PlayGymBadgeFanfare
+
+	msgbox cerulean_gym_Text_Misty_After, MSGBOX_DEFAULT
+	setflag FLAG_BADGE10_GET
+	closemessage
+	release
+	end
+
+cerulean_gym_EventScript_Misty_Defeated::
+	msgbox cerulean_gym_Text_Misty_After, MSGBOX_DEFAULT
 	closemessage
 	release
 	end
@@ -29,7 +45,14 @@ cerulean_gym_EventScript_GymGuy::
 	lock
 	faceplayer
 	setspeaker cerulean_gym_Speaker_GymGuy
-	msgbox cerulean_gym_Text_GymGuy, MSGBOX_DEFAULT
+	goto_if_set FLAG_BADGE10_GET, cerulean_gym_EventScript_GymGuy_After
+	msgbox cerulean_gym_Text_GymGuy_Intro, MSGBOX_DEFAULT
+	closemessage
+	release
+	end
+
+cerulean_gym_EventScript_GymGuy_After::
+	msgbox cerulean_gym_Text_GymGuy_After, MSGBOX_DEFAULT
 	closemessage
 	release
 	end
@@ -87,15 +110,31 @@ cerulean_gym_EventScript_Sign_Right::
 	msgbox cerulean_gym_Text_Sign_Right, MSGBOX_SIGN
 	end
 
-cerulean_gym_Text_Misty:
-	.string "Sorry, the GYM is closed.\p"
-	.string "Too much is happening around the\n"
-	.string "CAPE and the city right now.$"
+cerulean_gym_Text_Misty_Intro:
+	.string "Hi! I'm MISTY, the CERULEAN GYM\n"
+	.string "LEADER.\p"
+	.string "My WATER POKEMON are strong and fast.\n"
+	.string "Let's see what you've got!$"
 
-cerulean_gym_Text_GymGuy:
+cerulean_gym_Text_Misty_WinLoss:
+	.string "Wow! You're too much!\p"
+	.string "You can have the CASCADEBADGE.$"
+
+cerulean_gym_Text_Misty_ReceivedCascadeBadge:
+	.string "{PLAYER} received the CASCADEBADGE!$"
+
+cerulean_gym_Text_Misty_After:
+	.string "The CASCADEBADGE makes all POKEMON\n"
+	.string "up to Lv. 30 obey you.$"
+
+cerulean_gym_Text_GymGuy_Intro:
 	.string "Yo! CHAMP in the making!\p"
-	.string "MISTY isn't taking challengers today.\n"
-	.string "Check back after the CAPE clears up.$"
+	.string "MISTY's WATER types move fast.\n"
+	.string "Keep your wits about you!$"
+
+cerulean_gym_Text_GymGuy_After:
+	.string "What a battle! That CASCADEBADGE\n"
+	.string "looks good on you!$"
 
 cerulean_gym_Text_SwimmerM_Intro:
 	.string "You think you can swim circles\n"

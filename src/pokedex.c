@@ -854,6 +854,8 @@ static const u8 sCaughtBall_Gfx[] = INCBIN_U8("graphics/pokedex/caught_ball.4bpp
 static const u8 sText_TenDashes[] = _("----------");
 static const u8 sText_SnaggedFromTrainerFmt[] = _("Snagged from {STR_VAR_1} {STR_VAR_2}");
 static const u8 sText_SnaggedFromUnknown[] = _("Snagged from -----");
+static const u8 sText_FailedSnagFromTrainerFmt[] = _("Failed Snag From {STR_VAR_1} {STR_VAR_2}");
+static const u8 sText_FailedSnagFromUnknown[] = _("Failed Snag From -----");
 static const u8 sText_InParty[] = _("In Party");
 static const u8 sText_BoxFmt[] = _("Box {STR_VAR_1}");
 static const u8 sText_UnknownLocation[] = _("-----");
@@ -3275,6 +3277,8 @@ static void Task_HandleInfoScreenInput(u8 taskId)
         PlaySE(SE_PC_OFF);
         return;
     }
+    if (gIsShadowMonitorOpen)
+        return;
     if (JOY_NEW(A_BUTTON))
     {
         switch (sPokedexView->selectedScreen)
@@ -3814,11 +3818,21 @@ static void Task_SwitchScreensFromSizeScreen(u8 taskId)
 
 static void LoadScreenSelectBarMain(u16 unused)
 {
+    if (gIsShadowMonitorOpen)
+    {
+        FillBgTilemapBufferRect(1, 0, 0, 0, DISPLAY_TILE_WIDTH, DISPLAY_TILE_HEIGHT, 0);
+        return;
+    }
     CopyToBgTilemapBuffer(1, gPokedexScreenSelectBarMain_Tilemap, 0, 0);
 }
 
 static void LoadScreenSelectBarSubmenu(u16 unused)
 {
+    if (gIsShadowMonitorOpen)
+    {
+        FillBgTilemapBufferRect(1, 0, 0, 0, DISPLAY_TILE_WIDTH, DISPLAY_TILE_HEIGHT, 0);
+        return;
+    }
     CopyToBgTilemapBuffer(1, gPokedexScreenSelectBarSubmenu_Tilemap, 0, 0);
 }
 
@@ -3827,6 +3841,9 @@ static void HighlightScreenSelectBarItem(u8 selectedScreen, u16 unused)
     u8 i;
     u8 j;
     u16 *ptr = GetBgTilemapBuffer(1);
+
+    if (gIsShadowMonitorOpen)
+        return;
 
     for (i = 0; i < SCREEN_COUNT; i++)
     {
@@ -3854,6 +3871,9 @@ static void HighlightSubmenuScreenSelectBarItem(u8 a, u16 b)
     u8 i;
     u8 j;
     u16 *ptr = GetBgTilemapBuffer(1);
+
+    if (gIsShadowMonitorOpen)
+        return;
 
     for (i = 0; i < 4; i++)
     {
@@ -4264,16 +4284,17 @@ static void PrintShadowMonitorDetails(u16 shadowId, u32 owned)
 static void BuildShadowMonitorSnaggedFromText(u16 shadowId, u8 *dest)
 {
     u16 trainerId = GetShadowMonitorTrainerId(shadowId);
+    bool8 failed = (Shdw_GetState(shadowId) == SHDW_STATE_FAILED);
 
     if (trainerId == TRAINER_NONE)
     {
-        StringCopy(dest, sText_SnaggedFromUnknown);
+        StringCopy(dest, failed ? sText_FailedSnagFromUnknown : sText_SnaggedFromUnknown);
         return;
     }
 
     StringCopy(gStringVar1, GetTrainerClassNameFromId(trainerId));
     StringCopy(gStringVar2, GetTrainerNameFromId(trainerId));
-    StringExpandPlaceholders(dest, sText_SnaggedFromTrainerFmt);
+    StringExpandPlaceholders(dest, failed ? sText_FailedSnagFromTrainerFmt : sText_SnaggedFromTrainerFmt);
 }
 
 static void CreateShadowHeartBarSprites(void)

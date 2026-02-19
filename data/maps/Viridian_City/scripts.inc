@@ -297,6 +297,7 @@ ViridianCity_GymScene_FaceGonzap_T3::
     turnobject OBJ_EVENT_ID_PLAYER, DIR_WEST
 
 ViridianCity_GymScene_Gonzap_Talk::
+    playbgm MUS_CIPHER_ENCOUNTER, FALSE
     setspeaker Viridian_Speaker_Gonzap
     msgbox ViridianCity_Text_Gonzap_Intro, MSGBOX_DEFAULT
     closemessage
@@ -324,8 +325,11 @@ ViridianCity_GymScene_Shift_T3::
     goto ViridianCity_GymScene_AfterGonzap
 
 ViridianCity_GymScene_AfterGonzap::
+    fadescreenswapbuffers FADE_TO_BLACK
     setflag FLAG_HIDE_VIRIDIAN_GONZAP
     removeobject 5
+    fadescreenswapbuffers FADE_FROM_BLACK
+    fadedefaultbgm
 
     compare VAR_0x8004, 0
     goto_if_eq ViridianCity_GymScene_GruntReturn_T2

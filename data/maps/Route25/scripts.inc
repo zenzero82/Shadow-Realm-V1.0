@@ -2,6 +2,10 @@ Route25_MapScripts::
 	map_script MAP_SCRIPT_ON_TRANSITION, Route25_EventScript_OnTransition
 	.byte 0
 
+Route25_EventScript_BillsHouseSign::
+	msgbox Route25_Text_BillsHouseSign, MSGBOX_SIGN
+	end
+
 @ =================================================
 @ LOCAL IDS
 @ =================================================
@@ -86,7 +90,7 @@ Route25_EventScript_Michael::
 	lock
 	faceplayer
 	setspeaker Route25_Speaker_Michael
-	checkflag FLAG_BADGE01_GET
+	checkflag FLAG_BADGE09_GET
 	goto_if_eq Route25_EventScript_Michael_HasBoulderBadge
 	msgbox Route25_Text_Michael_NeedBoulderBadge, MSGBOX_DEFAULT
 	closemessage
@@ -145,17 +149,78 @@ Route25_EventScript_Wes::
 @ =================================================
 
 Route25_EventScript_Eusine::
+	checkflag FLAG_HIDE_ROUTE_25_EUSINE
+	goto_if_eq Route25_EventScript_Eusine_Done
 	lockall
-	applymovement LOCALID_ROUTE25_EUSINE, Route25_Movement_Eusine_Step
-	waitmovement 0
+	getplayerxy VAR_0x8004, VAR_0x8005
+	call Route25_EventScript_Eusine_ApproachPlayer
 	applymovement OBJ_EVENT_ID_PLAYER, Route25_Movement_Player_FaceRight
 	waitmovement 0
 	setspeaker Route25_Speaker_Eusine
 	msgbox Route25_Text_Eusine, MSGBOX_DEFAULT
 	closemessage
+	call Route25_EventScript_Eusine_Exit
 	setvar VAR_TEMP_0, 1
 	releaseall
 	end
+
+Route25_EventScript_Eusine_Done::
+	end
+
+Route25_EventScript_Eusine_ApproachPlayer::
+	compare VAR_0x8005, 9
+	goto_if_eq Route25_EventScript_Eusine_ApproachUp
+	compare VAR_0x8005, 10
+	goto_if_eq Route25_EventScript_Eusine_ApproachSame
+	compare VAR_0x8005, 11
+	goto_if_eq Route25_EventScript_Eusine_ApproachDown1
+	compare VAR_0x8005, 12
+	goto_if_eq Route25_EventScript_Eusine_ApproachDown2
+	goto Route25_EventScript_Eusine_ApproachDown3
+
+Route25_EventScript_Eusine_ApproachUp::
+	applymovement LOCALID_ROUTE25_EUSINE, Route25_Movement_Eusine_ToPlayer_Up1
+	waitmovement 0
+	return
+
+Route25_EventScript_Eusine_ApproachSame::
+	applymovement LOCALID_ROUTE25_EUSINE, Route25_Movement_Eusine_ToPlayer_Same
+	waitmovement 0
+	return
+
+Route25_EventScript_Eusine_ApproachDown1::
+	applymovement LOCALID_ROUTE25_EUSINE, Route25_Movement_Eusine_ToPlayer_Down1
+	waitmovement 0
+	return
+
+Route25_EventScript_Eusine_ApproachDown2::
+	applymovement LOCALID_ROUTE25_EUSINE, Route25_Movement_Eusine_ToPlayer_Down2
+	waitmovement 0
+	return
+
+Route25_EventScript_Eusine_ApproachDown3::
+	applymovement LOCALID_ROUTE25_EUSINE, Route25_Movement_Eusine_ToPlayer_Down3
+	waitmovement 0
+	return
+
+Route25_EventScript_Eusine_Exit::
+	compare VAR_0x8005, 10
+	goto_if_gt Route25_EventScript_Eusine_ExitUp
+	goto Route25_EventScript_Eusine_ExitDown
+
+Route25_EventScript_Eusine_ExitUp::
+	applymovement LOCALID_ROUTE25_EUSINE, Route25_Movement_Eusine_ExitUp
+	waitmovement 0
+	removeobject LOCALID_ROUTE25_EUSINE
+	setflag FLAG_HIDE_ROUTE_25_EUSINE
+	return
+
+Route25_EventScript_Eusine_ExitDown::
+	applymovement LOCALID_ROUTE25_EUSINE, Route25_Movement_Eusine_ExitDown
+	waitmovement 0
+	removeobject LOCALID_ROUTE25_EUSINE
+	setflag FLAG_HIDE_ROUTE_25_EUSINE
+	return
 
 @ =================================================
 @ ROUTE 25 TRAINERS
@@ -265,6 +330,53 @@ Route25_Movement_Eusine_Step:
 	face_left
 	step_end
 
+Route25_Movement_Eusine_ToPlayer_Up1:
+	walk_up
+	face_left
+	step_end
+
+Route25_Movement_Eusine_ToPlayer_Same:
+	face_left
+	step_end
+
+Route25_Movement_Eusine_ToPlayer_Down1:
+	walk_down
+	face_left
+	step_end
+
+Route25_Movement_Eusine_ToPlayer_Down2:
+	walk_down
+	walk_down
+	face_left
+	step_end
+
+Route25_Movement_Eusine_ToPlayer_Down3:
+	walk_down
+	walk_down
+	walk_down
+	face_left
+	step_end
+
+Route25_Movement_Eusine_ExitUp:
+	walk_up
+	walk_left
+	walk_left
+	walk_left
+	walk_left
+	walk_left
+	walk_left
+	step_end
+
+Route25_Movement_Eusine_ExitDown:
+	walk_down
+	walk_left
+	walk_left
+	walk_left
+	walk_left
+	walk_left
+	walk_left
+	step_end
+
 Route25_Movement_Player_FaceRight:
 	face_right
 	step_end
@@ -298,7 +410,7 @@ Route25_Text_Michael_Repeat:
 
 Route25_Text_Michael_NeedBoulderBadge:
 	.string "Looks like you haven't bested BROCK\n"
-	.string "in battle. You should defeat him before\n"
+	.string "in battle. You should defeat him before\l"
 	.string "coming to see WES.$"
 
 Route25_Text_Wes:
@@ -384,6 +496,10 @@ Route25_Text_Eusine:
 	.string "I not in my own timeline?\p"
 	.string "No matter, my search for SUICUNE\n"
 	.string "resumes. If you find any clues\l"
-	.string "I want you to tell BILL. He is\l"
-	.string "a good friend of mine. Till we\l"
-	.string "meet again!$"
+	.string "I want you to tell BILL.\l"
+	.string "He is a good friend of mine.\l"
+	.string "Till we meet again!$"
+
+Route25_Text_BillsHouseSign:
+	.string "SEA COTTAGE\n"
+	.string "BILL'S HOUSE$"

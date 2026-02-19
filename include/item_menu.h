@@ -33,6 +33,7 @@ enum {
     ITEMWIN_QUANTITY,
     ITEMWIN_QUANTITY_WIDE,
     ITEMWIN_MONEY,
+    ITEMWIN_START_MENU,
     ITEMWIN_COUNT
 };
 
@@ -69,7 +70,8 @@ struct BagMenu
     u8 itemIconSlot:2;
     u8 inhibitItemDescriptionPrint:1;
     u8 hideCloseBagText:1;
-    u8 unused1[2];
+    u8 favoriteMode;
+    u8 unused1[1];
     u8 pocketScrollArrowsTask;
     u8 pocketSwitchArrowsTask;
     const u8 *contextMenuItemsPtr;

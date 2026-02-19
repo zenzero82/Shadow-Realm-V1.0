@@ -1,6 +1,8 @@
 WesHideout_Entrance_MapScripts::
 	.byte 0
 
+#define LOCALID_WES 1
+
 @ =========================================================
 @ SPEAKER DEFINITIONS (Namebox)
 @ =========================================================
@@ -18,17 +20,22 @@ WesHideout_Entrance_EventScript_Nop::
 WesHideout_Entrance_EventScript_Wes::
 	lock
 	faceplayer
+	call WesHideout_Entrance_EventScript_Wes_Talk
+	release
+	end
+
+WesHideout_Entrance_EventScript_Wes_Talk::
 	setspeaker WesHideout_Entrance_Speaker_Wes
 	checkflag FLAG_WES_HIDEOUT_TEAM_BRIEFED
 	goto_if_eq WesHideout_Entrance_EventScript_Wes_Briefed
 	msgbox WesHideout_Entrance_Text_Wes_Intro, MSGBOX_DEFAULT
 	closemessage
-	release
-	end
+	return
 
 WesHideout_Entrance_EventScript_Wes_Briefed::
 	checkflag FLAG_RECEIVED_SNAG_MACHINE
 	goto_if_eq WesHideout_Entrance_EventScript_Wes_AfterGift
+	setspeaker WesHideout_Entrance_Speaker_Wes
 	msgbox WesHideout_Entrance_Text_Wes_Gift_Part1, MSGBOX_DEFAULT
 	closemessage
 	giveitem ITEM_SNAG_MACHINE
@@ -40,16 +47,64 @@ WesHideout_Entrance_EventScript_Wes_Briefed::
 	setflag FLAG_HIDE_CERULEAN_MISTY
 	setflag FLAG_HIDE_ROUTE_25_MICHAEL
 	setflag FLAG_HIDE_ROUTE_25_SYLVEON
+	setspeaker WesHideout_Entrance_Speaker_Wes
 	msgbox WesHideout_Entrance_Text_Wes_Gift_Part2, MSGBOX_DEFAULT
 	closemessage
-	release
-	end
+	return
 
 WesHideout_Entrance_EventScript_Wes_AfterGift::
 	msgbox WesHideout_Entrance_Text_Wes_AfterGift, MSGBOX_DEFAULT
 	closemessage
-	release
+	return
+
+@ =========================================================
+@ WES TRIGGERS
+@ =========================================================
+
+WesHideout_Entrance_EventScript_WesTrigger_0::
+	lockall
+	setvar VAR_TEMP_0, 1
+	applymovement LOCALID_PLAYER, WesHideout_Entrance_Movement_PlayerToWes_FromLeft
+	waitmovement 0
+	turnobject LOCALID_PLAYER, DIR_NORTH
+	turnobject LOCALID_WES, DIR_SOUTH
+	call WesHideout_Entrance_EventScript_Wes_Talk
+	releaseall
 	end
+
+WesHideout_Entrance_EventScript_WesTrigger_1::
+	lockall
+	setvar VAR_TEMP_0, 1
+	turnobject LOCALID_PLAYER, DIR_NORTH
+	turnobject LOCALID_WES, DIR_SOUTH
+	call WesHideout_Entrance_EventScript_Wes_Talk
+	releaseall
+	end
+
+WesHideout_Entrance_EventScript_WesTrigger_2::
+	lockall
+	setvar VAR_TEMP_0, 1
+	applymovement LOCALID_PLAYER, WesHideout_Entrance_Movement_PlayerToWes_FromRight
+	waitmovement 0
+	turnobject LOCALID_PLAYER, DIR_NORTH
+	turnobject LOCALID_WES, DIR_SOUTH
+	call WesHideout_Entrance_EventScript_Wes_Talk
+	releaseall
+	end
+
+@ =========================================================
+@ MOVEMENTS
+@ =========================================================
+
+WesHideout_Entrance_Movement_PlayerToWes_FromLeft:
+	walk_up
+	walk_right
+	step_end
+
+WesHideout_Entrance_Movement_PlayerToWes_FromRight:
+	walk_up
+	walk_left
+	step_end
 
 @ =========================================================
 @ TEXT
@@ -102,5 +157,5 @@ WesHideout_Entrance_Text_Wes_Gift_Part2:
 
 WesHideout_Entrance_Text_Wes_AfterGift:
 	.string "Head to ROUTE 24 and find that\n"
-	.string "trainer. Be ready to snag if you\n"
+	.string "trainer. Be ready to snag if you\l"
 	.string "see a Shadow POKEMON.$"

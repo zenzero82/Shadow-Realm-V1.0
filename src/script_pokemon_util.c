@@ -17,6 +17,7 @@
 #include "party_menu.h"
 #include "pokedex.h"
 #include "pokemon.h"
+#include "pokeball.h"
 #include "pokemon_storage_system.h"
 #include "random.h"
 #include "script.h"
@@ -56,9 +57,12 @@ static void HealPlayerBoxes(void)
     {
         for (boxPosition = 0; boxPosition < IN_BOX_COUNT; boxPosition++)
         {
-            boxMon = &gPokemonStoragePtr->boxes[boxId][boxPosition];
-            if (GetBoxMonData(boxMon, MON_DATA_SANITY_HAS_SPECIES))
+            boxMon = GetBoxedMonPtr(boxId, boxPosition);
+            if (boxMon != NULL && GetBoxMonData(boxMon, MON_DATA_SANITY_HAS_SPECIES))
+            {
                 HealBoxPokemon(boxMon);
+                MarkBoxStorageDirty(boxId);
+            }
         }
     }
 }
@@ -416,8 +420,7 @@ static u32 ScriptGiveMonParameterized(u8 side, u8 slot, u16 species, u8 level, u
     SetMonData(&mon, MON_DATA_ABILITY_NUM, &abilityNum);
 
     // ball
-    if (ball > POKEBALL_COUNT)
-        ball = BALL_POKE;
+    ball = ItemIdToBallId(ball);
     SetMonData(&mon, MON_DATA_POKEBALL, &ball);
 
     // held item

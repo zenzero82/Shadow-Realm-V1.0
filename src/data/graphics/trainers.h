@@ -515,6 +515,13 @@ const u16 gTrainerPalette_Lovrina[] = INCBIN_U16("graphics/trainers/front_pics/l
 const u32 gTrainerFrontPic_MirrorB[] = INCBIN_U32("graphics/trainers/front_pics/mb.4bpp.lz");
 const u16 gTrainerPalette_MirrorB[] = INCBIN_U16("graphics/trainers/front_pics/mb.gbapal");
 
+const u32 gTrainerFrontPic_LassGen2[] = INCBIN_U32("graphics/trainers/front_pics/lass_gen2.4bpp.lz");
+const u16 gTrainerPalette_LassGen2[] = INCBIN_U16("graphics/trainers/front_pics/lass_gen2.gbapal");
+const u32 gTrainerFrontPic_AceTrainerGen2M[] = INCBIN_U32("graphics/trainers/front_pics/ace_trainer_gen2m.4bpp.lz");
+const u16 gTrainerPalette_AceTrainerGen2M[] = INCBIN_U16("graphics/trainers/front_pics/ace_trainer_gen2m.gbapal");
+const u32 gTrainerFrontPic_AceTrainerGen2F[] = INCBIN_U32("graphics/trainers/front_pics/ace_trainer_gen2f.4bpp.lz");
+const u16 gTrainerPalette_AceTrainerGen2F[] = INCBIN_U16("graphics/trainers/front_pics/ace_trainer_gen2f.gbapal");
+
 const u8 gTrainerBackPic_Brendan[] = INCBIN_U8("graphics/trainers/back_pics/brendan.4bpp");
 const u8 gTrainerBackPic_May[] = INCBIN_U8("graphics/trainers/back_pics/may.4bpp");
 const u8 gTrainerBackPic_Red[] = INCBIN_U8("graphics/trainers/back_pics/red.4bpp");
@@ -676,6 +683,9 @@ const struct TrainerSprite gTrainerSprites[] =
     TRAINER_SPRITE(TRAINER_PIC_EIN, gTrainerFrontPic_Ein, gTrainerPalette_Ein),
     TRAINER_SPRITE(TRAINER_PIC_LOVRINA, gTrainerFrontPic_Lovrina, gTrainerPalette_Lovrina),
     TRAINER_SPRITE(TRAINER_PIC_MIRROR_B, gTrainerFrontPic_MirrorB, gTrainerPalette_MirrorB),
+    TRAINER_SPRITE(TRAINER_PIC_LASS_GEN2, gTrainerFrontPic_LassGen2, gTrainerPalette_LassGen2),
+    TRAINER_SPRITE(TRAINER_PIC_ACE_TRAINER_GEN2M, gTrainerFrontPic_AceTrainerGen2M, gTrainerPalette_AceTrainerGen2M),
+    TRAINER_SPRITE(TRAINER_PIC_ACE_TRAINER_GEN2F, gTrainerFrontPic_AceTrainerGen2F, gTrainerPalette_AceTrainerGen2F),
 
     // === Gen 1/2 bulk import ===
     TRAINER_SPRITE(TRAINER_PIC_ARCHER, gTrainerFrontPic_Archer, gTrainerPalette_Archer),

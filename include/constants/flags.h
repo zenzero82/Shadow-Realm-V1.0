@@ -96,8 +96,8 @@
 #define FLAG_HIDE_OAKS_LAB_HOOPA_RING 0x48 // hides Hoopa Ring in Oak's Lab (object 7)
 #define FLAG_OAKS_LAB_NEWGAME_INTRO_DONE 0x49
 #define FLAG_UNUSED_0x04A    0x4A // Unused Flag
-#define FLAG_UNUSED_0x04B    0x4B // Unused Flag
-#define FLAG_UNUSED_0x04C    0x4C // Unused Flag
+#define FLAG_HIDE_WEST_FOREST_HOOPA_RING 0x4B // hides Hoopa Ring in Pallet Town Western Forest (object 1)
+#define FLAG_HIDE_ROUTE_25_EUSINE 0x4C // hides Eusine after Route 25 scene
 #define FLAG_UNUSED_0x04D    0x4D // Unused Flag
 #define FLAG_UNUSED_0x04E    0x4E // Unused Flag
 #define FLAG_HIDE_ROUTE1_LEO FLAG_UNUSED_0x04A // hides Leo on Route 1
@@ -1583,6 +1583,9 @@
 #define FLAG_UNUSED_0x91D                           (SYSTEM_FLAGS + 0xBD) // Unused Flag
 #define FLAG_UNUSED_0x91E                           (SYSTEM_FLAGS + 0xBE) // Unused Flag
 #define FLAG_UNUSED_0x91F                           (SYSTEM_FLAGS + 0xBF) // Unused Flag
+
+#define FLAG_HIDE_MAHOGANY_ROCKETS                  FLAG_UNUSED_0x91A
+#define FLAG_HIDE_MAHOGANY_COP                      FLAG_UNUSED_0x91B
 
 // Daily Flags
 // These flags are cleared once per day

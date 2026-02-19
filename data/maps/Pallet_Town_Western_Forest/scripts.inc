@@ -2,7 +2,6 @@
 @ Uses FLAG_WEST_FOREST_INTRO_DONE (define in flags.h)
 
 .set LOCALID_HOOPA_RING, 1
-.set LOCALID_EIN, 2
 
 Pallet_Town_Western_Forest_MapScripts::
     map_script MAP_SCRIPT_ON_TRANSITION, Pallet_Town_Western_Forest_OnTransition
@@ -16,6 +15,8 @@ Pallet_Town_Western_Forest_OnTransition::
     goto_if_eq Pallet_Town_Western_Forest_OnTransition_Done
     hideobjectat LOCALID_PLAYER, MAP_PALLET_TOWN_WESTERN_FOREST
     hideobjectat LOCALID_HOOPA_RING, MAP_PALLET_TOWN_WESTERN_FOREST
+    setflag FLAG_HIDE_WEST_FOREST_HOOPA_RING
+    removeobject LOCALID_HOOPA_RING
 Pallet_Town_Western_Forest_OnTransition_Done:
     end
 
@@ -26,6 +27,8 @@ Pallet_Town_Western_Forest_OnLoad::
     goto_if_eq Pallet_Town_Western_Forest_OnLoad_Done
     hideobjectat LOCALID_PLAYER, MAP_PALLET_TOWN_WESTERN_FOREST
     hideobjectat LOCALID_HOOPA_RING, MAP_PALLET_TOWN_WESTERN_FOREST
+    setflag FLAG_HIDE_WEST_FOREST_HOOPA_RING
+    removeobject LOCALID_HOOPA_RING
 Pallet_Town_Western_Forest_OnLoad_Done:
     end
 
@@ -51,17 +54,34 @@ Pallet_Town_Western_Forest_EventScript_StartIntro::
     checkflag FLAG_WEST_FOREST_INTRO_DONE
     goto_if_eq Pallet_Town_Western_Forest_Intro_Done
 
-    lockall
+    goto Pallet_Town_Western_Forest_EventScript_StartIntro_Run
+
+Pallet_Town_Western_Forest_EventScript_StartIntro_FromWarp::
+    setvar VAR_TEMP_1, 1
+    checkflag FLAG_WEST_FOREST_INTRO_DONE
+    goto_if_eq Pallet_Town_Western_Forest_Intro_Done
+
+Pallet_Town_Western_Forest_EventScript_StartIntro_Run::
     setvar VAR_TEMP_0, 1
 
     @ Player emerges from the portal
+    hideobjectat LOCALID_HOOPA_RING, MAP_PALLET_TOWN_WESTERN_FOREST
+    clearflag FLAG_HIDE_WEST_FOREST_HOOPA_RING
+    addobject LOCALID_HOOPA_RING
+    hideobjectat LOCALID_HOOPA_RING, MAP_PALLET_TOWN_WESTERN_FOREST
     setobjectxy LOCALID_PLAYER, 5, 3
     setobjectxyperm LOCALID_PLAYER, 5, 3
     setobjectxy LOCALID_HOOPA_RING, 5, 4
     setobjectxyperm LOCALID_HOOPA_RING, 5, 4
-    showobjectat LOCALID_HOOPA_RING, MAP_PALLET_TOWN_WESTERN_FOREST
-    delay 16
+    setvar VAR_0x8004, LOCALID_HOOPA_RING
+    setvar VAR_0x8001, 5
+    setvar VAR_0x8002, 4
+    special Special_HoopaRingSpawnGrow
+    waitstate
+    playse SE_LAVARIDGE_FALL_WARP
     showobjectat LOCALID_PLAYER, MAP_PALLET_TOWN_WESTERN_FOREST
+    setvar VAR_0x8000, LOCALID_PLAYER
+    special Special_ObjectEventEmerge
     applymovement OBJ_EVENT_ID_PLAYER, Pallet_Town_Western_Forest_Mov_StepFromPortal_First
     waitmovement 0
     applymovement OBJ_EVENT_ID_PLAYER, Pallet_Town_Western_Forest_Mov_StepFromPortal_Second
@@ -95,6 +115,17 @@ Pallet_Town_Western_Forest_EventScript_IntroCore::
     @ Second bit of inner monologue (PLAYER)
     setspeaker SP_NAME_PLAYER
     msgbox Pallet_Town_Western_Forest_Text_Player_IntroThought2, MSGBOX_DEFAULT
+    closemessage
+
+    setvar VAR_0x8004, LOCALID_HOOPA_RING
+    special Special_HoopaRingShrinkDespawn
+    waitstate
+    hideobjectat LOCALID_HOOPA_RING, MAP_PALLET_TOWN_WESTERN_FOREST
+    setflag FLAG_HIDE_WEST_FOREST_HOOPA_RING
+    removeobject LOCALID_HOOPA_RING
+
+    setspeaker SP_NAME_PLAYER
+    msgbox Pallet_Town_Western_Forest_Text_Player_IntroThought2_Gone, MSGBOX_DEFAULT
     closemessage
 
     @ Give running shoes here since this is the true spawn area
@@ -137,7 +168,10 @@ Pallet_Town_Western_Forest_Text_Player_IntroThought1:
 
 Pallet_Town_Western_Forest_Text_Player_IntroThought2:
     .string "That portal behind me...\n"
-    .string "Did I come through that?\p"
+    .string "Did I come through that?$"
+
+Pallet_Town_Western_Forest_Text_Player_IntroThought2_Gone:
+    .string "WHAT?! It's gone?!\p"
     .string "Well... I guess I can go ask around\n"
     .string "to see if anyone knows anything.$"
 
@@ -282,36 +316,6 @@ Pallet_Town_Western_Forest_Text_PortalAsk_Littleroot:
     .string "The portal feels different...\p"
     .string "Warp to LITTLEROOT TOWN?$"
 
-
-@==============================================
-@ TRAINER TEST (EIN)
-@==============================================
-
-Pallet_Town_Western_Forest_Speaker_Ein:
-    .string "EIN$"
-
-Pallet_Town_Western_Forest_EventScript_Ein::
-    setspeaker Pallet_Town_Western_Forest_Speaker_Ein
-    trainerbattle_single TRAINER_EIN, Pallet_Town_Western_Forest_Text_Ein_Intro, Pallet_Town_Western_Forest_Text_Ein_Defeat, Pallet_Town_Western_Forest_EventScript_Ein_After
-    end
-
-Pallet_Town_Western_Forest_EventScript_Ein_After::
-    setspeaker Pallet_Town_Western_Forest_Speaker_Ein
-    msgbox Pallet_Town_Western_Forest_Text_Ein_After, MSGBOX_NPC
-    closemessage
-    release
-    end
-
-Pallet_Town_Western_Forest_Text_Ein_Intro:
-    .string "So you're the one testing that new\n"
-    .string "trainer front sprite? Show me.$"
-
-Pallet_Town_Western_Forest_Text_Ein_Defeat:
-    .string "Hmph... the sprite worked.$"
-
-Pallet_Town_Western_Forest_Text_Ein_After:
-    .string "Looks good in battle.\p"
-    .string "Let's keep moving.$"
 
 Speaker_Jeremy:
     .string "JEREMY$"

@@ -25,6 +25,7 @@
 #include "task.h"
 #include "test_runner.h"
 #include "util.h"
+#include "pokeball.h"
 #include "text.h"
 #include "constants/abilities.h"
 #include "constants/songs.h"
@@ -1944,7 +1945,7 @@ static u32 GetBattlerMonData(u32 battler, struct Pokemon *party, u32 monId, u8 *
         size = 1;
         break;
     case REQUEST_POKEBALL_BATTLE:
-        dst[0] = GetMonData(&party[monId], MON_DATA_POKEBALL);
+        dst[0] = ItemIdToBallId(GetMonData(&party[monId], MON_DATA_POKEBALL));
         size = 1;
         break;
     case REQUEST_ALL_IVS_BATTLE:

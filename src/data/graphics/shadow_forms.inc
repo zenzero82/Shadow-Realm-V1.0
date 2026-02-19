@@ -1,6 +1,6 @@
 const u32 gMonFrontPic_PikachuShadow[] = INCBIN_U32("graphics/pokemon/pikachu/shadow/anim_front.4bpp.lz");
 const u32 gMonBackPic_PikachuShadow[] = INCBIN_U32("graphics/pokemon/pikachu/shadow/back.4bpp.lz");
-const u16 gMonPalette_PikachuShadow[] = INCBIN_U16("graphics/pokemon/pikachu/shadow/pikachu_shadow.pal");
+const u16 gMonPalette_PikachuShadow[] = INCBIN_U16("graphics/pokemon/pikachu/shadow/shadow.gbapal");
 const u8 gMonIcon_PikachuShadow[] = INCBIN_U8("graphics/pokemon/pikachu/shadow/icon.4bpp");
 #if P_GENDER_DIFFERENCES && P_CUSTOM_GENDER_DIFF_ICONS
 const u8 gMonIcon_PikachuFShadow[] = INCBIN_U8("graphics/pokemon/pikachu/shadow/iconf.4bpp");

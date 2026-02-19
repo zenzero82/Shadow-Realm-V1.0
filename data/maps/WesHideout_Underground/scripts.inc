@@ -97,6 +97,7 @@ WesHideout_Underground_EventScript_Kukui_After::
 
 WesHideout_Underground_EventScript_Sycamore::
 	lockall
+	setvar VAR_TEMP_1, 1
 	checkflag FLAG_WES_HIDEOUT_TALKED_SYCAMORE
 	goto_if_eq WesHideout_Underground_EventScript_Sycamore_After
 	call WesHideout_Underground_EventScript_MagnoliaSycamore_Intro
@@ -109,7 +110,7 @@ WesHideout_Underground_EventScript_Sycamore::
 	end
 
 WesHideout_Underground_EventScript_Sycamore_After::
-	faceplayer
+	call WesHideout_Underground_EventScript_FaceMagSycamoreAndPlayer
 	setspeaker WesHideout_Underground_Speaker_Sycamore
 	msgbox WesHideout_Underground_Text_Sycamore_After, MSGBOX_NPC
 	closemessage
@@ -118,6 +119,7 @@ WesHideout_Underground_EventScript_Sycamore_After::
 
 WesHideout_Underground_EventScript_Magnolia::
 	lockall
+	setvar VAR_TEMP_1, 1
 	checkflag FLAG_WES_HIDEOUT_TALKED_MAGNOLIA
 	goto_if_eq WesHideout_Underground_EventScript_Magnolia_After
 	call WesHideout_Underground_EventScript_MagnoliaSycamore_Intro
@@ -130,7 +132,7 @@ WesHideout_Underground_EventScript_Magnolia::
 	end
 
 WesHideout_Underground_EventScript_Magnolia_After::
-	faceplayer
+	call WesHideout_Underground_EventScript_FaceMagSycamoreAndPlayer
 	setspeaker WesHideout_Underground_Speaker_Magnolia
 	msgbox WesHideout_Underground_Text_Magnolia_After, MSGBOX_NPC
 	closemessage
@@ -145,9 +147,9 @@ WesHideout_Underground_EventScript_Rowan::
 WesHideout_Underground_EventScript_GiveShadowMonitor::
 	checkflag FLAG_RECEIVED_SHADOW_MONITOR
 	goto_if_eq WesHideout_Underground_EventScript_GiveShadowMonitor_Done
-	setspeaker WesHideout_Underground_Speaker_Sycamore
 	giveitem ITEM_SHADOW_MONITOR
 	setflag FLAG_RECEIVED_SHADOW_MONITOR
+	setspeaker WesHideout_Underground_Speaker_Sycamore
 	msgbox WesHideout_Underground_Text_Sycamore_ShadowMonitor_Given, MSGBOX_NPC
 	closemessage
 WesHideout_Underground_EventScript_GiveShadowMonitor_Done::
@@ -285,9 +287,7 @@ WesHideout_Underground_EventScript_MagnoliaSycamore_Intro::
 	waitmovement 0
 	setobjectmovementtype LOCALID_MAGNOLIA, MOVEMENT_TYPE_NONE
 	setobjectmovementtype LOCALID_SYCAMORE, MOVEMENT_TYPE_NONE
-	applymovement LOCALID_MAGNOLIA, Common_Movement_FacePlayer
-	applymovement LOCALID_SYCAMORE, Common_Movement_FacePlayer
-	waitmovement 0
+	call WesHideout_Underground_EventScript_FaceMagSycamoreAndPlayer
 	setspeaker WesHideout_Underground_Speaker_Magnolia
 	msgbox WesHideout_Underground_Text_MagSycamore_Player1, MSGBOX_NPC
 	closemessage
@@ -348,6 +348,61 @@ WesHideout_Underground_EventScript_PlayerLeftRowan::
 WesHideout_Underground_EventScript_PlayerRightRowan::
 	turnobject LOCALID_ROWAN, DIR_EAST
 	turnobject LOCALID_PLAYER, DIR_WEST
+	return
+
+@ =========================================================
+@ FACE MAGNOLIA + SYCAMORE
+@ =========================================================
+
+WesHideout_Underground_EventScript_FaceMagSycamoreAndPlayer::
+	getplayerxy VAR_0x8000, VAR_0x8001
+	getobjectcurrentxy LOCALID_MAGNOLIA, CURRENT_POSITION, VAR_0x8002, VAR_0x8003
+	goto_if_lt VAR_0x8001, VAR_0x8003, WesHideout_Underground_EventScript_MagnoliaFaceNorth
+	goto_if_gt VAR_0x8001, VAR_0x8003, WesHideout_Underground_EventScript_MagnoliaFaceSouth
+	goto_if_lt VAR_0x8000, VAR_0x8002, WesHideout_Underground_EventScript_MagnoliaFaceWest
+	goto_if_gt VAR_0x8000, VAR_0x8002, WesHideout_Underground_EventScript_MagnoliaFaceEast
+	goto WesHideout_Underground_EventScript_MagnoliaFaceDone
+
+WesHideout_Underground_EventScript_MagnoliaFaceNorth::
+	turnobject LOCALID_MAGNOLIA, DIR_NORTH
+	goto WesHideout_Underground_EventScript_MagnoliaFaceDone
+
+WesHideout_Underground_EventScript_MagnoliaFaceSouth::
+	turnobject LOCALID_MAGNOLIA, DIR_SOUTH
+	goto WesHideout_Underground_EventScript_MagnoliaFaceDone
+
+WesHideout_Underground_EventScript_MagnoliaFaceWest::
+	turnobject LOCALID_MAGNOLIA, DIR_WEST
+	goto WesHideout_Underground_EventScript_MagnoliaFaceDone
+
+WesHideout_Underground_EventScript_MagnoliaFaceEast::
+	turnobject LOCALID_MAGNOLIA, DIR_EAST
+
+WesHideout_Underground_EventScript_MagnoliaFaceDone::
+	getobjectcurrentxy LOCALID_SYCAMORE, CURRENT_POSITION, VAR_0x8002, VAR_0x8003
+	goto_if_lt VAR_0x8001, VAR_0x8003, WesHideout_Underground_EventScript_SycamoreFaceNorth
+	goto_if_gt VAR_0x8001, VAR_0x8003, WesHideout_Underground_EventScript_SycamoreFaceSouth
+	goto_if_lt VAR_0x8000, VAR_0x8002, WesHideout_Underground_EventScript_SycamoreFaceWest
+	goto_if_gt VAR_0x8000, VAR_0x8002, WesHideout_Underground_EventScript_SycamoreFaceEast
+	goto WesHideout_Underground_EventScript_SycamoreFaceDone
+
+WesHideout_Underground_EventScript_SycamoreFaceNorth::
+	turnobject LOCALID_SYCAMORE, DIR_NORTH
+	goto WesHideout_Underground_EventScript_SycamoreFaceDone
+
+WesHideout_Underground_EventScript_SycamoreFaceSouth::
+	turnobject LOCALID_SYCAMORE, DIR_SOUTH
+	goto WesHideout_Underground_EventScript_SycamoreFaceDone
+
+WesHideout_Underground_EventScript_SycamoreFaceWest::
+	turnobject LOCALID_SYCAMORE, DIR_WEST
+	goto WesHideout_Underground_EventScript_SycamoreFaceDone
+
+WesHideout_Underground_EventScript_SycamoreFaceEast::
+	turnobject LOCALID_SYCAMORE, DIR_EAST
+
+WesHideout_Underground_EventScript_SycamoreFaceDone::
+	turnobject LOCALID_PLAYER, DIR_SOUTH
 	return
 
 @ =========================================================
@@ -471,8 +526,8 @@ WesHideout_Underground_Text_Elm_After:
 
 WesHideout_Underground_Text_Kukui_Intro:
 	.string "Alola! Good to finally meet you,\n"
-	.string "champ! We know more about you.\p"
-	.string "We know more about you than you do.\n"
+	.string "champ! We know more about you,\l"
+	.string "than you likely know about yourself!\n"
 	.string "I'm PROF. KUKUI, a move researcher.\p"
 	.string "Nobody in this timeline has heard\n"
 	.string "of Z MOVES. Can you believe it?!\p"

@@ -1,5 +1,6 @@
 #include "global.h"
 #include "pokemon.h"
+#include "pokeball.h"
 #include "battle.h"
 #include "daycare.h"
 #include "string_util.h"
@@ -712,8 +713,8 @@ static void InheritIVs(struct Pokemon *egg, struct DayCare *daycare)
 static void InheritPokeball(struct Pokemon *egg, struct BoxPokemon *father, struct BoxPokemon *mother)
 {
     enum PokeBall inheritBall = BALL_POKE;
-    enum PokeBall fatherBall = GetBoxMonData(father, MON_DATA_POKEBALL);
-    enum PokeBall motherBall = GetBoxMonData(mother, MON_DATA_POKEBALL);
+    enum PokeBall fatherBall = ItemIdToBallId(GetBoxMonData(father, MON_DATA_POKEBALL));
+    enum PokeBall motherBall = ItemIdToBallId(GetBoxMonData(mother, MON_DATA_POKEBALL));
     u16 fatherSpecies = GetBoxMonData(father, MON_DATA_SPECIES);
     u16 motherSpecies = GetBoxMonData(mother, MON_DATA_SPECIES);
 

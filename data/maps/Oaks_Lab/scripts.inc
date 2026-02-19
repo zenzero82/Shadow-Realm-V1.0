@@ -25,8 +25,16 @@ OaksLab_EventScript_OnLoad::
     hideobjectat LOCALID_PLAYER, MAP_OAKS_LAB
     setflag FLAG_HIDE_OAKS_LAB_NIA
     setflag FLAG_HIDE_OAKS_LAB_LEO
-    clearflag FLAG_HIDE_OAKS_LAB_OAK
     setflag FLAG_HIDE_OAKS_LAB_HOOPA_RING
+    setvar VAR_0x8004, 8
+    setvar VAR_0x8005, 5
+    removeobject LOCALID_OAK
+    setobjectxyperm LOCALID_OAK, VAR_0x8004, VAR_0x8005
+    clearflag FLAG_HIDE_OAKS_LAB_OAK
+    addobject LOCALID_OAK
+    setobjectxy LOCALID_OAK, VAR_0x8004, VAR_0x8005
+    special SpawnCameraObjectAtVars
+    special SetCameraFocusCoordsFromVars
 OaksLab_EventScript_OnLoad_AfterIntro:
     call OaksLab_EventScript_ApplyPostStarterState
     end
@@ -75,17 +83,33 @@ OaksLab_EventScript_NewGameIntro::
     hideobjectat LOCALID_PLAYER, MAP_OAKS_LAB
     setflag FLAG_HIDE_OAKS_LAB_NIA
     setflag FLAG_HIDE_OAKS_LAB_LEO
-    clearflag FLAG_HIDE_OAKS_LAB_OAK
     setflag FLAG_HIDE_OAKS_LAB_HOOPA_RING
-    showobjectat LOCALID_OAK, MAP_OAKS_LAB
+    setvar VAR_0x8004, 8
+    setvar VAR_0x8005, 5
+    setobjectxy LOCALID_OAK, VAR_0x8004, VAR_0x8005
 
     setobjectxy LOCALID_PLAYER, 2, 2
     setobjectxyperm LOCALID_PLAYER, 2, 2
-    setvar VAR_0x8004, 2
-    setvar VAR_0x8005, 2
+    special RemoveCameraObject
+    special SpawnCameraObjectAtVars
     special SetCameraFocusCoordsFromVars
-    special SpawnCameraObject
-    setobjectxy LOCALID_CAMERA, 2, 2
+
+    applymovement LOCALID_OAK, OaksLab_Move_Oak_Pace
+    waitmovement 0
+
+    setspeaker OaksLab_Speaker_Oak
+    msgbox OaksLab_Text_Oak_Concern, MSGBOX_DEFAULT
+    closemessage
+
+    playse SE_PC_LOGIN
+    waitse
+    playse SE_PIN
+    applymovement LOCALID_OAK, OaksLab_Move_Oak_Exclaim
+    waitmovement LOCALID_OAK
+    applymovement LOCALID_OAK, OaksLab_Move_Oak_ToHome
+    applymovement LOCALID_CAMERA, OaksLab_Move_Camera_ToOakHome
+    waitmovement LOCALID_OAK
+    waitmovement LOCALID_CAMERA
 
     setspeaker OaksLab_Speaker_Oak
     msgbox OaksLab_Text_Oak_Intro, MSGBOX_DEFAULT
@@ -93,7 +117,8 @@ OaksLab_EventScript_NewGameIntro::
 
     applymovement LOCALID_OAK, OaksLab_Move_Oak_Down2
     applymovement LOCALID_CAMERA, OaksLab_Move_Camera_OakFollow
-    waitmovement 0
+    waitmovement LOCALID_OAK
+    waitmovement LOCALID_CAMERA
 
     clearflag FLAG_HIDE_OAKS_LAB_HOOPA_RING
     addobject LOCALID_HOOPA_RING
@@ -101,12 +126,27 @@ OaksLab_EventScript_NewGameIntro::
     setobjectxyperm LOCALID_HOOPA_RING, 2, 3
     showobjectat LOCALID_HOOPA_RING, MAP_OAKS_LAB
 
-    delay 12
+    setvar VAR_0x8004, LOCALID_HOOPA_RING
+    setvar VAR_0x8001, 0
+    setvar VAR_0x8002, 0
+    special Special_HoopaRingSpawnGrow
+    waitstate
+
+    applymovement LOCALID_OAK, OaksLab_Move_Oak_PullIntoRing
+    waitmovement 0
+    setvar VAR_0x8000, LOCALID_OAK
+    special Special_ObjectEventAbsorb
+    waitstate
+    playse SE_LAVARIDGE_FALL_WARP
     hideobjectat LOCALID_OAK, MAP_OAKS_LAB
+
+    setvar VAR_0x8004, LOCALID_HOOPA_RING
+    special Special_HoopaRingShrinkDespawn
+    waitstate
     hideobjectat LOCALID_HOOPA_RING, MAP_OAKS_LAB
 
     applymovement LOCALID_CAMERA, OaksLab_Move_Camera_ToNia
-    waitmovement 0
+    waitmovement LOCALID_CAMERA
     setobjectxy LOCALID_PLAYER, 4, 12
     setobjectxyperm LOCALID_PLAYER, 4, 12
     clearflag FLAG_HIDE_OAKS_LAB_NIA
@@ -114,15 +154,15 @@ OaksLab_EventScript_NewGameIntro::
     setobjectxy LOCALID_NIA, 5, 12
     showobjectat LOCALID_NIA, MAP_OAKS_LAB
     applymovement LOCALID_NIA, OaksLab_Move_Nia_EnterLab
-    waitmovement 0
+    waitmovement LOCALID_NIA
     playse SE_PIN
     applymovement LOCALID_NIA, OaksLab_Move_Nia_ExclaimFaceUp
-    waitmovement 0
+    waitmovement LOCALID_NIA
     setspeaker OaksLab_Speaker_Nia
     msgbox OaksLab_Text_Nia_FindOak, MSGBOX_DEFAULT
     closemessage
 
-    fadescreen FADE_TO_BLACK
+    fadescreenspeed FADE_TO_BLACK, 6
     msgbox OaksLab_Text_SixMonthsLater, MSGBOX_DEFAULT
     closemessage
 
@@ -133,8 +173,10 @@ OaksLab_EventScript_NewGameIntro::
     setflag FLAG_HIDE_OAKS_LAB_HOOPA_RING
     clearflag FLAG_HIDE_OAKS_LAB_NIA
 
+    releaseall
     warp MAP_PALLET_TOWN_WESTERN_FOREST, WARP_ID_NONE, 5, 5
     waitstate
+    fadescreenspeed FADE_FROM_BLACK, 6
     end
 
 OaksLab_EventScript_NewGameIntro_Done::
@@ -402,6 +444,37 @@ OaksLab_Move_Oak_Down2:
     walk_down
     step_end
 
+OaksLab_Move_Oak_Exclaim:
+    emote_exclamation_mark
+    step_end
+
+OaksLab_Move_Oak_Pace:
+    walk_left
+    walk_right
+    walk_right
+    walk_left
+    face_up
+    step_end
+
+OaksLab_Move_Oak_ToHome:
+    walk_left
+    walk_left
+    walk_left
+    walk_left
+    walk_left
+    walk_left
+    walk_up
+    walk_up
+    walk_up
+    step_end
+
+OaksLab_Move_Oak_PullIntoRing:
+    face_down
+    lock_facing_direction
+    slide_up
+    unlock_facing_direction
+    step_end
+
 OaksLab_Move_Player_CamToOak:
     walk_left
     walk_left
@@ -432,6 +505,18 @@ OaksLab_Move_Player_CamToNia:
 OaksLab_Move_Camera_OakFollow:
     walk_down
     walk_down
+    step_end
+
+OaksLab_Move_Camera_ToOakHome:
+    walk_left
+    walk_left
+    walk_left
+    walk_left
+    walk_left
+    walk_left
+    walk_up
+    walk_up
+    walk_up
     step_end
 
 OaksLab_Move_Camera_ToNia:
@@ -759,9 +844,14 @@ OaksLab_Text_Bookshelf_XD:
     .string "A draft titled XD catches your eye.\p"
     .string "It mentions a strange new POKeMON form.$"
 
+OaksLab_Text_Oak_Concern:
+    .string "What is it that is different with\n"
+    .string "these 3 POKeMON?\p"
+    .string "Why are they able to resist?$"
+
 OaksLab_Text_Oak_Intro:
     .string "That's got to be it! I finally\n"
-    .string "understand what is causing the\n"
+    .string "understand what is causing the\l"
     .string "strange phenomenon in these POKEMON.\p"
     .string "I need to call the others and\n"
     .string "schedule a meeting.$"

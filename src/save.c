@@ -29,20 +29,14 @@ static void CopyFromSaveBlock3(u32, struct SaveSector *);
 /*
  * Sector Layout:
  *
- * Sectors 0 - 13:      Save Slot 1
- * Sectors 14 - 27:     Save Slot 2
+ * Sectors 0 - 5:       Save Slot 1 (SaveBlock2, SaveBlock1, Storage metadata)
+ * Sectors 6 - 27:      Box storage data
  * Sectors 28 - 29:     Hall of Fame
- * Sector 30:           Trainer Hill
- * Sector 31:           Recorded Battle
+ * Sector 30:           Trainer Hill (unused)
+ * Sector 31:           Recorded Battle (unused)
  *
- * There are two save slots for saving the player's game data. We alternate between
- * them each time the game is saved, so that if the current save slot is corrupt,
- * we can load the previous one. We also rotate the sectors in each save slot
- * so that the same data is not always being written to the same sector. This
- * might be done to reduce wear on the flash memory, but I'm not sure, since all
- * 14 sectors get written anyway.
- *
- * See SECTOR_ID_* constants in save.h
+ * There is a single save slot; box data is stored separately from the save slot.
+ * See SECTOR_ID_* constants in save.h.
  */
 
 #define SAVEBLOCK_CHUNK(structure, chunkNum)                                   \
@@ -66,14 +60,6 @@ struct
     SAVEBLOCK_CHUNK(struct SaveBlock1, 3), // SECTOR_ID_SAVEBLOCK1_END
 
     SAVEBLOCK_CHUNK(struct PokemonStorage, 0), // SECTOR_ID_PKMN_STORAGE_START
-    SAVEBLOCK_CHUNK(struct PokemonStorage, 1),
-    SAVEBLOCK_CHUNK(struct PokemonStorage, 2),
-    SAVEBLOCK_CHUNK(struct PokemonStorage, 3),
-    SAVEBLOCK_CHUNK(struct PokemonStorage, 4),
-    SAVEBLOCK_CHUNK(struct PokemonStorage, 5),
-    SAVEBLOCK_CHUNK(struct PokemonStorage, 6),
-    SAVEBLOCK_CHUNK(struct PokemonStorage, 7),
-    SAVEBLOCK_CHUNK(struct PokemonStorage, 8), // SECTOR_ID_PKMN_STORAGE_END
 };
 
 // These will produce an error if a save struct is larger than the space
@@ -525,11 +511,9 @@ static u8 GetSaveValidStatus(const struct SaveSectorLocation *locations)
     u16 i;
     u16 checksum;
     u32 saveSlot1Counter = 0;
-    u32 saveSlot2Counter = 0;
     u32 validSectorFlags = 0;
     bool8 signatureValid = FALSE;
     u8 saveSlot1Status;
-    u8 saveSlot2Status;
 
     // Check save slot 1
     for (i = 0; i < NUM_SECTORS_PER_SLOT; i++)
@@ -560,6 +544,26 @@ static u8 GetSaveValidStatus(const struct SaveSectorLocation *locations)
         saveSlot1Status = SAVE_STATUS_EMPTY;
     }
 
+#if NUM_SAVE_SLOTS == 1
+    if (saveSlot1Status == SAVE_STATUS_OK)
+    {
+        gSaveCounter = saveSlot1Counter;
+        return SAVE_STATUS_OK;
+    }
+
+    if (saveSlot1Status == SAVE_STATUS_EMPTY)
+    {
+        gSaveCounter = 0;
+        gLastWrittenSector = 0;
+        return SAVE_STATUS_EMPTY;
+    }
+
+    gSaveCounter = 0;
+    gLastWrittenSector = 0;
+    return SAVE_STATUS_CORRUPT;
+#else
+    u32 saveSlot2Counter = 0;
+    u8 saveSlot2Status;
     validSectorFlags = 0;
     signatureValid = FALSE;
 
@@ -643,6 +647,7 @@ static u8 GetSaveValidStatus(const struct SaveSectorLocation *locations)
     gSaveCounter = 0;
     gLastWrittenSector = 0;
     return SAVE_STATUS_CORRUPT;
+#endif
 }
 
 static u8 TryLoadSaveSector(u8 sectorId, u8 *data, u16 size)
@@ -735,6 +740,8 @@ u8 HandleSavingData(u8 saveType)
         // Write the full save slot first
         CopyPartyAndObjectsToSave();
         WriteSaveSectorOrSlot(FULL_SAVE_SLOT, gRamSaveSectorLocations);
+        if (!SaveBoxStorageToFlash())
+            gDamagedSaveSectors |= 1;
 
         // Save the Hall of Fame
         if (gHoFSaveBuffer != NULL)
@@ -748,6 +755,8 @@ u8 HandleSavingData(u8 saveType)
     default:
         CopyPartyAndObjectsToSave();
         WriteSaveSectorOrSlot(FULL_SAVE_SLOT, gRamSaveSectorLocations);
+        if (!SaveBoxStorageToFlash())
+            gDamagedSaveSectors |= 1;
         break;
     case SAVE_LINK:
     case SAVE_EREADER: // Dummied, now duplicate of SAVE_LINK
@@ -767,6 +776,8 @@ u8 HandleSavingData(u8 saveType)
         // Overwrite save slot
         CopyPartyAndObjectsToSave();
         WriteSaveSectorOrSlot(FULL_SAVE_SLOT, gRamSaveSectorLocations);
+        if (!SaveBoxStorageToFlash())
+            gDamagedSaveSectors |= 1;
         break;
     }
     gTrainerHillVBlankCounter = backupVar;
@@ -896,6 +907,7 @@ u8 LoadGameSave(u8 saveType)
     default:
         status = TryLoadSaveSlot(FULL_SAVE_SLOT, gRamSaveSectorLocations);
         CopyPartyAndObjectsFromSave();
+        InitBoxStorageCache();
         gSaveFileStatus = status;
         gGameContinueCallback = 0;
         break;

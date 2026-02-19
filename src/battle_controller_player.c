@@ -1726,7 +1726,6 @@ static void MoveSelectionDisplayMoveNames(u32 battler)
     {
         u32 move = moveInfo->moves[i];
         u32 displayMove = move;
-        MoveSelectionDestroyCursorAt(i);
         if (IsGimmickSelected(battler, GIMMICK_DYNAMAX) || GetActiveGimmick(battler) == GIMMICK_DYNAMAX)
             displayMove = GetMaxMove(battler, move);
 
@@ -1737,6 +1736,9 @@ static void MoveSelectionDisplayMoveNames(u32 battler)
         if (move != MOVE_NONE)
             gNumberOfMovesToChoose++;
     }
+
+    for (i = 0; i < MAX_MON_MOVES; i++)
+        MoveSelectionDestroyCursorAt(i);
 }
 
 static void MoveSelectionDisplayPpString(u32 battler)
@@ -1861,12 +1863,29 @@ static void MoveSelectionDisplayMoveDescription(u32 battler)
 
 void MoveSelectionCreateCursorAt(u8 cursorPosition, u8 baseTileNum)
 {
-    u16 src[2];
-    src[0] = baseTileNum + 1;
-    src[1] = baseTileNum + 2;
+    u8 windowId = B_WIN_MOVE_NAME_1 + cursorPosition;
+    u16 widthTiles;
+    u16 heightTiles;
+    u16 widthPixels;
+    u16 heightPixels;
 
-    CopyToBgTilemapBufferRect_ChangePalette(0, src, 9 * (cursorPosition & 1) + 1, 55 + (cursorPosition & 2), 1, 2, 0x11);
-    CopyBgTilemapBufferToVram(0);
+    (void)baseTileNum;
+
+    if (windowId > B_WIN_MOVE_NAME_4)
+        return;
+
+    widthTiles = gWindows[windowId].window.width;
+    heightTiles = gWindows[windowId].window.height;
+    if ((windowId == B_WIN_MOVE_NAME_1 || windowId == B_WIN_MOVE_NAME_3) && !gBattleStruct->zmove.viewing)
+        widthTiles /= 2;
+    widthPixels = widthTiles * TILE_WIDTH;
+    heightPixels = heightTiles * TILE_HEIGHT;
+
+    FillWindowPixelRect(windowId, 10, 0, 0, widthPixels, 1);
+    FillWindowPixelRect(windowId, 10, 0, heightPixels - 1, widthPixels, 1);
+    FillWindowPixelRect(windowId, 10, 0, 0, 1, heightPixels);
+    FillWindowPixelRect(windowId, 10, widthPixels - 1, 0, 1, heightPixels);
+    CopyWindowRectToVram(windowId, COPYWIN_GFX, 0, 0, widthTiles, heightTiles);
 }
 
 void MoveSelectionDestroyCursorAt(u8 cursorPosition)
@@ -1875,28 +1894,64 @@ void MoveSelectionDestroyCursorAt(u8 cursorPosition)
     src[0] = 0x1016;
     src[1] = 0x1016;
 
+    if (B_WIN_MOVE_NAME_1 + cursorPosition <= B_WIN_MOVE_NAME_4)
+    {
+        u8 windowId = B_WIN_MOVE_NAME_1 + cursorPosition;
+        u16 widthTiles = gWindows[windowId].window.width;
+        u16 heightTiles = gWindows[windowId].window.height;
+        u16 widthPixels;
+        u16 heightPixels;
+
+        if ((windowId == B_WIN_MOVE_NAME_1 || windowId == B_WIN_MOVE_NAME_3) && !gBattleStruct->zmove.viewing)
+            widthTiles /= 2;
+        widthPixels = widthTiles * TILE_WIDTH;
+        heightPixels = heightTiles * TILE_HEIGHT;
+
+        FillWindowPixelRect(windowId, 5, 0, 0, widthPixels, 1);
+        FillWindowPixelRect(windowId, 5, 0, heightPixels - 1, widthPixels, 1);
+        FillWindowPixelRect(windowId, 5, 0, 0, 1, heightPixels);
+        FillWindowPixelRect(windowId, 5, widthPixels - 1, 0, 1, heightPixels);
+        CopyWindowRectToVram(windowId, COPYWIN_GFX, 0, 0, widthTiles, heightTiles);
+    }
+
     CopyToBgTilemapBufferRect_ChangePalette(0, src, 9 * (cursorPosition & 1) + 1, 55 + (cursorPosition & 2), 1, 2, 0x11);
     CopyBgTilemapBufferToVram(0);
 }
 
 void ActionSelectionCreateCursorAt(u8 cursorPosition, u8 baseTileNum)
 {
-    u16 src[2];
-    src[0] = 1;
-    src[1] = 2;
+    u16 x;
+    u16 y;
+    u16 optionWidth = 6 * TILE_WIDTH;
+    u16 optionHeight = 2 * TILE_HEIGHT;
 
-    CopyToBgTilemapBufferRect_ChangePalette(0, src, 7 * (cursorPosition & 1) + 16, 35 + (cursorPosition & 2), 1, 2, 0x11);
-    CopyBgTilemapBufferToVram(0);
+    (void)baseTileNum;
+
+    x = (cursorPosition & 1) * optionWidth;
+    y = (cursorPosition & 2) ? optionHeight : 0;
+
+    FillWindowPixelRect(B_WIN_ACTION_MENU, 10, x, y, optionWidth, 1);
+    FillWindowPixelRect(B_WIN_ACTION_MENU, 10, x, y + optionHeight - 1, optionWidth, 1);
+    FillWindowPixelRect(B_WIN_ACTION_MENU, 10, x, y, 1, optionHeight);
+    FillWindowPixelRect(B_WIN_ACTION_MENU, 10, x + optionWidth - 1, y, 1, optionHeight);
+    CopyWindowToVram(B_WIN_ACTION_MENU, COPYWIN_GFX);
 }
 
 void ActionSelectionDestroyCursorAt(u8 cursorPosition)
 {
-    u16 src[2];
-    src[0] = 0x1016;
-    src[1] = 0x1016;
+    u16 x;
+    u16 y;
+    u16 optionWidth = 6 * TILE_WIDTH;
+    u16 optionHeight = 2 * TILE_HEIGHT;
 
-    CopyToBgTilemapBufferRect_ChangePalette(0, src, 7 * (cursorPosition & 1) + 16, 35 + (cursorPosition & 2), 1, 2, 0x11);
-    CopyBgTilemapBufferToVram(0);
+    x = (cursorPosition & 1) * optionWidth;
+    y = (cursorPosition & 2) ? optionHeight : 0;
+
+    FillWindowPixelRect(B_WIN_ACTION_MENU, 5, x, y, optionWidth, 1);
+    FillWindowPixelRect(B_WIN_ACTION_MENU, 5, x, y + optionHeight - 1, optionWidth, 1);
+    FillWindowPixelRect(B_WIN_ACTION_MENU, 5, x, y, 1, optionHeight);
+    FillWindowPixelRect(B_WIN_ACTION_MENU, 5, x + optionWidth - 1, y, 1, optionHeight);
+    CopyWindowToVram(B_WIN_ACTION_MENU, COPYWIN_GFX);
 }
 
 void CB2_SetUpReshowBattleScreenAfterMenu(void)
@@ -2458,6 +2513,9 @@ static void PlayerHandleBattleDebug(u32 battler)
     // 1) Give balls for testing snag / catching
     AddBagItem(ITEM_POKE_BALL, 50);
     AddBagItem(ITEM_MASTER_BALL, 50);
+    AddBagItem(ITEM_DARK_BALL, 50);
+    AddBagItem(ITEM_POTION, 2);
+    AddBagItem(ITEM_FULL_RESTORE, 2);
     FlagSet(FLAG_SYS_POKENAV_GET);
     FlagSet(FLAG_RECEIVED_POKENAV);
 

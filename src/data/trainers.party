@@ -82,8 +82,8 @@ Double Battle: No
 
 XD003 (pikachu)
 Level: 4
-Nature: ADAMANT
-IVs: 0 HP / 0 Atk / 0 Def / 0 SpA / 0 SpD / 0 Spe
+Nature: Timid
+IVs: 0 HP / 0 Atk / 0 Def / 31 SpA / 0 SpD / 31 Spe
 Shadow: Yes
 Shadow ID: 3
 Heart Gauge: 5000
@@ -116,7 +116,7 @@ Pic: BROCK_KANTO
 Gender: Male
 
 Rhyhorn 
-Level: 15
+Level: 1
 Nature: HARDY
 - Tackle
 - Defense Curl
@@ -124,7 +124,7 @@ Nature: HARDY
 - Sand Attack
 
 Onix 
-Level: 17
+Level: 1
 Nature: HARDY
 - Tackle
 - Bind
@@ -132,7 +132,7 @@ Nature: HARDY
 - Screech
 
 Sudowoodo 
-Level: 17
+Level: 1
 Nature: HARDY
 - Tackle
 - Defense Curl
@@ -405,7 +405,7 @@ Level: 5
 
 === TRAINER_LYRA ===
 Name: LYRA
-Class: Cooltrainer
+Class: Rival
 Pic: LYRA
 Gender: Female
 
@@ -417,10 +417,19 @@ Name: MISTY
 Class: Kanto Leader
 Music: Gym Leader
 Pic: MISTY
-Gender: Male
+Gender: Female
 
-Rattata
+Psyduck
 Level: 5
+
+Corsola
+Level: 18
+
+Starmie
+Level: 20
+
+Gyarados
+Level: 22
 
 === TRAINER_NURSE ===
 Name: NURSE
@@ -506,7 +515,7 @@ Level: 5
 
 === TRAINER_SUPER_NERD ===
 Name: SUPER NERD
-Class: Cooltrainer
+Class: TRAINER_CLASS_SUPER_NERD
 Pic: SUPER_NERD
 Gender: Male
 
@@ -550,7 +559,7 @@ Music: TRAINER_ENCOUNTER_MUSIC_TEAM_ROCKET
 Double Battle: No
 
 Mimikyu
-Level: 21
+Level: 2
 Nature: ADAMANT
 IVs: 0 HP / 0 Atk / 0 Def / 0 SpA / 0 SpD / 0 Spe
 Shadow: Yes
@@ -660,7 +669,7 @@ Level: 1
 === TRAINER_RT3_LASS ===
 Name: LASS
 Class: TRAINER_CLASS_LASS
-Pic: LASS
+Pic: LASS_GEN2  
 Gender: Female
 
 Jigglypuff
@@ -675,7 +684,7 @@ Class: TRAINER_CLASS_FIREBREATHER
 Pic: FIREBREATHER
 Gender: Male
 
-Morelull
+Ponyta
 Level: 1
 
 Audino
@@ -690,16 +699,6 @@ Music: TRAINER_ENCOUNTER_MUSIC_MIRRORB
 
 Blacephalon
 Level: 50
-
-=== TRAINER_EIN ===
-Name: EIN
-Class: TRAINER_CLASS_CIPHER_ADMIN
-Pic: EIN
-Gender: Male
-Music: TRAINER_ENCOUNTER_MUSIC_CIPHER_PEON
-
-Rattata
-Level: 5
 
 === TRAINER_RT4_BLACK_BELT ===
 Name: RYU
@@ -805,8 +804,8 @@ Nature: ADAMANT
 
 === TRAINER_RT25_YOUNGSTER1 ===
 Name: TIM
-Class: TRAINER_CLASS_YOUNGSTER
-Pic: YOUNGSTER2
+Class: TRAINER_CLASS_SCHOOL_KID
+Pic: school_kid_m
 Gender: Male
 
 Pidgey
@@ -817,8 +816,8 @@ Level: 1
 
 === TRAINER_RT25_LADY ===
 Name: MARIE
-Class: TRAINER_CLASS_LADY
-Pic: LADY
+Class: TRAINER_CLASS_BATTLE_GIRL
+Pic: BATTLE_GIRL
 Gender: Female
 
 Clefairy
@@ -829,8 +828,8 @@ Level: 1
 
 === TRAINER_RT25_COOLTRAINER_F ===
 Name: KARA
-Class: TRAINER_CLASS_COOLTRAINER
-Pic: COOLTRAINER_F
+Class: TRAINER_CLASS_ACE_TRAINER
+Pic: ACE_TRAINER_GEN2F
 Gender: Female
 
 Eevee
@@ -866,7 +865,7 @@ Level: 1
 === TRAINER_RT25_LASS ===
 Name: NINA
 Class: TRAINER_CLASS_LASS
-Pic: LASS
+Pic: LASS_GEN2
 Gender: Female
 
 SPECIES_NIDORAN_F
@@ -877,7 +876,7 @@ Level: 1
 
 === TRAINER_RT25_SUPER_NERD ===
 Name: DEX
-Class: TRAINER_CLASS_COOLTRAINER
+Class: TRAINER_CLASS_SUPER_NERD
 Pic: SUPER_NERD
 Gender: Male
 
@@ -889,8 +888,8 @@ Level: 1
 
 === TRAINER_RT25_COOLTRAINER_M ===
 Name: RYAN
-Class: TRAINER_CLASS_COOLTRAINER
-Pic: COOLTRAINER_M
+Class: TRAINER_CLASS_ACE_TRAINER
+Pic: ACE_TRAINER_GEN2M
 Gender: Male
 
 Growlithe
@@ -924,7 +923,7 @@ Staryu
 Level: 1
 
 === TRAINER_CERULEAN_GYM_SWIMMER_F2 ===
-Name: KARA
+Name: KAREN
 Class: TRAINER_CLASS_SWIMMER_F
 Pic: SWIMMER_F
 Gender: Female

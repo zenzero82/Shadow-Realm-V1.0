@@ -16,6 +16,16 @@
 
 #include "data/gimmicks.h"
 
+void BattleHud_RefreshHealthboxPalette(u8 battler, bool8 isShadowNow);
+
+static bool8 IsBattlerShadowNow(u32 battler)
+{
+    if (gBattlerPartyIndexes[battler] < PARTY_SIZE)
+        return GetMonData(GetBattlerMon(battler), MON_DATA_IS_SHADOW);
+
+    return gBattleMons[battler].isShadow;
+}
+
 // Populates gBattleStruct->gimmick.usableGimmick for each battler.
 void AssignUsableGimmicks(void)
 {
@@ -274,7 +284,9 @@ static void SpriteCb_GimmickIndicator(struct Sprite *sprite)
 {
     u32 battler = sprite->tBattler;
 
-    sprite->x = gSprites[gHealthboxSpriteIds[battler]].x + sprite->tPosX + sprite->tLevelXDelta;
+    s32 reverseOffset = gBattleMons[battler].isReverse ? -32 : 0;
+
+    sprite->x = gSprites[gHealthboxSpriteIds[battler]].x + sprite->tPosX + sprite->tLevelXDelta + reverseOffset;
     sprite->x2 = gSprites[gHealthboxSpriteIds[battler]].x2;
     sprite->y2 = gSprites[gHealthboxSpriteIds[battler]].y2;
 }
@@ -351,6 +363,8 @@ void UpdateIndicatorVisibilityAndType(u32 healthboxId, bool32 invisible)
     {
         sprite->invisible = TRUE;
     }
+
+    BattleHud_RefreshHealthboxPalette(battler, IsBattlerShadowNow(battler));
 }
 
 #undef INDICATOR_SIZE

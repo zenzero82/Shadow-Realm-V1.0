@@ -296,12 +296,14 @@ gSpecials::
 	def_special MoveElevator
 	def_special ShowGlassWorkshopMenu
 	def_special SpawnCameraObject
+	def_special SpawnCameraObjectAtVars
 	def_special RemoveCameraObject
 	def_special StartHoopaRingGrow
 	def_special StartHoopaRingShrink
 	def_special Special_HoopaRingSpawnGrow
 	def_special Special_HoopaRingShrinkDespawn
 	def_special Special_ObjectEventAbsorb
+	def_special Special_ObjectEventEmerge
 	def_special SetObjectEventPortalAffineAnims
 	def_special SetObjectEventPortalAbsorbAffineAnims
 	def_special ResetObjectEventAffineAnims

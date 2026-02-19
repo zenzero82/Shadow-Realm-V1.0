@@ -44,39 +44,72 @@ static bool8 ShouldAnimBeDoneRegardlessOfSubstitute(u8 animId);
 static void Task_ClearBitWhenBattleTableAnimDone(u8 taskId);
 static void Task_ClearBitWhenSpecialAnimDone(u8 taskId);
 static void ClearSpritesBattlerHealthboxAnimData(void);
+static u16 GetHealthboxFramePalTagForBattler(u8 battlerId);
 
 // const rom data
 static const struct CompressedSpriteSheet sSpriteSheet_SinglesPlayerHealthbox =
 {
-    gHealthboxSinglesPlayerGfx, 0x1000, TAG_HEALTHBOX_PLAYER1_TILE
+    gHealthboxBlankLargeGfx, 0x1000, TAG_HEALTHBOX_PLAYER1_TILE
+};
+
+static const struct CompressedSpriteSheet sSpriteSheet_SinglesPlayerHealthboxFrame =
+{
+    gHealthboxSinglesPlayerGfx, 0x1000, TAG_HEALTHBOX_FRAME_PLAYER1_TILE
 };
 
 static const struct CompressedSpriteSheet sSpriteSheet_SinglesOpponentHealthbox =
 {
-    gHealthboxSinglesOpponentGfx, 0x1000, TAG_HEALTHBOX_OPPONENT1_TILE
+    gHealthboxBlankLargeGfx, 0x1000, TAG_HEALTHBOX_OPPONENT1_TILE
+};
+
+static const struct CompressedSpriteSheet sSpriteSheet_SinglesOpponentHealthboxFrame =
+{
+    gHealthboxSinglesOpponentGfx, 0x1000, TAG_HEALTHBOX_FRAME_OPPONENT1_TILE
+};
+
+static const struct CompressedSpriteSheet sSpriteSheet_SinglesOpponentShadowHealthbox =
+{
+    gHealthboxSinglesOpponentShadowGfx, 0x1000, TAG_HEALTHBOX_FRAME_OPPONENT1_TILE
 };
 
 static const struct CompressedSpriteSheet sSpriteSheets_DoublesPlayerHealthbox[2] =
 {
-    {gHealthboxDoublesPlayerGfx, 0x800, TAG_HEALTHBOX_PLAYER1_TILE},
-    {gHealthboxDoublesPlayerGfx, 0x800, TAG_HEALTHBOX_PLAYER2_TILE}
+    {gBlankGfxCompressed, 0x800, TAG_HEALTHBOX_PLAYER1_TILE},
+    {gBlankGfxCompressed, 0x800, TAG_HEALTHBOX_PLAYER2_TILE}
+};
+
+static const struct CompressedSpriteSheet sSpriteSheets_DoublesPlayerHealthboxFrame[2] =
+{
+    {gHealthboxDoublesPlayerGfx, 0x800, TAG_HEALTHBOX_FRAME_PLAYER1_TILE},
+    {gHealthboxDoublesPlayerGfx, 0x800, TAG_HEALTHBOX_FRAME_PLAYER2_TILE}
 };
 
 static const struct CompressedSpriteSheet sSpriteSheets_DoublesOpponentHealthbox[2] =
 {
-    {gHealthboxDoublesOpponentGfx, 0x800, TAG_HEALTHBOX_OPPONENT1_TILE},
-    {gHealthboxDoublesOpponentGfx, 0x800, TAG_HEALTHBOX_OPPONENT2_TILE}
+    {gBlankGfxCompressed, 0x800, TAG_HEALTHBOX_OPPONENT1_TILE},
+    {gBlankGfxCompressed, 0x800, TAG_HEALTHBOX_OPPONENT2_TILE}
+};
+
+static const struct CompressedSpriteSheet sSpriteSheets_DoublesOpponentHealthboxFrame[2] =
+{
+    {gHealthboxDoublesOpponentGfx, 0x800, TAG_HEALTHBOX_FRAME_OPPONENT1_TILE},
+    {gHealthboxDoublesOpponentGfx, 0x800, TAG_HEALTHBOX_FRAME_OPPONENT2_TILE}
 };
 
 static const struct CompressedSpriteSheet sSpriteSheet_SafariHealthbox =
 {
-    gHealthboxSafariGfx, 0x1000, TAG_HEALTHBOX_SAFARI_TILE
+    gHealthboxBlankLargeGfx, 0x1000, TAG_HEALTHBOX_SAFARI_TILE
+};
+
+static const struct CompressedSpriteSheet sSpriteSheet_SafariHealthboxFrame =
+{
+    gHealthboxSafariGfx, 0x1000, TAG_HEALTHBOX_FRAME_SAFARI_TILE
 };
 
 // only need this one for shadow healthbox, because the "HEART" replacer for EXP is only shown on player-side single battles
 static const struct CompressedSpriteSheet sSpriteSheet_SinglesPlayerShadowHealthbox =
 {
-    gHealthboxSinglesPlayerShadowGfx, 0x1000, TAG_HEALTHBOX_PLAYER1_TILE
+    gHealthboxSinglesPlayerShadowGfx, 0x1000, TAG_HEALTHBOX_FRAME_PLAYER1_TILE
 };
 
 static const struct CompressedSpriteSheet sSpriteSheets_HealthBar[MAX_BATTLERS_COUNT] =
@@ -105,8 +138,8 @@ const struct SpritePalette gSpritePalettes_HealthBoxHealthBar[10] =
     // shadow palettes
     /* 6 */ {gBattleInterface_ShadowMenuPal, TAG_HEALTHBOX_PLAYER1_PAL},
     /* 7 */ {gBattleInterface_ShadowMenuPal, TAG_HEALTHBOX_PLAYER2_PAL},
-    /* 8 */ {gBattleInterface_ShadowMenuPal, TAG_HEALTHBOX_OPPONENT1_PAL},
-    /* 9 */ {gBattleInterface_ShadowMenuPal, TAG_HEALTHBOX_OPPONENT2_PAL},
+    /* 8 */ {gBattleInterface_ShadowMenuOpponentPal, TAG_HEALTHBOX_OPPONENT1_PAL},
+    /* 9 */ {gBattleInterface_ShadowMenuOpponentPal, TAG_HEALTHBOX_OPPONENT2_PAL},
 };
 
 const struct CompressedSpriteSheet gSpriteSheet_EnemyShadow =
@@ -149,12 +182,32 @@ const struct SpriteTemplate gSpriteTemplate_EnemyShadow =
     .callback = SpriteCallbackDummy,
 };
 
+static u16 GetHealthboxFramePalTagForBattler(u8 battlerId)
+{
+    if (gBattleTypeFlags & BATTLE_TYPE_SAFARI)
+        return TAG_HEALTHBOX_FRAME_SAFARI_PAL;
+
+    if (GetBattlerSide(battlerId) == B_SIDE_PLAYER)
+    {
+        return (GetBattlerAtPosition(B_POSITION_PLAYER_LEFT) == battlerId)
+             ? TAG_HEALTHBOX_FRAME_PLAYER1_PAL
+             : TAG_HEALTHBOX_FRAME_PLAYER2_PAL;
+    }
+    else
+    {
+        return (GetBattlerAtPosition(B_POSITION_OPPONENT_LEFT) == battlerId)
+             ? TAG_HEALTHBOX_FRAME_OPPONENT1_PAL
+             : TAG_HEALTHBOX_FRAME_OPPONENT2_PAL;
+    }
+}
+
 // code
 void ShdwLoadHealthboxPalette(u8 battlerId)
 {
     u8 palNum;
     u8 isShadow;
     struct Pokemon *mon;
+    bool8 isReverse;
 
     if (GetBattlerSide(battlerId) != B_SIDE_PLAYER)
         mon = &gEnemyParty[gBattlerPartyIndexes[battlerId]];
@@ -182,7 +235,59 @@ void ShdwLoadHealthboxPalette(u8 battlerId)
             palNum = isShadow ? 9 : 5; break;
     }
 
-    LoadSpritePalette(&gSpritePalettes_HealthBoxHealthBar[palNum]);
+    if (gBattleMons[battlerId].species != SPECIES_NONE)
+        isReverse = gBattleMons[battlerId].isReverse;
+    else
+        isReverse = gBattlerPartyIndexes[battlerId] < PARTY_SIZE
+                  ? GetMonData(mon, MON_DATA_REVERSE_MODE)
+                  : gBattleMons[battlerId].isReverse;
+
+    {
+        const struct SpritePalette *palEntry = &gSpritePalettes_HealthBoxHealthBar[palNum];
+        const u16 *palData = palEntry->data;
+        if (isShadow && isReverse)
+        {
+            if (GetBattlerSide(battlerId) == B_SIDE_PLAYER)
+                palData = gBattleInterface_ShadowMenuReversePal;
+            else
+                palData = gBattleInterface_ShadowMenuOpponentReversePal;
+        }
+
+        {
+            struct SpritePalette healthboxPal =
+            {
+                .data = palData,
+                .tag = palEntry->tag,
+            };
+
+            FreeSpritePaletteByTag(healthboxPal.tag);
+            LoadSpritePalette(&healthboxPal);
+        }
+    }
+    {
+        const u16 *framePalData;
+        struct SpritePalette framePal =
+        {
+            .data = NULL,
+            .tag = GetHealthboxFramePalTagForBattler(battlerId),
+        };
+
+        if (!isShadow)
+            framePalData = gBattleInterface_HealthboxFramePal;
+        else if (GetBattlerSide(battlerId) == B_SIDE_PLAYER)
+            framePalData = isReverse
+                         ? gBattleInterface_HealthboxFrameShadowReversePal
+                         : gBattleInterface_HealthboxFrameShadowPal;
+        else
+            framePalData = isReverse
+                         ? gBattleInterface_HealthboxFrameShadowOpponentReversePal
+                         : gBattleInterface_HealthboxFrameShadowOpponentPal;
+
+        framePal.data = framePalData;
+
+        FreeSpritePaletteByTag(framePal.tag);
+        LoadSpritePalette(&framePal);
+    }
 
     if (GetMonData(mon, MON_DATA_STATUS))
         UpdateHealthboxAttribute(gHealthboxSpriteIds[battlerId], mon, HEALTHBOX_STATUS_ICON);
@@ -192,10 +297,12 @@ void ShdwLoadHealthboxSprite(void)
 {
     u8 isShadow = GetMonData(&gPlayerParty[gBattlerPartyIndexes[GetBattlerAtPosition(0)]], MON_DATA_IS_SHADOW);
     FreeSpriteTilesByTag(TAG_HEALTHBOX_PLAYER1_TILE);
+    FreeSpriteTilesByTag(TAG_HEALTHBOX_FRAME_PLAYER1_TILE);
+    LoadCompressedSpriteSheet(&sSpriteSheet_SinglesPlayerHealthbox);
     if (isShadow)
         LoadCompressedSpriteSheet(&sSpriteSheet_SinglesPlayerShadowHealthbox);
     else
-        LoadCompressedSpriteSheet(&sSpriteSheet_SinglesPlayerHealthbox);
+        LoadCompressedSpriteSheet(&sSpriteSheet_SinglesPlayerHealthboxFrame);
 }
 
 void AllocateBattleSpritesData(void)
@@ -691,6 +798,8 @@ void BattleLoadMonSpriteGfx(struct Pokemon *mon, u32 battler)
     if (illusionMon != NULL)
         mon = illusionMon;
     bool8 isShadow = GetMonData(mon, MON_DATA_IS_SHADOW);
+    if (!isShadow && gBattleMons[battler].isShadow)
+        isShadow = TRUE;
 
     if (GetMonData(mon, MON_DATA_IS_EGG) || GetMonData(mon, MON_DATA_SPECIES) == SPECIES_NONE) // Don't load GFX of egg pokemon.
         return;
@@ -806,7 +915,10 @@ bool8 BattleLoadAllHealthBoxesGfx(u8 state)
             if (state == 2)
             {
                 if (gBattleTypeFlags & BATTLE_TYPE_SAFARI)
+                {
                     LoadCompressedSpriteSheet(&sSpriteSheet_SafariHealthbox);
+                    LoadCompressedSpriteSheet(&sSpriteSheet_SafariHealthboxFrame);
+                }
                 else
                     ShdwLoadHealthboxSprite();
                 ShdwLoadHealthboxPalette(0);
@@ -814,6 +926,13 @@ bool8 BattleLoadAllHealthBoxesGfx(u8 state)
             else if (state == 3)
             {
                 LoadCompressedSpriteSheet(&sSpriteSheet_SinglesOpponentHealthbox);
+                {
+                    u8 isShadow = GetMonData(&gEnemyParty[gBattlerPartyIndexes[B_BATTLER_1]], MON_DATA_IS_SHADOW);
+                    if (isShadow)
+                        LoadCompressedSpriteSheet(&sSpriteSheet_SinglesOpponentShadowHealthbox);
+                    else
+                        LoadCompressedSpriteSheet(&sSpriteSheet_SinglesOpponentHealthboxFrame);
+                }
                 ShdwLoadHealthboxPalette(1);
             }
             else if (state == 4)
@@ -837,6 +956,7 @@ bool8 BattleLoadAllHealthBoxesGfx(u8 state)
                 {
                 default:
                     LoadCompressedSpriteSheet(&sSpriteSheets_DoublesPlayerHealthbox[0]);
+                    LoadCompressedSpriteSheet(&sSpriteSheets_DoublesPlayerHealthboxFrame[0]);
                     break;
                 case BATTLE_COORDS_SINGLES:
                     ShdwLoadHealthboxSprite();
@@ -847,16 +967,19 @@ bool8 BattleLoadAllHealthBoxesGfx(u8 state)
             else if (state == 3)
             {
                 LoadCompressedSpriteSheet(&sSpriteSheets_DoublesPlayerHealthbox[1]);
+                LoadCompressedSpriteSheet(&sSpriteSheets_DoublesPlayerHealthboxFrame[1]);
                 ShdwLoadHealthboxPalette(2);
             }
             else if (state == 4)
             {
                 LoadCompressedSpriteSheet(&sSpriteSheets_DoublesOpponentHealthbox[0]);
+                LoadCompressedSpriteSheet(&sSpriteSheets_DoublesOpponentHealthboxFrame[0]);
                 ShdwLoadHealthboxPalette(1);
             }
             else if (state == 5)
             {
                 LoadCompressedSpriteSheet(&sSpriteSheets_DoublesOpponentHealthbox[1]);
+                LoadCompressedSpriteSheet(&sSpriteSheets_DoublesOpponentHealthboxFrame[1]);
                 ShdwLoadHealthboxPalette(3);
             }
             else if (state == 6)
@@ -961,8 +1084,15 @@ bool8 BattleInitAllSprites(u8 *state1, u8 *battler)
 
 void ClearSpritesHealthboxAnimData(void)
 {
+    u32 i;
+
     memset(gBattleSpritesDataPtr->healthBoxesData, 0, sizeof(struct BattleHealthboxInfo) * MAX_BATTLERS_COUNT);
     memset(gBattleSpritesDataPtr->animationData, 0, sizeof(struct BattleAnimationInfo));
+    for (i = 0; i < MAX_BATTLERS_COUNT; i++)
+    {
+        gBattleSpritesDataPtr->healthBoxesData[i].field_A = MAX_SPRITES;
+        gBattleSpritesDataPtr->healthBoxesData[i].field_B = MAX_SPRITES;
+    }
 }
 
 static void ClearSpritesBattlerHealthboxAnimData(void)
@@ -993,6 +1123,7 @@ void HandleSpeciesGfxDataChange(u8 battlerAtk, u8 battlerDef, bool32 megaEvo, bo
     struct Pokemon *monAtk = GetBattlerMon(battlerAtk);
     struct Pokemon *monDef = GetBattlerMon(battlerDef);
     void *dst;
+    bool8 isShadow = FALSE;
 
     if (IsContest())
     {
@@ -1009,6 +1140,9 @@ void HandleSpeciesGfxDataChange(u8 battlerAtk, u8 battlerDef, bool32 megaEvo, bo
     else
     {
         position = GetBattlerPosition(battlerAtk);
+        isShadow = gBattleMons[battlerAtk].isShadow;
+        if (!isShadow)
+            isShadow = GetMonData(monAtk, MON_DATA_IS_SHADOW);
         if (gBattleSpritesDataPtr->battlerData[battlerAtk].transformSpecies == SPECIES_NONE)
         {
             // Get base form if its currently Gigantamax
@@ -1036,16 +1170,17 @@ void HandleSpeciesGfxDataChange(u8 battlerAtk, u8 battlerDef, bool32 megaEvo, bo
             }
         }
 
-        HandleLoadSpecialPokePic(!IsOnPlayerSide(battlerAtk),
-                                 gMonSpritesGfxPtr->spritesGfx[position],
-                                 targetSpecies,
-                                 personalityValue);
+        HandleLoadSpecialPokePic_ShadowAware(!IsOnPlayerSide(battlerAtk),
+                                             gMonSpritesGfxPtr->spritesGfx[position],
+                                             targetSpecies,
+                                             personalityValue,
+                                             isShadow);
     }
     src = gMonSpritesGfxPtr->spritesGfx[position];
     dst = (void *)(OBJ_VRAM0 + gSprites[gBattlerSpriteIds[battlerAtk]].oam.tileNum * 32);
     DmaCopy32(3, src, dst, MON_PIC_SIZE);
     paletteOffset = OBJ_PLTT_ID(battlerAtk);
-    paletteData = GetMonSpritePalFromSpeciesAndPersonality(targetSpecies, isShiny, personalityValue);
+    paletteData = GetMonSpritePalFromSpeciesAndPersonality_ShadowAware(targetSpecies, isShiny, personalityValue, isShadow);
     LoadPalette(paletteData, paletteOffset, PLTT_SIZE_4BPP);
 
     if (!megaEvo)

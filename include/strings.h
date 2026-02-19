@@ -53,6 +53,9 @@ extern const u8 gText_Key_Items[];
 extern const u8 gText_Poke_Balls[];
 extern const u8 gText_TMs_Hms[];
 extern const u8 gText_Berries2[];
+extern const u8 gText_Medicine[];
+extern const u8 gText_Battle_Items[];
+extern const u8 gText_Treasures[];
 
 extern const u8 gText_Single2[];
 extern const u8 gText_Double2[];
@@ -312,6 +315,17 @@ extern const u8 gText_LinkStandby2[];
 
 // item menu screen text
 extern const u8 gText_CloseBag[];
+extern const u8 gText_BagAutoSort[];
+extern const u8 gText_BagFavorites[];
+extern const u8 gText_BagSortNameAZ[];
+extern const u8 gText_BagSortNameZA[];
+extern const u8 gText_BagSortType[];
+extern const u8 gText_BagFavoritesAdd[];
+extern const u8 gText_BagFavoritesRemove[];
+extern const u8 gText_BagFavoritesSort[];
+extern const u8 gText_BagFavoritesAddHint[];
+extern const u8 gText_BagFavoritesRemoveHint[];
+extern const u8 gText_BagFavoritesFull[];
 extern const u8 gText_NumberItem_HM[];
 extern const u8 gText_NumberItem_TMBerry[];
 extern const u8 gText_xVar1[];
@@ -381,6 +395,7 @@ extern const u8 gText_PkmnBaseVar2StatIncreased[];
 extern const u8 gText_MovesPPIncreased[];
 extern const u8 gText_PPWasRestored[];
 extern const u8 gText_WontHaveEffect[];
+extern const u8 gText_NoValidItemsInBag[];
 extern const u8 gText_PkmnSnappedOutOfConfusion[];
 extern const u8 gText_PkmnFriendlyBaseVar2Fell[];
 extern const u8 gText_PkmnFriendlyBaseVar2CantFall[];

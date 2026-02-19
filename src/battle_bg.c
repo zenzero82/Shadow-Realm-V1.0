@@ -22,6 +22,7 @@
 #include "trig.h"
 #include "window.h"
 #include "constants/map_types.h"
+#include "constants/map_groups.h"
 #include "constants/rgb.h"
 #include "constants/songs.h"
 #include "constants/trainers.h"
@@ -86,6 +87,12 @@ extern const u32 gBattleEnvironmentTiles_Plain_2[];
 extern const u32 gBattleEnvironmentTilemap_Plain_2[];
 extern const u16 gBattleEnvironmentPalette_Plain_2[];
 
+extern const u32 gBattleEnvironmentTiles_Blue_Building_2[];
+extern const u32 gBattleEnvironmentTilemap_Blue_Building_2[];
+extern const u32 gBattleEnvironmentAnimTiles_Blue_Building_2[];
+extern const u32 gBattleEnvironmentAnimTilemap_Blue_Building_2[];
+extern const u16 gBattleEnvironmentPalette_Blue_Building_2[];
+
 // Use the "_2" battle environment backgrounds (HNS-style alt backgrounds).
 // Set this to 0 to keep the vanilla backgrounds.
 #ifndef BATTLE_BG_USE_ENVIRONMENT_2
@@ -129,6 +136,27 @@ static const struct OamData sVsLetter_S_OamData =
     .paletteNum = 0,
     .affineParam = 0,
 };
+
+static bool32 IsKantoJohtoGymMap(void)
+{
+    u8 mapGroup = gSaveBlock1Ptr->location.mapGroup;
+    u8 mapNum = gSaveBlock1Ptr->location.mapNum;
+
+#define IS_CURRENT_MAP(map) (mapGroup == MAP_GROUP(map) && mapNum == MAP_NUM(map))
+    return IS_CURRENT_MAP(MAP_PEWTER_GYM)
+        || IS_CURRENT_MAP(MAP_CERULEAN_GYM)
+        || IS_CURRENT_MAP(MAP_VERMILION_GYM)
+        || IS_CURRENT_MAP(MAP_CELADON_GYM)
+        || IS_CURRENT_MAP(MAP_SAFFRON_GYM)
+        || IS_CURRENT_MAP(MAP_FUCHSIA_GYM)
+        || IS_CURRENT_MAP(MAP_VIRIDIAN_GYM)
+        || IS_CURRENT_MAP(MAP_SEAFOAM_ISLANDS_GYM)
+        || IS_CURRENT_MAP(MAP_VIOLET_CITY_GYM)
+        || IS_CURRENT_MAP(MAP_AZALEA_TOWN_GYM)
+        || IS_CURRENT_MAP(MAP_GOLDENROD_CITY_GYM)
+        || IS_CURRENT_MAP(MAP_ECRUTEAK_CITY_GYM);
+#undef IS_CURRENT_MAP
+}
 
 static const union AffineAnimCmd sVsLetterAffineAnimCmds0[] =
 {
@@ -974,9 +1002,18 @@ void DrawMainBattleBackground(void)
             LoadPalette(BATTLE_ENV_BG_TABLE[gBattleEnvironment].palette, BG_PLTT_ID(2), 3 * PLTT_SIZE_4BPP);
             break;
         case MAP_BATTLE_SCENE_GYM:
-            DecompressDataWithHeaderVram(gBattleEnvironmentTiles_Building, (void *)(BG_CHAR_ADDR(2)));
-            DecompressDataWithHeaderVram(gBattleEnvironmentTilemap_Building, (void *)(BG_SCREEN_ADDR(26)));
-            LoadPalette(gBattleEnvironmentPalette_BuildingGym, BG_PLTT_ID(2), 3 * PLTT_SIZE_4BPP);
+            if (IsKantoJohtoGymMap())
+            {
+                DecompressDataWithHeaderVram(gBattleEnvironmentTiles_Blue_Building_2, (void *)(BG_CHAR_ADDR(2)));
+                DecompressDataWithHeaderVram(gBattleEnvironmentTilemap_Blue_Building_2, (void *)(BG_SCREEN_ADDR(26)));
+                LoadPalette(gBattleEnvironmentPalette_Blue_Building_2, BG_PLTT_ID(2), 3 * PLTT_SIZE_4BPP);
+            }
+            else
+            {
+                DecompressDataWithHeaderVram(gBattleEnvironmentTiles_Building, (void *)(BG_CHAR_ADDR(2)));
+                DecompressDataWithHeaderVram(gBattleEnvironmentTilemap_Building, (void *)(BG_SCREEN_ADDR(26)));
+                LoadPalette(gBattleEnvironmentPalette_BuildingGym, BG_PLTT_ID(2), 3 * PLTT_SIZE_4BPP);
+            }
             break;
         case MAP_BATTLE_SCENE_MAGMA:
             DecompressDataWithHeaderVram(gBattleEnvironmentTiles_Stadium, (void *)(BG_CHAR_ADDR(2)));
@@ -1017,9 +1054,16 @@ void DrawMainBattleBackground(void)
     }
 }
 
+static void ClearBattleTextboxBlankTile(void)
+{
+    // Ensure tile 0 is fully transparent to avoid stray artifacts.
+    CpuFill16(0, (void *)BG_CHAR_ADDR(0), TILE_SIZE_4BPP);
+}
+
 void LoadBattleTextboxAndBackground(void)
 {
     DecompressDataWithHeaderVram(gBattleTextboxTiles, (void *)(BG_CHAR_ADDR(0)));
+    ClearBattleTextboxBlankTile();
     CopyToBgTilemapBuffer(0, gBattleTextboxTilemap, 0, 0);
     CopyBgTilemapBufferToVram(0);
     LoadPalette(gBattleTextboxPalette, BG_PLTT_ID(0), 2 * PLTT_SIZE_4BPP);
@@ -1369,6 +1413,11 @@ void DrawBattleEntryBackground(void)
             DecompressDataWithHeaderVram(BATTLE_ENV_BG_TABLE[gBattleEnvironment].entryTileset, (void *)(BG_CHAR_ADDR(1)));
             DecompressDataWithHeaderVram(BATTLE_ENV_BG_TABLE[gBattleEnvironment].entryTilemap, (void *)(BG_SCREEN_ADDR(28)));
         }
+        else if (GetCurrentMapBattleScene() == MAP_BATTLE_SCENE_GYM && IsKantoJohtoGymMap())
+        {
+            DecompressDataWithHeaderVram(gBattleEnvironmentAnimTiles_Blue_Building_2, (void *)(BG_CHAR_ADDR(1)));
+            DecompressDataWithHeaderVram(gBattleEnvironmentAnimTilemap_Blue_Building_2, (void *)(BG_SCREEN_ADDR(28)));
+        }
         else
         {
             DecompressDataWithHeaderVram(gBattleEnvironmentAnimTiles_Building, (void *)(BG_CHAR_ADDR(1)));
@@ -1385,6 +1434,7 @@ bool8 LoadChosenBattleElement(u8 caseId)
     {
     case 0:
         DecompressDataWithHeaderVram(gBattleTextboxTiles, (void *)(BG_CHAR_ADDR(0)));
+        ClearBattleTextboxBlankTile();
         break;
     case 1:
         CopyToBgTilemapBuffer(0, gBattleTextboxTilemap, 0, 0);
@@ -1434,7 +1484,10 @@ bool8 LoadChosenBattleElement(u8 caseId)
                 DecompressDataWithHeaderVram(BATTLE_ENV_BG_TABLE[gBattleEnvironment].tileset, (void *)(BG_CHAR_ADDR(2)));
                 break;
             case MAP_BATTLE_SCENE_GYM:
-                DecompressDataWithHeaderVram(gBattleEnvironmentTiles_Building, (void *)(BG_CHAR_ADDR(2)));
+                if (IsKantoJohtoGymMap())
+                    DecompressDataWithHeaderVram(gBattleEnvironmentTiles_Blue_Building_2, (void *)(BG_CHAR_ADDR(2)));
+                else
+                    DecompressDataWithHeaderVram(gBattleEnvironmentTiles_Building, (void *)(BG_CHAR_ADDR(2)));
                 break;
             case MAP_BATTLE_SCENE_MAGMA:
                 DecompressDataWithHeaderVram(gBattleEnvironmentTiles_Stadium, (void *)(BG_CHAR_ADDR(2)));
@@ -1496,7 +1549,10 @@ bool8 LoadChosenBattleElement(u8 caseId)
                 DecompressDataWithHeaderVram(BATTLE_ENV_BG_TABLE[gBattleEnvironment].tilemap, (void *)(BG_SCREEN_ADDR(26)));
                 break;
             case MAP_BATTLE_SCENE_GYM:
-                DecompressDataWithHeaderVram(gBattleEnvironmentTilemap_Building, (void *)(BG_SCREEN_ADDR(26)));
+                if (IsKantoJohtoGymMap())
+                    DecompressDataWithHeaderVram(gBattleEnvironmentTilemap_Blue_Building_2, (void *)(BG_SCREEN_ADDR(26)));
+                else
+                    DecompressDataWithHeaderVram(gBattleEnvironmentTilemap_Building, (void *)(BG_SCREEN_ADDR(26)));
                 break;
             case MAP_BATTLE_SCENE_MAGMA:
                 DecompressDataWithHeaderVram(gBattleEnvironmentTilemap_Stadium, (void *)(BG_SCREEN_ADDR(26)));
@@ -1558,7 +1614,10 @@ bool8 LoadChosenBattleElement(u8 caseId)
                 LoadPalette(BATTLE_ENV_BG_TABLE[gBattleEnvironment].palette, BG_PLTT_ID(2), 3 * PLTT_SIZE_4BPP);
                 break;
             case MAP_BATTLE_SCENE_GYM:
-                LoadPalette(gBattleEnvironmentPalette_BuildingGym, BG_PLTT_ID(2), 3 * PLTT_SIZE_4BPP);
+                if (IsKantoJohtoGymMap())
+                    LoadPalette(gBattleEnvironmentPalette_Blue_Building_2, BG_PLTT_ID(2), 3 * PLTT_SIZE_4BPP);
+                else
+                    LoadPalette(gBattleEnvironmentPalette_BuildingGym, BG_PLTT_ID(2), 3 * PLTT_SIZE_4BPP);
                 break;
             case MAP_BATTLE_SCENE_MAGMA:
                 LoadPalette(gBattleEnvironmentPalette_StadiumMagma, BG_PLTT_ID(2), 3 * PLTT_SIZE_4BPP);

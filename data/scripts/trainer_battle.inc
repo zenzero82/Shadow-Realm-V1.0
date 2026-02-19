@@ -21,7 +21,7 @@ EventScript_TryDoNormalTrainerBattle::
 	goto EventScript_ShowTrainerIntroMsg
 
 EventScript_NoNormalTrainerBattle::
-	gotopostbattlescript
+	gotobeatenscript
 
 EventScript_TryDoDoubleTrainerBattle::
 	lock
@@ -43,7 +43,7 @@ EventScript_NotEnoughMonsForDoubleBattle::
 	end
 
 EventScript_NoDoubleTrainerBattle::
-	gotopostbattlescript
+	gotobeatenscript
 
 EventScript_DoNoIntroTrainerBattle::
 	setflag FLAG_SAFE_FOLLOWER_MOVEMENT
@@ -69,7 +69,7 @@ EventScript_TryDoRematchBattle::
 	end
 
 EventScript_NoRematchTrainerBattle::
-	gotopostbattlescript
+	gotobeatenscript
 
 EventScript_TryDoDoubleRematchBattle::
 	specialvar VAR_RESULT, IsTrainerReadyForRematch
@@ -87,7 +87,7 @@ EventScript_TryDoDoubleRematchBattle::
 	end
 
 EventScript_NoDoubleRematchTrainerBattle::
-	gotopostbattlescript
+	gotobeatenscript
 
 EventScript_NotEnoughMonsForDoubleRematchBattle::
 	special ShowTrainerCantBattleSpeech

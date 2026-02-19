@@ -30,6 +30,12 @@ enum
     TD_BUTTONMODE,
     TD_FRAMETYPE,
 	TD_TIMER,
+    TD_PAGE,
+    TD_SHINY_ODDS,
+    TD_LEVEL_CAP,
+    TD_PAGE_SELECTION_OPTIONS,
+    TD_PAGE_SELECTION_FEATURES,
+    TD_PAGE_SELECTION_DIFFICULTY,
 };
 
 // Menu items
@@ -42,6 +48,37 @@ enum
     MENUITEM_BUTTONMODE,
     MENUITEM_FRAMETYPE,
     MENUITEM_COUNT,
+};
+
+enum
+{
+    MENUITEM_FEATURES_SHINY_ODDS,
+    MENUITEM_FEATURES_COUNT,
+};
+
+enum
+{
+    MENUITEM_DIFFICULTY_LEVEL_CAP,
+    MENUITEM_DIFFICULTY_COUNT,
+};
+
+enum
+{
+    OPTION_MENU_PAGE_FEATURES,
+    OPTION_MENU_PAGE_DIFFICULTY,
+    OPTION_MENU_PAGE_OPTIONS,
+    OPTION_MENU_PAGE_COUNT,
+};
+
+static const u8 sOptionMenuPagesDefault[] =
+{
+    OPTION_MENU_PAGE_OPTIONS,
+};
+
+static const u8 sOptionMenuPagesNewGame[] =
+{
+    OPTION_MENU_PAGE_FEATURES,
+    OPTION_MENU_PAGE_DIFFICULTY,
 };
 
 // this file's functions
@@ -62,14 +99,35 @@ static u8   FrameType_ProcessInput(u8 selection);
 static void FrameType_DrawChoices(u8 selection);
 static u8   ButtonMode_ProcessInput(u8 selection);
 static void ButtonMode_DrawChoices(u8 selection);
-static void DrawOptionMenuTexts(void);
+static u8   ShinyOdds_ProcessInput(u8 selection);
+static void ShinyOdds_DrawChoices(u8 selection);
+static u8   LevelCap_ProcessInput(u8 selection);
+static void LevelCap_DrawChoices(u8 selection);
+static void DrawOptionMenuTexts(u8 page, u8 selection);
+static void OptionMenu_DrawChoicesForPage(u8 taskId);
 static void DrawFrame(void);
 static void OptionMenu_ClearWindow(u8 option);
 static void ShowDescription(const u8 *text);
-static void SetDescription(u8 selection);
+static void SetDescriptionForSelection(u8 page, u8 selection);
+static const u8 *OptionMenu_GetLevelCapDescription(u8 selection);
+static const u8 *OptionMenu_GetPageList(u8 *count);
+static u8 OptionMenu_GetPageCount(void);
+static u8 OptionMenu_GetPageIndex(u8 page);
+static u8 OptionMenu_GetInitialPage(void);
+static u8 OptionMenu_GetItemCount(u8 page);
+static const u8 *OptionMenu_GetItemName(u8 page, u8 index);
+static const u8 *OptionMenu_GetDescription(u8 page, u8 index);
+static const u8 *OptionMenu_GetPageTitle(u8 page);
+static void OptionMenu_LoadCursorMap(u8 selection);
+static void OptionMenu_HideNewGameButtons(void);
+static void OptionMenu_ChangePage(u8 taskId, s8 direction);
+static u8 OptionMenu_ClampShinyOdds(u8 value);
+static u8 OptionMenu_ClampLevelCap(u8 value);
 
 // EWRAM vars
 EWRAM_DATA static bool8 sArrowPressed = FALSE;
+EWRAM_DATA static bool8 sOptionMenuNewGameSetup = FALSE;
+EWRAM_DATA static u8 sOptionMenuLevelCapSelection;
 
 // const rom data
 const u16 gPalOptionMenu[] = INCBIN_U16("graphics/option_menu/option_menu_text.gbapal");
@@ -81,14 +139,21 @@ const u32 gMapOptionMenu3[] = INCBIN_U32("graphics/option_menu/option_menu_3.bin
 const u32 gMapOptionMenu4[] = INCBIN_U32("graphics/option_menu/option_menu_4.bin.lz");
 const u32 gMapOptionMenu5[] = INCBIN_U32("graphics/option_menu/option_menu_5.bin.lz");
 const u8 localText_Option[] = _("{COLOR 2}{HIGHLIGHT TRANSPARENT}OPTIONS");
+const u8 localText_Features[] = _("{COLOR 2}{HIGHLIGHT TRANSPARENT}FEATURES");
+const u8 localText_Difficulty[] = _("{COLOR 2}{HIGHLIGHT TRANSPARENT}DIFFICULTY");
 const u8 localText_InstructionsSave[] = _("{COLOR 2}{HIGHLIGHT TRANSPARENT}SAVE");
 const u8 localText_InstructionsCancel[] = _("{COLOR 2}{HIGHLIGHT TRANSPARENT}CANCEL");
+const u8 localText_InstructionsSaveNewGame[] = _("{COLOR 2}{HIGHLIGHT TRANSPARENT}{A_BUTTON}SAVE");
+const u8 localText_InstructionsPrev[] = _("{COLOR 2}{HIGHLIGHT TRANSPARENT}L:PREV");
+const u8 localText_InstructionsNext[] = _("{COLOR 2}{HIGHLIGHT TRANSPARENT}R:NEXT");
 const u8 localText_TextSpeed[] = _("{COLOR 1}{HIGHLIGHT TRANSPARENT}Text Speed");
 const u8 localText_BattleScene[] = _("{COLOR 1}{HIGHLIGHT TRANSPARENT}BATTLE SCENE");
 const u8 localText_BattleStyle[] = _("{COLOR 1}{HIGHLIGHT TRANSPARENT}BATTLE STYLE");
 const u8 localText_Sound[] = _("{COLOR 1}{HIGHLIGHT TRANSPARENT}SOUND");
 const u8 localText_Frame[] = _("{COLOR 1}{HIGHLIGHT TRANSPARENT}FRAME");
 const u8 localText_ButtonMode[] = _("{COLOR 1}{HIGHLIGHT TRANSPARENT}CONTROLS");
+const u8 localText_ShinyOdds[] = _("{COLOR 1}{HIGHLIGHT TRANSPARENT}SHINY ODDS");
+const u8 localText_LevelCap[] = _("{COLOR 1}{HIGHLIGHT TRANSPARENT}LEVEL CAP");
 const u8 localText_TextSpeedSlow[] = _("{COLOR 1}{HIGHLIGHT TRANSPARENT}SLOW");
 const u8 localText_TextSpeedMid[] = _("{COLOR 1}{HIGHLIGHT TRANSPARENT}MID");
 const u8 localText_TextSpeedFast[] = _("{COLOR 1}{HIGHLIGHT TRANSPARENT}FAST");
@@ -103,17 +168,36 @@ const u8 localText_FrameTypeNumber[] = _("{COLOR 1}{HIGHLIGHT TRANSPARENT}");
 const u8 localText_ButtonTypeNormal[] = _("{COLOR 1}{HIGHLIGHT TRANSPARENT}NORMAL");
 const u8 localText_ButtonTypeLR[] = _("{COLOR 1}{HIGHLIGHT TRANSPARENT}LR");
 const u8 localText_ButtonTypeLEqualsA[] = _("{COLOR 1}{HIGHLIGHT TRANSPARENT}L=A");
+const u8 localText_ShinyOdds8192[] = _("{COLOR 1}{HIGHLIGHT TRANSPARENT}8192");
+const u8 localText_ShinyOdds4096[] = _("{COLOR 1}{HIGHLIGHT TRANSPARENT}4096");
+const u8 localText_ShinyOdds2048[] = _("{COLOR 1}{HIGHLIGHT TRANSPARENT}2048");
+const u8 localText_ShinyOdds1024[] = _("{COLOR 1}{HIGHLIGHT TRANSPARENT}1024");
+const u8 localText_ShinyOdds512[] = _("{COLOR 1}{HIGHLIGHT TRANSPARENT}512");
+const u8 localText_LevelCapOff[] = _("{COLOR 1}{HIGHLIGHT TRANSPARENT}OFF");
+const u8 localText_LevelCapNormal[] = _("{COLOR 1}{HIGHLIGHT TRANSPARENT}NORMAL");
+const u8 localText_LevelCapHard[] = _("{COLOR 1}{HIGHLIGHT TRANSPARENT}HARD");
 const u8 localText_TextSpeedDescription[] = _("{COLOR 1}{HIGHLIGHT TRANSPARENT}Choose from three text speed levels.");
 const u8 localText_BattleSceneDescription[] = _("{COLOR 1}{HIGHLIGHT TRANSPARENT}Show or disable animations\nduring battles.");
 const u8 localText_BattleStyleDescription[] = _("{COLOR 1}{HIGHLIGHT TRANSPARENT}Configure the rules that apply in\ncombat.");
 const u8 localText_SoundDescription[] = _("{COLOR 1}{HIGHLIGHT TRANSPARENT}Set the sound to mono or stereo. ");
 const u8 localText_FrameDescription[] = _("{COLOR 1}{HIGHLIGHT TRANSPARENT}Configure menu borders.");
 const u8 localText_ButtonModeDescription[] = _("{COLOR 1}{HIGHLIGHT TRANSPARENT}Configures the behavior of the\nL and R buttons.");
+const u8 localText_ShinyOddsDescription[] = _("{COLOR 1}{HIGHLIGHT TRANSPARENT}Choose the shiny encounter rate.");
+const u8 localText_LevelCapOffDescription[] = _("{COLOR 1}{HIGHLIGHT TRANSPARENT}Off: Overleveling is allowed.");
+const u8 localText_LevelCapNormalDescription[] = _("{COLOR 1}{HIGHLIGHT TRANSPARENT}Normal: Level Cap per Badge.");
+const u8 localText_LevelCapHardDescription[] = _("{COLOR 1}{HIGHLIGHT TRANSPARENT}Hard: Level Cap per previous Badge.\n(You will be underleveled)");
 const u8 localText_ExitWithSave[] = _("{COLOR 1}{HIGHLIGHT TRANSPARENT}Saving the changes made...");
 const u8 localText_ExitWithoutSave[] = _("{COLOR 1}{HIGHLIGHT TRANSPARENT}Discarding the changes made...");
 
+static const u8 sOptionMenuDescriptionTextColors[] =
+{
+    TEXT_COLOR_TRANSPARENT,
+    TEXT_COLOR_WHITE,
+    TEXT_COLOR_LIGHT_GRAY,
+};
 
-static const u8 *const sOptionMenuItemsNames[MENUITEM_COUNT] =
+
+static const u8 *const sOptionMenuItemsNamesOptions[MENUITEM_COUNT] =
 {
     localText_TextSpeed,
     localText_BattleScene,
@@ -123,7 +207,17 @@ static const u8 *const sOptionMenuItemsNames[MENUITEM_COUNT] =
     localText_Frame,
 };
 
-static const u8 *const sOptionMenuDescriptions[] =
+static const u8 *const sOptionMenuItemsNamesFeatures[MENUITEM_FEATURES_COUNT] =
+{
+    localText_ShinyOdds,
+};
+
+static const u8 *const sOptionMenuItemsNamesDifficulty[MENUITEM_DIFFICULTY_COUNT] =
+{
+    localText_LevelCap,
+};
+
+static const u8 *const sOptionMenuDescriptionsOptions[MENUITEM_COUNT] =
 {
     localText_TextSpeedDescription,
     localText_BattleSceneDescription,
@@ -131,8 +225,16 @@ static const u8 *const sOptionMenuDescriptions[] =
     localText_SoundDescription,
     localText_ButtonModeDescription,
     localText_FrameDescription,
-	localText_ExitWithSave,
-	localText_ExitWithoutSave,
+};
+
+static const u8 *const sOptionMenuDescriptionsFeatures[MENUITEM_FEATURES_COUNT] =
+{
+    localText_ShinyOddsDescription,
+};
+
+static const u8 *const sOptionMenuDescriptionsDifficulty[MENUITEM_DIFFICULTY_COUNT] =
+{
+    localText_LevelCapNormalDescription,
 };
 
 static const u32 *const sOptionMenuItems[MENUITEM_COUNT] =
@@ -221,6 +323,11 @@ static void VBlankCB(void)
     TransferPlttBuffer();
 }
 
+void OptionMenu_SetNewGameSetup(bool8 enable)
+{
+    sOptionMenuNewGameSetup = enable;
+}
+
 void CB2_InitOptionMenu(void)
 {
     switch (gMain.state)
@@ -282,6 +389,7 @@ void CB2_InitOptionMenu(void)
         break;
     case 6:
 		LZ77UnCompVram(gMapOptionMenu0, (void *)(VRAM + 0x3800)); 
+        OptionMenu_HideNewGameButtons();
         gMain.state++;
         break;
     case 7:
@@ -289,8 +397,9 @@ void CB2_InitOptionMenu(void)
         gMain.state++;
         break;
     case 8:
+        sOptionMenuLevelCapSelection = OptionMenu_ClampLevelCap(gSaveBlock2Ptr->optionsLevelCap);
 		PutWindowTilemap(0);
-		DrawOptionMenuTexts();
+		DrawOptionMenuTexts(OptionMenu_GetInitialPage(), 0);
         gMain.state++;
         break;
     case 9:
@@ -301,21 +410,38 @@ void CB2_InitOptionMenu(void)
     case 10:
     {
         u8 taskId = CreateTask(Task_OptionMenuFadeIn, 0);
+        u8 initialPage = OptionMenu_GetInitialPage();
 
-        gTasks[taskId].data[TD_MENUSELECTION] = 0;
+        gTasks[taskId].data[TD_PAGE] = initialPage;
+        gTasks[taskId].data[TD_PAGE_SELECTION_OPTIONS] = 0;
+        gTasks[taskId].data[TD_PAGE_SELECTION_FEATURES] = 0;
+        gTasks[taskId].data[TD_PAGE_SELECTION_DIFFICULTY] = 0;
+        switch (initialPage)
+        {
+        case OPTION_MENU_PAGE_FEATURES:
+            gTasks[taskId].data[TD_MENUSELECTION] = gTasks[taskId].data[TD_PAGE_SELECTION_FEATURES];
+            break;
+        case OPTION_MENU_PAGE_DIFFICULTY:
+            gTasks[taskId].data[TD_MENUSELECTION] = gTasks[taskId].data[TD_PAGE_SELECTION_DIFFICULTY];
+            break;
+        case OPTION_MENU_PAGE_OPTIONS:
+        default:
+            gTasks[taskId].data[TD_MENUSELECTION] = gTasks[taskId].data[TD_PAGE_SELECTION_OPTIONS];
+            break;
+        }
         gTasks[taskId].data[TD_TEXTSPEED] = gSaveBlock2Ptr->optionsTextSpeed;
         gTasks[taskId].data[TD_BATTLESCENE] = gSaveBlock2Ptr->optionsBattleSceneOff;
         gTasks[taskId].data[TD_BATTLESTYLE] = gSaveBlock2Ptr->optionsBattleStyle;
         gTasks[taskId].data[TD_SOUND] = gSaveBlock2Ptr->optionsSound;
         gTasks[taskId].data[TD_BUTTONMODE] = gSaveBlock2Ptr->optionsButtonMode;
         gTasks[taskId].data[TD_FRAMETYPE] = gSaveBlock2Ptr->optionsWindowFrameType;
+        gTasks[taskId].data[TD_SHINY_ODDS] = OptionMenu_ClampShinyOdds(gSaveBlock2Ptr->optionsShinyOdds);
+        gTasks[taskId].data[TD_LEVEL_CAP] = OptionMenu_ClampLevelCap(gSaveBlock2Ptr->optionsLevelCap);
+        sOptionMenuLevelCapSelection = gTasks[taskId].data[TD_LEVEL_CAP];
+        gSaveBlock2Ptr->optionsShinyOdds = gTasks[taskId].data[TD_SHINY_ODDS];
+        gSaveBlock2Ptr->optionsLevelCap = gTasks[taskId].data[TD_LEVEL_CAP];
 
-        TextSpeed_DrawChoices(gTasks[taskId].data[TD_TEXTSPEED]);
-        BattleScene_DrawChoices(gTasks[taskId].data[TD_BATTLESCENE]);
-        BattleStyle_DrawChoices(gTasks[taskId].data[TD_BATTLESTYLE]);
-        Sound_DrawChoices(gTasks[taskId].data[TD_SOUND]);
-        ButtonMode_DrawChoices(gTasks[taskId].data[TD_BUTTONMODE]);
-        FrameType_DrawChoices(gTasks[taskId].data[TD_FRAMETYPE]);
+        OptionMenu_DrawChoicesForPage(taskId);
         
 		CopyWindowToVram(0, 3);
         gMain.state++;
@@ -337,7 +463,20 @@ static void Task_OptionMenuFadeIn(u8 taskId)
 
 static void Task_OptionMenuProcessInput(u8 taskId)
 {
-	if (gMain.newKeys & A_BUTTON)
+    u8 page = gTasks[taskId].data[TD_PAGE];
+    u8 itemCount = OptionMenu_GetItemCount(page);
+
+    if ((gMain.newKeys & L_BUTTON) && OptionMenu_GetPageCount() > 1)
+    {
+        OptionMenu_ChangePage(taskId, -1);
+        return;
+    }
+    else if ((gMain.newKeys & R_BUTTON) && OptionMenu_GetPageCount() > 1)
+    {
+        OptionMenu_ChangePage(taskId, 1);
+        return;
+    }
+    else if (gMain.newKeys & A_BUTTON)
     {
 		OptionMenu_ClearWindow(DESCRIPTION);
         gTasks[taskId].data[TD_TIMER] = 20;
@@ -345,6 +484,8 @@ static void Task_OptionMenuProcessInput(u8 taskId)
     }
 	else if (gMain.newKeys & B_BUTTON)
     {
+        if (sOptionMenuNewGameSetup)
+            return;
 		OptionMenu_ClearWindow(DESCRIPTION);
         gTasks[taskId].data[TD_TIMER] = 20;
 		gTasks[taskId].func = Task_OptionMenuCancel;
@@ -354,68 +495,94 @@ static void Task_OptionMenuProcessInput(u8 taskId)
         if (gTasks[taskId].data[TD_MENUSELECTION] > 0)
             gTasks[taskId].data[TD_MENUSELECTION]--;
         else
-            gTasks[taskId].data[TD_MENUSELECTION] = MENUITEM_COUNT - 1;
-		LZ77UnCompVram(sOptionMenuItems[gTasks[taskId].data[TD_MENUSELECTION]], (void *)(VRAM + 0x3800));
+            gTasks[taskId].data[TD_MENUSELECTION] = itemCount - 1;
+		OptionMenu_LoadCursorMap(gTasks[taskId].data[TD_MENUSELECTION]);
 		OptionMenu_ClearWindow(DESCRIPTION);
-		SetDescription(gTasks[taskId].data[TD_MENUSELECTION]);
+		SetDescriptionForSelection(page, gTasks[taskId].data[TD_MENUSELECTION]);
     }
     else if (gMain.newKeys & DPAD_DOWN)
     {
-        if (gTasks[taskId].data[TD_MENUSELECTION] < MENUITEM_COUNT - 1)
+        if (gTasks[taskId].data[TD_MENUSELECTION] < itemCount - 1)
             gTasks[taskId].data[TD_MENUSELECTION]++;
         else
             gTasks[taskId].data[TD_MENUSELECTION] = 0;
-		LZ77UnCompVram(sOptionMenuItems[gTasks[taskId].data[TD_MENUSELECTION]], (void *)(VRAM + 0x3800));
+		OptionMenu_LoadCursorMap(gTasks[taskId].data[TD_MENUSELECTION]);
 		OptionMenu_ClearWindow(DESCRIPTION);
-		SetDescription(gTasks[taskId].data[TD_MENUSELECTION]);
+		SetDescriptionForSelection(page, gTasks[taskId].data[TD_MENUSELECTION]);
     }
     else
     {
         u8 previousOption;
 
-        switch (gTasks[taskId].data[TD_MENUSELECTION])
+        switch (page)
         {
-        case MENUITEM_TEXTSPEED:
-			previousOption = gTasks[taskId].data[TD_TEXTSPEED];
-            gTasks[taskId].data[TD_TEXTSPEED] = TextSpeed_ProcessInput(gTasks[taskId].data[TD_TEXTSPEED]);
+        case OPTION_MENU_PAGE_OPTIONS:
+            switch (gTasks[taskId].data[TD_MENUSELECTION])
+            {
+            case MENUITEM_TEXTSPEED:
+                previousOption = gTasks[taskId].data[TD_TEXTSPEED];
+                gTasks[taskId].data[TD_TEXTSPEED] = TextSpeed_ProcessInput(gTasks[taskId].data[TD_TEXTSPEED]);
 
-            if (previousOption != gTasks[taskId].data[TD_TEXTSPEED])
-                TextSpeed_DrawChoices(gTasks[taskId].data[TD_TEXTSPEED]);
+                if (previousOption != gTasks[taskId].data[TD_TEXTSPEED])
+                    TextSpeed_DrawChoices(gTasks[taskId].data[TD_TEXTSPEED]);
+                break;
+            case MENUITEM_BATTLESCENE:
+                previousOption = gTasks[taskId].data[TD_BATTLESCENE];
+                gTasks[taskId].data[TD_BATTLESCENE] = BattleScene_ProcessInput(gTasks[taskId].data[TD_BATTLESCENE]);
+
+                if (previousOption != gTasks[taskId].data[TD_BATTLESCENE])
+                    BattleScene_DrawChoices(gTasks[taskId].data[TD_BATTLESCENE]);
+                break;
+            case MENUITEM_BATTLESTYLE:
+                previousOption = gTasks[taskId].data[TD_BATTLESTYLE];
+                gTasks[taskId].data[TD_BATTLESTYLE] = BattleStyle_ProcessInput(gTasks[taskId].data[TD_BATTLESTYLE]);
+
+                if (previousOption != gTasks[taskId].data[TD_BATTLESTYLE])
+                    BattleStyle_DrawChoices(gTasks[taskId].data[TD_BATTLESTYLE]);
+                break;
+            case MENUITEM_SOUND:
+                previousOption = gTasks[taskId].data[TD_SOUND];
+                gTasks[taskId].data[TD_SOUND] = Sound_ProcessInput(gTasks[taskId].data[TD_SOUND]);
+
+                if (previousOption != gTasks[taskId].data[TD_SOUND])
+                    Sound_DrawChoices(gTasks[taskId].data[TD_SOUND]);
+                break;
+            case MENUITEM_BUTTONMODE:
+                previousOption = gTasks[taskId].data[TD_BUTTONMODE];
+                gTasks[taskId].data[TD_BUTTONMODE] = ButtonMode_ProcessInput(gTasks[taskId].data[TD_BUTTONMODE]);
+
+                if (previousOption != gTasks[taskId].data[TD_BUTTONMODE])
+                    ButtonMode_DrawChoices(gTasks[taskId].data[TD_BUTTONMODE]);
+                break;
+            case MENUITEM_FRAMETYPE:
+                previousOption = gTasks[taskId].data[TD_FRAMETYPE];
+                gTasks[taskId].data[TD_FRAMETYPE] = FrameType_ProcessInput(gTasks[taskId].data[TD_FRAMETYPE]);
+
+                if (previousOption != gTasks[taskId].data[TD_FRAMETYPE])
+                    FrameType_DrawChoices(gTasks[taskId].data[TD_FRAMETYPE]);
+                break;
+            default:
+                return;
+            }
             break;
-        case MENUITEM_BATTLESCENE:
-            previousOption = gTasks[taskId].data[TD_BATTLESCENE];
-            gTasks[taskId].data[TD_BATTLESCENE] = BattleScene_ProcessInput(gTasks[taskId].data[TD_BATTLESCENE]);
+        case OPTION_MENU_PAGE_FEATURES:
+            previousOption = gTasks[taskId].data[TD_SHINY_ODDS];
+            gTasks[taskId].data[TD_SHINY_ODDS] = ShinyOdds_ProcessInput(gTasks[taskId].data[TD_SHINY_ODDS]);
 
-            if (previousOption != gTasks[taskId].data[TD_BATTLESCENE])
-                BattleScene_DrawChoices(gTasks[taskId].data[TD_BATTLESCENE]);
-			break;
-        case MENUITEM_BATTLESTYLE:
-            previousOption = gTasks[taskId].data[TD_BATTLESTYLE];
-            gTasks[taskId].data[TD_BATTLESTYLE] = BattleStyle_ProcessInput(gTasks[taskId].data[TD_BATTLESTYLE]);
-
-            if (previousOption != gTasks[taskId].data[TD_BATTLESTYLE])
-                BattleStyle_DrawChoices(gTasks[taskId].data[TD_BATTLESTYLE]);
+            if (previousOption != gTasks[taskId].data[TD_SHINY_ODDS])
+                ShinyOdds_DrawChoices(gTasks[taskId].data[TD_SHINY_ODDS]);
             break;
-        case MENUITEM_SOUND:
-            previousOption = gTasks[taskId].data[TD_SOUND];
-            gTasks[taskId].data[TD_SOUND] = Sound_ProcessInput(gTasks[taskId].data[TD_SOUND]);
+        case OPTION_MENU_PAGE_DIFFICULTY:
+            previousOption = gTasks[taskId].data[TD_LEVEL_CAP];
+            gTasks[taskId].data[TD_LEVEL_CAP] = LevelCap_ProcessInput(gTasks[taskId].data[TD_LEVEL_CAP]);
 
-            if (previousOption != gTasks[taskId].data[TD_SOUND])
-                Sound_DrawChoices(gTasks[taskId].data[TD_SOUND]);
-            break;
-        case MENUITEM_BUTTONMODE:
-            previousOption = gTasks[taskId].data[TD_BUTTONMODE];
-            gTasks[taskId].data[TD_BUTTONMODE] = ButtonMode_ProcessInput(gTasks[taskId].data[TD_BUTTONMODE]);
-
-            if (previousOption != gTasks[taskId].data[TD_BUTTONMODE])
-                ButtonMode_DrawChoices(gTasks[taskId].data[TD_BUTTONMODE]);
-			break;
-        case MENUITEM_FRAMETYPE:
-            previousOption = gTasks[taskId].data[TD_FRAMETYPE];
-            gTasks[taskId].data[TD_FRAMETYPE] = FrameType_ProcessInput(gTasks[taskId].data[TD_FRAMETYPE]);
-
-            if (previousOption != gTasks[taskId].data[TD_FRAMETYPE])
-                FrameType_DrawChoices(gTasks[taskId].data[TD_FRAMETYPE]);
+            if (previousOption != gTasks[taskId].data[TD_LEVEL_CAP])
+            {
+                LevelCap_DrawChoices(gTasks[taskId].data[TD_LEVEL_CAP]);
+                sOptionMenuLevelCapSelection = gTasks[taskId].data[TD_LEVEL_CAP];
+                OptionMenu_ClearWindow(DESCRIPTION);
+                SetDescriptionForSelection(page, gTasks[taskId].data[TD_MENUSELECTION]);
+            }
             break;
         default:
             return;
@@ -444,7 +611,7 @@ static void OptionMenu_ClearWindow(u8 option)
 
 static void Task_OptionMenuSave(u8 taskId)
 {
-	SetDescription(6);
+	ShowDescription(localText_ExitWithSave);
 	if (gTasks[taskId].data[TD_TIMER])
     {
         gTasks[taskId].data[TD_TIMER]--;
@@ -457,6 +624,8 @@ static void Task_OptionMenuSave(u8 taskId)
 		gSaveBlock2Ptr->optionsSound = gTasks[taskId].data[TD_SOUND];
 		gSaveBlock2Ptr->optionsButtonMode = gTasks[taskId].data[TD_BUTTONMODE];
 		gSaveBlock2Ptr->optionsWindowFrameType = gTasks[taskId].data[TD_FRAMETYPE];
+		gSaveBlock2Ptr->optionsShinyOdds = gTasks[taskId].data[TD_SHINY_ODDS];
+		gSaveBlock2Ptr->optionsLevelCap = gTasks[taskId].data[TD_LEVEL_CAP];
 
 		BeginNormalPaletteFade(0xFFFFFFFF, 0, 0, 0x10, 0);
 		gTasks[taskId].func = Task_OptionMenuFadeOut;
@@ -465,7 +634,7 @@ static void Task_OptionMenuSave(u8 taskId)
 
 static void Task_OptionMenuCancel(u8 taskId)
 {
-	SetDescription(7);
+	ShowDescription(localText_ExitWithoutSave);
 	if (gTasks[taskId].data[TD_TIMER])
     {
         gTasks[taskId].data[TD_TIMER]--;
@@ -481,8 +650,19 @@ static void Task_OptionMenuFadeOut(u8 taskId)
 {
     if (!gPaletteFade.active)
     {
+        bool8 isNewGame = sOptionMenuNewGameSetup;
+
         DestroyTask(taskId);
         FreeAllWindowBuffers();
+        if (isNewGame)
+        {
+            SetVBlankCallback(NULL);
+            SetGpuReg(REG_OFFSET_DISPCNT, 0);
+            DmaClearLarge16(3, (void *)(VRAM), VRAM_SIZE, 0x1000);
+            DmaClear32(3, OAM, OAM_SIZE);
+            DmaClear16(3, PLTT, PLTT_SIZE);
+        }
+        sOptionMenuNewGameSetup = FALSE;
         SetMainCallback2(gMain.savedCallback);
     }
 }
@@ -501,9 +681,9 @@ static void DrawOptionMenuChoice(const u8 *text, u8 x, u8 y, u8 style)
 	CopyWindowToVram(0, 2);
 }
 
-static void SetDescription(u8 selection)
+static void SetDescriptionForSelection(u8 page, u8 selection)
 {
-	ShowDescription(sOptionMenuDescriptions[selection]);
+	ShowDescription(OptionMenu_GetDescription(page, selection));
 }
 
 static void ShowDescription(const u8 *text)
@@ -514,9 +694,254 @@ static void ShowDescription(const u8 *text)
     for (i = 0; *text != EOS && i <= 160; i++)
         dst[i] = *(text++);
 	
-	dst[2] = 5;
+	dst[2] = TEXT_COLOR_WHITE;
     dst[i] = EOS;
-	AddTextPrinterParameterized4(0, FONT_NORMAL, 12, 120, 0, 0, 0, 0, dst);
+	AddTextPrinterParameterized4(0, FONT_NORMAL, 12, 120, 0, 0, sOptionMenuDescriptionTextColors, 0, dst);
+    CopyWindowToVram(0, 2);
+}
+
+static const u8 *OptionMenu_GetPageList(u8 *count)
+{
+    if (sOptionMenuNewGameSetup)
+    {
+        *count = ARRAY_COUNT(sOptionMenuPagesNewGame);
+        return sOptionMenuPagesNewGame;
+    }
+
+    *count = ARRAY_COUNT(sOptionMenuPagesDefault);
+    return sOptionMenuPagesDefault;
+}
+
+static u8 OptionMenu_GetPageCount(void)
+{
+    u8 count;
+
+    OptionMenu_GetPageList(&count);
+    return count;
+}
+
+static u8 OptionMenu_GetPageIndex(u8 page)
+{
+    u8 count;
+    const u8 *pageList = OptionMenu_GetPageList(&count);
+    u8 i;
+
+    for (i = 0; i < count; i++)
+    {
+        if (pageList[i] == page)
+            return i;
+    }
+
+    return 0;
+}
+
+static u8 OptionMenu_GetInitialPage(void)
+{
+    u8 count;
+    const u8 *pageList = OptionMenu_GetPageList(&count);
+
+    if (count == 0)
+        return OPTION_MENU_PAGE_OPTIONS;
+
+    return pageList[0];
+}
+
+static u8 OptionMenu_GetItemCount(u8 page)
+{
+    switch (page)
+    {
+    case OPTION_MENU_PAGE_OPTIONS:
+        return MENUITEM_COUNT;
+    case OPTION_MENU_PAGE_FEATURES:
+        return MENUITEM_FEATURES_COUNT;
+    case OPTION_MENU_PAGE_DIFFICULTY:
+        return MENUITEM_DIFFICULTY_COUNT;
+    default:
+        return 0;
+    }
+}
+
+static const u8 *OptionMenu_GetItemName(u8 page, u8 index)
+{
+    switch (page)
+    {
+    case OPTION_MENU_PAGE_OPTIONS:
+        if (index >= MENUITEM_COUNT)
+            index = 0;
+        return sOptionMenuItemsNamesOptions[index];
+    case OPTION_MENU_PAGE_FEATURES:
+        if (index >= MENUITEM_FEATURES_COUNT)
+            index = 0;
+        return sOptionMenuItemsNamesFeatures[index];
+    case OPTION_MENU_PAGE_DIFFICULTY:
+        if (index >= MENUITEM_DIFFICULTY_COUNT)
+            index = 0;
+        return sOptionMenuItemsNamesDifficulty[index];
+    default:
+        return localText_TextSpeed;
+    }
+}
+
+static const u8 *OptionMenu_GetDescription(u8 page, u8 index)
+{
+    switch (page)
+    {
+    case OPTION_MENU_PAGE_OPTIONS:
+        if (index >= MENUITEM_COUNT)
+            index = 0;
+        return sOptionMenuDescriptionsOptions[index];
+    case OPTION_MENU_PAGE_FEATURES:
+        if (index >= MENUITEM_FEATURES_COUNT)
+            index = 0;
+        return sOptionMenuDescriptionsFeatures[index];
+    case OPTION_MENU_PAGE_DIFFICULTY:
+        if (index == MENUITEM_DIFFICULTY_LEVEL_CAP)
+            return OptionMenu_GetLevelCapDescription(sOptionMenuLevelCapSelection);
+        if (index >= MENUITEM_DIFFICULTY_COUNT)
+            index = 0;
+        return sOptionMenuDescriptionsDifficulty[index];
+    default:
+        return localText_TextSpeedDescription;
+    }
+}
+
+static const u8 *OptionMenu_GetLevelCapDescription(u8 selection)
+{
+    switch (selection)
+    {
+    case OPTIONS_LEVEL_CAP_OFF:
+        return localText_LevelCapOffDescription;
+    case OPTIONS_LEVEL_CAP_HARD:
+        return localText_LevelCapHardDescription;
+    case OPTIONS_LEVEL_CAP_NORMAL:
+    default:
+        return localText_LevelCapNormalDescription;
+    }
+}
+
+static const u8 *OptionMenu_GetPageTitle(u8 page)
+{
+    switch (page)
+    {
+    case OPTION_MENU_PAGE_OPTIONS:
+        return localText_Option;
+    case OPTION_MENU_PAGE_FEATURES:
+        return localText_Features;
+    case OPTION_MENU_PAGE_DIFFICULTY:
+        return localText_Difficulty;
+    default:
+        return localText_Option;
+    }
+}
+
+static void OptionMenu_LoadCursorMap(u8 selection)
+{
+    if (selection >= MENUITEM_COUNT)
+        selection = 0;
+	LZ77UnCompVram(sOptionMenuItems[selection], (void *)(VRAM + 0x3800));
+    OptionMenu_HideNewGameButtons();
+}
+
+static void OptionMenu_HideNewGameButtons(void)
+{
+    u16 *tilemap;
+    u16 row0Fill;
+    u16 row1Fill;
+    const u8 cols[] = {16, 23};
+    u8 i;
+
+    if (!sOptionMenuNewGameSetup)
+        return;
+
+    tilemap = (u16 *)(VRAM + 0x3800);
+    row0Fill = tilemap[0];
+    row1Fill = tilemap[32];
+
+    for (i = 0; i < ARRAY_COUNT(cols); i++)
+    {
+        tilemap[cols[i]] = row0Fill;
+        tilemap[32 + cols[i]] = row1Fill;
+    }
+
+    DmaClear16(3, (void *)(VRAM + (0x20 * 0x11)), 0x20 * 4);
+}
+
+static void OptionMenu_ChangePage(u8 taskId, s8 direction)
+{
+    u8 page = gTasks[taskId].data[TD_PAGE];
+    u8 selection = gTasks[taskId].data[TD_MENUSELECTION];
+    u8 itemCount;
+
+    switch (page)
+    {
+    case OPTION_MENU_PAGE_OPTIONS:
+        gTasks[taskId].data[TD_PAGE_SELECTION_OPTIONS] = selection;
+        break;
+    case OPTION_MENU_PAGE_FEATURES:
+        gTasks[taskId].data[TD_PAGE_SELECTION_FEATURES] = selection;
+        break;
+    case OPTION_MENU_PAGE_DIFFICULTY:
+        gTasks[taskId].data[TD_PAGE_SELECTION_DIFFICULTY] = selection;
+        break;
+    }
+
+    {
+        u8 pageCount;
+        u8 pageIndex;
+        const u8 *pageList = OptionMenu_GetPageList(&pageCount);
+
+        if (pageCount <= 1)
+            return;
+
+        pageIndex = OptionMenu_GetPageIndex(page);
+        if (direction > 0)
+            pageIndex = (pageIndex + 1) % pageCount;
+        else
+            pageIndex = (pageIndex + pageCount - 1) % pageCount;
+
+        page = pageList[pageIndex];
+    }
+
+    gTasks[taskId].data[TD_PAGE] = page;
+
+    switch (page)
+    {
+    case OPTION_MENU_PAGE_OPTIONS:
+        selection = gTasks[taskId].data[TD_PAGE_SELECTION_OPTIONS];
+        break;
+    case OPTION_MENU_PAGE_FEATURES:
+        selection = gTasks[taskId].data[TD_PAGE_SELECTION_FEATURES];
+        break;
+    case OPTION_MENU_PAGE_DIFFICULTY:
+        selection = gTasks[taskId].data[TD_PAGE_SELECTION_DIFFICULTY];
+        break;
+    default:
+        selection = 0;
+        break;
+    }
+
+    itemCount = OptionMenu_GetItemCount(page);
+    if (selection >= itemCount)
+        selection = 0;
+
+    gTasks[taskId].data[TD_MENUSELECTION] = selection;
+    OptionMenu_LoadCursorMap(selection);
+    DrawOptionMenuTexts(page, selection);
+    OptionMenu_DrawChoicesForPage(taskId);
+}
+
+static u8 OptionMenu_ClampShinyOdds(u8 value)
+{
+    if (value >= OPTIONS_SHINY_ODDS_COUNT)
+        return OPTIONS_SHINY_ODDS_8192;
+    return value;
+}
+
+static u8 OptionMenu_ClampLevelCap(u8 value)
+{
+    if (value > OPTIONS_LEVEL_CAP_HARD)
+        return OPTIONS_LEVEL_CAP_NORMAL;
+    return value;
 }
 
 static u8 TextSpeed_ProcessInput(u8 selection)
@@ -724,20 +1149,143 @@ static void ButtonMode_DrawChoices(u8 selection)
     DrawOptionMenuChoice(localText_ButtonTypeLEqualsA, 188, 80, styles[2]);
 }
 
-static void DrawOptionMenuTexts(void)
+static u8 ShinyOdds_ProcessInput(u8 selection)
 {
+    if (gMain.newKeys & DPAD_RIGHT)
+    {
+        if (selection < OPTIONS_SHINY_ODDS_COUNT - 1)
+            selection++;
+        else
+            selection = 0;
+
+        sArrowPressed = TRUE;
+    }
+    if (gMain.newKeys & DPAD_LEFT)
+    {
+        if (selection != 0)
+            selection--;
+        else
+            selection = OPTIONS_SHINY_ODDS_COUNT - 1;
+
+        sArrowPressed = TRUE;
+    }
+    return selection;
+}
+
+static void ShinyOdds_DrawChoices(u8 selection)
+{
+    u8 styles[OPTIONS_SHINY_ODDS_COUNT];
     u8 i;
 
-    FillWindowPixelBuffer(0, PIXEL_FILL(0));
-	AddTextPrinterParameterized(0, FONT_NORMAL, localText_Option, 8, 1, TEXT_SPEED_FF, NULL);
-	AddTextPrinterParameterized(0, FONT_NORMAL, localText_InstructionsSave, 140, 0 , TEXT_SPEED_FF, NULL);
-	AddTextPrinterParameterized(0, FONT_NORMAL, localText_InstructionsCancel, 204, 0 , TEXT_SPEED_FF, NULL);
-	SetDescription(0);
-	for (i = 0; i < MENUITEM_COUNT; i++)
+    for (i = 0; i < OPTIONS_SHINY_ODDS_COUNT; i++)
+        styles[i] = 5;
+    styles[selection] = 1;
+
+    DrawOptionMenuChoice(localText_ShinyOdds8192, 104, 16, styles[0]);
+    DrawOptionMenuChoice(localText_ShinyOdds4096, 132, 16, styles[1]);
+    DrawOptionMenuChoice(localText_ShinyOdds2048, 160, 16, styles[2]);
+    DrawOptionMenuChoice(localText_ShinyOdds1024, 188, 16, styles[3]);
+    DrawOptionMenuChoice(localText_ShinyOdds512,  216, 16, styles[4]);
+}
+
+static u8 LevelCap_ProcessInput(u8 selection)
+{
+    if (gMain.newKeys & DPAD_RIGHT)
     {
-        AddTextPrinterParameterized(0, FONT_NORMAL, sOptionMenuItemsNames[i], 8, (i * 16) + 17, TEXT_SPEED_FF, NULL);
+        if (selection < OPTIONS_LEVEL_CAP_HARD)
+            selection++;
+        else
+            selection = 0;
+
+        sArrowPressed = TRUE;
+    }
+    if (gMain.newKeys & DPAD_LEFT)
+    {
+        if (selection != 0)
+            selection--;
+        else
+            selection = OPTIONS_LEVEL_CAP_HARD;
+
+        sArrowPressed = TRUE;
+    }
+    return selection;
+}
+
+static void LevelCap_DrawChoices(u8 selection)
+{
+    u8 styles[3];
+
+    styles[0] = 5;
+    styles[1] = 5;
+    styles[2] = 5;
+    styles[selection] = 1;
+
+    DrawOptionMenuChoice(localText_LevelCapOff,    112, 16, styles[0]);
+    DrawOptionMenuChoice(localText_LevelCapNormal, 148, 16, styles[1]);
+    DrawOptionMenuChoice(localText_LevelCapHard,   198, 16, styles[2]);
+}
+
+static void DrawOptionMenuTexts(u8 page, u8 selection)
+{
+    u8 i;
+    u8 itemCount = OptionMenu_GetItemCount(page);
+    u8 instructionsY = 0;
+    u8 prevX = 8;
+    u8 nextX = 76;
+    u8 saveX = 140;
+    const u8 *saveText = localText_InstructionsSave;
+
+    if (sOptionMenuNewGameSetup)
+    {
+        prevX = 76;
+        nextX = 140;
+        saveX = 204;
+        saveText = localText_InstructionsSaveNewGame;
+    }
+
+    FillWindowPixelBuffer(0, PIXEL_FILL(0));
+	AddTextPrinterParameterized(0, FONT_NORMAL, OptionMenu_GetPageTitle(page), 8, 1, TEXT_SPEED_FF, NULL);
+    if (OptionMenu_GetPageCount() > 1)
+    {
+        AddTextPrinterParameterized(0, FONT_NORMAL, localText_InstructionsPrev, prevX, instructionsY, TEXT_SPEED_FF, NULL);
+        AddTextPrinterParameterized(0, FONT_NORMAL, localText_InstructionsNext, nextX, instructionsY, TEXT_SPEED_FF, NULL);
+    }
+    if (sOptionMenuNewGameSetup)
+    {
+        AddTextPrinterParameterized(0, FONT_NORMAL, saveText, saveX, instructionsY, TEXT_SPEED_FF, NULL);
+    }
+    else
+    {
+	    AddTextPrinterParameterized(0, FONT_NORMAL, saveText, saveX, instructionsY , TEXT_SPEED_FF, NULL);
+	    AddTextPrinterParameterized(0, FONT_NORMAL, localText_InstructionsCancel, 204, instructionsY , TEXT_SPEED_FF, NULL);
+    }
+	SetDescriptionForSelection(page, selection);
+	for (i = 0; i < itemCount; i++)
+    {
+        AddTextPrinterParameterized(0, FONT_NORMAL, OptionMenu_GetItemName(page, i), 8, (i * 16) + 17, TEXT_SPEED_FF, NULL);
     }
     CopyWindowToVram(0, 2);
+}
+
+static void OptionMenu_DrawChoicesForPage(u8 taskId)
+{
+    switch (gTasks[taskId].data[TD_PAGE])
+    {
+    case OPTION_MENU_PAGE_OPTIONS:
+        TextSpeed_DrawChoices(gTasks[taskId].data[TD_TEXTSPEED]);
+        BattleScene_DrawChoices(gTasks[taskId].data[TD_BATTLESCENE]);
+        BattleStyle_DrawChoices(gTasks[taskId].data[TD_BATTLESTYLE]);
+        Sound_DrawChoices(gTasks[taskId].data[TD_SOUND]);
+        ButtonMode_DrawChoices(gTasks[taskId].data[TD_BUTTONMODE]);
+        FrameType_DrawChoices(gTasks[taskId].data[TD_FRAMETYPE]);
+        break;
+    case OPTION_MENU_PAGE_FEATURES:
+        ShinyOdds_DrawChoices(gTasks[taskId].data[TD_SHINY_ODDS]);
+        break;
+    case OPTION_MENU_PAGE_DIFFICULTY:
+        LevelCap_DrawChoices(gTasks[taskId].data[TD_LEVEL_CAP]);
+        break;
+    }
 }
 
 static void DrawFrame(void)

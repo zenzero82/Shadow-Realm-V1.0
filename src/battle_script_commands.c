@@ -38,6 +38,7 @@
 #include "wild_encounter.h"
 #include "rtc.h"
 #include "party_menu.h"
+#include "sprite.h"
 #include "battle_arena.h"
 #include "constants/regions.h"
 #include "battle_pike.h"
@@ -67,10 +68,36 @@
 #include "constants/trainers.h"
 #include "battle_util.h"
 #include "constants/pokemon.h"
+#include "constants/shadow.h"
 #include "config/battle.h"
 #include "data/battle_move_effects.h"
 #include "pokemon.h"
 
+extern void ShdwLoadHealthboxPalette(u8 battlerId);
+extern void BattleHud_ApplyHealthboxPalette(u8 battler, bool8 isShadowNow);
+
+static void TryMarkShadowFailedOnFaint(u32 battler)
+{
+    struct Pokemon *mon;
+    u16 shadowId;
+    u8 state;
+
+    if (IsOnPlayerSide(battler))
+        return;
+    if (gBattleMons[battler].snagged)
+        return;
+
+    mon = GetBattlerMon(battler);
+    if (!GetMonData(mon, MON_DATA_IS_SHADOW))
+        return;
+
+    shadowId = GetMonData(mon, MON_DATA_SHADOW_ID);
+    state = Shdw_GetState(shadowId);
+    if (state == SHDW_STATE_SNAGGED || state == SHDW_STATE_PURIFIED)
+        return;
+
+    Shdw_SetState(shadowId, SHDW_STATE_FAILED);
+}
 
 static u16 GetVictoryWildBgmForRegion(void)
 {
@@ -4710,6 +4737,7 @@ static void Cmd_tryfaintmon(void)
         if (!(gAbsentBattlerFlags & (1u << battler))
          && !IsBattlerAlive(battler))
         {
+            TryMarkShadowFailedOnFaint(battler);
             gHitMarker |= HITMARKER_FAINTED(battler);
             BattleScriptPush(cmd->nextInstr);
             gBattlescriptCurrInstr = faintScript;
@@ -9454,7 +9482,7 @@ static void DrawLevelUpWindow1(void)
     u16 currStats[NUM_STATS];
 
     GetMonLevelUpWindowStats(&gPlayerParty[gBattleStruct->expGetterMonId], currStats);
-    DrawLevelUpWindowPg1(B_WIN_LEVEL_UP_BOX, gBattleResources->beforeLvlUp->stats, currStats, TEXT_DYNAMIC_COLOR_5, TEXT_DYNAMIC_COLOR_4, TEXT_DYNAMIC_COLOR_6);
+    DrawLevelUpWindowPg1(B_WIN_LEVEL_UP_BOX, gBattleResources->beforeLvlUp->stats, currStats, 4, TEXT_DYNAMIC_COLOR_5, TEXT_DYNAMIC_COLOR_4);
 }
 
 static void DrawLevelUpWindow2(void)
@@ -9462,7 +9490,7 @@ static void DrawLevelUpWindow2(void)
     u16 currStats[NUM_STATS];
 
     GetMonLevelUpWindowStats(&gPlayerParty[gBattleStruct->expGetterMonId], currStats);
-    DrawLevelUpWindowPg2(B_WIN_LEVEL_UP_BOX, currStats, TEXT_DYNAMIC_COLOR_5, TEXT_DYNAMIC_COLOR_4, TEXT_DYNAMIC_COLOR_6);
+    DrawLevelUpWindowPg2(B_WIN_LEVEL_UP_BOX, currStats, 4, TEXT_DYNAMIC_COLOR_5, TEXT_DYNAMIC_COLOR_4);
 }
 
 static void InitLevelUpBanner(void)
@@ -10939,6 +10967,39 @@ static void Cmd_various(void)
             MarkBattlerForControllerExec(battler);
             BattleLoadMonSpriteGfx(GetBattlerMon(battler), battler);
             SetBattlerShadowSpriteCallback(battler, gBattleMons[battler].species);
+            if (gBattlerSpriteIds[battler] < MAX_SPRITES)
+            {
+                struct Sprite *sprite = &gSprites[gBattlerSpriteIds[battler]];
+                if (sprite->images != NULL && sprite->anims != NULL)
+                {
+                    s16 imageValue = sprite->anims[sprite->animNum][sprite->animCmdIndex].frame.imageValue;
+                    if (imageValue >= 0)
+                    {
+                        const struct SpriteFrameImage *images = sprite->images;
+                        const void *src;
+                        u16 size;
+
+                        if (!images[0].relativeFrames)
+                        {
+                            src = images[imageValue].data;
+                            size = images[imageValue].size;
+                        }
+                        else
+                        {
+                            src = (const u8 *)images[0].data + images[0].size * imageValue;
+                            size = images[0].size;
+                        }
+
+                        if (src != NULL && size != 0)
+                        {
+                            void *dst = (void *)(OBJ_VRAM0 + sprite->oam.tileNum * TILE_SIZE_4BPP);
+                            DmaCopy32(3, src, dst, size);
+                        }
+                    }
+                    else
+                        StartSpriteAnim(sprite, sprite->animNum);
+                }
+            }
         }
         // Change stats.
         else if (cmd->case_ == 1)
@@ -16103,6 +16164,14 @@ static void Cmd_handleballthrow(void)
                 if (B_DREAM_BALL_MODIFIER >= GEN_8 && (gBattleMons[gBattlerTarget].status1 & STATUS1_SLEEP || GetBattlerAbility(gBattlerTarget) == ABILITY_COMATOSE))
                     ballMultiplier = 400;
                 break;
+            case BALL_DARK:
+                if (gBattleMons[gBattlerTarget].isShadow)
+                {
+                    bool32 isLegendaryOrMythical = gSpeciesInfo[gBattleMons[gBattlerTarget].species].isLegendary
+                        || gSpeciesInfo[gBattleMons[gBattlerTarget].species].isMythical;
+                    ballMultiplier = isLegendaryOrMythical ? 150 : 200;
+                }
+                break;
             case BALL_BEAST:
                 ballMultiplier = 10;
                 break;
@@ -16546,15 +16615,15 @@ void BattleCreateYesNoCursorAt(u8 cursorPosition)
     src[0] = 1;
     src[1] = 2;
 
-    CopyToBgTilemapBufferRect_ChangePalette(0, src, 0x19, 9 + (2 * cursorPosition), 1, 2, 0x11);
+    CopyToBgTilemapBufferRect_ChangePalette(0, src, 0x19, 9 + (2 * cursorPosition), 1, 2, 5);
     CopyBgTilemapBufferToVram(0);
 }
 
 void BattleDestroyYesNoCursorAt(u8 cursorPosition)
 {
     u16 src[2];
-    src[0] = 0x1016;
-    src[1] = 0x1016;
+    src[0] = 0x1026;
+    src[1] = 0x1026;
 
     CopyToBgTilemapBufferRect_ChangePalette(0, src, 0x19, 9 + (2 * cursorPosition), 1, 2, 0x11);
     CopyBgTilemapBufferToVram(0);
@@ -16880,6 +16949,34 @@ void BS_RestoreAttacker(void)
         DebugPrintfLevel(MGBA_LOG_WARN, "BS_RestoreAttacker attempting to restore an empty attacker!");
         // #endif
     }
+    gBattlescriptCurrInstr = cmd->nextInstr;
+}
+
+void BS_ClearReverseModeAfterCall(void)
+{
+    NATIVE_ARGS();
+    u32 battler = gBattlerAttacker;
+
+    if (gBattleMons[battler].isReverse)
+    {
+        gBattleMons[battler].isReverse = FALSE;
+        if (GetBattlerSide(battler) != B_SIDE_OPPONENT)
+        {
+            u8 reverseFlag = FALSE;
+            SetMonData(&gPlayerParty[gBattlerPartyIndexes[battler]], MON_DATA_REVERSE_MODE, &reverseFlag);
+        }
+        if (gHealthboxSpriteIds[battler] < MAX_SPRITES)
+            UpdateHealthboxAttribute(gHealthboxSpriteIds[battler], GetBattlerMon(battler), HEALTHBOX_ALL);
+        if (gHealthboxSpriteIds[battler] < MAX_SPRITES)
+            UpdateIndicatorVisibilityAndType(gHealthboxSpriteIds[battler], FALSE);
+        if (gHealthboxSpriteIds[battler] < MAX_SPRITES)
+        {
+            bool8 isShadowNow = GetMonData(GetBattlerMon(battler), MON_DATA_IS_SHADOW);
+            ShdwLoadHealthboxPalette(battler);
+            BattleHud_ApplyHealthboxPalette(battler, isShadowNow);
+        }
+    }
+
     gBattlescriptCurrInstr = cmd->nextInstr;
 }
 

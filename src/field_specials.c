@@ -1301,6 +1301,22 @@ void SpawnCameraObject(void)
                                                   gSaveBlock1Ptr->pos.y + MAP_OFFSET,
                                                   3); // elevation
     gObjectEvents[obj].invisible = TRUE;
+    if (gObjectEvents[obj].spriteId != SPRITE_NONE)
+        gSprites[gObjectEvents[obj].spriteId].invisible = TRUE;
+    CameraObjectSetFollowedSpriteId(gObjectEvents[obj].spriteId);
+}
+
+void SpawnCameraObjectAtVars(void)
+{
+    u8 obj = SpawnSpecialObjectEventParameterized(OBJ_EVENT_GFX_BOY_1,
+                                                  MOVEMENT_TYPE_FACE_DOWN,
+                                                  LOCALID_CAMERA,
+                                                  gSpecialVar_0x8004 + MAP_OFFSET,
+                                                  gSpecialVar_0x8005 + MAP_OFFSET,
+                                                  3); // elevation
+    gObjectEvents[obj].invisible = TRUE;
+    if (gObjectEvents[obj].spriteId != SPRITE_NONE)
+        gSprites[gObjectEvents[obj].spriteId].invisible = TRUE;
     CameraObjectSetFollowedSpriteId(gObjectEvents[obj].spriteId);
 }
 
@@ -1343,6 +1359,23 @@ static u8 GetObjectEventIdFromSpecialTargetLocalId(void)
                                            gSaveBlock1Ptr->location.mapGroup);
 }
 
+static bool8 TryAlignObjectEventToPortalCenter(struct ObjectEvent *objectEvent)
+{
+    u8 ringEventId;
+
+    if (gSpecialVar_0x8004 == 0)
+        return FALSE;
+
+    ringEventId = GetObjectEventIdFromSpecialLocalId();
+    if (ringEventId == OBJECT_EVENTS_COUNT)
+        return FALSE;
+
+    MoveObjectEventToMapCoords(objectEvent,
+                               gObjectEvents[ringEventId].currentCoords.x,
+                               gObjectEvents[ringEventId].currentCoords.y - 1);
+    return TRUE;
+}
+
 static void Task_WaitObjectEventAffineAnim(u8 taskId)
 {
     u8 objectEventId = gTasks[taskId].data[0];
@@ -1350,10 +1383,14 @@ static void Task_WaitObjectEventAffineAnim(u8 taskId)
     bool8 resetAffine = gTasks[taskId].data[2];
     s16 *counter = &gTasks[taskId].data[3];
     bool8 showWhenStarted = gTasks[taskId].data[4];
+    bool8 resumeScript = gTasks[taskId].data[5];
+    bool8 restorePriority = gTasks[taskId].data[7];
+    u8 savedPriority = gTasks[taskId].data[6];
 
     if (objectEventId == OBJECT_EVENTS_COUNT)
     {
-        ScriptContext_Enable();
+        if (resumeScript)
+            ScriptContext_Enable();
         DestroyTask(taskId);
         return;
     }
@@ -1364,6 +1401,7 @@ static void Task_WaitObjectEventAffineAnim(u8 taskId)
     if (showWhenStarted && !sprite->affineAnimBeginning)
     {
         objectEvent->invisible = FALSE;
+        sprite->invisible = FALSE;
         gTasks[taskId].data[4] = FALSE;
     }
 
@@ -1385,29 +1423,39 @@ static void Task_WaitObjectEventAffineAnim(u8 taskId)
     if (resetAffine)
         sprite->affineAnims = GetObjectEventGraphicsInfo(objectEvent->graphicsId)->affineAnims;
 
-    ScriptContext_Enable();
+    if (restorePriority)
+        sprite->oam.priority = savedPriority;
+
+    if (resumeScript)
+        ScriptContext_Enable();
     DestroyTask(taskId);
 }
 
 static const union AffineAnimCmd sAffineAnim_PortalGrowSpin[] =
 {
-    AFFINEANIMCMD_FRAME(0x900, 0x900, 0, 0),    // Start tiny (inverse scale)
-    AFFINEANIMCMD_FRAME(0, 0, -2, 6),           // Hold small, slight spin
-    AFFINEANIMCMD_FRAME(-0x40, -0x40, -4, 32),  // Spin CCW and grow to full size
+    AFFINEANIMCMD_FRAME(0x10, 0x10, 0, 0),    // Start tiny
+    AFFINEANIMCMD_FRAME(0x4, 0x4, -2, 64),    // Spin CCW and grow to full size
     AFFINEANIMCMD_END,
 };
 
 static const union AffineAnimCmd sAffineAnim_PortalShrinkSpin[] =
 {
     AFFINEANIMCMD_FRAME(0x100, 0x100, 0, 0),  // Start full size
-    AFFINEANIMCMD_FRAME(0x40, 0x40, 4, 32),   // Spin CW and shrink down
+    AFFINEANIMCMD_FRAME(-0x4, -0x4, 2, 60),   // Spin CW and shrink down
     AFFINEANIMCMD_END,
 };
 
 static const union AffineAnimCmd sAffineAnim_PortalAbsorbShrinkSpin[] =
 {
     AFFINEANIMCMD_FRAME(0x100, 0x100, 0, 0),  // Start normal size
-    AFFINEANIMCMD_FRAME(0x40, 0x40, 4, 32),   // Spin CW and shrink down
+    AFFINEANIMCMD_FRAME(-0x4, -0x4, 4, 60),   // Spin CW and shrink down
+    AFFINEANIMCMD_END,
+};
+
+static const union AffineAnimCmd sAffineAnim_PortalEmergeGrowSpin[] =
+{
+    AFFINEANIMCMD_FRAME(0x10, 0x10, 0, 0),    // Start tiny
+    AFFINEANIMCMD_FRAME(0xF, 0xF, -2, 16),    // Spin CCW and grow to full size
     AFFINEANIMCMD_END,
 };
 
@@ -1420,6 +1468,11 @@ static const union AffineAnimCmd *const sAffineAnimTable_PortalSpin[] =
 static const union AffineAnimCmd *const sAffineAnimTable_PortalAbsorb[] =
 {
     sAffineAnim_PortalAbsorbShrinkSpin,
+};
+
+static const union AffineAnimCmd *const sAffineAnimTable_PortalEmerge[] =
+{
+    sAffineAnim_PortalEmergeGrowSpin,
 };
 
 void StartHoopaRingGrow(void)
@@ -1441,6 +1494,8 @@ void StartHoopaRingGrow(void)
     StartSpriteAnim(sprite, ANIM_STD_FACE_SOUTH);
     InitSpriteAffineAnim(sprite);
     StartSpriteAffineAnim(sprite, 0);
+    if (sprite->oam.matrixNum != 0xFF)
+        SetOamMatrixRotationScaling(sprite->oam.matrixNum, 0x10, 0x10, 0);
     CalcCenterToCornerVec(sprite, sprite->oam.shape, sprite->oam.size, sprite->oam.affineMode);
 }
 
@@ -1463,6 +1518,8 @@ void StartHoopaRingShrink(void)
     StartSpriteAnim(sprite, ANIM_STD_FACE_SOUTH);
     InitSpriteAffineAnim(sprite);
     StartSpriteAffineAnim(sprite, 1);
+    if (sprite->oam.matrixNum != 0xFF)
+        SetOamMatrixRotationScaling(sprite->oam.matrixNum, 0x100, 0x100, 0);
     CalcCenterToCornerVec(sprite, sprite->oam.shape, sprite->oam.size, sprite->oam.affineMode);
 }
 
@@ -1495,14 +1552,7 @@ void Special_HoopaRingSpawnGrow(void)
     {
         struct Sprite *sprite = &gSprites[gObjectEvents[objectEventId].spriteId];
         sprite->invisible = TRUE;
-        if (sprite->oam.matrixNum != 0xFF)
-            SetOamMatrixRotationScaling(sprite->oam.matrixNum, 0x900, 0x900, 0);
     }
-    SetObjectInvisibility(gSpecialVar_0x8004,
-                          gSaveBlock1Ptr->location.mapNum,
-                          gSaveBlock1Ptr->location.mapGroup,
-                          FALSE);
-    gSprites[gObjectEvents[objectEventId].spriteId].invisible = FALSE;
 
     taskId = CreateTask(Task_WaitObjectEventAffineAnim, 8);
     if (taskId == TASK_NONE)
@@ -1511,6 +1561,8 @@ void Special_HoopaRingSpawnGrow(void)
         return;
     }
     gTasks[taskId].data[0] = objectEventId;
+    gTasks[taskId].data[4] = TRUE;
+    gTasks[taskId].data[5] = TRUE;
 }
 
 void Special_HoopaRingShrinkDespawn(void)
@@ -1534,6 +1586,7 @@ void Special_HoopaRingShrinkDespawn(void)
     }
     gTasks[taskId].data[0] = objectEventId;
     gTasks[taskId].data[1] = TRUE;
+    gTasks[taskId].data[5] = TRUE;
 }
 
 void Special_ObjectEventAbsorb(void)
@@ -1549,6 +1602,9 @@ void Special_ObjectEventAbsorb(void)
 
     struct ObjectEvent *objectEvent = &gObjectEvents[objectEventId];
     struct Sprite *sprite = &gSprites[objectEvent->spriteId];
+    u8 oldPriority = sprite->oam.priority;
+
+    TryAlignObjectEventToPortalCenter(objectEvent);
 
     sprite->oam.affineMode = ST_OAM_AFFINE_DOUBLE;
     sprite->subspriteMode = SUBSPRITES_OFF;
@@ -1557,6 +1613,7 @@ void Special_ObjectEventAbsorb(void)
     sprite->animPaused = TRUE;
     sprite->affineAnimPaused = FALSE;
     sprite->invisible = TRUE;
+    sprite->oam.priority = 1;
     InitSpriteAffineAnim(sprite);
     StartSpriteAffineAnim(sprite, 0);
     if (sprite->oam.matrixNum != 0xFF)
@@ -1573,6 +1630,48 @@ void Special_ObjectEventAbsorb(void)
     gTasks[taskId].data[0] = objectEventId;
     gTasks[taskId].data[1] = TRUE;
     gTasks[taskId].data[2] = TRUE;
+    gTasks[taskId].data[5] = TRUE;
+    gTasks[taskId].data[6] = oldPriority;
+    gTasks[taskId].data[7] = TRUE;
+}
+
+void Special_ObjectEventEmerge(void)
+{
+    u8 objectEventId = GetObjectEventIdFromSpecialTargetLocalId();
+    u8 taskId;
+
+    if (objectEventId == OBJECT_EVENTS_COUNT)
+        return;
+
+    struct ObjectEvent *objectEvent = &gObjectEvents[objectEventId];
+    struct Sprite *sprite = &gSprites[objectEvent->spriteId];
+    u8 oldPriority = sprite->oam.priority;
+
+    TryAlignObjectEventToPortalCenter(objectEvent);
+
+    sprite->oam.affineMode = ST_OAM_AFFINE_DOUBLE;
+    sprite->subspriteMode = SUBSPRITES_OFF;
+    sprite->subspriteTableNum = 0;
+    sprite->affineAnims = sAffineAnimTable_PortalEmerge;
+    sprite->animPaused = FALSE;
+    sprite->affineAnimPaused = FALSE;
+    objectEvent->invisible = TRUE;
+    sprite->invisible = TRUE;
+    sprite->oam.priority = 1;
+    InitSpriteAffineAnim(sprite);
+    StartSpriteAffineAnim(sprite, 0);
+    if (sprite->oam.matrixNum != 0xFF)
+        SetOamMatrixRotationScaling(sprite->oam.matrixNum, 0x10, 0x10, 0);
+    CalcCenterToCornerVec(sprite, sprite->oam.shape, sprite->oam.size, sprite->oam.affineMode);
+
+    taskId = CreateTask(Task_WaitObjectEventAffineAnim, 8);
+    if (taskId == TASK_NONE)
+        return;
+    gTasks[taskId].data[0] = objectEventId;
+    gTasks[taskId].data[2] = TRUE;
+    gTasks[taskId].data[4] = TRUE;
+    gTasks[taskId].data[6] = oldPriority;
+    gTasks[taskId].data[7] = TRUE;
 }
 
 void SetObjectEventPortalAffineAnims(void)
@@ -3693,7 +3792,7 @@ bool8 IsDestinationBoxFull(void)
     {
         for (i = 0; i < IN_BOX_COUNT; i++)
         {
-            if (GetBoxMonData(GetBoxedMonPtr(box, i), MON_DATA_SPECIES, 0) == SPECIES_NONE)
+            if (GetBoxMonDataAt(box, i, MON_DATA_SPECIES) == SPECIES_NONE)
             {
                 if (GetPCBoxToSendMon() != box)
                     FlagClear(FLAG_SHOWN_BOX_WAS_FULL_MESSAGE);

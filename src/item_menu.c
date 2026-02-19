@@ -57,13 +57,8 @@
 
 // The buffer for the bag item list needs to be large enough to hold the maximum
 // number of item slots that could fit in a single pocket, + 1 for Cancel.
-// This constant picks the max of the existing pocket sizes.
-// By default, the largest pocket is BAG_TMHM_COUNT at 64.
-#define MAX_POCKET_ITEMS  ((max(BAG_TMHM_COUNT,              \
-                            max(BAG_BERRIES_COUNT,           \
-                            max(BAG_ITEMS_COUNT,             \
-                            max(BAG_KEYITEMS_COUNT,          \
-                                BAG_POKEBALLS_COUNT))))) + 1)
+// Keep this at least as large as the biggest bag pocket (+1 for Cancel).
+#define MAX_POCKET_ITEMS (BAG_TMHM_COUNT + 1)
 
 // Up to 8 item slots can be visible at a time
 #define MAX_ITEMS_SHOWN 8
@@ -115,6 +110,7 @@ struct ListBuffer2 {
 struct TempWallyBag {
     struct ItemSlot bagPocket_Items[BAG_ITEMS_COUNT];
     struct ItemSlot bagPocket_PokeBalls[BAG_POKEBALLS_COUNT];
+    struct ItemSlot bagPocket_Medicine[BAG_MEDICINE_COUNT];
     u16 cursorPosition[POCKETS_COUNT];
     u16 scrollPosition[POCKETS_COUNT];
     u16 unused;
@@ -138,6 +134,9 @@ static void PrepareTMHMMoveWindow(void);
 static bool8 IsWallysBag(void);
 static void Task_WallyTutorialBagMenu(u8);
 static void Task_BagMenu_HandleInput(u8);
+static void Task_BagMenu_HandleStartMenu(u8);
+static void Task_BagMenu_HandleAutoSortMenu(u8);
+static void Task_BagMenu_HandleFavoritesMenu(u8);
 static void GetItemNameFromPocket(u8 *, u16);
 static void PrintItemDescription(int);
 static void BagMenu_PrintCursorAtPos(u8, u8);
@@ -182,6 +181,20 @@ static void TryDepositItem(u8);
 static void Task_ChooseHowManyToDeposit(u8 taskId);
 static void WaitDepositErrorMessage(u8);
 static void CB2_ApprenticeExitBagMenu(void);
+static void BagMenu_OpenStartMenu(u8 taskId);
+static void BagMenu_OpenAutoSortMenu(u8 taskId);
+static void BagMenu_OpenFavoritesMenu(u8 taskId);
+static void BagMenu_CloseStartMenu(u8 taskId);
+static void BagMenu_ApplySort(u8 taskId, u8 sortMode);
+static void BagMenu_EnterFavoriteMode(u8 taskId, u8 mode);
+static void BagMenu_ExitFavoriteMode(u8 taskId);
+static void BagMenu_HandleFavoriteInput(u8 taskId);
+static void BagMenu_PrintFavoriteHint(const u8 *text);
+static void BagMenu_RebuildItemList(u8 taskId);
+static void SortBagPocketItems(u8 pocketId, u8 sortMode);
+static bool8 IsItemFavorite(u16 itemId);
+static bool8 AddFavoriteItem(u16 itemId);
+static bool8 RemoveFavoriteItem(u16 itemId);
 static void CB2_FavorLadyExitBagMenu(void);
 static void CB2_QuizLadyExitBagMenu(void);
 static void UpdatePocketItemLists(void);
@@ -289,6 +302,38 @@ static const struct MenuAction sItemMenuActions[] = {
     [ACTION_DUMMY]             = {gText_EmptyString2, {NULL}}
 };
 
+static void BagMenu_StartAutoSort(u8 taskId);
+static void BagMenu_StartFavorites(u8 taskId);
+static void BagMenu_StartMenuCancel(u8 taskId);
+static void BagMenu_SortNameAZ(u8 taskId);
+static void BagMenu_SortNameZA(u8 taskId);
+static void BagMenu_SortType(u8 taskId);
+static void BagMenu_AutoSortCancel(u8 taskId);
+static void BagMenu_FavoritesAdd(u8 taskId);
+static void BagMenu_FavoritesRemove(u8 taskId);
+static void BagMenu_FavoritesSort(u8 taskId);
+static void BagMenu_FavoritesCancel(u8 taskId);
+
+static const struct MenuAction sBagStartMenuActions[] = {
+    {gText_BagAutoSort,     {BagMenu_StartAutoSort}},
+    {gText_BagFavorites,    {BagMenu_StartFavorites}},
+    {gText_Cancel2,         {BagMenu_StartMenuCancel}},
+};
+
+static const struct MenuAction sBagAutoSortMenuActions[] = {
+    {gText_BagSortNameAZ,   {BagMenu_SortNameAZ}},
+    {gText_BagSortNameZA,   {BagMenu_SortNameZA}},
+    {gText_BagSortType,     {BagMenu_SortType}},
+    {gText_Cancel2,         {BagMenu_AutoSortCancel}},
+};
+
+static const struct MenuAction sBagFavoritesMenuActions[] = {
+    {gText_BagFavoritesAdd,    {BagMenu_FavoritesAdd}},
+    {gText_BagFavoritesRemove, {BagMenu_FavoritesRemove}},
+    {gText_BagFavoritesSort,   {BagMenu_FavoritesSort}},
+    {gText_Cancel2,            {BagMenu_FavoritesCancel}},
+};
+
 // these are all 2D arrays with a width of 2 but are represented as 1D arrays
 // ACTION_DUMMY is used to represent blank spaces
 static const u8 sContextMenuItems_ItemsPocket[] = {
@@ -381,6 +426,23 @@ static const struct ScrollArrowsTemplate sBagScrollArrowsTemplate = {
 };
 
 static const u8 sRegisteredSelect_Gfx[] = INCBIN_U8("graphics/bag/select_button.4bpp");
+static const u8 sFavoritePrefix[] = _("· ");
+
+enum
+{
+    BAG_SORT_DEFAULT,
+    BAG_SORT_NAME_AZ,
+    BAG_SORT_NAME_ZA,
+    BAG_SORT_TYPE,
+    BAG_SORT_FAVORITES
+};
+
+enum
+{
+    FAVORITE_MODE_NONE,
+    FAVORITE_MODE_ADD,
+    FAVORITE_MODE_REMOVE
+};
 
 enum {
     COLORID_NORMAL,
@@ -397,6 +459,26 @@ static const u8 sFontColorTable[][3] = {
     [COLORID_GRAY_CURSOR] = {TEXT_COLOR_TRANSPARENT, TEXT_COLOR_LIGHT_GRAY, TEXT_COLOR_GREEN},
     [COLORID_UNUSED]      = {TEXT_COLOR_DARK_GRAY,   TEXT_COLOR_WHITE,      TEXT_COLOR_LIGHT_GRAY},
     [COLORID_TMHM_INFO]   = {TEXT_COLOR_TRANSPARENT, TEXT_DYNAMIC_COLOR_5,  TEXT_DYNAMIC_COLOR_1}
+};
+
+static const u16 sBagStartMenuPal[] =
+{
+    RGB(5, 5, 5),
+    RGB(0, 0, 0),
+    RGB(31, 31, 31),
+    RGB(12, 12, 12),
+    RGB(0, 0, 0),
+    RGB(0, 0, 0),
+    RGB(0, 0, 0),
+    RGB(0, 0, 0),
+    RGB(0, 0, 0),
+    RGB(0, 0, 0),
+    RGB(0, 0, 0),
+    RGB(0, 0, 0),
+    RGB(0, 0, 0),
+    RGB(0, 0, 0),
+    RGB(0, 0, 0),
+    RGB(0, 0, 0),
 };
 
 static const struct WindowTemplate sDefaultBagWindows[] =
@@ -550,6 +632,15 @@ static const struct WindowTemplate sContextMenuWindowTemplates[] =
         .paletteNum = 15,
         .baseBlock = 0x231,
     },
+    [ITEMWIN_START_MENU] = {
+        .bg = 1,
+        .tilemapLeft = 15,
+        .tilemapTop = 9,
+        .width = 14,
+        .height = 8,
+        .paletteNum = 11,
+        .baseBlock = 0x21D,
+    },
 };
 
 EWRAM_DATA struct BagMenu *gBagMenu = 0;
@@ -628,6 +719,8 @@ void QuizLadyOpenBagMenu(void)
 
 void GoToBagMenu(u8 location, u8 pocket, void ( *exitCallback)())
 {
+    u8 i;
+
     gBagMenu = AllocZeroed(sizeof(*gBagMenu));
     if (gBagMenu == NULL)
     {
@@ -646,8 +739,14 @@ void GoToBagMenu(u8 location, u8 pocket, void ( *exitCallback)())
             gBagPosition.location == ITEMMENULOCATION_BERRY_BLENDER_CRUSH ||
             gBagPosition.location == ITEMMENULOCATION_BERRY_TREE_MULCH)
             gBagMenu->pocketSwitchDisabled = TRUE;
+        for (i = 0; i < POCKETS_COUNT; i++)
+        {
+            if (gSaveBlock1Ptr->bagPocketSortModes[i] > BAG_SORT_FAVORITES)
+                gSaveBlock1Ptr->bagPocketSortModes[i] = BAG_SORT_DEFAULT;
+        }
         gBagMenu->newScreenCallback = NULL;
         gBagMenu->toSwapPos = NOT_SWAPPING;
+        gBagMenu->favoriteMode = FAVORITE_MODE_NONE;
         gBagMenu->pocketScrollArrowsTask = TASK_NONE;
         gBagMenu->pocketSwitchArrowsTask = TASK_NONE;
         memset(gBagMenu->spriteIds, SPRITE_NONE, sizeof(gBagMenu->spriteIds));
@@ -828,6 +927,7 @@ static bool8 LoadBagMenu_Graphics(void)
         if (FreeTempTileDataBuffersIfPossible() != TRUE)
         {
             DecompressDataWithHeaderWram(gBagScreen_GfxTileMap, gBagMenu->tilemapBuffer);
+            FillBgTilemapBufferRect_Palette0(2, 0x1017, 4, 3, POCKETS_COUNT, 1);
             gBagMenu->graphicsLoadState++;
         }
         break;
@@ -911,34 +1011,41 @@ static void LoadBagItemListBuffers(u8 pocketId)
 
 static void GetItemNameFromPocket(u8 *dest, u16 itemId)
 {
+    u8 *nameDst = dest;
+    u32 prefixWidth = 0;
     u8 *end;
+    if (IsItemFavorite(itemId))
+    {
+        nameDst = StringCopy(nameDst, sFavoritePrefix);
+        prefixWidth = GetStringWidth(FONT_NARROW, sFavoritePrefix, 0);
+    }
     switch (gBagPosition.pocket)
     {
     case TMHM_POCKET:
         end = StringCopy(gStringVar2, GetMoveName(ItemIdToBattleMoveId(itemId)));
-        PrependFontIdToFit(gStringVar2, end, FONT_NARROW, 61);
+        PrependFontIdToFit(gStringVar2, end, FONT_NARROW, (prefixWidth < 61) ? (61 - prefixWidth) : 0);
         if (itemId >= ITEM_HM01)
         {
             // Get HM number
             ConvertIntToDecimalStringN(gStringVar1, itemId - ITEM_HM01 + 1, STR_CONV_MODE_LEADING_ZEROS, 1);
-            StringExpandPlaceholders(dest, gText_NumberItem_HM);
+            StringExpandPlaceholders(nameDst, gText_NumberItem_HM);
         }
         else
         {
             // Get TM number
             ConvertIntToDecimalStringN(gStringVar1, itemId - ITEM_TM01 + 1, STR_CONV_MODE_LEADING_ZEROS, 2);
-            StringExpandPlaceholders(dest, gText_NumberItem_TMBerry);
+            StringExpandPlaceholders(nameDst, gText_NumberItem_TMBerry);
         }
         break;
     case BERRIES_POCKET:
         ConvertIntToDecimalStringN(gStringVar1, itemId - FIRST_BERRY_INDEX + 1, STR_CONV_MODE_LEADING_ZEROS, 2);
         end = CopyItemName(itemId, gStringVar2);
-        PrependFontIdToFit(gStringVar2, end, FONT_NARROW, 61);
-        StringExpandPlaceholders(dest, gText_NumberItem_TMBerry);
+        PrependFontIdToFit(gStringVar2, end, FONT_NARROW, (prefixWidth < 61) ? (61 - prefixWidth) : 0);
+        StringExpandPlaceholders(nameDst, gText_NumberItem_TMBerry);
         break;
     default:
-        end = CopyItemName(itemId, dest);
-        PrependFontIdToFit(dest, end, FONT_NARROW, 88);
+        end = CopyItemName(itemId, nameDst);
+        PrependFontIdToFit(nameDst, end, FONT_NARROW, (prefixWidth < 88) ? (88 - prefixWidth) : 0);
         break;
     }
 }
@@ -1132,15 +1239,24 @@ void UpdatePocketItemList(u8 pocketId)
 {
     u16 i;
     struct BagPocket *pocket = &gBagPockets[pocketId];
-    switch (pocketId)
+    u8 sortMode = gSaveBlock1Ptr->bagPocketSortModes[pocketId];
+
+    if (sortMode != BAG_SORT_DEFAULT)
     {
-    case TMHM_POCKET:
-    case BERRIES_POCKET:
-        SortBerriesOrTMHMs(pocket);
-        break;
-    default:
-        CompactItemsInBagPocket(pocket);
-        break;
+        SortBagPocketItems(pocketId, sortMode);
+    }
+    else
+    {
+        switch (pocketId)
+        {
+        case TMHM_POCKET:
+        case BERRIES_POCKET:
+            SortBerriesOrTMHMs(pocket);
+            break;
+        default:
+            CompactItemsInBagPocket(pocket);
+            break;
+        }
     }
 
     gBagMenu->numItemStacks[pocketId] = 0;
@@ -1155,6 +1271,114 @@ void UpdatePocketItemList(u8 pocketId)
         gBagMenu->numShownItems[pocketId] = MAX_ITEMS_SHOWN;
     else
         gBagMenu->numShownItems[pocketId] = gBagMenu->numItemStacks[pocketId];
+}
+
+static bool8 IsItemFavorite(u16 itemId)
+{
+    u16 i;
+
+    for (i = 0; i < BAG_FAVORITES_COUNT; i++)
+    {
+        if (gSaveBlock1Ptr->bagFavoriteItems[i] == itemId)
+            return TRUE;
+    }
+    return FALSE;
+}
+
+static bool8 AddFavoriteItem(u16 itemId)
+{
+    u16 i;
+
+    if (IsItemFavorite(itemId))
+        return TRUE;
+
+    for (i = 0; i < BAG_FAVORITES_COUNT; i++)
+    {
+        if (gSaveBlock1Ptr->bagFavoriteItems[i] == ITEM_NONE)
+        {
+            gSaveBlock1Ptr->bagFavoriteItems[i] = itemId;
+            return TRUE;
+        }
+    }
+    return FALSE;
+}
+
+static bool8 RemoveFavoriteItem(u16 itemId)
+{
+    u16 i;
+
+    for (i = 0; i < BAG_FAVORITES_COUNT; i++)
+    {
+        if (gSaveBlock1Ptr->bagFavoriteItems[i] == itemId)
+        {
+            gSaveBlock1Ptr->bagFavoriteItems[i] = ITEM_NONE;
+            return TRUE;
+        }
+    }
+    return FALSE;
+}
+
+static s32 CompareBagItemIds(u16 itemIdA, u16 itemIdB, u8 sortMode)
+{
+    s32 cmp;
+
+    if (sortMode == BAG_SORT_TYPE)
+    {
+        cmp = (s32)GetItemType(itemIdA) - (s32)GetItemType(itemIdB);
+        if (cmp != 0)
+            return cmp;
+    }
+    else if (sortMode == BAG_SORT_FAVORITES)
+    {
+        bool8 favA = IsItemFavorite(itemIdA);
+        bool8 favB = IsItemFavorite(itemIdB);
+        if (favA != favB)
+            return favA ? -1 : 1;
+    }
+
+    cmp = StringCompare(GetItemName(itemIdA), GetItemName(itemIdB));
+    if (cmp == 0)
+        cmp = (s32)itemIdA - (s32)itemIdB;
+    if (sortMode == BAG_SORT_NAME_ZA)
+        cmp = -cmp;
+    return cmp;
+}
+
+static void SortBagPocketItems(u8 pocketId, u8 sortMode)
+{
+    struct BagPocket *pocket = &gBagPockets[pocketId];
+    struct ItemSlot *sorted = AllocZeroed(sizeof(*sorted) * pocket->capacity);
+    u16 count = 0;
+    u16 i;
+
+    if (sorted == NULL)
+        return;
+
+    for (i = 0; i < pocket->capacity; i++)
+    {
+        if (pocket->itemSlots[i].itemId != ITEM_NONE)
+            sorted[count++] = pocket->itemSlots[i];
+    }
+
+    for (i = 1; i < count; i++)
+    {
+        u16 j = i;
+        struct ItemSlot temp = sorted[i];
+
+        while (j > 0 && CompareBagItemIds(sorted[j - 1].itemId, temp.itemId, sortMode) > 0)
+        {
+            sorted[j] = sorted[j - 1];
+            j--;
+        }
+        sorted[j] = temp;
+    }
+
+    for (i = 0; i < count; i++)
+        pocket->itemSlots[i] = sorted[i];
+    if (count < pocket->capacity)
+        ClearItemSlots(&pocket->itemSlots[count], pocket->capacity - count);
+
+    Free(sorted);
 }
 
 static void UpdatePocketItemLists(void)
@@ -1241,6 +1465,12 @@ static void Task_BagMenu_HandleInput(u8 taskId)
     u16 *cursorPos = &gBagPosition.cursorPosition[gBagPosition.pocket];
     s32 listPosition;
 
+    if (gBagMenu->favoriteMode != FAVORITE_MODE_NONE)
+    {
+        BagMenu_HandleFavoriteInput(taskId);
+        return;
+    }
+
     if (MenuHelpers_ShouldWaitForLinkRecv() != TRUE && !gPaletteFade.active)
     {
         switch (GetSwitchBagPocketDirection())
@@ -1263,6 +1493,12 @@ static void Task_BagMenu_HandleInput(u8 taskId)
                         StartItemSwap(taskId);
                     }
                 }
+                return;
+            }
+            if (JOY_NEW(START_BUTTON))
+            {
+                PlaySE(SE_SELECT);
+                BagMenu_OpenStartMenu(taskId);
                 return;
             }
             break;
@@ -1292,6 +1528,291 @@ static void Task_BagMenu_HandleInput(u8 taskId)
             tQuantity = BagGetQuantityByPocketPosition(gBagPosition.pocket + 1, listPosition);
             gSpecialVar_ItemId = BagGetItemIdByPocketPosition(gBagPosition.pocket + 1, listPosition);
             sContextMenuFuncs[gBagPosition.location](taskId);
+            break;
+        }
+    }
+}
+
+static void BagMenu_PrintFavoriteHint(const u8 *text)
+{
+    FillWindowPixelBuffer(WIN_DESCRIPTION, PIXEL_FILL(0));
+    BagMenu_Print(WIN_DESCRIPTION, FONT_NORMAL, text, 3, 1, 0, 0, 0, COLORID_NORMAL);
+    ScheduleBgCopyTilemapToVram(0);
+}
+
+static void BagMenu_RebuildItemList(u8 taskId)
+{
+    s16 *data = gTasks[taskId].data;
+    u16 *scrollPos = &gBagPosition.scrollPosition[gBagPosition.pocket];
+    u16 *cursorPos = &gBagPosition.cursorPosition[gBagPosition.pocket];
+
+    DestroyListMenuTask(tListTaskId, scrollPos, cursorPos);
+    UpdatePocketItemList(gBagPosition.pocket);
+    UpdatePocketListPosition(gBagPosition.pocket);
+    LoadBagItemListBuffers(gBagPosition.pocket);
+    tListTaskId = ListMenuInit(&gMultiuseListMenuTemplate, *scrollPos, *cursorPos);
+    ScheduleBgCopyTilemapToVram(0);
+}
+
+static void BagMenu_EnterFavoriteMode(u8 taskId, u8 mode)
+{
+    gBagMenu->favoriteMode = mode;
+    gBagMenu->inhibitItemDescriptionPrint = TRUE;
+    BagMenu_PrintFavoriteHint((mode == FAVORITE_MODE_ADD) ? gText_BagFavoritesAddHint : gText_BagFavoritesRemoveHint);
+    BagMenu_CloseStartMenu(taskId);
+}
+
+static void BagMenu_ExitFavoriteMode(u8 taskId)
+{
+    u16 arrayId = GetItemListPosition(gBagPosition.pocket);
+
+    gBagMenu->favoriteMode = FAVORITE_MODE_NONE;
+    gBagMenu->inhibitItemDescriptionPrint = FALSE;
+    PrintItemDescription(sListBuffer1->subBuffers[arrayId].id);
+    gTasks[taskId].func = Task_BagMenu_HandleInput;
+}
+
+static void BagMenu_HandleFavoriteInput(u8 taskId)
+{
+    s16 *data = gTasks[taskId].data;
+    u16 *scrollPos = &gBagPosition.scrollPosition[gBagPosition.pocket];
+    u16 *cursorPos = &gBagPosition.cursorPosition[gBagPosition.pocket];
+    s32 listPosition;
+
+    if (MenuHelpers_ShouldWaitForLinkRecv() != TRUE && !gPaletteFade.active)
+    {
+        switch (GetSwitchBagPocketDirection())
+        {
+        case SWITCH_POCKET_LEFT:
+            SwitchBagPocket(taskId, MENU_CURSOR_DELTA_LEFT, FALSE);
+            return;
+        case SWITCH_POCKET_RIGHT:
+            SwitchBagPocket(taskId, MENU_CURSOR_DELTA_RIGHT, FALSE);
+            return;
+        default:
+            break;
+        }
+
+        listPosition = ListMenu_ProcessInput(tListTaskId);
+        ListMenuGetScrollAndRow(tListTaskId, scrollPos, cursorPos);
+        switch (listPosition)
+        {
+        case LIST_NOTHING_CHOSEN:
+            break;
+        case LIST_CANCEL:
+            PlaySE(SE_SELECT);
+            BagMenu_ExitFavoriteMode(taskId);
+            break;
+        default:
+        {
+            u16 itemId = BagGetItemIdByPocketPosition(gBagPosition.pocket + 1, listPosition);
+
+            PlaySE(SE_SELECT);
+            if (gBagMenu->favoriteMode == FAVORITE_MODE_ADD)
+            {
+                if (!AddFavoriteItem(itemId))
+                {
+                    BagMenu_PrintFavoriteHint(gText_BagFavoritesFull);
+                    break;
+                }
+            }
+            else if (gBagMenu->favoriteMode == FAVORITE_MODE_REMOVE)
+            {
+                RemoveFavoriteItem(itemId);
+            }
+            BagMenu_RebuildItemList(taskId);
+            BagMenu_PrintFavoriteHint((gBagMenu->favoriteMode == FAVORITE_MODE_ADD)
+                                      ? gText_BagFavoritesAddHint
+                                      : gText_BagFavoritesRemoveHint);
+            break;
+        }
+        }
+    }
+}
+
+static void BagMenu_PrintStartMenuWithColors(const struct MenuAction *actions, u8 count, const u8 *textColors, u8 fill)
+{
+    u8 i;
+    u8 windowId = BagMenu_AddWindow(ITEMWIN_START_MENU);
+
+    FillWindowPixelBuffer(windowId, PIXEL_FILL(fill));
+    for (i = 0; i < count; i++)
+        AddTextPrinterParameterized4(windowId, FONT_NARROW, 8, 1 + (16 * i), 0, 0, textColors, TEXT_SKIP_DRAW, actions[i].text);
+    CopyWindowToVram(windowId, COPYWIN_GFX);
+    InitMenuInUpperLeftCornerNormal(windowId, count, 0);
+    ScheduleBgCopyTilemapToVram(1);
+}
+
+static void BagMenu_PrintStartMenu(const struct MenuAction *actions, u8 count)
+{
+    static const u8 sStartMenuTextColors[] = {TEXT_COLOR_TRANSPARENT, TEXT_COLOR_DARK_GRAY, TEXT_COLOR_LIGHT_GRAY};
+
+    BagMenu_PrintStartMenuWithColors(actions, count, sStartMenuTextColors, 1);
+}
+
+static void BagMenu_OpenStartMenu(u8 taskId)
+{
+    static const u8 sStartMenuTextColors[] = {TEXT_COLOR_TRANSPARENT, TEXT_COLOR_DARK_GRAY, TEXT_COLOR_LIGHT_GRAY};
+
+    BagMenu_PrintStartMenuWithColors(sBagStartMenuActions, ARRAY_COUNT(sBagStartMenuActions), sStartMenuTextColors, 1);
+    gTasks[taskId].func = Task_BagMenu_HandleStartMenu;
+}
+
+static void BagMenu_OpenAutoSortMenu(u8 taskId)
+{
+    static const u8 sAutoSortMenuTextColors[] = {TEXT_COLOR_TRANSPARENT, TEXT_COLOR_DARK_GRAY, TEXT_COLOR_LIGHT_GRAY};
+
+    BagMenu_PrintStartMenuWithColors(sBagAutoSortMenuActions, ARRAY_COUNT(sBagAutoSortMenuActions), sAutoSortMenuTextColors, 1);
+    gTasks[taskId].func = Task_BagMenu_HandleAutoSortMenu;
+}
+
+static void BagMenu_OpenFavoritesMenu(u8 taskId)
+{
+    BagMenu_PrintStartMenu(sBagFavoritesMenuActions, ARRAY_COUNT(sBagFavoritesMenuActions));
+    gTasks[taskId].func = Task_BagMenu_HandleFavoritesMenu;
+}
+
+static void BagMenu_CloseStartMenu(u8 taskId)
+{
+    BagMenu_RemoveWindow(ITEMWIN_START_MENU);
+    ScheduleBgCopyTilemapToVram(1);
+    gTasks[taskId].func = Task_BagMenu_HandleInput;
+}
+
+static void BagMenu_ApplySort(u8 taskId, u8 sortMode)
+{
+    if (sortMode == BAG_SORT_FAVORITES)
+    {
+        u8 i;
+
+        for (i = 0; i < POCKETS_COUNT; i++)
+            gSaveBlock1Ptr->bagPocketSortModes[i] = sortMode;
+        UpdatePocketItemLists();
+    }
+    else
+    {
+        gSaveBlock1Ptr->bagPocketSortModes[gBagPosition.pocket] = sortMode;
+    }
+    BagMenu_CloseStartMenu(taskId);
+    BagMenu_RebuildItemList(taskId);
+}
+
+static void BagMenu_StartAutoSort(u8 taskId)
+{
+    BagMenu_OpenAutoSortMenu(taskId);
+}
+
+static void BagMenu_StartFavorites(u8 taskId)
+{
+    BagMenu_OpenFavoritesMenu(taskId);
+}
+
+static void BagMenu_StartMenuCancel(u8 taskId)
+{
+    BagMenu_CloseStartMenu(taskId);
+}
+
+static void BagMenu_SortNameAZ(u8 taskId)
+{
+    BagMenu_ApplySort(taskId, BAG_SORT_NAME_AZ);
+}
+
+static void BagMenu_SortNameZA(u8 taskId)
+{
+    BagMenu_ApplySort(taskId, BAG_SORT_NAME_ZA);
+}
+
+static void BagMenu_SortType(u8 taskId)
+{
+    BagMenu_ApplySort(taskId, BAG_SORT_TYPE);
+}
+
+static void BagMenu_AutoSortCancel(u8 taskId)
+{
+    BagMenu_OpenStartMenu(taskId);
+}
+
+static void BagMenu_FavoritesAdd(u8 taskId)
+{
+    BagMenu_EnterFavoriteMode(taskId, FAVORITE_MODE_ADD);
+}
+
+static void BagMenu_FavoritesRemove(u8 taskId)
+{
+    BagMenu_EnterFavoriteMode(taskId, FAVORITE_MODE_REMOVE);
+}
+
+static void BagMenu_FavoritesSort(u8 taskId)
+{
+    BagMenu_ApplySort(taskId, BAG_SORT_FAVORITES);
+}
+
+static void BagMenu_FavoritesCancel(u8 taskId)
+{
+    BagMenu_OpenStartMenu(taskId);
+}
+
+static void Task_BagMenu_HandleStartMenu(u8 taskId)
+{
+    if (MenuHelpers_ShouldWaitForLinkRecv() != TRUE)
+    {
+        s8 selection = Menu_ProcessInputNoWrap();
+
+        switch (selection)
+        {
+        case MENU_NOTHING_CHOSEN:
+            break;
+        case MENU_B_PRESSED:
+            PlaySE(SE_SELECT);
+            BagMenu_CloseStartMenu(taskId);
+            break;
+        default:
+            PlaySE(SE_SELECT);
+            sBagStartMenuActions[selection].func.void_u8(taskId);
+            break;
+        }
+    }
+}
+
+static void Task_BagMenu_HandleAutoSortMenu(u8 taskId)
+{
+    if (MenuHelpers_ShouldWaitForLinkRecv() != TRUE)
+    {
+        s8 selection = Menu_ProcessInputNoWrap();
+
+        switch (selection)
+        {
+        case MENU_NOTHING_CHOSEN:
+            break;
+        case MENU_B_PRESSED:
+            PlaySE(SE_SELECT);
+            BagMenu_OpenStartMenu(taskId);
+            break;
+        default:
+            PlaySE(SE_SELECT);
+            sBagAutoSortMenuActions[selection].func.void_u8(taskId);
+            break;
+        }
+    }
+}
+
+static void Task_BagMenu_HandleFavoritesMenu(u8 taskId)
+{
+    if (MenuHelpers_ShouldWaitForLinkRecv() != TRUE)
+    {
+        s8 selection = Menu_ProcessInputNoWrap();
+
+        switch (selection)
+        {
+        case MENU_NOTHING_CHOSEN:
+            break;
+        case MENU_B_PRESSED:
+            PlaySE(SE_SELECT);
+            BagMenu_OpenStartMenu(taskId);
+            break;
+        default:
+            PlaySE(SE_SELECT);
+            sBagFavoritesMenuActions[selection].func.void_u8(taskId);
             break;
         }
     }
@@ -1434,9 +1955,9 @@ static void DrawItemListBgRow(u8 y)
 static void DrawPocketIndicatorSquare(u8 x, bool8 isCurrentPocket)
 {
     if (!isCurrentPocket)
-        FillBgTilemapBufferRect_Palette0(2, 0x1017, x + 5, 3, 1, 1);
+        FillBgTilemapBufferRect_Palette0(2, 0x1017, x + 4, 3, 1, 1);
     else
-        FillBgTilemapBufferRect_Palette0(2, 0x102B, x + 5, 3, 1, 1);
+        FillBgTilemapBufferRect_Palette0(2, 0x102B, x + 4, 3, 1, 1);
     ScheduleBgCopyTilemapToVram(2);
 }
 
@@ -1634,6 +2155,9 @@ static void OpenContextMenu(u8 taskId)
             switch (gBagPosition.pocket)
             {
             case ITEMS_POCKET:
+            case MEDICINE_POCKET:
+            case BATTLE_ITEMS_POCKET:
+            case TREASURES_POCKET:
                 gBagMenu->contextMenuItemsPtr = gBagMenu->contextMenuItemsBuffer;
                 gBagMenu->contextMenuNumItems = ARRAY_COUNT(sContextMenuItems_ItemsPocket);
                 memcpy(&gBagMenu->contextMenuItemsBuffer, &sContextMenuItems_ItemsPocket, sizeof(sContextMenuItems_ItemsPocket));
@@ -2330,6 +2854,7 @@ static void PrepareBagForWallyTutorial(void)
     sTempWallyBag = AllocZeroed(sizeof(*sTempWallyBag));
     memcpy(sTempWallyBag->bagPocket_Items, gSaveBlock1Ptr->bagPocket_Items, sizeof(gSaveBlock1Ptr->bagPocket_Items));
     memcpy(sTempWallyBag->bagPocket_PokeBalls, gSaveBlock1Ptr->bagPocket_PokeBalls, sizeof(gSaveBlock1Ptr->bagPocket_PokeBalls));
+    memcpy(sTempWallyBag->bagPocket_Medicine, gSaveBlock1Ptr->bagPocket_Medicine, sizeof(gSaveBlock1Ptr->bagPocket_Medicine));
     sTempWallyBag->pocket = gBagPosition.pocket;
     for (i = 0; i < POCKETS_COUNT; i++)
     {
@@ -2338,6 +2863,7 @@ static void PrepareBagForWallyTutorial(void)
     }
     ClearItemSlots(gSaveBlock1Ptr->bagPocket_Items, BAG_ITEMS_COUNT);
     ClearItemSlots(gSaveBlock1Ptr->bagPocket_PokeBalls, BAG_POKEBALLS_COUNT);
+    ClearItemSlots(gSaveBlock1Ptr->bagPocket_Medicine, BAG_MEDICINE_COUNT);
     ResetBagScrollPositions();
 }
 
@@ -2347,6 +2873,7 @@ static void RestoreBagAfterWallyTutorial(void)
 
     memcpy(gSaveBlock1Ptr->bagPocket_Items, sTempWallyBag->bagPocket_Items, sizeof(sTempWallyBag->bagPocket_Items));
     memcpy(gSaveBlock1Ptr->bagPocket_PokeBalls, sTempWallyBag->bagPocket_PokeBalls, sizeof(sTempWallyBag->bagPocket_PokeBalls));
+    memcpy(gSaveBlock1Ptr->bagPocket_Medicine, sTempWallyBag->bagPocket_Medicine, sizeof(sTempWallyBag->bagPocket_Medicine));
     gBagPosition.pocket = sTempWallyBag->pocket;
     for (i = 0; i < POCKETS_COUNT; i++)
     {
@@ -2361,7 +2888,7 @@ void DoWallyTutorialBagMenu(void)
     PrepareBagForWallyTutorial();
     AddBagItem(ITEM_POTION, 1);
     AddBagItem(ITEM_POKE_BALL, 1);
-    GoToBagMenu(ITEMMENULOCATION_WALLY, ITEMS_POCKET, CB2_SetUpReshowBattleScreenAfterMenu2);
+    GoToBagMenu(ITEMMENULOCATION_WALLY, MEDICINE_POCKET, CB2_SetUpReshowBattleScreenAfterMenu2);
 }
 
 #define tTimer data[8]
@@ -2494,6 +3021,7 @@ static void LoadBagMenuTextWindows(void)
     LoadMessageBoxGfx(0, 10, BG_PLTT_ID(13));
     ListMenuLoadStdPalAt(BG_PLTT_ID(12), 1);
     LoadPalette(&gStandardMenuPalette, BG_PLTT_ID(15), PLTT_SIZE_4BPP);
+    LoadPalette(sBagStartMenuPal, BG_PLTT_ID(11), PLTT_SIZE_4BPP);
     for (i = 0; i <= WIN_POCKET_NAME; i++)
     {
         FillWindowPixelBuffer(i, PIXEL_FILL(0));

@@ -13,3 +13,20 @@ saffron_pokecenter_EventScript_Chansey::
 saffron_pokecenter_OnTransition:
 	setrespawn HEAL_LOCATION_SAFFRON_CITY
 	end
+
+saffron_pokecenter_EventScript_Bookshelf1::
+	msgbox saffron_pokecenter_Text_Bookshelf1, MSGBOX_SIGN
+	end
+
+saffron_pokecenter_EventScript_Bookshelf2::
+	msgbox saffron_pokecenter_Text_Bookshelf2, MSGBOX_SIGN
+	end
+
+saffron_pokecenter_EventScript_WallMap::
+	goto EventScript_RegionMap
+
+saffron_pokecenter_Text_Bookshelf1:
+	.string "A SILPH CO. handbook.$"
+
+saffron_pokecenter_Text_Bookshelf2:
+	.string "A guide to the SAFFRON DOJO.$"

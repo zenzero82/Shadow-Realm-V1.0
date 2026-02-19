@@ -211,9 +211,9 @@ static const struct ListMenuTemplate sShopBuyMenuListTemplate =
     .item_X = 8,
     .cursor_X = 0,
     .upText_Y = 1,
-    .cursorPal = 1,
+    .cursorPal = 2,
     .fillValue = 0,
-    .cursorShadowPal = 2,
+    .cursorShadowPal = 1,
     .lettersSpacing = 0,
     .itemVerticalPadding = 0,
     .scrollMultiple = LIST_NO_MULTIPLE_SCROLL,
@@ -335,8 +335,8 @@ static const struct WindowTemplate sShopBuyMenuYesNoWindowTemplates =
 static const u8 sShopBuyMenuTextColors[][3] =
 {
     [COLORID_NORMAL]      = {1, 2, 3},
-    [COLORID_ITEM_LIST]   = {0, 1, 2},
-    [COLORID_GRAY_CURSOR] = {0, 1, 2},
+    [COLORID_ITEM_LIST]   = {0, 2, 1},
+    [COLORID_GRAY_CURSOR] = {0, 2, 1},
 
 };
 

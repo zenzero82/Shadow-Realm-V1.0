@@ -580,6 +580,7 @@ static void UpdateMapSecInfoWindow(struct Pokenav_RegionMapGfx *state)
         PutWindowRectTilemap(state->infoWindowId, 0, 0, 12, 2);
         AddTextPrinterParameterized(state->infoWindowId, FONT_NARROW, regionMap->mapSecName, 0, 1, TEXT_SKIP_DRAW, NULL);
         DrawCityMap(state, regionMap->mapSecId, regionMap->posWithinMapSec);
+        DrawTextBorderOuter(state->infoWindowId, 0x42, 4);
         CopyWindowToVram(state->infoWindowId, COPYWIN_FULL);
         SetCityZoomTextInvisibility(FALSE);
         break;
@@ -588,6 +589,7 @@ static void UpdateMapSecInfoWindow(struct Pokenav_RegionMapGfx *state)
         PutWindowRectTilemap(state->infoWindowId, 0, 0, 12, 2);
         AddTextPrinterParameterized(state->infoWindowId, FONT_NARROW, regionMap->mapSecName, 0, 1, TEXT_SKIP_DRAW, NULL);
         FillBgTilemapBufferRect(1, 0x1041, 17, 6, 12, 11, 17);
+        DrawTextBorderOuter(state->infoWindowId, 0x42, 4);
         CopyWindowToVram(state->infoWindowId, COPYWIN_FULL);
         SetCityZoomTextInvisibility(TRUE);
         break;
@@ -597,12 +599,15 @@ static void UpdateMapSecInfoWindow(struct Pokenav_RegionMapGfx *state)
         PutWindowTilemap(state->infoWindowId);
         AddTextPrinterParameterized(state->infoWindowId, FONT_NARROW, regionMap->mapSecName, 0, 1, TEXT_SKIP_DRAW, NULL);
         PrintLandmarkNames(state, regionMap->mapSecId, regionMap->posWithinMapSec);
+        DrawTextBorderOuter(state->infoWindowId, 0x42, 4);
         CopyWindowToVram(state->infoWindowId, COPYWIN_FULL);
         SetCityZoomTextInvisibility(TRUE);
         break;
     case MAPSECTYPE_NONE:
-        FillBgTilemapBufferRect(1, 0x1041, 17, 4, 12, 13, 17);
-        CopyBgTilemapBufferToVram(1);
+        FillWindowPixelBuffer(state->infoWindowId, PIXEL_FILL(1));
+        PutWindowTilemap(state->infoWindowId);
+        DrawTextBorderOuter(state->infoWindowId, 0x42, 4);
+        CopyWindowToVram(state->infoWindowId, COPYWIN_FULL);
         SetCityZoomTextInvisibility(TRUE);
         break;
     }
@@ -789,7 +794,11 @@ static bool32 TryToggleRegionMap(struct Pokenav_RegionMapGfx *state)
         return FALSE;
 
     RegionMap_CycleRegion();
+    UpdateRegionMapHeaderGfx();
     UpdateMapSecInfoWindow(state);
+    DrawTextBorderOuter(state->infoWindowId, 0x42, 4);
+    PutWindowTilemap(state->infoWindowId);
+    CopyWindowToVram(state->infoWindowId, COPYWIN_FULL);
     UpdateRegionMapHelpBarText();
 
     if (IsRegionMapZoomed())

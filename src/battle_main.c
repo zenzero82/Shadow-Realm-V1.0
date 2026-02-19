@@ -398,6 +398,8 @@ const struct TrainerClass gTrainerClasses[TRAINER_CLASS_COUNT] =
     [TRAINER_CLASS_WANDERER] = { _("WANDERER") },
     [TRAINER_CLASS_CIPHER_ADMIN] = { _("CIPHER ADMIN"), 10 },
     [TRAINER_CLASS_SNAGEM_HEAD] = { _("SNAGEM HEAD"), 20 },
+    [TRAINER_CLASS_SUPER_NERD] = { _("SUPER NERD"), 8 },
+    [TRAINER_CLASS_ACE_TRAINER] = { _("ACE TRAINER"), 12, BALL_ULTRA },
 };
 
 static void (*const sTurnActionsFuncsTable[])(void) =
@@ -2008,7 +2010,7 @@ u8 CreateNPCTrainerPartyFromTrainer(struct Pokemon *party, const struct Trainer 
             SetMonData(&party[i], MON_DATA_FRIENDSHIP, &(partyData[monIndex].friendship));
             if (partyData[monIndex].ball != ITEM_NONE)
             {
-                ball = partyData[monIndex].ball;
+                ball = ItemIdToBallId(partyData[monIndex].ball);
                 SetMonData(&party[i], MON_DATA_POKEBALL, &ball);
             }
             
@@ -2038,6 +2040,13 @@ u8 CreateNPCTrainerPartyFromTrainer(struct Pokemon *party, const struct Trainer 
                 levelBoost = partyData[monIndex].boostLevel;
                 SetMonHeartValue(&party[i], partyData[monIndex].heartGauge);
                 SetMonHeartMax(&party[i], partyData[monIndex].heartGauge);
+            }
+            if (partyData[monIndex].isShadow
+                && party >= gEnemyParty
+                && party < gEnemyParty + PARTY_SIZE)
+            {
+                ball = BALL_DARK;
+                SetMonData(&party[i], MON_DATA_POKEBALL, &ball);
             }
             if (party >= gEnemyParty && party < gEnemyParty + PARTY_SIZE)
             {
@@ -2075,7 +2084,7 @@ u8 CreateNPCTrainerPartyFromTrainer(struct Pokemon *party, const struct Trainer 
 
             if (B_TRAINER_CLASS_POKE_BALLS >= GEN_7 && ball == -1)
             {
-                ball = gTrainerClasses[trainer->trainerClass].ball ?: ITEM_POKE_BALL;
+                ball = ItemIdToBallId(gTrainerClasses[trainer->trainerClass].ball ?: ITEM_POKE_BALL);
                 SetMonData(&party[i], MON_DATA_POKEBALL, &ball);
             }
         }

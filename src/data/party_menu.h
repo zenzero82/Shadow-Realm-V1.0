@@ -118,6 +118,7 @@ static const u8 sFontColorTable[][3] =
     {TEXT_COLOR_WHITE,       TEXT_COLOR_DARK_GRAY,  TEXT_COLOR_LIGHT_GRAY}, // Selection actions
     {TEXT_COLOR_WHITE,       TEXT_COLOR_BLUE,       TEXT_COLOR_LIGHT_BLUE}, // Field moves
     {TEXT_COLOR_TRANSPARENT, TEXT_COLOR_WHITE,      TEXT_COLOR_DARK_GRAY},  // Unused
+    {TEXT_COLOR_TRANSPARENT, TEXT_DYNAMIC_COLOR_4,  TEXT_DYNAMIC_COLOR_5},  // HP text
 };
 
 static const struct WindowTemplate sSinglePartyMenuWindowTemplate[] =
@@ -617,30 +618,36 @@ static const u8 sHPBarRedPalIds[] = {89, 90};
 static const u8 sPartyBoxEmptySlotPalIds1[] = {52, 53, 54};
 static const u8 sPartyBoxMultiPalIds1[] = {68, 69, 70};
 static const u8 sPartyBoxFaintedPalIds1[] = {84, 85, 86};
-static const u8 sPartyBoxCurrSelectionPalIds1[] = {116, 117, 118};
+static const u8 sPartyBoxCurrSelectionPalIds1[] = {52, 53, 53};
 static const u8 sPartyBoxCurrSelectionMultiPalIds[] = {132, 133, 134};
 static const u8 sPartyBoxCurrSelectionFaintedPalIds[] = {148, 149, 150};
 static const u8 sPartyBoxSelectedForActionPalIds1[] = {100, 101, 102};
-static const u8 sPartyBoxEmptySlotPalIds2[] = {49, 55, 56};
+static const u8 sPartyBoxEmptySlotPalIds2[] = {52, 55, 56};
 static const u8 sPartyBoxMultiPalIds2[] = {65, 71, 72};
 static const u8 sPartyBoxFaintedPalIds2[] = {81, 87, 88};
-static const u8 sPartyBoxCurrSelectionPalIds2[] = {97, 103, 104};
+static const u8 sPartyBoxCurrSelectionPalIds2[] = {51, 52, 53};
 static const u8 sPartyBoxSelectedForActionPalIds2[] = {161, 167, 168};
 static const u8 sPartyBoxNoMonPalIds[] = {17, 27, 28};
 // Shadow Palettes
-static const u8 sPartyBoxShadowPalIds1[] = {31, 47, 31};
-static const u8 sPartyBoxCurrSelectionShadowPalIds[] = {31, 47, 31};
-static const u8 sPartyBoxShadowPalIds2[] = {81, 87, 88};
+static const u8 sPartyBoxShadowPalIds1[] = {52, 53, 54};
+static const u8 sPartyBoxCurrSelectionShadowPalIds[] = {121, 122, 123};
+static const u8 sPartyBoxShadowPalIds2[] = {52, 55, 56};
+static const u8 sPartyBoxCurrSelectionShadowPalIds2[] = {121, 122, 123};
 
-static const u8 sPartyBoxReversePalIds1[] = {200, 201, 202};
-static const u8 sPartyBoxReversePalIds2[] = {203, 204, 205};
+static const u8 sPartyBoxReversePalIds1[] = {52, 53, 54};
+static const u8 sPartyBoxReversePalIds2[] = {52, 55, 56};
 static const u8 sPartyBoxCurrSelectionReversePalIds1[] = {206, 207, 208};
 static const u8 sPartyBoxCurrSelectionReversePalIds2[] = {209, 210, 211};
 
+static const u8 sPartyBoxHpTextPalIdsNormal[] = {51, 61};
+static const u8 sPartyBoxHpTextPalIdsShadow[] = {47, 31};
+static const u8 sPartyBoxHpTextPalIdsReverse[] = {200, 201};
+static const u8 sPartyBoxHpTextPalOffsets[] = {13, 14};
+
 static const u8 *const sActionStringTable[] =
 {
-    [PARTY_MSG_CHOOSE_MON]             = gText_ChoosePokemon,
-    [PARTY_MSG_CHOOSE_MON_OR_CANCEL]   = gText_ChoosePokemonCancel,
+    [PARTY_MSG_CHOOSE_MON]             = COMPOUND_STRING("Press {R_BUTTON} for PC"),
+    [PARTY_MSG_CHOOSE_MON_OR_CANCEL]   = COMPOUND_STRING("Press {R_BUTTON} for PC"),
     [PARTY_MSG_CHOOSE_MON_AND_CONFIRM] = gText_ChoosePokemonConfirm,
     [PARTY_MSG_MOVE_TO_WHERE]          = gText_MoveToWhere,
     [PARTY_MSG_TEACH_WHICH_MON]        = gText_TeachWhichPokemon,
@@ -734,6 +741,8 @@ struct
     [MENU_CATALOG_MOWER]   = {COMPOUND_STRING("Lawn mower"),      CursorCb_CatalogMower},
     [MENU_CHANGE_FORM]     = {COMPOUND_STRING("Change form"),     CursorCb_ChangeForm},
     [MENU_CHANGE_ABILITY]  = {COMPOUND_STRING("Change Ability"),  CursorCb_ChangeAbility},
+    [MENU_AUTO_HEAL]       = {COMPOUND_STRING("AUTO HEAL"),       CursorCb_AutoHeal},
+    [MENU_MAKE_LEAD]       = {COMPOUND_STRING("MAKE LEAD"),       CursorCb_MakeLead},
 };
 
 static const u8 sPartyMenuAction_SummarySwitchCancel[] = {MENU_SUMMARY, MENU_SWITCH, MENU_CANCEL1};
@@ -1097,6 +1106,47 @@ const struct SpriteTemplate gSpriteTemplate_StatusIcons =
     .paletteTag = TAG_STATUS_ICONS,
     .oam = &sOamData_StatusCondition,
     .anims = sSpriteTemplate_StatusCondition,
+    .images = NULL,
+    .affineAnims = gDummySpriteAffineAnimTable,
+    .callback = SpriteCallbackDummy,
+};
+
+static const u8 ALIGNED(4) sReverseIndicatorGfx[] = INCBIN_U8("graphics/battle_interface/reverse_indicator.4bpp");
+static const u16 sReverseIndicatorPal[] = INCBIN_U16("graphics/battle_interface/misc_indicator.gbapal");
+
+static const struct OamData sOamData_ReverseIndicator =
+{
+    .y = 0,
+    .affineMode = ST_OAM_AFFINE_OFF,
+    .objMode = ST_OAM_OBJ_NORMAL,
+    .mosaic = FALSE,
+    .bpp = ST_OAM_4BPP,
+    .shape = SPRITE_SHAPE(8x16),
+    .x = 0,
+    .matrixNum = 0,
+    .size = SPRITE_SIZE(8x16),
+    .tileNum = 0,
+    .priority = 1,
+    .paletteNum = 0,
+    .affineParam = 0,
+};
+
+static const struct SpriteSheet sSpriteSheet_ReverseIndicator =
+{
+    .data = sReverseIndicatorGfx, .size = sizeof(sReverseIndicatorGfx), .tag = TAG_REVERSE_INDICATOR
+};
+
+static const struct SpritePalette sSpritePalette_ReverseIndicator =
+{
+    .data = sReverseIndicatorPal, .tag = TAG_REVERSE_INDICATOR
+};
+
+static const struct SpriteTemplate sSpriteTemplate_ReverseIndicator =
+{
+    .tileTag = TAG_REVERSE_INDICATOR,
+    .paletteTag = TAG_REVERSE_INDICATOR,
+    .oam = &sOamData_ReverseIndicator,
+    .anims = gDummySpriteAnimTable,
     .images = NULL,
     .affineAnims = gDummySpriteAffineAnimTable,
     .callback = SpriteCallbackDummy,

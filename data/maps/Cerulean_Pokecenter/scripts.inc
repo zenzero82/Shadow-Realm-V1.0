@@ -46,3 +46,20 @@ Cerulean_Pokecenter_Text_SuperNerd:
 Cerulean_Pokecenter_Text_Gentleman:
 	.string "CERULEAN used to feel calm.\n"
 	.string "Now it's all sirens and rumors.$"
+
+Cerulean_Pokecenter_EventScript_Bookshelf1::
+	msgbox Cerulean_Pokecenter_Text_Bookshelf1, MSGBOX_SIGN
+	end
+
+Cerulean_Pokecenter_EventScript_Bookshelf2::
+	msgbox Cerulean_Pokecenter_Text_Bookshelf2, MSGBOX_SIGN
+	end
+
+Cerulean_Pokecenter_EventScript_WallMap::
+	goto EventScript_RegionMap
+
+Cerulean_Pokecenter_Text_Bookshelf1:
+	.string "A travel guide to NUGGET BRIDGE.$"
+
+Cerulean_Pokecenter_Text_Bookshelf2:
+	.string "Warnings about CERULEAN CAVE.$"
