@@ -69,3 +69,28 @@ Cherrygrove_City_Text_FlareGrunt2:
 Cherrygrove_City_Text_FlareGrunt3:
 	.string "Some tech around here is too\n"
 	.string "advanced to ignore.$"
+
+CherryGroveCity_EventScript_Sign::
+	msgbox CherryGroveCity_EventScript_Sign_Text, MSGBOX_SIGN
+	end
+
+CherryGroveCity_EventScript_Sign_Text:
+	.string "It's a sign.$"
+
+Cherrygrove_City_EventScript_Boy::
+	faceplayer
+	msgbox Cherrygrove_City_Text_Boy, MSGBOX_NPC
+	end
+
+Cherrygrove_City_EventScript_Lass::
+	faceplayer
+	msgbox Cherrygrove_City_Text_Lass, MSGBOX_NPC
+	end
+
+Cherrygrove_City_Text_Boy:
+	.string "MR. POKéMON lives past ROUTE 30.\n"
+	.string "I want to see his rare finds.$"
+
+Cherrygrove_City_Text_Lass:
+	.string "This town feels calm, but travelers\n"
+	.string "keep whispering about strange teams.$"

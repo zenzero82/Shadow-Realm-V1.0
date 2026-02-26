@@ -13,6 +13,10 @@
 #include "constants/trainer_types.h"
 #include "constants/berry.h"
 #include "constants/species.h"
+
+#ifndef FLAG_HIDE_OLIVINE_CITY_GYM_JASMINE
+#define FLAG_HIDE_OLIVINE_CITY_GYM_JASMINE 0x4B2
+#endif
 	.include "asm/macros.inc"
 	.include "constants/constants.inc"
 

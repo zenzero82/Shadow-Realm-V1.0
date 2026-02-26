@@ -6,10 +6,10 @@ Route3_MapScripts::
 @ =========================================================
 
 Route3_Speaker_Youngster1:
-	.string "YOUNGSTER1$"
+	.string "BEN$"
 
 Route3_Speaker_Youngster2:
-	.string "YOUNGSTER$"
+	.string "CALVIN$"
 
 Route3_Speaker_Lass:
 	.string "LASS$"

@@ -6202,6 +6202,8 @@ u16 GetBattleBGM(void)
             return MUS_BATTLE_TEAM_PLASMA;
         case TRAINER_CLASS_TEAM_FLARE:
             return MUS_BATTLE_TEAM_FLARE;
+        case TRAINER_CLASS_TEAM_SKULL:
+            return MUS_BATTLE_TEAM_SKULL;
         default:
             return IsCurrentMapInKanto() ? MUS_HG_VS_TRAINER_KANTO : MUS_VS_TRAINER;
         }

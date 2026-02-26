@@ -48,6 +48,7 @@
 #include "play_time.h"
 #include "random.h"
 #include "roamer.h"
+#include "roaming_shadow_hunter.h"
 #include "rotating_gate.h"
 #include "rtc.h"
 #include "safari_zone.h"
@@ -857,6 +858,7 @@ void LoadMapFromCameraTransition(u8 mapGroup, u8 mapNum)
 
     ApplyCurrentWarp();
     LoadCurrentMapData();
+    RoamingHunter_PrepareMapLoad(mapGroup, mapNum);
     LoadObjEventTemplatesFromHeader();
     TrySetMapSaveWarpStatus();
     ClearTempFieldEventData();
@@ -875,12 +877,19 @@ if (I_VS_SEEKER_CHARGING != 0)
     ChooseAmbientCrySpecies();
     SetDefaultFlashLevel();
     Overworld_ClearSavedMusic();
+    RoamingHunter_OnMapTransition();
     RunOnTransitionMapScript();
     InitMap();
     CopySecondaryTilesetToVramUsingHeap(gMapHeader.mapLayout);
     LoadSecondaryTilesetPalette(gMapHeader.mapLayout, TRUE); // skip copying to Faded, gamma shift will take care of it
 
     ApplyWeatherColorMapToPals(NUM_PALS_IN_PRIMARY, NUM_PALS_TOTAL - NUM_PALS_IN_PRIMARY); // palettes [6,12]
+    UpdateTimeOfDay();
+    if (MapHasNaturalLight(gMapHeader.mapType) && gWeatherPtr->colorMapIndex == 0)
+    {
+        UpdateAltBgPalettes(PALETTES_BG);
+        UpdatePalettesWithTime(PALETTES_ALL);
+    }
 
     InitSecondaryTilesetAnimation();
     UpdateLocationHistoryForRoamer();
@@ -888,6 +897,8 @@ if (I_VS_SEEKER_CHARGING != 0)
     DoCurrentWeather();
     ResetFieldTasksArgs();
     RunOnResumeMapScript();
+    if (RoamingHunter_TryConsumeAlert() != 0)
+        ScriptContext_SetupScript(RoamingHunter_AlertScript);
 
     if (OW_HIDE_REPEAT_MAP_POPUP)
     {
@@ -908,6 +919,7 @@ static void LoadMapFromWarp(bool32 a1)
     bool8 isIndoors;
 
     LoadCurrentMapData();
+    RoamingHunter_PrepareMapLoad(gSaveBlock1Ptr->location.mapGroup, gSaveBlock1Ptr->location.mapNum);
     if (!(sObjectEventLoadFlag & SKIP_OBJECT_EVENT_LOAD))
     {
         if (gMapHeader.mapLayoutId == LAYOUT_BATTLE_FRONTIER_BATTLE_PYRAMID_FLOOR)
@@ -944,6 +956,7 @@ if (I_VS_SEEKER_CHARGING != 0)
         FlagClear(FLAG_SYS_USE_FLASH);
     SetDefaultFlashLevel();
     Overworld_ClearSavedMusic();
+    RoamingHunter_OnMapTransition();
     RunOnTransitionMapScript();
     UpdateLocationHistoryForRoamer();
     MoveAllRoamersToOtherLocationSets();
@@ -3738,7 +3751,3 @@ bool8 ScrFunc_settimeofday(struct ScriptContext *ctx)
     SetTimeOfDay(ScriptReadByte(ctx));
     return FALSE;
 }
-
-
-
-

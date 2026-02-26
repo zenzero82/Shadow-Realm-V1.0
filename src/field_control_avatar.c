@@ -35,6 +35,7 @@
 #include "vs_seeker.h"
 #include "wild_encounter.h"
 #include "shadow_heart.h"
+#include "roaming_shadow_hunter.h"
 #include "constants/event_bg.h"
 #include "constants/event_objects.h"
 #include "constants/field_poison.h"
@@ -771,6 +772,11 @@ static bool8 TryStartStepCountScript(u16 metatileBehavior)
             ScriptContext_SetupScript(MossdeepCity_SpaceCenter_2F_EventScript_RivalRayquazaCall);
             return TRUE;
         }
+        if (RoamingHunter_TryConsumeAlert() != 0)
+        {
+            ScriptContext_SetupScript(RoamingHunter_AlertScript);
+            return TRUE;
+        }
         if (UpdateVsSeekerStepCounter())
         {
             ScriptContext_SetupScript(EventScript_VsSeekerChargingDone);
@@ -924,6 +930,11 @@ static bool8 TryStartWarpEventScript(struct MapPosition *position, u16 metatileB
     {
         StoreInitialPlayerAvatarState();
         SetupWarp(&gMapHeader, warpEventId, position);
+        if (MetatileBehavior_IsWarpDoor(metatileBehavior) == TRUE)
+        {
+            DoDoorWarp();
+            return TRUE;
+        }
         if (MetatileBehavior_IsEscalator(metatileBehavior) == TRUE)
         {
             DoEscalatorWarp(metatileBehavior);

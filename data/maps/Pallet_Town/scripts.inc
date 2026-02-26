@@ -140,7 +140,15 @@ PalletTown_EventScript_Route1AideTrigger0::
     applymovement OBJ_EVENT_ID_PLAYER, PalletTown_Move_Player_Path
     waitmovement 0
 
+    playse SE_DOOR
     opendoor 16, 13
+    waitdooranim
+
+    applymovement 1, PalletTown_Move_Leo_EnterLab
+    applymovement OBJ_EVENT_ID_PLAYER, PalletTown_Move_Player_EnterLab
+    waitmovement 0
+
+    closedoor 16, 13
     waitdooranim
 
     clearflag FLAG_HIDE_OAKS_LAB_LEO
@@ -182,7 +190,15 @@ PalletTown_EventScript_Route1AideTrigger1::
     applymovement OBJ_EVENT_ID_PLAYER, PalletTown_Move_Player_Path
     waitmovement 0
 
+    playse SE_DOOR
     opendoor 16, 13
+    waitdooranim
+
+    applymovement 1, PalletTown_Move_Leo_EnterLab
+    applymovement OBJ_EVENT_ID_PLAYER, PalletTown_Move_Player_EnterLab
+    waitmovement 0
+
+    closedoor 16, 13
     waitdooranim
 
     clearflag FLAG_HIDE_OAKS_LAB_LEO
@@ -235,7 +251,6 @@ PalletTown_Move_Leo_Path:
     walk_right
     walk_right
     walk_right
-    walk_up
     step_end
 
 PalletTown_Move_Player_Path:
@@ -257,6 +272,13 @@ PalletTown_Move_Player_Path:
     walk_right
     walk_right
     walk_right
+    step_end
+
+PalletTown_Move_Leo_EnterLab:
+    walk_up
+    step_end
+
+PalletTown_Move_Player_EnterLab:
     walk_right
     walk_up
     step_end
@@ -268,7 +290,7 @@ PalletTown_Move_Player_Path:
 PalletTown_Text_Teacher:
     .string "I'm a teacher here in town.\p"
     .string "Lately my students keep talking about\n"
-    .string "POKEMON on the news that should\l"
+    .string "POKéMON on the news that should\l"
     .string "not even exist in KANTO.$"
 
 PalletTown_Text_Fisher:
@@ -291,7 +313,7 @@ PalletTown_Text_BluesHouseSign:
     .string "GARY'S HOUSE$"
 
 PalletTown_Text_OaksLabSign:
-    .string "OAK POKEMON\n"
+    .string "OAK POKéMON\n"
     .string "RESEARCH LAB$"
 
 PalletTown_Text_Route1Aide_Intro:
@@ -306,8 +328,8 @@ PalletTown_Text_Route1Aide_SawMan:
     .string "I have no idea who you are, but did\n"
     .string "you see what just happened?!\p"
     .string "A strange man on Route 1 just captured\n"
-    .string "an innocent POKEMON with some strange\l"
-    .string "looking POKeBALL.\p"
+    .string "an innocent POKéMON with some strange\l"
+    .string "looking POKé BALL.\p"
     .string "He sent it back out and it looks weird!\p"
     .string "It started to give off a strange aura\n"
     .string "and even changed colors!\p"

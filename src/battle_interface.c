@@ -108,6 +108,9 @@ static bool8 IsOpponentShadowNow(u8 battler)
 
 static bool8 IsBattlerReverseNow(u8 battler)
 {
+    if (!IsOnPlayerSide(battler))
+        return FALSE;
+
     if (gBattleMons[battler].species != SPECIES_NONE)
         return gBattleMons[battler].isReverse;
 
@@ -455,6 +458,22 @@ static const struct SpriteTemplate sHealthboxSafariFrameSpriteTemplate =
     .images = NULL,
     .affineAnims = gDummySpriteAffineAnimTable,
     .callback = SpriteCB_HealthBoxFrameMain
+};
+
+static const u16 sHealthboxFrameDoublePal[16] =
+{
+    0x0000, 0x2108, 0x14A5, 0x14A5,
+    0x14A5, 0x14A5, 0x14A5, 0x14A5,
+    0x14A5, 0x039F, 0x4A7F, 0x6318,
+    0x4E73, 0x03E0, 0x001F, 0x7E4D,
+};
+
+static const u16 sHealthboxFrameDoubleShadowPal[16] =
+{
+    0x0000, 0x2108, 0x14A5, 0x7D52,
+    0x7D52, 0x7D52, 0x14A5, 0x14A5,
+    0x14A5, 0x039F, 0x4A7F, 0x6318,
+    0x4E73, 0x03E0, 0x001F, 0x7E4D,
 };
 
 static const struct OamData sOamData_Healthbar =
@@ -892,10 +911,10 @@ static void BattleHud_ApplyHealthboxPaletteInternal(u8 battler, bool8 isShadowNo
 
     // Find (or allocate) the OBJ palette slot for THIS battler's FRAME palette tag.
     u32 palIndex = IndexOfSpritePaletteTag(tag);
-    if (palIndex == 0xFFFFFFFF)
+    if (palIndex == 0xFF)
     {
         palIndex = LoadSpritePalette(palEntry);
-        if (palIndex == 0xFFFFFFFF)
+        if (palIndex == 0xFF)
             return;
     }
 
@@ -920,7 +939,7 @@ static void BattleHud_ApplyHealthboxPaletteInternal(u8 battler, bool8 isShadowNo
         // Ensure the healthbar keeps using TAG_HEALTHBAR_PAL (the gradient).
         {
             u32 barPalIdx = IndexOfSpritePaletteTag(TAG_HEALTHBAR_PAL);
-            if (barPalIdx != 0xFFFFFFFF)
+            if (barPalIdx != 0xFF)
             {
                 u8 hbId = GetHealthbarSpriteIdFromBattler(battler);
                 if (hbId < MAX_SPRITES)
@@ -945,13 +964,16 @@ static void BattleHud_ApplyHealthboxPaletteInternal(u8 battler, bool8 isShadowNo
                      ? gBattleInterface_HealthboxFrameShadowOpponentReversePal
                      : gBattleInterface_HealthboxFrameShadowOpponentPal;
 
+        if (IsDoubleBattle())
+            frameSrc = isShadowNow ? sHealthboxFrameDoubleShadowPal : sHealthboxFrameDoublePal;
+
         struct SpritePalette framePalEntry = {.data = frameSrc, .tag = frameTag};
         u32 framePalIndex = IndexOfSpritePaletteTag(frameTag);
 
-        if (framePalIndex == 0xFFFFFFFF)
+        if (framePalIndex == 0xFF)
             framePalIndex = LoadSpritePalette(&framePalEntry);
 
-        if (framePalIndex != 0xFFFFFFFF)
+        if (framePalIndex != 0xFF)
         {
             const u8 slot = (u8)framePalIndex;
             FillPalette(RGB_BLACK, OBJ_PLTT_ID(slot), 32);
@@ -966,6 +988,12 @@ static void BattleHud_ApplyHealthboxPaletteInternal(u8 battler, bool8 isShadowNo
 
     if (setVisible)
         SetHealthboxSpriteVisible(gHealthboxSpriteIds[battler]);
+
+    if (gHealthboxSpriteIds[battler] < MAX_SPRITES
+        && GetMonData(GetBattlerMon(battler), MON_DATA_STATUS))
+    {
+        UpdateStatusIconInHealthbox(gHealthboxSpriteIds[battler]);
+    }
 }
 
 void BattleHud_ApplyHealthboxPalette(u8 battler, bool8 isShadowNow)
@@ -1974,15 +2002,7 @@ void Task_HidePartyStatusSummary(u8 taskId)
     for (i = 0; i < PARTY_SIZE; i++)
         ballIconSpriteIds[i] = gTasks[taskId].tBallIconSpriteId(i);
 
-    SetGpuReg(REG_OFFSET_BLDCNT, BLDCNT_TGT2_ALL | BLDCNT_EFFECT_BLEND);
-    SetGpuReg(REG_OFFSET_BLDALPHA, BLDALPHA_BLEND(16, 0));
-
     gTasks[taskId].tBlend = 16;
-
-    for (i = 0; i < PARTY_SIZE; i++)
-        gSprites[ballIconSpriteIds[i]].oam.objMode = ST_OAM_OBJ_BLEND;
-
-    gSprites[summaryBarSpriteId].oam.objMode = ST_OAM_OBJ_BLEND;
 
     if (isBattleStart)
     {
@@ -2015,6 +2035,21 @@ void Task_HidePartyStatusSummary(u8 taskId)
     }
 }
 
+static void BlendPartyStatusSummaryPalettes(u8 coeff)
+{
+    u32 mask = 0;
+    u32 barPal = IndexOfSpritePaletteTag(TAG_STATUS_SUMMARY_BAR_PAL);
+    u32 ballPal = IndexOfSpritePaletteTag(TAG_STATUS_SUMMARY_BALLS_PAL);
+
+    if (barPal != 0xFF)
+        mask |= 1 << (barPal + 16);
+    if (ballPal != 0xFF)
+        mask |= 1 << (ballPal + 16);
+
+    if (mask != 0)
+        BlendPalettes(mask, coeff, RGB_BLACK);
+}
+
 static void Task_HidePartyStatusSummary_BattleStart_1(u8 taskId)
 {
     if ((gTasks[taskId].data[11]++ % 2) == 0)
@@ -2022,7 +2057,7 @@ static void Task_HidePartyStatusSummary_BattleStart_1(u8 taskId)
         if (--gTasks[taskId].tBlend < 0)
             return;
 
-        SetGpuReg(REG_OFFSET_BLDALPHA, BLDALPHA_BLEND(gTasks[taskId].tBlend, 16 - gTasks[taskId].tBlend));
+        BlendPartyStatusSummaryPalettes(16 - gTasks[taskId].tBlend);
     }
     if (gTasks[taskId].tBlend == 0)
         gTasks[taskId].func = Task_HidePartyStatusSummary_BattleStart_2;
@@ -2061,8 +2096,6 @@ static void Task_HidePartyStatusSummary_BattleStart_2(u8 taskId)
     else if (gTasks[taskId].tBlend == -3)
     {
         gBattleSpritesDataPtr->healthBoxesData[battler].partyStatusSummaryShown = 0;
-        SetGpuReg(REG_OFFSET_BLDCNT, 0);
-        SetGpuReg(REG_OFFSET_BLDALPHA, 0);
         DestroyTask(taskId);
     }
 }
@@ -2075,7 +2108,7 @@ static void Task_HidePartyStatusSummary_DuringBattle(u8 taskId)
 
     if (--gTasks[taskId].tBlend >= 0)
     {
-        SetGpuReg(REG_OFFSET_BLDALPHA, BLDALPHA_BLEND(gTasks[taskId].tBlend, 16 - gTasks[taskId].tBlend));
+        BlendPartyStatusSummaryPalettes(16 - gTasks[taskId].tBlend);
     }
     else if (gTasks[taskId].tBlend == -1)
     {
@@ -2093,8 +2126,6 @@ static void Task_HidePartyStatusSummary_DuringBattle(u8 taskId)
     else if (gTasks[taskId].tBlend == -3)
     {
         gBattleSpritesDataPtr->healthBoxesData[battler].partyStatusSummaryShown = 0;
-        SetGpuReg(REG_OFFSET_BLDCNT, 0);
-        SetGpuReg(REG_OFFSET_BLDALPHA, 0);
         DestroyTask(taskId);
     }
 }
@@ -2288,7 +2319,7 @@ static void UpdateStatusIconInHealthbox(u8 healthboxSpriteId)
 {
     s32 i;
     u8 battler, healthBarSpriteId;
-    u32 status, pltAdder;
+    u32 status, status2, pltAdder;
     const u8 *statusGfxPtr;
     s16 tileNumAdder;
     u8 statusPalId;
@@ -2296,6 +2327,7 @@ static void UpdateStatusIconInHealthbox(u8 healthboxSpriteId)
     battler = gSprites[healthboxSpriteId].hMain_Battler;
     healthBarSpriteId = gSprites[healthboxSpriteId].hMain_HealthBarSpriteId;
     status = GetMonData(GetBattlerMon(battler), MON_DATA_STATUS);
+    status2 = gBattleMons[battler].status2;
     if (IsOnPlayerSide(battler))
     {
         switch (GetBattlerCoordsIndex(battler))
@@ -2333,21 +2365,21 @@ static void UpdateStatusIconInHealthbox(u8 healthboxSpriteId)
         statusGfxPtr = GetHealthboxElementGfxPtr(GetStatusIconForBattlerId(HEALTHBOX_GFX_STATUS_FRZ_BATTLER0, battler));
         statusPalId = PAL_STATUS_FRZ;
     }
-    else if (status & STATUS1_FROSTBITE)
-    {
-        statusGfxPtr = GetHealthboxElementGfxPtr(GetStatusIconForBattlerId(HEALTHBOX_GFX_STATUS_FRB_BATTLER0, battler));
-        statusPalId = PAL_STATUS_FRZ;
-    }
     else if (status & STATUS1_PARALYSIS)
     {
         statusGfxPtr = GetHealthboxElementGfxPtr(GetStatusIconForBattlerId(HEALTHBOX_GFX_STATUS_PRZ_BATTLER0, battler));
         statusPalId = PAL_STATUS_PAR;
     }
+    else if (status2 & STATUS2_CONFUSION)
+    {
+        statusGfxPtr = GetHealthboxElementGfxPtr(GetStatusIconForBattlerId(HEALTHBOX_GFX_STATUS_FRB_BATTLER0, battler));
+        statusPalId = PAL_STATUS_FRZ;
+    }
     else
     {
         statusGfxPtr = GetHealthboxElementGfxPtr(HEALTHBOX_GFX_39);
 
-        for (i = 0; i < 3; i++)
+        for (i = 0; i < 2; i++)
             CpuCopy32(statusGfxPtr, (void *)(OBJ_VRAM0 + (gSprites[healthboxSpriteId].oam.tileNum + tileNumAdder + i) * TILE_SIZE_4BPP), 32);
 
         if (!gBattleSpritesDataPtr->battlerData[battler].hpNumbersNoBars)
@@ -2363,7 +2395,6 @@ static void UpdateStatusIconInHealthbox(u8 healthboxSpriteId)
     FillPalette(sStatusIconColors[statusPalId], OBJ_PLTT_OFFSET + pltAdder, PLTT_SIZEOF(1));
     CpuCopy16(&gPlttBufferUnfaded[OBJ_PLTT_OFFSET + pltAdder], (u16 *)OBJ_PLTT + pltAdder, PLTT_SIZEOF(1));
     CpuCopy32(statusGfxPtr, (void *)(OBJ_VRAM0 + (gSprites[healthboxSpriteId].oam.tileNum + tileNumAdder) * TILE_SIZE_4BPP), 64);
-    CpuFill32(0, (void *)(OBJ_VRAM0 + (gSprites[healthboxSpriteId].oam.tileNum + tileNumAdder + 2) * TILE_SIZE_4BPP), 32);
     if (GetBattlerCoordsIndex(battler) == BATTLE_COORDS_DOUBLES || !IsOnPlayerSide(battler))
     {
         if (!gBattleSpritesDataPtr->battlerData[battler].hpNumbersNoBars)

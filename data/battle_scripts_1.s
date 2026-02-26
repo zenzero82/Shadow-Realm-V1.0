@@ -5423,12 +5423,22 @@ BattleScript_LocalBattleWonLoseTexts::
 	trainerslidein BS_OPPONENT1
 	waitstate
 	printstring STRINGID_TRAINER1LOSETEXT
-	jumpifnotbattletype BATTLE_TYPE_TWO_OPPONENTS, BattleScript_LocalBattleWonReward
+	jumpifnotbattletype BATTLE_TYPE_TWO_OPPONENTS, BattleScript_LocalBattleWonShadowFledText
 	trainerslideout BS_OPPONENT1
 	waitstate
 	trainerslidein BS_OPPONENT2
 	waitstate
 	printstring STRINGID_TRAINER2LOSETEXT
+BattleScript_LocalBattleWonShadowFledText::
+	jumpifbyte CMP_EQUAL, gShadowMonFledThisBattle, 0, BattleScript_LocalBattleWonReward
+	jumpifbattletype BATTLE_TYPE_DOUBLE, BattleScript_ShadowFledText_Generic
+	printstring STRINGID_SHADOW_POKEMON_FLED_TRAINER
+	goto BattleScript_ShadowFledText_Wait
+BattleScript_ShadowFledText_Generic::
+	printstring STRINGID_SHADOW_POKEMON_FLED_GENERIC
+BattleScript_ShadowFledText_Wait::
+	waitmessage B_WAIT_TIME_LONG
+	setbyte gShadowMonFledThisBattle, 0
 BattleScript_LocalBattleWonReward::
 	getmoneyreward
 	printstring STRINGID_PLAYERGOTMONEY

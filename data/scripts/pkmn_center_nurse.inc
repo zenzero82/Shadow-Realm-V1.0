@@ -120,6 +120,15 @@ EventScript_PkmnCenterNurse_GoldCardHealPkmn::
 	goto EventScript_PkmnCenterNurse_HealPkmn
 	end
 
+Common_EventScript_PkmnCenterBlissey::
+	lock
+	faceplayer
+	waitse
+	playmoncry SPECIES_BLISSEY, CRY_MODE_NORMAL
+	waitmoncry
+	release
+	end
+
 Movement_PkmnCenterNurse_Bow:
 	nurse_joy_bow
 	delay_4

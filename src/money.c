@@ -10,6 +10,8 @@
 #include "strings.h"
 #include "decompress.h"
 #include "tv.h"
+#include "constants/flags.h"
+#include "constants/vars.h"
 
 EWRAM_DATA static u8 sMoneyBoxWindowId = 0;
 EWRAM_DATA static u8 sMoneyLabelSpriteId = 0;
@@ -117,6 +119,49 @@ void RemoveMoney(u32 *moneyPtr, u32 toSub)
         toSet -= toSub;
 
     SetMoney(moneyPtr, toSet);
+}
+
+u32 GetGoldMomSavings(void)
+{
+    if (!FlagGet(FLAG_GOLD_MOM_SAVINGS_INIT))
+        return 0;
+
+    return (VarGet(VAR_GOLD_MOM_SAVINGS_H) << 16) | VarGet(VAR_GOLD_MOM_SAVINGS_L);
+}
+
+void SetGoldMomSavings(u32 newValue)
+{
+    if (newValue > MAX_MONEY)
+        newValue = MAX_MONEY;
+
+    VarSet(VAR_GOLD_MOM_SAVINGS_L, newValue & 0xFFFF);
+    VarSet(VAR_GOLD_MOM_SAVINGS_H, newValue >> 16);
+    FlagSet(FLAG_GOLD_MOM_SAVINGS_INIT);
+}
+
+void AddGoldMomSavings(u32 toAdd)
+{
+    u32 current = GetGoldMomSavings();
+    u32 next = current + toAdd;
+
+    if (next > MAX_MONEY || next < current)
+        next = MAX_MONEY;
+
+    SetGoldMomSavings(next);
+}
+
+u32 WithdrawGoldMomSavings(void)
+{
+    u32 current = GetGoldMomSavings();
+    if (current)
+        SetGoldMomSavings(0);
+
+    return current;
+}
+
+bool8 HasGoldMomSavings(void)
+{
+    return GetGoldMomSavings() != 0;
 }
 
 bool8 IsEnoughForCostInVar0x8005(void)

@@ -18,7 +18,7 @@ route9_pokecenter_EventScript_Bookshelf2::
 	end
 
 route9_pokecenter_EventScript_WallMap::
-	goto EventScript_RegionMap
+	goto EventScript_RegionMap_Kanto
 
 route9_pokecenter_Text_Bookshelf1:
 	.string "A ROCK TUNNEL map.$"

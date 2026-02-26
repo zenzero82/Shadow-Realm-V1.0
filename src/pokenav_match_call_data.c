@@ -6,10 +6,12 @@
 #include "battle.h"
 #include "gym_leader_rematch.h"
 #include "match_call.h"
+#include "money.h"
 #include "pokenav.h"
 #include "strings.h"
 #include "constants/region_map_sections.h"
 #include "constants/trainers.h"
+#include "constants/flags.h"
 
 
 // NPC below means non-trainer character (no rematch or check page)
@@ -227,7 +229,7 @@ static const match_call_text_data_t sMomTextScripts[] = {
 static const struct MatchCallStructNPC sMomMatchCallHeader =
 {
     .type = MC_TYPE_NPC,
-    .mapSec = MAPSEC_LITTLEROOT_TOWN,
+    .mapSec = MAPSEC_NEW_BARK_TOWN,
     .flag = FLAG_ENABLE_MOM_MATCH_CALL,
     .desc = COMPOUND_STRING("CALM & KIND"),
     .name = COMPOUND_STRING("MOM"),
@@ -982,6 +984,9 @@ void MatchCall_GetMessage(u32 idx, u8 *dest)
 
 static void MatchCall_GetMessage_NPC(match_call_t matchCall, u8 *dest)
 {
+    if (matchCall.npc->flag == FLAG_ENABLE_MOM_MATCH_CALL)
+        ConvertIntToDecimalStringN(gStringVar1, GetGoldMomSavings(), STR_CONV_MODE_LEFT_ALIGN, MAX_MONEY_DIGITS);
+
     MatchCall_BufferCallMessageText(matchCall.npc->textData, dest);
 }
 

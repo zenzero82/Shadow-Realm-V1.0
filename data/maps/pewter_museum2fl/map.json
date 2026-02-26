@@ -87,7 +87,7 @@
       "y": 5,
       "elevation": 0,
       "player_facing_dir": "BG_EVENT_PLAYER_FACING_ANY",
-      "script": "pewter_museum2fl_EventScript_Sign_MoonStone"
+      "script": "pewter_museum2fl_EventScript_Sign_SpaceProbe"
     },
     {
       "type": "sign",
@@ -95,7 +95,7 @@
       "y": 5,
       "elevation": 0,
       "player_facing_dir": "BG_EVENT_PLAYER_FACING_ANY",
-      "script": "pewter_museum2fl_EventScript_Sign_MoonStone"
+      "script": "pewter_museum2fl_EventScript_Sign_SpaceProbe"
     },
     {
       "type": "sign",
@@ -103,7 +103,7 @@
       "y": 5,
       "elevation": 0,
       "player_facing_dir": "BG_EVENT_PLAYER_FACING_ANY",
-      "script": "pewter_museum2fl_EventScript_Sign_MoonStone"
+      "script": "pewter_museum2fl_EventScript_Sign_SpaceProbe"
     },
     {
       "type": "sign",

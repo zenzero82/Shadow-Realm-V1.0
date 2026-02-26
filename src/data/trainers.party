@@ -81,7 +81,7 @@ Music: TRAINER_ENCOUNTER_MUSIC_CIPHER_PEON
 Double Battle: No
 
 XD003 (pikachu)
-Level: 4
+Level: 1
 Nature: Timid
 IVs: 0 HP / 0 Atk / 0 Def / 31 SpA / 0 SpD / 31 Spe
 Shadow: Yes
@@ -97,16 +97,6 @@ Music: TRAINER_ENCOUNTER_MUSIC_TEAM_ROCKET
 
 Meowth
 Level: 1
-
-=== TRAINER_GIOVANNI_1 ===
-Name: GIOVANNI
-Class: Team Rocket
-Pic: GIOVANNI
-Gender: Male
-Music: TRAINER_ENCOUNTER_MUSIC_TEAM_ROCKET
-
-Rattata
-Level: 5
 
 === TRAINER_BROCK_KANTO ===
 Name: BROCK
@@ -157,206 +147,90 @@ Nature: HARDY
 - Peck
 - Growl
 
-=== TRAINER_ARCHER ===
-Name: ARCHER
-Class: Team Rocket
-Pic: ARCHER
+=== TRAINER_AZALEA_AL ===
+Name: AL
+Class: BUG_CATCHER
+Pic: BUG_CATCHER
 Gender: Male
 
-Rattata
-Level: 5
+Metapod
+Level: 1
 
-=== TRAINER_ARIANA ===
-Name: ARIANA
-Class: Team Rocket
-Pic: ARIANA
+Butterfree
+Level: 1
+
+=== TRAINER_AZALEA_JOSH ===
+Name: JOSH
+Class: BUG_CATCHER
+Pic: BUG_CATCHER
+Gender: Male
+
+Yanma
+Level: 1
+
+=== TRAINER_AZALEA_BENNY ===
+Name: BENNY
+Class: BUG_CATCHER
+Pic: BUG_CATCHER
+Gender: Male
+
+Kakuna
+Level: 1
+
+Beedrill
+Level: 1
+
+=== TRAINER_AZALEA_AMY_AND_MAY ===
+Name: AMY&MAY
+Class: TWINS
+Pic: TWINS
 Gender: Female
+Double Battle: Yes
 
-Rattata
-Level: 5
+Ledyba
+Level: 1
+Shadow: Yes
+Shadow ID: 50
+Heart Gauge: 5000
+- Shadow Rush
 
-=== TRAINER_BIKER ===
-Name: BIKER
-Class: Cooltrainer
-Pic: BIKER
-Gender: Male
+Spinarak
+Level: 1
+Shadow: Yes
+Shadow ID: 51
+Heart Gauge: 5000
+- Shadow Rush
 
-Rattata
-Level: 5
+Caterpie
+Level: 1
 
-=== TRAINER_BLAINE ===
-Name: BLAINE
-Class: Kanto Leader
-Music: Gym Leader
-Pic: BLAINE
-Gender: Male
-
-Rattata
-Level: 5
-
-=== TRAINER_BURGLAR ===
-Name: BURGLAR
-Class: Cooltrainer
-Pic: BURGLAR
-Gender: Male
-
-Rattata
-Level: 5
-
-=== TRAINER_CHAMPION_LANCE ===
-Name: LANCE
-Class: Champion
-Pic: CHAMPION_LANCE
-Gender: Male
-
-Rattata
-Level: 5
-
-=== TRAINER_ELITE_FOUR_BRUNO ===
-Name: BRUNO
-Class: Elite Four
-Pic: ELITE_FOUR_BRUNO
-Gender: Male
-
-Rattata
-Level: 5
-
-=== TRAINER_ELITE_FOUR_KAREN ===
-Name: KAREN
-Class: Elite Four
-Pic: ELITE_FOUR_KAREN
-Gender: Female
-
-Rattata
-Level: 5
-
-=== TRAINER_ELITE_FOUR_KOGA ===
-Name: KOGA
-Class: Elite Four
-Pic: ELITE_FOUR_KOGA
-Gender: Male
-
-Rattata
-Level: 5
-
-=== TRAINER_ELITE_FOUR_WILL ===
-Name: WILL
-Class: Elite Four
-Pic: ELITE_FOUR_WILL
-Gender: Male
-
-Rattata
-Level: 5
-
-=== TRAINER_ENGINEER ===
-Name: ENGINEER
-Class: Cooltrainer
-Pic: ENGINEER
-Gender: Male
-
-Rattata
-Level: 5
-
-=== TRAINER_ERIKA ===
-Name: ERIKA
-Class: Kanto Leader
-Music: Gym Leader
-Pic: ERIKA
-Gender: Male
-
-Rattata
-Level: 5
-
-=== TRAINER_EUSINE ===
-Name: EUSINE
-Class: Cooltrainer
-Pic: EUSINE
-Gender: Male
-
-Rattata
-Level: 5
-
-=== TRAINER_FIREBREATHER ===
-Name: KLAY
-Class: Cooltrainer
-Pic: FIREBREATHER
-Gender: Male
-
-Rattata
-Level: 5
-
-=== TRAINER_GOLD ===
-Name: GOLD
-Class: Rival
-Pic: GOLD
-Gender: Male
-
-Rattata
-Level: 5
-
-=== TRAINER_JANINE ===
-Name: JANINE
-Class: Kanto Leader
-Music: Gym Leader
-Pic: JANINE
-Gender: Male
-
-Rattata
-Level: 5
-
-=== TRAINER_JUGGLER ===
-Name: JUGGLER
-Class: Cooltrainer
-Pic: JUGGLER
-Gender: Male
-
-Rattata
-Level: 5
-
-=== TRAINER_KIMONO_GIRL ===
-Name: JOK
-Class: Cooltrainer
-Pic: KIMONO_GIRL
-Gender: Female
-
-Rattata
-Level: 5
-
-=== TRAINER_LEADER_BLUE ===
-Name: BLUE
-Class: LEADER
-Pic: LEADER_BLUE
-Gender: Male
-
-Rattata
-Level: 5
-
-=== TRAINER_LEADER_BUGSY ===
+=== TRAINER_BUGSY_1 ===
 Name: BUGSY
 Class: LEADER
+Music: Gym Leader
 Pic: LEADER_BUGSY
 Gender: Male
 
-Rattata
-Level: 5
+Pineco
+Level: 1
+- Pin Missile
+- Headbutt
+- Bullet Seed
+- Harden
 
-=== TRAINER_LEADER_CHUCK ===
-Name: CHUCK
-Class: LEADER
-Pic: LEADER_CHUCK
-Gender: Male
+Ledian
+Level: 1
+- Bullet Seed
+- Comet Punch
+- Supersonic
+- Reflect
 
-Rattata
-Level: 5
-
-=== TRAINER_LEADER_CLAIR ===
-Name: CLAIR
-Class: LEADER
-Pic: LEADER_CLAIR
-Gender: Male
-
-Rattata
-Level: 5
+Scyther @ ITEM_BERRY_JUICE
+Level: 1
+- Quick Attack
+- Fury Cutter
+- Bullet Seed
+- Pursuit
 
 === TRAINER_LEADER_FALKNER ===
 Name: FALKNER
@@ -365,52 +239,7 @@ Pic: LEADER_FALKNER
 Gender: Male
 
 Rattata
-Level: 5
-
-=== TRAINER_LEADER_JASMINE ===
-Name: JASMINE
-Class: LEADER
-Pic: LEADER_JASMINE
-Gender: Male
-
-Rattata
-Level: 5
-
-=== TRAINER_LEADER_MORTY ===
-Name: MORTY
-Class: LEADER
-Pic: LEADER_MORTY
-Gender: Male
-
-Rattata
-Level: 5
-
-=== TRAINER_LEADER_PRYCE ===
-Name: PRYCE
-Class: LEADER
-Pic: LEADER_PRYCE
-Gender: Male
-
-Rattata
-Level: 5
-
-=== TRAINER_LEADER_WHITNEY ===
-Name: WHITNEY
-Class: LEADER
-Pic: LEADER_WHITNEY
-Gender: Male
-
-Rattata
-Level: 5
-
-=== TRAINER_LYRA ===
-Name: LYRA
-Class: Rival
-Pic: LYRA
-Gender: Female
-
-Rattata
-Level: 5
+Level: 1
 
 === TRAINER_MISTY ===
 Name: MISTY
@@ -420,135 +249,16 @@ Pic: MISTY
 Gender: Female
 
 Psyduck
-Level: 5
+Level: 1
 
 Corsola
-Level: 18
+Level: 1
 
 Starmie
-Level: 20
+Level: 1
 
 Gyarados
-Level: 22
-
-=== TRAINER_NURSE ===
-Name: NURSE
-Class: Cooltrainer
-Pic: NURSE
-Gender: Male
-
-Rattata
-Level: 5
-
-=== TRAINER_OFFICER ===
-Name: OFFICER
-Class: Cooltrainer
-Pic: OFFICER
-Gender: Male
-
-Rattata
-Level: 5
-
-=== TRAINER_PETREL ===
-Name: PETREL
-Class: Team Rocket
-Pic: PETREL
-Gender: Male
-
-Rattata
-Level: 5
-
-=== TRAINER_PROTON ===
-Name: PROTON
-Class: Team Rocket
-Pic: PROTON
-Gender: Male
-
-Rattata
-Level: 5
-
-=== TRAINER_PSYCHIC_M2 ===
-Name: PSYCHIC
-Class: Cooltrainer
-Pic: PSYCHIC_M2
-Gender: Male
-
-Rattata
-Level: 5
-
-=== TRAINER_SABRINA ===
-Name: SABRINA
-Class: Kanto Leader
-Music: Gym Leader
-Pic: SABRINA
-Gender: Male
-
-Rattata
-Level: 5
-
-=== TRAINER_SAGE ===
-Name: SAGE
-Class: Cooltrainer
-Pic: SAGE
-Gender: Male
-
-Rattata
-Level: 5
-
-=== TRAINER_SAGE_LEADER ===
-Name: SAGE
-Class: Cooltrainer
-Pic: SAGE_LEADER
-Gender: Male
-
-Rattata
-Level: 5
-
-=== TRAINER_SILVER ===
-Name: SILVER
-Class: Rival
-Pic: SILVER
-Gender: Male
-
-Rattata
-Level: 5
-
-=== TRAINER_SUPER_NERD ===
-Name: SUPER NERD
-Class: TRAINER_CLASS_SUPER_NERD
-Pic: SUPER_NERD
-Gender: Male
-
-Rattata
-Level: 5
-
-=== TRAINER_SURGE ===
-Name: LT SURGE
-Class: Kanto Leader
-Music: Gym Leader
-Pic: SURGE
-Gender: Male
-
-Rattata
-Level: 5
-
-=== TRAINER_TWINS2 ===
-Name: TWINS2
-Class: Cooltrainer
-Pic: TWINS2
-Gender: Male
-
-Rattata
-Level: 5
-
-=== TRAINER_YOUNGSTER2 ===
-Name: YOUNGSTER2
-Class: Cooltrainer
-Pic: YOUNGSTER2
-Gender: Male
-
-Rattata
-Level: 5
+Level: 1
 
 === TRAINER_ROCKET_GRUNT_M_1 ===
 Name: ZANDER
@@ -559,7 +269,7 @@ Music: TRAINER_ENCOUNTER_MUSIC_TEAM_ROCKET
 Double Battle: No
 
 Mimikyu
-Level: 2
+Level: 1
 Nature: ADAMANT
 IVs: 0 HP / 0 Atk / 0 Def / 0 SpA / 0 SpD / 0 Spe
 Shadow: Yes
@@ -633,7 +343,7 @@ Name: Corvin
 Class: Team Plasma
 Pic: PLASMA_GRUNT_M_GEN5
 Gender: Male
-Music: TRAINER_ENCOUNTER_MUSIC_TEAM_ROCKET
+Music: TRAINER_ENCOUNTER_MUSIC_PLASMA
 Double Battle: No
 
 Trubbish
@@ -642,8 +352,50 @@ Level: 1
 Scraggy
 Level: 1
 
+=== TRAINER_VF_GALACTIC ===
+Name: Vega
+Class: Team Galactic
+Pic: GALACTIC_GRUNT_M_GEN4
+Gender: Male
+Music: TRAINER_ENCOUNTER_MUSIC_GALACTIC
+Double Battle: No
+
+Zubat
+Level: 1
+
+Stunky
+Level: 1
+
+=== TRAINER_VF_SKULL ===
+Name: Rex
+Class: Team Skull
+Pic: SKULL_MFP
+Gender: Male
+Music: TRAINER_ENCOUNTER_MUSIC_SUSPICIOUS
+Double Battle: No
+
+Scraggy
+Level: 1
+
+Sandile
+Level: 1
+
+=== TRAINER_VF_FLARE ===
+Name: Pyre
+Class: Team Flare
+Pic: FLARE_MFP
+Gender: Male
+Music: TRAINER_ENCOUNTER_MUSIC_SUSPICIOUS
+Double Battle: No
+
+Houndour
+Level: 1
+
+Fletchling
+Level: 1
+
 === TRAINER_RT3_YOUNGSTER1 ===
-Name: YOUNGSTER1
+Name: BEN
 Class: TRAINER_CLASS_YOUNGSTER
 Pic: YOUNGSTER2
 Gender: Male
@@ -655,7 +407,7 @@ Woobat
 Level: 1
 
 === TRAINER_RT3_YOUNGSTER2 ===
-Name: YOUNGSTER
+Name: CALVIN
 Class: TRAINER_CLASS_YOUNGSTER
 Pic: YOUNGSTER2
 Gender: Male
@@ -697,8 +449,8 @@ Pic: MIRROR_B
 Gender: Male
 Music: TRAINER_ENCOUNTER_MUSIC_MIRRORB
 
-Blacephalon
-Level: 50
+Rattata
+Level: 1
 
 === TRAINER_RT4_BLACK_BELT ===
 Name: RYU
@@ -791,13 +543,13 @@ Pic: LOOKER_GEN5
 Gender: Male
 
 Growlithe
-Level: 18
+Level: 1
 Nature: BRAVE
 - Bite
 - Ember
 
 Croagunk
-Level: 19
+Level: 1
 Nature: ADAMANT
 - Low Kick
 - Mud-Slap
@@ -886,18 +638,6 @@ Level: 1
 Voltorb
 Level: 1
 
-=== TRAINER_RT25_COOLTRAINER_M ===
-Name: RYAN
-Class: TRAINER_CLASS_ACE_TRAINER
-Pic: ACE_TRAINER_GEN2M
-Gender: Male
-
-Growlithe
-Level: 1
-
-Poliwag
-Level: 1
-
 === TRAINER_CERULEAN_GYM_SWIMMER_M ===
 Name: TYLER
 Class: TRAINER_CLASS_SWIMMER_M
@@ -932,4 +672,356 @@ Psyduck
 Level: 1
 
 Magikarp
+Level: 1
+
+=== TRAINER_KURTS_HOUSE_IRONMASK ===
+Name: MARAUDER
+Class: TRAINER_CLASS_CIPHER_ADMIN
+Pic: SNAGEM
+Music: TRAINER_ENCOUNTER_MUSIC_CIPHER_PEON
+
+Murkrow
+Level: 1
+
+Sneasel
+Level: 1
+
+=== TRAINER_ROCK_TUNNEL_1F_PLASMA_1 ===
+Name: AXEL
+Class: TRAINER_CLASS_TEAM_PLASMA
+Pic: PLASMA_GRUNT_M_GEN5
+Music: TRAINER_ENCOUNTER_MUSIC_PLASMA
+
+Purrloin
+Level: 1
+
+Sandile
+Level: 1
+
+=== TRAINER_ROCK_TUNNEL_1F_PLASMA_2 ===
+Name: DANE
+Class: TRAINER_CLASS_TEAM_PLASMA
+Pic: PLASMA_GRUNT_M_GEN5
+Music: TRAINER_ENCOUNTER_MUSIC_PLASMA
+
+Trubbish
+Level: 1
+
+Purrloin
+Level: 1
+
+=== TRAINER_ROCK_TUNNEL_1F_PLASMA_3 ===
+Name: MIRA
+Class: TRAINER_CLASS_TEAM_PLASMA
+Pic: PLASMA_GRUNT_F_GEN5
+Music: TRAINER_ENCOUNTER_MUSIC_PLASMA
+
+Scraggy
+Level: 1
+
+Trubbish
+Level: 1
+
+=== TRAINER_ROCK_TUNNEL_1F_PLASMA_4 ===
+Name: COLT
+Class: TRAINER_CLASS_TEAM_PLASMA
+Pic: PLASMA_GRUNT_M_GEN5
+Music: TRAINER_ENCOUNTER_MUSIC_PLASMA
+
+Roggenrola
+Level: 1
+
+Sandile
+Level: 1
+
+=== TRAINER_ROCK_TUNNEL_1F_PLASMA_5 ===
+Name: ROOK
+Class: TRAINER_CLASS_TEAM_PLASMA
+Pic: PLASMA_GRUNT_M_GEN5
+Music: TRAINER_ENCOUNTER_MUSIC_PLASMA
+
+Scraggy
+Level: 1
+
+Roggenrola
+Level: 1
+
+=== TRAINER_ROCK_TUNNEL_1F_PLASMA_6 ===
+Name: NASH
+Class: TRAINER_CLASS_TEAM_PLASMA
+Pic: PLASMA_GRUNT_M_GEN5
+Music: TRAINER_ENCOUNTER_MUSIC_PLASMA
+
+Trubbish
+Level: 1
+
+Drilbur
+Level: 1
+
+=== TRAINER_ROCK_TUNNEL_B1F_PLASMA_1 ===
+Name: FAYE
+Class: TRAINER_CLASS_TEAM_PLASMA
+Pic: PLASMA_GRUNT_F_GEN5
+Music: TRAINER_ENCOUNTER_MUSIC_PLASMA
+
+Sandile
+Level: 1
+
+Scraggy
+Level: 1
+
+=== TRAINER_ROCK_TUNNEL_B1F_PLASMA_2 ===
+Name: ORIN
+Class: TRAINER_CLASS_TEAM_PLASMA
+Pic: PLASMA_GRUNT_M_GEN5
+Music: TRAINER_ENCOUNTER_MUSIC_PLASMA
+
+Drilbur
+Level: 1
+
+Purrloin
+Level: 1
+
+=== TRAINER_ROCK_TUNNEL_B1F_PLASMA_3 ===
+Name: GAGE
+Class: TRAINER_CLASS_TEAM_PLASMA
+Pic: PLASMA_GRUNT_M_GEN5
+Music: TRAINER_ENCOUNTER_MUSIC_PLASMA
+
+Roggenrola
+Level: 1
+
+Trubbish
+Level: 1
+
+=== TRAINER_ROCK_TUNNEL_B1F_PLASMA_4 ===
+Name: NYX
+Class: TRAINER_CLASS_TEAM_PLASMA
+Pic: PLASMA_GRUNT_F_GEN5
+Music: TRAINER_ENCOUNTER_MUSIC_PLASMA
+
+Scraggy
+Level: 1
+
+Purrloin
+Level: 1
+
+=== TRAINER_ROCK_TUNNEL_B1F_PLASMA_5 ===
+Name: KADE
+Class: TRAINER_CLASS_TEAM_PLASMA
+Pic: PLASMA_GRUNT_M_GEN5
+Music: TRAINER_ENCOUNTER_MUSIC_PLASMA
+
+Sandile
+Level: 1
+
+Roggenrola
+Level: 1
+
+=== TRAINER_ROCK_TUNNEL_B1F_PLASMA_6 ===
+Name: VOSS
+Class: TRAINER_CLASS_TEAM_PLASMA
+Pic: PLASMA_GRUNT_M_GEN5
+Music: TRAINER_ENCOUNTER_MUSIC_PLASMA
+
+Trubbish
+Level: 1
+
+Drilbur
+Level: 1
+
+=== TRAINER_ROCK_TUNNEL_B1F_PLASMA_7 ===
+Name: IRIS
+Class: TRAINER_CLASS_TEAM_PLASMA
+Pic: PLASMA_GRUNT_F_GEN5
+Music: TRAINER_ENCOUNTER_MUSIC_PLASMA
+
+Purrloin
+Level: 1
+
+Roggenrola
+Level: 1
+
+=== TRAINER_ROCK_TUNNEL_B1F_PLASMA_8 ===
+Name: SERA
+Class: TRAINER_CLASS_TEAM_PLASMA
+Pic: PLASMA_GRUNT_F_GEN5
+Music: TRAINER_ENCOUNTER_MUSIC_PLASMA
+
+Sandile
+Level: 1
+
+Trubbish
+Level: 1
+
+=== TRAINER_SLOWPOKEWELL_BRYONY ===
+Name: BRYONY
+Class: TRAINER_CLASS_TEAM_FLARE_ADMIN
+Pic: BRYONY
+Music: TRAINER_ENCOUNTER_MUSIC_SUSPICIOUS
+
+Houndour
+Level: 1
+
+Litleo
+Level: 1
+
+=== TRAINER_SLOWPOKEWELL_FLARE_1 ===
+Name: VESPER
+Class: TRAINER_CLASS_TEAM_FLARE
+Pic: FLARE_MFP
+Music: TRAINER_ENCOUNTER_MUSIC_SUSPICIOUS
+
+Houndour
+Level: 1
+
+Fletchling
+Level: 1
+
+=== TRAINER_SLOWPOKEWELL_FLARE_2 ===
+Name: ORLA
+Class: TRAINER_CLASS_TEAM_FLARE
+Pic: FLARE_MFP
+Music: TRAINER_ENCOUNTER_MUSIC_SUSPICIOUS
+
+Litleo
+Level: 1
+
+Houndour
+Level: 1
+
+=== TRAINER_SLOWPOKEWELL_FLARE_3 ===
+Name: KADE
+Class: TRAINER_CLASS_TEAM_FLARE
+Pic: FLARE_MFP
+Music: TRAINER_ENCOUNTER_MUSIC_SUSPICIOUS
+
+Fletchling
+Level: 1
+
+Litleo
+Level: 1
+
+=== TRAINER_VIOLET_GYM_BIRD_KEEPER_1 ===
+Name: ROBIN
+Class: TRAINER_CLASS_BIRD_KEEPER
+Pic: BIRD_KEEPER
+
+Pidgey
+Level: 1
+
+Hoothoot
+Level: 1
+
+=== TRAINER_VIOLET_GYM_BIRD_KEEPER_2 ===
+Name: KYLE
+Class: TRAINER_CLASS_BIRD_KEEPER
+Pic: BIRD_KEEPER
+
+Spearow
+Level: 1
+
+Pidgey
+Level: 1
+
+=== TRAINER_ROUTE32_YOUNGSTER ===
+Name: TIM
+Class: TRAINER_CLASS_YOUNGSTER
+Pic: YOUNGSTER2
+Gender: Male
+
+Rattata
+Level: 1
+
+Pidgey
+Level: 1
+
+=== TRAINER_ROUTE32_PICNICKER ===
+Name: LINA
+Class: TRAINER_CLASS_PICNICKER
+Pic: PICNICKER
+Gender: Female
+
+Hoppip
+Level: 1
+
+Bellsprout
+Level: 1
+
+=== TRAINER_ROUTE32_FISHERMAN_1 ===
+Name: RAY
+Class: TRAINER_CLASS_FISHERMAN
+Pic: FISHERMAN
+Gender: Male
+
+Magikarp
+Level: 1
+
+=== TRAINER_ROUTE32_FISHERMAN_2 ===
+Name: NED
+Class: TRAINER_CLASS_FISHERMAN
+Pic: FISHERMAN
+Gender: Male
+
+Poliwag
+Level: 1
+
+=== TRAINER_ROUTE32_FISHERMAN_3 ===
+Name: LEO
+Class: TRAINER_CLASS_FISHERMAN
+Pic: FISHERMAN
+Gender: Male
+
+Goldeen
+Level: 1
+
+=== TRAINER_ROUTE32_BIRD_KEEPER ===
+Name: MILO
+Class: TRAINER_CLASS_BIRD_KEEPER
+Pic: BIRD_KEEPER
+Gender: Male
+
+Pidgey
+Level: 1
+
+Hoothoot
+Level: 1
+
+=== TRAINER_ROUTE33_HIKER ===
+Name: DUKE
+Class: TRAINER_CLASS_HIKER
+Pic: HIKER
+Gender: Male
+
+Geodude
+Level: 1
+
+=== TRAINER_UNION_CAVE_HIKER ===
+Name: GUS
+Class: TRAINER_CLASS_HIKER
+Pic: HIKER
+Gender: Male
+
+Geodude
+Level: 1
+
+Zubat
+Level: 1
+
+=== TRAINER_UNION_CAVE_SUPER_NERD ===
+Name: TREV
+Class: TRAINER_CLASS_SUPER_NERD
+Pic: SUPER_NERD
+Gender: Male
+
+Magnemite
+Level: 1
+
+=== TRAINER_UNION_CAVE_FIREBREATHER ===
+Name: BO
+Class: TRAINER_CLASS_FIREBREATHER
+Pic: FIREBREATHER
+Gender: Male
+
+Vulpix
 Level: 1

@@ -561,6 +561,8 @@ extern const u8 EventScript_CableBoxResults[];
 extern const u8 EventScript_PokeBlockFeeder[];
 extern const u8 Route110_TrickHousePuzzle_EventScript_Door[];
 extern const u8 EventScript_RegionMap[];
+extern const u8 EventScript_RegionMap_Kanto[];
+extern const u8 EventScript_RegionMap_Johto[];
 extern const u8 EventScript_RunningShoesManual[];
 extern const u8 EventScript_PictureBookShelf[];
 extern const u8 EventScript_BookShelf[];
@@ -694,6 +696,8 @@ extern const u8 EventScript_PokemonGotAway[];
 extern const u8 EventScript_LostSignal[];
 extern const u8 EventScript_TooDark[];
 extern const u8 EventScript_MovedTooFast[];
+
+extern const u8 RoamingHunter_AlertScript[];
 
 
 #endif // GUARD_EVENT_SCRIPTS_H

@@ -30,5 +30,5 @@ cerulean_house1_Text_BaldingMan:
 	.string "CAVE route. It must be serious.$"
 
 cerulean_house1_Text_Woman:
-	.string "We keep our POKeMON close at night.\n"
+	.string "We keep our POKéMON close at night.\n"
 	.string "Too many break-ins lately.$"

@@ -26,6 +26,30 @@ static bool8 IsBattlerShadowNow(u32 battler)
     return gBattleMons[battler].isShadow;
 }
 
+static void EnsureIndicatorPaletteLoaded(u16 palTag)
+{
+    if (palTag == TAG_NONE)
+        return;
+
+    if (IndexOfSpritePaletteTag(palTag) != 0xFFFFFFFF)
+        return;
+
+    switch (palTag)
+    {
+    case TAG_MISC_INDICATOR_PAL:
+        LoadSpritePalette(&sSpritePalette_MiscIndicator);
+        break;
+    case TAG_MEGA_INDICATOR_PAL:
+        LoadSpritePalette(&sSpritePalette_MegaIndicator);
+        break;
+    case TAG_TERA_INDICATOR_PAL:
+        LoadSpritePalette(&sSpritePalette_TeraIndicator);
+        break;
+    default:
+        break;
+    }
+}
+
 // Populates gBattleStruct->gimmick.usableGimmick for each battler.
 void AssignUsableGimmicks(void)
 {
@@ -343,13 +367,22 @@ void UpdateIndicatorVisibilityAndType(u32 healthboxId, bool32 invisible)
     u32 battler = gSprites[healthboxId].hMain_Battler;
     u32 palTag = GetIndicatorPalTag(battler);
     struct Sprite *sprite = &gSprites[GetIndicatorSpriteId(healthboxId)];
+    u32 palNum;
 
     if (GetIndicatorSpriteId(healthboxId) == 0) // safari zone means the player doesn't have an indicator sprite id
         return;
 
     if (palTag != TAG_NONE)
     {
-        sprite->oam.paletteNum = IndexOfSpritePaletteTag(palTag);
+        EnsureIndicatorPaletteLoaded(palTag);
+        palNum = IndexOfSpritePaletteTag(palTag);
+        if (palNum == 0xFFFFFFFF)
+        {
+            sprite->invisible = TRUE;
+            return;
+        }
+
+        sprite->oam.paletteNum = palNum;
         sprite->invisible = invisible;
 
         u32 *dst = (u32 *)(OBJ_VRAM0 + TILE_SIZE_4BPP * GetSpriteTileStartByTag(BATTLER_INDICATOR_TAG + battler));

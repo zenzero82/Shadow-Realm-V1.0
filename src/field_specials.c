@@ -27,6 +27,7 @@
 #include "mystery_gift.h"
 #include "match_call.h"
 #include "menu.h"
+#include "money.h"
 #include "overworld.h"
 #include "party_menu.h"
 #include "pokeblock.h"
@@ -58,6 +59,7 @@
 #include "constants/field_effects.h"
 #include "constants/field_specials.h"
 #include "constants/items.h"
+#include "constants/flags.h"
 #include "constants/heal_locations.h"
 #include "constants/map_types.h"
 #include "constants/mystery_gift.h"
@@ -1834,6 +1836,32 @@ bool8 Special_AreLeadMonEVsMaxedOut(void)
         return TRUE;
 
     return FALSE;
+}
+
+void BufferGoldMomSavings(void)
+{
+    ConvertIntToDecimalStringN(gStringVar1, GetGoldMomSavings(), STR_CONV_MODE_LEFT_ALIGN, MAX_MONEY_DIGITS);
+}
+
+void GoldMomSavingsHasMoney(void)
+{
+    gSpecialVar_Result = HasGoldMomSavings();
+}
+
+void GoldMomSavingsWithdrawAll(void)
+{
+    u32 amount = WithdrawGoldMomSavings();
+    if (amount)
+        AddMoney(&gSaveBlock1Ptr->money, amount);
+
+    ConvertIntToDecimalStringN(gStringVar1, amount, STR_CONV_MODE_LEFT_ALIGN, MAX_MONEY_DIGITS);
+    gSpecialVar_Result = (amount != 0);
+}
+
+void GoldMomSavingsInit(void)
+{
+    if (!FlagGet(FLAG_GOLD_MOM_SAVINGS_INIT))
+        SetGoldMomSavings(0);
 }
 
 u8 TryUpdateRusturfTunnelState(void)

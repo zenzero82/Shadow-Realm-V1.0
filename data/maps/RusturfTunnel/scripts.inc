@@ -1,6 +1,7 @@
 RusturfTunnel_MapScripts::
 	map_script MAP_SCRIPT_ON_TRANSITION, RusturfTunnel_OnTransition
 	map_script MAP_SCRIPT_ON_FRAME_TABLE, RusturfTunnel_OnFrame
+	map_script MAP_SCRIPT_ON_TRANSITION, RoamingHunter_OnMapLoad
 	.byte 0
 
 RusturfTunnel_OnFrame:

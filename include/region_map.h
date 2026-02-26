@@ -104,6 +104,7 @@ u16 GetRegionMapSecIdAt(u16 x, u16 y);
 void CreateRegionMapPlayerIcon(u16 tileTag, u16 paletteTag);
 void CreateRegionMapCursor(u16 tileTag, u16 paletteTag);
 bool32 IsEventIslandMapSecId(u16 mapSecId);
+bool8 RegionMap_GetMapSecDimensions(u16 mapSecId, u16 *x, u16 *y, u16 *width, u16 *height);
 u8 *GetMapName(u8 *dest, u16 regionMapId, u16 padLength);
 u8 *GetMapNameGeneric(u8 *dest, u16 mapSecId);
 u8 *GetMapNameHandleAquaHideout(u8 *dest, u16 mapSecId);

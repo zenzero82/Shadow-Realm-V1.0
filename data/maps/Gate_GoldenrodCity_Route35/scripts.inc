@@ -28,7 +28,7 @@ Gate_GoldenrodCity_Route35_EventScript_Fisher::
 Route35GoldenrodGate_Text_RandyAskFavor:
 	.string "Excuse me, kid! Can you do a guy\n"
 	.string "a favor?\p"
-	.string "Can you take this POKEMON with MAIL\n"
+	.string "Can you take this POKéMON with MAIL\n"
 	.string "to my friend?\p"
 	.string "He's on ROUTE 31.$"
 
@@ -39,7 +39,7 @@ Route35GoldenrodGate_Text_PokefanF_TreeBlocking:
 	.string "watered it with a SQUIRTBOTTLE.$"
 
 Route35GoldenrodGate_Text_Fisher:
-	.string "I wonder how many kinds of POKEMON\n"
+	.string "I wonder how many kinds of POKéMON\n"
 	.string "there are in the world.\p"
 	.string "Three years ago, PROF. OAK said that\n"
 	.string "there were 150 different kinds.\p"

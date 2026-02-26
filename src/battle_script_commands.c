@@ -38,6 +38,7 @@
 #include "wild_encounter.h"
 #include "rtc.h"
 #include "party_menu.h"
+#include "constants/flags.h"
 #include "sprite.h"
 #include "battle_arena.h"
 #include "constants/regions.h"
@@ -66,6 +67,7 @@
 #include "constants/trainer_slide.h"
 #include "constants/flags.h"
 #include "constants/trainers.h"
+#include "roaming_shadow_hunter.h"
 #include "battle_util.h"
 #include "constants/pokemon.h"
 #include "constants/shadow.h"
@@ -97,6 +99,13 @@ static void TryMarkShadowFailedOnFaint(u32 battler)
         return;
 
     Shdw_SetState(shadowId, SHDW_STATE_FAILED);
+    gShadowMonFledThisBattle = TRUE;
+    RoamingHunter_OnShadowSnagFailed(
+        GetMonData(mon, MON_DATA_SPECIES),
+        GetMonData(mon, MON_DATA_LEVEL),
+        RegionMap_GetRegionFromMapGroup(gSaveBlock1Ptr->location.mapGroup),
+        shadowId
+    );
 }
 
 static u16 GetVictoryWildBgmForRegion(void)
@@ -7627,7 +7636,7 @@ static void Cmd_moveend(void)
         {
             if (gBattleMons[gBattlerAttacker].isShadow == TRUE
             && !gBattleMons[gBattlerAttacker].isReverse
-            && GetBattlerSide(gBattlerAttacker) != B_SIDE_OPPONENT)
+            && IsOnPlayerSide(gBattlerAttacker))
             {
                 u8 chance = GetReverseModeChance(&gBattleMons[gBattlerAttacker]);
                 u8 roll = Random() % 100;
@@ -8950,6 +8959,24 @@ static u32 GetTrainerMoneyToGive(u16 trainerId)
     return moneyReward;
 }
 
+static void GiveMoneyWithMomSavings(u32 money)
+{
+    if (FlagGet(FLAG_ENABLE_GOLD_MOM_SAVINGS))
+    {
+        u32 savings = money / 3;
+        u32 takeHome = money - savings;
+
+        if (savings)
+            AddGoldMomSavings(savings);
+
+        AddMoney(&gSaveBlock1Ptr->money, takeHome);
+    }
+    else
+    {
+        AddMoney(&gSaveBlock1Ptr->money, money);
+    }
+}
+
 static void Cmd_getmoneyreward(void)
 {
     CMD_ARGS();
@@ -8962,7 +8989,7 @@ static void Cmd_getmoneyreward(void)
         money = GetTrainerMoneyToGive(TRAINER_BATTLE_PARAM.opponentA);
         if (gBattleTypeFlags & BATTLE_TYPE_TWO_OPPONENTS)
             money += GetTrainerMoneyToGive(TRAINER_BATTLE_PARAM.opponentB);
-        AddMoney(&gSaveBlock1Ptr->money, money);
+        GiveMoneyWithMomSavings(money);
     }
     else
     {
@@ -13175,7 +13202,7 @@ static void Cmd_givepaydaymoney(void)
     if (!(gBattleTypeFlags & (BATTLE_TYPE_LINK | BATTLE_TYPE_RECORDED_LINK)) && gPaydayMoney != 0)
     {
         u32 bonusMoney = gPaydayMoney * gBattleStruct->moneyMultiplier;
-        AddMoney(&gSaveBlock1Ptr->money, bonusMoney);
+        GiveMoneyWithMomSavings(bonusMoney);
 
         PREPARE_HWORD_NUMBER_BUFFER(gBattleTextBuff1, 5, bonusMoney)
 
@@ -15961,10 +15988,16 @@ static void Cmd_removescreens(void)
 
 u8 GetCatchingBattler(void)
 {
-    if (IsBattlerAlive(GetBattlerAtPosition(B_POSITION_OPPONENT_LEFT)))
-        return GetBattlerAtPosition(B_POSITION_OPPONENT_LEFT);
-    else
-        return GetBattlerAtPosition(B_POSITION_OPPONENT_RIGHT);
+    u8 left = GetBattlerAtPosition(B_POSITION_OPPONENT_LEFT);
+    u8 right = GetBattlerAtPosition(B_POSITION_OPPONENT_RIGHT);
+
+    if (IsBattlerAlive(left) && gBattleMons[left].isShadow)
+        return left;
+    if (IsBattlerAlive(right) && gBattleMons[right].isShadow)
+        return right;
+    if (IsBattlerAlive(left))
+        return left;
+    return right;
 }
 
 static void Cmd_handleballthrow(void)
@@ -15977,7 +16010,13 @@ static void Cmd_handleballthrow(void)
     if (gBattleControllerExecFlags)
         return;
 
-    gBattlerTarget = GetCatchingBattler();
+    if (gBattleStruct->ballThrowTarget < gBattlersCount
+        && GetBattlerSide(gBattleStruct->ballThrowTarget) == B_SIDE_OPPONENT
+        && IsBattlerAlive(gBattleStruct->ballThrowTarget))
+        gBattlerTarget = gBattleStruct->ballThrowTarget;
+    else
+        gBattlerTarget = GetCatchingBattler();
+    gBattleStruct->ballThrowTarget = MAX_BATTLERS_COUNT;
 
     if (gBattleTypeFlags & BATTLE_TYPE_TRAINER && !gBattleMons[gBattlerTarget].isShadow)
     {

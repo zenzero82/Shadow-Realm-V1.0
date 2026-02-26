@@ -7833,7 +7833,7 @@
       "border_width": 2,
       "border_height": 2,
       "primary_tileset": "gTileset_johto_NE",
-      "secondary_tileset": "gTileset_generator",
+      "secondary_tileset": "gTileset_ruinsofAlphOutside",
       "border_filepath": "data/layouts/RuinsOfAlph_Outside/border.bin",
       "blockdata_filepath": "data/layouts/RuinsOfAlph_Outside/map.bin"
     },
@@ -7893,7 +7893,7 @@
       "border_width": 2,
       "border_height": 2,
       "primary_tileset": "gTileset_johto_general_og",
-      "secondary_tileset": "gTileset_Cave_Grey",
+      "secondary_tileset": "gTileset_cave_default",
       "border_filepath": "data/layouts/UnionCave_B2F/border.bin",
       "blockdata_filepath": "data/layouts/UnionCave_B2F/map.bin"
     },
@@ -8676,6 +8676,42 @@
       "secondary_tileset": "gTileset_cave_default",
       "border_filepath": "data/layouts/Shadow_Realm/border.bin",
       "blockdata_filepath": "data/layouts/Shadow_Realm/map.bin"
+    },
+    {
+      "id": "LAYOUT_JOHTO_HOUSE1",
+      "name": "JOHTO_HOUSE1",
+      "width": 13,
+      "height": 10,
+      "border_width": 2,
+      "border_height": 2,
+      "primary_tileset": "gTileset_johto_building",
+      "secondary_tileset": "gTileset_oaks_lab",
+      "border_filepath": "data/layouts/JOHTO_HOUSE1/border.bin",
+      "blockdata_filepath": "data/layouts/JOHTO_HOUSE1/map.bin"
+    },
+    {
+      "id": "LAYOUT_JOHTO_HOUSE2",
+      "name": "JOHTO_HOUSE2_Layout",
+      "width": 13,
+      "height": 10,
+      "border_width": 2,
+      "border_height": 2,
+      "primary_tileset": "gTileset_johto_building",
+      "secondary_tileset": "gTileset_oaks_lab",
+      "border_filepath": "data/layouts/JOHTO_HOUSE2/border.bin",
+      "blockdata_filepath": "data/layouts/JOHTO_HOUSE2/map.bin"
+    },
+    {
+      "id": "LAYOUT_JOHTO_PCENTER",
+      "name": "Johto_pcenter_Layout",
+      "width": 16,
+      "height": 10,
+      "border_width": 2,
+      "border_height": 2,
+      "primary_tileset": "gTileset_johto_building",
+      "secondary_tileset": "gTileset_pokecenter_kanto",
+      "border_filepath": "data/layouts/Johto_pcenter/border.bin",
+      "blockdata_filepath": "data/layouts/Johto_pcenter/map.bin"
     }
   ]
 }

@@ -75,6 +75,7 @@ static EWRAM_DATA u8 sHofPCTopBarWindowId = 0;
 static EWRAM_DATA bool8 sScheduledBgCopiesToVram[4] = {FALSE};
 static EWRAM_DATA u16 sTempTileDataBufferIdx = 0;
 static EWRAM_DATA void *sTempTileDataBuffer[0x20] = {NULL};
+static EWRAM_DATA u8 sMenuCursorFillValue = 0;
 
 const u16 gStandardMenuPalette[] = INCBIN_U16("graphics/interface/std_menu.gbapal");
 
@@ -154,6 +155,7 @@ void InitStandardTextBoxWindows(void)
     sMapNamePopupWindowId = WINDOW_NONE;
     if (OW_POPUP_GENERATION == GEN_5)
         sSecondaryPopupWindowId = WINDOW_NONE;
+    Menu_ResetCursorFillValue();
 }
 
 void FreeAllOverworldWindowBuffers(void)
@@ -173,6 +175,16 @@ u16 RunTextPrintersAndIsPrinter0Active(void)
 {
     RunTextPrinters();
     return IsTextPrinterActive(0);
+}
+
+void Menu_SetCursorFillValue(u8 fillValue)
+{
+    sMenuCursorFillValue = fillValue;
+}
+
+void Menu_ResetCursorFillValue(void)
+{
+    sMenuCursorFillValue = 1;
 }
 
 u16 AddTextPrinterParameterized2(u8 windowId, u8 fontId, const u8 *str, u8 speed, void (*callback)(struct TextPrinterTemplate *, u16), u8 fgColor, u8 bgColor, u8 shadowColor)
@@ -1116,7 +1128,7 @@ void RedrawMenuCursor(u8 oldPos, u8 newPos)
 
     width = GetMenuCursorDimensionByFont(sMenu.fontId, 0);
     height = GetMenuCursorDimensionByFont(sMenu.fontId, 1);
-    FillWindowPixelRect(sMenu.windowId, PIXEL_FILL(1), sMenu.left, sMenu.optionHeight * oldPos + sMenu.top, width, height);
+    FillWindowPixelRect(sMenu.windowId, PIXEL_FILL(sMenuCursorFillValue), sMenu.left, sMenu.optionHeight * oldPos + sMenu.top, width, height);
     AddTextPrinterParameterized(sMenu.windowId, sMenu.fontId, gText_SelectorArrow3, sMenu.left, sMenu.optionHeight * newPos + sMenu.top, 0, 0);
 }
 
@@ -1492,7 +1504,7 @@ static void MoveMenuGridCursor(u8 oldCursorPos, u8 newCursorPos)
 
     u8 xPos = (oldCursorPos % sMenu.columns) * sMenu.optionWidth + sMenu.left;
     u8 yPos = (oldCursorPos / sMenu.columns) * sMenu.optionHeight + sMenu.top;
-    FillWindowPixelRect(sMenu.windowId, PIXEL_FILL(1), xPos, yPos, cursorWidth, cursorHeight);
+    FillWindowPixelRect(sMenu.windowId, PIXEL_FILL(sMenuCursorFillValue), xPos, yPos, cursorWidth, cursorHeight);
 
     xPos = (newCursorPos % sMenu.columns) * sMenu.optionWidth + sMenu.left;
     yPos = (newCursorPos / sMenu.columns) * sMenu.optionHeight + sMenu.top;

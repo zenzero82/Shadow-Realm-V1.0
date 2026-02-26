@@ -47,6 +47,7 @@
 #include "random.h"
 #include "recorded_battle.h"
 #include "roamer.h"
+#include "roaming_shadow_hunter.h"
 #include "safari_zone.h"
 #include "scanline_effect.h"
 #include "script.h"
@@ -205,6 +206,7 @@ EWRAM_DATA u16 gPauseCounterBattle = 0;
 EWRAM_DATA u16 gPaydayMoney = 0;
 EWRAM_DATA u8 gBattleCommunication[BATTLE_COMMUNICATION_ENTRIES_COUNT] = {0};
 EWRAM_DATA u8 gBattleOutcome = 0;
+EWRAM_DATA bool8 gShadowMonFledThisBattle = FALSE;
 EWRAM_DATA struct ProtectStruct gProtectStructs[MAX_BATTLERS_COUNT] = {0};
 EWRAM_DATA struct SpecialStatus gSpecialStatuses[MAX_BATTLERS_COUNT] = {0};
 EWRAM_DATA u32 gBattleWeather = 0;
@@ -312,17 +314,17 @@ const struct TrainerClass gTrainerClasses[TRAINER_CLASS_COUNT] =
     [TRAINER_CLASS_PKMN_TRAINER_1] = { _("{PKMN} TRAINER") },
     [TRAINER_CLASS_PKMN_TRAINER_2] = { _("{PKMN} TRAINER") },
     [TRAINER_CLASS_HIKER] = { _("HIKER"), 10 },
-    [TRAINER_CLASS_TEAM_AQUA] = { _("TEAM AQUA") },
+    [TRAINER_CLASS_TEAM_AQUA] = { _("TEAM AQUA"), 0, BALL_DUSK },
     [TRAINER_CLASS_PKMN_BREEDER] = { _("{PKMN} BREEDER"), 10, B_TRAINER_CLASS_POKE_BALLS >= GEN_8 ? BALL_HEAL : BALL_FRIEND },
     [TRAINER_CLASS_COOLTRAINER] = { _("COOLTRAINER"), 12, BALL_ULTRA },
     [TRAINER_CLASS_BIRD_KEEPER] = { _("BIRD KEEPER"), 8 },
     [TRAINER_CLASS_COLLECTOR] = { _("COLLECTOR"), 15, BALL_PREMIER },
     [TRAINER_CLASS_SWIMMER_M] = { _("SWIMMER♂"), 2, BALL_DIVE },
-    [TRAINER_CLASS_TEAM_MAGMA] = { _("TEAM MAGMA") },
+    [TRAINER_CLASS_TEAM_MAGMA] = { _("TEAM MAGMA"), 0, BALL_DUSK },
     [TRAINER_CLASS_EXPERT] = { _("EXPERT"), 10 },
-    [TRAINER_CLASS_AQUA_ADMIN] = { _("AQUA ADMIN"), 10 },
+    [TRAINER_CLASS_AQUA_ADMIN] = { _("AQUA ADMIN"), 10, BALL_DUSK },
     [TRAINER_CLASS_BLACK_BELT] = { _("BLACK BELT"), 8, BALL_ULTRA },
-    [TRAINER_CLASS_AQUA_LEADER] = { _("AQUA LEADER"), 20, BALL_MASTER },
+    [TRAINER_CLASS_AQUA_LEADER] = { _("AQUA LEADER"), 20, BALL_DUSK },
     [TRAINER_CLASS_HEX_MANIAC] = { _("HEX MANIAC"), 6 },
     [TRAINER_CLASS_AROMA_LADY] = { _("AROMA LADY"), 10 },
     [TRAINER_CLASS_RUIN_MANIAC] = { _("RUIN MANIAC"), 15 },
@@ -359,11 +361,11 @@ const struct TrainerClass gTrainerClasses[TRAINER_CLASS_COUNT] =
     [TRAINER_CLASS_TWINS] = { _("TWINS"), 3 },
     [TRAINER_CLASS_SAILOR] = { _("SAILOR"), 8 },
     [TRAINER_CLASS_COOLTRAINER_2] = { _("COOLTRAINER"), 5, BALL_ULTRA },
-    [TRAINER_CLASS_MAGMA_ADMIN] = { _("MAGMA ADMIN"), 10 },
+    [TRAINER_CLASS_MAGMA_ADMIN] = { _("MAGMA ADMIN"), 10, BALL_DUSK },
     [TRAINER_CLASS_RIVAL] = { _("{PKMN} TRAINER"), 15 },
-    [TRAINER_CLASS_BUG_CATCHER] = { _("BUG CATCHER"), 4 },
+    [TRAINER_CLASS_BUG_CATCHER] = { _("BUG CATCHER"), 4, BALL_NET },
     [TRAINER_CLASS_PKMN_RANGER] = { _("{PKMN} RANGER"), 12 },
-    [TRAINER_CLASS_MAGMA_LEADER] = { _("MAGMA LEADER"), 20, BALL_MASTER },
+    [TRAINER_CLASS_MAGMA_LEADER] = { _("MAGMA LEADER"), 20, BALL_DUSK },
     [TRAINER_CLASS_LASS] = { _("LASS"), 4 },
     [TRAINER_CLASS_YOUNG_COUPLE] = { _("YOUNG COUPLE"), 8 },
     [TRAINER_CLASS_OLD_COUPLE] = { _("OLD COUPLE"), 10 },
@@ -376,16 +378,18 @@ const struct TrainerClass gTrainerClasses[TRAINER_CLASS_COUNT] =
     [TRAINER_CLASS_PIKE_QUEEN] = { _("PIKE QUEEN") },
     [TRAINER_CLASS_PYRAMID_KING] = { _("PYRAMID KING") },
     [TRAINER_CLASS_RS_PROTAG] = { _("{PKMN} TRAINER") },
-    [TRAINER_CLASS_CIPHER_PEON] = { _("CIPHER PEON") },
-    [TRAINER_CLASS_TEAM_ROCKET] = {_("TEAM ROCKET") },
-    [TRAINER_CLASS_TEAM_PLASMA] = {_("TEAM PLASMA") },
+    [TRAINER_CLASS_CIPHER_PEON] = { _("CIPHER PEON"), 0, BALL_DUSK },
+    [TRAINER_CLASS_TEAM_ROCKET] = { _("TEAM ROCKET"), 0, BALL_DUSK },
+    [TRAINER_CLASS_TEAM_PLASMA] = { _("TEAM PLASMA"), 0, BALL_DUSK },
     [TRAINER_CLASS_TEAM_SNAGEM] = {_("TEAM SNAGEM") },
-    [TRAINER_CLASS_TEAM_SKULL] = {_("TEAM SKULL") },
-    [TRAINER_CLASS_TEAM_FLARE] = {_("TEAM FLARE") },
-    [TRAINER_CLASS_TEAM_GALACTIC] = {_("GALACTIC") },
+    [TRAINER_CLASS_TEAM_SKULL] = { _("TEAM SKULL"), 0, BALL_DUSK },
+    [TRAINER_CLASS_TEAM_FLARE] = { _("TEAM FLARE"), 0, BALL_DUSK },
+    [TRAINER_CLASS_TEAM_FLARE_ADMIN] = { _("TEAM FLARE ADMIN"), 10, BALL_DUSK },
+    [TRAINER_CLASS_TEAM_GALACTIC] = { _("TEAM GALACTIC"), 0, BALL_DUSK },
+    [TRAINER_CLASS_TEAM_GALACTIC_ADMIN] = { _("TEAM GALACTIC ADMIN"), 10, BALL_DUSK },
     [TRAINER_CLASS_NURSE] = { _("NURSE") },
     [TRAINER_CLASS_POLICEMAN] = { _("POLICEMAN") },
-    [TRAINER_CLASS_ROCKET_ADMIN] = { _("ROCKET ADMIN"), 10 },
+    [TRAINER_CLASS_ROCKET_ADMIN] = { _("ROCKET ADMIN"), 10, BALL_DUSK },
     [TRAINER_CLASS_SAGE] = { _("SAGE"), 8 },
     [TRAINER_CLASS_ENGINEER] = { _("ENGINEER"), 8 },
     [TRAINER_CLASS_FIREBREATHER] = { _("FIREBREATHER"), 8 },
@@ -396,9 +400,9 @@ const struct TrainerClass gTrainerClasses[TRAINER_CLASS_COUNT] =
     [TRAINER_CLASS_JUGGLER] = { _("JUGGLER"), 8 },
     [TRAINER_CLASS_PSYCHIC_M] = { _("PSYCHIC♂"), 6 },
     [TRAINER_CLASS_WANDERER] = { _("WANDERER") },
-    [TRAINER_CLASS_CIPHER_ADMIN] = { _("CIPHER ADMIN"), 10 },
-    [TRAINER_CLASS_SNAGEM_HEAD] = { _("SNAGEM HEAD"), 20 },
-    [TRAINER_CLASS_SUPER_NERD] = { _("SUPER NERD"), 8 },
+    [TRAINER_CLASS_CIPHER_ADMIN] = { _("CIPHER ADMIN"), 10, BALL_DUSK },
+    [TRAINER_CLASS_SNAGEM_HEAD] = { _("SNAGEM HEAD"), 20, BALL_DUSK },
+    [TRAINER_CLASS_SUPER_NERD] = { _("SUPER NERD"), 8, BALL_TIMER },
     [TRAINER_CLASS_ACE_TRAINER] = { _("ACE TRAINER"), 12, BALL_ULTRA },
 };
 
@@ -599,8 +603,12 @@ static void CB2_InitBattleInternal(void)
         if (!(gBattleTypeFlags & (BATTLE_TYPE_LINK | BATTLE_TYPE_RECORDED)))
         {
             CreateNPCTrainerParty(&gEnemyParty[0], TRAINER_BATTLE_PARAM.opponentA, TRUE);
+            RoamingHunter_TryOverrideTrainerParty(TRAINER_BATTLE_PARAM.opponentA, &gEnemyParty[0]);
             if (gBattleTypeFlags & BATTLE_TYPE_TWO_OPPONENTS && !BATTLE_TWO_VS_ONE_OPPONENT)
+            {
                 CreateNPCTrainerParty(&gEnemyParty[PARTY_SIZE / 2], TRAINER_BATTLE_PARAM.opponentB, FALSE);
+                RoamingHunter_TryOverrideTrainerParty(TRAINER_BATTLE_PARAM.opponentB, &gEnemyParty[PARTY_SIZE / 2]);
+            }
             SetWildMonHeldItem();
             CalculateEnemyPartyCount();
         }

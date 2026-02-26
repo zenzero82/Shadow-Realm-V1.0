@@ -514,6 +514,28 @@ const u32 gTrainerFrontPic_Lovrina[] = INCBIN_U32("graphics/trainers/front_pics/
 const u16 gTrainerPalette_Lovrina[] = INCBIN_U16("graphics/trainers/front_pics/lovrinafp.gbapal");
 const u32 gTrainerFrontPic_MirrorB[] = INCBIN_U32("graphics/trainers/front_pics/mb.4bpp.lz");
 const u16 gTrainerPalette_MirrorB[] = INCBIN_U16("graphics/trainers/front_pics/mb.gbapal");
+const u32 gTrainerFrontPic_Ardos[] = INCBIN_U32("graphics/trainers/front_pics/ardosfp.4bpp.lz");
+const u16 gTrainerPalette_Ardos[] = INCBIN_U16("graphics/trainers/front_pics/ardosfp.gbapal");
+const u32 gTrainerFrontPic_Eldes[] = INCBIN_U32("graphics/trainers/front_pics/eldesfp.4bpp.lz");
+const u16 gTrainerPalette_Eldes[] = INCBIN_U16("graphics/trainers/front_pics/eldesfp.gbapal");
+const u32 gTrainerFrontPic_Greevil[] = INCBIN_U32("graphics/trainers/front_pics/greevilfp.4bpp.lz");
+const u16 gTrainerPalette_Greevil[] = INCBIN_U16("graphics/trainers/front_pics/greevilfp.gbapal");
+const u32 gTrainerFrontPic_Nascour[] = INCBIN_U32("graphics/trainers/front_pics/nascourfp.4bpp.lz");
+const u16 gTrainerPalette_Nascour[] = INCBIN_U16("graphics/trainers/front_pics/nascourfp.gbapal");
+const u32 gTrainerFrontPic_Venus[] = INCBIN_U32("graphics/trainers/front_pics/venus.4bpp.lz");
+const u16 gTrainerPalette_Venus[] = INCBIN_U16("graphics/trainers/front_pics/venus.gbapal");
+const u32 gTrainerFrontPic_Dakim[] = INCBIN_U32("graphics/trainers/front_pics/dakimfp.4bpp.lz");
+const u16 gTrainerPalette_Dakim[] = INCBIN_U16("graphics/trainers/front_pics/dakimfp.gbapal");
+const u32 gTrainerFrontPic_FlareMfp[] = INCBIN_U32("graphics/trainers/front_pics/flaremfp.4bpp.lz");
+const u16 gTrainerPalette_FlareMfp[] = INCBIN_U16("graphics/trainers/front_pics/flaremfp.gbapal");
+const u32 gTrainerFrontPic_SkullMfp[] = INCBIN_U32("graphics/trainers/front_pics/skullmfp.4bpp.lz");
+const u16 gTrainerPalette_SkullMfp[] = INCBIN_U16("graphics/trainers/front_pics/skullmfp.gbapal");
+const u32 gTrainerFrontPic_CassidyButch[] = INCBIN_U32("graphics/trainers/front_pics/cassidy_butch.4bpp.lz");
+const u16 gTrainerPalette_CassidyButch[] = INCBIN_U16("graphics/trainers/front_pics/cassidy_butch.gbapal");
+const u32 gTrainerFrontPic_Bryony[] = INCBIN_U32("graphics/trainers/front_pics/bryony.4bpp.lz");
+const u16 gTrainerPalette_Bryony[] = INCBIN_U16("graphics/trainers/front_pics/bryony.gbapal");
+const u32 gTrainerFrontPic_IronMaskedMarauder[] = INCBIN_U32("graphics/trainers/front_pics/iron_masked_marauder.4bpp.lz");
+const u16 gTrainerPalette_IronMaskedMarauder[] = INCBIN_U16("graphics/trainers/front_pics/iron_masked_marauder.gbapal");
 
 const u32 gTrainerFrontPic_LassGen2[] = INCBIN_U32("graphics/trainers/front_pics/lass_gen2.4bpp.lz");
 const u16 gTrainerPalette_LassGen2[] = INCBIN_U16("graphics/trainers/front_pics/lass_gen2.gbapal");
@@ -683,6 +705,17 @@ const struct TrainerSprite gTrainerSprites[] =
     TRAINER_SPRITE(TRAINER_PIC_EIN, gTrainerFrontPic_Ein, gTrainerPalette_Ein),
     TRAINER_SPRITE(TRAINER_PIC_LOVRINA, gTrainerFrontPic_Lovrina, gTrainerPalette_Lovrina),
     TRAINER_SPRITE(TRAINER_PIC_MIRROR_B, gTrainerFrontPic_MirrorB, gTrainerPalette_MirrorB),
+    TRAINER_SPRITE(TRAINER_PIC_ARDOS, gTrainerFrontPic_Ardos, gTrainerPalette_Ardos),
+    TRAINER_SPRITE(TRAINER_PIC_ELDES, gTrainerFrontPic_Eldes, gTrainerPalette_Eldes),
+    TRAINER_SPRITE(TRAINER_PIC_GREEVIL, gTrainerFrontPic_Greevil, gTrainerPalette_Greevil),
+    TRAINER_SPRITE(TRAINER_PIC_NASCOUR, gTrainerFrontPic_Nascour, gTrainerPalette_Nascour),
+    TRAINER_SPRITE(TRAINER_PIC_VENUS, gTrainerFrontPic_Venus, gTrainerPalette_Venus),
+    TRAINER_SPRITE(TRAINER_PIC_DAKIM, gTrainerFrontPic_Dakim, gTrainerPalette_Dakim),
+    TRAINER_SPRITE(TRAINER_PIC_FLARE_MFP, gTrainerFrontPic_FlareMfp, gTrainerPalette_FlareMfp),
+    TRAINER_SPRITE(TRAINER_PIC_SKULL_MFP, gTrainerFrontPic_SkullMfp, gTrainerPalette_SkullMfp),
+    TRAINER_SPRITE(TRAINER_PIC_CASSIDY_BUTCH, gTrainerFrontPic_CassidyButch, gTrainerPalette_CassidyButch),
+    TRAINER_SPRITE(TRAINER_PIC_BRYONY, gTrainerFrontPic_Bryony, gTrainerPalette_Bryony),
+    TRAINER_SPRITE(TRAINER_PIC_IRON_MASKED_MARAUDER, gTrainerFrontPic_IronMaskedMarauder, gTrainerPalette_IronMaskedMarauder),
     TRAINER_SPRITE(TRAINER_PIC_LASS_GEN2, gTrainerFrontPic_LassGen2, gTrainerPalette_LassGen2),
     TRAINER_SPRITE(TRAINER_PIC_ACE_TRAINER_GEN2M, gTrainerFrontPic_AceTrainerGen2M, gTrainerPalette_AceTrainerGen2M),
     TRAINER_SPRITE(TRAINER_PIC_ACE_TRAINER_GEN2F, gTrainerFrontPic_AceTrainerGen2F, gTrainerPalette_AceTrainerGen2F),

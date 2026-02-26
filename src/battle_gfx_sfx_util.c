@@ -907,8 +907,11 @@ bool8 BattleLoadAllHealthBoxesGfx(u8 state)
         {
             LoadSpritePalette(&gSpritePalettes_HealthBoxHealthBar[0]);
             LoadSpritePalette(&gSpritePalettes_HealthBoxHealthBar[1]);
-            LoadIndicatorSpritesGfx();
-            CategoryIcons_LoadSpritesGfx();
+            if (!IsDoubleBattle())
+            {
+                LoadIndicatorSpritesGfx();
+                CategoryIcons_LoadSpritesGfx();
+            }
         }
         else if (!IsDoubleBattle())
         {

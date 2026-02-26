@@ -47,6 +47,34 @@
       "trainer_sight_or_berry_tree_id": "0",
       "script": "NULL",
       "flag": "0"
+    },
+    {
+      "local_id": "LOCALID_ROUTE10_PLASMA_GRUNT",
+      "graphics_id": "OBJ_EVENT_GFX_PLASMAGRUNTF_GEN5",
+      "x": 16,
+      "y": 59,
+      "elevation": 0,
+      "movement_type": "MOVEMENT_TYPE_FACE_UP",
+      "movement_range_x": 0,
+      "movement_range_y": 0,
+      "trainer_type": "TRAINER_TYPE_NONE",
+      "trainer_sight_or_berry_tree_id": "3",
+      "script": "Route10_EventScript_PlasmaGrunt",
+      "flag": "FLAG_HIDE_ROCK_TUNNEL_PLASMA"
+    },
+    {
+      "local_id": "LOCALID_ROUTE10_ZANDER",
+      "graphics_id": "OBJ_EVENT_GFX_ROCKET_GRUNT_M_GEN1",
+      "x": 26,
+      "y": 4,
+      "elevation": 0,
+      "movement_type": "MOVEMENT_TYPE_FACE_RIGHT",
+      "movement_range_x": 0,
+      "movement_range_y": 0,
+      "trainer_type": "TRAINER_TYPE_NONE",
+      "trainer_sight_or_berry_tree_id": "0",
+      "script": "Route10_EventScript_Zander",
+      "flag": "FLAG_HIDE_ROUTE_24_ZANDER"
     }
   ],
   "warp_events": [

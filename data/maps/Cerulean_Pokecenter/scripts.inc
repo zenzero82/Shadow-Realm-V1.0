@@ -56,7 +56,7 @@ Cerulean_Pokecenter_EventScript_Bookshelf2::
 	end
 
 Cerulean_Pokecenter_EventScript_WallMap::
-	goto EventScript_RegionMap
+	goto EventScript_RegionMap_Kanto
 
 Cerulean_Pokecenter_Text_Bookshelf1:
 	.string "A travel guide to NUGGET BRIDGE.$"

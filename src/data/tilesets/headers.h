@@ -1819,5 +1819,16 @@ const struct Tileset gTileset_wescave2 =
     .palettes = gTilesetPalettes_wescave2,
     .metatiles = gMetatiles_wescave2,
     .metatileAttributes = gMetatileAttributes_wescave2,
+    .callback = InitTilesetAnim_WesCave,
+};
+
+const struct Tileset gTileset_ruinsofAlphOutside =
+{
+    .isCompressed = TRUE,
+    .isSecondary = TRUE,
+    .tiles = gTilesetTiles_ruinsofAlphOutside,
+    .palettes = gTilesetPalettes_ruinsofAlphOutside,
+    .metatiles = gMetatiles_ruinsofAlphOutside,
+    .metatileAttributes = gMetatileAttributes_ruinsofAlphOutside,
     .callback = NULL,
 };

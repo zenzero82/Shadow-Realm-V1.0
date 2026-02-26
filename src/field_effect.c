@@ -399,6 +399,20 @@ static const struct OamData sOam_32x16 =
     .paletteNum = 0,
 };
 
+static const struct OamData sOam_32x32 =
+{
+    .y = 0,
+    .affineMode = ST_OAM_AFFINE_OFF,
+    .objMode = ST_OAM_OBJ_NORMAL,
+    .bpp = ST_OAM_4BPP,
+    .shape = SPRITE_SHAPE(32x32),
+    .x = 0,
+    .size = SPRITE_SIZE(32x32),
+    .tileNum = 0,
+    .priority = 0,
+    .paletteNum = 0,
+};
+
 static const struct SpriteFrameImage sPicTable_PokeballGlow[] =
 {
     obj_frame_tiles(sPokeballGlow_Gfx)
@@ -412,10 +426,8 @@ static const struct SpriteFrameImage sPicTable_PokecenterMonitor[] =
 
 static const struct SpriteFrameImage sPicTable_PokecenterMonitor_KantoJohto[] =
 {
-    {sPokecenterMonitor_Gfx + 0x000, 0x100},
-    {sPokecenterMonitor_Gfx + 0x080, 0x100},
-    {sPokecenterMonitor_Gfx + 0x100, 0x100},
-    {sPokecenterMonitor_Gfx + 0x180, 0x100}
+    {sPokecenterMonitor_Gfx + 0x000, 0x200},
+    {sPokecenterMonitor_Gfx + 0x100, 0x200}
 };
 
 static const struct SpriteFrameImage sPicTable_HofMonitorBig[] =
@@ -571,7 +583,7 @@ static const struct SpriteTemplate sSpriteTemplate_PokecenterMonitor_KantoJohto 
 {
     .tileTag = TAG_NONE,
     .paletteTag = FLDEFF_PAL_TAG_GENERAL_0,
-    .oam = &sOam_32x16,
+    .oam = &sOam_32x32,
     .anims = sAnims_Flicker,
     .images = sPicTable_PokecenterMonitor_KantoJohto,
     .affineAnims = gDummySpriteAffineAnimTable,

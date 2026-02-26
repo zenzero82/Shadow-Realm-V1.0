@@ -23,10 +23,10 @@ lavender_pokecenter_EventScript_Bookshelf2::
 	end
 
 lavender_pokecenter_EventScript_WallMap::
-	goto EventScript_RegionMap
+	goto EventScript_RegionMap_Kanto
 
 lavender_pokecenter_Text_Bookshelf1:
-	.string "A booklet about POKEMON TOWER.$"
+	.string "A booklet about POKéMON TOWER.$"
 
 lavender_pokecenter_Text_Bookshelf2:
 	.string "Notes from the SOUL HOUSE.$"

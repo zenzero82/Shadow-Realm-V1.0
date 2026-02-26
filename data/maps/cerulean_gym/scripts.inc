@@ -1,5 +1,12 @@
 cerulean_gym_MapScripts::
+	map_script MAP_SCRIPT_ON_TRANSITION, cerulean_gym_OnTransition
 	.byte 0
+
+cerulean_gym_OnTransition:
+	goto_if_unset FLAG_BADGE10_GET, cerulean_gym_OnTransition_End
+	call cerulean_gym_EventScript_SetGymTrainers
+cerulean_gym_OnTransition_End:
+	end
 
 cerulean_gym_Speaker_Misty:
 	.string "MISTY$"
@@ -31,6 +38,7 @@ cerulean_gym_EventScript_Misty::
 
 	msgbox cerulean_gym_Text_Misty_After, MSGBOX_DEFAULT
 	setflag FLAG_BADGE10_GET
+	call cerulean_gym_EventScript_SetGymTrainers
 	closemessage
 	release
 	end
@@ -40,6 +48,12 @@ cerulean_gym_EventScript_Misty_Defeated::
 	closemessage
 	release
 	end
+
+cerulean_gym_EventScript_SetGymTrainers::
+	settrainerflag TRAINER_CERULEAN_GYM_SWIMMER_M
+	settrainerflag TRAINER_CERULEAN_GYM_SWIMMER_F1
+	settrainerflag TRAINER_CERULEAN_GYM_SWIMMER_F2
+	return
 
 cerulean_gym_EventScript_GymGuy::
 	lock
@@ -103,17 +117,29 @@ cerulean_gym_EventScript_Starmie::
 	end
 
 cerulean_gym_EventScript_Sign_Left::
-	msgbox cerulean_gym_Text_Sign_Left, MSGBOX_SIGN
+	goto cerulean_gym_EventScript_GymStatue
 	end
 
 cerulean_gym_EventScript_Sign_Right::
-	msgbox cerulean_gym_Text_Sign_Right, MSGBOX_SIGN
+	goto cerulean_gym_EventScript_GymStatue
+	end
+
+cerulean_gym_EventScript_GymStatue::
+	lockall
+	goto_if_set FLAG_BADGE10_GET, cerulean_gym_EventScript_GymStatuePostVictory
+	msgbox cerulean_gym_Text_GymStatue, MSGBOX_SIGN
+	releaseall
+	end
+
+cerulean_gym_EventScript_GymStatuePostVictory::
+	msgbox cerulean_gym_Text_GymStatuePlayerWon, MSGBOX_SIGN
+	releaseall
 	end
 
 cerulean_gym_Text_Misty_Intro:
-	.string "Hi! I'm MISTY, the CERULEAN GYM\n"
+	.string "I'm MISTY, the CERULEAN GYM\n"
 	.string "LEADER.\p"
-	.string "My WATER POKEMON are strong and fast.\n"
+	.string "My WATER POKéMON are strong and fast.\n"
 	.string "Let's see what you've got!$"
 
 cerulean_gym_Text_Misty_WinLoss:
@@ -124,16 +150,29 @@ cerulean_gym_Text_Misty_ReceivedCascadeBadge:
 	.string "{PLAYER} received the CASCADEBADGE!$"
 
 cerulean_gym_Text_Misty_After:
-	.string "The CASCADEBADGE makes all POKEMON\n"
-	.string "up to Lv. 30 obey you.$"
+	.string "Michael was right after all.\n"
+	.string "You did manage to kick my butt!\p"
+	.string "This whole SHADOW POKéMON mess is\n"
+	.string "stressing me out.\p"
+	.string "I hate the thought of stealing\n"
+	.string "trainers POKéMON, but I understand\l"
+	.string "that it's to help them.\p"
+	.string "Just please take care of the POKéMON.\p"
+	.string "Also just so you know, when defeating\n"
+	.string "one of us GYM LEADERS, your POKéMON\l"
+	.string "get stronger and you'll be able to\l"
+	.string "increase their strength more with each\l"
+	.string "badge.\p"
+	.string "If it were in terms of levels, I'd say\n"
+	.string "you would be able to go to level 24 now.$"
 
 cerulean_gym_Text_GymGuy_Intro:
 	.string "Yo! CHAMP in the making!\p"
 	.string "MISTY's WATER types move fast.\n"
-	.string "Keep your wits about you!$"
+	.string "Try your best to keep up!$"
 
 cerulean_gym_Text_GymGuy_After:
-	.string "What a battle! That CASCADEBADGE\n"
+	.string "What a battle! That CASCADE BADGE\n"
 	.string "looks good on you!$"
 
 cerulean_gym_Text_SwimmerM_Intro:
@@ -175,3 +214,15 @@ cerulean_gym_Text_Sign_Left:
 cerulean_gym_Text_Sign_Right:
 	.string "Tip: Water types are weak to\n"
 	.string "Electric- and Grass-type moves.$"
+
+cerulean_gym_Text_GymStatue:
+	.string "CERULEAN POKéMON GYM\n"
+	.string "LEADER: MISTY\p"
+	.string "WINNING TRAINERS:\n"
+	.string "RED, BLUE, WES$"
+
+cerulean_gym_Text_GymStatuePlayerWon:
+	.string "CERULEAN POKéMON GYM\n"
+	.string "LEADER: MISTY\p"
+	.string "WINNING TRAINERS:\n"
+	.string "RED, BLUE, WES, {PLAYER}$"

@@ -72,7 +72,7 @@ pewter_museum_EventScript_Sign_MoonStone::
 pewter_museum_Text_Scientist1:
 	.string "We're open again, even if it's a bit\n"
 	.string "quieter than usual.\p"
-	.string "These fossils are proof that POKeMON\n"
+	.string "These fossils are proof that POKéMON\n"
 	.string "have survived ages of change.$"
 
 pewter_museum_Text_Scientist2:
@@ -83,7 +83,7 @@ pewter_museum_Text_Scientist2:
 pewter_museum_Text_Attendant:
 	.string "Please enjoy the exhibits.\p"
 	.string "No touching the displays, and please\n"
-	.string "watch your POKeMON.$"
+	.string "watch your POKéMON.$"
 
 pewter_museum_Text_Hiker:
 	.string "The trails up to MT. MOON are rough.\p"

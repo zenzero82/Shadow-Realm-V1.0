@@ -14,7 +14,9 @@
 #include "pokedex_area_screen.h"
 #include "region_map.h"
 #include "roamer.h"
+#include "roaming_shadow_hunter.h"
 #include "rtc.h"
+#include "shadow_monitor.h"
 #include "sound.h"
 #include "string_util.h"
 #include "text.h"
@@ -136,6 +138,7 @@ static void ShowAreaUnknownLabel(void);
 static void PrintAreaLabelText(const u8 *text, enum PokedexAreaLabels labelId, int textXPos);
 static void ClearAreaWindowLabel(enum PokedexAreaLabels labelId);
 static bool8 IsOverworldAreaMapType(u8 mapType);
+static void ShadowMonitor_SetupAreaHeader(void);
 
 bool32 ShouldShowAreaUnknownLabel(void);
 
@@ -263,6 +266,19 @@ static const struct WindowTemplate sTimeOfDayWindowLabelTemplates[] =
     }
 };
 
+static const struct WindowTemplate sShadowMonitorHeaderWindowTemplate =
+{
+    .bg = LABEL_WINDOW_BG,
+    .tilemapLeft = 1,
+    .tilemapTop = 0,
+    .width = 7,
+    .height = 2,
+    .paletteNum = 0,
+    .baseBlock = 0x2A0,
+};
+
+static EWRAM_DATA u8 sShadowMonitorHeaderWindowId;
+
 static void ResetDrawAreaGlowState(void)
 {
     sPokedexAreaScreen->drawAreaGlowState = 0;
@@ -326,6 +342,21 @@ static void FindMapsWithMon(u16 species)
 
     sPokedexAreaScreen->numOverworldAreas = 0;
     sPokedexAreaScreen->numSpecialAreas = 0;
+
+    if (gIsShadowMonitorOpen)
+    {
+        const struct ActiveHunterState *active;
+
+        if (!RoamingHunter_IsUnlocked())
+            return;
+
+        active = RoamingHunter_GetActiveForRegion(sPokedexAreaScreen->region);
+        if (active == NULL || !active->active)
+            return;
+
+        SetSpecialMapHasMon(active->mapGroup, active->mapNum);
+        return;
+    }
 
     // Check if this species should be hidden from the area map.
     // This only applies to Wynaut, to hide the encounters on Mirage Island.
@@ -694,6 +725,15 @@ static void AddTimeOfDayLabels(void)
 
 static void ShowEncounterInfoLabel(void)
 {
+    if (gIsShadowMonitorOpen)
+    {
+        static const u8 gText_Tracker[] = _("TRACKER");
+        int stringXPos = GetStringCenterAlignXOffset(FONT_NORMAL, gText_Tracker, 64);
+
+        PrintAreaLabelText(gText_Tracker, DEX_AREA_LABEL_TIME_OF_DAY, stringXPos);
+        return;
+    }
+
     const u8 *gText_TimeOfDay = GetTimeOfDayTextWithButton(gAreaTimeOfDay);
     int stringXPos = GetStringCenterAlignXOffset(FONT_NORMAL, gText_TimeOfDay, 64);
 
@@ -704,6 +744,9 @@ static void ShowAreaUnknownLabel(void)
 {
     static const u8 gText_AreaUnknown[] = _("AREA UNKNOWN");
     int stringXPos = GetStringCenterAlignXOffset(FONT_NORMAL, gText_AreaUnknown, 80);
+
+    if (gIsShadowMonitorOpen)
+        return;
 
     PrintAreaLabelText(gText_AreaUnknown, DEX_AREA_LABEL_AREA_UNKNOWN, stringXPos);
 }
@@ -738,6 +781,7 @@ void DisplayPokedexAreaScreen(u16 species, u8 *screenSwitchState, enum TimeOfDay
     u8 taskId;
 
     sPokedexAreaScreen = AllocZeroed(sizeof(*sPokedexAreaScreen));
+    sShadowMonitorHeaderWindowId = WINDOW_NONE;
     sPokedexAreaScreen->species = species;
     sPokedexAreaScreen->screenSwitchState = screenSwitchState;
     sPokedexAreaScreen->areaState = areaState;
@@ -764,6 +808,8 @@ static void Task_ShowPokedexAreaScreen(u8 taskId)
         HideBg(3);
         HideBg(2);
         HideBg(0);
+        if (gIsShadowMonitorOpen)
+            HideBg(1);
         break;
     case 1:
         SetBgAttribute(3, BG_ATTR_CHARBASEINDEX, 3);
@@ -804,7 +850,7 @@ static void Task_ShowPokedexAreaScreen(u8 taskId)
     case 10:
         SetGpuReg(REG_OFFSET_BLDCNT, BLDCNT_TGT1_BG0 | BLDCNT_EFFECT_BLEND | BLDCNT_TGT2_BG0 | BLDCNT_TGT2_ALL);
         StartAreaGlow();
-        if (OW_TIME_OF_DAY_ENCOUNTERS)
+        if (OW_TIME_OF_DAY_ENCOUNTERS && !gIsShadowMonitorOpen)
         {
             AddTimeOfDayLabels();
             ShowEncounterInfoLabel();
@@ -812,6 +858,8 @@ static void Task_ShowPokedexAreaScreen(u8 taskId)
                 ShowAreaUnknownLabel();
             DoScheduledBgTilemapCopiesToVram();
         }
+        if (gIsShadowMonitorOpen)
+            ShadowMonitor_SetupAreaHeader();
         if (POKEDEX_PLUS_HGSS)
             LoadHGSSScreenSelectBarSubmenu();
         ShowBg(2);
@@ -912,14 +960,14 @@ static void Task_HandlePokedexAreaScreenInput(u8 taskId)
             gTasks[taskId].data[1] = 2;
             PlaySE(SE_DEX_PAGE);
         }
-        else if (JOY_NEW(DPAD_UP) && OW_TIME_OF_DAY_ENCOUNTERS == TRUE)
+        else if (!gIsShadowMonitorOpen && JOY_NEW(DPAD_UP) && OW_TIME_OF_DAY_ENCOUNTERS == TRUE)
         {
             gTasks[taskId].data[1] = 3;
             gAreaTimeOfDay = TryDecrementTimeOfDay(gAreaTimeOfDay);
             sPokedexAreaScreen->areaState = DEX_UPDATE_AREA_SCREEN;
             PlaySE(SE_DEX_PAGE);
         }
-        else if (JOY_NEW(DPAD_DOWN) && OW_TIME_OF_DAY_ENCOUNTERS == TRUE)
+        else if (!gIsShadowMonitorOpen && JOY_NEW(DPAD_DOWN) && OW_TIME_OF_DAY_ENCOUNTERS == TRUE)
         {
             gTasks[taskId].data[1] = 3;
             gAreaTimeOfDay = TryIncrementTimeOfDay(gAreaTimeOfDay);
@@ -980,11 +1028,19 @@ static void CreateAreaMarkerSprites(void)
     numSprites = 0;
     for (i = 0; i < sPokedexAreaScreen->numSpecialAreas; i++)
     {
+        u16 mapSecX;
+        u16 mapSecY;
+        u16 mapSecWidth;
+        u16 mapSecHeight;
+
         mapSecId = sPokedexAreaScreen->specialAreaRegionMapSectionIds[i];
-        x = 8 * (gRegionMapEntries[mapSecId].x + 1) + 4;
-        y = 8 * (gRegionMapEntries[mapSecId].y) + 28;
-        x += 4 * (gRegionMapEntries[mapSecId].width - 1);
-        y += 4 * (gRegionMapEntries[mapSecId].height - 1);
+        if (!RegionMap_GetMapSecDimensions(mapSecId, &mapSecX, &mapSecY, &mapSecWidth, &mapSecHeight))
+            continue;
+
+        x = 8 * (mapSecX + 1) + 4;
+        y = 8 * (mapSecY) + 28;
+        x += 4 * (mapSecWidth - 1);
+        y += 4 * (mapSecHeight - 1);
         spriteId = CreateSprite(&sAreaMarkerSpriteTemplate, x, y, 0);
         if (spriteId != MAX_SPRITES)
         {
@@ -1029,6 +1085,30 @@ static void LoadAreaUnknownGraphics(void)
     DecompressDataWithHeaderWram(gPokedexAreaScreenAreaUnknown_Gfx, sPokedexAreaScreen->areaUnknownGraphicsBuffer);
     LoadSpriteSheet(&spriteSheet);
     LoadSpritePalette(&sAreaUnknownSpritePalette);
+}
+
+static void ShadowMonitor_SetupAreaHeader(void)
+{
+    static const u8 sText_Tracker[] = _("TRACKER");
+    static const u8 sTextColor[3] = { TEXT_COLOR_TRANSPARENT, TEXT_DYNAMIC_COLOR_6, TEXT_COLOR_LIGHT_GRAY };
+    const u8 tabWidth = 7 * 8;
+    const u8 tabY = 1;
+    u8 x;
+
+    FillBgTilemapBufferRect_Palette0(LABEL_WINDOW_BG, 0, 0, 0, 32, 32);
+
+    if (sShadowMonitorHeaderWindowId == WINDOW_NONE)
+        sShadowMonitorHeaderWindowId = AddWindow(&sShadowMonitorHeaderWindowTemplate);
+    if (sShadowMonitorHeaderWindowId == WINDOW_NONE)
+        return;
+
+    FillWindowPixelBuffer(sShadowMonitorHeaderWindowId, PIXEL_FILL(0));
+    PutWindowTilemap(sShadowMonitorHeaderWindowId);
+    x = GetStringCenterAlignXOffset(FONT_NORMAL, sText_Tracker, tabWidth);
+    AddTextPrinterParameterized4(sShadowMonitorHeaderWindowId, FONT_NORMAL, x, tabY, 0, 0, sTextColor, TEXT_SKIP_DRAW, sText_Tracker);
+    CopyWindowToVram(sShadowMonitorHeaderWindowId, COPYWIN_GFX);
+    CopyBgTilemapBufferToVram(LABEL_WINDOW_BG);
+    ShowBg(LABEL_WINDOW_BG);
 }
 
 static void CreateAreaUnknownSprites(void)

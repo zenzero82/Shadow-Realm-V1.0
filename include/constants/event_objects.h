@@ -357,6 +357,7 @@
 #define OBJ_EVENT_GFX_WORKER_F_GEN2         337
 #define OBJ_EVENT_GFX_WORKER_M_GEN2         338
 #define OBJ_EVENT_GFX_YOUNGSTER2_GEN2       339
+#define OBJ_EVENT_GFX_BIRD_KEEPER_M_GEN2    367
 //Gen 4
 #define OBJ_EVENT_GFX_DAWN_GEN4             370
 #define OBJ_EVENT_GFX_LUCAS_GEN4            371
@@ -458,10 +459,23 @@
 #define OBJ_EVENT_GFX_ASH              442
 #define OBJ_EVENT_GFX_IRONMASK         443
 #define OBJ_EVENT_GFX_MIRROR_B         444
+#define OBJ_EVENT_GFX_LYRA             445
+#define OBJ_EVENT_GFX_CASSIDY          446
+#define OBJ_EVENT_GFX_BUTCH            447
+#define OBJ_EVENT_GFX_RESIX            448
+#define OBJ_EVENT_GFX_BLUSIX           449
+#define OBJ_EVENT_GFX_GREESIX          450
+#define OBJ_EVENT_GFX_PURPSIX          451
+#define OBJ_EVENT_GFX_BROWSIX          452
+#define OBJ_EVENT_GFX_YELLOSIX         453
+#define OBJ_EVENT_GFX_SHELLY           454
+#define OBJ_EVENT_GFX_MATT             455
+#define OBJ_EVENT_GFX_COURTNEY         456
+#define OBJ_EVENT_GFX_TABITHA          457
 // NOTE: The maximum amount of object events has been expanded from 255 to 65535.
 // Since dynamic graphics ids still require at least 16 free values, the actual limit
 // is 65519, but even considering follower Pokémon, this should be more than enough :)
-#define NUM_OBJ_EVENT_GFX                                               446
+#define NUM_OBJ_EVENT_GFX                                               458
 
 
 // These are dynamic object gfx ids.
@@ -549,6 +563,7 @@
 // can be spawned for the camera to track instead of the player. Additionally, the value 0 is reserved as an "empty" indicator.
 #define LOCALID_NONE                         0
 #define LOCALID_CAMERA                     127
+#define LOCALID_ROAMING_HUNTER             126
 #define LOCALID_BERRY_BLENDER_PLAYER_END   240 // This will use 5 (MAX_RFU_PLAYERS) IDs ending at 240, i.e. 236-240
 #define LOCALID_PLAYER                     255
 #define OBJ_EVENT_ID_FOLLOWER 0xFE
@@ -612,6 +627,7 @@
 #define OBJ_EVENT_PAL_TAG_SCIENTIST_M_GEN1        0x1136
 #define OBJ_EVENT_PAL_TAG_SCIENTIST_F_GEN1        0x1137
 #define OBJ_EVENT_PAL_TAG_WOMAN_5_GEN1            0x1138
+#define OBJ_EVENT_PAL_TAG_LYRA                    0x1139
 #define OBJ_EVENT_PAL_TAG_BEAUTY2_GEN1            0x1141
 #define OBJ_EVENT_PAL_TAG_FAT_MAN2_GEN1           0x1142
 #define OBJ_EVENT_PAL_TAG_BLUE_MOM_GEN1           0x1143
@@ -706,6 +722,7 @@
 #define OBJ_EVENT_PAL_TAG_WORKER_F_GEN2          0x1249
 #define OBJ_EVENT_PAL_TAG_WORKER_M_GEN2          0x124A
 #define OBJ_EVENT_PAL_TAG_YOUNGSTER2_GEN2        0x124B
+#define OBJ_EVENT_PAL_TAG_BIRD_KEEPER_M_GEN2     0x125A
 
 //Sinnoh
 #define OBJ_EVENT_PAL_TAG_DAWN_GEN4             0x1300

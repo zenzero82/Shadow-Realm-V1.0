@@ -576,3 +576,11 @@ gSpecials::
 	def_special UseBlankMessageToCancelPokemonPic
 	def_special EnterCode
 	def_special GetCodeFeedback
+	def_special RoamingHunter_TryCreateNpcOnMap
+	def_special RoamingHunter_TryConsumeAlert
+	def_special RoamingHunter_StartBattle
+	def_special RoamingHunter_OnBattleWon
+	def_special BufferGoldMomSavings
+	def_special GoldMomSavingsHasMoney
+	def_special GoldMomSavingsWithdrawAll
+	def_special GoldMomSavingsInit

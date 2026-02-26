@@ -42,20 +42,19 @@ Route25BillsHouse_EventScript_Molayne::
 @ =================================================
 
 Route25BillsHouse_Text_Bill:
-	.string "Hey, I'm BILL. I developed the\n"
-	.string "POKEMON STORAGE SYSTEM. These\l"
-	.string "guys came from a different\l"
-	.string "timeline, but boy are they\l"
-	.string "smart!$"
+	.string "Hey, I'm BILL. We just boosted\n"
+	.string "the PC STORAGE SYSTEM with bigger\l"
+	.string "boxes and smarter indexing - thanks\l"
+	.string "to SOPHOCLES, MOLAYNE, and ZEN!$"
 
 Route25BillsHouse_Text_Sophocles:
-	.string "I've been testing BILL's system\n"
-	.string "with all kinds of hardware.\l"
-	.string "Optimization is everything if we\l"
-	.string "want it fast and reliable!$"
+	.string "I've been stress-testing the new\n"
+	.string "box grid and the search cache.\l"
+	.string "ZEN's prefetch idea kept it snappy\l"
+	.string "even with tons more POKéMON!$"
 
 Route25BillsHouse_Text_Molayne:
-	.string "I'm helping BILL design access\n"
-	.string "from the player's bag. It should\l"
-	.string "make storage management way more\l"
-	.string "convenient!$"
+	.string "I'm wiring the interface so the\n"
+	.string "expansion feels seamless in the\l"
+	.string "field. ZEN suggested quick-swap\l"
+	.string "flows to make it feel smooth!$"

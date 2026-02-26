@@ -1,5 +1,5 @@
 Kanto_Furniture_Text_Bookshelf_Pallet:
-	.string "Notes on SHADOW POKEMON.\p"
+	.string "Notes on SHADOW POKéMON.\p"
 	.string "Most pages are signed OAK.$"
 
 Kanto_Furniture_Text_Bookshelf_Viridian:
@@ -7,7 +7,7 @@ Kanto_Furniture_Text_Bookshelf_Viridian:
 	.string "TEAM ROCKET is mentioned often.$"
 
 Kanto_Furniture_Text_Bookshelf_Pewter:
-	.string "Books on fossils and ancient POKEMON.\p"
+	.string "Books on fossils and ancient POKéMON.\p"
 	.string "A sketch of MT. MOON.$"
 
 Kanto_Furniture_Text_Bookshelf_Cerulean:
@@ -36,4 +36,4 @@ Kanto_Furniture_Text_TV_Cerulean:
 
 Kanto_Furniture_Text_TV_Lavender:
 	.string "A late-night story about the\n"
-	.string "POKEMON TOWER.$"
+	.string "POKéMON TOWER.$"

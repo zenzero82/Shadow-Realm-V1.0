@@ -714,6 +714,24 @@ u8 GetTrainerBattleTransition(void)
         || trainerClass == TRAINER_CLASS_AQUA_ADMIN)
         return B_TRANSITION_AQUA;
 
+    if (trainerClass == TRAINER_CLASS_TEAM_ROCKET
+        || trainerClass == TRAINER_CLASS_ROCKET_ADMIN)
+        return B_TRANSITION_ROCKET;
+
+    if (trainerClass == TRAINER_CLASS_TEAM_PLASMA)
+        return B_TRANSITION_PLASMA;
+
+    if (trainerClass == TRAINER_CLASS_TEAM_FLARE
+        || trainerClass == TRAINER_CLASS_TEAM_FLARE_ADMIN)
+        return B_TRANSITION_FLARE;
+
+    if (trainerClass == TRAINER_CLASS_TEAM_GALACTIC
+        || trainerClass == TRAINER_CLASS_TEAM_GALACTIC_ADMIN)
+        return B_TRANSITION_GALACTIC;
+
+    if (trainerClass == TRAINER_CLASS_TEAM_SKULL)
+        return B_TRANSITION_SKULL;
+
     switch (GetTrainerBattleType(trainerId))
     {
     case TRAINER_BATTLE_TYPE_SINGLES:
@@ -1433,6 +1451,12 @@ void PlayTrainerEncounterMusic(void)
             break;
         case TRAINER_ENCOUNTER_MUSIC_MIRRORB:
             music = MUS_MIRRORB;
+            break;
+        case TRAINER_ENCOUNTER_MUSIC_GALACTIC:
+            music = MUS_ENCOUNTER_TEAM_GALACTIC;
+            break;
+        case TRAINER_ENCOUNTER_MUSIC_PLASMA:
+            music = MUS_ENCOUNTER_TEAM_PLASMA;
             break;
         default:
             music = MUS_ENCOUNTER_SUSPICIOUS;

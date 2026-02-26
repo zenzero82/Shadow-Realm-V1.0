@@ -84,13 +84,70 @@
 #define TRAINER_CERULEAN_GYM_SWIMMER_F1  77
 #define TRAINER_CERULEAN_GYM_SWIMMER_F2  78
 #define TRAINER_EIN                      79
+#define TRAINER_AZALEA_AL                80
+#define TRAINER_AZALEA_JOSH              81
+#define TRAINER_AZALEA_BENNY             82
+#define TRAINER_AZALEA_AMY_AND_MAY       83
+#define TRAINER_BUGSY_1                  84
+#define TRAINER_EVICE                    85
+#define TRAINER_GONZAP                   86
+#define TRAINER_LOVRINA                  87
+#define TRAINER_GREEVIL                  88
+#define TRAINER_ARDOS                    89
+#define TRAINER_ELDES                    90
+#define TRAINER_VENUS                    91
+#define TRAINER_DAKIM                    92
+#define TRAINER_NASCOUR                  93
+#define TRAINER_CASSIDY_HUNTER           94
+#define TRAINER_BUTCH_HUNTER             95
+#define TRAINER_SILVER_HUNTER            96
+#define TRAINER_HEX_RESIX                97
+#define TRAINER_HEX_BLUSIX               98
+#define TRAINER_HEX_GREESIX              99
+#define TRAINER_HEX_PURPSIX              100
+#define TRAINER_HEX_BROWSIX              101
+#define TRAINER_HEX_YELLOSIX             102
+#define TRAINER_VF_GALACTIC              103
+#define TRAINER_VF_SKULL                 104
+#define TRAINER_VF_FLARE                 105
+#define TRAINER_ROCK_TUNNEL_1F_PLASMA_1  106
+#define TRAINER_ROCK_TUNNEL_1F_PLASMA_2  107
+#define TRAINER_ROCK_TUNNEL_1F_PLASMA_3  108
+#define TRAINER_ROCK_TUNNEL_1F_PLASMA_4  109
+#define TRAINER_ROCK_TUNNEL_1F_PLASMA_5  110
+#define TRAINER_ROCK_TUNNEL_1F_PLASMA_6  111
+#define TRAINER_ROCK_TUNNEL_B1F_PLASMA_1 112
+#define TRAINER_ROCK_TUNNEL_B1F_PLASMA_2 113
+#define TRAINER_ROCK_TUNNEL_B1F_PLASMA_3 114
+#define TRAINER_ROCK_TUNNEL_B1F_PLASMA_4 115
+#define TRAINER_ROCK_TUNNEL_B1F_PLASMA_5 116
+#define TRAINER_ROCK_TUNNEL_B1F_PLASMA_6 117
+#define TRAINER_ROCK_TUNNEL_B1F_PLASMA_7 118
+#define TRAINER_ROCK_TUNNEL_B1F_PLASMA_8 119
+#define TRAINER_SLOWPOKEWELL_FLARE_1     120
+#define TRAINER_SLOWPOKEWELL_FLARE_2     121
+#define TRAINER_SLOWPOKEWELL_FLARE_3     122
+#define TRAINER_SLOWPOKEWELL_BRYONY      123
+#define TRAINER_KURTS_HOUSE_IRONMASK     124
+#define TRAINER_VIOLET_GYM_BIRD_KEEPER_1 125
+#define TRAINER_VIOLET_GYM_BIRD_KEEPER_2 126
+#define TRAINER_ROUTE32_YOUNGSTER        127
+#define TRAINER_ROUTE32_PICNICKER        128
+#define TRAINER_ROUTE32_FISHERMAN_1      129
+#define TRAINER_ROUTE32_FISHERMAN_2      130
+#define TRAINER_ROUTE32_FISHERMAN_3      131
+#define TRAINER_ROUTE32_BIRD_KEEPER      132
+#define TRAINER_ROUTE33_HIKER            133
+#define TRAINER_UNION_CAVE_HIKER         134
+#define TRAINER_UNION_CAVE_SUPER_NERD    135
+#define TRAINER_UNION_CAVE_FIREBREATHER  136
 
 
 
 // NOTE: Because each Trainer uses a flag to determine when they are defeated, there is only space for 9 additional trainers before trainer flag space overflows
 //       More space can be made by shifting flags around in constants/flags.h or changing how trainer flags are handled
 //       MAX_TRAINERS_COUNT can be increased but will take up additional saveblock space
-#define TRAINERS_COUNT                      80
+#define TRAINERS_COUNT                      137
 #define MAX_TRAINERS_COUNT                  1000
 #define TRAINER_PARTNER(partner)           (MAX_TRAINERS_COUNT + partner)
 

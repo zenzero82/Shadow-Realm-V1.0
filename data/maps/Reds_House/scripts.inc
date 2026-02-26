@@ -32,6 +32,22 @@ PalletTown_RedsHouse_1F_EventScript_MomTalk::
 
 PalletTown_RedsHouse_1F_EventScript_MomRepeat::
 	setspeaker Speaker_RedsMom
+	msgbox RedsHouse_Text_MomRestAsk, MSGBOX_YESNO
+	goto_if_eq VAR_RESULT, FALSE, PalletTown_RedsHouse_1F_EventScript_MomRepeat_No
+	closemessage
+	fadescreenswapbuffers FADE_TO_BLACK
+	special HealPlayerParty
+	playfanfare MUS_HEAL
+	waitfanfare
+	fadescreenswapbuffers FADE_FROM_BLACK
+	goto PalletTown_RedsHouse_1F_EventScript_MomRepeat_Line
+
+PalletTown_RedsHouse_1F_EventScript_MomRepeat_No::
+	closemessage
+	goto PalletTown_RedsHouse_1F_EventScript_MomRepeat_Line
+
+PalletTown_RedsHouse_1F_EventScript_MomRepeat_Line::
+	setspeaker Speaker_RedsMom
 	msgbox RedsHouse_Text_MomRepeatLine, MSGBOX_DEFAULT
 	closemessage
 	release
@@ -95,6 +111,9 @@ RedsHouse_Text_MomIntro_3:
 RedsHouse_Text_MomRepeatLine:
 	.string "If you see RED, can you please\n"
 	.string "tell him to come home and visit!$"
+
+RedsHouse_Text_MomRestAsk:
+	.string "Do you want to rest?$"
 
 RedsHouse_Text_TV:
 	.string "PROF. OAK has been missing for \n"

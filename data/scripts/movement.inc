@@ -106,6 +106,14 @@ Common_Movement_WalkUp2::
 	walk_up
 	step_end
 
+Common_Movement_JumpUp1:
+	jump_up
+	step_end
+
+Common_Movement_JumpDown1:
+	jump_down
+	step_end
+
 @ Follower NPC
 Common_Movement_WalkUpSlow::
     walk_slow_up

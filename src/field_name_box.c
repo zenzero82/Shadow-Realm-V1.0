@@ -23,19 +23,16 @@ EWRAM_DATA const u8 *gSpeakerName = NULL;
 static const u32 sNameBoxDefaultGfx[] = INCBIN_U32("graphics/text_window/name_box.4bpp");
 static const u32 sNameBoxPokenavGfx[] = INCBIN_U32("graphics/pokenav/name_box.4bpp");
 
+#define MATCH_CALL_TEXT_COLOR_BG     1
+#define MATCH_CALL_TEXT_COLOR_FG     6
+#define MATCH_CALL_TEXT_COLOR_SHADOW 5
+
 static void WindowFunc_DrawNamebox(u32, u32, u32, u32, u32, u32, u32);
 static void WindowFunc_ClearNamebox(u8, u8, u8, u8, u8, u8);
 
 void TrySpawnNamebox(u32 tileNum)
 {
     u8 *strbuf = AllocZeroed(32 * sizeof(u8));
-    if (IsMatchCallTaskActive())
-    {
-        if (strbuf)
-            Free(strbuf);
-        DestroyNamebox();
-        return;
-    }
     if ((OW_FLAG_SUPPRESS_NAME_BOX != 0 && FlagGet(OW_FLAG_SUPPRESS_NAME_BOX)) || gSpeakerName == NULL || !strbuf)
     {
         // Re-check again in case anything but !strbuf is TRUE.
@@ -85,8 +82,9 @@ void TrySpawnNamebox(u32 tileNum)
     int strX = GetStringCenterAlignXOffset(fontId, strbuf, (winWidth * 8));
     if (matchCall)
     {
-        colors[1] = 1;
-        colors[2] = 0;
+        colors[0] = MATCH_CALL_TEXT_COLOR_BG;
+        colors[1] = MATCH_CALL_TEXT_COLOR_FG;
+        colors[2] = MATCH_CALL_TEXT_COLOR_SHADOW;
     }
 
     SaveTextColors(&bakColors[0], &bakColors[1], &bakColors[2]);

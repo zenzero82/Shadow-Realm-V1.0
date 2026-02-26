@@ -597,8 +597,7 @@ static void Task_DoPokeballSendOutAnim(u8 taskId)
     gSprites[ballSpriteId].data[0] = 0x80;
     gSprites[ballSpriteId].data[1] = 0;
     gSprites[ballSpriteId].data[7] = throwCaseId;
-    if (ballId == BALL_DARK && !IsBattlerPlayer(battler))
-        ApplyBallSpritePalette(ballId, ballSpriteId);
+    ApplyBallSpritePalette(ballId, ballSpriteId);
 
     switch (throwCaseId)
     {

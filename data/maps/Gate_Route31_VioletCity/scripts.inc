@@ -22,7 +22,7 @@ Gate_Route31_VioletCity_Text_Policeman:
 	.string "SPROUT TOWER?$"
 
 Gate_Route31_VioletCity_Text_CooltrainerF:
-	.string "I saw the cutest POKEMON out\n"
+	.string "I saw the cutest POKéMON out\n"
 	.string "there.\p"
 	.string "It looked a lot like PIKACHU!$"
 

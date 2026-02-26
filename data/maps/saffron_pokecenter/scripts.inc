@@ -23,7 +23,7 @@ saffron_pokecenter_EventScript_Bookshelf2::
 	end
 
 saffron_pokecenter_EventScript_WallMap::
-	goto EventScript_RegionMap
+	goto EventScript_RegionMap_Kanto
 
 saffron_pokecenter_Text_Bookshelf1:
 	.string "A SILPH CO. handbook.$"

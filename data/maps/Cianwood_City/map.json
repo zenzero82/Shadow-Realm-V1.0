@@ -79,7 +79,7 @@
       "y": 48,
       "elevation": 0,
       "player_facing_dir": "BG_EVENT_PLAYER_FACING_ANY",
-      "script": "NULL"
+      "script": "CianwoodCity_EventScript_CitySign"
     },
     {
       "type": "sign",
@@ -87,7 +87,7 @@
       "y": 51,
       "elevation": 0,
       "player_facing_dir": "BG_EVENT_PLAYER_FACING_ANY",
-      "script": "NULL"
+      "script": "CianwoodCity_EventScript_Pharmacy"
     },
     {
       "type": "sign",
@@ -95,7 +95,7 @@
       "y": 44,
       "elevation": 0,
       "player_facing_dir": "BG_EVENT_PLAYER_FACING_ANY",
-      "script": "NULL"
+      "script": "CianwoodCity_EventScript_GymSign"
     },
     {
       "type": "sign",
@@ -103,7 +103,7 @@
       "y": 33,
       "elevation": 0,
       "player_facing_dir": "BG_EVENT_PLAYER_FACING_ANY",
-      "script": "NULL"
+      "script": "CianwoodCity_EventScript_CaveSign"
     }
   ]
 }

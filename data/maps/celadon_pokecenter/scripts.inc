@@ -23,7 +23,7 @@ celadon_pokecenter_EventScript_Bookshelf2::
 	end
 
 celadon_pokecenter_EventScript_WallMap::
-	goto EventScript_RegionMap
+	goto EventScript_RegionMap_Kanto
 
 celadon_pokecenter_Text_Bookshelf1:
 	.string "A CELADON DEPT. STORE catalog.$"

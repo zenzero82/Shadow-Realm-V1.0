@@ -51,7 +51,7 @@
 #define SET_TILE(ptr, posY, posX, tile) \
 {                                       \
     u32 index = (posY) * 32 + posX;     \
-    ptr[index] = tile | (0xF0 << 8);    \
+    ptr[index] = (tile) | (0xF0 << 8);  \
 }
 
 struct TransitionData
@@ -113,6 +113,11 @@ static void Task_AngledWipes(u8);
 static void Task_Mugshot(u8);
 static void Task_Aqua(u8);
 static void Task_Magma(u8);
+static void Task_Rocket(u8);
+static void Task_Plasma(u8);
+static void Task_Flare(u8);
+static void Task_Galactic(u8);
+static void Task_Skull(u8);
 static void Task_Regice(u8);
 static void Task_Registeel(u8);
 static void Task_Regirock(u8);
@@ -159,6 +164,16 @@ static bool8 Aqua_Init(struct Task *);
 static bool8 Aqua_SetGfx(struct Task *);
 static bool8 Magma_Init(struct Task *);
 static bool8 Magma_SetGfx(struct Task *);
+static bool8 Rocket_Init(struct Task *);
+static bool8 Rocket_SetGfx(struct Task *);
+static bool8 Plasma_Init(struct Task *);
+static bool8 Plasma_SetGfx(struct Task *);
+static bool8 Flare_Init(struct Task *);
+static bool8 Flare_SetGfx(struct Task *);
+static bool8 Galactic_Init(struct Task *);
+static bool8 Galactic_SetGfx(struct Task *);
+static bool8 Skull_Init(struct Task *);
+static bool8 Skull_SetGfx(struct Task *);
 static bool8 FramesCountdown(struct Task *);
 static bool8 Regi_Init(struct Task *);
 static bool8 Regice_SetGfx(struct Task *);
@@ -306,6 +321,16 @@ static const u32 sTeamAqua_Tileset[] = INCBIN_U32("graphics/battle_transitions/t
 static const u32 sTeamAqua_Tilemap[] = INCBIN_U32("graphics/battle_transitions/team_aqua.bin.lz");
 static const u32 sTeamMagma_Tileset[] = INCBIN_U32("graphics/battle_transitions/team_magma.4bpp.lz");
 static const u32 sTeamMagma_Tilemap[] = INCBIN_U32("graphics/battle_transitions/team_magma.bin.lz");
+static const u32 sTeamRocket_Tileset[] = INCBIN_U32("graphics/battle_transitions/team_rocket.4bpp.lz");
+static const u16 sTeamRocket_Palette[] = INCBIN_U16("graphics/battle_transitions/team_rocket.gbapal");
+static const u32 sTeamPlasma_Tileset[] = INCBIN_U32("graphics/battle_transitions/team_plasma.4bpp.lz");
+static const u16 sTeamPlasma_Palette[] = INCBIN_U16("graphics/battle_transitions/team_plasma.gbapal");
+static const u32 sTeamFlare_Tileset[] = INCBIN_U32("graphics/battle_transitions/team_flare.4bpp.lz");
+static const u16 sTeamFlare_Palette[] = INCBIN_U16("graphics/battle_transitions/team_flare.gbapal");
+static const u32 sTeamGalactic_Tileset[] = INCBIN_U32("graphics/battle_transitions/team_galactic.4bpp.lz");
+static const u16 sTeamGalactic_Palette[] = INCBIN_U16("graphics/battle_transitions/team_galactic.gbapal");
+static const u32 sTeamSkull_Tileset[] = INCBIN_U32("graphics/battle_transitions/team_skull.4bpp.lz");
+static const u16 sTeamSkull_Palette[] = INCBIN_U16("graphics/battle_transitions/team_skull.gbapal");
 static const u32 sRegis_Tileset[] = INCBIN_U32("graphics/battle_transitions/regis.4bpp");
 static const u16 sRegice_Palette[] = INCBIN_U16("graphics/battle_transitions/regice.gbapal");
 static const u16 sRegisteel_Palette[] = INCBIN_U16("graphics/battle_transitions/registeel.gbapal");
@@ -360,6 +385,11 @@ static const TaskFunc sTasks_Main[B_TRANSITION_COUNT] =
     [B_TRANSITION_MUGSHOT] = Task_Mugshot,
     [B_TRANSITION_AQUA] = Task_Aqua,
     [B_TRANSITION_MAGMA] = Task_Magma,
+    [B_TRANSITION_ROCKET] = Task_Rocket,
+    [B_TRANSITION_PLASMA] = Task_Plasma,
+    [B_TRANSITION_FLARE] = Task_Flare,
+    [B_TRANSITION_GALACTIC] = Task_Galactic,
+    [B_TRANSITION_SKULL] = Task_Skull,
     [B_TRANSITION_REGICE] = Task_Regice,
     [B_TRANSITION_REGISTEEL] = Task_Registeel,
     [B_TRANSITION_REGIROCK] = Task_Regirock,
@@ -427,6 +457,61 @@ static const TransitionStateFunc sMagma_Funcs[] =
 {
     Magma_Init,
     Magma_SetGfx,
+    PatternWeave_Blend1,
+    PatternWeave_Blend2,
+    PatternWeave_FinishAppear,
+    FramesCountdown,
+    PatternWeave_CircularMask
+};
+
+static const TransitionStateFunc sRocket_Funcs[] =
+{
+    Rocket_Init,
+    Rocket_SetGfx,
+    PatternWeave_Blend1,
+    PatternWeave_Blend2,
+    PatternWeave_FinishAppear,
+    FramesCountdown,
+    PatternWeave_CircularMask
+};
+
+static const TransitionStateFunc sPlasma_Funcs[] =
+{
+    Plasma_Init,
+    Plasma_SetGfx,
+    PatternWeave_Blend1,
+    PatternWeave_Blend2,
+    PatternWeave_FinishAppear,
+    FramesCountdown,
+    PatternWeave_CircularMask
+};
+
+static const TransitionStateFunc sFlare_Funcs[] =
+{
+    Flare_Init,
+    Flare_SetGfx,
+    PatternWeave_Blend1,
+    PatternWeave_Blend2,
+    PatternWeave_FinishAppear,
+    FramesCountdown,
+    PatternWeave_CircularMask
+};
+
+static const TransitionStateFunc sGalactic_Funcs[] =
+{
+    Galactic_Init,
+    Galactic_SetGfx,
+    PatternWeave_Blend1,
+    PatternWeave_Blend2,
+    PatternWeave_FinishAppear,
+    FramesCountdown,
+    PatternWeave_CircularMask
+};
+
+static const TransitionStateFunc sSkull_Funcs[] =
+{
+    Skull_Init,
+    Skull_SetGfx,
     PatternWeave_Blend1,
     PatternWeave_Blend2,
     PatternWeave_FinishAppear,
@@ -1332,6 +1417,31 @@ static void Task_Magma(u8 taskId)
     while (sMagma_Funcs[gTasks[taskId].tState](&gTasks[taskId]));
 }
 
+static void Task_Rocket(u8 taskId)
+{
+    while (sRocket_Funcs[gTasks[taskId].tState](&gTasks[taskId]));
+}
+
+static void Task_Plasma(u8 taskId)
+{
+    while (sPlasma_Funcs[gTasks[taskId].tState](&gTasks[taskId]));
+}
+
+static void Task_Flare(u8 taskId)
+{
+    while (sFlare_Funcs[gTasks[taskId].tState](&gTasks[taskId]));
+}
+
+static void Task_Galactic(u8 taskId)
+{
+    while (sGalactic_Funcs[gTasks[taskId].tState](&gTasks[taskId]));
+}
+
+static void Task_Skull(u8 taskId)
+{
+    while (sSkull_Funcs[gTasks[taskId].tState](&gTasks[taskId]));
+}
+
 static void Task_Regice(u8 taskId)
 {
     while (sRegice_Funcs[gTasks[taskId].tState](&gTasks[taskId]));
@@ -1407,6 +1517,86 @@ static bool8 Magma_Init(struct Task *task)
     return FALSE;
 }
 
+static bool8 Rocket_Init(struct Task *task)
+{
+    u16 *tilemap, *tileset;
+
+    task->tEndDelay = 60;
+    InitPatternWeaveTransition(task);
+    GetBg0TilesDst(&tilemap, &tileset);
+    CpuFill16(0, tilemap, BG_SCREEN_SIZE);
+    CpuFill16(0, tileset, 0x20);
+    DecompressDataWithHeaderVram(sTeamRocket_Tileset, (u8 *)tileset + 0x20);
+    LoadPalette(sTeamRocket_Palette, BG_PLTT_ID(15), sizeof(sTeamRocket_Palette));
+
+    task->tState++;
+    return FALSE;
+}
+
+static bool8 Plasma_Init(struct Task *task)
+{
+    u16 *tilemap, *tileset;
+
+    task->tEndDelay = 60;
+    InitPatternWeaveTransition(task);
+    GetBg0TilesDst(&tilemap, &tileset);
+    CpuFill16(0, tilemap, BG_SCREEN_SIZE);
+    CpuFill16(0, tileset, 0x20);
+    DecompressDataWithHeaderVram(sTeamPlasma_Tileset, (u8 *)tileset + 0x20);
+    LoadPalette(sTeamPlasma_Palette, BG_PLTT_ID(15), sizeof(sTeamPlasma_Palette));
+
+    task->tState++;
+    return FALSE;
+}
+
+static bool8 Flare_Init(struct Task *task)
+{
+    u16 *tilemap, *tileset;
+
+    task->tEndDelay = 60;
+    InitPatternWeaveTransition(task);
+    GetBg0TilesDst(&tilemap, &tileset);
+    CpuFill16(0, tilemap, BG_SCREEN_SIZE);
+    CpuFill16(0, tileset, 0x20);
+    DecompressDataWithHeaderVram(sTeamFlare_Tileset, (u8 *)tileset + 0x20);
+    LoadPalette(sTeamFlare_Palette, BG_PLTT_ID(15), sizeof(sTeamFlare_Palette));
+
+    task->tState++;
+    return FALSE;
+}
+
+static bool8 Galactic_Init(struct Task *task)
+{
+    u16 *tilemap, *tileset;
+
+    task->tEndDelay = 60;
+    InitPatternWeaveTransition(task);
+    GetBg0TilesDst(&tilemap, &tileset);
+    CpuFill16(0, tilemap, BG_SCREEN_SIZE);
+    CpuFill16(0, tileset, 0x20);
+    DecompressDataWithHeaderVram(sTeamGalactic_Tileset, (u8 *)tileset + 0x20);
+    LoadPalette(sTeamGalactic_Palette, BG_PLTT_ID(15), sizeof(sTeamGalactic_Palette));
+
+    task->tState++;
+    return FALSE;
+}
+
+static bool8 Skull_Init(struct Task *task)
+{
+    u16 *tilemap, *tileset;
+
+    task->tEndDelay = 60;
+    InitPatternWeaveTransition(task);
+    GetBg0TilesDst(&tilemap, &tileset);
+    CpuFill16(0, tilemap, BG_SCREEN_SIZE);
+    CpuFill16(0, tileset, 0x20);
+    DecompressDataWithHeaderVram(sTeamSkull_Tileset, (u8 *)tileset + 0x20);
+    LoadPalette(sTeamSkull_Palette, BG_PLTT_ID(15), sizeof(sTeamSkull_Palette));
+
+    task->tState++;
+    return FALSE;
+}
+
 static bool8 Regi_Init(struct Task *task)
 {
     u16 *tilemap, *tileset;
@@ -1473,6 +1663,116 @@ static bool8 Magma_SetGfx(struct Task *task)
 
     GetBg0TilesDst(&tilemap, &tileset);
     DecompressDataWithHeaderVram(sTeamMagma_Tilemap, tilemap);
+    SetSinWave((s16*)gScanlineEffectRegBuffers[0], 0, task->tSinIndex, 132, task->tAmplitude, DISPLAY_HEIGHT);
+
+    task->tState++;
+    return FALSE;
+}
+
+static bool8 Rocket_SetGfx(struct Task *task)
+{
+    s16 i, j;
+    s16 startX, startY;
+    u16 tile;
+    u16 *tilemap, *tileset;
+
+    GetBg0TilesDst(&tilemap, &tileset);
+    startX = (30 - 16) / 2;
+    startY = (20 - 16) / 2;
+    tile = 1;
+    for (i = 0; i < 16; i++)
+    {
+        for (j = 0; j < 16; j++)
+            SET_TILE(tilemap, startY + i, startX + j, tile++);
+    }
+    SetSinWave((s16*)gScanlineEffectRegBuffers[0], 0, task->tSinIndex, 132, task->tAmplitude, DISPLAY_HEIGHT);
+
+    task->tState++;
+    return FALSE;
+}
+
+static bool8 Plasma_SetGfx(struct Task *task)
+{
+    s16 i, j;
+    s16 startX, startY;
+    u16 tile;
+    u16 *tilemap, *tileset;
+
+    GetBg0TilesDst(&tilemap, &tileset);
+    startX = (30 - 16) / 2;
+    startY = (20 - 16) / 2;
+    tile = 1;
+    for (i = 0; i < 16; i++)
+    {
+        for (j = 0; j < 16; j++)
+            SET_TILE(tilemap, startY + i, startX + j, tile++);
+    }
+    SetSinWave((s16*)gScanlineEffectRegBuffers[0], 0, task->tSinIndex, 132, task->tAmplitude, DISPLAY_HEIGHT);
+
+    task->tState++;
+    return FALSE;
+}
+
+static bool8 Flare_SetGfx(struct Task *task)
+{
+    s16 i, j;
+    s16 startX, startY;
+    u16 tile;
+    u16 *tilemap, *tileset;
+
+    GetBg0TilesDst(&tilemap, &tileset);
+    startX = (30 - 16) / 2;
+    startY = (20 - 16) / 2;
+    tile = 1;
+    for (i = 0; i < 16; i++)
+    {
+        for (j = 0; j < 16; j++)
+            SET_TILE(tilemap, startY + i, startX + j, tile++);
+    }
+    SetSinWave((s16*)gScanlineEffectRegBuffers[0], 0, task->tSinIndex, 132, task->tAmplitude, DISPLAY_HEIGHT);
+
+    task->tState++;
+    return FALSE;
+}
+
+static bool8 Galactic_SetGfx(struct Task *task)
+{
+    s16 i, j;
+    s16 startX, startY;
+    u16 tile;
+    u16 *tilemap, *tileset;
+
+    GetBg0TilesDst(&tilemap, &tileset);
+    startX = (30 - 16) / 2;
+    startY = (20 - 16) / 2;
+    tile = 1;
+    for (i = 0; i < 16; i++)
+    {
+        for (j = 0; j < 16; j++)
+            SET_TILE(tilemap, startY + i, startX + j, tile++);
+    }
+    SetSinWave((s16*)gScanlineEffectRegBuffers[0], 0, task->tSinIndex, 132, task->tAmplitude, DISPLAY_HEIGHT);
+
+    task->tState++;
+    return FALSE;
+}
+
+static bool8 Skull_SetGfx(struct Task *task)
+{
+    s16 i, j;
+    s16 startX, startY;
+    u16 tile;
+    u16 *tilemap, *tileset;
+
+    GetBg0TilesDst(&tilemap, &tileset);
+    startX = (30 - 16) / 2;
+    startY = (20 - 16) / 2;
+    tile = 1;
+    for (i = 0; i < 16; i++)
+    {
+        for (j = 0; j < 16; j++)
+            SET_TILE(tilemap, startY + i, startX + j, tile++);
+    }
     SetSinWave((s16*)gScanlineEffectRegBuffers[0], 0, task->tSinIndex, 132, task->tAmplitude, DISPLAY_HEIGHT);
 
     task->tState++;

@@ -241,6 +241,9 @@ std::string ReadEventText()
     char buffer[2];
     std::uint32_t length = ReadVLQ();
 
+    if (length == 0)
+        return std::string();
+
     if (length <= 2)
     {
         if (fread(buffer, length, 1, g_inputFile) != 1)

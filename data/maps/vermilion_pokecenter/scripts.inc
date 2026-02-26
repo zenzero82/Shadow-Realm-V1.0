@@ -23,7 +23,7 @@ vermilion_pokecenter_EventScript_Bookshelf2::
 	end
 
 vermilion_pokecenter_EventScript_WallMap::
-	goto EventScript_RegionMap
+	goto EventScript_RegionMap_Kanto
 
 vermilion_pokecenter_Text_Bookshelf1:
 	.string "A brochure for the S.S. ANNE.$"

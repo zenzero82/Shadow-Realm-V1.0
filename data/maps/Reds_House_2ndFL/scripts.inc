@@ -23,6 +23,8 @@ PalletTown_RedsHouse_2F_EventScript_Rest::
 	closemessage
 	fadescreenswapbuffers FADE_TO_BLACK
 	special HealPlayerParty
+	playfanfare MUS_HEAL
+	waitfanfare
 	fadescreenswapbuffers FADE_FROM_BLACK
 	end
 

@@ -50,6 +50,45 @@
       "trainer_sight_or_berry_tree_id": "BERRY_TREE_JOHTO_ROUTE_30_PECHA",
       "script": "BerryTreeScript",
       "flag": "0"
+    },
+    {
+      "graphics_id": "OBJ_EVENT_GFX_LITTLE_BOY",
+      "x": 26,
+      "y": 31,
+      "elevation": 0,
+      "movement_type": "MOVEMENT_TYPE_WANDER_AROUND",
+      "movement_range_x": 1,
+      "movement_range_y": 1,
+      "trainer_type": "TRAINER_TYPE_NONE",
+      "trainer_sight_or_berry_tree_id": "0",
+      "script": "Route30_EventScript_LittleBoy",
+      "flag": "0"
+    },
+    {
+      "graphics_id": "OBJ_EVENT_GFX_YOUNGSTER2_GEN2",
+      "x": 20,
+      "y": 28,
+      "elevation": 0,
+      "movement_type": "MOVEMENT_TYPE_FACE_RIGHT",
+      "movement_range_x": 0,
+      "movement_range_y": 0,
+      "trainer_type": "TRAINER_TYPE_NONE",
+      "trainer_sight_or_berry_tree_id": "5",
+      "script": "Route30_EventScript_Youngster",
+      "flag": "0"
+    },
+    {
+      "graphics_id": "OBJ_EVENT_GFX_BUG_CATCHER_GEN2",
+      "x": 19,
+      "y": 8,
+      "elevation": 0,
+      "movement_type": "MOVEMENT_TYPE_LOOK_AROUND",
+      "movement_range_x": 0,
+      "movement_range_y": 0,
+      "trainer_type": "TRAINER_TYPE_NONE",
+      "trainer_sight_or_berry_tree_id": "2",
+      "script": "Route30_EventScript_BugCatcher",
+      "flag": "0"
     }
   ],
   "warp_events": [
@@ -57,14 +96,14 @@
       "x": 26,
       "y": 39,
       "elevation": 0,
-      "dest_map": "MAP_ROUTE30",
+      "dest_map": "MAP_ROUTE30_HOUSE",
       "dest_warp_id": "0"
     },
     {
       "x": 35,
       "y": 4,
       "elevation": 0,
-      "dest_map": "MAP_ROUTE30",
+      "dest_map": "MAP_ROUTE30_MR_POKEMONS_HOUSE",
       "dest_warp_id": "0"
     }
   ],
@@ -76,7 +115,7 @@
       "y": 29,
       "elevation": 0,
       "player_facing_dir": "BG_EVENT_PLAYER_FACING_ANY",
-      "script": "NULL"
+      "script": "Route30_EventScript_SignRoute30"
     },
     {
       "type": "sign",
@@ -84,7 +123,7 @@
       "y": 19,
       "elevation": 0,
       "player_facing_dir": "BG_EVENT_PLAYER_FACING_ANY",
-      "script": "NULL"
+      "script": "Route30_EventScript_SignTrainerTips"
     },
     {
       "type": "sign",
@@ -92,7 +131,7 @@
       "y": 4,
       "elevation": 0,
       "player_facing_dir": "BG_EVENT_PLAYER_FACING_ANY",
-      "script": "NULL"
+      "script": "Route30_EventScript_SignMrPokemon"
     }
   ]
 }

@@ -39,7 +39,7 @@ PalletTown_House2_Text_Hello:
 	.string "on him for me?$"
 
 PalletTown_BluesHouse_Text_TV:
-	.string "A TV show about POKeMON battles\p"
+	.string "A TV show about POKéMON battles\p"
 	.string "is playing in the background.$"
 
 PalletTown_BluesHouse_Text_Bookshelf1:

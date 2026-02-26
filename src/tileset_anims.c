@@ -38,6 +38,7 @@ static void TilesetAnim_BattleFrontierOutsideEast(u16);
 static void TilesetAnim_Underwater(u16);
 static void TilesetAnim_SootopolisGym(u16);
 static void TilesetAnim_Cave(u16);
+static void TilesetAnim_WesCave(u16);
 static void TilesetAnim_EliteFour(u16);
 static void TilesetAnim_MauvilleGym(u16);
 static void TilesetAnim_BikeShop(u16);
@@ -85,6 +86,7 @@ static void QueueAnimTiles_Pacifidlog_LogBridges(u8);
 static void QueueAnimTiles_Pacifidlog_WaterCurrents(u8);
 static void QueueAnimTiles_Sootopolis_StormyWater(u16);
 static void QueueAnimTiles_Underwater_Seaweed(u8);
+static void QueueAnimTiles_WesCave_Water(u16);
 static void QueueAnimTiles_Cave_Lava(u16);
 static void QueueAnimTiles_BattleFrontierOutsideWest_Flag(u16);
 static void QueueAnimTiles_BattleFrontierOutsideEast_Flag(u16);
@@ -123,6 +125,26 @@ const u16 *const gTilesetAnims_General_Water[] = {
     gTilesetAnims_General_Water_Frame5,
     gTilesetAnims_General_Water_Frame6,
     gTilesetAnims_General_Water_Frame7
+};
+
+const u16 gTilesetAnims_WesCave_Water_Frame0[] = INCBIN_U16("data/tilesets/secondary/wescave_2/anim/water/0.4bpp");
+const u16 gTilesetAnims_WesCave_Water_Frame1[] = INCBIN_U16("data/tilesets/secondary/wescave_2/anim/water/1.4bpp");
+const u16 gTilesetAnims_WesCave_Water_Frame2[] = INCBIN_U16("data/tilesets/secondary/wescave_2/anim/water/2.4bpp");
+const u16 gTilesetAnims_WesCave_Water_Frame3[] = INCBIN_U16("data/tilesets/secondary/wescave_2/anim/water/3.4bpp");
+const u16 gTilesetAnims_WesCave_Water_Frame4[] = INCBIN_U16("data/tilesets/secondary/wescave_2/anim/water/4.4bpp");
+const u16 gTilesetAnims_WesCave_Water_Frame5[] = INCBIN_U16("data/tilesets/secondary/wescave_2/anim/water/5.4bpp");
+const u16 gTilesetAnims_WesCave_Water_Frame6[] = INCBIN_U16("data/tilesets/secondary/wescave_2/anim/water/6.4bpp");
+const u16 gTilesetAnims_WesCave_Water_Frame7[] = INCBIN_U16("data/tilesets/secondary/wescave_2/anim/water/7.4bpp");
+
+const u16 *const gTilesetAnims_WesCave_Water[] = {
+    gTilesetAnims_WesCave_Water_Frame0,
+    gTilesetAnims_WesCave_Water_Frame1,
+    gTilesetAnims_WesCave_Water_Frame2,
+    gTilesetAnims_WesCave_Water_Frame3,
+    gTilesetAnims_WesCave_Water_Frame4,
+    gTilesetAnims_WesCave_Water_Frame5,
+    gTilesetAnims_WesCave_Water_Frame6,
+    gTilesetAnims_WesCave_Water_Frame7
 };
 
 const u16 gTilesetAnims_General_SandWaterEdge_Frame0[] = INCBIN_U16("data/tilesets/primary/general/anim/sand_water_edge/0.4bpp");
@@ -1115,6 +1137,13 @@ void InitTilesetAnim_Cave(void)
     sSecondaryTilesetAnimCallback = TilesetAnim_Cave;
 }
 
+void InitTilesetAnim_WesCave(void)
+{
+    sSecondaryTilesetAnimCounter = 0;
+    sSecondaryTilesetAnimCounterMax = 128;
+    sSecondaryTilesetAnimCallback = TilesetAnim_WesCave;
+}
+
 void InitTilesetAnim_EliteFour(void)
 {
     sSecondaryTilesetAnimCounter = 0;
@@ -1259,6 +1288,12 @@ static void TilesetAnim_Cave(u16 timer)
         QueueAnimTiles_Cave_Lava(timer / 16);
 }
 
+static void TilesetAnim_WesCave(u16 timer)
+{
+    if (timer % 16 == 1)
+        QueueAnimTiles_WesCave_Water(timer / 16);
+}
+
 static void TilesetAnim_BattleFrontierOutsideWest(u16 timer)
 {
     if (timer % 8 == 0)
@@ -1296,6 +1331,17 @@ static void QueueAnimTiles_Underwater_Seaweed(u8 timer)
 {
     u8 i = timer % ARRAY_COUNT(gTilesetAnims_Underwater_Seaweed);
     AppendTilesetAnimToBuffer(gTilesetAnims_Underwater_Seaweed[i], (u16 *)(BG_VRAM + TILE_OFFSET_4BPP(NUM_TILES_IN_PRIMARY + 496)), 4 * TILE_SIZE_4BPP);
+}
+
+static void QueueAnimTiles_WesCave_Water(u16 timer)
+{
+    u16 i = timer % ARRAY_COUNT(gTilesetAnims_WesCave_Water);
+    const u16 *frame = gTilesetAnims_WesCave_Water[i];
+    const u16 *tile0 = frame;
+    const u16 *tile1 = frame + (TILE_SIZE_4BPP / 2);
+
+    AppendTilesetAnimToBuffer(tile0, (u16 *)(BG_VRAM + TILE_OFFSET_4BPP(NUM_TILES_IN_PRIMARY)), TILE_SIZE_4BPP);
+    AppendTilesetAnimToBuffer(tile1, (u16 *)(BG_VRAM + TILE_OFFSET_4BPP(NUM_TILES_IN_PRIMARY + 1)), TILE_SIZE_4BPP);
 }
 
 static void QueueAnimTiles_Pacifidlog_WaterCurrents(u8 timer)

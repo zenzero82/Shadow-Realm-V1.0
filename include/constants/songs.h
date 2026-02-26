@@ -505,8 +505,16 @@
 #define MUS_BATTLE_TEAM_GALACTIC        617  // mus_battle_team_galactic.mid
 #define MUS_BATTLE_TEAM_PLASMA          618  // mus_battle_team_plasma.mid
 #define MUS_BATTLE_TEAM_FLARE           619  // mus_battle_team_flare.mid
+#define MUS_ORREPCENTER                 620  // mus_orrepcenter.mid
+#define MUS_HG_ROCK_TUNNEL              621  // mus_hg_rock_tunnel.mid
+#define MUS_HG_RUINS_OF_ALPH            622  // mus_hg_ruins_of_alph.mid
+#define MUS_HG_UNION_CAVE               623  // mus_hg_union_cave.mid
+#define MUS_ENCOUNTER_TEAM_GALACTIC     624  // mus_encounter_team_galactic.mid
+#define MUS_ENCOUNTER_TEAM_PLASMA       625  // mus_encounter_team_plasma.mid
+#define MUS_BATTLE_TEAM_SKULL           626  // mus_battle_team_skull.mid
+#define MUS_HEXAGONBROS                 627  // mus_hexagonbros.mid
 
-#define END_MUS                     MUS_BATTLE_TEAM_FLARE
+#define END_MUS                     MUS_HEXAGONBROS
 
 // These PH_* constants are phoneme sounds used by the "bard" NPC (see src/bard_music.c and src/mauville_old_man.c).
 // Each comes in a triplet of PH_*_BLEND, PH_*_HELD, and PH_*_SOLO, and the name of each triplet incorporates the English phonetic sound it represents.

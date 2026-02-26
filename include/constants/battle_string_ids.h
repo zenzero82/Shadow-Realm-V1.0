@@ -13,6 +13,8 @@ enum StringID
     STRINGID_TABLE_START, // Make sure to add new messages below this marker
     // todo: make some of those names less vague: attacker/target vs pkmn, etc.
     STRINGID_TRAINER1LOSETEXT,
+    STRINGID_SHADOW_POKEMON_FLED_TRAINER,
+    STRINGID_SHADOW_POKEMON_FLED_GENERIC,
     STRINGID_PKMNGAINEDEXP,
     STRINGID_PKMNGREWTOLV,
     STRINGID_PKMNLEARNEDMOVE,

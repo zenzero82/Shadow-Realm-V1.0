@@ -1116,7 +1116,34 @@ static u32 GetBallThrowableState(void)
 {
     if (IsBattlerAlive(GetBattlerAtPosition(B_POSITION_OPPONENT_LEFT))
      && IsBattlerAlive(GetBattlerAtPosition(B_POSITION_OPPONENT_RIGHT)))
-        return BALL_THROW_UNABLE_TWO_MONS;
+    {
+        bool32 canSnagInDouble = FALSE;
+        if (gBattleTypeFlags & (BATTLE_TYPE_TRAINER | BATTLE_TYPE_FRONTIER))
+        {
+            u32 i;
+            for (i = 0; i < gBattlersCount; i++)
+            {
+                if (GetBattlerSide(i) == B_SIDE_OPPONENT
+                    && IsBattlerAlive(i)
+                    && (gBattleMons[i].isShadow
+                        || GetMonData(GetBattlerMon(i), MON_DATA_IS_SHADOW)))
+                {
+                    canSnagInDouble = TRUE;
+                    break;
+                }
+            }
+
+            if (canSnagInDouble
+                && !FlagGet(FLAG_HAS_SNAG_MACHINE)
+                && !CheckBagHasItem(ITEM_SNAG_MACHINE, 1))
+            {
+                canSnagInDouble = FALSE;
+            }
+        }
+
+        if (!canSnagInDouble)
+            return BALL_THROW_UNABLE_TWO_MONS;
+    }
     else if (IsPlayerPartyAndPokemonStorageFull() == TRUE)
         return BALL_THROW_UNABLE_NO_ROOM;
     else if (B_SEMI_INVULNERABLE_CATCH >= GEN_4 && (gStatuses3[GetCatchingBattler()] & STATUS3_SEMI_INVULNERABLE))

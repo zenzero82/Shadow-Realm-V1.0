@@ -6,6 +6,9 @@ pewter_gym_MapScripts::
 PewterGym_EventScript_OnEnter::
     setflag FLAG_HIDE_PEWTER_GYM_BROCK_BALL
     setflag FLAG_HIDE_PEWTER_GYM_BROCK_CROAGUNK
+    goto_if_unset FLAG_BADGE09_GET, PewterGym_EventScript_OnEnter_End
+    call PewterCity_Gym_EventScript_SetGymTrainers
+PewterGym_EventScript_OnEnter_End::
     end
 
 PewterGym_Speaker_Brock:
@@ -60,10 +63,15 @@ PewterCity_Gym_EventScript_Brock::
 
     msgbox PewterCity_Gym_Text_Brock_FightDone, MSGBOX_DEFAULT
     setflag FLAG_BADGE09_GET
+    call PewterCity_Gym_EventScript_SetGymTrainers
 
     closemessage
     release
     end
+
+PewterCity_Gym_EventScript_SetGymTrainers::
+    settrainerflag TRAINER_CAMPER_KANTO
+    return
 
 PewterCity_Gym_EventScript_Brock_CroagunkIntro::
     clearflag FLAG_HIDE_PEWTER_GYM_BROCK_CROAGUNK
@@ -163,7 +171,7 @@ PewterCity_Gym_Text_Brock_Apology:
     .string "Sorry about that. Now, let's battle.$"
 
 PewterCity_Gym_Text_Brock_WinLoss:
-    .string "Your POKEMON's power and resolve\n"
+    .string "Your POKéMON's power and resolve\n"
     .string "broke right through my rock-solid\n"
     .string "defense…\p"
     .string "Looks like KANTO has another trainer\n"
@@ -188,7 +196,7 @@ PewterCity_Gym_Text_Brock_FightDone:
 
 PewterCity_Gym_Text_CamperJerry_Seen:
     .string "The trainers in this GYM usually use\n"
-    .string "rock-type POKEMON.\p"
+    .string "rock-type POKéMON.\p"
     .string "We've been training for any threats.\p"
     .string "Battles here can go long.\n"
     .string "You ready for that?$"
@@ -215,13 +223,13 @@ PewterCity_Gym_Text_Guide_Win:
     .string "needs right now.$"
 
 PewterCity_Gym_Text_GymStatue:
-    .string "PEWTER POKEMON GYM\n"
+    .string "PEWTER POKéMON GYM\n"
     .string "LEADER: BROCK\p"
     .string "WINNING TRAINERS:\n"
     .string "RED, BLUE, WES$"
 
 PewterCity_Gym_Text_GymStatuePlayerWon:
-    .string "PEWTER POKEMON GYM\n"
+    .string "PEWTER POKéMON GYM\n"
     .string "LEADER: BROCK\p"
     .string "WINNING TRAINERS:\n"
     .string "RED, BLUE, WES, {PLAYER}$"

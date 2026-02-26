@@ -23,10 +23,10 @@ Route4_Pokecenter_EventScript_Bookshelf2::
 	end
 
 Route4_Pokecenter_EventScript_WallMap::
-	goto EventScript_RegionMap
+	goto EventScript_RegionMap_Kanto
 
 Route4_Pokecenter_Text_Bookshelf1:
 	.string "MT. MOON trail guide.$"
 
 Route4_Pokecenter_Text_Bookshelf2:
-	.string "ROUTE 4 wild POKEMON.$"
+	.string "ROUTE 4 wild POKéMON.$"

@@ -15,5 +15,5 @@ pewter_house1_EventScript_Boy::
 
 pewter_house1_Text_Boy:
 	.string "I want to see a real GYM battle!\p"
-	.string "They say BROCK's POKeMON are like\n"
+	.string "They say BROCK's POKéMON are like\n"
 	.string "living boulders.$"

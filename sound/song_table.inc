@@ -351,7 +351,7 @@ gSongTable::
 	song dummy_song_header, 0, 0
 	song dummy_song_header, 0, 0
 	song dummy_song_header, 0, 0
-	song mus_littleroot_test, 0, 0
+	song dummy_song_header, 0, 0
 	song mus_hg_vs_gym_leader, 0, 0
 	song mus_caught, 0, 0
 	song mus_victory_wild, 0, 0
@@ -394,10 +394,10 @@ gSongTable::
 	song mus_slots_win, 2, 2
 	song mus_too_bad, 2, 2
 	song mus_roulette, 0, 0
-	song mus_link_contest_p1, 0, 0
-	song mus_link_contest_p2, 0, 0
-	song mus_link_contest_p3, 0, 0
-	song mus_link_contest_p4, 0, 0
+	song dummy_song_header, 0, 0
+	song dummy_song_header, 0, 0
+	song dummy_song_header, 0, 0
+	song dummy_song_header, 0, 0
 	song mus_encounter_rich, 0, 0
 	song mus_verdanturf, 0, 0
 	song mus_rustboro, 0, 0
@@ -621,6 +621,14 @@ gSongTable::
 	song mus_battle_team_galactic, 0, 0
 	song mus_battle_team_plasma, 0, 0
 	song mus_battle_team_flare, 0, 0
+	song mus_orrepcenter, 0, 0
+	song mus_hg_rock_tunnel, 0, 0
+	song mus_hg_ruins_of_alph, 0, 0
+	song mus_hg_union_cave, 0, 0
+	song mus_encounter_team_galactic, 0, 0
+	song mus_encounter_team_plasma, 0, 0
+	song mus_battle_team_skull, 0, 0
+	song mus_hexagonbros, 0, 0
 
 
 	.align 2

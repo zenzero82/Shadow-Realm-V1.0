@@ -193,7 +193,11 @@ extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_MayWatering
 extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_BrendanDecorating;
 extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_MayDecorating;
 extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_Archie;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_Shelly;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_Matt;
 extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_Maxie;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_Courtney;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_Tabitha;
 extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_KyogreFront;
 extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_GroudonFront;
 extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_Fossil;
@@ -229,6 +233,7 @@ extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_Sudowoodo;
 extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_Mew;
 extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_Red;
 extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_Leaf;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_Lyra;
 extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_Deoxys;
 extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_BirthIslandStone;
 extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_Brandon;
@@ -293,6 +298,7 @@ extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_BaldingManG
 extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_BattleGirlGen2;
 extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_BattleTowerTrainerDudeGen2;
 extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_BikerGen2;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_BirdKeeperMGen2;
 extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_BlackBeltGen2;
 extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_Boy2Gen2;
 extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_BrunoGen2;
@@ -491,6 +497,14 @@ extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_SnagemGrunt
 extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_Venus;
 extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_Ash;
 extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_MirrorB;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_Cassidy;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_Butch;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_Resix;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_Blusix;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_Greesix;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_Purpsix;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_Browsix;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_Yellosix;
 extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_Ironmask;
 
 const struct ObjectEventGraphicsInfo *const gObjectEventGraphicsInfoPointers[NUM_OBJ_EVENT_GFX] = {
@@ -726,6 +740,7 @@ const struct ObjectEventGraphicsInfo *const gObjectEventGraphicsInfoPointers[NUM
     [OBJ_EVENT_GFX_MEW] =                      &gObjectEventGraphicsInfo_OldMan,
     [OBJ_EVENT_GFX_RED] =                      &gObjectEventGraphicsInfo_Red,
     [OBJ_EVENT_GFX_LEAF] =                     &gObjectEventGraphicsInfo_Leaf,
+    [OBJ_EVENT_GFX_LYRA] =                     &gObjectEventGraphicsInfo_Lyra,
     [OBJ_EVENT_GFX_DEOXYS] =                   &gObjectEventGraphicsInfo_OldMan,
     [OBJ_EVENT_GFX_DEOXYS_TRIANGLE] =          &gObjectEventGraphicsInfo_BirthIslandStone,
     [OBJ_EVENT_GFX_BRANDON] =                  &gObjectEventGraphicsInfo_Brandon,
@@ -783,6 +798,7 @@ const struct ObjectEventGraphicsInfo *const gObjectEventGraphicsInfoPointers[NUM
     [OBJ_EVENT_GFX_BATTLE_GIRL_GEN2]  = &gObjectEventGraphicsInfo_BattleGirlGen2,
     [OBJ_EVENT_GFX_BATTLE_TOWER_TRAINER_DUDE_GEN2]  = &gObjectEventGraphicsInfo_BattleTowerTrainerDudeGen2,
     [OBJ_EVENT_GFX_BIKER_GEN2]  = &gObjectEventGraphicsInfo_BikerGen2,
+    [OBJ_EVENT_GFX_BIRD_KEEPER_M_GEN2]  = &gObjectEventGraphicsInfo_BirdKeeperMGen2,
     [OBJ_EVENT_GFX_BLACK_BELT_GEN2]  = &gObjectEventGraphicsInfo_BlackBeltGen2,
     [OBJ_EVENT_GFX_BOY_2_GEN2]  = &gObjectEventGraphicsInfo_Boy2Gen2,
     [OBJ_EVENT_GFX_BRUNO_GEN2]  = &gObjectEventGraphicsInfo_BrunoGen2,
@@ -956,6 +972,18 @@ const struct ObjectEventGraphicsInfo *const gObjectEventGraphicsInfoPointers[NUM
     [OBJ_EVENT_GFX_ASH] = &gObjectEventGraphicsInfo_Ash,
     [OBJ_EVENT_GFX_IRONMASK] = &gObjectEventGraphicsInfo_Ironmask,
     [OBJ_EVENT_GFX_MIRROR_B] = &gObjectEventGraphicsInfo_MirrorB,
+    [OBJ_EVENT_GFX_CASSIDY] = &gObjectEventGraphicsInfo_Cassidy,
+    [OBJ_EVENT_GFX_BUTCH] = &gObjectEventGraphicsInfo_Butch,
+    [OBJ_EVENT_GFX_RESIX] = &gObjectEventGraphicsInfo_Resix,
+    [OBJ_EVENT_GFX_BLUSIX] = &gObjectEventGraphicsInfo_Blusix,
+    [OBJ_EVENT_GFX_GREESIX] = &gObjectEventGraphicsInfo_Greesix,
+    [OBJ_EVENT_GFX_PURPSIX] = &gObjectEventGraphicsInfo_Purpsix,
+    [OBJ_EVENT_GFX_BROWSIX] = &gObjectEventGraphicsInfo_Browsix,
+    [OBJ_EVENT_GFX_YELLOSIX] = &gObjectEventGraphicsInfo_Yellosix,
+    [OBJ_EVENT_GFX_SHELLY] = &gObjectEventGraphicsInfo_Shelly,
+    [OBJ_EVENT_GFX_MATT] = &gObjectEventGraphicsInfo_Matt,
+    [OBJ_EVENT_GFX_COURTNEY] = &gObjectEventGraphicsInfo_Courtney,
+    [OBJ_EVENT_GFX_TABITHA] = &gObjectEventGraphicsInfo_Tabitha,
 };
 
 const struct ObjectEventGraphicsInfo *const gMauvilleOldManGraphicsInfoPointers[] = {

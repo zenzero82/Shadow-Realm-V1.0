@@ -251,6 +251,10 @@ static void LoadScreenSelectBarMain(u16);
 static void LoadScreenSelectBarSubmenu(u16);
 static void HighlightScreenSelectBarItem(u8, u16);
 static void HighlightSubmenuScreenSelectBarItem(u8, u16);
+static void ShadowMonitor_ClearScreenSelectBar(u16 *tilemap, u16 size);
+static void ShadowMonitor_PrintTrackerTab(void);
+
+static EWRAM_DATA u8 sShadowMonitorTrackerWindowId;
 static void Task_DisplayCaughtMonDexPage(u8);
 static void Task_HandleCaughtMonPageInput(u8);
 static void Task_ExitCaughtMonPage(u8);
@@ -841,6 +845,17 @@ static const struct WindowTemplate sPokemonList_WindowTemplate[] =
         .baseBlock = 1,
     },
     DUMMY_WIN_TEMPLATE
+};
+
+static const struct WindowTemplate sShadowMonitorTabWindowTemplate =
+{
+    .bg = 1,
+    .tilemapLeft = 1,
+    .tilemapTop = 0,
+    .width = 7,
+    .height = 2,
+    .paletteNum = 0,
+    .baseBlock = 0x2A0,
 };
 
 static const u8 sText_No0000[] UNUSED = _("{NO}0000");
@@ -2143,6 +2158,7 @@ static bool8 LoadPokedexListPage(u8 page)
             sPokedexView->isSearchResults = TRUE;
         LoadPokedexBgPalette(sPokedexView->isSearchResults);
         InitWindows(sPokemonList_WindowTemplate);
+        sShadowMonitorTrackerWindowId = WINDOW_NONE;
         DeactivateAllTextPrinters();
         PutWindowTilemap(0);
         CopyWindowToVram(0, COPYWIN_FULL);
@@ -3096,6 +3112,7 @@ static u8 LoadInfoScreen(struct PokedexListItem *item, u8 monSpriteId)
     SetBgTilemapBuffer(1, AllocZeroed(BG_SCREEN_SIZE));
     SetBgTilemapBuffer(0, AllocZeroed(BG_SCREEN_SIZE));
     InitWindows(sInfoScreen_WindowTemplates);
+    sShadowMonitorTrackerWindowId = WINDOW_NONE;
     DeactivateAllTextPrinters();
 
     return taskId;
@@ -3158,6 +3175,7 @@ static void Task_LoadInfoScreen(u8 taskId)
     case 2:
         LoadScreenSelectBarMain(0xD);
         HighlightScreenSelectBarItem(sPokedexView->selectedScreen, 0xD);
+        ShadowMonitor_PrintTrackerTab();
         LoadPokedexBgPalette(sPokedexView->isSearchResults);
         gMain.state++;
         break;
@@ -3277,8 +3295,6 @@ static void Task_HandleInfoScreenInput(u8 taskId)
         PlaySE(SE_PC_OFF);
         return;
     }
-    if (gIsShadowMonitorOpen)
-        return;
     if (JOY_NEW(A_BUTTON))
     {
         switch (sPokedexView->selectedScreen)
@@ -3398,6 +3414,7 @@ static void Task_LoadAreaScreen(u8 taskId)
     case 1:
         LoadScreenSelectBarSubmenu(0xD);
         HighlightSubmenuScreenSelectBarItem(0, 0xD);
+        ShadowMonitor_PrintTrackerTab();
         LoadPokedexBgPalette(sPokedexView->isSearchResults);
         SetGpuReg(REG_OFFSET_BG1CNT, BGCNT_PRIORITY(0) | BGCNT_CHARBASE(0) | BGCNT_SCREENBASE(13) | BGCNT_16COLOR | BGCNT_TXT256x256);
         gMain.state++;
@@ -3405,7 +3422,7 @@ static void Task_LoadAreaScreen(u8 taskId)
     case 2:
         {
             u16 species = ShadowIdToSpecies(sPokedexListItem->dexNum);
-            if (species != 0)
+            if (species != 0 || gIsShadowMonitorOpen)
                 DisplayPokedexAreaScreen(species, &sPokedexView->screenSwitchState, gAreaTimeOfDay, DEX_SHOW_AREA_SCREEN);
         }
         SetVBlankCallback(gPokedexVBlankCB);
@@ -3434,7 +3451,7 @@ static void Task_ReloadAreaScreen(u8 taskId)
     case 2:
         {
             u16 species = ShadowIdToSpecies(sPokedexListItem->dexNum);
-            if (species != 0)
+            if (species != 0 || gIsShadowMonitorOpen)
                 DisplayPokedexAreaScreen(species, &sPokedexView->screenSwitchState, gAreaTimeOfDay, DEX_UPDATE_AREA_SCREEN);
         }
         gMain.state = 0;
@@ -3499,6 +3516,7 @@ static void Task_LoadCryScreen(u8 taskId)
     case 2:
         LoadScreenSelectBarSubmenu(0xD);
         HighlightSubmenuScreenSelectBarItem(1, 0xD);
+        ShadowMonitor_PrintTrackerTab();
         LoadPokedexBgPalette(sPokedexView->isSearchResults);
         gMain.state++;
         break;
@@ -3698,6 +3716,7 @@ static void Task_LoadSizeScreen(u8 taskId)
     case 2:
         LoadScreenSelectBarSubmenu(0xD);
         HighlightSubmenuScreenSelectBarItem(2, 0xD);
+        ShadowMonitor_PrintTrackerTab();
         LoadPokedexBgPalette(sPokedexView->isSearchResults);
         gMain.state++;
         break;
@@ -3820,20 +3839,34 @@ static void LoadScreenSelectBarMain(u16 unused)
 {
     if (gIsShadowMonitorOpen)
     {
-        FillBgTilemapBufferRect(1, 0, 0, 0, DISPLAY_TILE_WIDTH, DISPLAY_TILE_HEIGHT, 0);
-        return;
+        u16 tilemap[96];
+
+        FillBgTilemapBufferRect_Palette0(1, 0, 0, 0, 32, 32);
+        DecompressDataWithHeaderWram((const u32 *)gPokedexScreenSelectBarMain_Tilemap, tilemap);
+        ShadowMonitor_ClearScreenSelectBar(tilemap, ARRAY_COUNT(tilemap));
+        CopyToBgTilemapBuffer(1, tilemap, sizeof(tilemap), 0);
     }
-    CopyToBgTilemapBuffer(1, gPokedexScreenSelectBarMain_Tilemap, 0, 0);
+    else
+    {
+        CopyToBgTilemapBuffer(1, gPokedexScreenSelectBarMain_Tilemap, 0, 0);
+    }
 }
 
 static void LoadScreenSelectBarSubmenu(u16 unused)
 {
     if (gIsShadowMonitorOpen)
     {
-        FillBgTilemapBufferRect(1, 0, 0, 0, DISPLAY_TILE_WIDTH, DISPLAY_TILE_HEIGHT, 0);
-        return;
+        u16 tilemap[96];
+
+        FillBgTilemapBufferRect_Palette0(1, 0, 0, 0, 32, 32);
+        DecompressDataWithHeaderWram((const u32 *)gPokedexScreenSelectBarSubmenu_Tilemap, tilemap);
+        ShadowMonitor_ClearScreenSelectBar(tilemap, ARRAY_COUNT(tilemap));
+        CopyToBgTilemapBuffer(1, tilemap, sizeof(tilemap), 0);
     }
-    CopyToBgTilemapBuffer(1, gPokedexScreenSelectBarSubmenu_Tilemap, 0, 0);
+    else
+    {
+        CopyToBgTilemapBuffer(1, gPokedexScreenSelectBarSubmenu_Tilemap, 0, 0);
+    }
 }
 
 static void HighlightScreenSelectBarItem(u8 selectedScreen, u16 unused)
@@ -3843,7 +3876,10 @@ static void HighlightScreenSelectBarItem(u8 selectedScreen, u16 unused)
     u16 *ptr = GetBgTilemapBuffer(1);
 
     if (gIsShadowMonitorOpen)
+    {
+        CopyBgTilemapBufferToVram(1);
         return;
+    }
 
     for (i = 0; i < SCREEN_COUNT; i++)
     {
@@ -3873,7 +3909,10 @@ static void HighlightSubmenuScreenSelectBarItem(u8 a, u16 b)
     u16 *ptr = GetBgTilemapBuffer(1);
 
     if (gIsShadowMonitorOpen)
+    {
+        CopyBgTilemapBufferToVram(1);
         return;
+    }
 
     for (i = 0; i < 4; i++)
     {
@@ -3895,6 +3934,49 @@ static void HighlightSubmenuScreenSelectBarItem(u8 a, u16 b)
         }
     }
     CopyBgTilemapBufferToVram(1);
+}
+
+static void ShadowMonitor_ClearScreenSelectBar(u16 *tilemap, u16 size)
+{
+    u16 x;
+    u16 y;
+    const u16 trackerStart = 1;
+    const u16 trackerEnd = 7;
+
+    if (tilemap == NULL || size < 32 * 3)
+        return;
+
+    for (y = 0; y < 3; y++)
+    {
+        for (x = 0; x < 32; x++)
+        {
+            if (x < trackerStart || x > trackerEnd)
+                tilemap[y * 32 + x] = 0;
+        }
+    }
+}
+
+static void ShadowMonitor_PrintTrackerTab(void)
+{
+    static const u8 sText_Tracker[] = _("TRACKER");
+    static const u8 sTextColor[3] = { TEXT_COLOR_TRANSPARENT, TEXT_DYNAMIC_COLOR_6, TEXT_COLOR_LIGHT_GRAY };
+    const u8 tabWidth = 7 * 8;
+    const u8 tabY = 1;
+    u8 x;
+
+    if (!gIsShadowMonitorOpen)
+        return;
+
+    if (sShadowMonitorTrackerWindowId == WINDOW_NONE)
+        sShadowMonitorTrackerWindowId = AddWindow(&sShadowMonitorTabWindowTemplate);
+    if (sShadowMonitorTrackerWindowId == WINDOW_NONE)
+        return;
+
+    FillWindowPixelBuffer(sShadowMonitorTrackerWindowId, PIXEL_FILL(0));
+    PutWindowTilemap(sShadowMonitorTrackerWindowId);
+    x = GetStringCenterAlignXOffset(FONT_NORMAL, sText_Tracker, tabWidth);
+    AddTextPrinterParameterized4(sShadowMonitorTrackerWindowId, FONT_NORMAL, x, tabY, 0, 0, sTextColor, TEXT_SKIP_DRAW, sText_Tracker);
+    CopyWindowToVram(sShadowMonitorTrackerWindowId, COPYWIN_GFX);
 }
 
 #define tState         data[0]

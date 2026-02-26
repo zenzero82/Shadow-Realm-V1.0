@@ -634,6 +634,10 @@ static const u32 sPokenavIcon_Gfx[] = INCBIN_U32("graphics/pokenav/match_call/na
 
 static const u8 sText_PokenavCallEllipsis[] = _("………………\p");
 
+#define MATCH_CALL_TEXT_COLOR_BG     1
+#define MATCH_CALL_TEXT_COLOR_FG     6
+#define MATCH_CALL_TEXT_COLOR_SHADOW 5
+
 #define tState      data[0]
 #define tWindowId   data[2]
 #define tIconTaskId data[5]
@@ -669,7 +673,7 @@ static const struct WindowTemplate sMatchCallTextWindow =
     .tilemapTop = 15,
     .width = 28,
     .height = 4,
-    .paletteNum = 15,
+    .paletteNum = 14,
     .baseBlock = 0x200
 };
 
@@ -700,7 +704,7 @@ static bool32 MatchCall_LoadGfx(u8 taskId)
         return FALSE;
     }
 
-    FillWindowPixelBuffer(tWindowId, PIXEL_FILL(8));
+    FillWindowPixelBuffer(tWindowId, PIXEL_FILL(1));
     LoadPalette(sMatchCallWindow_Pal, BG_PLTT_ID(14), sizeof(sMatchCallWindow_Pal));
     LoadPalette(sPokenavIcon_Pal, BG_PLTT_ID(15), sizeof(sPokenavIcon_Pal));
     ChangeBgY(0, -0x2000, BG_COORD_SET);
@@ -751,7 +755,7 @@ static bool32 MatchCall_PrintIntro(u8 taskId)
     s16 *data = gTasks[taskId].data;
     if (!RunMatchCallTextPrinter(tWindowId))
     {
-        FillWindowPixelBuffer(tWindowId, PIXEL_FILL(8));
+        FillWindowPixelBuffer(tWindowId, PIXEL_FILL(1));
 
         // Ready the message (and the speaker's name if possible)
         if (!sMatchCallState.triggeredFromScript)
@@ -770,7 +774,7 @@ static bool32 MatchCall_PrintMessage(u8 taskId)
     s16 *data = gTasks[taskId].data;
     if (!RunMatchCallTextPrinter(tWindowId) && !IsSEPlaying() && JOY_NEW(A_BUTTON | B_BUTTON))
     {
-        FillWindowPixelBuffer(tWindowId, PIXEL_FILL(8));
+        FillWindowPixelBuffer(tWindowId, PIXEL_FILL(1));
         CopyWindowToVram(tWindowId, COPYWIN_GFX);
         PlaySE(SE_POKENAV_HANG_UP);
         return TRUE;
@@ -787,6 +791,7 @@ static bool32 MatchCall_SlideWindowOut(u8 taskId)
         FillBgTilemapBufferRect_Palette0(0, 0, 0, 14, 30, 6);
         DestroyTask(tIconTaskId);
         RemoveWindow(tWindowId);
+        DestroyNamebox();
         CopyBgTilemapBufferToVram(0);
         return TRUE;
     }
@@ -876,9 +881,9 @@ static void InitMatchCallTextPrinter(int windowId, const u8 *str)
     printerTemplate.letterSpacing = 0;
     printerTemplate.lineSpacing = 0;
     printerTemplate.unk = 0;
-    printerTemplate.fgColor = TEXT_DYNAMIC_COLOR_1;
-    printerTemplate.bgColor = TEXT_COLOR_BLUE;
-    printerTemplate.shadowColor = TEXT_DYNAMIC_COLOR_5;
+    printerTemplate.fgColor = MATCH_CALL_TEXT_COLOR_FG;
+    printerTemplate.bgColor = MATCH_CALL_TEXT_COLOR_BG;
+    printerTemplate.shadowColor = MATCH_CALL_TEXT_COLOR_SHADOW;
     gTextFlags.useAlternateDownArrow = FALSE;
 
     AddTextPrinter(&printerTemplate, GetPlayerTextSpeedDelay(), NULL);

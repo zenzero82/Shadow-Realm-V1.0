@@ -185,9 +185,9 @@ PewterCity_Text_Sign:
     .string "A Stone Gray City$"
 
 PewterCity_Text_GymSign:
-    .string "PEWTER CITY POKEMON GYM\n"
+    .string "PEWTER CITY POKéMON GYM\n"
     .string "LEADER: BROCK\p"
-    .string "The Rock Solid POKEMON Trainer$"
+    .string "The Rock Solid POKéMON Trainer$"
 
 PewterCity_Text_MuseumSign:
     .string "PEWTER MUSEUM OF SCIENCE\n"
@@ -232,7 +232,7 @@ PewterCity_Text_WesTalk_Unknown:
 
 PewterCity_Text_WesTalk_Known:
     .string "Keep your eyes open on ROUTE 3.\n"
-    .string "The shadows move fast there.$"
+    .string "Things move fast there.$"
 
 PewterCity_Text_OldMan:
     .string "Pewter's stones are steady, but the\n"

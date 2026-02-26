@@ -706,6 +706,8 @@ void Task_WarpAndLoadMap(u8 taskId)
 }
 
 #define tDoorTask   data[1]
+#define tDoorX      data[4]
+#define tDoorY      data[5]
 
 enum
 {
@@ -736,14 +738,18 @@ void Task_DoDoorWarp(u8 taskId)
         SetFollowerNPCData(FNPC_DATA_COME_OUT_DOOR, FNPC_DOOR_NONE);
         FreezeObjectEvents();
         PlayerGetDestCoords(x, y);
-        PlaySE(GetDoorSoundEffect(*x, *y - 1));
+        task->tDoorX = *x;
+        task->tDoorY = *y - 1;
+        if (MetatileBehavior_IsDoor(MapGridGetMetatileBehaviorAt(*x, *y)))
+            task->tDoorY = *y;
+        PlaySE(GetDoorSoundEffect(task->tDoorX, task->tDoorY));
         if (followerObject)
         {
             // Put follower into pokeball
             ClearObjectEventMovement(followerObject, &gSprites[followerObject->spriteId]);
             ObjectEventSetHeldMovement(followerObject, MOVEMENT_ACTION_ENTER_POKEBALL);
         }
-        task->tDoorTask = FieldAnimateDoorOpen(*x, *y - 1);
+        task->tDoorTask = FieldAnimateDoorOpen(task->tDoorX, task->tDoorY);
         task->tState = DOORWARP_START_WALK_UP;
         break;
     case DOORWARP_START_WALK_UP:
@@ -768,7 +774,7 @@ void Task_DoDoorWarp(u8 taskId)
         {
             // Don't close door on NPC follower.
             if (!PlayerHasFollowerNPC() || gObjectEvents[followerObjId].invisible)
-                task->tDoorTask = FieldAnimateDoorClose(*x, *y - 1);
+                task->tDoorTask = FieldAnimateDoorClose(task->tDoorX, task->tDoorY);
 
             ObjectEventClearHeldMovementIfFinished(&gObjectEvents[playerObjId]);
             SetPlayerVisibility(FALSE);

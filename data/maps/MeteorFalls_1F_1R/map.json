@@ -148,6 +148,20 @@
       "trainer_sight_or_berry_tree_id": "0",
       "script": "MeteorFalls_1F_1R_EventScript_ProfCozmo",
       "flag": "FLAG_HIDE_METEOR_FALLS_1F_1R_COZMO"
+    },
+    {
+      "local_id": "LOCALID_ROAMING_HUNTER_METEOR_FALLS_1F_1R",
+      "graphics_id": "OBJ_EVENT_GFX_VAR_0",
+      "x": 8,
+      "y": 9,
+      "elevation": 3,
+      "movement_type": "MOVEMENT_TYPE_FACE_DOWN",
+      "movement_range_x": 0,
+      "movement_range_y": 0,
+      "trainer_type": "TRAINER_TYPE_NONE",
+      "trainer_sight_or_berry_tree_id": "0",
+      "script": "RoamingHunter_NpcScript",
+      "flag": "FLAG_ROAMING_HUNTER_NPC_HIDE"
     }
   ],
   "warp_events": [

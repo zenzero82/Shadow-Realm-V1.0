@@ -84,10 +84,9 @@ pewter_pokecenter_Text_Beauty:
 	.string "tired and dusty.$"
 
 pewter_pokecenter_Text_BugCatcher:
-	.string "I wanted to see the MUSEUM, but they\n"
-	.string "say it's still being fixed up.\p"
-	.string "Guess I'll train my bugs in the city\n"
-	.string "for now.$"
+	.string "The MUSEUM is open again.\p"
+	.string "I want to see the fossils after I\n"
+	.string "heal up my bugs.$"
 
 pewter_pokecenter_EventScript_Bookshelf1::
 	msgbox pewter_pokecenter_Text_Bookshelf1, MSGBOX_SIGN
@@ -98,7 +97,7 @@ pewter_pokecenter_EventScript_Bookshelf2::
 	end
 
 pewter_pokecenter_EventScript_WallMap::
-	goto EventScript_RegionMap
+	goto EventScript_RegionMap_Kanto
 
 pewter_pokecenter_Text_Bookshelf1:
 	.string "A MUSEUM guidebook on fossils.$"

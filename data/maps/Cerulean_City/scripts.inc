@@ -12,6 +12,8 @@ Cerulean_City_MapScripts::
 
 CeruleanCity_EventScript_CityEnter::
     setflag FLAG_VISITED_CERULEAN_CITY
+    call_if_set FLAG_CERULEAN_POLICE_MOVED_26, CeruleanCity_EventScript_SetPolice26Moved
+    call_if_set FLAG_CERULEAN_POLICE_MOVED_27, CeruleanCity_EventScript_SetPolice27Moved
     end
 
 @ =================================================
@@ -20,7 +22,9 @@ CeruleanCity_EventScript_CityEnter::
 
 #define LOCALID_MISTY 1
 #define LOCALID_MICHAEL 2
-#define LOCALID_CERULEAN_GATE_OFFICER 29
+#define LOCALID_CERULEAN_POLICEMAN_1 18
+#define LOCALID_CERULEAN_POLICEMAN_2 19
+#define LOCALID_CERULEAN_GATE_OFFICER 21
 
 @ =================================================
 @ SPEAKER DEFINITIONS
@@ -316,6 +320,16 @@ CeruleanCity_Movement_PlayerStepDown:
     walk_down
     step_end
 
+CeruleanCity_Movement_Policeman1_MoveAside:
+    walk_left
+    walk_up
+    step_end
+
+CeruleanCity_Movement_Policeman2_MoveAside:
+    walk_left
+    walk_down
+    step_end
+
 
 @ =================================================
 @ NPC: Cooltrainer M (Power Plant info becomes "odd activity east")
@@ -437,14 +451,62 @@ CeruleanCity_EventScript_PlasmaGruntM::
     end
 
 CeruleanCity_EventScript_Policeman1::
+    lockall
+    checkflag FLAG_BADGE10_GET
+    goto_if_unset FLAG_BADGE10_GET, CeruleanCity_EventScript_Policeman1_Blocked
+    setspeaker CeruleanCity_Speaker_Policeman1
+    msgbox CeruleanCity_Text_PolicemanAllowPass, MSGBOX_NPC
+    closemessage
+    checkflag FLAG_CERULEAN_POLICE_MOVED_27
+    goto_if_set FLAG_CERULEAN_POLICE_MOVED_27, CeruleanCity_EventScript_Policeman1_End
+    applymovement LOCALID_CERULEAN_POLICEMAN_2, CeruleanCity_Movement_Policeman2_MoveAside
+    waitmovement 0
+    setobjectxyperm LOCALID_CERULEAN_POLICEMAN_2, 48, 20
+    turnobject LOCALID_CERULEAN_POLICEMAN_2, DIR_NORTH
+    setflag FLAG_CERULEAN_POLICE_MOVED_27
+CeruleanCity_EventScript_Policeman1_End::
+    releaseall
+    end
+
+CeruleanCity_EventScript_Policeman1_Blocked::
     setspeaker CeruleanCity_Speaker_Policeman1
     msgbox CeruleanCity_Text_Policeman1, MSGBOX_NPC
+    releaseall
     end
 
 CeruleanCity_EventScript_Policeman2::
+    lockall
+    checkflag FLAG_BADGE10_GET
+    goto_if_unset FLAG_BADGE10_GET, CeruleanCity_EventScript_Policeman2_Blocked
+    setspeaker CeruleanCity_Speaker_Policeman2
+    msgbox CeruleanCity_Text_PolicemanAllowPass, MSGBOX_NPC
+    closemessage
+    checkflag FLAG_CERULEAN_POLICE_MOVED_26
+    goto_if_set FLAG_CERULEAN_POLICE_MOVED_26, CeruleanCity_EventScript_Policeman2_End
+    applymovement LOCALID_CERULEAN_POLICEMAN_1, CeruleanCity_Movement_Policeman1_MoveAside
+    waitmovement 0
+    setobjectxyperm LOCALID_CERULEAN_POLICEMAN_1, 48, 17
+    turnobject LOCALID_CERULEAN_POLICEMAN_1, DIR_SOUTH
+    setflag FLAG_CERULEAN_POLICE_MOVED_26
+CeruleanCity_EventScript_Policeman2_End::
+    releaseall
+    end
+
+CeruleanCity_EventScript_Policeman2_Blocked::
     setspeaker CeruleanCity_Speaker_Policeman2
     msgbox CeruleanCity_Text_Policeman2, MSGBOX_NPC
+    releaseall
     end
+
+CeruleanCity_EventScript_SetPolice26Moved::
+    setobjectxyperm LOCALID_CERULEAN_POLICEMAN_1, 48, 17
+    turnobject LOCALID_CERULEAN_POLICEMAN_1, DIR_SOUTH
+    return
+
+CeruleanCity_EventScript_SetPolice27Moved::
+    setobjectxyperm LOCALID_CERULEAN_POLICEMAN_2, 48, 20
+    turnobject LOCALID_CERULEAN_POLICEMAN_2, DIR_NORTH
+    return
 
 CeruleanCity_EventScript_CaveGate_Block::
     lockall
@@ -574,7 +636,7 @@ CeruleanCity_Text_CooltrainerM2:
     .string "And whenever MISTY goes to investigate,\n"
     .string "someone calls her back to the GYM.\p"
     .string "It feels like somebody is steering\n"
-    .string "everything from the shadows.$"
+    .string "everything from afar.$"
 
 CeruleanCity_Text_SuperNerd:
     .string "CERULEAN CAPE is usually for dates...\p"
@@ -586,7 +648,7 @@ CeruleanCity_Text_SuperNerd:
     .string "but I swear I heard the name.$"
 
 CeruleanCity_Text_Slowbro_Stub:
-    .string "A trainer and their POKeMON are\n"
+    .string "A trainer and their POKéMON are\n"
     .string "resting here.\p"
     .string "Something about them feels... off.$"
 
@@ -609,9 +671,9 @@ CeruleanCity_Text_Fisher_RocketTip:
 
 CeruleanCity_Text_Youngster1:
     .string "The cave north of town has strong\n"
-    .string "POKeMON...\p"
+    .string "POKéMON...\p"
     .string "But my cousin says he saw one with a\n"
-    .string "dark aura.\p"
+    .string "weird glow.\p"
     .string "He ran so fast he dropped his items!$"
 
 CeruleanCity_Text_Sign:
@@ -620,7 +682,7 @@ CeruleanCity_Text_Sign:
 
 CeruleanCity_Text_GymSign:
     .string "CERULEAN CITY\n"
-    .string "POKeMON GYM\l"
+    .string "POKéMON GYM\l"
     .string "LEADER: MISTY\p"
     .string "The Tomboyish Mermaid$"
 
@@ -644,7 +706,7 @@ CeruleanCity_Text_LockedDoor:
 
 CeruleanCity_Text_Misty_Argue:
     .string "I don't care what you say!\n"
-    .string "Stealing trainers' POKeMON\l"
+    .string "Stealing trainers' POKéMON\l"
     .string "is not cool!!$"
 
 CeruleanCity_Text_Michael_Argue:
@@ -725,6 +787,12 @@ CeruleanCity_Text_Policeman1:
 CeruleanCity_Text_Policeman2:
     .string "We're investigating a crime wave.\n"
     .string "Report anything suspicious.$"
+
+CeruleanCity_Text_PolicemanAllowPass:
+    .string "Oh, you defeated MISTY in battle!\n"
+    .string "We need that kind of strength in\l"
+    .string "this situation. You may leave the\l"
+    .string "city and return as you please.$"
 
 CeruleanCity_Text_PoliceGate_Block:
     .string "Hey kid, this route might be\n"

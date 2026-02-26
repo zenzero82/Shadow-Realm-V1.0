@@ -9,10 +9,12 @@
 #include "overworld.h"
 #include "pokemon.h"
 #include "pokenav.h"
+#include "money.h"
 #include "sound.h"
 #include "string_util.h"
 #include "strings.h"
 #include "constants/songs.h"
+#include "constants/flags.h"
 
 struct Pokenav_MatchCallMenu
 {
@@ -195,7 +197,22 @@ static u32 CB2_HandleCheckPageInput(struct Pokenav_MatchCallMenu *state)
 
 static u32 CB2_HandleCallExitInput(struct Pokenav_MatchCallMenu *state)
 {
-    if (JOY_NEW(A_BUTTON | B_BUTTON))
+    if (JOY_NEW(A_BUTTON))
+    {
+        int selection = PokenavList_GetSelectedIndex();
+        if (state->matchCallEntries[selection].headerId == MC_HEADER_MOM
+            && FlagGet(FLAG_ENABLE_GOLD_MOM_SAVINGS))
+        {
+            u32 amount = WithdrawGoldMomSavings();
+            if (amount)
+                AddMoney(&gSaveBlock1Ptr->money, amount);
+        }
+
+        state->callback = CB2_HandleMatchCallInput;
+        return POKENAV_MC_FUNC_EXIT_CALL;
+    }
+
+    if (JOY_NEW(B_BUTTON))
     {
         state->callback = CB2_HandleMatchCallInput;
         return POKENAV_MC_FUNC_EXIT_CALL;

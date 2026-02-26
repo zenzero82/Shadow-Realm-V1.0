@@ -2099,7 +2099,7 @@ int main(int argc, char *argv[])
     unsigned char *source_buffer = NULL;
     struct Parsed parsed = {
         .default_ivs = { 31, 31, 31, 31, 31, 31 },
-        .default_level = 100,
+        .default_level = 1,
     };
 
     const char *source_path = NULL;

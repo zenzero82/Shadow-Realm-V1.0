@@ -461,6 +461,10 @@ static const u8 sFontColorTable[][3] = {
     [COLORID_TMHM_INFO]   = {TEXT_COLOR_TRANSPARENT, TEXT_DYNAMIC_COLOR_5,  TEXT_DYNAMIC_COLOR_1}
 };
 
+#define BAG_CONTEXT_MENU_FILL_COLOR 10
+
+static const u8 sContextMenuTextColors[] = {TEXT_COLOR_TRANSPARENT, TEXT_COLOR_WHITE, TEXT_COLOR_LIGHT_GRAY};
+
 static const u16 sBagStartMenuPal[] =
 {
     RGB(5, 5, 5),
@@ -2219,13 +2223,36 @@ static void OpenContextMenu(u8 taskId)
 
 static void PrintContextMenuItems(u8 windowId)
 {
-    PrintMenuActionTexts(windowId, FONT_NARROW, 8, 1, 0, 16, gBagMenu->contextMenuNumItems, sItemMenuActions, gBagMenu->contextMenuItemsPtr);
+    u8 i;
+
+    FillWindowPixelBuffer(windowId, PIXEL_FILL(BAG_CONTEXT_MENU_FILL_COLOR));
+    Menu_SetCursorFillValue(BAG_CONTEXT_MENU_FILL_COLOR);
+    for (i = 0; i < gBagMenu->contextMenuNumItems; i++)
+        AddTextPrinterParameterized4(windowId, FONT_NARROW, 8, 1 + (16 * i), 0, 0, sContextMenuTextColors,
+                                     TEXT_SKIP_DRAW, sItemMenuActions[gBagMenu->contextMenuItemsPtr[i]].text);
+    CopyWindowToVram(windowId, COPYWIN_GFX);
     InitMenuInUpperLeftCornerNormal(windowId, gBagMenu->contextMenuNumItems, 0);
 }
 
 static void PrintContextMenuItemGrid(u8 windowId, u8 columns, u8 rows)
 {
-    PrintMenuActionGrid(windowId, FONT_NARROW, 8, 1, 56, columns, rows, sItemMenuActions, gBagMenu->contextMenuItemsPtr);
+    u8 i;
+    u8 j;
+    u8 actionId;
+    u8 lineHeight = GetFontAttribute(FONT_NARROW, FONTATTR_MAX_LETTER_HEIGHT);
+
+    FillWindowPixelBuffer(windowId, PIXEL_FILL(BAG_CONTEXT_MENU_FILL_COLOR));
+    Menu_SetCursorFillValue(BAG_CONTEXT_MENU_FILL_COLOR);
+    for (i = 0; i < rows; i++)
+    {
+        for (j = 0; j < columns; j++)
+        {
+            actionId = gBagMenu->contextMenuItemsPtr[(columns * i) + j];
+            AddTextPrinterParameterized4(windowId, FONT_NARROW, 8 + (56 * j), 1 + (lineHeight * i), 0, 0,
+                                         sContextMenuTextColors, TEXT_SKIP_DRAW, sItemMenuActions[actionId].text);
+        }
+    }
+    CopyWindowToVram(windowId, COPYWIN_GFX);
     InitMenuActionGrid(windowId, 56, columns, rows, 0);
 }
 
@@ -3058,6 +3085,11 @@ static void BagMenu_RemoveWindow(u8 windowType)
     u8 *windowId = &gBagMenu->windowIds[windowType];
     if (*windowId != WINDOW_NONE)
     {
+        if (windowType == ITEMWIN_1x1
+         || windowType == ITEMWIN_1x2
+         || windowType == ITEMWIN_2x2
+         || windowType == ITEMWIN_2x3)
+            Menu_ResetCursorFillValue();
         ClearStdWindowAndFrameToTransparent(*windowId, FALSE);
         ClearWindowTilemap(*windowId);
         RemoveWindow(*windowId);

@@ -1,4 +1,4 @@
-.set LOCALID_ARIANA, 9
+.set LOCALID_ARIANA, 10
 .set LOCALID_ITEMBALL_MOON_STONE, 10
 
 MtMoon_Outside_MapScripts::
@@ -10,7 +10,10 @@ MtMoon_Outside_EventScript_Ariana::
 	setspeaker MtMoon_Outside_Speaker_Ariana
 	msgbox MtMoon_Outside_Text_Ariana_Capture, MSGBOX_DEFAULT
 	closemessage
+	playse SE_PIN
 	applymovement LOCALID_ARIANA, Common_Movement_ExclamationMark
+	waitmovement 0
+	applymovement LOCALID_ARIANA, MtMoon_Outside_Movement_Ariana_Spin
 	waitmovement 0
 	faceplayer
 	setspeaker MtMoon_Outside_Speaker_Ariana
@@ -23,6 +26,17 @@ MtMoon_Outside_EventScript_Ariana::
 	fadescreenswapbuffers FADE_FROM_BLACK
 	release
 	end
+
+MtMoon_Outside_Movement_Ariana_Spin:
+	face_up
+	delay_4
+	face_left
+	delay_4
+	face_down
+	delay_4
+	face_right
+	delay_4
+	step_end
 
 MtMoon_Outside_EventScript_ClefairyCry::
 	lock

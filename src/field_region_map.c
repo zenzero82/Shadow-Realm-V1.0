@@ -15,6 +15,7 @@
 #include "text.h"
 #include "text_window.h"
 #include "window.h"
+#include "constants/regions.h"
 #include "constants/rgb.h"
 #include "constants/songs.h"
 
@@ -51,6 +52,7 @@ static void MCB2_FieldUpdateRegionMap(void);
 static void FieldUpdateRegionMap(void);
 static void PrintRegionMapSecName();
 static void PrintTitleWindowText();
+static const u8 *GetRegionMapTitleText(void);
 
 static const struct BgTemplate sFieldRegionMapBgTemplates[] = {
     {
@@ -231,7 +233,8 @@ static void PrintRegionMapSecName(void)
 static void PrintTitleWindowText(void)
 {
     static const u8 FlyPromptText[] = _("{R_BUTTON} FLY");
-    u32 hoennOffset = GetStringCenterAlignXOffset(FONT_NORMAL, gText_Hoenn, 0x38);
+    const u8 *regionText = GetRegionMapTitleText();
+    u32 regionOffset = GetStringCenterAlignXOffset(FONT_NORMAL, regionText, 0x38);
     u32 flyOffset = GetStringCenterAlignXOffset(FONT_NORMAL, FlyPromptText, 0x38);
 
     FillWindowPixelBuffer(WIN_TITLE, PIXEL_FILL(1));
@@ -244,7 +247,21 @@ static void PrintTitleWindowText(void)
     }
     else
     {
-        AddTextPrinterParameterized(WIN_TITLE, FONT_NORMAL, gText_Hoenn, hoennOffset, 1, 0, NULL);
+        AddTextPrinterParameterized(WIN_TITLE, FONT_NORMAL, regionText, regionOffset, 1, 0, NULL);
         CopyWindowToVram(WIN_TITLE, COPYWIN_FULL);
+    }
+}
+
+static const u8 *GetRegionMapTitleText(void)
+{
+    switch (RegionMap_GetCurrentRegion())
+    {
+    case REGION_KANTO:
+        return gText_Kanto;
+    case REGION_JOHTO:
+        return gText_Johto;
+    case REGION_HOENN:
+    default:
+        return gText_Hoenn;
     }
 }

@@ -23,7 +23,7 @@ cinnabar_pokecenter_EventScript_Bookshelf2::
 	end
 
 cinnabar_pokecenter_EventScript_WallMap::
-	goto EventScript_RegionMap
+	goto EventScript_RegionMap_Kanto
 
 cinnabar_pokecenter_Text_Bookshelf1:
 	.string "Research notes from CINNABAR LAB.$"

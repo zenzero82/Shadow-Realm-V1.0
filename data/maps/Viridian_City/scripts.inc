@@ -276,10 +276,16 @@ ViridianCity_GymScene_Open_T3::
 ViridianCity_GymScene_SpawnGonzap::
     waitmovement 0
 
+    playse SE_SLIDING_DOOR
+    opendoor 35, 10
+    waitdooranim
+
     clearflag FLAG_HIDE_VIRIDIAN_GONZAP
     showobjectat 5, MAP_VIRIDIAN_CITY    @ LOCALID 5 = Gonzap
     applymovement 5, ViridianCity_Move_Gonzap_ExitGym
     waitmovement 0
+    closedoor 35, 10
+    waitdooranim
 
     compare VAR_0x8004, 0
     goto_if_eq ViridianCity_GymScene_FaceGonzap_T2
@@ -325,10 +331,8 @@ ViridianCity_GymScene_Shift_T3::
     goto ViridianCity_GymScene_AfterGonzap
 
 ViridianCity_GymScene_AfterGonzap::
-    fadescreenswapbuffers FADE_TO_BLACK
     setflag FLAG_HIDE_VIRIDIAN_GONZAP
     removeobject 5
-    fadescreenswapbuffers FADE_FROM_BLACK
     fadedefaultbgm
 
     compare VAR_0x8004, 0
@@ -401,7 +405,6 @@ ViridianCity_Move_Grunt_T3_Return:
     step_end
 
 ViridianCity_Move_Gonzap_ExitGym:
-    walk_down
     walk_down
     step_end
 
@@ -535,7 +538,7 @@ ViridianCity_Text_CoffeeGramps_Question:
     .string "I need to talk to someone, so you'll\n"
     .string "have to do!\p"
     .string "I might not look like much now, but\n"
-    .string "I was an expert at catching POKEMON.\p"
+    .string "I was an expert at catching POKéMON.\p"
     .string "Do you believe me?$"
 
 ViridianCity_Text_CoffeeGramps_Believed:
@@ -592,7 +595,7 @@ ViridianCity_Text_Sign:
     .string "The Eternally Green Paradise$"
 
 ViridianCity_Text_GymSign:
-    .string "VIRIDIAN CITY POKEMON GYM\n"
+    .string "VIRIDIAN CITY POKéMON GYM\n"
     .string "LEADER: …\p"
     .string "The rest of the text is illegible…$"
 

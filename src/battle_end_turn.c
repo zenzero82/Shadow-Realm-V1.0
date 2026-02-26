@@ -5,6 +5,7 @@
 #include "battle_controllers.h"
 #include "battle_ai_util.h"
 #include "battle_gimmick.h"
+#include "battle_interface.h"
 #include "battle_scripts.h"
 #include "constants/battle.h"
 #include "constants/battle_string_ids.h"
@@ -1566,6 +1567,19 @@ static bool32 HandleEndTurnReverseMode(u32 battler)
     u32 ability = GetBattlerAbility(battler);
 
     gBattleStruct->turnEffectsBattlerId++;
+
+    if (!IsOnPlayerSide(battler))
+    {
+        if (gBattleMons[battler].isReverse)
+        {
+            gBattleMons[battler].isReverse = FALSE;
+            if (gHealthboxSpriteIds[battler] < MAX_SPRITES)
+                UpdateHealthboxAttribute(gHealthboxSpriteIds[battler], GetBattlerMon(battler), HEALTHBOX_ALL);
+            if (gHealthboxSpriteIds[battler] < MAX_SPRITES)
+                UpdateIndicatorVisibilityAndType(gHealthboxSpriteIds[battler], FALSE);
+        }
+        return FALSE;
+    }
 
     if (gBattleMons[battler].isReverse
         && IsBattlerAlive(battler)

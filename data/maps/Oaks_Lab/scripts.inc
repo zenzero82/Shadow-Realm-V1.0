@@ -737,10 +737,10 @@ OaksLab_Text_FindCoworker:
     .string "any hints on his PC.$"
 OaksLab_Text_Leo_EnterLab:
     .string "Nia! It seems that issue the Professor\n"
-    .string "has been researching has made its way\n"
+    .string "has been researching has made its way\l"
     .string "to Pallet Town!\p"
     .string "One of those people just captured a\n"
-    .string "POKEMON and transformed it!$"
+    .string "POKéMON and transformed it!$"
 
 OaksLab_Text_OakEmailIntro:
     .string "Oh no! This is not good.\p"
@@ -748,7 +748,7 @@ OaksLab_Text_OakEmailIntro:
     .string "The Professor got an email from\n"
     .string "a colleague. It says:\p"
     .string "A trainer arrived through a portal.\n"
-    .string "Give them one of the POKEMON that\l"
+    .string "Give them one of the POKéMON that\l"
     .string "Oak was studying...$"
 
 OaksLab_Text_Leo_ToPlayer:
@@ -758,7 +758,7 @@ OaksLab_Text_Leo_ToPlayer:
     .string "strange portal.\p"
     .string "...You're the one! Please, you have to\n"
     .string "help us!\p"
-    .string "The POKEMON the Professor was studying\n"
+    .string "The POKéMON the Professor was studying\n"
     .string "are on the table.$"
 OaksLab_Text_Aide_PointToStarters:
     .string "Leo, you should also give him a\n"
@@ -774,7 +774,7 @@ OaksLab_Text_Leo_BlockExit:
     .string "Please pick a partner before you go!$"
 OaksLab_Text_Leo_PostStarter:
     .string "I hope the Professor was right to\n"
-    .string "entrust a POKEMON to you.\p"
+    .string "entrust a POKéMON to you.\p"
     .string "There has been so much strange activity\n"
     .string "lately. I have trust issues...$"
 OaksLab_Text_Leo_GrantNationalDex:
@@ -782,7 +782,7 @@ OaksLab_Text_Leo_GrantNationalDex:
     .string "Like she said, take this and use it\n"
     .string "on your journey.\p"
     .string "It can really help document the strange\n"
-    .string "appearance of POKEMON in this region.$"
+    .string "appearance of POKéMON in this region.$"
 OaksLab_Text_Nia_PostStarter:
     .string "We don't know much about what is\n"
     .string "happening.\p"
@@ -802,10 +802,9 @@ OaksLab_Text_Ball_Zorua_Inspect:
 
 OaksLab_Text_StarterBall_NotYet:
     .string "It seems like there is a Pokemon inside.\p"
-    .string "Better not touch it yet.$"
+    .string "Better not touch it.$"
 
 OaksLab_Text_StarterBall_AlreadyHavePokemon:
-    .string "The Pokeball is empty.\p"
     .string "You already chose a starter Pokemon.$"
 
 OaksLab_Text_NicknamePrompt:
@@ -828,13 +827,13 @@ OaksLab_Text_ReceivedPokedex:
 
 OaksLab_Text_OaksPC:
     .string "OAK's PC is full of notes on\n"
-    .string "SHADOW POKeMON research.\p"
+    .string "POKéMON research.\p"
     .string "There are detailed studies on the\n"
-    .string "starter POKeMON too.$"
+    .string "starter POKéMON too.$"
 
 OaksLab_Text_Bookshelf_Collection:
     .string "A large collection of books on\n"
-    .string "POKeMON habitats and biology.$"
+    .string "POKéMON habitats and biology.$"
 
 OaksLab_Text_Bookshelf_Studies:
     .string "Stacks of research papers on\n"
@@ -842,17 +841,17 @@ OaksLab_Text_Bookshelf_Studies:
 
 OaksLab_Text_Bookshelf_XD:
     .string "A draft titled XD catches your eye.\p"
-    .string "It mentions a strange new POKeMON form.$"
+    .string "It mentions a strange new POKéMON form.$"
 
 OaksLab_Text_Oak_Concern:
     .string "What is it that is different with\n"
-    .string "these 3 POKeMON?\p"
+    .string "these 3 POKéMON?\p"
     .string "Why are they able to resist?$"
 
 OaksLab_Text_Oak_Intro:
     .string "That's got to be it! I finally\n"
     .string "understand what is causing the\l"
-    .string "strange phenomenon in these POKEMON.\p"
+    .string "strange phenomenon in these POKéMON.\p"
     .string "I need to call the others and\n"
     .string "schedule a meeting.$"
 

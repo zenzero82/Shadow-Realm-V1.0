@@ -2015,28 +2015,22 @@ MatchCall_BattlePyramidText14::
 	.string "See you again!$"
 
 MatchCall_Text_Mom1::
-	.string "MOM: Your father and you…\n"
-	.string "Everyone is captivated by POKéMON.\p"
-	.string "What is the charm of POKéMON?\p"
-	.string "Me?\n"
-	.string "I adore POKéMON that help me with\l"
-	.string "my everyday chores.$"
+	.string "MOM: Hi, {PLAYER}!\p"
+	.string "Your savings balance is {STR_VAR_1}.\p"
+	.string "Press A to have me send it, or B\l"
+	.string "to keep saving.$"
 
 MatchCall_Text_Mom2::
-	.string "MOM: Hi, {PLAYER}!\n"
-	.string "Your father keeps himself locked\l"
-	.string "away in the PETALBURG GYM.\p"
-	.string "He comes home every so often.\n"
-	.string "But he goes back to the GYM when\l"
-	.string "he's eaten everything he can.\p"
-	.string "I'm guessing that losing to you\n"
-	.string "was a big blow to his pride!$"
+	.string "MOM: Hi, {PLAYER}!\p"
+	.string "Your savings balance is {STR_VAR_1}.\p"
+	.string "Press A to have me send it, or B\l"
+	.string "to keep saving.$"
 
 MatchCall_Text_Mom3::
-	.string "MOM: {PLAYER}…\n"
-	.string "Don't worry about me or the house.\p"
-	.string "Wear those RUNNING SHOES until\n"
-	.string "they fall apart, honey!$"
+	.string "MOM: Hi, {PLAYER}!\p"
+	.string "Your savings balance is {STR_VAR_1}.\p"
+	.string "Press A to have me send it, or B\l"
+	.string "to keep saving.$"
 
 MatchCall_Text_Roxanne1::
 	.string "ROXANNE: Oh, hello, {PLAYER}!\p"
@@ -2332,6 +2326,29 @@ MatchCall_Text_BrendanRayquazaCall:
 	.string "amazing before.\p"
 	.string "I wish you could've seen it,\n"
 	.string "{PLAYER}.\p"
+	.string "… … … … … …\n"
+	.string "… … … … … Click!$"
+
+MatchCall_Text_RowanShadowHunter:
+	.string "… … … … … …\n"
+	.string "… … … … … Beep!\p"
+	.string "It's your professor.\p"
+	.string "Your Shadow Tracker is buzzing.\p"
+	.string "It seems a trainer with a\n"
+	.string "shadow POKéMON has appeared.\p"
+	.string "… … … … … …\n"
+	.string "… … … … … Click!$"
+
+MatchCall_Text_MattUnionCave:
+	.string "… … … … … …\n"
+	.string "… … … … … Beep!\p"
+	.string "???: We were able to Lure MICHAEL\l"
+	.string "out of VIOLET. The MAURDER should\l"
+	.string "be finishing up getting the\l"
+	.string "blueprints from that Old Man.\p"
+	.string "Make your way over to OLIVINE CITY.\n"
+	.string "We got somethings to take care of.\p"
+	.string "MATT: Aye Aye Cap.\p"
 	.string "… … … … … …\n"
 	.string "… … … … … Click!$"
 

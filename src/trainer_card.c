@@ -10,6 +10,7 @@
 #include "sound.h"
 #include "frontier_pass.h"
 #include "overworld.h"
+#include "region_map.h"
 #include "menu.h"
 #include "text.h"
 #include "event_data.h"
@@ -31,6 +32,7 @@
 #include "constants/game_stat.h"
 #include "constants/battle_frontier.h"
 #include "constants/rgb.h"
+#include "constants/regions.h"
 #include "constants/trainers.h"
 #include "constants/union_room.h"
 
@@ -38,6 +40,7 @@ enum {
     WIN_MSG,
     WIN_CARD_TEXT,
     WIN_TRAINER_PIC,
+    WIN_CARD_HINT,
 };
 
 struct TrainerCardData
@@ -174,8 +177,12 @@ static void ChangeTrainerCardRegion(s8 delta);
 static void ReloadTrainerCardRegionGfx(void);
 static void RedrawTrainerCard(u8 taskId);
 static void PrintRegionNameOnCard(void);
+static void PrintRegionSwitchHint(void);
 static void LoadTrainerCardRegionPalettes(void);
 static void UpdateBadgeCountForRegion(void);
+static bool8 IsTrainerCardRegionUnlocked(u8 region);
+static s8 GetNextUnlockedRegion(s8 start, s8 delta);
+static u8 GetUnlockedTrainerCardRegionCount(void);
 
 static const u32 sTrainerCardStickers_Gfx[]      = INCBIN_U32("graphics/trainer_card/frlg/stickers.4bpp.lz");
 static const u16 sUnused_Pal[]                   = INCBIN_U16("graphics/trainer_card/unused.gbapal");
@@ -324,6 +331,15 @@ static const struct WindowTemplate sTrainerCardWindowTemplates[] =
         .height = 10,
         .paletteNum = 8,
         .baseBlock = 0x150,
+    },
+    [WIN_CARD_HINT] = {
+        .bg = 1,
+        .tilemapLeft = 1,
+        .tilemapTop = 0,
+        .width = 28,
+        .height = 1,
+        .paletteNum = 15,
+        .baseBlock = 0x1F9,
     },
     DUMMY_WIN_TEMPLATE
 };
@@ -485,15 +501,61 @@ static void UpdateBadgeCountForRegion(void)
     }
 }
 
+static bool8 IsTrainerCardRegionUnlocked(u8 region)
+{
+    switch (region)
+    {
+    case TRAINER_CARD_REGION_KANTO:
+        return TRUE;
+    case TRAINER_CARD_REGION_JOHTO:
+        return FlagGet(FLAG_TRAINER_CARD_JOHTO_UNLOCKED);
+    case TRAINER_CARD_REGION_HOENN:
+        return FlagGet(FLAG_TRAINER_CARD_HOENN_UNLOCKED);
+    default:
+        return FALSE;
+    }
+}
+
+static s8 GetNextUnlockedRegion(s8 start, s8 delta)
+{
+    s8 region = start;
+    u8 i;
+
+    for (i = 0; i < TRAINER_CARD_REGION_COUNT; i++)
+    {
+        region += delta;
+        if (region < 0)
+            region = TRAINER_CARD_REGION_COUNT - 1;
+        else if (region >= TRAINER_CARD_REGION_COUNT)
+            region = 0;
+
+        if (IsTrainerCardRegionUnlocked(region))
+            return region;
+    }
+
+    return start;
+}
+
+static u8 GetUnlockedTrainerCardRegionCount(void)
+{
+    u8 count = 0;
+    u8 i;
+
+    for (i = 0; i < TRAINER_CARD_REGION_COUNT; i++)
+    {
+        if (IsTrainerCardRegionUnlocked(i))
+            count++;
+    }
+
+    return count;
+}
 
 static void ChangeTrainerCardRegion(s8 delta)
 {
-    s8 region = sData->cardRegion + delta;
+    s8 region = GetNextUnlockedRegion(sData->cardRegion, delta);
 
-    if (region < 0)
-        region = TRAINER_CARD_REGION_COUNT - 1;
-    else if (region >= TRAINER_CARD_REGION_COUNT)
-        region = 0;
+    if (region == sData->cardRegion)
+        return;
 
     sData->cardRegion = region;
     ReloadTrainerCardRegionGfx();
@@ -517,6 +579,7 @@ static void Task_TrainerCard(u8 taskId)
         if (!IsDma3ManagerBusyWithBgCopy())
         {
             FillWindowPixelBuffer(WIN_CARD_TEXT, PIXEL_FILL(0));
+            FillWindowPixelBuffer(WIN_CARD_HINT, PIXEL_FILL(0));
             sData->mainState++;
         }
         break;
@@ -526,6 +589,7 @@ static void Task_TrainerCard(u8 taskId)
         break;
     case 2:
         DrawTrainerCardWindow(WIN_CARD_TEXT);
+        DrawTrainerCardWindow(WIN_CARD_HINT);
         sData->mainState++;
         break;
     case 3:
@@ -575,6 +639,7 @@ static void Task_TrainerCard(u8 taskId)
         {
             PrintTimeOnCard();
             DrawTrainerCardWindow(WIN_CARD_TEXT);
+            DrawTrainerCardWindow(WIN_CARD_HINT);
             sData->timeColonNeedDraw = FALSE;
         }
 
@@ -804,6 +869,7 @@ static void RedrawTrainerCard(u8 taskId)
 
     // Clear text window
     FillWindowPixelBuffer(WIN_CARD_TEXT, PIXEL_FILL(0));
+    FillWindowPixelBuffer(WIN_CARD_HINT, PIXEL_FILL(0));
 
     // Reset the print state so we redraw EVERYTHING
     sData->printState = 0;
@@ -824,6 +890,7 @@ static void RedrawTrainerCard(u8 taskId)
 
     // Push updated window to screen
     DrawTrainerCardWindow(WIN_CARD_TEXT);
+    DrawTrainerCardWindow(WIN_CARD_HINT);
 
     // Optional feedback sound
     PlaySE(SE_SELECT);
@@ -1000,9 +1067,6 @@ void CopyTrainerCardData(struct TrainerCard *dst, struct TrainerCard *src, u8 ga
 
 static void SetDataFromTrainerCard(void)
 {
-    u8 i;
-    u32 badgeFlag;
-
     sData->hasPokedex = FALSE;
     sData->hasHofResult = FALSE;
     sData->hasLinkResults = FALSE;
@@ -1129,6 +1193,20 @@ static void PrintRegionNameOnCard(void)
         TEXT_SKIP_DRAW, regionText);
 }
 
+static void PrintRegionSwitchHint(void)
+{
+    u8 x;
+
+    if (GetUnlockedTrainerCardRegionCount() < 2)
+        return;
+
+    x = GetStringRightAlignXOffset(FONT_SMALL, gText_TrainerCardSwitchHint, 216);
+    AddTextPrinterParameterized3(
+        WIN_CARD_HINT, FONT_SMALL,
+        x, 0, sTrainerCardTextColors,
+        TEXT_SKIP_DRAW, gText_TrainerCardSwitchHint);
+}
+
 static bool8 PrintAllOnCardFront(void)
 {
     switch (sData->printState)
@@ -1153,6 +1231,9 @@ static bool8 PrintAllOnCardFront(void)
         break;
     case 6:  // <-- add this
         PrintRegionNameOnCard();
+        break;
+    case 7:
+        PrintRegionSwitchHint();
         break;
     default:
         sData->printState = 0;
@@ -1192,6 +1273,9 @@ static bool8 PrintAllOnCardBack(void)
         break;
     case 7:
         PrintStickersOnCard();
+        break;
+    case 8:
+        PrintRegionSwitchHint();
         break;
     default:
         sData->printState = 0;
@@ -1938,6 +2022,7 @@ static bool8 Task_DrawFlippedCardSide(struct Task *task)
         {
         case 0:
             FillWindowPixelBuffer(WIN_CARD_TEXT, PIXEL_FILL(0));
+            FillWindowPixelBuffer(WIN_CARD_HINT, PIXEL_FILL(0));
             FillBgTilemapBufferRect_Palette0(3, 0, 0, 0, 0x20, 0x20);
             break;
         case 1:
@@ -1957,6 +2042,7 @@ static bool8 Task_DrawFlippedCardSide(struct Task *task)
                 DrawCardFrontOrBack(sData->backTilemap);
             else
                 DrawTrainerCardWindow(WIN_CARD_TEXT);
+            DrawTrainerCardWindow(WIN_CARD_HINT);
             break;
         case 3:
             if (!sData->onBack)
@@ -1993,6 +2079,7 @@ static bool8 Task_SetCardFlipped(struct Task *task)
     }
 
     DrawTrainerCardWindow(WIN_CARD_TEXT);
+    DrawTrainerCardWindow(WIN_CARD_HINT);
 
     // Toggle which side is considered "current"
     sData->onBack ^= 1;
@@ -2090,6 +2177,22 @@ void ShowTrainerCardInLink(u8 cardId, void (*callback)(void))
     SetMainCallback2(CB2_InitTrainerCard);
 }
 
+static u8 GetDefaultTrainerCardRegion(void)
+{
+    u8 region = RegionMap_GetRegionFromMapGroup(gSaveBlock1Ptr->location.mapGroup);
+
+    switch (region)
+    {
+    case REGION_JOHTO:
+        return TRAINER_CARD_REGION_JOHTO;
+    case REGION_HOENN:
+        return TRAINER_CARD_REGION_HOENN;
+    case REGION_KANTO:
+    default:
+        return TRAINER_CARD_REGION_KANTO;
+    }
+}
+
 static void InitTrainerCardData(void)
 {
     u8 i;
@@ -2102,7 +2205,9 @@ static void InitTrainerCardData(void)
     sData->cardType = GetSetCardType();
 
     // Default region when opening the Trainer Card
-    sData->cardRegion = TRAINER_CARD_REGION_KANTO;
+    sData->cardRegion = GetDefaultTrainerCardRegion();
+    if (!IsTrainerCardRegionUnlocked(sData->cardRegion))
+        sData->cardRegion = GetNextUnlockedRegion(sData->cardRegion, +1);
 
     for (i = 0; i < TRAINER_CARD_PROFILE_LENGTH; i++)
         CopyEasyChatWord(sData->easyChatProfile[i], sData->trainerCard.easyChatProfile[i]);

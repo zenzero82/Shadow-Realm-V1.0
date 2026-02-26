@@ -71,11 +71,11 @@ Route35NationalParkGate_Text_Rocker:
 
 Route35NationalParkGate_Text_BugCatcher1:
 	.string "I'm going to catch the strongest\n"
-	.string "bug POKEMON!$"
+	.string "bug POKéMON!$"
 
 Route35NationalParkGate_Text_BugCatcher2:
-	.string "I love big, tough bug POKEMON.$"
+	.string "I love big, tough bug POKéMON.$"
 
 Route35NationalParkGate_Text_Beauty:
-	.string "Bug POKEMON are full of surprises.$"
+	.string "Bug POKéMON are full of surprises.$"
 

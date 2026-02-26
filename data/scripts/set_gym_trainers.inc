@@ -8,6 +8,7 @@ Common_EventScript_SetGymTrainers::
 	case 6, FortreeCity_Gym_SetGymTrainers
 	case 7, MossdeepCity_Gym_SetGymTrainers
 	case 8, SootopolisCity_Gym_SetGymTrainers
+	case 18, AzaleaTown_Gym_SetGymTrainers
 	end
 
 RustboroCity_Gym_SetGymTrainers::
@@ -89,4 +90,11 @@ SootopolisCity_Gym_SetGymTrainers::
 	settrainerflag TRAINER_BETHANY
 	settrainerflag TRAINER_ANNIKA
 	settrainerflag TRAINER_DAPHNE
+	return
+
+AzaleaTown_Gym_SetGymTrainers::
+	settrainerflag TRAINER_AZALEA_AL
+	settrainerflag TRAINER_AZALEA_JOSH
+	settrainerflag TRAINER_AZALEA_BENNY
+	settrainerflag TRAINER_AZALEA_AMY_AND_MAY
 	return

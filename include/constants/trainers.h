@@ -208,7 +208,19 @@
 #define TRAINER_PIC_ACE_TRAINER_GEN2M    172
 #define TRAINER_PIC_ACE_TRAINER_GEN2F    173
 
-#define TRAINER_PIC_COUNT                 174
+#define TRAINER_PIC_ARDOS                174
+#define TRAINER_PIC_ELDES                175
+#define TRAINER_PIC_GREEVIL              176
+#define TRAINER_PIC_NASCOUR              177
+#define TRAINER_PIC_VENUS                178
+#define TRAINER_PIC_DAKIM                179
+#define TRAINER_PIC_FLARE_MFP            180
+#define TRAINER_PIC_SKULL_MFP            181
+#define TRAINER_PIC_CASSIDY_BUTCH        182
+#define TRAINER_PIC_BRYONY               183
+#define TRAINER_PIC_IRON_MASKED_MARAUDER 184
+
+#define TRAINER_PIC_COUNT                185
 
 // The player back pics are assumed to alternate according to the gender values (MALE/FEMALE)
 #define TRAINER_BACK_PIC_BRENDAN                0
@@ -478,8 +490,10 @@
 #define TRAINER_CLASS_SNAGEM_HEAD    0x58
 #define TRAINER_CLASS_SUPER_NERD     0x59
 #define TRAINER_CLASS_ACE_TRAINER    0x5A
+#define TRAINER_CLASS_TEAM_FLARE_ADMIN 0x5B
+#define TRAINER_CLASS_TEAM_GALACTIC_ADMIN 0x5C
 
-#define TRAINER_CLASS_COUNT          0x5B
+#define TRAINER_CLASS_COUNT          0x5D
 
 #define TRAINER_ENCOUNTER_MUSIC_MALE         0 // standard male encounter music
 #define TRAINER_ENCOUNTER_MUSIC_FEMALE       1 // standard female encounter music
@@ -499,6 +513,8 @@
 #define TRAINER_ENCOUNTER_MUSIC_TEAM_ROCKET 15
 #define TRAINER_ENCOUNTER_MUSIC_GYM_LEADER  16
 #define TRAINER_ENCOUNTER_MUSIC_MIRRORB     17
+#define TRAINER_ENCOUNTER_MUSIC_GALACTIC    18
+#define TRAINER_ENCOUNTER_MUSIC_PLASMA      19
 
 #define F_TRAINER_FEMALE (1 << 7)
 

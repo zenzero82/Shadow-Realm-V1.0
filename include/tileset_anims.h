@@ -35,5 +35,6 @@ void InitTilesetAnim_BattlePyramid(void);
 void InitTilesetAnim_NationalPark(void);
 void InitTilesetAnim_ecruteak_theater(void);
 void InitTilesetAnim_AzaleaTown_Gym(void);
+void InitTilesetAnim_WesCave(void);
 
 #endif // GUARD_TILESET_ANIMS_H

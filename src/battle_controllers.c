@@ -247,6 +247,7 @@ void SetUpBattleVarsAndBirchZigzagoon(void)
     s32 i;
 
     gBattleMainFunc = BeginBattleIntroDummy;
+    gShadowMonFledThisBattle = FALSE;
 
     for (i = 0; i < MAX_BATTLERS_COUNT; i++)
     {
@@ -1821,6 +1822,8 @@ static u32 GetBattlerMonData(u32 battler, struct Pokemon *party, u32 monId, u8 *
         battleMon.isShadow = GetMonData(&party[monId], MON_DATA_IS_SHADOW);
         battleMon.shadowAggro = GetMonData(&party[monId], MON_DATA_SHADOW_AGGRO);
         battleMon.isReverse = GetMonData(&party[monId], MON_DATA_REVERSE_MODE);
+        if (!IsOnPlayerSide(battler))
+            battleMon.isReverse = FALSE;
         battleMon.snagged = GetMonData(&party[monId], MON_DATA_SNAGGED);
         battleMon.shadowID = GetMonData(&party[monId], MON_DATA_SHADOW_ID);
         battleMon.heartVal = GetMonData(&party[monId], MON_DATA_HEART_VALUE);

@@ -331,7 +331,7 @@ ViridianForest_EventScript_Item_ParalyzeHeal::
     end
 
 ViridianForest_EventScript_Item_Time_Flute::
-    finditem ITEM_TIME_FLUTE
+    finditem ITEM_PARALYZE_HEAL
     goto_if_eq VAR_0x8007, FALSE, ViridianForest_EventScript_Item_Done
     removeobject LOCALID_ITEMBALL_TIME_FLUTE
     end

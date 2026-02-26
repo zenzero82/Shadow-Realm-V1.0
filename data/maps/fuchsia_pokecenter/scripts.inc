@@ -23,7 +23,7 @@ fuchsia_pokecenter_EventScript_Bookshelf2::
 	end
 
 fuchsia_pokecenter_EventScript_WallMap::
-	goto EventScript_RegionMap
+	goto EventScript_RegionMap_Kanto
 
 fuchsia_pokecenter_Text_Bookshelf1:
 	.string "A SAFARI ZONE guide.$"

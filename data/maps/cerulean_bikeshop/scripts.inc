@@ -37,6 +37,7 @@ CeruleanBikeShop_EventScript_LookerTrigger_Right::
 
 CeruleanBikeShop_EventScript_Looker::
 	lockall
+	setvar VAR_TEMP_1, 3
 	faceplayer
 	goto CeruleanBikeShop_EventScript_Looker_Start
 
@@ -72,6 +73,37 @@ CeruleanBikeShop_EventScript_Looker_After::
 	setspeaker CeruleanBikeShop_Speaker_Looker
 	msgbox CeruleanBikeShop_Text_Looker_After, MSGBOX_NPC
 	closemessage
+	compare VAR_TEMP_1, 0
+	goto_if_eq CeruleanBikeShop_EventScript_Looker_ExitLeft
+	compare VAR_TEMP_1, 2
+	goto_if_eq CeruleanBikeShop_EventScript_Looker_ExitRight
+	compare VAR_TEMP_1, 3
+	goto_if_eq CeruleanBikeShop_EventScript_Looker_ExitDirect
+	goto CeruleanBikeShop_EventScript_Looker_ExitCenter
+
+CeruleanBikeShop_EventScript_Looker_ExitLeft::
+	applymovement LOCALID_LOOKER, CeruleanBikeShop_Movement_Looker_ExitLeft
+	waitmovement 0
+	goto CeruleanBikeShop_EventScript_Looker_ExitDone
+
+CeruleanBikeShop_EventScript_Looker_ExitCenter::
+	applymovement LOCALID_LOOKER, CeruleanBikeShop_Movement_Looker_ExitCenter
+	waitmovement 0
+	goto CeruleanBikeShop_EventScript_Looker_ExitDone
+
+CeruleanBikeShop_EventScript_Looker_ExitRight::
+	applymovement LOCALID_LOOKER, CeruleanBikeShop_Movement_Looker_ExitRight
+	waitmovement 0
+	goto CeruleanBikeShop_EventScript_Looker_ExitDone
+
+CeruleanBikeShop_EventScript_Looker_ExitDirect::
+	applymovement LOCALID_LOOKER, CeruleanBikeShop_Movement_Looker_ExitDirect
+	waitmovement 0
+	goto CeruleanBikeShop_EventScript_Looker_ExitDone
+
+CeruleanBikeShop_EventScript_Looker_ExitDone::
+	setflag FLAG_HIDE_CERULEAN_BIKESHOP_LOOKER
+	removeobject LOCALID_LOOKER
 	releaseall
 	end
 
@@ -112,4 +144,25 @@ CeruleanBikeShop_Movement_Looker_ApproachRight:
 	walk_down
 	walk_right
 	face_down
+	step_end
+
+CeruleanBikeShop_Movement_Looker_ExitLeft:
+	walk_right
+	walk_down
+	step_end
+
+CeruleanBikeShop_Movement_Looker_ExitCenter:
+	walk_down
+	walk_down
+	step_end
+
+CeruleanBikeShop_Movement_Looker_ExitRight:
+	walk_left
+	walk_down
+	step_end
+
+CeruleanBikeShop_Movement_Looker_ExitDirect:
+	walk_down
+	walk_down
+	walk_down
 	step_end

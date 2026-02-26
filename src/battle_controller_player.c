@@ -100,6 +100,11 @@ static void MoveSelectionDisplayMoveDescription(u32 battler);
 static void SwitchIn_HandleSoundAndEnd(u32 battler);
 static void WaitForMonSelection(u32 battler);
 static void CompleteWhenChoseItem(u32 battler);
+static void HandleInputChooseBallTarget(u32 battler);
+static bool8 IsOpponentShadowBattler(u8 battler);
+static bool8 ShouldSelectShadowBallTarget(void);
+static void StartBallTargetSelection(u32 battler, u8 mode, u16 itemId);
+static u8 GetOtherShadowOpponent(u8 battler);
 static void Task_LaunchLvlUpAnim(u8);
 static void Task_PrepareToGiveExpWithExpBar(u8);
 static void Task_SetControllerToWaitForString(u8);
@@ -118,6 +123,16 @@ static void ReloadMoveNames(u32 battler);
 static u32 CheckTypeEffectiveness(u32 targetId, u32 battler);
 static u32 CheckTargetTypeEffectiveness(u32 battler);
 static void MoveSelectionDisplayMoveEffectiveness(u32 foeEffectiveness, u32 battler);
+
+enum
+{
+    BALL_TARGET_NONE,
+    BALL_TARGET_FROM_LAST_USED,
+    BALL_TARGET_FROM_BAG,
+};
+
+static u8 sBallTargetMode[MAX_BATTLERS_COUNT];
+static u16 sBallTargetItem[MAX_BATTLERS_COUNT];
 
 static void (*const sPlayerBufferCommands[CONTROLLER_CMDS_COUNT])(u32 battler) =
 {
@@ -327,9 +342,16 @@ static void HandleInputChooseAction(u32 battler)
                 gBattleStruct->ackBallUseBtn = FALSE;
                 PlaySE(SE_SELECT);
                 ArrowsChangeColorLastBallCycle(FALSE);
-                TryHideLastUsedBall();
-                BtlController_EmitTwoReturnValues(battler, B_COMM_TO_ENGINE, B_ACTION_THROW_BALL, 0);
-                PlayerBufferExecCompleted(battler);
+                if (ShouldSelectShadowBallTarget())
+                {
+                    StartBallTargetSelection(battler, BALL_TARGET_FROM_LAST_USED, ITEM_NONE);
+                }
+                else
+                {
+                    TryHideLastUsedBall();
+                    BtlController_EmitTwoReturnValues(battler, B_COMM_TO_ENGINE, B_ACTION_THROW_BALL, 0);
+                    PlayerBufferExecCompleted(battler);
+                }
             }
             return;
         }
@@ -447,9 +469,16 @@ static void HandleInputChooseAction(u32 battler)
              && JOY_NEW(B_LAST_USED_BALL_BUTTON) && CanThrowLastUsedBall())
     {
         PlaySE(SE_SELECT);
-        TryHideLastUsedBall();
-        BtlController_EmitTwoReturnValues(battler, B_COMM_TO_ENGINE, B_ACTION_THROW_BALL, 0);
-        PlayerBufferExecCompleted(battler);
+        if (ShouldSelectShadowBallTarget())
+        {
+            StartBallTargetSelection(battler, BALL_TARGET_FROM_LAST_USED, ITEM_NONE);
+        }
+        else
+        {
+            TryHideLastUsedBall();
+            BtlController_EmitTwoReturnValues(battler, B_COMM_TO_ENGINE, B_ACTION_THROW_BALL, 0);
+            PlayerBufferExecCompleted(battler);
+        }
     }
 }
 
@@ -596,6 +625,127 @@ void HandleInputChooseTarget(u32 battler)
         }
 
         gSprites[gBattlerSpriteIds[gMultiUsePlayerCursor]].callback = SpriteCB_ShowAsMoveTarget;
+    }
+}
+
+static bool8 IsOpponentShadowBattler(u8 battler)
+{
+    if (GetBattlerSide(battler) != B_SIDE_OPPONENT || !IsBattlerAlive(battler))
+        return FALSE;
+
+    if (gBattleMons[battler].isShadow)
+        return TRUE;
+
+    return GetMonData(GetBattlerMon(battler), MON_DATA_IS_SHADOW);
+}
+
+static bool8 ShouldSelectShadowBallTarget(void)
+{
+    u8 left, right;
+    u8 count = 0;
+
+    if (!IsDoubleBattle())
+        return FALSE;
+    if (!(gBattleTypeFlags & (BATTLE_TYPE_TRAINER | BATTLE_TYPE_FRONTIER)))
+        return FALSE;
+
+    left = GetBattlerAtPosition(B_POSITION_OPPONENT_LEFT);
+    right = GetBattlerAtPosition(B_POSITION_OPPONENT_RIGHT);
+
+    if (IsOpponentShadowBattler(left))
+        count++;
+    if (IsOpponentShadowBattler(right))
+        count++;
+
+    return (count > 1);
+}
+
+static u8 GetOtherShadowOpponent(u8 battler)
+{
+    u8 left = GetBattlerAtPosition(B_POSITION_OPPONENT_LEFT);
+    u8 right = GetBattlerAtPosition(B_POSITION_OPPONENT_RIGHT);
+
+    if (battler == left && IsOpponentShadowBattler(right))
+        return right;
+    if (battler == right && IsOpponentShadowBattler(left))
+        return left;
+
+    return battler;
+}
+
+static void StartBallTargetSelection(u32 battler, u8 mode, u16 itemId)
+{
+    u8 left = GetBattlerAtPosition(B_POSITION_OPPONENT_LEFT);
+    u8 right = GetBattlerAtPosition(B_POSITION_OPPONENT_RIGHT);
+
+    sBallTargetMode[battler] = mode;
+    sBallTargetItem[battler] = itemId;
+
+    if (IsOpponentShadowBattler(left))
+        gMultiUsePlayerCursor = left;
+    else
+        gMultiUsePlayerCursor = right;
+
+    gPlayerDpadHoldFrames = 0;
+    gBattlerControllerFuncs[battler] = HandleInputChooseBallTarget;
+    gSprites[gBattlerSpriteIds[gMultiUsePlayerCursor]].callback = SpriteCB_ShowAsMoveTarget;
+    DoBounceEffect(gMultiUsePlayerCursor, BOUNCE_HEALTHBOX, 15, 1);
+    TryHideLastUsedBall();
+}
+
+static void HandleInputChooseBallTarget(u32 battler)
+{
+    s32 i;
+
+    DoBounceEffect(gMultiUsePlayerCursor, BOUNCE_HEALTHBOX, 15, 1);
+    for (i = 0; i < gBattlersCount; i++)
+    {
+        if (i != gMultiUsePlayerCursor)
+            EndBounceEffect(i, BOUNCE_HEALTHBOX);
+    }
+
+    if (JOY_HELD(DPAD_ANY) && gSaveBlock2Ptr->optionsButtonMode == OPTIONS_BUTTON_MODE_L_EQUALS_A)
+        gPlayerDpadHoldFrames++;
+    else
+        gPlayerDpadHoldFrames = 0;
+
+    if (JOY_NEW(A_BUTTON))
+    {
+        PlaySE(SE_SELECT);
+        gSprites[gBattlerSpriteIds[gMultiUsePlayerCursor]].callback = SpriteCB_HideAsMoveTarget;
+        EndBounceEffect(gMultiUsePlayerCursor, BOUNCE_HEALTHBOX);
+
+        gBattleStruct->ballThrowTarget = gMultiUsePlayerCursor;
+        if (sBallTargetMode[battler] == BALL_TARGET_FROM_BAG)
+            BtlController_EmitOneReturnValue(battler, B_COMM_TO_ENGINE, sBallTargetItem[battler]);
+        else
+            BtlController_EmitTwoReturnValues(battler, B_COMM_TO_ENGINE, B_ACTION_THROW_BALL, 0);
+
+        sBallTargetMode[battler] = BALL_TARGET_NONE;
+        PlayerBufferExecCompleted(battler);
+    }
+    else if (JOY_NEW(B_BUTTON) || gPlayerDpadHoldFrames > 59)
+    {
+        PlaySE(SE_SELECT);
+        gSprites[gBattlerSpriteIds[gMultiUsePlayerCursor]].callback = SpriteCB_HideAsMoveTarget;
+        EndBounceEffect(gMultiUsePlayerCursor, BOUNCE_HEALTHBOX);
+        sBallTargetMode[battler] = BALL_TARGET_NONE;
+        gBattlerControllerFuncs[battler] = HandleInputChooseAction;
+        DoBounceEffect(battler, BOUNCE_HEALTHBOX, 7, 1);
+        DoBounceEffect(battler, BOUNCE_MON, 7, 1);
+    }
+    else if (JOY_NEW(DPAD_LEFT | DPAD_RIGHT | DPAD_UP | DPAD_DOWN))
+    {
+        u8 next = GetOtherShadowOpponent(gMultiUsePlayerCursor);
+        if (next != gMultiUsePlayerCursor)
+        {
+            PlaySE(SE_SELECT);
+            gSprites[gBattlerSpriteIds[gMultiUsePlayerCursor]].callback = SpriteCB_HideAsMoveTarget;
+            EndBounceEffect(gMultiUsePlayerCursor, BOUNCE_HEALTHBOX);
+            gMultiUsePlayerCursor = next;
+            gSprites[gBattlerSpriteIds[gMultiUsePlayerCursor]].callback = SpriteCB_ShowAsMoveTarget;
+            DoBounceEffect(gMultiUsePlayerCursor, BOUNCE_HEALTHBOX, 15, 1);
+        }
     }
 }
 
@@ -1675,6 +1825,13 @@ static void CompleteWhenChoseItem(u32 battler)
 {
     if (gMain.callback2 == BattleMainCB2 && !gPaletteFade.active)
     {
+        if (gSpecialVar_ItemId != ITEM_NONE
+            && GetItemPocket(gSpecialVar_ItemId) == POCKET_POKE_BALLS
+            && ShouldSelectShadowBallTarget())
+        {
+            StartBallTargetSelection(battler, BALL_TARGET_FROM_BAG, gSpecialVar_ItemId);
+            return;
+        }
         BtlController_EmitOneReturnValue(battler, B_COMM_TO_ENGINE, gSpecialVar_ItemId);
         PlayerBufferExecCompleted(battler);
     }
@@ -1854,7 +2011,10 @@ static void MoveSelectionDisplayMoveDescription(u32 battler)
     BattlePutTextOnWindow(gDisplayedStringBattle, B_WIN_MOVE_DESCRIPTION);
 
     if (gCategoryIconSpriteId == 0xFF)
+    {
+        CategoryIcons_LoadSpritesGfx();
         gCategoryIconSpriteId = CreateSprite(&gSpriteTemplate_CategoryIcons, 38, 64, 1);
+    }
 
     StartSpriteAnim(&gSprites[gCategoryIconSpriteId], GetBattleMoveCategory(move));
 
@@ -2514,6 +2674,12 @@ static void PlayerHandleBattleDebug(u32 battler)
     AddBagItem(ITEM_POKE_BALL, 50);
     AddBagItem(ITEM_MASTER_BALL, 50);
     AddBagItem(ITEM_DARK_BALL, 50);
+    AddBagItem(ITEM_SNAG_MACHINE, 1);
+    AddBagItem(ITEM_SHADOW_MONITOR, 1);
+    FlagSet(FLAG_HAS_SNAG_MACHINE);
+    FlagSet(FLAG_RECEIVED_SNAG_MACHINE);
+    FlagSet(FLAG_RECEIVED_SHADOW_MONITOR);
+    FlagSet(FLAG_SHADOW_TRACKER_UNLOCKED);
     AddBagItem(ITEM_POTION, 2);
     AddBagItem(ITEM_FULL_RESTORE, 2);
     FlagSet(FLAG_SYS_POKENAV_GET);

@@ -2036,6 +2036,18 @@ static void GetMapSecDimensions(u16 mapSecId, u16 *x, u16 *y, u16 *width, u16 *h
     }
 }
 
+bool8 RegionMap_GetMapSecDimensions(u16 mapSecId, u16 *x, u16 *y, u16 *width, u16 *height)
+{
+    if (mapSecId >= MAPSEC_NONE)
+        return FALSE;
+
+    GetMapSecDimensions(mapSecId, x, y, width, height);
+    if (*width == 0 || *height == 0)
+        return FALSE;
+
+    return TRUE;
+}
+
 bool8 IsRegionMapZoomed(void)
 {
     return sRegionMap->zoomed;

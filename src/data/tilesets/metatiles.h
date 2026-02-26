@@ -477,3 +477,6 @@ const u16 gMetatileAttributes_wescave[] = INCBIN_U16("data/tilesets/primary/wesc
 
 const u16 gMetatiles_wescave2[] = INCBIN_U16("data/tilesets/secondary/wescave_2/metatiles.bin");
 const u16 gMetatileAttributes_wescave2[] = INCBIN_U16("data/tilesets/secondary/wescave_2/metatile_attributes.bin");
+
+const u16 gMetatiles_ruinsofAlphOutside[] = INCBIN_U16("data/tilesets/secondary/ruinsof_alph_outside/metatiles.bin");
+const u16 gMetatileAttributes_ruinsofAlphOutside[] = INCBIN_U16("data/tilesets/secondary/ruinsof_alph_outside/metatile_attributes.bin");

@@ -696,6 +696,8 @@ EventScript_SetBrineyLocation_Route109::
 	.include "data/scripts/obtain_item.inc"
 	.include "data/scripts/record_mix.inc"
 	.include "data/scripts/pc.inc"
+	.include "data/scripts/roaming_shadow_hunter_alert.inc"
+	.include "data/scripts/roaming_shadow_hunter.inc"
 
 @ scripts/notices.inc? signs.inc? See comment about text/notices.inc
 Common_EventScript_ShowPokemartSign::
@@ -776,6 +778,24 @@ Common_EventScript_OutOfCenterPartyHeal::
 EventScript_RegionMap::
 	lockall
 	msgbox Common_Text_LookCloserAtMap, MSGBOX_DEFAULT
+	fadescreen FADE_TO_BLACK
+	special FieldShowRegionMap
+	waitstate
+	releaseall
+	end
+
+EventScript_RegionMap_Kanto::
+	lockall
+	msgbox Common_Text_LookCloserAtKantoMap, MSGBOX_DEFAULT
+	fadescreen FADE_TO_BLACK
+	special FieldShowRegionMap
+	waitstate
+	releaseall
+	end
+
+EventScript_RegionMap_Johto::
+	lockall
+	msgbox Common_Text_LookCloserAtJohtoMap, MSGBOX_DEFAULT
 	fadescreen FADE_TO_BLACK
 	special FieldShowRegionMap
 	waitstate
@@ -1120,10 +1140,10 @@ EventScript_ShadowPurifyReadyMultiple::
     end
 
 gText_ShadowPurifyReady::
-    .string "One of your POKEMON is ready to open\nthe door to its heart!\p$"
+    .string "One of your POKéMON is ready to open\nthe door to its heart!\p$"
 
 gText_ShadowPurifyMultipleReady::
-    .string "You have POKEMON that are ready to open\nthe door to their hearts!\p$"
+    .string "You have POKéMON that are ready to open\nthe door to their hearts!\p$"
 
 	.include "data/scripts/pc_transfer.inc"
 	.include "data/scripts/questionnaire.inc"
@@ -1867,3 +1887,7 @@ gText_ShadowPurifyMultipleReady::
 	.include "data/maps/Mirorb_Lair/scripts.inc"
 
 	.include "data/maps/Shadow_Realm/scripts.inc"
+
+	.include "data/maps/JOHTO_HOUSE2/scripts.inc"
+
+	.include "data/maps/Johto_pcenter/scripts.inc"

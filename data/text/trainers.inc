@@ -4807,7 +4807,7 @@ Route1_Text_TorkinPostBattle:
     .string "That was only an early-stage XD\n"
     .string "conversion.\p"
     .string "Once the real process is complete,\n"
-    .string "these POKEMON won't flinch, or feel\l"
+    .string "these POKéMON won't flinch, or feel\l"
     .string "anything at all.\p"
     .string "Keep chasing me if you want.\n"
 	.string "By the time you understand what's\l"

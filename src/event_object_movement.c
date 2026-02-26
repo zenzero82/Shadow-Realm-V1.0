@@ -558,6 +558,7 @@ static const struct SpritePalette sObjectEventSpritePalettes[] = {
     {gObjectEventPal_SubmarineShadow,       OBJ_EVENT_PAL_TAG_SUBMARINE_SHADOW},
     {gObjectEventPal_Poochyena,             OBJ_EVENT_PAL_TAG_POOCHYENA},
     {gObjectEventPal_RedLeaf,               OBJ_EVENT_PAL_TAG_RED_LEAF},
+    {gObjectEventPal_Lyra,                  OBJ_EVENT_PAL_TAG_LYRA},
     {gObjectEventPal_Deoxys,                OBJ_EVENT_PAL_TAG_DEOXYS},
     {gObjectEventPal_BirthIslandStone,      OBJ_EVENT_PAL_TAG_BIRTH_ISLAND_STONE},
     {gObjectEventPal_HoOh,                  OBJ_EVENT_PAL_TAG_HO_OH},
@@ -601,6 +602,7 @@ static const struct SpritePalette sObjectEventSpritePalettes[] = {
     {gObjectEventPal_BattleGirlGen2,                OBJ_EVENT_PAL_TAG_BATTLE_GIRL_GEN2},
     {gObjectEventPal_BattleTowerTrainerDudeGen2,    OBJ_EVENT_PAL_TAG_BATTLE_TOWER_TRAINER_DUDE_GEN2},
     {gObjectEventPal_BikerGen2,                     OBJ_EVENT_PAL_TAG_BIKER_GEN2},
+    {gObjectEventPal_BirdKeeperMGen2,              OBJ_EVENT_PAL_TAG_BIRD_KEEPER_M_GEN2},
     {gObjectEventPal_BlackBeltGen2,                 OBJ_EVENT_PAL_TAG_BLACK_BELT_GEN2},
     {gObjectEventPal_Boy2Gen2,                      OBJ_EVENT_PAL_TAG_BOY_2_GEN2},
     {gObjectEventPal_BrunoGen2,                     OBJ_EVENT_PAL_TAG_BRUNO_GEN2},
@@ -914,6 +916,13 @@ static const u16 sReflectionPaletteTags_RedLeaf[] = {
     OBJ_EVENT_PAL_TAG_RED_LEAF,
 };
 
+static const u16 sReflectionPaletteTags_Lyra[] = {
+    OBJ_EVENT_PAL_TAG_LYRA,
+    OBJ_EVENT_PAL_TAG_LYRA,
+    OBJ_EVENT_PAL_TAG_LYRA,
+    OBJ_EVENT_PAL_TAG_LYRA,
+};
+
 static const struct PairedPalettes sSpecialObjectReflectionPaletteSets[] = {
     {OBJ_EVENT_PAL_TAG_BRENDAN,          sReflectionPaletteTags_Brendan},
     {OBJ_EVENT_PAL_TAG_MAY,              sReflectionPaletteTags_May},
@@ -928,6 +937,7 @@ static const struct PairedPalettes sSpecialObjectReflectionPaletteSets[] = {
     {OBJ_EVENT_PAL_TAG_NPC_3,            sReflectionPaletteTags_Npc3},
     {OBJ_EVENT_PAL_TAG_SUBMARINE_SHADOW, sReflectionPaletteTags_SubmarineShadow},
     {OBJ_EVENT_PAL_TAG_RED_LEAF,         sReflectionPaletteTags_RedLeaf},
+    {OBJ_EVENT_PAL_TAG_LYRA,             sReflectionPaletteTags_Lyra},
     {OBJ_EVENT_PAL_TAG_NONE,             NULL},
 };
 

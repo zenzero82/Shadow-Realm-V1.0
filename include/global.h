@@ -22,6 +22,7 @@
 #include "constants/items.h"
 #include "config/save.h"
 #include "constants/shadow.h"
+#include "roaming_shadow_hunter.h"
 
 
 // Prevent cross-jump optimization.
@@ -1142,6 +1143,7 @@ struct SaveBlock1
     /*0x31DC*/ struct Roamer roamer[ROAMER_COUNT];
     // Shadow Pokémon registry: indexed by shadowID (1..MAX_SHADOW_MON_IDS)
     /*0x31F8*/ u8 shadowMonStates[MAX_SHADOW_MON_IDS + 1];
+    /*0x31F9*/ struct RoamingShadowHunterSave roamingShadowHunter;
 #if FREE_ENIGMA_BERRY == FALSE
     /*0x31F8*/ struct EnigmaBerry enigmaBerry;
 #endif //FREE_ENIGMA_BERRY
