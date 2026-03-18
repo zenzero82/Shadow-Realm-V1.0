@@ -121,7 +121,8 @@ void SetVBlankHBlankCallbacksToNull(void)
     SetHBlankCallback(NULL);
 }
 
-void DisplayMessageAndContinueTask(u8 taskId, u8 windowId, u16 tileNum, u8 paletteNum, u8 fontId, u8 textSpeed, const u8 *string, void *taskFunc)
+void DisplayMessageAndContinueTaskWithColors(u8 taskId, u8 windowId, u16 tileNum, u8 paletteNum, u8 fontId, u8 textSpeed,
+                                            const u8 *string, void *taskFunc, u8 fgColor, u8 shadowColor, u8 bgColor)
 {
     sMessageWindowId = windowId;
     DrawDialogFrameWithCustomTileAndPalette(windowId, TRUE, tileNum, paletteNum);
@@ -130,9 +131,34 @@ void DisplayMessageAndContinueTask(u8 taskId, u8 windowId, u16 tileNum, u8 palet
         StringExpandPlaceholders(gStringVar4, string);
 
     gTextFlags.canABSpeedUpPrint = 1;
-    AddTextPrinterParameterized2(windowId, fontId, gStringVar4, textSpeed, NULL, TEXT_COLOR_DARK_GRAY, TEXT_COLOR_WHITE, TEXT_COLOR_LIGHT_GRAY);
+    AddTextPrinterParameterized2(windowId, fontId, gStringVar4, textSpeed, NULL, fgColor, shadowColor, bgColor);
     sMessageNextTask = taskFunc;
     gTasks[taskId].func = Task_ContinueTaskAfterMessagePrints;
+}
+
+void DisplayMessageAndContinueTaskWithColorsAndFill(u8 taskId, u8 windowId, u16 tileNum, u8 paletteNum, u8 fontId, u8 textSpeed,
+                                                   const u8 *string, void *taskFunc, u8 fgColor, u8 shadowColor, u8 bgColor,
+                                                   u8 fillValue)
+{
+    sMessageWindowId = windowId;
+    DrawDialogFrameWithCustomTileAndPalette(windowId, FALSE, tileNum, paletteNum);
+    FillWindowPixelBuffer(windowId, PIXEL_FILL(fillValue));
+    PutWindowTilemap(windowId);
+    CopyWindowToVram(windowId, COPYWIN_FULL);
+
+    if (string != gStringVar4)
+        StringExpandPlaceholders(gStringVar4, string);
+
+    gTextFlags.canABSpeedUpPrint = 1;
+    AddTextPrinterParameterized2(windowId, fontId, gStringVar4, textSpeed, NULL, fgColor, shadowColor, bgColor);
+    sMessageNextTask = taskFunc;
+    gTasks[taskId].func = Task_ContinueTaskAfterMessagePrints;
+}
+
+void DisplayMessageAndContinueTask(u8 taskId, u8 windowId, u16 tileNum, u8 paletteNum, u8 fontId, u8 textSpeed, const u8 *string, void *taskFunc)
+{
+    DisplayMessageAndContinueTaskWithColors(taskId, windowId, tileNum, paletteNum, fontId, textSpeed, string, taskFunc,
+                                           TEXT_COLOR_DARK_GRAY, TEXT_COLOR_WHITE, TEXT_COLOR_LIGHT_GRAY);
 }
 
 bool16 RunTextPrintersRetIsActive(u8 textPrinterId)

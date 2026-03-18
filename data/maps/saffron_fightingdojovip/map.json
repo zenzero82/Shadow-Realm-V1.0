@@ -2,7 +2,7 @@
   "id": "MAP_SAFFRON_FIGHTINGDOJOVIP",
   "name": "saffron_fightingdojovip",
   "layout": "LAYOUT_SAFFRON_FIGHTINGDOJOVIP",
-  "music": "MUS_DUMMY",
+  "music": "MUS_HG_DANCE_THEATER",
   "region_map_section": "MAPSEC_SAFFRON_CITY",
   "requires_flash": false,
   "weather": "WEATHER_NONE",

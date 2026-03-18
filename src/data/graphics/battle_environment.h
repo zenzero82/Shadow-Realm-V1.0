@@ -36,6 +36,10 @@ const u32 gBattleEnvironmentTiles_Building[] = INCBIN_U32("graphics/battle_envir
 const u16 gBattleEnvironmentPalette_Frontier[] = INCBIN_U16("graphics/battle_environment/stadium/battle_frontier.gbapal"); // this is also used for link battles
 const u32 gBattleEnvironmentTilemap_Building[] = INCBIN_U32("graphics/battle_environment/building/map.bin.lz");
 
+const u32 gBattleEnvironmentTiles_RockGym[] = INCBIN_U32("graphics/battle_environment/rock_gym/tiles.4bpp.lz");
+const u16 gBattleEnvironmentPalette_RockGym[] = INCBIN_U16("graphics/battle_environment/rock_gym/palette.gbapal");
+const u32 gBattleEnvironmentTilemap_RockGym[] = INCBIN_U32("graphics/battle_environment/rock_gym/map.bin.lz");
+
 const u32 gBattleEnvironmentTiles_Stadium[] = INCBIN_U32("graphics/battle_environment/stadium/tiles.4bpp.lz");
 const u32 gBattleEnvironmentTilemap_Stadium[] = INCBIN_U32("graphics/battle_environment/stadium/map.bin.lz");
 
@@ -199,4 +203,3 @@ const u32 gBattleEnvironmentAnimTilemap_Rayquaza_2[] = INCBIN_U32("graphics/batt
 const u16 gBattleEnvironmentPalette_Frontier_2[] = INCBIN_U16("graphics/battle_environment/building_2/battle_frontier.gbapal"); // this is also used for link battles
 const u32 gBattleEnvironmentTiles_Plain_2[] = INCBIN_U32("graphics/battle_environment/plain_2/tiles.4bpp.lz");
 const u32 gBattleEnvironmentTilemap_Plain_2[] = INCBIN_U32("graphics/battle_environment/plain_2/map.bin.lz");
-

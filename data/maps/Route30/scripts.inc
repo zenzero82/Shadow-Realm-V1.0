@@ -1,18 +1,30 @@
 Route30_MapScripts::
 	.byte 0
 
+Route30_Speaker_LittleBoy:
+	.string "BEN$"
+
+Route30_Speaker_Youngster:
+	.string "KYLE$"
+
+Route30_Speaker_BugCatcher:
+	.string "MILO$"
+
 Route30_EventScript_LittleBoy::
 	faceplayer
+	setspeaker Route30_Speaker_LittleBoy
 	msgbox Route30_Text_LittleBoy, MSGBOX_NPC
 	end
 
 Route30_EventScript_Youngster::
 	faceplayer
+	setspeaker Route30_Speaker_Youngster
 	msgbox Route30_Text_Youngster, MSGBOX_NPC
 	end
 
 Route30_EventScript_BugCatcher::
 	faceplayer
+	setspeaker Route30_Speaker_BugCatcher
 	msgbox Route30_Text_BugCatcher, MSGBOX_NPC
 	end
 

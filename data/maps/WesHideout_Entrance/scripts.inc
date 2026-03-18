@@ -26,10 +26,25 @@ WesHideout_Entrance_EventScript_Wes::
 
 WesHideout_Entrance_EventScript_Wes_Talk::
 	setspeaker WesHideout_Entrance_Speaker_Wes
+WesHideout_Entrance_EventScript_Wes_Talk_QuestSkip:
+	checkflag FLAG_ROUTE_24_ZANDER_DEFEATED
+	goto_if_eq WesHideout_Entrance_EventScript_Wes_Talk_ZanderCheck
+	goto WesHideout_Entrance_EventScript_Wes_Talk_ZanderDone
+WesHideout_Entrance_EventScript_Wes_Talk_ZanderCheck:
+	checkflag FLAG_WES_ZANDER_REPORT_DONE
+	goto_if_eq WesHideout_Entrance_EventScript_Wes_Talk_ZanderDone
+	setflag FLAG_WES_ZANDER_REPORT_DONE
+	setspeaker WesHideout_Entrance_Speaker_Wes
+	msgbox WesHideout_Entrance_Text_Wes_Zander_Report, MSGBOX_DEFAULT
+	closemessage
+	return
+WesHideout_Entrance_EventScript_Wes_Talk_ZanderDone:
 	checkflag FLAG_WES_HIDEOUT_TEAM_BRIEFED
 	goto_if_eq WesHideout_Entrance_EventScript_Wes_Briefed
+	setspeaker WesHideout_Entrance_Speaker_Wes
 	msgbox WesHideout_Entrance_Text_Wes_Intro, MSGBOX_DEFAULT
 	closemessage
+	call WesHideout_Entrance_EventScript_Wes_Talk_QuestCompleteAfterIntro
 	return
 
 WesHideout_Entrance_EventScript_Wes_Briefed::
@@ -50,11 +65,59 @@ WesHideout_Entrance_EventScript_Wes_Briefed::
 	setspeaker WesHideout_Entrance_Speaker_Wes
 	msgbox WesHideout_Entrance_Text_Wes_Gift_Part2, MSGBOX_DEFAULT
 	closemessage
+	checkflag FLAG_QUEST_SNAG_MACHINE_COMPLETED
+	goto_if_eq WesHideout_Entrance_EventScript_Wes_SnagQuestDone
+	goto WesHideout_Entrance_EventScript_Wes_SnagQuestComplete
+WesHideout_Entrance_EventScript_Wes_SnagQuestComplete:
+	checkflag FLAG_QUEST_SNAG_MACHINE_STARTED
+	goto_if_eq WesHideout_Entrance_EventScript_Wes_SnagQuestComplete_HasStart
+	setflag FLAG_QUEST_SNAG_MACHINE_STARTED
+WesHideout_Entrance_EventScript_Wes_SnagQuestComplete_HasStart:
+	setflag FLAG_QUEST_SNAG_MACHINE_COMPLETED
+	call QuestJournal_EventScript_QuestCompleteAlert
+	setvar VAR_TEMP_1, 0
+	checkflag FLAG_QUEST_DEFEAT_MISTY_STARTED
+	goto_if_eq WesHideout_Entrance_EventScript_Wes_SnagQuestCheckShadow
+	setflag FLAG_QUEST_DEFEAT_MISTY_STARTED
+	addvar VAR_TEMP_1, 1
+WesHideout_Entrance_EventScript_Wes_SnagQuestCheckShadow:
+	checkflag FLAG_QUEST_SHADOW_TRAINER_STARTED
+	goto_if_eq WesHideout_Entrance_EventScript_Wes_SnagQuestAlert
+	setflag FLAG_QUEST_SHADOW_TRAINER_STARTED
+	addvar VAR_TEMP_1, 1
+WesHideout_Entrance_EventScript_Wes_SnagQuestAlert:
+	compare VAR_TEMP_1, 0
+	goto_if_eq WesHideout_Entrance_EventScript_Wes_SnagQuestDone
+	compare VAR_TEMP_1, 1
+	goto_if_eq WesHideout_Entrance_EventScript_Wes_SnagQuestOneNew
+	call QuestJournal_EventScript_NewQuestsAlert
+	goto WesHideout_Entrance_EventScript_Wes_SnagQuestDone
+WesHideout_Entrance_EventScript_Wes_SnagQuestOneNew:
+	call QuestJournal_EventScript_NewQuestAlert
+	goto WesHideout_Entrance_EventScript_Wes_SnagQuestDone
+WesHideout_Entrance_EventScript_Wes_SnagQuestDone:
 	return
 
 WesHideout_Entrance_EventScript_Wes_AfterGift::
+	setspeaker WesHideout_Entrance_Speaker_Wes
 	msgbox WesHideout_Entrance_Text_Wes_AfterGift, MSGBOX_DEFAULT
 	closemessage
+	return
+
+WesHideout_Entrance_EventScript_Wes_Talk_QuestCompleteAfterIntro:
+	checkflag FLAG_QUEST_TALK_WES_COMPLETED
+	goto_if_eq WesHideout_Entrance_EventScript_Wes_Talk_QuestCompleteAfterIntro_Done
+	checkflag FLAG_QUEST_TALK_WES_STARTED
+	goto_if_eq WesHideout_Entrance_EventScript_Wes_Talk_QuestCompleteAfterIntro_Do
+	goto WesHideout_Entrance_EventScript_Wes_Talk_QuestCompleteAfterIntro_Done
+WesHideout_Entrance_EventScript_Wes_Talk_QuestCompleteAfterIntro_Do:
+	setflag FLAG_QUEST_TALK_WES_COMPLETED
+	call QuestJournal_EventScript_QuestCompleteAlert
+	checkflag FLAG_QUEST_TALK_TEAM_STARTED
+	goto_if_eq WesHideout_Entrance_EventScript_Wes_Talk_QuestCompleteAfterIntro_Done
+	setflag FLAG_QUEST_TALK_TEAM_STARTED
+	call QuestJournal_EventScript_NewQuestAlert
+WesHideout_Entrance_EventScript_Wes_Talk_QuestCompleteAfterIntro_Done:
 	return
 
 @ =========================================================
@@ -63,6 +126,9 @@ WesHideout_Entrance_EventScript_Wes_AfterGift::
 
 WesHideout_Entrance_EventScript_WesTrigger_0::
 	lockall
+	checkflag FLAG_WES_HIDEOUT_WES_TRIGGERED
+	goto_if_eq WesHideout_Entrance_EventScript_WesTrigger_Done
+	setflag FLAG_WES_HIDEOUT_WES_TRIGGERED
 	setvar VAR_TEMP_0, 1
 	applymovement LOCALID_PLAYER, WesHideout_Entrance_Movement_PlayerToWes_FromLeft
 	waitmovement 0
@@ -74,6 +140,9 @@ WesHideout_Entrance_EventScript_WesTrigger_0::
 
 WesHideout_Entrance_EventScript_WesTrigger_1::
 	lockall
+	checkflag FLAG_WES_HIDEOUT_WES_TRIGGERED
+	goto_if_eq WesHideout_Entrance_EventScript_WesTrigger_Done
+	setflag FLAG_WES_HIDEOUT_WES_TRIGGERED
 	setvar VAR_TEMP_0, 1
 	turnobject LOCALID_PLAYER, DIR_NORTH
 	turnobject LOCALID_WES, DIR_SOUTH
@@ -83,12 +152,19 @@ WesHideout_Entrance_EventScript_WesTrigger_1::
 
 WesHideout_Entrance_EventScript_WesTrigger_2::
 	lockall
+	checkflag FLAG_WES_HIDEOUT_WES_TRIGGERED
+	goto_if_eq WesHideout_Entrance_EventScript_WesTrigger_Done
+	setflag FLAG_WES_HIDEOUT_WES_TRIGGERED
 	setvar VAR_TEMP_0, 1
 	applymovement LOCALID_PLAYER, WesHideout_Entrance_Movement_PlayerToWes_FromRight
 	waitmovement 0
 	turnobject LOCALID_PLAYER, DIR_NORTH
 	turnobject LOCALID_WES, DIR_SOUTH
 	call WesHideout_Entrance_EventScript_Wes_Talk
+	releaseall
+	end
+
+WesHideout_Entrance_EventScript_WesTrigger_Done::
 	releaseall
 	end
 
@@ -159,3 +235,10 @@ WesHideout_Entrance_Text_Wes_AfterGift:
 	.string "Head to ROUTE 10 and find that\n"
 	.string "trainer. Be ready to snag if you\l"
 	.string "see a Shadow POKéMON.$"
+
+WesHideout_Entrance_Text_Wes_Zander_Report:
+	.string "Right on! Looks like you were able to\n"
+	.string "find and defeat a member of TEAM\n"
+	.string "ROCKET. We will keep collecting info\n"
+	.string "here at HQ. Keep exploring until we\n"
+	.string "contact you.$"

@@ -1,9 +1,19 @@
 CherrygroveCity_Mart_MapScripts::
 	.byte 0
 
+CherrygroveCity_Mart_Speaker_Clerk:
+	.string "CLERK$"
+
+CherrygroveCity_Mart_Speaker_Youngster:
+	.string "NATE$"
+
+CherrygroveCity_Mart_Speaker_BugCatcher:
+	.string "PETER$"
+
 CherrygroveCity_Mart_EventScript_Clerk::
 	lock
 	faceplayer
+	setspeaker CherrygroveCity_Mart_Speaker_Clerk
 	message gText_HowMayIServeYou
 	waitmessage
 	pokemart CherrygroveCity_Mart_Pokemart
@@ -24,11 +34,13 @@ CherrygroveCity_Mart_Pokemart:
 
 CherrygroveCity_Mart_EventScript_Youngster::
 	faceplayer
+	setspeaker CherrygroveCity_Mart_Speaker_Youngster
 	msgbox CherrygroveCity_Mart_Text_Youngster, MSGBOX_NPC
 	end
 
 CherrygroveCity_Mart_EventScript_BugCatcher::
 	faceplayer
+	setspeaker CherrygroveCity_Mart_Speaker_BugCatcher
 	msgbox CherrygroveCity_Mart_Text_BugCatcher, MSGBOX_NPC
 	end
 

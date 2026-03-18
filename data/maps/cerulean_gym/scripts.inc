@@ -36,14 +36,27 @@ cerulean_gym_EventScript_Misty::
 	waitmessage
 	call Common_EventScript_PlayGymBadgeFanfare
 
+	setspeaker cerulean_gym_Speaker_Misty
 	msgbox cerulean_gym_Text_Misty_After, MSGBOX_DEFAULT
 	setflag FLAG_BADGE10_GET
+	checkflag FLAG_QUEST_DEFEAT_MISTY_COMPLETED
+	goto_if_eq cerulean_gym_EventScript_Misty_StartGuardsQuest
+	setflag FLAG_QUEST_DEFEAT_MISTY_COMPLETED
+	call QuestJournal_EventScript_QuestCompleteAlert
+cerulean_gym_EventScript_Misty_StartGuardsQuest:
+	checkflag FLAG_QUEST_ROUTE9_GUARDS_STARTED
+	goto_if_eq cerulean_gym_EventScript_Misty_QuestDone
+	setflag FLAG_QUEST_ROUTE9_GUARDS_STARTED
+	call QuestJournal_EventScript_NewQuestAlert
+	call QuestJournal_EventScript_CheckRoute9Guards
+cerulean_gym_EventScript_Misty_QuestDone:
 	call cerulean_gym_EventScript_SetGymTrainers
 	closemessage
 	release
 	end
 
 cerulean_gym_EventScript_Misty_Defeated::
+	setspeaker cerulean_gym_Speaker_Misty
 	msgbox cerulean_gym_Text_Misty_After, MSGBOX_DEFAULT
 	closemessage
 	release

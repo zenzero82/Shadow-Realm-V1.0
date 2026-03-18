@@ -629,6 +629,13 @@ gSongTable::
 	song mus_encounter_team_plasma, 0, 0
 	song mus_battle_team_skull, 0, 0
 	song mus_hexagonbros, 0, 0
+	song mus_elm_lab, 0, 0
+	song mus_hg_poke_mart, 0, 0
+	song mus_hg_ice_path, 0, 0
+	song mus_hg_victory_road, 0, 0
+	song mus_hg_game_corner, 0, 0
+	song mus_hg_dance_theater, 0, 0
+	song mus_hg_pokemon_league, 0, 0
 
 
 	.align 2

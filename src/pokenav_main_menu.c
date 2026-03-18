@@ -709,6 +709,20 @@ void UpdateRegionMapHeaderGfx(void)
     CopyBgTilemapBufferToVram(0);
 }
 
+void UpdateMainMenuHeaderGfx(void)
+{
+    struct Pokenav_MainMenu *menu = GetSubstructPtr(POKENAV_SUBSTRUCT_MAIN_MENU);
+
+    if (menu == NULL)
+        return;
+
+    DecompressAndCopyTileDataToVram(0, gPokenavHeader_Gfx, 0, 0, 0);
+    SetBgTilemapBuffer(0, menu->tilemapBuffer);
+    CopyToBgTilemapBuffer(0, &gPokenavHeader_Tilemap, 0, 0);
+    LoadPalette(gPokenavHeader_Pal, BG_PLTT_ID(0), PLTT_SIZE_4BPP);
+    CopyBgTilemapBufferToVram(0);
+}
+
 static void LoadLeftHeaderGfxForMenu(u32 menuGfxId)
 {
     struct Pokenav_MainMenu *menu;

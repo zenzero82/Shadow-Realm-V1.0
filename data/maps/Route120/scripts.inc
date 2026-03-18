@@ -187,7 +187,7 @@ Route120_EventScript_StevenBattleKecleon::
 	applymovement LOCALID_BRIDGE_KECLEON, Movement_KecleonAppears
 	waitmovement 0
 	waitse
-	playmoncry SPECIES_KECLEON, CRY_MODE_ENCOUNTER
+	playmoncry SPECIES_KECLEON, CRY_MODE_NORMAL
 	delay 40
 	waitmoncry
 	setwildbattle SPECIES_KECLEON, 30

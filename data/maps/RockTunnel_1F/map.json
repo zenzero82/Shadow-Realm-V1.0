@@ -129,7 +129,7 @@
       "movement_range_x": 0,
       "movement_range_y": 0,
       "trainer_type": "TRAINER_TYPE_NONE",
-      "trainer_sight_or_berry_tree_id": "ITEM_ESCAPE_ROPE",
+      "trainer_sight_or_berry_tree_id": "ITEM_SUPER_POTION",
       "script": "Common_EventScript_FindItem",
       "flag": "FLAG_ITEM_ROCK_TUNNEL_1F_ESCAPE_ROPE"
     },
@@ -192,14 +192,14 @@
       "y": 13,
       "elevation": 0,
       "dest_map": "MAP_ROCK_TUNNEL_B1F",
-      "dest_warp_id": "4"
+      "dest_warp_id": "5"
     },
     {
       "x": 27,
       "y": 22,
       "elevation": 0,
       "dest_map": "MAP_ROCK_TUNNEL_B1F",
-      "dest_warp_id": "2"
+      "dest_warp_id": "4"
     },
     {
       "x": 33,
@@ -213,7 +213,7 @@
       "y": 38,
       "elevation": 0,
       "dest_map": "MAP_ROCK_TUNNEL_B1F",
-      "dest_warp_id": "5"
+      "dest_warp_id": "3"
     }
   ],
   "coord_events": [],

@@ -1,8 +1,8 @@
 Lavender_Town_MapScripts::
 	.byte 0
 
-#define LOCALID_LYRA 5
-#define LOCALID_MEGANIUM 10
+#define LOCALID_LYRA 1
+#define LOCALID_MEGANIUM 6
 
 @ =========================================================
 @ SPEAKER DEFINITIONS (Namebox)
@@ -21,19 +21,27 @@ Lavender_Town_Speaker_Birch:
 Lavender_Town_EventScript_LyraTrigger_Left::
 	goto_if_set FLAG_LAVENDER_LYRA_SCENE_DONE, Lavender_Town_EventScript_LyraTrigger_Done
 	lockall
+	playse SE_PIN
+	applymovement LOCALID_LYRA, Lavender_Town_Movement_LyraExclaim
+	waitmovement LOCALID_LYRA
 	applymovement LOCALID_LYRA, Lavender_Town_Movement_LyraToPlayer_Left
 	applymovement LOCALID_MEGANIUM, Lavender_Town_Movement_LyraToPlayer_Left
 	applymovement LOCALID_PLAYER, Common_Movement_FaceDown
 	waitmovement 0
+	waitmovement LOCALID_MEGANIUM
 	goto Lavender_Town_EventScript_LyraScene
 
 Lavender_Town_EventScript_LyraTrigger_Right::
 	goto_if_set FLAG_LAVENDER_LYRA_SCENE_DONE, Lavender_Town_EventScript_LyraTrigger_Done
 	lockall
+	playse SE_PIN
+	applymovement LOCALID_LYRA, Lavender_Town_Movement_LyraExclaim
+	waitmovement LOCALID_LYRA
 	applymovement LOCALID_LYRA, Lavender_Town_Movement_LyraToPlayer_Right
 	applymovement LOCALID_MEGANIUM, Lavender_Town_Movement_LyraToPlayer_Right
 	applymovement LOCALID_PLAYER, Common_Movement_FaceDown
 	waitmovement 0
+	waitmovement LOCALID_MEGANIUM
 	goto Lavender_Town_EventScript_LyraScene
 
 Lavender_Town_EventScript_LyraScene::
@@ -50,6 +58,7 @@ Lavender_Town_EventScript_LyraScene::
 	msgbox Lavender_Town_Text_LyraReturn, MSGBOX_DEFAULT
 	setflag FLAG_LAVENDER_LYRA_SCENE_DONE
 	setflag FLAG_WES_HIDEOUT_LYRA_SCENE
+	turnobject LOCALID_PLAYER, DIR_NORTH
 	fadescreen FADE_TO_BLACK
 	warp MAP_WES_HIDEOUT_UNDERGROUND, 25, 12
 	waitstate
@@ -75,6 +84,10 @@ Lavender_Town_Movement_LyraToPlayer_Right:
 	walk_right
 	walk_up
 	face_up
+	step_end
+
+Lavender_Town_Movement_LyraExclaim:
+	emote_exclamation_mark
 	step_end
 
 @ =========================================================

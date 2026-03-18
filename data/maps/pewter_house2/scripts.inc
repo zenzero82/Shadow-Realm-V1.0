@@ -10,6 +10,8 @@ pewter_house2_EventScript_OldMan::
 	setspeaker pewter_house2_Speaker_Gordon
 	msgbox pewter_house2_Text_OldMan, MSGBOX_DEFAULT
 	closemessage
+	setflag FLAG_QUEST_PEWTER_NPC_HOUSE2_OLD_MAN
+	call QuestJournal_EventScript_CheckPewterCityNPCs
 	release
 	end
 

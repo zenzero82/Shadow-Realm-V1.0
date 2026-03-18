@@ -2,7 +2,7 @@
   "id": "MAP_ROUTE25_BILLSHOUSE",
   "name": "route25_billshouse",
   "layout": "LAYOUT_ROUTE25_BILLSHOUSE",
-  "music": "MUS_DUMMY",
+  "music": "MUS_HG_ROUTE24",
   "region_map_section": "MAPSEC_ROUTE_25",
   "requires_flash": false,
   "weather": "WEATHER_NONE",

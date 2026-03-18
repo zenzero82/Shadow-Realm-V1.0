@@ -7134,7 +7134,6 @@ static void Cmd_moveend(void)
                 break;
             case EFFECT_MAX_HP_50_RECOIL:
             case EFFECT_MIND_BLOWN:
-            case EFFECT_SHADOW_HALF:
                 if (IsBattlerAlive(gBattlerAttacker)
                  && !(gBattleStruct->moveResultFlags[gBattlerTarget] & MOVE_RESULT_FAILED)
                  && GetBattlerAbility(gBattlerAttacker) != ABILITY_MAGIC_GUARD)
@@ -7142,6 +7141,24 @@ static void Cmd_moveend(void)
                     gBattleStruct->moveDamage[gBattlerAttacker] = (GetNonDynamaxMaxHP(gBattlerAttacker) + 1) / 2; // Half of Max HP Rounded UP
                     BattleScriptCall(BattleScript_MaxHp50Recoil);
                     effect = TRUE;
+                }
+                break;
+            case EFFECT_SHADOW_HALF:
+                if (IsBattlerAlive(gBattlerAttacker)
+                 && !(gBattleStruct->moveResultFlags[gBattlerTarget] & MOVE_RESULT_FAILED)
+                 && GetBattlerAbility(gBattlerAttacker) != ABILITY_MAGIC_GUARD)
+                {
+                    s32 currHp = gBattleMons[gBattlerAttacker].hp;
+                    if (currHp > 1)
+                    {
+                        s32 recoil = (GetNonDynamaxMaxHP(gBattlerAttacker) + 1) / 2; // Half of Max HP Rounded UP
+                        recoil = min(recoil, currHp - 1);
+                        if (recoil < 1)
+                            recoil = 1;
+                        gBattleStruct->moveDamage[gBattlerAttacker] = recoil;
+                        BattleScriptCall(BattleScript_MaxHp50Recoil);
+                        effect = TRUE;
+                    }
                 }
                 break;
             case EFFECT_RAPID_SPIN:
@@ -7813,18 +7830,6 @@ static void Cmd_switchindataupdate(void)
     gBattleScripting.battler = battler;
 
     PREPARE_MON_NICK_BUFFER(gBattleTextBuff1, battler, gBattlerPartyIndexes[battler]);
-    // ⭐ NEW: Shadow send-out particles (now that gBattleScripting.battler is set)
-    {
-        struct Pokemon *party = GetBattlerParty(battler);
-        struct Pokemon *mon   = &party[gBattlerPartyIndexes[battler]];
-        u8 isShadowMon        = GetMonData(mon, MON_DATA_IS_SHADOW, NULL);
-
-        // Only flare for enemy Shadow Pokémon; drop the side check if you want it on your own too
-        if (GetBattlerSide(battler) == B_SIDE_OPPONENT && isShadowMon)
-        {
-            LaunchStatusAnimation(battler, B_ANIM_STATUS_SHADOW);
-        }
-    }
     gBattlescriptCurrInstr = cmd->nextInstr;
 }
 
@@ -8353,6 +8358,17 @@ bool32 TryShowShadowPokemonHint(u32 battler)
     return TRUE;
 }
 
+static void TryPlayShadowSendOutFlare(u32 battler)
+{
+    extern void LaunchStatusAnimation(u8 battler, u8 animId);
+    struct Pokemon *party = GetBattlerParty(battler);
+    struct Pokemon *mon = &party[gBattlerPartyIndexes[battler]];
+    u8 isShadowMon = GetMonData(mon, MON_DATA_IS_SHADOW, NULL);
+
+    if (GetBattlerSide(battler) == B_SIDE_OPPONENT && isShadowMon)
+        LaunchStatusAnimation(battler, B_ANIM_STATUS_SHADOW);
+}
+
 static bool32 DoSwitchInEffectsForBattler(u32 battler)
 {
     u32 i = 0;
@@ -8572,6 +8588,7 @@ static void Cmd_switchineffects(void)
                 gBattlerFainted = gBattleStruct->multipleSwitchInSortedBattlers[gBattleStruct->multipleSwitchInCursor];
                 if (gBattleStruct->battlerState[gBattlerFainted].multipleSwitchInBattlers)
                 {
+                    TryPlayShadowSendOutFlare(gBattlerFainted);
                     if (DoSwitchInEffectsForBattler(gBattlerFainted))
                         return;
                 }
@@ -8586,6 +8603,7 @@ static void Cmd_switchineffects(void)
         break;
     default:
         UpdateSentMonFlags(battler);
+        TryPlayShadowSendOutFlare(battler);
         if (!DoSwitchInEffectsForBattler(battler))
             gBattlescriptCurrInstr = cmd->nextInstr;
         break;
@@ -16654,7 +16672,7 @@ void BattleCreateYesNoCursorAt(u8 cursorPosition)
     src[0] = 1;
     src[1] = 2;
 
-    CopyToBgTilemapBufferRect_ChangePalette(0, src, 0x19, 9 + (2 * cursorPosition), 1, 2, 5);
+    CopyToBgTilemapBufferRect_ChangePalette(0, src, 0x19, 9 + (2 * cursorPosition), 1, 2, 0);
     CopyBgTilemapBufferToVram(0);
 }
 

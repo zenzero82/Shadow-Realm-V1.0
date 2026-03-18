@@ -9,6 +9,7 @@
 #include "battle_setup.h"
 #include "battle_z_move.h"
 #include "battle_gimmick.h"
+#include "caps.h"
 #include "generational_changes.h"
 #include "party_menu.h"
 #include "pokemon.h"
@@ -7542,8 +7543,9 @@ u8 GetAttackerObedienceForAction()
 {
     s32 rnd;
     s32 calc;
-    u8 obedienceLevel = 0;
+    u32 obedienceLevel = 0;
     u8 levelReferenced;
+    u8 levelCapMode;
 
     if (gBattleTypeFlags & (BATTLE_TYPE_LINK | BATTLE_TYPE_RECORDED_LINK))
         return OBEYS;
@@ -7561,22 +7563,13 @@ u8 GetAttackerObedienceForAction()
     if (FlagGet(FLAG_BADGE08_GET)) // Rain Badge, ignore obedience altogether
         return OBEYS;
 
-    obedienceLevel = 10;
+    levelCapMode = gSaveBlock2Ptr->optionsLevelCap;
+    if (levelCapMode > OPTIONS_LEVEL_CAP_HARD)
+        levelCapMode = OPTIONS_LEVEL_CAP_NORMAL;
+    if (levelCapMode != OPTIONS_LEVEL_CAP_OFF)
+        return OBEYS;
 
-    if (FlagGet(FLAG_BADGE01_GET)) // Stone Badge
-        obedienceLevel = 20;
-    if (FlagGet(FLAG_BADGE02_GET)) // Knuckle Badge
-        obedienceLevel = 30;
-    if (FlagGet(FLAG_BADGE03_GET)) // Dynamo Badge
-        obedienceLevel = 40;
-    if (FlagGet(FLAG_BADGE04_GET)) // Heat Badge
-        obedienceLevel = 50;
-    if (FlagGet(FLAG_BADGE05_GET)) // Balance Badge
-        obedienceLevel = 60;
-    if (FlagGet(FLAG_BADGE06_GET)) // Feather Badge
-        obedienceLevel = 70;
-    if (FlagGet(FLAG_BADGE07_GET)) // Mind Badge
-        obedienceLevel = 80;
+    obedienceLevel = GetLevelCapForObedience();
 
     if (B_OBEDIENCE_MECHANICS >= GEN_8
      && !IsOtherTrainer(gBattleMons[gBattlerAttacker].otId, gBattleMons[gBattlerAttacker].otName))
@@ -9457,6 +9450,7 @@ static inline s32 DoFixedDamageMoveCalc(struct DamageCalculationData *damageCalc
 {
     s32 dmg = 0;
     s32 randDamage;
+    bool8 allowZero = FALSE;
 
     switch (GetMoveEffect(damageCalcData->move))
     {
@@ -9471,9 +9465,27 @@ static inline s32 DoFixedDamageMoveCalc(struct DamageCalculationData *damageCalc
         dmg = GetMoveFixedDamage(damageCalcData->move);
         break;
     case EFFECT_SUPER_FANG:
-    case EFFECT_SHADOW_HALF:
         dmg = GetNonDynamaxHP(damageCalcData->battlerDef) / 2;
         break;
+    case EFFECT_SHADOW_HALF:
+    {
+        s32 hp = GetNonDynamaxHP(damageCalcData->battlerDef);
+
+        if (hp <= 1)
+        {
+            dmg = 0;
+            allowZero = TRUE;
+        }
+        else
+        {
+            dmg = hp / 2;
+            if (dmg >= hp)
+                dmg = hp - 1;
+            if (dmg == 0)
+                dmg = 1;
+        }
+        break;
+    }
     case EFFECT_FINAL_GAMBIT:
         dmg = GetNonDynamaxHP(damageCalcData->battlerAtk);
         break;
@@ -9483,7 +9495,7 @@ static inline s32 DoFixedDamageMoveCalc(struct DamageCalculationData *damageCalc
 
     gBattleStruct->moveResultFlags[damageCalcData->battlerDef] &= ~(MOVE_RESULT_NOT_VERY_EFFECTIVE | MOVE_RESULT_SUPER_EFFECTIVE);
 
-    if (dmg == 0)
+    if (dmg == 0 && !allowZero)
         dmg = 1;
 
     return dmg;

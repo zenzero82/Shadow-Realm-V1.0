@@ -102,6 +102,12 @@ static void PremierBallOpenParticleAnimation(u8);
 static void CB_CriticalCaptureThrownBallMovement(struct Sprite *sprite);
 static void SpriteCB_PokeBlock_Throw(struct Sprite *);
 
+static inline void EnsureBattleReservedObjPals(void)
+{
+    if (gReservedSpritePaletteCount < MAX_BATTLERS_COUNT)
+        gReservedSpritePaletteCount = MAX_BATTLERS_COUNT;
+}
+
 struct CaptureStar
 {
     s8 xOffset;
@@ -188,7 +194,13 @@ static const struct CompressedSpriteSheet sBallParticleSpriteSheets[] =
     [BALL_PARK]     = {gBattleAnimSpriteGfx_Particles,      0x100, TAG_PARTICLES_PARKBALL},
     [BALL_BEAST]    = {gBattleAnimSpriteGfx_Particles,      0x100, TAG_PARTICLES_BEASTBALL},
     [BALL_CHERISH]  = {gBattleAnimSpriteGfx_Particles2,     0x100, TAG_PARTICLES_CHERISHBALL},
-    [BALL_DARK]     = {gBattleAnimSpriteGfx_Particles,      0x100, TAG_PARTICLES_DARKBALL},
+    [BALL_DARK]     = {gBattleAnimSpriteGfx_Particles2,     0x100, TAG_PARTICLES_DARKBALL},
+};
+
+static const u16 sBallParticlePal_DarkBall[] =
+{
+    0x0000, 0x7FFF, 0x02BF, 0x2BFF, 0x03FF, 0x53FF, 0x5CEF, 0x4CAC,
+    0x3427, 0x72FA, 0x0000, 0x28DF, 0x7EC0, 0x7C46, 0x47F5, 0x43AA,
 };
 
 static const struct SpritePalette sBallParticlePalettes[] =
@@ -221,7 +233,7 @@ static const struct SpritePalette sBallParticlePalettes[] =
     [BALL_PARK]     = {gBattleAnimSpritePal_CircleImpact,   TAG_PARTICLES_PARKBALL},
     [BALL_BEAST]    = {gBattleAnimSpritePal_CircleImpact,   TAG_PARTICLES_BEASTBALL},
     [BALL_CHERISH]  = {gBattleAnimSpritePal_Particles2,     TAG_PARTICLES_CHERISHBALL},
-    [BALL_DARK]     = {gBattleAnimSpritePal_CircleImpact,   TAG_PARTICLES_DARKBALL},
+    [BALL_DARK]     = {sBallParticlePal_DarkBall,           TAG_PARTICLES_DARKBALL},
 };
 
 static const union AnimCmd sAnim_RegularBall[] =
@@ -306,7 +318,7 @@ static const u8 sBallParticleAnimNums[POKEBALL_COUNT] =
     [BALL_PARK]    = 5,
     [BALL_BEAST]   = 5,
     [BALL_CHERISH] = 0,
-    [BALL_DARK]    = 0,
+    [BALL_DARK]    = 2,
 };
 
 static const TaskFunc sBallParticleAnimationFuncs[POKEBALL_COUNT] =
@@ -340,7 +352,7 @@ static const TaskFunc sBallParticleAnimationFuncs[POKEBALL_COUNT] =
     [BALL_PARK]    = UltraBallOpenParticleAnimation,
     [BALL_BEAST]   = UltraBallOpenParticleAnimation,
     [BALL_CHERISH] = MasterBallOpenParticleAnimation,
-    [BALL_DARK]    = PokeBallOpenParticleAnimation,
+    [BALL_DARK]    = UltraBallOpenParticleAnimation,
 };
 
 static const struct SpriteTemplate sBallParticleSpriteTemplates[POKEBALL_COUNT] =
@@ -808,7 +820,11 @@ static void LoadHealthboxPalsForLevelUp(u8 *paletteId1, u8 *paletteId2, u8 battl
 
     gSprites[healthBoxSpriteId].oam.paletteNum = *paletteId1;
     gSprites[spriteId1].oam.paletteNum = *paletteId1;
-    gSprites[spriteId2].oam.paletteNum = *paletteId2;
+    // Keep the HP bar on its own palette to prevent color flashing during level-up.
+    {
+        u8 barPalIdx = IndexOfSpritePaletteTag(TAG_HEALTHBAR_PAL);
+        gSprites[spriteId2].oam.paletteNum = (barPalIdx != 0xFF) ? barPalIdx : *paletteId2;
+    }
 }
 
 void AnimTask_LoadHealthboxPalsForLevelUp(u8 taskId)
@@ -1789,11 +1805,22 @@ static void SpriteCB_Ball_Block_Step(struct Sprite *sprite)
 
 static void LoadBallParticleGfx(u8 ballId)
 {
-    u32 palIndex = IndexOfSpritePaletteTag(sBallParticlePalettes[ballId].tag);
+    const u8 fallbackSlot = 14;
+    u32 palIndex;
 
+    EnsureBattleReservedObjPals();
+    palIndex = IndexOfSpritePaletteTag(sBallParticlePalettes[ballId].tag);
     if (palIndex == 0xFF)
         palIndex = LoadSpritePalette(&sBallParticlePalettes[ballId]);
-    else
+    if (palIndex == 0xFF && fallbackSlot >= gReservedSpritePaletteCount)
+    {
+        // Fallback: keep a valid palette slot even when allocations are exhausted.
+        u16 fallbackTag = GetSpritePaletteTagByPaletteNum(fallbackSlot);
+
+        if (fallbackTag == TAG_NONE || fallbackTag == sBallParticlePalettes[ballId].tag)
+            palIndex = LoadSpritePaletteInSlot(&sBallParticlePalettes[ballId], fallbackSlot);
+    }
+    if (palIndex != 0xFF)
         LoadPalette(sBallParticlePalettes[ballId].data, OBJ_PLTT_ID(palIndex), PLTT_SIZE_4BPP);
 
     if (GetSpriteTileStartByTag(sBallParticleSpriteSheets[ballId].tag) == 0xFFFF)

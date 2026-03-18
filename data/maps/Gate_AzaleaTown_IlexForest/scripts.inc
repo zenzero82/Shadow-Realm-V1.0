@@ -1,9 +1,16 @@
 Gate_AzaleaTown_IlexForest_MapScripts::
 	.byte 0
 
+Gate_AzaleaTown_IlexForest_Speaker_Officer:
+	.string "OFFICER$"
+
+Gate_AzaleaTown_IlexForest_Speaker_Granny:
+	.string "MARGO$"
+
 Gate_AzaleaTown_IlexForest_EventScript_Officer::
 	lock
 	faceplayer
+	setspeaker Gate_AzaleaTown_IlexForest_Speaker_Officer
 	msgbox Gate_AzaleaTown_IlexForest_Text_Officer, MSGBOX_DEFAULT
 	closemessage
 	release
@@ -12,6 +19,7 @@ Gate_AzaleaTown_IlexForest_EventScript_Officer::
 Gate_AzaleaTown_IlexForest_EventScript_Granny::
 	lock
 	faceplayer
+	setspeaker Gate_AzaleaTown_IlexForest_Speaker_Granny
 	msgbox Gate_AzaleaTown_IlexForest_Text_Granny, MSGBOX_DEFAULT
 	closemessage
 	release
@@ -26,4 +34,3 @@ Gate_AzaleaTown_IlexForest_Text_Granny:
 	.string "The FOREST is watched\n"
 	.string "over by its protector.\p"
 	.string "Stay out of mischief!$"
-

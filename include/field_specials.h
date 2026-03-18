@@ -36,5 +36,8 @@ void PreparePartyForSkyBattle(void);
 void GetObjectPosition(u16*, u16*, u32, u32);
 bool32 CheckObjectAtXY(u32, u32);
 bool32 CheckPartyHasSpecies(u32);
+void Special_Kukui_CheckShadowMeowthInParty(void);
+void Special_Kukui_TakeShadowMeowth(void);
+void Special_Kukui_ReturnShadowMeowth(void);
 
 #endif // GUARD_FIELD_SPECIALS_H

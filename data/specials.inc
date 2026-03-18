@@ -310,6 +310,11 @@ gSpecials::
 	def_special GetPokeblockNameByMonNature
 	def_special GetSecretBaseNearbyMapName
 	def_special CheckRelicanthWailord
+	def_special CheckHooh
+	def_special CheckAerodactyl
+	def_special CheckKabuto
+	def_special CheckOmanyte
+	def_special DoSlidingPuzzle
 	def_special ShouldDoBrailleRegirockEffectOld
 	def_special DoOrbEffect
 	def_special FadeOutOrbEffect
@@ -584,3 +589,6 @@ gSpecials::
 	def_special GoldMomSavingsHasMoney
 	def_special GoldMomSavingsWithdrawAll
 	def_special GoldMomSavingsInit
+	def_special Special_Kukui_CheckShadowMeowthInParty
+	def_special Special_Kukui_TakeShadowMeowth
+	def_special Special_Kukui_ReturnShadowMeowth

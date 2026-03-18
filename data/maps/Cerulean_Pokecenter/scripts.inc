@@ -22,6 +22,8 @@ Cerulean_Pokecenter_EventScript_SuperNerd::
 	setspeaker Cerulean_Pokecenter_Speaker_SuperNerd
 	msgbox Cerulean_Pokecenter_Text_SuperNerd, MSGBOX_DEFAULT
 	closemessage
+	setflag FLAG_QUEST_CERULEAN_NPC_POKECENTER_SUPER_NERD
+	call QuestJournal_EventScript_CheckCeruleanCityNPCs
 	release
 	end
 
@@ -31,6 +33,8 @@ Cerulean_Pokecenter_EventScript_Gentleman::
 	setspeaker Cerulean_Pokecenter_Speaker_Gentleman
 	msgbox Cerulean_Pokecenter_Text_Gentleman, MSGBOX_DEFAULT
 	closemessage
+	setflag FLAG_QUEST_CERULEAN_NPC_POKECENTER_GENTLEMAN
+	call QuestJournal_EventScript_CheckCeruleanCityNPCs
 	release
 	end
 

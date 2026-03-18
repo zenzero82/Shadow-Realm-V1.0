@@ -282,8 +282,8 @@ const struct PokemonCrySong gPokemonCrySongTemplate =
     .tieCmd = TIE,
     .tieKeyValue = 60, // default is Cn3
     .tieVelocityValue = 127,
-    .unkCmd0C = {XCMD, 0x0C},
-    .unkCmd0CParam = 60,
+    .xwaitCmd = {XCMD, 0x0C},
+    .length = 60,
     .end = {EOT, FINE}
 };
 
@@ -301,6 +301,6 @@ const XcmdFunc gXcmdTable[] =
     ply_xiecl,
     ply_xleng,
     ply_xswee,
-    ply_xcmd_0C,
+    ply_xwait,
     ply_xcmd_0D,
 };

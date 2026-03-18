@@ -15,6 +15,7 @@
 #include "menu.h"
 #include "overworld.h"
 #include "palette.h"
+#include "rtc.h"
 #include "sound.h"
 #include "sprite.h"
 #include "task.h"
@@ -28,6 +29,7 @@
 #include "constants/trainers.h"
 #include "constants/battle_anim.h"
 #include "constants/battle_partner.h"
+#include "constants/opponents.h"
 
 extern const u32 gBattleEnvironmentTiles_TallGrass_2[];
 extern const u32 gBattleEnvironmentTilemap_TallGrass_2[];
@@ -93,15 +95,83 @@ extern const u32 gBattleEnvironmentAnimTiles_Blue_Building_2[];
 extern const u32 gBattleEnvironmentAnimTilemap_Blue_Building_2[];
 extern const u16 gBattleEnvironmentPalette_Blue_Building_2[];
 
+extern const u16 gBattleEnvironmentPalette_TallGrass_2_Night[];
+extern const u16 gBattleEnvironmentPalette_TallGrass_2_Twilight[];
+extern const u16 gBattleEnvironmentPalette_LongGrass_2_Night[];
+extern const u16 gBattleEnvironmentPalette_Sand_2_Night[];
+extern const u16 gBattleEnvironmentPalette_Sand_2_Twilight[];
+extern const u16 gBattleEnvironmentPalette_Water_2_Night[];
+extern const u16 gBattleEnvironmentPalette_Water_2_Twilight[];
+extern const u16 gBattleEnvironmentPalette_PondWater_2_Night[];
+extern const u16 gBattleEnvironmentPalette_PondWater_2_Twilight[];
+extern const u16 gBattleEnvironmentPalette_Rock_2_Night[];
+extern const u16 gBattleEnvironmentPalette_Rock_2_Twilight[];
+extern const u16 gBattleEnvironmentPalette_Plain_2_Night[];
+
 // Use the "_2" battle environment backgrounds (HNS-style alt backgrounds).
 // Set this to 0 to keep the vanilla backgrounds.
 #ifndef BATTLE_BG_USE_ENVIRONMENT_2
 #define BATTLE_BG_USE_ENVIRONMENT_2 1
 #endif
 
+extern const struct BattleBackground sBattleEnvironmentTable[];
+static const struct BattleBackground sBattleEnvironmentTable_2[];
+
 #define BATTLE_ENV_BG_TABLE (BATTLE_BG_USE_ENVIRONMENT_2 ? sBattleEnvironmentTable_2 : sBattleEnvironmentTable)
 
 // .rodata
+
+static const u16 *GetBattleEnvironmentPaletteForTime(u32 environment)
+{
+    const u16 *palette = BATTLE_ENV_BG_TABLE[environment].palette;
+
+    if (!BATTLE_BG_USE_ENVIRONMENT_2)
+        return palette;
+
+    switch (GetTimeOfDay())
+    {
+    case TIME_DAY:
+    case TIMES_OF_DAY_COUNT:
+        break;
+    case TIME_NIGHT:
+        switch (environment)
+        {
+        case BATTLE_ENVIRONMENT_GRASS:
+            return gBattleEnvironmentPalette_TallGrass_2_Night;
+        case BATTLE_ENVIRONMENT_LONG_GRASS:
+            return gBattleEnvironmentPalette_LongGrass_2_Night;
+        case BATTLE_ENVIRONMENT_SAND:
+            return gBattleEnvironmentPalette_Sand_2_Night;
+        case BATTLE_ENVIRONMENT_WATER:
+            return gBattleEnvironmentPalette_Water_2_Night;
+        case BATTLE_ENVIRONMENT_POND:
+            return gBattleEnvironmentPalette_PondWater_2_Night;
+        case BATTLE_ENVIRONMENT_MOUNTAIN:
+            return gBattleEnvironmentPalette_Rock_2_Night;
+        case BATTLE_ENVIRONMENT_PLAIN:
+            return gBattleEnvironmentPalette_Plain_2_Night;
+        }
+        break;
+    case TIME_MORNING:
+    case TIME_EVENING:
+        switch (environment)
+        {
+        case BATTLE_ENVIRONMENT_GRASS:
+            return gBattleEnvironmentPalette_TallGrass_2_Twilight;
+        case BATTLE_ENVIRONMENT_SAND:
+            return gBattleEnvironmentPalette_Sand_2_Twilight;
+        case BATTLE_ENVIRONMENT_WATER:
+            return gBattleEnvironmentPalette_Water_2_Twilight;
+        case BATTLE_ENVIRONMENT_POND:
+            return gBattleEnvironmentPalette_PondWater_2_Twilight;
+        case BATTLE_ENVIRONMENT_MOUNTAIN:
+            return gBattleEnvironmentPalette_Rock_2_Twilight;
+        }
+        break;
+    }
+
+    return palette;
+}
 
 static const struct OamData sVsLetter_V_OamData =
 {
@@ -137,12 +207,37 @@ static const struct OamData sVsLetter_S_OamData =
     .affineParam = 0,
 };
 
+static bool32 IsBrockTestBattle(void)
+{
+    return (gBattleTypeFlags & BATTLE_TYPE_TRAINER)
+        && TRAINER_BATTLE_PARAM.opponentA == TRAINER_BROCK_KANTO;
+}
+
+static bool32 IsPewterGymMap(void)
+{
+    u8 mapGroup = gSaveBlock1Ptr->location.mapGroup;
+    u8 mapNum = gSaveBlock1Ptr->location.mapNum;
+
+#define IS_CURRENT_MAP(map) (mapGroup == MAP_GROUP(map) && mapNum == MAP_NUM(map))
+    return IS_CURRENT_MAP(MAP_PEWTER_GYM);
+#undef IS_CURRENT_MAP
+}
+
+static bool32 IsMistyTestBattle(void)
+{
+    return (gBattleTypeFlags & BATTLE_TYPE_TRAINER)
+        && TRAINER_BATTLE_PARAM.opponentA == TRAINER_MISTY;
+}
+
 static bool32 IsKantoJohtoGymMap(void)
 {
     u8 mapGroup = gSaveBlock1Ptr->location.mapGroup;
     u8 mapNum = gSaveBlock1Ptr->location.mapNum;
 
 #define IS_CURRENT_MAP(map) (mapGroup == MAP_GROUP(map) && mapNum == MAP_NUM(map))
+    if (IsBrockTestBattle())
+        return FALSE;
+
     return IS_CURRENT_MAP(MAP_PEWTER_GYM)
         || IS_CURRENT_MAP(MAP_CERULEAN_GYM)
         || IS_CURRENT_MAP(MAP_VERMILION_GYM)
@@ -968,7 +1063,7 @@ void DrawMainBattleBackground(void)
         default:
             DecompressDataWithHeaderVram(BATTLE_ENV_BG_TABLE[gBattleEnvironment].tileset, (void *)(BG_CHAR_ADDR(2)));
             DecompressDataWithHeaderVram(BATTLE_ENV_BG_TABLE[gBattleEnvironment].tilemap, (void *)(BG_SCREEN_ADDR(26)));
-            LoadPalette(BATTLE_ENV_BG_TABLE[gBattleEnvironment].palette, BG_PLTT_ID(2), 3 * PLTT_SIZE_4BPP);
+            LoadPalette(GetBattleEnvironmentPaletteForTime(gBattleEnvironment), BG_PLTT_ID(2), 3 * PLTT_SIZE_4BPP);
             break;
         }
     }
@@ -977,7 +1072,10 @@ void DrawMainBattleBackground(void)
         if (gBattleTypeFlags & BATTLE_TYPE_TRAINER)
         {
             u32 trainerClass = GetTrainerClassFromId(TRAINER_BATTLE_PARAM.opponentA);
-            if ((trainerClass == TRAINER_CLASS_LEADER || trainerClass == TRAINER_CLASS_KANTO_LEADER))
+            if (!IsBrockTestBattle() && !IsMistyTestBattle()
+                && (trainerClass == TRAINER_CLASS_LEADER
+                    || trainerClass == TRAINER_CLASS_KANTO_LEADER
+                    || trainerClass == TRAINER_CLASS_JOHTO_LEADER))
             {
                 DecompressDataWithHeaderVram(gBattleEnvironmentTiles_Building, (void *)(BG_CHAR_ADDR(2)));
                 DecompressDataWithHeaderVram(gBattleEnvironmentTilemap_Building, (void *)(BG_SCREEN_ADDR(26)));
@@ -999,10 +1097,22 @@ void DrawMainBattleBackground(void)
         case MAP_BATTLE_SCENE_NORMAL:
             DecompressDataWithHeaderVram(BATTLE_ENV_BG_TABLE[gBattleEnvironment].tileset, (void *)(BG_CHAR_ADDR(2)));
             DecompressDataWithHeaderVram(BATTLE_ENV_BG_TABLE[gBattleEnvironment].tilemap, (void *)(BG_SCREEN_ADDR(26)));
-            LoadPalette(BATTLE_ENV_BG_TABLE[gBattleEnvironment].palette, BG_PLTT_ID(2), 3 * PLTT_SIZE_4BPP);
+            LoadPalette(GetBattleEnvironmentPaletteForTime(gBattleEnvironment), BG_PLTT_ID(2), 3 * PLTT_SIZE_4BPP);
             break;
         case MAP_BATTLE_SCENE_GYM:
-            if (IsKantoJohtoGymMap())
+            if (IsPewterGymMap())
+            {
+                DecompressDataWithHeaderVram(gBattleEnvironmentTiles_Building, (void *)(BG_CHAR_ADDR(2)));
+                DecompressDataWithHeaderVram(gBattleEnvironmentTilemap_Building, (void *)(BG_SCREEN_ADDR(26)));
+                LoadPalette(gBattleEnvironmentPalette_Building, BG_PLTT_ID(2), 3 * PLTT_SIZE_4BPP);
+            }
+            else if (IsBrockTestBattle())
+            {
+                DecompressDataWithHeaderVram(gBattleEnvironmentTiles_Building, (void *)(BG_CHAR_ADDR(2)));
+                DecompressDataWithHeaderVram(gBattleEnvironmentTilemap_Building, (void *)(BG_SCREEN_ADDR(26)));
+                LoadPalette(gBattleEnvironmentPalette_Building, BG_PLTT_ID(2), 3 * PLTT_SIZE_4BPP);
+            }
+            else if (IsKantoJohtoGymMap())
             {
                 DecompressDataWithHeaderVram(gBattleEnvironmentTiles_Blue_Building_2, (void *)(BG_CHAR_ADDR(2)));
                 DecompressDataWithHeaderVram(gBattleEnvironmentTilemap_Blue_Building_2, (void *)(BG_SCREEN_ADDR(26)));
@@ -1394,7 +1504,10 @@ void DrawBattleEntryBackground(void)
         if (gBattleTypeFlags & BATTLE_TYPE_TRAINER)
         {
             u32 trainerClass = GetTrainerClassFromId(TRAINER_BATTLE_PARAM.opponentA);
-            if ((trainerClass == TRAINER_CLASS_LEADER || trainerClass == TRAINER_CLASS_KANTO_LEADER))
+            if (!IsBrockTestBattle() && !IsMistyTestBattle()
+                && (trainerClass == TRAINER_CLASS_LEADER
+                    || trainerClass == TRAINER_CLASS_KANTO_LEADER
+                    || trainerClass == TRAINER_CLASS_JOHTO_LEADER))
             {
                 DecompressDataWithHeaderVram(gBattleEnvironmentAnimTiles_Building, (void *)(BG_CHAR_ADDR(1)));
                 DecompressDataWithHeaderVram(gBattleEnvironmentAnimTilemap_Building, (void *)(BG_SCREEN_ADDR(28)));
@@ -1465,7 +1578,10 @@ bool8 LoadChosenBattleElement(u8 caseId)
             if (gBattleTypeFlags & BATTLE_TYPE_TRAINER)
             {
                 u32 trainerClass = GetTrainerClassFromId(TRAINER_BATTLE_PARAM.opponentA);
-                if ((trainerClass == TRAINER_CLASS_LEADER || trainerClass == TRAINER_CLASS_KANTO_LEADER))
+                if (!IsBrockTestBattle()
+                    && (trainerClass == TRAINER_CLASS_LEADER
+                        || trainerClass == TRAINER_CLASS_KANTO_LEADER
+                        || trainerClass == TRAINER_CLASS_JOHTO_LEADER))
                 {
                     DecompressDataWithHeaderVram(gBattleEnvironmentTiles_Building, (void *)(BG_CHAR_ADDR(2)));
                     break;
@@ -1484,7 +1600,9 @@ bool8 LoadChosenBattleElement(u8 caseId)
                 DecompressDataWithHeaderVram(BATTLE_ENV_BG_TABLE[gBattleEnvironment].tileset, (void *)(BG_CHAR_ADDR(2)));
                 break;
             case MAP_BATTLE_SCENE_GYM:
-                if (IsKantoJohtoGymMap())
+                if (IsPewterGymMap() || IsBrockTestBattle())
+                    DecompressDataWithHeaderVram(gBattleEnvironmentTiles_Building, (void *)(BG_CHAR_ADDR(2)));
+                else if (IsKantoJohtoGymMap())
                     DecompressDataWithHeaderVram(gBattleEnvironmentTiles_Blue_Building_2, (void *)(BG_CHAR_ADDR(2)));
                 else
                     DecompressDataWithHeaderVram(gBattleEnvironmentTiles_Building, (void *)(BG_CHAR_ADDR(2)));
@@ -1530,7 +1648,10 @@ bool8 LoadChosenBattleElement(u8 caseId)
             if (gBattleTypeFlags & BATTLE_TYPE_TRAINER)
             {
                 u32 trainerClass = GetTrainerClassFromId(TRAINER_BATTLE_PARAM.opponentA);
-                if ((trainerClass == TRAINER_CLASS_LEADER || trainerClass == TRAINER_CLASS_KANTO_LEADER))
+                if (!IsBrockTestBattle() && !IsMistyTestBattle()
+                    && (trainerClass == TRAINER_CLASS_LEADER
+                        || trainerClass == TRAINER_CLASS_KANTO_LEADER
+                        || trainerClass == TRAINER_CLASS_JOHTO_LEADER))
                 {
                     DecompressDataWithHeaderVram(gBattleEnvironmentTilemap_Building, (void *)(BG_SCREEN_ADDR(26)));
                     break;
@@ -1549,7 +1670,9 @@ bool8 LoadChosenBattleElement(u8 caseId)
                 DecompressDataWithHeaderVram(BATTLE_ENV_BG_TABLE[gBattleEnvironment].tilemap, (void *)(BG_SCREEN_ADDR(26)));
                 break;
             case MAP_BATTLE_SCENE_GYM:
-                if (IsKantoJohtoGymMap())
+                if (IsPewterGymMap() || IsBrockTestBattle())
+                    DecompressDataWithHeaderVram(gBattleEnvironmentTilemap_Building, (void *)(BG_SCREEN_ADDR(26)));
+                else if (IsKantoJohtoGymMap())
                     DecompressDataWithHeaderVram(gBattleEnvironmentTilemap_Blue_Building_2, (void *)(BG_SCREEN_ADDR(26)));
                 else
                     DecompressDataWithHeaderVram(gBattleEnvironmentTilemap_Building, (void *)(BG_SCREEN_ADDR(26)));
@@ -1595,7 +1718,10 @@ bool8 LoadChosenBattleElement(u8 caseId)
             if (gBattleTypeFlags & BATTLE_TYPE_TRAINER)
             {
                 u32 trainerClass = GetTrainerClassFromId(TRAINER_BATTLE_PARAM.opponentA);
-                if ((trainerClass == TRAINER_CLASS_LEADER || trainerClass == TRAINER_CLASS_KANTO_LEADER))
+                if (!IsBrockTestBattle() && !IsMistyTestBattle()
+                    && (trainerClass == TRAINER_CLASS_LEADER
+                        || trainerClass == TRAINER_CLASS_KANTO_LEADER
+                        || trainerClass == TRAINER_CLASS_JOHTO_LEADER))
                 {
                     LoadPalette(gBattleEnvironmentPalette_BuildingLeader, BG_PLTT_ID(2), 3 * PLTT_SIZE_4BPP);
                     break;
@@ -1611,10 +1737,14 @@ bool8 LoadChosenBattleElement(u8 caseId)
             {
             default:
             case MAP_BATTLE_SCENE_NORMAL:
-                LoadPalette(BATTLE_ENV_BG_TABLE[gBattleEnvironment].palette, BG_PLTT_ID(2), 3 * PLTT_SIZE_4BPP);
+                LoadPalette(GetBattleEnvironmentPaletteForTime(gBattleEnvironment), BG_PLTT_ID(2), 3 * PLTT_SIZE_4BPP);
                 break;
             case MAP_BATTLE_SCENE_GYM:
-                if (IsKantoJohtoGymMap())
+                if (IsPewterGymMap())
+                    LoadPalette(gBattleEnvironmentPalette_Building, BG_PLTT_ID(2), 3 * PLTT_SIZE_4BPP);
+                else if (IsBrockTestBattle())
+                    LoadPalette(gBattleEnvironmentPalette_Building, BG_PLTT_ID(2), 3 * PLTT_SIZE_4BPP);
+                else if (IsKantoJohtoGymMap())
                     LoadPalette(gBattleEnvironmentPalette_Blue_Building_2, BG_PLTT_ID(2), 3 * PLTT_SIZE_4BPP);
                 else
                     LoadPalette(gBattleEnvironmentPalette_BuildingGym, BG_PLTT_ID(2), 3 * PLTT_SIZE_4BPP);

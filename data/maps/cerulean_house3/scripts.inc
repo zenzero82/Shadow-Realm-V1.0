@@ -10,6 +10,8 @@ cerulean_house3_EventScript_Hiker::
 	setspeaker cerulean_house3_Speaker_Hiker
 	msgbox cerulean_house3_Text_Hiker, MSGBOX_DEFAULT
 	closemessage
+	setflag FLAG_QUEST_CERULEAN_NPC_HOUSE3_HIKER
+	call QuestJournal_EventScript_CheckCeruleanCityNPCs
 	release
 	end
 

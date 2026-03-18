@@ -1,5 +1,6 @@
 WesHideout_Underground_MapScripts::
 	map_script MAP_SCRIPT_ON_TRANSITION, WesHideout_Underground_OnTransition
+	map_script MAP_SCRIPT_ON_LOAD, WesHideout_Underground_OnLoad
 	map_script MAP_SCRIPT_ON_FRAME_TABLE, WesHideout_Underground_OnFrame
 	.byte 0
 
@@ -22,15 +23,34 @@ WesHideout_Underground_OnTransition::
 	hideobjectat LOCALID_HOOPA_RING, MAP_WES_HIDEOUT_UNDERGROUND
 	removeobject LOCALID_HOOPA_RING
 	goto_if_set FLAG_WES_HIDEOUT_LYRA_SCENE, WesHideout_Underground_OnTransition_Scene
+	setflag FLAG_HIDE_WES_HIDEOUT_LYRA
+	setflag FLAG_HIDE_WES_HIDEOUT_MEGANIUM
 	hideobjectat LOCALID_LYRA, MAP_WES_HIDEOUT_UNDERGROUND
 	hideobjectat LOCALID_MEGANIUM, MAP_WES_HIDEOUT_UNDERGROUND
 	setvar VAR_TEMP_2, 1
 	end
 
 WesHideout_Underground_OnTransition_Scene::
-	showobjectat LOCALID_LYRA, MAP_WES_HIDEOUT_UNDERGROUND
-	showobjectat LOCALID_MEGANIUM, MAP_WES_HIDEOUT_UNDERGROUND
+	clearflag FLAG_HIDE_WES_HIDEOUT_LYRA
+	clearflag FLAG_HIDE_WES_HIDEOUT_MEGANIUM
+	hideobjectat LOCALID_PLAYER, MAP_WES_HIDEOUT_UNDERGROUND
+	hideobjectat LOCALID_LYRA, MAP_WES_HIDEOUT_UNDERGROUND
+	hideobjectat LOCALID_MEGANIUM, MAP_WES_HIDEOUT_UNDERGROUND
+	turnobject LOCALID_PLAYER, DIR_NORTH
 	setvar VAR_TEMP_2, 0
+	end
+
+WesHideout_Underground_OnLoad::
+	goto_if_set FLAG_WES_HIDEOUT_LYRA_SCENE, WesHideout_Underground_OnLoad_Scene
+	end
+
+WesHideout_Underground_OnLoad_Scene::
+	hideobjectat LOCALID_PLAYER, MAP_WES_HIDEOUT_UNDERGROUND
+	hideobjectat LOCALID_LYRA, MAP_WES_HIDEOUT_UNDERGROUND
+	hideobjectat LOCALID_MEGANIUM, MAP_WES_HIDEOUT_UNDERGROUND
+	hideobjectat LOCALID_HOOPA_RING, MAP_WES_HIDEOUT_UNDERGROUND
+	setflag FLAG_HIDE_WES_HIDEOUT_HOOPA_RING
+	removeobject LOCALID_HOOPA_RING
 	end
 
 WesHideout_Underground_OnFrame::
@@ -66,6 +86,8 @@ WesHideout_Underground_EventScript_LyraScene::
 	lockall
 	setvar VAR_TEMP_2, 1
 	clearflag FLAG_WES_HIDEOUT_LYRA_SCENE
+	clearflag FLAG_HIDE_WES_HIDEOUT_LYRA
+	clearflag FLAG_HIDE_WES_HIDEOUT_MEGANIUM
 	setflag FLAG_HIDE_WES_HIDEOUT_HOOPA_RING
 	hideobjectat LOCALID_HOOPA_RING, MAP_WES_HIDEOUT_UNDERGROUND
 	removeobject LOCALID_HOOPA_RING
@@ -75,12 +97,12 @@ WesHideout_Underground_EventScript_LyraScene::
 	setobjectxyperm LOCALID_LYRA, 27, 12
 	setobjectxy LOCALID_MEGANIUM, 27, 13
 	setobjectxyperm LOCALID_MEGANIUM, 27, 13
-	showobjectat LOCALID_LYRA, MAP_WES_HIDEOUT_UNDERGROUND
-	showobjectat LOCALID_MEGANIUM, MAP_WES_HIDEOUT_UNDERGROUND
 	turnobject LOCALID_PLAYER, DIR_NORTH
 	turnobject LOCALID_LYRA, DIR_NORTH
 	turnobject LOCALID_MEGANIUM, DIR_NORTH
-	fadescreen FADE_FROM_BLACK
+	showobjectat LOCALID_PLAYER, MAP_WES_HIDEOUT_UNDERGROUND
+	showobjectat LOCALID_LYRA, MAP_WES_HIDEOUT_UNDERGROUND
+	showobjectat LOCALID_MEGANIUM, MAP_WES_HIDEOUT_UNDERGROUND
 	turnobject LOCALID_BIRCH, DIR_SOUTH
 	setspeaker WesHideout_Underground_Speaker_Birch
 	msgbox WesHideout_Underground_Text_Birch_TimeMachine, MSGBOX_DEFAULT
@@ -132,6 +154,7 @@ WesHideout_Underground_EventScript_Birch::
 	msgbox WesHideout_Underground_Text_Birch_Intro, MSGBOX_NPC
 	closemessage
 	call WesHideout_Underground_EventScript_Birch_GivePokenav
+	setspeaker WesHideout_Underground_Speaker_Birch
 	msgbox WesHideout_Underground_Text_Birch_Intro_Final, MSGBOX_NPC
 	closemessage
 	setflag FLAG_WES_HIDEOUT_TALKED_BIRCH
@@ -187,12 +210,84 @@ WesHideout_Underground_EventScript_Kukui::
 	msgbox WesHideout_Underground_Text_Kukui_Intro, MSGBOX_NPC
 	closemessage
 	setflag FLAG_WES_HIDEOUT_TALKED_KUKUI
+	checkflag FLAG_QUEST_KUKUI_SHADOW_STARTED
+	goto_if_eq WesHideout_Underground_EventScript_Kukui_QuestStartDone
+	setflag FLAG_QUEST_KUKUI_SHADOW_STARTED
+	call QuestJournal_EventScript_NewQuestAlert
+WesHideout_Underground_EventScript_Kukui_QuestStartDone:
 	call WesHideout_Underground_EventScript_CheckAllProfessors
 	release
 	end
 
 WesHideout_Underground_EventScript_Kukui_After::
+	checkflag FLAG_QUEST_KUKUI_SHADOW_STARTED
+	goto_if_eq WesHideout_Underground_EventScript_Kukui_Quest
 	msgbox WesHideout_Underground_Text_Kukui_After, MSGBOX_NPC
+	closemessage
+	release
+	end
+
+WesHideout_Underground_EventScript_Kukui_Quest:
+	checkflag FLAG_QUEST_KUKUI_SHADOW_COMPLETED
+	goto_if_eq WesHideout_Underground_EventScript_Kukui_Quest_Completed
+	msgbox WesHideout_Underground_Text_Kukui_AskShadow, MSGBOX_YESNO
+	compare VAR_RESULT, YES
+	goto_if_eq WesHideout_Underground_EventScript_Kukui_Quest_CheckMeowth
+	release
+	end
+
+WesHideout_Underground_EventScript_Kukui_Quest_CheckMeowth:
+	special Special_Kukui_CheckShadowMeowthInParty
+	compare VAR_RESULT, TRUE
+	goto_if_eq WesHideout_Underground_EventScript_Kukui_Quest_Meowth
+	msgbox WesHideout_Underground_Text_Kukui_NotMeowth, MSGBOX_NPC
+	closemessage
+	release
+	end
+
+WesHideout_Underground_EventScript_Kukui_Quest_Meowth:
+	msgbox WesHideout_Underground_Text_Kukui_Meowth_Request, MSGBOX_YESNO
+	compare VAR_RESULT, YES
+	goto_if_eq WesHideout_Underground_EventScript_Kukui_Quest_TakeMeowth
+	release
+	end
+
+WesHideout_Underground_EventScript_Kukui_Quest_TakeMeowth:
+	special Special_Kukui_TakeShadowMeowth
+	setflag FLAG_KUKUI_SHADOW_MEOWTH_TAKEN
+	setflag FLAG_QUEST_KUKUI_SHADOW_COMPLETED
+	call QuestJournal_EventScript_QuestCompleteAlert
+	checkflag FLAG_QUEST_SNAG_MACHINE_STARTED
+	goto_if_eq WesHideout_Underground_EventScript_Kukui_Quest_TakeMeowth_End
+	setflag FLAG_QUEST_SNAG_MACHINE_STARTED
+	call QuestJournal_EventScript_NewQuestAlert
+WesHideout_Underground_EventScript_Kukui_Quest_TakeMeowth_End:
+	msgbox WesHideout_Underground_Text_Kukui_Meowth_Taken, MSGBOX_NPC
+	closemessage
+	release
+	end
+
+WesHideout_Underground_EventScript_Kukui_Quest_Completed:
+	checkflag FLAG_KUKUI_SHADOW_MEOWTH_TAKEN
+	goto_if_eq WesHideout_Underground_EventScript_Kukui_Quest_Testing
+	msgbox WesHideout_Underground_Text_Kukui_After, MSGBOX_NPC
+	closemessage
+	release
+	end
+
+WesHideout_Underground_EventScript_Kukui_Quest_Testing:
+	checkflag FLAG_BADGE08_GET
+	goto_if_eq WesHideout_Underground_EventScript_Kukui_Quest_Return
+	msgbox WesHideout_Underground_Text_Kukui_Meowth_Testing, MSGBOX_NPC
+	closemessage
+	release
+	end
+
+WesHideout_Underground_EventScript_Kukui_Quest_Return:
+	special Special_Kukui_ReturnShadowMeowth
+	setflag FLAG_KUKUI_SHADOW_MEOWTH_RETURNED
+	clearflag FLAG_KUKUI_SHADOW_MEOWTH_TAKEN
+	msgbox WesHideout_Underground_Text_Kukui_Meowth_Returned, MSGBOX_NPC
 	closemessage
 	release
 	end
@@ -200,6 +295,8 @@ WesHideout_Underground_EventScript_Kukui_After::
 WesHideout_Underground_EventScript_Sycamore::
 	lockall
 	setvar VAR_TEMP_1, 1
+	checkflag FLAG_RECEIVED_SNAG_MACHINE
+	goto_if_eq WesHideout_Underground_EventScript_Sycamore_AfterSnag
 	checkflag FLAG_WES_HIDEOUT_TALKED_SYCAMORE
 	goto_if_eq WesHideout_Underground_EventScript_Sycamore_After
 	call WesHideout_Underground_EventScript_MagnoliaSycamore_Intro
@@ -207,6 +304,7 @@ WesHideout_Underground_EventScript_Sycamore::
 	setflag FLAG_WES_HIDEOUT_TALKED_SYCAMORE
 	setflag FLAG_WES_HIDEOUT_TALKED_MAGNOLIA
 	setflag FLAG_WES_HIDEOUT_TEAM_BRIEFED
+	call WesHideout_Underground_EventScript_StartSnagMachineQuest
 	call WesHideout_Underground_EventScript_CheckAllProfessors
 	releaseall
 	end
@@ -219,9 +317,19 @@ WesHideout_Underground_EventScript_Sycamore_After::
 	releaseall
 	end
 
+WesHideout_Underground_EventScript_Sycamore_AfterSnag::
+	call WesHideout_Underground_EventScript_FaceMagSycamoreAndPlayer
+	setspeaker WesHideout_Underground_Speaker_Sycamore
+	msgbox WesHideout_Underground_Text_Sycamore_AfterSnag, MSGBOX_NPC
+	closemessage
+	releaseall
+	end
+
 WesHideout_Underground_EventScript_Magnolia::
 	lockall
 	setvar VAR_TEMP_1, 1
+	checkflag FLAG_RECEIVED_SNAG_MACHINE
+	goto_if_eq WesHideout_Underground_EventScript_Magnolia_AfterSnag
 	checkflag FLAG_WES_HIDEOUT_TALKED_MAGNOLIA
 	goto_if_eq WesHideout_Underground_EventScript_Magnolia_After
 	call WesHideout_Underground_EventScript_MagnoliaSycamore_Intro
@@ -229,6 +337,7 @@ WesHideout_Underground_EventScript_Magnolia::
 	setflag FLAG_WES_HIDEOUT_TALKED_SYCAMORE
 	setflag FLAG_WES_HIDEOUT_TALKED_MAGNOLIA
 	setflag FLAG_WES_HIDEOUT_TEAM_BRIEFED
+	call WesHideout_Underground_EventScript_StartSnagMachineQuest
 	call WesHideout_Underground_EventScript_CheckAllProfessors
 	releaseall
 	end
@@ -237,6 +346,14 @@ WesHideout_Underground_EventScript_Magnolia_After::
 	call WesHideout_Underground_EventScript_FaceMagSycamoreAndPlayer
 	setspeaker WesHideout_Underground_Speaker_Magnolia
 	msgbox WesHideout_Underground_Text_Magnolia_After, MSGBOX_NPC
+	closemessage
+	releaseall
+	end
+
+WesHideout_Underground_EventScript_Magnolia_AfterSnag::
+	call WesHideout_Underground_EventScript_FaceMagSycamoreAndPlayer
+	setspeaker WesHideout_Underground_Speaker_Magnolia
+	msgbox WesHideout_Underground_Text_Magnolia_AfterSnag, MSGBOX_NPC
 	closemessage
 	releaseall
 	end
@@ -255,6 +372,14 @@ WesHideout_Underground_EventScript_GiveShadowMonitor::
 	msgbox WesHideout_Underground_Text_Sycamore_ShadowMonitor_Given, MSGBOX_NPC
 	closemessage
 WesHideout_Underground_EventScript_GiveShadowMonitor_Done::
+	return
+
+WesHideout_Underground_EventScript_StartSnagMachineQuest::
+	checkflag FLAG_QUEST_SNAG_MACHINE_STARTED
+	goto_if_eq WesHideout_Underground_EventScript_StartSnagMachineQuest_Done
+	setflag FLAG_QUEST_SNAG_MACHINE_STARTED
+	call QuestJournal_EventScript_NewQuestAlert
+WesHideout_Underground_EventScript_StartSnagMachineQuest_Done::
 	return
 
 WesHideout_Underground_EventScript_Rowan_Talk_Object::
@@ -538,20 +663,32 @@ WesHideout_Underground_Movement_PlayerIntoRing:
 
 WesHideout_Underground_EventScript_CheckAllProfessors::
 	checkflag FLAG_WES_HIDEOUT_TALKED_BIRCH
-	goto_if_eq WesHideout_Underground_EventScript_CheckAllProfessors_Done
+	goto_if_ne WesHideout_Underground_EventScript_CheckAllProfessors_Done
 	checkflag FLAG_WES_HIDEOUT_TALKED_ELM
-	goto_if_eq WesHideout_Underground_EventScript_CheckAllProfessors_Done
+	goto_if_ne WesHideout_Underground_EventScript_CheckAllProfessors_Done
 	checkflag FLAG_WES_HIDEOUT_TALKED_KUKUI
-	goto_if_eq WesHideout_Underground_EventScript_CheckAllProfessors_Done
+	goto_if_ne WesHideout_Underground_EventScript_CheckAllProfessors_Done
 	checkflag FLAG_WES_HIDEOUT_TALKED_SYCAMORE
-	goto_if_eq WesHideout_Underground_EventScript_CheckAllProfessors_Done
+	goto_if_ne WesHideout_Underground_EventScript_CheckAllProfessors_Done
 	checkflag FLAG_WES_HIDEOUT_TALKED_MAGNOLIA
-	goto_if_eq WesHideout_Underground_EventScript_CheckAllProfessors_Done
+	goto_if_ne WesHideout_Underground_EventScript_CheckAllProfessors_Done
 	checkflag FLAG_WES_HIDEOUT_TALKED_ROWAN
-	goto_if_eq WesHideout_Underground_EventScript_CheckAllProfessors_Done
+	goto_if_ne WesHideout_Underground_EventScript_CheckAllProfessors_Done
 	checkflag FLAG_WES_HIDEOUT_TALKED_JUNIPER
-	goto_if_eq WesHideout_Underground_EventScript_CheckAllProfessors_Done
+	goto_if_ne WesHideout_Underground_EventScript_CheckAllProfessors_Done
 	setflag FLAG_WES_HIDEOUT_TEAM_BRIEFED
+	checkflag FLAG_QUEST_TALK_TEAM_STARTED
+	goto_if_eq WesHideout_Underground_EventScript_CheckAllProfessors_Quest
+	goto WesHideout_Underground_EventScript_CheckAllProfessors_Done
+WesHideout_Underground_EventScript_CheckAllProfessors_Quest:
+	checkflag FLAG_QUEST_TALK_TEAM_COMPLETED
+	goto_if_eq WesHideout_Underground_EventScript_CheckAllProfessors_Done
+	setflag FLAG_QUEST_TALK_TEAM_COMPLETED
+	call QuestJournal_EventScript_QuestCompleteAlert
+	checkflag FLAG_QUEST_KUKUI_SHADOW_STARTED
+	goto_if_eq WesHideout_Underground_EventScript_CheckAllProfessors_Done
+	setflag FLAG_QUEST_KUKUI_SHADOW_STARTED
+	call QuestJournal_EventScript_NewQuestAlert
 WesHideout_Underground_EventScript_CheckAllProfessors_Done::
 	return
 
@@ -573,8 +710,8 @@ WesHideout_Underground_Text_Birch_Intro:
 	.string "We don't know why it was alarmed.\n"
 	.string "It likely has to do with CIPHER.\p"
 	.string "Can you do me a favor and track it\n"
-	.string "down? MICHAEL said CELEBI was used.\p"
-	.string "In WES's timeline to help purify\n"
+	.string "down? MICHAEL said CELEBI was used\p"
+	.string "in WES's timeline to help purify\n"
 	.string "Shadow POKéMON.\p"
 	.string "It has been helping us since we\n"
 	.string "learned of the problem.\p"
@@ -690,17 +827,57 @@ WesHideout_Underground_Text_Kukui_After:
 	.string "Stop by again! We'll be here.\n"
 	.string "for some time.$"
 
+WesHideout_Underground_Text_Kukui_AskShadow:
+	.string "Alola! Do you have a Shadow POKéMON\n"
+	.string "you want to show me?$"
+
+WesHideout_Underground_Text_Kukui_NotMeowth:
+	.string "Hmm, I don't think we need to study\n"
+	.string "this one right now. Keep bringing\l"
+	.string "me some.$"
+
+WesHideout_Underground_Text_Kukui_Meowth_Request:
+	.string "Oh, there is something that is quite\n"
+	.string "different with this POKéMON. Do you\l"
+	.string "mind leaving it with me for some\l"
+	.string "time?$"
+
+WesHideout_Underground_Text_Kukui_Meowth_Taken:
+	.string "Thanks! I'll let you know when we're\n"
+	.string "done with our tests.$"
+
+WesHideout_Underground_Text_Kukui_Meowth_Testing:
+	.string "Alola! We are still running some tests\n"
+	.string "on MEOWTH. Come back some other time.\p"
+	.string "If I had to guess, it would be by the\n"
+	.string "time you got 8 badges.$"
+
+WesHideout_Underground_Text_Kukui_Meowth_Returned:
+	.string "Alola! We learned a lot from this\n"
+	.string "POKéMON. Here it is back.$"
+
 WesHideout_Underground_Text_Sycamore_After:
 	.string "Use the SHADOW MONITOR to track\n"
 	.string "Shadow POKéMON you snag.\p"
 	.string "Bring me data when you can.\n"
 	.string "It will help us refine it.$"
 
+WesHideout_Underground_Text_Sycamore_AfterSnag:
+	.string "You will likely bump into CALEM or\n"
+	.string "SERENA during your journey.\p"
+	.string "Be sure to ask them for a MEGA\n"
+	.string "BRACELET!$"
+
 WesHideout_Underground_Text_Magnolia_After:
 	.string "It's about time to take CIPHER down!\n"
 	.string "Go see WES upstairs.\p"
 	.string "I believe he has something special\n"
 	.string "for you.$"
+
+WesHideout_Underground_Text_Magnolia_AfterSnag:
+	.string "If you see VICTOR or GLORIA,\n"
+	.string "be sure to ask them for a DYNAMAX\n"
+	.string "BAND.$"
 
 WesHideout_Underground_Text_Rowan_Intro_1:
 	.string "Oh, you finally made it.\p"

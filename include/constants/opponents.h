@@ -141,13 +141,30 @@
 #define TRAINER_UNION_CAVE_HIKER         134
 #define TRAINER_UNION_CAVE_SUPER_NERD    135
 #define TRAINER_UNION_CAVE_FIREBREATHER  136
+#define TRAINER_ROUTE9_CAMPER_1          137
+#define TRAINER_ROUTE9_CAMPER_2          138
+#define TRAINER_ROUTE9_PICNICKER_1       139
+#define TRAINER_ROUTE9_PICNICKER_2       140
+#define TRAINER_ROUTE9_HIKER_1           141
+#define TRAINER_ROUTE9_HIKER_2           142
+#define TRAINER_JJ_ILEX                  143
+#define TRAINER_ROUTE34_CAMPER           144
+#define TRAINER_ROUTE34_GENTLEMAN        145
+#define TRAINER_ROUTE34_YOUNGSTER        146
+#define TRAINER_ILEX_ROCKET_GRUNT_F1     147
+#define TRAINER_ILEX_ROCKET_GRUNT_M1     148
+#define TRAINER_ILEX_ROCKET_GRUNT_F2     149
+#define TRAINER_ILEX_ROCKET_GRUNT_M2     150
+#define TRAINER_ILEX_ROCKET_GRUNT_M3     151
+#define TRAINER_ILEX_ROCKET_GRUNT_F3     152
+#define TRAINER_ILEX_BUG_CATCHER         153
 
 
 
 // NOTE: Because each Trainer uses a flag to determine when they are defeated, there is only space for 9 additional trainers before trainer flag space overflows
 //       More space can be made by shifting flags around in constants/flags.h or changing how trainer flags are handled
 //       MAX_TRAINERS_COUNT can be increased but will take up additional saveblock space
-#define TRAINERS_COUNT                      137
+#define TRAINERS_COUNT                      154
 #define MAX_TRAINERS_COUNT                  1000
 #define TRAINER_PARTNER(partner)           (MAX_TRAINERS_COUNT + partner)
 

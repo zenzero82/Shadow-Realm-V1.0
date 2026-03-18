@@ -81,7 +81,7 @@ Music: TRAINER_ENCOUNTER_MUSIC_CIPHER_PEON
 Double Battle: No
 
 XD003 (pikachu)
-Level: 1
+Level: 4
 Nature: Timid
 IVs: 0 HP / 0 Atk / 0 Def / 31 SpA / 0 SpD / 31 Spe
 Shadow: Yes
@@ -95,8 +95,11 @@ Class: Team Rocket
 Pic: JESSIE_JAMES
 Music: TRAINER_ENCOUNTER_MUSIC_TEAM_ROCKET
 
+Ekans
+Level: 3
+
 Meowth
-Level: 1
+Level: 5
 
 === TRAINER_BROCK_KANTO ===
 Name: BROCK
@@ -106,7 +109,8 @@ Pic: BROCK_KANTO
 Gender: Male
 
 Rhyhorn 
-Level: 1
+Level: 14
+Ball: Heavy Ball
 Nature: HARDY
 - Tackle
 - Defense Curl
@@ -114,7 +118,8 @@ Nature: HARDY
 - Sand Attack
 
 Onix 
-Level: 1
+Level: 16
+Ball: Heavy Ball
 Nature: HARDY
 - Tackle
 - Bind
@@ -122,7 +127,8 @@ Nature: HARDY
 - Screech
 
 Sudowoodo 
-Level: 1
+Level: 16
+Ball: Heavy Ball
 Nature: HARDY
 - Tackle
 - Defense Curl
@@ -136,13 +142,13 @@ Pic: CAMPER_KANTO
 Gender: Male
 
 Geodude 
-Level: 1
+Level: 12
 Nature: HARDY
 - Tackle
 - Tail Whip
 
 Roggenrola
-Level: 1
+Level: 12
 Nature: HARDY
 - Peck
 - Growl
@@ -153,11 +159,14 @@ Class: BUG_CATCHER
 Pic: BUG_CATCHER
 Gender: Male
 
-Metapod
-Level: 1
+Ledian
+Level: 23
 
-Butterfree
-Level: 1
+Ariados
+Level: 24
+
+Vivillon
+Level: 25
 
 === TRAINER_AZALEA_JOSH ===
 Name: JOSH
@@ -165,8 +174,14 @@ Class: BUG_CATCHER
 Pic: BUG_CATCHER
 Gender: Male
 
-Yanma
-Level: 1
+Forretress
+Level: 24
+
+Kricketune
+Level: 25
+
+Shuckle
+Level: 26
 
 === TRAINER_AZALEA_BENNY ===
 Name: BENNY
@@ -174,11 +189,14 @@ Class: BUG_CATCHER
 Pic: BUG_CATCHER
 Gender: Male
 
-Kakuna
-Level: 1
+Vespiquen
+Level: 24
 
-Beedrill
-Level: 1
+Yanmega
+Level: 25
+
+Mothim
+Level: 26
 
 === TRAINER_AZALEA_AMY_AND_MAY ===
 Name: AMY&MAY
@@ -187,59 +205,51 @@ Pic: TWINS
 Gender: Female
 Double Battle: Yes
 
-Ledyba
-Level: 1
-Shadow: Yes
-Shadow ID: 50
-Heart Gauge: 5000
-- Shadow Rush
+Ledian
+Level: 23
 
-Spinarak
-Level: 1
-Shadow: Yes
-Shadow ID: 51
-Heart Gauge: 5000
-- Shadow Rush
+Ariados
+Level: 23
 
-Caterpie
-Level: 1
+Wormadam
+Level: 24
 
 === TRAINER_BUGSY_1 ===
 Name: BUGSY
-Class: LEADER
+Class: JOHTO_LEADER
 Music: Gym Leader
 Pic: LEADER_BUGSY
 Gender: Male
 
-Pineco
-Level: 1
-- Pin Missile
-- Headbutt
-- Bullet Seed
-- Harden
+Kleavor
+Level: 26
 
-Ledian
-Level: 1
-- Bullet Seed
-- Comet Punch
-- Supersonic
-- Reflect
+Heracross
+Level: 26
 
-Scyther @ ITEM_BERRY_JUICE
-Level: 1
-- Quick Attack
-- Fury Cutter
-- Bullet Seed
-- Pursuit
+Vikavolt
+Level: 27
+
+Scizor
+Level: 30
 
 === TRAINER_LEADER_FALKNER ===
 Name: FALKNER
-Class: LEADER
+Class: JOHTO_LEADER
 Pic: LEADER_FALKNER
 Gender: Male
 
-Rattata
-Level: 1
+Fearow
+Level: 23
+
+ORICORIO_PAU
+Level: 23
+
+Tranquill
+Level: 24
+
+Honchkrow
+Level: 25
 
 === TRAINER_MISTY ===
 Name: MISTY
@@ -249,16 +259,24 @@ Pic: MISTY
 Gender: Female
 
 Psyduck
-Level: 1
+Level: 19
+Ball: Dive Ball
 
 Corsola
-Level: 1
+Level: 19
+Ball: Dive Ball
 
 Starmie
-Level: 1
+Level: 20
+Ball: Dive Ball
 
 Gyarados
-Level: 1
+Level: 22
+Ball: Dive Ball
+- Twister
+- Bite
+- Leer 
+- Thunder Wave
 
 === TRAINER_ROCKET_GRUNT_M_1 ===
 Name: ZANDER
@@ -269,15 +287,15 @@ Music: TRAINER_ENCOUNTER_MUSIC_TEAM_ROCKET
 Double Battle: No
 
 Mimikyu
-Level: 1
-Nature: ADAMANT
+Level: 23
+Nature: Jolly
 IVs: 0 HP / 0 Atk / 0 Def / 0 SpA / 0 SpD / 0 Spe
 Shadow: Yes
 Shadow ID: 49
 Heart Gauge: 5000
 - Shadow Half
 - Shadow Sky
-- Shadow Wave
+- Shadow Rush
 
 === TRAINER_VF_BUGCATCHER1 ===
 Name: Neil
@@ -286,13 +304,13 @@ Pic: BUG_CATCHER
 Gender: Male
 
 Caterpie
-Level: 1
+Level: 6
 
 Weedle
-Level: 1
+Level: 6
 
 Metapod
-Level: 1
+Level: 6
 
 === TRAINER_VF_BUGCATCHER2 ===
 Name: Rick
@@ -301,13 +319,13 @@ Pic: BUG_CATCHER
 Gender: Male
 
 Cutiefly
-Level: 1
+Level: 6
 
 Grubbin
-Level: 1
+Level: 6
 
 Joltik
-Level: 1
+Level: 6
 
 === TRAINER_VF_BUGCATCHER3 ===
 Name: Jamal
@@ -316,13 +334,13 @@ Pic: BUG_CATCHER
 Gender: Male
 
 Venipede
-Level: 1
+Level: 6
 
 Venonat
-Level: 1
+Level: 6
 
 Paras
-Level: 1
+Level: 6
 
 === TRAINER_VF_ROCKET ===
 Name: Travis
@@ -333,66 +351,10 @@ Music: TRAINER_ENCOUNTER_MUSIC_TEAM_ROCKET
 Double Battle: No
 
 Koffing
-Level: 1
+Level: 6
 
 Ekans
-Level: 1
-
-=== TRAINER_VF_PLASMA ===
-Name: Corvin
-Class: Team Plasma
-Pic: PLASMA_GRUNT_M_GEN5
-Gender: Male
-Music: TRAINER_ENCOUNTER_MUSIC_PLASMA
-Double Battle: No
-
-Trubbish
-Level: 1
-
-Scraggy
-Level: 1
-
-=== TRAINER_VF_GALACTIC ===
-Name: Vega
-Class: Team Galactic
-Pic: GALACTIC_GRUNT_M_GEN4
-Gender: Male
-Music: TRAINER_ENCOUNTER_MUSIC_GALACTIC
-Double Battle: No
-
-Zubat
-Level: 1
-
-Stunky
-Level: 1
-
-=== TRAINER_VF_SKULL ===
-Name: Rex
-Class: Team Skull
-Pic: SKULL_MFP
-Gender: Male
-Music: TRAINER_ENCOUNTER_MUSIC_SUSPICIOUS
-Double Battle: No
-
-Scraggy
-Level: 1
-
-Sandile
-Level: 1
-
-=== TRAINER_VF_FLARE ===
-Name: Pyre
-Class: Team Flare
-Pic: FLARE_MFP
-Gender: Male
-Music: TRAINER_ENCOUNTER_MUSIC_SUSPICIOUS
-Double Battle: No
-
-Houndour
-Level: 1
-
-Fletchling
-Level: 1
+Level: 6
 
 === TRAINER_RT3_YOUNGSTER1 ===
 Name: BEN
@@ -401,10 +363,10 @@ Pic: YOUNGSTER2
 Gender: Male
 
 Roggenrola
-Level: 1
+Level: 10
 
 Woobat
-Level: 1
+Level: 10
 
 === TRAINER_RT3_YOUNGSTER2 ===
 Name: CALVIN
@@ -413,10 +375,10 @@ Pic: YOUNGSTER2
 Gender: Male
 
 Mudbray
-Level: 1
+Level: 10
 
 Minccino
-Level: 1
+Level: 10
 
 === TRAINER_RT3_LASS ===
 Name: LASS
@@ -425,10 +387,10 @@ Pic: LASS_GEN2
 Gender: Female
 
 Jigglypuff
-Level: 1
+Level: 10
 
 Stufful
-Level: 1
+Level: 10
 
 === TRAINER_RT3_FIREBREATHER ===
 Name: Otis
@@ -437,10 +399,10 @@ Pic: FIREBREATHER
 Gender: Male
 
 Ponyta
-Level: 1
+Level: 10
 
 Audino
-Level: 1
+Level: 10
 
 === TRAINER_TEMP_MIROR_B ===
 Name: MIROR B
@@ -459,10 +421,10 @@ Pic: BLACK_BELT
 Gender: Male
 
 Ponyta
-Level: 1
+Level: 15
 
 Emolga
-Level: 1
+Level: 15
 
 === TRAINER_RT4_ROCKER ===
 Name: AMP
@@ -471,10 +433,10 @@ Pic: GUITARIST
 Gender: Male
 
 Deerling
-Level: 1
+Level: 15
 
 Stufful
-Level: 1
+Level: 15
 
 === TRAINER_RT4_PICNICKER1 ===
 Name: LILY
@@ -483,10 +445,10 @@ Pic: PICNICKER
 Gender: Female
 
 Petilil
-Level: 1
+Level: 15
 
 SPECIES_PONYTA_GALAR
-Level: 1
+Level: 15
 
 === TRAINER_RT4_PICNICKER2 ===
 Name: MIA
@@ -495,10 +457,10 @@ Pic: PICNICKER
 Gender: Female
 
 Emolga
-Level: 1
+Level: 15
 
 Deerling
-Level: 1
+Level: 15
 
 === TRAINER_RT4_BRENDAN1 ===
 Name: BRENDAN
@@ -507,10 +469,10 @@ Pic: BRENDAN
 Gender: Male
 
 Stufful
-Level: 1
+Level: 15
 
 Petilil
-Level: 1
+Level: 15
 
 === TRAINER_RT4_BRENDAN2 ===
 Name: BRENDAN
@@ -519,10 +481,10 @@ Pic: BRENDAN
 Gender: Male
 
 SPECIES_PONYTA_GALAR
-Level: 1
+Level: 15
 
 Emolga
-Level: 1
+Level: 15
 
 === TRAINER_RT4_BRENDAN3 ===
 Name: BRENDAN
@@ -531,10 +493,197 @@ Pic: BRENDAN
 Gender: Male
 
 Ponyta
-Level: 1
+Level: 15
 
 Deerling
-Level: 1
+Level: 15
+
+=== TRAINER_ROUTE9_CAMPER_1 ===
+Name: MARK
+Class: TRAINER_CLASS_CAMPER
+Pic: CAMPER_KANTO
+Gender: Male
+
+Sandshrew
+Level: 16
+
+Geodude
+Level: 17
+
+=== TRAINER_ROUTE9_CAMPER_2 ===
+Name: TROY
+Class: TRAINER_CLASS_CAMPER
+Pic: CAMPER_KANTO
+Gender: Male
+
+SPECIES_NIDORAN_M
+Level: 16
+
+Spearow
+Level: 17
+
+=== TRAINER_ROUTE9_PICNICKER_1 ===
+Name: RINA
+Class: TRAINER_CLASS_PICNICKER
+Pic: PICNICKER
+Gender: Female
+
+SPECIES_NIDORAN_F
+Level: 16
+
+Clefairy
+Level: 17
+
+=== TRAINER_ROUTE9_PICNICKER_2 ===
+Name: MEL
+Class: TRAINER_CLASS_PICNICKER
+Pic: PICNICKER
+Gender: Female
+
+Vulpix
+Level: 17
+
+=== TRAINER_JJ_ILEX ===
+Name: JESS&JAMES
+Class: Team Rocket
+Pic: JESSIE_JAMES
+Music: TRAINER_ENCOUNTER_MUSIC_TEAM_ROCKET
+
+Arbok
+Level: 29
+
+Koffing
+Level: 29
+
+Meowth
+Level: 30
+Shadow: Yes
+Shadow ID: 8
+Heart Gauge: 5000
+- Shadow Rush
+
+=== TRAINER_ILEX_ROCKET_GRUNT_F1 ===
+Name: SABRINA
+Class: TRAINER_CLASS_TEAM_ROCKET
+Pic: ROCKET_GRUNT_F
+Gender: Female
+Music: TRAINER_ENCOUNTER_MUSIC_TEAM_ROCKET
+Double Battle: No
+
+Koffing
+Level: 28
+
+Ekans
+Level: 28
+
+=== TRAINER_ILEX_ROCKET_GRUNT_M1 ===
+Name: RORY
+Class: TRAINER_CLASS_TEAM_ROCKET
+Pic: ROCKET_GRUNT_M
+Gender: Male
+Music: TRAINER_ENCOUNTER_MUSIC_TEAM_ROCKET
+Double Battle: No
+
+Zubat
+Level: 28
+
+Koffing
+Level: 29
+
+=== TRAINER_ILEX_ROCKET_GRUNT_F2 ===
+Name: LANA
+Class: TRAINER_CLASS_TEAM_ROCKET
+Pic: ROCKET_GRUNT_F
+Gender: Female
+Music: TRAINER_ENCOUNTER_MUSIC_TEAM_ROCKET
+Double Battle: No
+
+Grimer
+Level: 28
+
+Murkrow
+Level: 29
+
+Koffing
+Level: 28
+
+=== TRAINER_ILEX_ROCKET_GRUNT_M2 ===
+Name: MARK
+Class: TRAINER_CLASS_TEAM_ROCKET
+Pic: ROCKET_GRUNT_M
+Gender: Male
+Music: TRAINER_ENCOUNTER_MUSIC_TEAM_ROCKET
+Double Battle: No
+
+Rattata
+Level: 28
+
+Golbat
+Level: 29
+
+=== TRAINER_ILEX_ROCKET_GRUNT_M3 ===
+Name: TODD
+Class: TRAINER_CLASS_TEAM_ROCKET
+Pic: ROCKET_GRUNT_M
+Gender: Male
+Music: TRAINER_ENCOUNTER_MUSIC_TEAM_ROCKET
+Double Battle: No
+
+Sneasel
+Level: 29
+
+Koffing
+Level: 28
+
+=== TRAINER_ILEX_ROCKET_GRUNT_F3 ===
+Name: RINA
+Class: TRAINER_CLASS_TEAM_ROCKET
+Pic: ROCKET_GRUNT_F
+Gender: Female
+Music: TRAINER_ENCOUNTER_MUSIC_TEAM_ROCKET
+Double Battle: No
+
+Arbok
+Level: 29
+
+Grimer
+Level: 28
+
+=== TRAINER_ILEX_BUG_CATCHER ===
+Name: BEN
+Class: BUG_CATCHER
+Pic: BUG_CATCHER
+Gender: Male
+
+Ledyba
+Level: 27
+
+Pineco
+Level: 28
+
+Yanma
+Level: 28
+
+=== TRAINER_ROUTE9_HIKER_1 ===
+Name: GABE
+Class: TRAINER_CLASS_HIKER
+Pic: HIKER
+Gender: Male
+
+Geodude
+Level: 17
+
+Machop
+Level: 18
+
+=== TRAINER_ROUTE9_HIKER_2 ===
+Name: RUSTY
+Class: TRAINER_CLASS_HIKER
+Pic: HIKER
+Gender: Male
+
+Onix
+Level: 18
 
 === TRAINER_LOOKER_CERULEAN ===
 Name: LOOKER
@@ -543,13 +692,13 @@ Pic: LOOKER_GEN5
 Gender: Male
 
 Growlithe
-Level: 1
+Level: 16
 Nature: BRAVE
 - Bite
 - Ember
 
 Croagunk
-Level: 1
+Level: 18
 Nature: ADAMANT
 - Low Kick
 - Mud-Slap
@@ -561,10 +710,10 @@ Pic: school_kid_m
 Gender: Male
 
 Pidgey
-Level: 1
+Level: 14
 
 Rattata
-Level: 1
+Level: 15
 
 === TRAINER_RT25_LADY ===
 Name: MARIE
@@ -573,10 +722,10 @@ Pic: BATTLE_GIRL
 Gender: Female
 
 Clefairy
-Level: 1
+Level: 14
 
 Jigglypuff
-Level: 1
+Level: 15
 
 === TRAINER_RT25_COOLTRAINER_F ===
 Name: KARA
@@ -585,10 +734,10 @@ Pic: ACE_TRAINER_GEN2F
 Gender: Female
 
 Eevee
-Level: 1
+Level: 15
 
 Vulpix
-Level: 1
+Level: 16
 
 === TRAINER_RT25_YOUNGSTER2 ===
 Name: BEN
@@ -597,22 +746,22 @@ Pic: YOUNGSTER2
 Gender: Male
 
 Spearow
-Level: 1
+Level: 14
 
 SPECIES_NIDORAN_M
-Level: 1
+Level: 15
 
 === TRAINER_RT25_CAMPER ===
 Name: COLE
 Class: TRAINER_CLASS_CAMPER
-Pic: CAMPER
+Pic: CAMPER_KANTO
 Gender: Male
 
 Sandshrew
-Level: 1
+Level: 15
 
 Mankey
-Level: 1
+Level: 16
 
 === TRAINER_RT25_LASS ===
 Name: NINA
@@ -621,10 +770,10 @@ Pic: LASS_GEN2
 Gender: Female
 
 SPECIES_NIDORAN_F
-Level: 1
+Level: 14
 
 Bellsprout
-Level: 1
+Level: 15
 
 === TRAINER_RT25_SUPER_NERD ===
 Name: DEX
@@ -633,10 +782,10 @@ Pic: SUPER_NERD
 Gender: Male
 
 Magnemite
-Level: 1
+Level: 15
 
 Voltorb
-Level: 1
+Level: 16
 
 === TRAINER_CERULEAN_GYM_SWIMMER_M ===
 Name: TYLER
@@ -645,10 +794,10 @@ Pic: SWIMMER_M
 Gender: Male
 
 Poliwag
-Level: 1
+Level: 16
 
 Horsea
-Level: 1
+Level: 16
 
 === TRAINER_CERULEAN_GYM_SWIMMER_F1 ===
 Name: MAYA
@@ -657,10 +806,10 @@ Pic: SWIMMER_F
 Gender: Female
 
 Goldeen
-Level: 1
+Level: 17
 
 Staryu
-Level: 1
+Level: 17
 
 === TRAINER_CERULEAN_GYM_SWIMMER_F2 ===
 Name: KAREN
@@ -669,22 +818,33 @@ Pic: SWIMMER_F
 Gender: Female
 
 Psyduck
-Level: 1
+Level: 17
 
 Magikarp
-Level: 1
+Level: 18
 
 === TRAINER_KURTS_HOUSE_IRONMASK ===
 Name: MARAUDER
-Class: TRAINER_CLASS_CIPHER_ADMIN
-Pic: SNAGEM
-Music: TRAINER_ENCOUNTER_MUSIC_CIPHER_PEON
+Class: TRAINER_CLASS_ROCKET_ADMIN
+Pic: IRON_MASKED_MARAUDER
+Music: TRAINER_ENCOUNTER_MUSIC_TEAM_ROCKET
 
 Murkrow
-Level: 1
+Level: 26
 
 Sneasel
-Level: 1
+Level: 25
+
+Skarmory
+Level: 29
+Nature: Impish
+Shadow: Yes
+Shadow ID: 9
+Heart Gauge: 7500
+- Shadow Rush
+- Shadow Hold
+- Shadow Mist 
+- Shadow Shed
 
 === TRAINER_ROCK_TUNNEL_1F_PLASMA_1 ===
 Name: AXEL
@@ -693,10 +853,10 @@ Pic: PLASMA_GRUNT_M_GEN5
 Music: TRAINER_ENCOUNTER_MUSIC_PLASMA
 
 Purrloin
-Level: 1
+Level: 19
 
 Sandile
-Level: 1
+Level: 19
 
 === TRAINER_ROCK_TUNNEL_1F_PLASMA_2 ===
 Name: DANE
@@ -705,10 +865,10 @@ Pic: PLASMA_GRUNT_M_GEN5
 Music: TRAINER_ENCOUNTER_MUSIC_PLASMA
 
 Trubbish
-Level: 1
+Level: 19
 
 Purrloin
-Level: 1
+Level: 19
 
 === TRAINER_ROCK_TUNNEL_1F_PLASMA_3 ===
 Name: MIRA
@@ -717,10 +877,10 @@ Pic: PLASMA_GRUNT_F_GEN5
 Music: TRAINER_ENCOUNTER_MUSIC_PLASMA
 
 Scraggy
-Level: 1
+Level: 19
 
 Trubbish
-Level: 1
+Level: 19
 
 === TRAINER_ROCK_TUNNEL_1F_PLASMA_4 ===
 Name: COLT
@@ -729,10 +889,10 @@ Pic: PLASMA_GRUNT_M_GEN5
 Music: TRAINER_ENCOUNTER_MUSIC_PLASMA
 
 Roggenrola
-Level: 1
+Level: 19
 
 Sandile
-Level: 1
+Level: 19
 
 === TRAINER_ROCK_TUNNEL_1F_PLASMA_5 ===
 Name: ROOK
@@ -741,10 +901,10 @@ Pic: PLASMA_GRUNT_M_GEN5
 Music: TRAINER_ENCOUNTER_MUSIC_PLASMA
 
 Scraggy
-Level: 1
+Level: 19
 
 Roggenrola
-Level: 1
+Level: 19
 
 === TRAINER_ROCK_TUNNEL_1F_PLASMA_6 ===
 Name: NASH
@@ -753,10 +913,10 @@ Pic: PLASMA_GRUNT_M_GEN5
 Music: TRAINER_ENCOUNTER_MUSIC_PLASMA
 
 Trubbish
-Level: 1
+Level: 19
 
 Drilbur
-Level: 1
+Level: 19
 
 === TRAINER_ROCK_TUNNEL_B1F_PLASMA_1 ===
 Name: FAYE
@@ -765,10 +925,10 @@ Pic: PLASMA_GRUNT_F_GEN5
 Music: TRAINER_ENCOUNTER_MUSIC_PLASMA
 
 Sandile
-Level: 1
+Level: 19
 
 Scraggy
-Level: 1
+Level: 19
 
 === TRAINER_ROCK_TUNNEL_B1F_PLASMA_2 ===
 Name: ORIN
@@ -777,10 +937,10 @@ Pic: PLASMA_GRUNT_M_GEN5
 Music: TRAINER_ENCOUNTER_MUSIC_PLASMA
 
 Drilbur
-Level: 1
+Level: 19
 
 Purrloin
-Level: 1
+Level: 19
 
 === TRAINER_ROCK_TUNNEL_B1F_PLASMA_3 ===
 Name: GAGE
@@ -789,10 +949,10 @@ Pic: PLASMA_GRUNT_M_GEN5
 Music: TRAINER_ENCOUNTER_MUSIC_PLASMA
 
 Roggenrola
-Level: 1
+Level: 19
 
 Trubbish
-Level: 1
+Level: 19
 
 === TRAINER_ROCK_TUNNEL_B1F_PLASMA_4 ===
 Name: NYX
@@ -801,10 +961,10 @@ Pic: PLASMA_GRUNT_F_GEN5
 Music: TRAINER_ENCOUNTER_MUSIC_PLASMA
 
 Scraggy
-Level: 1
+Level: 19
 
 Purrloin
-Level: 1
+Level: 19
 
 === TRAINER_ROCK_TUNNEL_B1F_PLASMA_5 ===
 Name: KADE
@@ -813,10 +973,10 @@ Pic: PLASMA_GRUNT_M_GEN5
 Music: TRAINER_ENCOUNTER_MUSIC_PLASMA
 
 Sandile
-Level: 1
+Level: 19
 
 Roggenrola
-Level: 1
+Level: 19
 
 === TRAINER_ROCK_TUNNEL_B1F_PLASMA_6 ===
 Name: VOSS
@@ -825,10 +985,10 @@ Pic: PLASMA_GRUNT_M_GEN5
 Music: TRAINER_ENCOUNTER_MUSIC_PLASMA
 
 Trubbish
-Level: 1
+Level: 19
 
 Drilbur
-Level: 1
+Level: 19
 
 === TRAINER_ROCK_TUNNEL_B1F_PLASMA_7 ===
 Name: IRIS
@@ -837,10 +997,10 @@ Pic: PLASMA_GRUNT_F_GEN5
 Music: TRAINER_ENCOUNTER_MUSIC_PLASMA
 
 Purrloin
-Level: 1
+Level: 19
 
 Roggenrola
-Level: 1
+Level: 19
 
 === TRAINER_ROCK_TUNNEL_B1F_PLASMA_8 ===
 Name: SERA
@@ -849,10 +1009,10 @@ Pic: PLASMA_GRUNT_F_GEN5
 Music: TRAINER_ENCOUNTER_MUSIC_PLASMA
 
 Sandile
-Level: 1
+Level: 19
 
 Trubbish
-Level: 1
+Level: 19
 
 === TRAINER_SLOWPOKEWELL_BRYONY ===
 Name: BRYONY
@@ -861,10 +1021,21 @@ Pic: BRYONY
 Music: TRAINER_ENCOUNTER_MUSIC_SUSPICIOUS
 
 Houndour
-Level: 1
+Level: 26
 
 Litleo
-Level: 1
+Level: 26
+
+Pangoro
+Level: 29
+Nature: Adamant
+Shadow: Yes
+Shadow ID: 45
+Heart Gauge: 7500
+- Shadow Blitz
+- Shadow Break 
+- Shadow Down
+- Shadow Half
 
 === TRAINER_SLOWPOKEWELL_FLARE_1 ===
 Name: VESPER
@@ -873,10 +1044,10 @@ Pic: FLARE_MFP
 Music: TRAINER_ENCOUNTER_MUSIC_SUSPICIOUS
 
 Houndour
-Level: 1
+Level: 26
 
 Fletchling
-Level: 1
+Level: 26
 
 === TRAINER_SLOWPOKEWELL_FLARE_2 ===
 Name: ORLA
@@ -885,10 +1056,10 @@ Pic: FLARE_MFP
 Music: TRAINER_ENCOUNTER_MUSIC_SUSPICIOUS
 
 Litleo
-Level: 1
+Level: 26
 
 Houndour
-Level: 1
+Level: 26
 
 === TRAINER_SLOWPOKEWELL_FLARE_3 ===
 Name: KADE
@@ -897,32 +1068,32 @@ Pic: FLARE_MFP
 Music: TRAINER_ENCOUNTER_MUSIC_SUSPICIOUS
 
 Fletchling
-Level: 1
+Level: 26
 
 Litleo
-Level: 1
+Level: 26
 
 === TRAINER_VIOLET_GYM_BIRD_KEEPER_1 ===
 Name: ROBIN
 Class: TRAINER_CLASS_BIRD_KEEPER
 Pic: BIRD_KEEPER
 
-Pidgey
-Level: 1
+Pidgeotto
+Level: 21
 
-Hoothoot
-Level: 1
+Noctowl
+Level: 21
 
 === TRAINER_VIOLET_GYM_BIRD_KEEPER_2 ===
 Name: KYLE
 Class: TRAINER_CLASS_BIRD_KEEPER
 Pic: BIRD_KEEPER
 
-Spearow
-Level: 1
+Trumbeak
+Level: 21
 
-Pidgey
-Level: 1
+Pidgeotto
+Level: 21
 
 === TRAINER_ROUTE32_YOUNGSTER ===
 Name: TIM
@@ -931,10 +1102,10 @@ Pic: YOUNGSTER2
 Gender: Male
 
 Rattata
-Level: 1
+Level: 21
 
 Pidgey
-Level: 1
+Level: 21
 
 === TRAINER_ROUTE32_PICNICKER ===
 Name: LINA
@@ -943,10 +1114,10 @@ Pic: PICNICKER
 Gender: Female
 
 Hoppip
-Level: 1
+Level: 21
 
 Bellsprout
-Level: 1
+Level: 21
 
 === TRAINER_ROUTE32_FISHERMAN_1 ===
 Name: RAY
@@ -955,7 +1126,7 @@ Pic: FISHERMAN
 Gender: Male
 
 Magikarp
-Level: 1
+Level: 21
 
 === TRAINER_ROUTE32_FISHERMAN_2 ===
 Name: NED
@@ -964,7 +1135,7 @@ Pic: FISHERMAN
 Gender: Male
 
 Poliwag
-Level: 1
+Level: 21
 
 === TRAINER_ROUTE32_FISHERMAN_3 ===
 Name: LEO
@@ -973,7 +1144,7 @@ Pic: FISHERMAN
 Gender: Male
 
 Goldeen
-Level: 1
+Level: 21
 
 === TRAINER_ROUTE32_BIRD_KEEPER ===
 Name: MILO
@@ -982,10 +1153,10 @@ Pic: BIRD_KEEPER
 Gender: Male
 
 Pidgey
-Level: 1
+Level: 21
 
 Hoothoot
-Level: 1
+Level: 21
 
 === TRAINER_ROUTE33_HIKER ===
 Name: DUKE
@@ -994,7 +1165,46 @@ Pic: HIKER
 Gender: Male
 
 Geodude
-Level: 1
+Level: 24
+
+=== TRAINER_ROUTE34_CAMPER ===
+Name: NATE
+Class: TRAINER_CLASS_CAMPER
+Pic: CAMPER
+Gender: Male
+
+Litleo
+Level: 26
+
+Skiddo
+Level: 27
+
+=== TRAINER_ROUTE34_GENTLEMAN ===
+Name: ALFRED
+Class: TRAINER_CLASS_GENTLEMAN
+Pic: GENTLEMAN
+Gender: Male
+
+Girafarig
+Level: 26
+
+Dunsparce
+Level: 26
+
+Stantler
+Level: 27
+
+=== TRAINER_ROUTE34_YOUNGSTER ===
+Name: TIM
+Class: TRAINER_CLASS_YOUNGSTER
+Pic: YOUNGSTER
+Gender: Male
+
+Hoothoot
+Level: 25
+
+Starly
+Level: 26
 
 === TRAINER_UNION_CAVE_HIKER ===
 Name: GUS
@@ -1003,10 +1213,10 @@ Pic: HIKER
 Gender: Male
 
 Geodude
-Level: 1
+Level: 22
 
 Zubat
-Level: 1
+Level: 22
 
 === TRAINER_UNION_CAVE_SUPER_NERD ===
 Name: TREV
@@ -1015,7 +1225,7 @@ Pic: SUPER_NERD
 Gender: Male
 
 Magnemite
-Level: 1
+Level: 22
 
 === TRAINER_UNION_CAVE_FIREBREATHER ===
 Name: BO
@@ -1024,4 +1234,4 @@ Pic: FIREBREATHER
 Gender: Male
 
 Vulpix
-Level: 1
+Level: 22

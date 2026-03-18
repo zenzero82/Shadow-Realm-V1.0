@@ -10,6 +10,8 @@ pewter_house1_EventScript_Boy::
 	setspeaker pewter_house1_Speaker_Tim
 	msgbox pewter_house1_Text_Boy, MSGBOX_DEFAULT
 	closemessage
+	setflag FLAG_QUEST_PEWTER_NPC_HOUSE1_BOY
+	call QuestJournal_EventScript_CheckPewterCityNPCs
 	release
 	end
 

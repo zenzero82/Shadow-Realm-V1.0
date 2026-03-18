@@ -30,6 +30,12 @@ Violet_City_OnLoad::
 	goto_if_set FLAG_VIOLET_MICHAEL_SCENE_DONE, Violet_City_OnLoad_Done
 	setvar VAR_TEMP_1, 0
 	setvar VAR_TEMP_2, 0
+	clearflag FLAG_HIDE_VIOLET_MICHAEL
+	addobject VIOLET_LOCALID_MICHAEL
+	setobjectxy VIOLET_LOCALID_MICHAEL, 14, 40
+	setobjectxyperm VIOLET_LOCALID_MICHAEL, 14, 40
+	showobjectat VIOLET_LOCALID_MICHAEL, MAP_VIOLET_CITY
+	turnobject VIOLET_LOCALID_MICHAEL, DIR_NORTH
 	hideobjectat LOCALID_PLAYER, MAP_VIOLET_CITY
 	setflag FLAG_HIDE_VIOLET_HOOPA_RING
 	hideobjectat VIOLET_LOCALID_HOOPA_RING, MAP_VIOLET_CITY
@@ -92,7 +98,6 @@ Violet_City_EventScript_PlayerEmerges_Done:
 
 Violet_City_EventScript_MichaelScene::
 	clearflag FLAG_HIDE_VIOLET_MICHAEL
-	addobject VIOLET_LOCALID_MICHAEL
 	setobjectxy VIOLET_LOCALID_MICHAEL, 14, 40
 	setobjectxyperm VIOLET_LOCALID_MICHAEL, 14, 40
 	showobjectat VIOLET_LOCALID_MICHAEL, MAP_VIOLET_CITY
@@ -108,6 +113,24 @@ Violet_City_EventScript_MichaelScene::
 	waitse
 	setflag FLAG_TRAINER_CARD_JOHTO_UNLOCKED
 	closemessage
+	checkflag FLAG_QUEST_VIOLET_NPCS_STARTED
+	goto_if_eq Violet_City_EventScript_MichaelScene_QuestNPCs_Done
+	setflag FLAG_QUEST_VIOLET_NPCS_STARTED
+	call QuestJournal_EventScript_NewQuestAlert
+	call Violet_City_EventScript_CheckVioletQuest
+Violet_City_EventScript_MichaelScene_QuestNPCs_Done:
+	checkflag FLAG_QUEST_DEFEAT_FALKNER_STARTED
+	goto_if_eq Violet_City_EventScript_MichaelScene_QuestFalkner_Done
+	setflag FLAG_QUEST_DEFEAT_FALKNER_STARTED
+	call QuestJournal_EventScript_NewQuestAlert
+Violet_City_EventScript_MichaelScene_QuestFalkner_Done:
+	checkflag FLAG_QUEST_KURT_APRICOT_STARTED
+	goto_if_eq Violet_City_EventScript_MichaelScene_QuestKurt_Done
+	checkflag FLAG_QUEST_KURT_APRICOT_COMPLETED
+	goto_if_eq Violet_City_EventScript_MichaelScene_QuestKurt_Done
+	setflag FLAG_QUEST_KURT_APRICOT_STARTED
+	call QuestJournal_EventScript_NewQuestAlert
+Violet_City_EventScript_MichaelScene_QuestKurt_Done:
 	applymovement VIOLET_LOCALID_MICHAEL, Violet_City_Movement_Michael_Leave
 	waitmovement 0
 	setflag FLAG_HIDE_VIOLET_MICHAEL
@@ -145,9 +168,30 @@ Violet_City_Movement_Michael_Leave:
 Violet_City_Speaker_Michael:
 	.string "MICHAEL$"
 
+Violet_City_Speaker_Sage:
+	.string "SAGE KAZU$"
+
+Violet_City_Speaker_Policeman:
+	.string "OFFICER ROSS$"
+
+Violet_City_Speaker_PolicemanGate:
+	.string "OFFICER$"
+
+Violet_City_Speaker_Woman:
+	.string "MARA$"
+
+Violet_City_Speaker_OldMan:
+	.string "GILES$"
+
+Violet_City_Speaker_Boy:
+	.string "TOM$"
+
+Violet_City_Speaker_SuperNerd:
+	.string "LEO$"
+
 Violet_City_Text_Michael_Intro:
 	.string "{PLAYER} hey!\n"
-	.string "That's so cool. Looks like PROF.\n"
+	.string "That's so cool. Looks like PROF.\l"
 	.string "BIRCH got this thing working pretty\l"
 	.string "quickly.\p"
 	.string "I think we can try to make more of\n"
@@ -177,40 +221,180 @@ VioletCity_EventScript_GymSign::
 	end
 
 VioletCity_EventScript_GymSign_Text:
-	.string "A POKéMON GYM statue.$"
+    .string "VIOLET CITY POKéMON GYM\n"
+    .string "LEADER: FALKNER\p"
+    .string "The Flying Type POKéMON Trainer$"
 
 Violet_City_EventScript_Sage::
 	faceplayer
+	setspeaker Violet_City_Speaker_Sage
 	msgbox Violet_City_Text_Sage, MSGBOX_NPC
+	closemessage
+	setflag FLAG_QUEST_VIOLET_NPC_SAGE
+	call Violet_City_EventScript_CheckVioletQuest
 	end
 
 Violet_City_EventScript_Policeman::
 	faceplayer
+	setspeaker Violet_City_Speaker_Policeman
 	msgbox Violet_City_Text_Policeman, MSGBOX_NPC
+	closemessage
+	setflag FLAG_QUEST_VIOLET_NPC_POLICEMAN
+	call Violet_City_EventScript_CheckVioletQuest
+	end
+
+Violet_City_EventScript_PolicemanGate::
+	faceplayer
+	setspeaker Violet_City_Speaker_PolicemanGate
+	msgbox Violet_City_Text_PolicemanGate, MSGBOX_NPC
+	closemessage
+	setflag FLAG_QUEST_VIOLET_NPC_POLICEMAN_GATE
+	call Violet_City_EventScript_CheckVioletQuest
 	end
 
 Violet_City_EventScript_Woman::
 	faceplayer
+	setspeaker Violet_City_Speaker_Woman
 	msgbox Violet_City_Text_Woman, MSGBOX_NPC
+	closemessage
+	setflag FLAG_QUEST_VIOLET_NPC_WOMAN
+	call Violet_City_EventScript_CheckVioletQuest
 	end
 
 Violet_City_EventScript_OldMan::
 	faceplayer
+	setspeaker Violet_City_Speaker_OldMan
 	msgbox Violet_City_Text_OldMan, MSGBOX_NPC
+	closemessage
+	setflag FLAG_QUEST_VIOLET_NPC_OLD_MAN
+	call Violet_City_EventScript_CheckVioletQuest
 	end
 
 Violet_City_EventScript_Boy::
 	faceplayer
+	setspeaker Violet_City_Speaker_Boy
 	msgbox Violet_City_Text_Boy, MSGBOX_NPC
+	closemessage
+	setflag FLAG_QUEST_VIOLET_NPC_BOY
+	call Violet_City_EventScript_CheckVioletQuest
 	end
 
 Violet_City_EventScript_SuperNerd::
 	faceplayer
+	setspeaker Violet_City_Speaker_SuperNerd
 	msgbox Violet_City_Text_SuperNerd, MSGBOX_NPC
+	closemessage
+	setflag FLAG_QUEST_VIOLET_NPC_SUPER_NERD
+	call Violet_City_EventScript_CheckVioletQuest
 	end
+
+Violet_City_EventScript_CheckVioletQuest::
+	checkflag FLAG_QUEST_VIOLET_NPCS_STARTED
+	goto_if_eq Violet_City_EventScript_CheckVioletQuest_CheckCompleted
+	return
+Violet_City_EventScript_CheckVioletQuest_CheckCompleted:
+	checkflag FLAG_QUEST_VIOLET_NPCS_COMPLETED
+	goto_if_eq Violet_City_EventScript_CheckVioletQuest_Done
+	checkflag FLAG_QUEST_VIOLET_NPC_SAGE
+	goto_if_eq Violet_City_EventScript_CheckVioletQuest_CheckPoliceman
+	goto Violet_City_EventScript_CheckVioletQuest_Done
+Violet_City_EventScript_CheckVioletQuest_CheckPoliceman:
+	checkflag FLAG_QUEST_VIOLET_NPC_POLICEMAN
+	goto_if_eq Violet_City_EventScript_CheckVioletQuest_CheckPolicemanGate
+	goto Violet_City_EventScript_CheckVioletQuest_Done
+Violet_City_EventScript_CheckVioletQuest_CheckPolicemanGate:
+	checkflag FLAG_QUEST_VIOLET_NPC_POLICEMAN_GATE
+	goto_if_eq Violet_City_EventScript_CheckVioletQuest_CheckWoman
+	goto Violet_City_EventScript_CheckVioletQuest_Done
+Violet_City_EventScript_CheckVioletQuest_CheckWoman:
+	checkflag FLAG_QUEST_VIOLET_NPC_WOMAN
+	goto_if_eq Violet_City_EventScript_CheckVioletQuest_CheckOldMan
+	goto Violet_City_EventScript_CheckVioletQuest_Done
+Violet_City_EventScript_CheckVioletQuest_CheckOldMan:
+	checkflag FLAG_QUEST_VIOLET_NPC_OLD_MAN
+	goto_if_eq Violet_City_EventScript_CheckVioletQuest_CheckBoy
+	goto Violet_City_EventScript_CheckVioletQuest_Done
+Violet_City_EventScript_CheckVioletQuest_CheckBoy:
+	checkflag FLAG_QUEST_VIOLET_NPC_BOY
+	goto_if_eq Violet_City_EventScript_CheckVioletQuest_CheckSuperNerd
+	goto Violet_City_EventScript_CheckVioletQuest_Done
+Violet_City_EventScript_CheckVioletQuest_CheckSuperNerd:
+	checkflag FLAG_QUEST_VIOLET_NPC_SUPER_NERD
+	goto_if_eq Violet_City_EventScript_CheckVioletQuest_CheckHouse1Hiker
+	goto Violet_City_EventScript_CheckVioletQuest_Done
+Violet_City_EventScript_CheckVioletQuest_CheckHouse1Hiker:
+	checkflag FLAG_QUEST_VIOLET_NPC_HOUSE1_HIKER
+	goto_if_eq Violet_City_EventScript_CheckVioletQuest_CheckHouse2Woman
+	goto Violet_City_EventScript_CheckVioletQuest_Done
+Violet_City_EventScript_CheckVioletQuest_CheckHouse2Woman:
+	checkflag FLAG_QUEST_VIOLET_NPC_HOUSE2_WOMAN
+	goto_if_eq Violet_City_EventScript_CheckVioletQuest_CheckHouse2LittleBoy
+	goto Violet_City_EventScript_CheckVioletQuest_Done
+Violet_City_EventScript_CheckVioletQuest_CheckHouse2LittleBoy:
+	checkflag FLAG_QUEST_VIOLET_NPC_HOUSE2_LITTLE_BOY
+	goto_if_eq Violet_City_EventScript_CheckVioletQuest_CheckMartOldWoman
+	goto Violet_City_EventScript_CheckVioletQuest_Done
+Violet_City_EventScript_CheckVioletQuest_CheckMartOldWoman:
+	checkflag FLAG_QUEST_VIOLET_NPC_MART_OLD_WOMAN
+	goto_if_eq Violet_City_EventScript_CheckVioletQuest_CheckMartRocker
+	goto Violet_City_EventScript_CheckVioletQuest_Done
+Violet_City_EventScript_CheckVioletQuest_CheckMartRocker:
+	checkflag FLAG_QUEST_VIOLET_NPC_MART_ROCKER
+	goto_if_eq Violet_City_EventScript_CheckVioletQuest_CheckPokecenterGameboyKid
+	goto Violet_City_EventScript_CheckVioletQuest_Done
+Violet_City_EventScript_CheckVioletQuest_CheckPokecenterGameboyKid:
+	checkflag FLAG_QUEST_VIOLET_NPC_POKECENTER_GAMEBOY_KID
+	goto_if_eq Violet_City_EventScript_CheckVioletQuest_CheckPokecenterGentleman
+	goto Violet_City_EventScript_CheckVioletQuest_Done
+Violet_City_EventScript_CheckVioletQuest_CheckPokecenterGentleman:
+	checkflag FLAG_QUEST_VIOLET_NPC_POKECENTER_GENTLEMAN
+	goto_if_eq Violet_City_EventScript_CheckVioletQuest_CheckPokecenterBeauty
+	goto Violet_City_EventScript_CheckVioletQuest_Done
+Violet_City_EventScript_CheckVioletQuest_CheckPokecenterBeauty:
+	checkflag FLAG_QUEST_VIOLET_NPC_POKECENTER_BEAUTY
+	goto_if_eq Violet_City_EventScript_CheckVioletQuest_CheckSchoolScientist
+	goto Violet_City_EventScript_CheckVioletQuest_Done
+Violet_City_EventScript_CheckVioletQuest_CheckSchoolScientist:
+	checkflag FLAG_QUEST_VIOLET_NPC_SCHOOL_SCIENTIST
+	goto_if_eq Violet_City_EventScript_CheckVioletQuest_CheckSchoolSuperNerd
+	goto Violet_City_EventScript_CheckVioletQuest_Done
+Violet_City_EventScript_CheckVioletQuest_CheckSchoolSuperNerd:
+	checkflag FLAG_QUEST_VIOLET_NPC_SCHOOL_SUPER_NERD
+	goto_if_eq Violet_City_EventScript_CheckVioletQuest_CheckSchoolLittleBoy
+	goto Violet_City_EventScript_CheckVioletQuest_Done
+Violet_City_EventScript_CheckVioletQuest_CheckSchoolLittleBoy:
+	checkflag FLAG_QUEST_VIOLET_NPC_SCHOOL_LITTLE_BOY
+	goto_if_eq Violet_City_EventScript_CheckVioletQuest_CheckSchoolTwin
+	goto Violet_City_EventScript_CheckVioletQuest_Done
+Violet_City_EventScript_CheckVioletQuest_CheckSchoolTwin:
+	checkflag FLAG_QUEST_VIOLET_NPC_SCHOOL_TWIN
+	goto_if_eq Violet_City_EventScript_CheckVioletQuest_CheckSchoolLittleBoy2
+	goto Violet_City_EventScript_CheckVioletQuest_Done
+Violet_City_EventScript_CheckVioletQuest_CheckSchoolLittleBoy2:
+	checkflag FLAG_QUEST_VIOLET_NPC_SCHOOL_LITTLE_BOY2
+	goto_if_eq Violet_City_EventScript_CheckVioletQuest_CheckSchoolLittleGirl2
+	goto Violet_City_EventScript_CheckVioletQuest_Done
+Violet_City_EventScript_CheckVioletQuest_CheckSchoolLittleGirl2:
+	checkflag FLAG_QUEST_VIOLET_NPC_SCHOOL_LITTLE_GIRL2
+	goto_if_eq Violet_City_EventScript_CheckVioletQuest_CheckSchoolLass
+	goto Violet_City_EventScript_CheckVioletQuest_Done
+Violet_City_EventScript_CheckVioletQuest_CheckSchoolLass:
+	checkflag FLAG_QUEST_VIOLET_NPC_SCHOOL_LASS
+	goto_if_eq Violet_City_EventScript_CheckVioletQuest_CheckSchoolYoungster
+	goto Violet_City_EventScript_CheckVioletQuest_Done
+Violet_City_EventScript_CheckVioletQuest_CheckSchoolYoungster:
+	checkflag FLAG_QUEST_VIOLET_NPC_SCHOOL_YOUNGSTER
+	goto_if_eq Violet_City_EventScript_CheckVioletQuest_AllDone
+	goto Violet_City_EventScript_CheckVioletQuest_Done
+Violet_City_EventScript_CheckVioletQuest_AllDone:
+	setflag FLAG_QUEST_VIOLET_NPCS_COMPLETED
+	call QuestJournal_EventScript_QuestCompleteAlert
+Violet_City_EventScript_CheckVioletQuest_Done:
+	return
 
 Violet_City_EventScript_Michael::
 	faceplayer
+	setspeaker Violet_City_Speaker_Michael
 	msgbox Violet_City_Text_Michael, MSGBOX_NPC
 	end
 
@@ -221,6 +405,10 @@ Violet_City_Text_Sage:
 Violet_City_Text_Policeman:
 	.string "Traffic's light today. Enjoy the\n"
 	.string "walk, but stay aware.$"
+
+Violet_City_Text_PolicemanGate:
+	.string "Nobody can pass until the game is\n"
+	.string "finished.$"
 
 Violet_City_Text_Woman:
 	.string "VIOLET is small, but travelers keep\n"

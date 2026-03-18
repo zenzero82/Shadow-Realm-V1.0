@@ -1837,6 +1837,9 @@ const u16 gItemIconPalette_SnagMachine[] = INCBIN_U16("graphics/items/icon_palet
 const u32 gItemIcon_ShadowMonitor[] = INCBIN_U32("graphics/items/icons/shadow_monitor.4bpp.lz");
 const u16 gItemIconPalette_ShadowMonitor[] = INCBIN_U16("graphics/items/icon_palettes/shadow_monitor.gbapal");
 
+const u32 gItemIcon_QuestJournal[] = INCBIN_U32("graphics/items/icons/quest_journal.4bpp.lz");
+const u16 gItemIconPalette_QuestJournal[] = INCBIN_U16("graphics/items/icon_palettes/quest_journal.gbapal");
+
 const u32 gItemIcon_TownMap[] = INCBIN_U32("graphics/items/icons/town_map.4bpp.lz");
 const u16 gItemIconPalette_TownMap[] = INCBIN_U16("graphics/items/icon_palettes/town_map.gbapal");
 

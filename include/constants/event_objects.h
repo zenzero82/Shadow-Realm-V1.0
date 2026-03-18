@@ -472,10 +472,11 @@
 #define OBJ_EVENT_GFX_MATT             455
 #define OBJ_EVENT_GFX_COURTNEY         456
 #define OBJ_EVENT_GFX_TABITHA          457
+#define OBJ_EVENT_GFX_HOOPA_RING_TIME_AMULET 458
 // NOTE: The maximum amount of object events has been expanded from 255 to 65535.
 // Since dynamic graphics ids still require at least 16 free values, the actual limit
 // is 65519, but even considering follower Pokémon, this should be more than enough :)
-#define NUM_OBJ_EVENT_GFX                                               458
+#define NUM_OBJ_EVENT_GFX                                               459
 
 
 // These are dynamic object gfx ids.
@@ -565,9 +566,18 @@
 #define LOCALID_CAMERA                     127
 #define LOCALID_ROAMING_HUNTER             126
 #define LOCALID_BERRY_BLENDER_PLAYER_END   240 // This will use 5 (MAX_RFU_PLAYERS) IDs ending at 240, i.e. 236-240
+#define LOCALID_PHOTO_CAMERA_MON_BASE      241
+#define LOCALID_PHOTO_CAMERA_MON_1         (LOCALID_PHOTO_CAMERA_MON_BASE + 0)
+#define LOCALID_PHOTO_CAMERA_MON_2         (LOCALID_PHOTO_CAMERA_MON_BASE + 1)
+#define LOCALID_PHOTO_CAMERA_MON_3         (LOCALID_PHOTO_CAMERA_MON_BASE + 2)
+#define LOCALID_PHOTO_CAMERA_MON_4         (LOCALID_PHOTO_CAMERA_MON_BASE + 3)
+#define LOCALID_PHOTO_CAMERA_MON_5         (LOCALID_PHOTO_CAMERA_MON_BASE + 4)
+#define LOCALID_PHOTO_CAMERA_MON_6         (LOCALID_PHOTO_CAMERA_MON_BASE + 5)
 #define LOCALID_PLAYER                     255
 #define OBJ_EVENT_ID_FOLLOWER 0xFE
 #define OBJ_EVENT_ID_NPC_FOLLOWER 0xFD
+#define OBJ_EVENT_ID_OVERWORLD_WILD_BASE 0xF8
+#define OBJ_EVENT_ID_OVERWORLD_WILD_COUNT 3
 
 // Aliases for old names. "object event id" normally refers to an index into gObjectEvents, which these are not.
 #define OBJ_EVENT_ID_CAMERA LOCALID_CAMERA
@@ -613,6 +623,7 @@
 #define OBJ_EVENT_PAL_TAG_DYNAMIC                 0x1124
 //misc (NEW)
 #define OBJ_EVENT_PAL_TAG_HOOPA_RING              0x1125
+#define OBJ_EVENT_PAL_TAG_HOOPA_RING_TIME_AMULET  0x117F
 //Kanto
 #define OBJ_EVENT_PAL_TAG_BROCK_GEN1              0x1126
 #define OBJ_EVENT_PAL_TAG_CUTTABLE_TREE_G1        0x1127  
@@ -827,6 +838,15 @@
 #define OBJ_EVENT_PAL_TAG_ASH                     0x1A0E
 #define OBJ_EVENT_PAL_TAG_IRONMASK                0x1A0F
 #define OBJ_EVENT_PAL_TAG_MIRROR_B                0x1A10
+#define OBJ_EVENT_PAL_TAG_AQUA_MEMBER_M           0x1A11
+#define OBJ_EVENT_PAL_TAG_AQUA_MEMBER_F           0x1A12
+#define OBJ_EVENT_PAL_TAG_MATT                    0x1A13
+#define OBJ_EVENT_PAL_TAG_RESIX                   0x1A14
+#define OBJ_EVENT_PAL_TAG_BLUSIX                  0x1A15
+#define OBJ_EVENT_PAL_TAG_GREESIX                 0x1A16
+#define OBJ_EVENT_PAL_TAG_PURPSIX                 0x1A17
+#define OBJ_EVENT_PAL_TAG_BROWSIX                 0x1A18
+#define OBJ_EVENT_PAL_TAG_YELLOSIX                0x1A19
 
 #if OW_FOLLOWERS_POKEBALLS
 // Vanilla

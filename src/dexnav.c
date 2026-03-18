@@ -219,7 +219,7 @@ static const struct WindowTemplate sDexNavGuiWindowTemplates[] =
         .tilemapTop = 0,
         .width = 26,
         .height = 2,
-        .paletteNum = 15,
+        .paletteNum = 0,
         .baseBlock = 200,
     },
     DUMMY_WIN_TEMPLATE
@@ -227,7 +227,7 @@ static const struct WindowTemplate sDexNavGuiWindowTemplates[] =
 
 //gui font
 static const u8 sFontColor_Black[3] = {TEXT_COLOR_TRANSPARENT, TEXT_COLOR_DARK_GRAY, TEXT_COLOR_LIGHT_GRAY};
-static const u8 sFontColor_White[3] = {TEXT_COLOR_TRANSPARENT, TEXT_COLOR_WHITE, TEXT_COLOR_DARK_GRAY};
+static const u8 sFontColor_White[3] = {TEXT_COLOR_TRANSPARENT, TEXT_COLOR_WHITE, TEXT_COLOR_LIGHT_GRAY};
 //search window font
 static const u8 sSearchFontColor[3] = {0, 15, 13};
 
@@ -658,6 +658,13 @@ static bool8 DexNavPickTile(enum EncounterType environment, u8 areaX, u8 areaY, 
                 continue;
             }
 
+            if ((environment == ENCOUNTER_TYPE_LAND || environment == ENCOUNTER_TYPE_WATER)
+                && IsElevationMismatchAt(gObjectEvents[gPlayerAvatar.spriteId].currentElevation, topX, topY))
+            {
+                topX++;
+                continue;
+            }
+
             weight = 0; // initiliaze weight
             switch (environment)
             {
@@ -808,15 +815,54 @@ static void LoadSearchIconData(void)
     LoadCompressedSpriteSheetUsingHeap(&sHiddenMonIconSpriteSheet);
 }
 
+#if USE_DEXNAV_SEARCH_LEVELS == TRUE
+#define DEXNAV_SEARCH_LEVEL_SCALE 7
+#define DEXNAV_SEARCH_LEVEL_BUCKET_MAX 15
+
+static u16 DexNavGetSearchLevelIndex(u16 species)
+{
+    u16 dexNum = SpeciesToNationalPokedexNum(species);
+
+    if (dexNum >= POKEMON_SLOTS_NUMBER)
+        dexNum = 0;
+    return dexNum;
+}
+
+static u8 GetPackedSearchLevel(u16 species)
+{
+    u16 index = DexNavGetSearchLevelIndex(species);
+    u8 packed = gSaveBlock3Ptr->dexNavSearchLevels[index >> 1];
+
+    if (index & 1)
+        return packed >> 4;
+
+    return packed & 0x0F;
+}
+
+static void SetPackedSearchLevel(u16 species, u8 level)
+{
+    u16 index = DexNavGetSearchLevelIndex(species);
+    u8 *packed = &gSaveBlock3Ptr->dexNavSearchLevels[index >> 1];
+
+    level &= 0x0F;
+    if (index & 1)
+        *packed = (*packed & 0x0F) | (level << 4);
+    else
+        *packed = (*packed & 0xF0) | level;
+}
+#endif
+
 static u8 GetSearchLevel(u16 species)
 {
-    u8 searchLevel;
 #if USE_DEXNAV_SEARCH_LEVELS == TRUE
-    searchLevel = gSaveBlock3Ptr->dexNavSearchLevels[species];
+    u16 level = GetPackedSearchLevel(species) * DEXNAV_SEARCH_LEVEL_SCALE;
+
+    if (level > 100)
+        level = 100;
+    return (u8)level;
 #else
-    searchLevel = 0;
+    return 0;
 #endif
-    return searchLevel;
 }
 
 #define tProximity          data[0]
@@ -1136,8 +1182,8 @@ static void Task_DexNavSearch(u8 taskId)
         return;
     }
 
-    //Caves and water the pokemon moves around
-    if ((sDexNavSearchDataPtr->environment == ENCOUNTER_TYPE_WATER || GetCurrentMapType() == MAP_TYPE_UNDERGROUND)
+    // Water searches move around; caves were too aggressive.
+    if (sDexNavSearchDataPtr->environment == ENCOUNTER_TYPE_WATER
         && sDexNavSearchDataPtr->proximity < GetMovementProximityBySearchLevel() && sDexNavSearchDataPtr->movementCount < 2
         && task->tRevealed)
     {
@@ -2690,8 +2736,13 @@ u32 CalculateDexNavShinyRolls(void)
 void TryIncrementSpeciesSearchLevel()
 {
 #if USE_DEXNAV_SEARCH_LEVELS == TRUE
-    if (gMapHeader.regionMapSectionId != MAPSEC_BATTLE_FRONTIER && gSaveBlock3Ptr->dexNavSearchLevels[gDexNavSpecies] < 255)
-        gSaveBlock3Ptr->dexNavSearchLevels[gDexNavSpecies]++;
+    if (gMapHeader.regionMapSectionId != MAPSEC_BATTLE_FRONTIER)
+    {
+        u8 level = GetPackedSearchLevel(gDexNavSpecies);
+
+        if (level < DEXNAV_SEARCH_LEVEL_BUCKET_MAX)
+            SetPackedSearchLevel(gDexNavSpecies, level + 1);
+    }
 #endif
 }
 

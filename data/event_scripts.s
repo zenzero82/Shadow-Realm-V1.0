@@ -52,6 +52,7 @@
 #include "constants/script_menu.h"
 #include "constants/secret_bases.h"
 #include "constants/siirtc.h"
+#include "constants/sliding_puzzles.h"
 #include "constants/songs.h"
 #include "constants/sound.h"
 #include "constants/species.h"
@@ -1243,10 +1244,6 @@ gText_ShadowPurifyMultipleReady::
 
 	.include "data/maps/route2_entrance3/scripts.inc"
 
-	.include "data/maps/viridian_pokecenter_2fl/scripts.inc"
-
-	.include "data/maps/pewter_pokecenter_2fl/scripts.inc"
-
 	.include "data/maps/pewter_museum/scripts.inc"
 
 	.include "data/maps/pewter_museum2fl/scripts.inc"
@@ -1758,6 +1755,7 @@ gText_ShadowPurifyMultipleReady::
 
 	.include "data/maps/SlowpokeWell_B2F/scripts.inc"
 
+	@ Ilex Forest
 	.include "data/maps/IlexForest/scripts.inc"
 
 	.include "data/maps/NationalPark_Normal/scripts.inc"
@@ -1891,3 +1889,64 @@ gText_ShadowPurifyMultipleReady::
 	.include "data/maps/JOHTO_HOUSE2/scripts.inc"
 
 	.include "data/maps/Johto_pcenter/scripts.inc"
+
+	.include "data/maps/Olivine_pokecenter/scripts.inc"
+
+	.include "data/maps/Olivine_gym/scripts.inc"
+
+	.include "data/maps/Olivine_portinside/scripts.inc"
+
+	.include "data/maps/Olivine_mart/scripts.inc"
+
+	.include "data/maps/Olivine_lighthouse/scripts.inc"
+
+	.include "data/maps/Olivine_house1/scripts.inc"
+
+	.include "data/maps/Olivine_house2/scripts.inc"
+
+	.include "data/maps/Olivine_cafe/scripts.inc"
+
+	.include "data/maps/Olivine_house3/scripts.inc"
+
+	.include "data/maps/Olivine_portoutside/scripts.inc"
+
+	.include "data/maps/Cianwood_house2/scripts.inc"
+
+	.include "data/maps/Cianwood_house1/scripts.inc"
+
+	.include "data/maps/Cianwood_pokecenter/scripts.inc"
+
+	.include "data/maps/Cianwood_house3/scripts.inc"
+
+	.include "data/maps/Cianwood_shop/scripts.inc"
+
+	.include "data/maps/Cianwood_gym/scripts.inc"
+
+	.include "data/maps/Mahogany_pokecenter/scripts.inc"
+
+	.include "data/maps/Mahogany_shop/scripts.inc"
+
+	.include "data/maps/Mahogany_gym/scripts.inc"
+
+	.include "data/maps/Lakeofrage_house1/scripts.inc"
+
+	.include "data/maps/Mahogany_house1/scripts.inc"
+
+	.include "data/maps/Lakeofrage_house2/scripts.inc"
+
+	.include "data/maps/Blackthorn_pokecenter/scripts.inc"
+
+	.include "data/maps/Blackthorn_mart/scripts.inc"
+
+	.include "data/maps/Blackthorn_house1/scripts.inc"
+
+	.include "data/maps/Blackthorn_gym/scripts.inc"
+
+	.include "data/maps/Blackthorn_house2/scripts.inc"
+
+	.include "data/maps/Blackthorn_house3/scripts.inc"
+
+	.include "data/maps/Nothing/scripts.inc"
+
+EventScript_OverworldWildMon::
+	end

@@ -22,6 +22,8 @@ pewter_museum_EventScript_Scientist1::
 	setspeaker pewter_museum_Speaker_Scientist1
 	msgbox pewter_museum_Text_Scientist1, MSGBOX_DEFAULT
 	closemessage
+	setflag FLAG_QUEST_PEWTER_NPC_MUSEUM_SCIENTIST1
+	call QuestJournal_EventScript_CheckPewterCityNPCs
 	release
 	end
 
@@ -31,6 +33,8 @@ pewter_museum_EventScript_Scientist2::
 	setspeaker pewter_museum_Speaker_Scientist2
 	msgbox pewter_museum_Text_Scientist2, MSGBOX_DEFAULT
 	closemessage
+	setflag FLAG_QUEST_PEWTER_NPC_MUSEUM_SCIENTIST2
+	call QuestJournal_EventScript_CheckPewterCityNPCs
 	release
 	end
 
@@ -40,6 +44,8 @@ pewter_museum_EventScript_Attendant::
 	setspeaker pewter_museum_Speaker_Attendant
 	msgbox pewter_museum_Text_Attendant, MSGBOX_DEFAULT
 	closemessage
+	setflag FLAG_QUEST_PEWTER_NPC_MUSEUM_ATTENDANT
+	call QuestJournal_EventScript_CheckPewterCityNPCs
 	release
 	end
 
@@ -49,6 +55,8 @@ pewter_museum_EventScript_Hiker::
 	setspeaker pewter_museum_Speaker_Hiker
 	msgbox pewter_museum_Text_Hiker, MSGBOX_DEFAULT
 	closemessage
+	setflag FLAG_QUEST_PEWTER_NPC_MUSEUM_HIKER
+	call QuestJournal_EventScript_CheckPewterCityNPCs
 	release
 	end
 
@@ -58,6 +66,8 @@ pewter_museum_EventScript_OldMan::
 	setspeaker pewter_museum_Speaker_OldMan
 	msgbox pewter_museum_Text_OldMan, MSGBOX_DEFAULT
 	closemessage
+	setflag FLAG_QUEST_PEWTER_NPC_MUSEUM_OLD_MAN
+	call QuestJournal_EventScript_CheckPewterCityNPCs
 	release
 	end
 
@@ -100,5 +110,5 @@ pewter_museum_Text_Sign_Aerodactyl:
 
 pewter_museum_Text_Sign_MoonStone:
 	.string "MT. MOON MINERALS\n"
-	.string "Strange stones collected from the\n"
+	.string "Strange stones collected from the\l"
 	.string "mountain caves.$"

@@ -1,9 +1,19 @@
 AzaleaTown_Mart_MapScripts::
 	.byte 0
 
+AzaleaTown_Mart_Speaker_Clerk:
+	.string "CLERK$"
+
+AzaleaTown_Mart_Speaker_Rocker:
+	.string "JAX$"
+
+AzaleaTown_Mart_Speaker_BugCatcher:
+	.string "CAL$"
+
 AzaleaTown_Mart_EventScript_Clerk::
 	lock
 	faceplayer
+	setspeaker AzaleaTown_Mart_Speaker_Clerk
 	message gText_HowMayIServeYou
 	waitmessage
 	pokemart AzaleaTown_Mart_Pokemart
@@ -24,12 +34,18 @@ AzaleaTown_Mart_Pokemart:
 
 AzaleaTown_Mart_EventScript_Rocker::
 	faceplayer
+	setspeaker AzaleaTown_Mart_Speaker_Rocker
 	msgbox AzaleaTown_Mart_Text_Rocker, MSGBOX_NPC
+	setflag FLAG_QUEST_AZALEA_NPC_MART_ROCKER
+	call AzaleaTown_EventScript_CheckAzaleaQuest
 	end
 
 AzaleaTown_Mart_EventScript_BugCatcher::
 	faceplayer
+	setspeaker AzaleaTown_Mart_Speaker_BugCatcher
 	msgbox AzaleaTown_Mart_Text_BugCatcher, MSGBOX_NPC
+	setflag FLAG_QUEST_AZALEA_NPC_MART_BUG_CATCHER
+	call AzaleaTown_EventScript_CheckAzaleaQuest
 	end
 
 AzaleaTown_Mart_Text_Rocker:

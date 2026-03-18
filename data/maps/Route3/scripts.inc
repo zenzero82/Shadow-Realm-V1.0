@@ -69,6 +69,10 @@ Route3_EventScript_Firebreather_After::
 	release
 	end
 
+Route3_EventScript_Sign::
+	msgbox Route3_Text_MtMoonSquareSign, MSGBOX_SIGN
+	end
+
 @ =========================================================
 @ TEXT
 @ =========================================================
@@ -112,3 +116,8 @@ Route3_Text_Firebreather_Defeat:
 
 Route3_Text_Firebreather_After:
 	.string "I'll stoke the fire next time.$"
+
+Route3_Text_MtMoonSquareSign:
+	.string "MT.MOON SQUARE\p"
+	.string "Just go up the stairs.$"
+

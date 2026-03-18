@@ -25,10 +25,10 @@
       "trainer_type": "TRAINER_TYPE_NONE",
       "trainer_sight_or_berry_tree_id": "0",
       "script": "SlowpokeWell_B1F_EventScript_Flare1",
-      "flag": "0"
+      "flag": "FLAG_HIDE_SLOWPOKE_WELL_FLARES"
     },
     {
-      "graphics_id": "OBJ_EVENT_GFX_FLARE_GRUNT_F_GEN6",
+      "graphics_id": "OBJ_EVENT_GFX_FLARE_GRUNT_M_GEN6",
       "x": 28,
       "y": 17,
       "elevation": 0,
@@ -38,10 +38,10 @@
       "trainer_type": "TRAINER_TYPE_NORMAL",
       "trainer_sight_or_berry_tree_id": "3",
       "script": "SlowpokeWell_B1F_EventScript_Flare2",
-      "flag": "0"
+      "flag": "FLAG_HIDE_SLOWPOKE_WELL_FLARES"
     },
     {
-      "graphics_id": "OBJ_EVENT_GFX_FLARE_GRUNT_F_GEN6",
+      "graphics_id": "OBJ_EVENT_GFX_FLARE_GRUNT_M_GEN6",
       "x": 26,
       "y": 2,
       "elevation": 0,
@@ -51,7 +51,7 @@
       "trainer_type": "TRAINER_TYPE_NORMAL",
       "trainer_sight_or_berry_tree_id": "3",
       "script": "SlowpokeWell_B1F_EventScript_Flare3",
-      "flag": "0"
+      "flag": "FLAG_HIDE_SLOWPOKE_WELL_FLARES"
     },
     {
       "graphics_id": "OBJ_EVENT_GFX_BRYONY_GEN6",
@@ -61,10 +61,10 @@
       "movement_type": "MOVEMENT_TYPE_FACE_RIGHT",
       "movement_range_x": 0,
       "movement_range_y": 0,
-      "trainer_type": "TRAINER_TYPE_NORMAL",
-      "trainer_sight_or_berry_tree_id": "3",
+      "trainer_type": "TRAINER_TYPE_NONE",
+      "trainer_sight_or_berry_tree_id": "0",
       "script": "SlowpokeWell_B1F_EventScript_Bryony",
-      "flag": "0"
+      "flag": "FLAG_HIDE_SLOWPOKE_WELL_FLARES"
     },
     {
       "graphics_id": "OBJ_EVENT_GFX_SPECIES(SLOWPOKE_GALAR)",
@@ -96,6 +96,16 @@
       "dest_warp_id": "0"
     }
   ],
-  "coord_events": [],
+  "coord_events": [
+    {
+      "type": "trigger",
+      "x": 20,
+      "y": 2,
+      "elevation": 0,
+      "var": "VAR_TEMP_0",
+      "var_value": "0",
+      "script": "SlowpokeWell_B1F_EventScript_BryonyScene"
+    }
+  ],
   "bg_events": []
 }

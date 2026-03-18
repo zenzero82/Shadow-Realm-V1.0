@@ -1421,8 +1421,19 @@ void DisplayItemMessage(u8 taskId, u8 fontId, const u8 *str, void (*callback)(u8
     s16 *data = gTasks[taskId].data;
 
     tMsgWindowId = AddItemMessageWindow(ITEMWIN_MESSAGE);
-    FillWindowPixelBuffer(tMsgWindowId, PIXEL_FILL(1));
-    DisplayMessageAndContinueTask(taskId, tMsgWindowId, 10, 13, fontId, GetPlayerTextSpeedDelay(), str, callback);
+    DisplayMessageAndContinueTaskWithColorsAndFill(taskId, tMsgWindowId, 10, 13, fontId, GetPlayerTextSpeedDelay(), str, callback,
+                                                   TEXT_COLOR_WHITE, TEXT_COLOR_DARK_GRAY, TEXT_COLOR_TRANSPARENT, BAG_CONTEXT_MENU_FILL_COLOR);
+    ScheduleBgCopyTilemapToVram(1);
+}
+
+void DisplayItemMessageWithBg(u8 taskId, u8 fontId, const u8 *str, u8 fillValue, void (*callback)(u8 taskId))
+{
+    s16 *data = gTasks[taskId].data;
+    u8 fill = (fillValue == 0) ? BAG_CONTEXT_MENU_FILL_COLOR : fillValue;
+
+    tMsgWindowId = AddItemMessageWindow(ITEMWIN_MESSAGE);
+    DisplayMessageAndContinueTaskWithColorsAndFill(taskId, tMsgWindowId, 10, 13, fontId, GetPlayerTextSpeedDelay(), str, callback,
+                                                   TEXT_COLOR_WHITE, TEXT_COLOR_DARK_GRAY, TEXT_COLOR_TRANSPARENT, fill);
     ScheduleBgCopyTilemapToVram(1);
 }
 

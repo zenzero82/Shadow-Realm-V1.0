@@ -45,7 +45,12 @@ Route25BillsHouse_Text_Bill:
 	.string "Hey, I'm BILL. We just boosted\n"
 	.string "the PC STORAGE SYSTEM with bigger\l"
 	.string "boxes and smarter indexing - thanks\l"
-	.string "to SOPHOCLES, MOLAYNE, and ZEN!$"
+	.string "to SOPHOCLES, MOLAYNE, and ZEN!\p"
+	.string "Oh you met EUSINE? Yeah, he's been\n"
+	.string "looking for this special POKéMON for\l"
+	.string "a while now. I think I might have\l"
+	.string "seen it one time in the area, but\l"
+	.string "we can never know for sure.$"
 
 Route25BillsHouse_Text_Sophocles:
 	.string "I've been stress-testing the new\n"

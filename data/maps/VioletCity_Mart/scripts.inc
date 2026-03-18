@@ -1,9 +1,19 @@
 VioletCity_Mart_MapScripts::
 	.byte 0
 
+VioletCity_Mart_Speaker_Clerk:
+	.string "CLERK$"
+
+VioletCity_Mart_Speaker_OldWoman:
+	.string "EDNA$"
+
+VioletCity_Mart_Speaker_Rocker:
+	.string "JAX$"
+
 VioletCity_Mart_EventScript_Clerk::
 	lock
 	faceplayer
+	setspeaker VioletCity_Mart_Speaker_Clerk
 	message gText_HowMayIServeYou
 	waitmessage
 	pokemart VioletCity_Mart_Pokemart
@@ -23,12 +33,18 @@ VioletCity_Mart_Pokemart:
 
 VioletCity_Mart_EventScript_OldWoman::
 	faceplayer
+	setspeaker VioletCity_Mart_Speaker_OldWoman
 	msgbox VioletCity_Mart_Text_OldWoman, MSGBOX_NPC
+	setflag FLAG_QUEST_VIOLET_NPC_MART_OLD_WOMAN
+	call Violet_City_EventScript_CheckVioletQuest
 	end
 
 VioletCity_Mart_EventScript_Rocker::
 	faceplayer
+	setspeaker VioletCity_Mart_Speaker_Rocker
 	msgbox VioletCity_Mart_Text_Rocker, MSGBOX_NPC
+	setflag FLAG_QUEST_VIOLET_NPC_MART_ROCKER
+	call Violet_City_EventScript_CheckVioletQuest
 	end
 
 VioletCity_Mart_Text_OldWoman:

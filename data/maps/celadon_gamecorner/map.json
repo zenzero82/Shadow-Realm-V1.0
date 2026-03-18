@@ -2,7 +2,7 @@
   "id": "MAP_CELADON_GAMECORNER",
   "name": "celadon_gamecorner",
   "layout": "LAYOUT_CELADON_GAMECORNER",
-  "music": "MUS_DUMMY",
+  "music": "MUS_GAME_CORNER",
   "region_map_section": "MAPSEC_CELADON_CITY",
   "requires_flash": false,
   "weather": "WEATHER_NONE",

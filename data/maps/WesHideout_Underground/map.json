@@ -116,7 +116,7 @@
       "trainer_type": "TRAINER_TYPE_NONE",
       "trainer_sight_or_berry_tree_id": "0",
       "script": "NULL",
-      "flag": "0"
+      "flag": "FLAG_HIDE_WES_HIDEOUT_LYRA"
     },
     {
       "graphics_id": "OBJ_EVENT_GFX_SPECIES(MEGANIUM)",
@@ -129,10 +129,10 @@
       "trainer_type": "TRAINER_TYPE_NONE",
       "trainer_sight_or_berry_tree_id": "0",
       "script": "NULL",
-      "flag": "0"
+      "flag": "FLAG_HIDE_WES_HIDEOUT_MEGANIUM"
     },
     {
-      "graphics_id": "OBJ_EVENT_GFX_HOOPA_RING",
+      "graphics_id": "OBJ_EVENT_GFX_HOOPA_RING_TIME_AMULET",
       "x": 25,
       "y": 11,
       "elevation": 0,

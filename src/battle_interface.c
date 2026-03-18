@@ -38,6 +38,9 @@
 #include "constants/items.h"
 #include "caps.h"
 
+EWRAM_DATA u8 gStatusSummaryBarPalSlot = 0;
+EWRAM_DATA u8 gStatusSummaryBallsPalSlot = 0;
+
 // --- SHADOW FIX HELPERS (global) ---
 void ShadowHud_Clear(u8 battler);
 void ShadowHud_SyncForBattler(u8 battler);
@@ -301,6 +304,7 @@ static void SpriteCB_StatusSummaryBalls_Exit(struct Sprite *);
 static void SpriteCB_StatusSummaryBalls_OnSwitchout(struct Sprite *);
 
 static u8 GetStatusIconForBattlerId(u8, u8);
+static u8 LoadStatusSummaryPalette(const struct SpritePalette *palette, u8 preferredSlot);
 static s32 CalcNewBarValue(s32, s32, s32, s32 *, u8, u16);
 static u8 GetScaledExpFraction(s32, s32, s32, u8);
 static void MoveBattleBarGraphically(u8, u8);
@@ -779,6 +783,39 @@ static const struct SpriteTemplate sStatusSummaryBallsSpriteTemplates[2] =
     }
 };
 
+static u8 LoadStatusSummaryPalette(const struct SpritePalette *palette, u8 preferredSlot)
+{
+    u32 palIndex = IndexOfSpritePaletteTag(palette->tag);
+
+    if (palIndex == 0xFF)
+    {
+        if (preferredSlot >= gReservedSpritePaletteCount)
+        {
+            u16 slotTag = GetSpritePaletteTagByPaletteNum(preferredSlot);
+
+            if (slotTag == TAG_NONE || slotTag == palette->tag)
+                palIndex = LoadSpritePaletteInSlot(palette, preferredSlot);
+        }
+
+        if (palIndex == 0xFF)
+            palIndex = LoadSpritePalette(palette);
+    }
+    else
+    {
+        LoadPalette(palette->data, OBJ_PLTT_ID(palIndex), PLTT_SIZE_4BPP);
+    }
+
+    return palIndex;
+}
+
+void ReserveStatusSummaryPalettes(void)
+{
+    gStatusSummaryBarPalSlot = LoadStatusSummaryPalette(&sStatusSummaryBarSpritePal, 12);
+    gStatusSummaryBallsPalSlot = IndexOfSpritePaletteTag(TAG_HEALTHBAR_PAL);
+    if (gStatusSummaryBallsPalSlot == 0xFF)
+        gStatusSummaryBallsPalSlot = LoadStatusSummaryPalette(&sStatusSummaryBallsSpritePal, 13);
+}
+
 static const u8 sEmptyWhiteText_GrayHighlight[] = __("{COLOR WHITE}{HIGHLIGHT DARK_GRAY}              ");
 static const u8 sEmptyWhiteText_TransparentHighlight[] = __("{COLOR WHITE}{HIGHLIGHT TRANSPARENT}              ");
 
@@ -989,10 +1026,13 @@ static void BattleHud_ApplyHealthboxPaletteInternal(u8 battler, bool8 isShadowNo
     if (setVisible)
         SetHealthboxSpriteVisible(gHealthboxSpriteIds[battler]);
 
-    if (gHealthboxSpriteIds[battler] < MAX_SPRITES
-        && GetMonData(GetBattlerMon(battler), MON_DATA_STATUS))
+    if (gHealthboxSpriteIds[battler] < MAX_SPRITES)
     {
-        UpdateStatusIconInHealthbox(gHealthboxSpriteIds[battler]);
+        u32 status = GetMonData(GetBattlerMon(battler), MON_DATA_STATUS);
+        u32 status2 = gBattleMons[battler].status2;
+
+        if (status || (status2 & STATUS2_CONFUSION))
+            UpdateStatusIconInHealthbox(gHealthboxSpriteIds[battler]);
     }
 }
 
@@ -1773,6 +1813,8 @@ u8 CreatePartyStatusSummarySprites(u8 battler, struct HpAndStatus *partyInfo, bo
     s32 i, j, var;
     u8 summaryBarSpriteId;
     u8 ballIconSpritesIds[PARTY_SIZE];
+    u8 barPalNum;
+    u8 ballsPalNum;
     u8 taskId;
 
     if (!skipPlayer || GetBattlerPosition(battler) != B_POSITION_OPPONENT_RIGHT)
@@ -1807,13 +1849,16 @@ u8 CreatePartyStatusSummarySprites(u8 battler, struct HpAndStatus *partyInfo, bo
 
     LoadCompressedSpriteSheetUsingHeap(&sStatusSummaryBarSpriteSheet);
     LoadSpriteSheet(&sStatusSummaryBallsSpriteSheet);
-    LoadSpritePalette(&sStatusSummaryBarSpritePal);
-    LoadSpritePalette(&sStatusSummaryBallsSpritePal);
+    ReserveStatusSummaryPalettes();
+    barPalNum = gStatusSummaryBarPalSlot;
+    ballsPalNum = gStatusSummaryBallsPalSlot;
 
     summaryBarSpriteId = CreateSprite(&sStatusSummaryBarSpriteTemplates[isOpponent], bar_X, bar_Y, 10);
     SetSubspriteTables(&gSprites[summaryBarSpriteId], sStatusSummaryBar_SubspriteTable_Enter);
     gSprites[summaryBarSpriteId].x2 = bar_pos2_X;
     gSprites[summaryBarSpriteId].data[0] = bar_data0;
+    if (barPalNum != 0xFF)
+        gSprites[summaryBarSpriteId].oam.paletteNum = barPalNum;
 
     if (isOpponent)
     {
@@ -1828,6 +1873,8 @@ u8 CreatePartyStatusSummarySprites(u8 battler, struct HpAndStatus *partyInfo, bo
     for (i = 0; i < PARTY_SIZE; i++)
     {
         ballIconSpritesIds[i] = CreateSpriteAtEnd(&sStatusSummaryBallsSpriteTemplates[isOpponent], bar_X, bar_Y - 4, 9);
+        if (ballsPalNum != 0xFF)
+            gSprites[ballIconSpritesIds[i]].oam.paletteNum = ballsPalNum;
 
         if (!isBattleStart)
             gSprites[ballIconSpritesIds[i]].callback = SpriteCB_StatusSummaryBalls_OnSwitchout;
@@ -2002,7 +2049,15 @@ void Task_HidePartyStatusSummary(u8 taskId)
     for (i = 0; i < PARTY_SIZE; i++)
         ballIconSpriteIds[i] = gTasks[taskId].tBallIconSpriteId(i);
 
+    SetGpuReg(REG_OFFSET_BLDCNT, BLDCNT_TGT2_ALL | BLDCNT_EFFECT_BLEND);
+    SetGpuReg(REG_OFFSET_BLDALPHA, BLDALPHA_BLEND(16, 0));
+
     gTasks[taskId].tBlend = 16;
+
+    for (i = 0; i < PARTY_SIZE; i++)
+        gSprites[ballIconSpriteIds[i]].oam.objMode = ST_OAM_OBJ_BLEND;
+
+    gSprites[summaryBarSpriteId].oam.objMode = ST_OAM_OBJ_BLEND;
 
     if (isBattleStart)
     {
@@ -2035,30 +2090,14 @@ void Task_HidePartyStatusSummary(u8 taskId)
     }
 }
 
-static void BlendPartyStatusSummaryPalettes(u8 coeff)
-{
-    u32 mask = 0;
-    u32 barPal = IndexOfSpritePaletteTag(TAG_STATUS_SUMMARY_BAR_PAL);
-    u32 ballPal = IndexOfSpritePaletteTag(TAG_STATUS_SUMMARY_BALLS_PAL);
-
-    if (barPal != 0xFF)
-        mask |= 1 << (barPal + 16);
-    if (ballPal != 0xFF)
-        mask |= 1 << (ballPal + 16);
-
-    if (mask != 0)
-        BlendPalettes(mask, coeff, RGB_BLACK);
-}
-
 static void Task_HidePartyStatusSummary_BattleStart_1(u8 taskId)
 {
     if ((gTasks[taskId].data[11]++ % 2) == 0)
     {
         if (--gTasks[taskId].tBlend < 0)
             return;
-
-        BlendPartyStatusSummaryPalettes(16 - gTasks[taskId].tBlend);
     }
+    SetGpuReg(REG_OFFSET_BLDALPHA, BLDALPHA_BLEND(gTasks[taskId].tBlend, 16 - gTasks[taskId].tBlend));
     if (gTasks[taskId].tBlend == 0)
         gTasks[taskId].func = Task_HidePartyStatusSummary_BattleStart_2;
 }
@@ -2092,10 +2131,14 @@ static void Task_HidePartyStatusSummary_BattleStart_2(u8 taskId)
 
         for (i = 1; i < PARTY_SIZE; i++)
             DestroySprite(&gSprites[ballIconSpriteIds[i]]);
+        gStatusSummaryBarPalSlot = 0xFF;
+        gStatusSummaryBallsPalSlot = 0xFF;
     }
     else if (gTasks[taskId].tBlend == -3)
     {
         gBattleSpritesDataPtr->healthBoxesData[battler].partyStatusSummaryShown = 0;
+        SetGpuReg(REG_OFFSET_BLDCNT, 0);
+        SetGpuReg(REG_OFFSET_BLDALPHA, 0);
         DestroyTask(taskId);
     }
 }
@@ -2108,7 +2151,7 @@ static void Task_HidePartyStatusSummary_DuringBattle(u8 taskId)
 
     if (--gTasks[taskId].tBlend >= 0)
     {
-        BlendPartyStatusSummaryPalettes(16 - gTasks[taskId].tBlend);
+        SetGpuReg(REG_OFFSET_BLDALPHA, BLDALPHA_BLEND(gTasks[taskId].tBlend, 16 - gTasks[taskId].tBlend));
     }
     else if (gTasks[taskId].tBlend == -1)
     {
@@ -2122,10 +2165,14 @@ static void Task_HidePartyStatusSummary_DuringBattle(u8 taskId)
 
         for (i = 1; i < PARTY_SIZE; i++)
             DestroySprite(&gSprites[ballIconSpriteIds[i]]);
+        gStatusSummaryBarPalSlot = 0xFF;
+        gStatusSummaryBallsPalSlot = 0xFF;
     }
     else if (gTasks[taskId].tBlend == -3)
     {
         gBattleSpritesDataPtr->healthBoxesData[battler].partyStatusSummaryShown = 0;
+        SetGpuReg(REG_OFFSET_BLDCNT, 0);
+        SetGpuReg(REG_OFFSET_BLDALPHA, 0);
         DestroyTask(taskId);
     }
 }
@@ -3343,6 +3390,28 @@ static inline bool32 IsAnyAbilityPopUpActive(void)
     return FALSE;
 }
 
+static bool32 IsAnyAbilityPopUpPaletteUserActive(void)
+{
+    if (IsAnyAbilityPopUpActive())
+        return TRUE;
+
+    if (gBattleStruct->ballSpriteIds[1] != MAX_SPRITES
+        && gSprites[gBattleStruct->ballSpriteIds[1]].inUse)
+        return TRUE;
+
+#if B_LAST_USED_BALL_BUTTON == R_BUTTON
+    if (gBattleStruct->ballSpriteIds[2] != MAX_SPRITES
+        && gSprites[gBattleStruct->ballSpriteIds[2]].inUse)
+        return TRUE;
+#endif
+
+    if (gBattleStruct->moveInfoSpriteId != MAX_SPRITES
+        && gSprites[gBattleStruct->moveInfoSpriteId].inUse)
+        return TRUE;
+
+    return FALSE;
+}
+
 void CreateAbilityPopUp(u8 battler, u32 ability, bool32 isDoubleBattle)
 {
     const s16 (*coords)[2];
@@ -3484,7 +3553,7 @@ static void Task_FreeAbilityPopUpGfx(u8 taskId)
 {
     if (!gSprites[gTasks[taskId].tSpriteId1].inUse
         && !gSprites[gTasks[taskId].tSpriteId2].inUse
-        && !IsAnyAbilityPopUpActive())
+        && !IsAnyAbilityPopUpPaletteUserActive())
     {
         FreeSpriteTilesByTag(ABILITY_POP_UP_TAG);
         FreeSpritePaletteByTag(ABILITY_POP_UP_TAG);
@@ -3763,9 +3832,10 @@ void TryAddLastUsedBallItemSprites(void)
 static void DestroyLastUsedBallWinGfx(struct Sprite *sprite)
 {
     FreeSpriteTilesByTag(LAST_BALL_WINDOW_TAG);
-    FreeSpritePaletteByTag(ABILITY_POP_UP_TAG);
     DestroySprite(sprite);
     gBattleStruct->ballSpriteIds[1] = MAX_SPRITES;
+    if (!IsAnyAbilityPopUpPaletteUserActive())
+        FreeSpritePaletteByTag(ABILITY_POP_UP_TAG);
 }
 #if B_LAST_USED_BALL_BUTTON == R_BUTTON
 static void DestroyLastUsedBallCallWinGfx(struct Sprite *sprite)
@@ -3808,9 +3878,10 @@ void TryToHideMoveInfoWindow(void)
 static void DestroyMoveInfoWinGfx(struct Sprite *sprite)
 {
     FreeSpriteTilesByTag(MOVE_INFO_WINDOW_TAG);
-    FreeSpritePaletteByTag(ABILITY_POP_UP_TAG);
     DestroySprite(sprite);
     gBattleStruct->moveInfoSpriteId = MAX_SPRITES;
+    if (!IsAnyAbilityPopUpPaletteUserActive())
+        FreeSpritePaletteByTag(ABILITY_POP_UP_TAG);
 }
 
 static void SpriteCB_LastUsedBallWin(struct Sprite *sprite)

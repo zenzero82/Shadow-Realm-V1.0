@@ -8,6 +8,7 @@ pewter_pokecenter_EventScript_Nurse::
 	msgbox gText_WouldYouLikeToRestYourPkmn, MSGBOX_YESNO
 	goto_if_eq VAR_RESULT, NO, pewter_pokecenter_EventScript_Nurse_Goodbye
 
+	hidefollower 1
 	setvar VAR_0x800B, 1
 	applymovement VAR_0x800B, pewter_pokecenter_Move_Nurse_Turn
 	waitmovement 0
@@ -62,6 +63,8 @@ pewter_pokecenter_EventScript_Beauty::
 	setspeaker pewter_pokecenter_Speaker_Mel
 	msgbox pewter_pokecenter_Text_Beauty, MSGBOX_DEFAULT
 	closemessage
+	setflag FLAG_QUEST_PEWTER_NPC_POKECENTER_BEAUTY
+	call QuestJournal_EventScript_CheckPewterCityNPCs
 	release
 	end
 
@@ -71,6 +74,8 @@ pewter_pokecenter_EventScript_BugCatcher::
 	setspeaker pewter_pokecenter_Speaker_Toby
 	msgbox pewter_pokecenter_Text_BugCatcher, MSGBOX_DEFAULT
 	closemessage
+	setflag FLAG_QUEST_PEWTER_NPC_POKECENTER_BUG_CATCHER
+	call QuestJournal_EventScript_CheckPewterCityNPCs
 	release
 	end
 

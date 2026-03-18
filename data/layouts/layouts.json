@@ -5606,30 +5606,6 @@
       "blockdata_filepath": "data/layouts/viridian_pokecenter/map.bin"
     },
     {
-      "id": "LAYOUT_PEWTER_POKECENTER_2FL",
-      "name": "pewter_pokecenter_2fl_Layout",
-      "width": 15,
-      "height": 9,
-      "border_width": 2,
-      "border_height": 2,
-      "primary_tileset": "gTileset_kanto_inside",
-      "secondary_tileset": "gTileset_pokecenter_kanto",
-      "border_filepath": "data/layouts/pewter_pokecenter_2fl/border.bin",
-      "blockdata_filepath": "data/layouts/pewter_pokecenter_2fl/map.bin"
-    },
-    {
-      "id": "LAYOUT_VIRIDIAN_POKECENTER_2FL",
-      "name": "viridian_pokecenter_2fl_Layout",
-      "width": 15,
-      "height": 10,
-      "border_width": 2,
-      "border_height": 2,
-      "primary_tileset": "gTileset_kanto_inside",
-      "secondary_tileset": "gTileset_pokecenter_kanto",
-      "border_filepath": "data/layouts/viridian_pokecenter_2fl/border.bin",
-      "blockdata_filepath": "data/layouts/viridian_pokecenter_2fl/map.bin"
-    },
-    {
       "id": "LAYOUT_PEWTER_MUSEUM",
       "name": "pewter_museum_Layout",
       "width": 28,
@@ -6945,7 +6921,7 @@
       "border_width": 2,
       "border_height": 2,
       "primary_tileset": "gTileset_johto_building",
-      "secondary_tileset": "gTileset_oaks_lab",
+      "secondary_tileset": "gTileset_PokemonLeague",
       "border_filepath": "data/layouts/indigoplateau_koga/border.bin",
       "blockdata_filepath": "data/layouts/indigoplateau_koga/map.bin"
     },
@@ -6957,7 +6933,7 @@
       "border_width": 2,
       "border_height": 2,
       "primary_tileset": "gTileset_johto_building",
-      "secondary_tileset": "gTileset_oaks_lab",
+      "secondary_tileset": "gTileset_PokemonLeague",
       "border_filepath": "data/layouts/indigoplateau_bruno/border.bin",
       "blockdata_filepath": "data/layouts/indigoplateau_bruno/map.bin"
     },
@@ -6969,7 +6945,7 @@
       "border_width": 2,
       "border_height": 2,
       "primary_tileset": "gTileset_johto_building",
-      "secondary_tileset": "gTileset_oaks_lab",
+      "secondary_tileset": "gTileset_PokemonLeague",
       "border_filepath": "data/layouts/indigoplateau_will/border.bin",
       "blockdata_filepath": "data/layouts/indigoplateau_will/map.bin"
     },
@@ -6981,7 +6957,7 @@
       "border_width": 2,
       "border_height": 2,
       "primary_tileset": "gTileset_johto_building",
-      "secondary_tileset": "gTileset_oaks_lab",
+      "secondary_tileset": "gTileset_PokemonLeague",
       "border_filepath": "data/layouts/indigoplateau_karen/border.bin",
       "blockdata_filepath": "data/layouts/indigoplateau_karen/map.bin"
     },
@@ -6993,7 +6969,7 @@
       "border_width": 2,
       "border_height": 2,
       "primary_tileset": "gTileset_johto_building",
-      "secondary_tileset": "gTileset_oaks_lab",
+      "secondary_tileset": "gTileset_PokemonLeague",
       "border_filepath": "data/layouts/indigoplateau_champion/border.bin",
       "blockdata_filepath": "data/layouts/indigoplateau_champion/map.bin"
     },
@@ -7005,7 +6981,7 @@
       "border_width": 2,
       "border_height": 2,
       "primary_tileset": "gTileset_johto_building",
-      "secondary_tileset": "gTileset_oaks_lab",
+      "secondary_tileset": "gTileset_PokemonLeague",
       "border_filepath": "data/layouts/indigoplateau_halloffame/border.bin",
       "blockdata_filepath": "data/layouts/indigoplateau_halloffame/map.bin"
     },
@@ -7845,7 +7821,7 @@
       "border_width": 2,
       "border_height": 2,
       "primary_tileset": "gTileset_johto_building",
-      "secondary_tileset": "gTileset_generator",
+      "secondary_tileset": "gTileset_RuinsOfAlph_B1F",
       "border_filepath": "data/layouts/RuinsOfAlph_B1F/border.bin",
       "blockdata_filepath": "data/layouts/RuinsOfAlph_B1F/map.bin"
     },
@@ -7857,7 +7833,7 @@
       "border_width": 2,
       "border_height": 2,
       "primary_tileset": "gTileset_johto_building",
-      "secondary_tileset": "gTileset_generator",
+      "secondary_tileset": "gTileset_RuinsOfAlphWriting",
       "border_filepath": "data/layouts/RuinsOfAlph_PuzzleAndRewardChambers/border.bin",
       "blockdata_filepath": "data/layouts/RuinsOfAlph_PuzzleAndRewardChambers/map.bin"
     },
@@ -7952,7 +7928,7 @@
       "height": 56,
       "border_width": 2,
       "border_height": 2,
-      "primary_tileset": "gTileset_johto_general_og",
+      "primary_tileset": "gTileset_FRLG_Town",
       "secondary_tileset": "gTileset_NationalPark",
       "border_filepath": "data/layouts/NationalPark_BugContest/border.bin",
       "blockdata_filepath": "data/layouts/NationalPark_BugContest/map.bin"
@@ -7989,18 +7965,18 @@
       "border_width": 2,
       "border_height": 2,
       "primary_tileset": "gTileset_johto_general_og",
-      "secondary_tileset": "gTileset_NationalPark",
+      "secondary_tileset": "gTileset_cave_default",
       "border_filepath": "data/layouts/CliffEdgeGate/border.bin",
       "blockdata_filepath": "data/layouts/CliffEdgeGate/map.bin"
     },
     {
       "id": "LAYOUT_MT_MORTAR_1F_SOUTH",
       "name": "MtMortar_1F_South_Layout",
-      "width": 72,
+      "width": 63,
       "height": 54,
       "border_width": 2,
       "border_height": 2,
-      "primary_tileset": "gTileset_johto_general_og",
+      "primary_tileset": "gTileset_johto_NE",
       "secondary_tileset": "gTileset_Cave_Grey",
       "border_filepath": "data/layouts/MtMortar_1F_South/border.bin",
       "blockdata_filepath": "data/layouts/MtMortar_1F_South/map.bin"
@@ -8024,7 +8000,7 @@
       "height": 36,
       "border_width": 2,
       "border_height": 2,
-      "primary_tileset": "gTileset_johto_general_og",
+      "primary_tileset": "gTileset_johto_NE",
       "secondary_tileset": "gTileset_Cave_Grey",
       "border_filepath": "data/layouts/MtMortar_B1F/border.bin",
       "blockdata_filepath": "data/layouts/MtMortar_B1F/map.bin"
@@ -8036,7 +8012,7 @@
       "height": 40,
       "border_width": 2,
       "border_height": 2,
-      "primary_tileset": "gTileset_johto_general_og",
+      "primary_tileset": "gTileset_johto_NE",
       "secondary_tileset": "gTileset_Cave_Grey",
       "border_filepath": "data/layouts/MtMortar_2F/border.bin",
       "blockdata_filepath": "data/layouts/MtMortar_2F/map.bin"
@@ -8133,7 +8109,7 @@
       "border_width": 2,
       "border_height": 2,
       "primary_tileset": "gTileset_johto_general_og",
-      "secondary_tileset": "gTileset_cave_ice",
+      "secondary_tileset": "gTileset_Cave_DragonsDen",
       "border_filepath": "data/layouts/DragonsDen_Entrance/border.bin",
       "blockdata_filepath": "data/layouts/DragonsDen_Entrance/map.bin"
     },
@@ -8145,19 +8121,19 @@
       "border_width": 2,
       "border_height": 2,
       "primary_tileset": "gTileset_johto_general_og",
-      "secondary_tileset": "gTileset_cave_ice",
+      "secondary_tileset": "gTileset_Cave_DragonsDen",
       "border_filepath": "data/layouts/DragonsDen_Cavern/border.bin",
       "blockdata_filepath": "data/layouts/DragonsDen_Cavern/map.bin"
     },
     {
       "id": "LAYOUT_DRAGONS_DEN_SHRINE",
       "name": "DragonsDen_Shrine_Layout",
-      "width": 10,
+      "width": 14,
       "height": 18,
       "border_width": 2,
       "border_height": 2,
-      "primary_tileset": "gTileset_johto_general_og",
-      "secondary_tileset": "gTileset_cave_ice",
+      "primary_tileset": "gTileset_johto_building",
+      "secondary_tileset": "gTileset_DragonsDen_Shrine",
       "border_filepath": "data/layouts/DragonsDen_Shrine/border.bin",
       "blockdata_filepath": "data/layouts/DragonsDen_Shrine/map.bin"
     },
@@ -8673,7 +8649,7 @@
       "border_width": 2,
       "border_height": 2,
       "primary_tileset": "gTileset_shadowrealm",
-      "secondary_tileset": "gTileset_cave_default",
+      "secondary_tileset": "gTileset_distortion",
       "border_filepath": "data/layouts/Shadow_Realm/border.bin",
       "blockdata_filepath": "data/layouts/Shadow_Realm/map.bin"
     },
@@ -8712,6 +8688,138 @@
       "secondary_tileset": "gTileset_pokecenter_kanto",
       "border_filepath": "data/layouts/Johto_pcenter/border.bin",
       "blockdata_filepath": "data/layouts/Johto_pcenter/map.bin"
+    },
+    {
+      "id": "LAYOUT_OLIVINE_GYM",
+      "name": "Olivine_gym_Layout",
+      "width": 17,
+      "height": 22,
+      "border_width": 2,
+      "border_height": 2,
+      "primary_tileset": "gTileset_johto_building",
+      "secondary_tileset": "gTileset_EcruteakTheater",
+      "border_filepath": "data/layouts/Olivine_gym/border.bin",
+      "blockdata_filepath": "data/layouts/Olivine_gym/map.bin"
+    },
+    {
+      "id": "LAYOUT_OLIVINE_PORTINSIDE",
+      "name": "Olivine_portinside_Layout",
+      "width": 18,
+      "height": 28,
+      "border_width": 2,
+      "border_height": 2,
+      "primary_tileset": "gTileset_johto_general_og",
+      "secondary_tileset": "gTileset_portindoor",
+      "border_filepath": "data/layouts/Olivine_portinside/border.bin",
+      "blockdata_filepath": "data/layouts/Olivine_portinside/map.bin"
+    },
+    {
+      "id": "LAYOUT_OLIVINE_LIGHTHOUSE",
+      "name": "Olivine_lighthouse_Layout",
+      "width": 170,
+      "height": 20,
+      "border_width": 2,
+      "border_height": 2,
+      "primary_tileset": "gTileset_johto_building",
+      "secondary_tileset": "gTileset_Lighthouse",
+      "border_filepath": "data/layouts/Olivine_lighthouse/border.bin",
+      "blockdata_filepath": "data/layouts/Olivine_lighthouse/map.bin"
+    },
+    {
+      "id": "LAYOUT_OLIVINE_CAFE",
+      "name": "Olivine_cafe_Layout",
+      "width": 8,
+      "height": 10,
+      "border_width": 2,
+      "border_height": 2,
+      "primary_tileset": "gTileset_johto_building",
+      "secondary_tileset": "gTileset_cafe",
+      "border_filepath": "data/layouts/Olivine_cafe/border.bin",
+      "blockdata_filepath": "data/layouts/Olivine_cafe/map.bin"
+    },
+    {
+      "id": "LAYOUT_OLIVINE_PORTOUTSIDE",
+      "name": "Olivine_portoutside_Layout",
+      "width": 32,
+      "height": 23,
+      "border_width": 2,
+      "border_height": 2,
+      "primary_tileset": "gTileset_johto_general_og",
+      "secondary_tileset": "gTileset_portindoor",
+      "border_filepath": "data/layouts/Olivine_portoutside/border.bin",
+      "blockdata_filepath": "data/layouts/Olivine_portoutside/map.bin"
+    },
+    {
+      "id": "LAYOUT_CIANWOOD_GYM",
+      "name": "Cianwood_gym_Layout",
+      "width": 21,
+      "height": 17,
+      "border_width": 2,
+      "border_height": 2,
+      "primary_tileset": "gTileset_johto_building",
+      "secondary_tileset": "gTileset_CianwoodCity_Gym",
+      "border_filepath": "data/layouts/Cianwood_gym/border.bin",
+      "blockdata_filepath": "data/layouts/Cianwood_gym/map.bin"
+    },
+    {
+      "id": "LAYOUT_CIANWOOD_SHOP",
+      "name": "Cianwood_shop_Layout",
+      "width": 16,
+      "height": 15,
+      "border_width": 2,
+      "border_height": 2,
+      "primary_tileset": "gTileset_johto_building",
+      "secondary_tileset": "gTileset_cerulean_bikeshop",
+      "border_filepath": "data/layouts/Cianwood_shop/border.bin",
+      "blockdata_filepath": "data/layouts/Cianwood_shop/map.bin"
+    },
+    {
+      "id": "LAYOUT_MAHOGANY_SHOP",
+      "name": "Mahogany_shop_Layout",
+      "width": 10,
+      "height": 12,
+      "border_width": 2,
+      "border_height": 2,
+      "primary_tileset": "gTileset_johto_building",
+      "secondary_tileset": "gTileset_house2",
+      "border_filepath": "data/layouts/Mahogany_shop/border.bin",
+      "blockdata_filepath": "data/layouts/Mahogany_shop/map.bin"
+    },
+    {
+      "id": "LAYOUT_MAHOGANY_GYM",
+      "name": "Mahogany_gym_Layout",
+      "width": 25,
+      "height": 30,
+      "border_width": 2,
+      "border_height": 2,
+      "primary_tileset": "gTileset_johto_building",
+      "secondary_tileset": "gTileset_SootopolisGym",
+      "border_filepath": "data/layouts/Mahogany_gym/border.bin",
+      "blockdata_filepath": "data/layouts/Mahogany_gym/map.bin"
+    },
+    {
+      "id": "LAYOUT_BLACKTHORN_GYM",
+      "name": "Blackthorn_gym_Layout",
+      "width": 41,
+      "height": 60,
+      "border_width": 2,
+      "border_height": 2,
+      "primary_tileset": "gTileset_johto_building",
+      "secondary_tileset": "gTileset_blackthorn_gym",
+      "border_filepath": "data/layouts/Blackthorn_gym/border.bin",
+      "blockdata_filepath": "data/layouts/Blackthorn_gym/map.bin"
+    },
+    {
+      "id": "LAYOUT_NOTHING",
+      "name": "Nothing_Layout",
+      "width": 80,
+      "height": 80,
+      "border_width": 2,
+      "border_height": 2,
+      "primary_tileset": "gTileset_shadowrealm",
+      "secondary_tileset": "gTileset_distortion",
+      "border_filepath": "data/layouts/Nothing/border.bin",
+      "blockdata_filepath": "data/layouts/Nothing/map.bin"
     }
   ]
 }

@@ -20,11 +20,13 @@ $(MID_BUILDDIR)/%.o: $(MID_ASM_DIR)/%.s
 	$(AS) $(ASFLAGS) -I sound -o $@ $<
 
 # Compressed cries
-$(CRY_BIN_DIR)/%.bin: $(CRY_SUBDIR)/%.aif 
-	$(AIF) $< $@ --compress
+$(CRY_BIN_DIR)/%.bin: $(CRY_SUBDIR)/%.wav
+	$(WAV2AGB) -b -c -l 1 --no-pad $< $@
 
-# Uncompressed cries
-$(CRY_BIN_DIR)/uncomp_%.bin: $(CRY_SUBDIR)/uncomp_%.aif 
+# Uncompressed cries (prefer WAV, fall back to AIF if needed)
+$(CRY_BIN_DIR)/uncomp_%.bin: $(CRY_SUBDIR)/uncomp_%.wav
+	$(WAV2AGB) -b $< $@
+$(CRY_BIN_DIR)/uncomp_%.bin: $(CRY_SUBDIR)/uncomp_%.aif
 	$(AIF) $< $@
 
 # Uncompressed sounds

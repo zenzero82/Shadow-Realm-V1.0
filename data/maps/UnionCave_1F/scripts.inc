@@ -78,6 +78,21 @@ UnionCave_1F_EventScript_Matt::
 UnionCave_1F_EventScript_MattCallTrigger::
 	goto_if_set FLAG_HIDE_UNION_CAVE_MATT, UnionCave_1F_EventScript_MattCallTrigger_End
 	lockall
+	special StorePlayerCoordsInVars
+	goto_if_eq VAR_0x8004, 31, UnionCave_1F_EventScript_MattCallTrigger_FromLeft
+UnionCave_1F_EventScript_MattCallTrigger_FromRight::
+	special SpawnCameraObject
+	applymovement LOCALID_CAMERA, UnionCave_1F_Movement_CameraToMatt_Right
+	waitmovement 0
+	goto UnionCave_1F_EventScript_MattCallTrigger_Call
+
+UnionCave_1F_EventScript_MattCallTrigger_FromLeft::
+	special SpawnCameraObject
+	applymovement LOCALID_CAMERA, UnionCave_1F_Movement_CameraToMatt_Left
+	waitmovement 0
+	goto UnionCave_1F_EventScript_MattCallTrigger_Call
+
+UnionCave_1F_EventScript_MattCallTrigger_Call::
 	pokenavcall MatchCall_Text_MattUnionCave
 	waitmessage
 	closemessage
@@ -85,6 +100,17 @@ UnionCave_1F_EventScript_MattCallTrigger::
 	waitmovement 0
 	setflag FLAG_HIDE_UNION_CAVE_MATT
 	removeobject LOCALID_UNION_CAVE_1F_MATT
+	goto_if_eq VAR_0x8004, 31, UnionCave_1F_EventScript_MattCallTrigger_CameraBackLeft
+	applymovement LOCALID_CAMERA, UnionCave_1F_Movement_CameraToPlayer_Right
+	waitmovement 0
+	goto UnionCave_1F_EventScript_MattCallTrigger_CameraDone
+
+UnionCave_1F_EventScript_MattCallTrigger_CameraBackLeft::
+	applymovement LOCALID_CAMERA, UnionCave_1F_Movement_CameraToPlayer_Left
+	waitmovement 0
+
+UnionCave_1F_EventScript_MattCallTrigger_CameraDone::
+	special RemoveCameraObject
 	setvar VAR_TEMP_0, 1
 	releaseall
 	end
@@ -99,6 +125,32 @@ UnionCave_1F_EventScript_MattCallTrigger_End::
 UnionCave_1F_Movement_MattExit:
 	walk_down
 	walk_down
+	step_end
+
+UnionCave_1F_Movement_CameraToMatt_Right:
+	walk_down
+	walk_down
+	walk_down
+	step_end
+
+UnionCave_1F_Movement_CameraToMatt_Left:
+	walk_right
+	walk_down
+	walk_down
+	walk_down
+	step_end
+
+UnionCave_1F_Movement_CameraToPlayer_Right:
+	walk_up
+	walk_up
+	walk_up
+	step_end
+
+UnionCave_1F_Movement_CameraToPlayer_Left:
+	walk_up
+	walk_up
+	walk_up
+	walk_left
 	step_end
 
 @ =========================================================

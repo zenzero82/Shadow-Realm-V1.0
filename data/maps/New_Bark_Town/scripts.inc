@@ -3,58 +3,115 @@ New_Bark_Town_MapScripts::
 	.byte 0
 
 @ Local IDs from map.json:
-@   1 = Hoopa Ring
-@   2 = Resix
-@   3 = Greesix
-@   4 = Yellosix
-@   5 = Browsix
-@   6 = Blusix
-.set LOCALID_RESIX, 2
-.set LOCALID_GREESIX, 3
-.set LOCALID_YELLOSIX, 4
-.set LOCALID_BROWSIX, 5
-.set LOCALID_BLUSIX, 6
+@   1 = Resix
+@   2 = Greesix
+@   3 = Yellosix
+@   4 = Browsix
+@   5 = Blusix
+.set LOCALID_RESIX, 1
+.set LOCALID_GREESIX, 2
+.set LOCALID_YELLOSIX, 3
+.set LOCALID_BROWSIX, 4
+.set LOCALID_BLUSIX, 5
+.set LOCALID_HOOPA_RING, 6
 
 @ Legacy Snagem Grunt placeholders (not placed on map)
-.set LOCALID_SNAGEM_GRUNT_1, 2
-.set LOCALID_SNAGEM_GRUNT_2, 3
-.set LOCALID_SNAGEM_GRUNT_3, 4
+.set LOCALID_SNAGEM_GRUNT_1, 7
+.set LOCALID_SNAGEM_GRUNT_2, 8
+.set LOCALID_SNAGEM_GRUNT_3, 9
 
 @ ================================
 @ HEXAGON BROS SCENE
 @ ================================
 
 New_Bark_Town_OnTransition:
+	setflag FLAG_HIDE_NEW_BARK_HOOPA_RING
+	checkflag FLAG_BIRCH_TIME_AMULET_CALL_DONE
+	goto_if_eq VAR_RESULT, TRUE, New_Bark_Town_OnTransition_BirchDone
+	checkflag FLAG_QUEST_GOLDS_MOM_COMPLETED
+	goto_if_eq VAR_RESULT, FALSE, New_Bark_Town_OnTransition_BirchDone
+	special StorePlayerCoordsInVars
+	goto_if_ne VAR_0x8004, 20, New_Bark_Town_OnTransition_BirchDone
+	goto_if_ne VAR_0x8005, 11, New_Bark_Town_OnTransition_BirchDone
+	goto New_Bark_Town_EventScript_BirchCallWarp
+New_Bark_Town_OnTransition_BirchDone:
 	checkflag FLAG_HEXAGON_BROS_SCENE_DONE
 	goto_if_eq VAR_RESULT, TRUE, New_Bark_Town_OnTransition_HideBros
-	goto New_Bark_Town_EventScript_HexagonBros
+	call New_Bark_Town_EventScript_ShowHexagonBros
+	end
 
 New_Bark_Town_OnTransition_HideBros:
 	call New_Bark_Town_EventScript_HideHexagonBros
 	end
 
-New_Bark_Town_EventScript_HexagonBros::
+New_Bark_Town_EventScript_BirchCallWarp::
 	lockall
-	fadeoutbgm 4
-	delay 20
+	setflag FLAG_BIRCH_TIME_AMULET_CALL_DONE
+	setspeaker New_Bark_Town_Speaker_Birch
+	pokenavcall New_Bark_Town_Text_Birch_Call
+	waitmessage
+	closemessage
+
+	clearflag FLAG_HIDE_NEW_BARK_HOOPA_RING
+	addobject LOCALID_HOOPA_RING
+	hideobjectat LOCALID_HOOPA_RING, MAP_NEW_BARK_TOWN
+	setobjectxy LOCALID_HOOPA_RING, 20, 11
+	setobjectxyperm LOCALID_HOOPA_RING, 20, 11
+	showobjectat LOCALID_HOOPA_RING, MAP_NEW_BARK_TOWN
+	setvar VAR_0x8004, LOCALID_HOOPA_RING
+	setvar VAR_0x8001, 20
+	setvar VAR_0x8002, 11
+	special Special_HoopaRingSpawnGrow
+	waitstate
+	setvar VAR_0x8000, LOCALID_PLAYER
+	special Special_ObjectEventAbsorb
+	waitstate
+	playse SE_LAVARIDGE_FALL_WARP
+	hideobjectat LOCALID_PLAYER, MAP_NEW_BARK_TOWN
+	setvar VAR_0x8004, LOCALID_HOOPA_RING
+	special Special_HoopaRingShrinkDespawn
+	waitstate
+	hideobjectat LOCALID_HOOPA_RING, MAP_NEW_BARK_TOWN
+	setflag FLAG_HIDE_NEW_BARK_HOOPA_RING
+	removeobject LOCALID_HOOPA_RING
+
+	setflag FLAG_ROUTE34_HOOPA_SCENE
+	releaseall
+	warp MAP_ROUTE34, 36, 55
+	waitstate
+	end
+
+New_Bark_Town_EventScript_HexagonBros::
+	goto_if_set FLAG_HEXAGON_BROS_SCENE_DONE, New_Bark_Town_EventScript_HexagonBros_Done
+	lockall
+	setvar VAR_TEMP_0, 1
 	playbgm MUS_HEXAGONBROS, TRUE
 
-	applymovement LOCALID_PLAYER, Common_Movement_FaceUp
-	waitmovement 0
-
-	special StorePlayerCoordsInVars
-	goto_if_ne VAR_0x8004, 7, New_Bark_Town_EventScript_CameraSnap
-	goto_if_ne VAR_0x8005, 21, New_Bark_Town_EventScript_CameraSnap
 	special SpawnCameraObject
-	applymovement LOCALID_CAMERA, New_Bark_Town_Mov_Camera_PanToResix
+	special StorePlayerCoordsInVars
+	goto_if_eq VAR_0x8005, 11, New_Bark_Town_EventScript_CameraPan_Y11
+	goto_if_eq VAR_0x8005, 12, New_Bark_Town_EventScript_CameraPan_Y12
+	goto_if_eq VAR_0x8005, 14, New_Bark_Town_EventScript_CameraPan_Y14
+	goto New_Bark_Town_EventScript_CameraPan_Y13
+
+New_Bark_Town_EventScript_CameraPan_Y11:
+	applymovement LOCALID_CAMERA, New_Bark_Town_Mov_Camera_PanToResix_Y11
+	goto New_Bark_Town_EventScript_CameraPan_Done
+
+New_Bark_Town_EventScript_CameraPan_Y12:
+	applymovement LOCALID_CAMERA, New_Bark_Town_Mov_Camera_PanToResix_Y12
+	goto New_Bark_Town_EventScript_CameraPan_Done
+
+New_Bark_Town_EventScript_CameraPan_Y14:
+	applymovement LOCALID_CAMERA, New_Bark_Town_Mov_Camera_PanToResix_Y14
+	goto New_Bark_Town_EventScript_CameraPan_Done
+
+New_Bark_Town_EventScript_CameraPan_Y13:
+	applymovement LOCALID_CAMERA, New_Bark_Town_Mov_Camera_PanToResix_Y13
+
+New_Bark_Town_EventScript_CameraPan_Done:
 	waitmovement 0
 	goto New_Bark_Town_EventScript_CameraDone
-
-New_Bark_Town_EventScript_CameraSnap:
-	setvar VAR_0x8004, 7
-	setvar VAR_0x8005, 13
-	special SpawnCameraObjectAtVars
-	special SetCameraFocusCoordsFromVars
 
 New_Bark_Town_EventScript_CameraDone:
 	setspeaker New_Bark_Town_Speaker_Resix
@@ -80,15 +137,25 @@ New_Bark_Town_EventScript_CameraDone:
 	setspeaker New_Bark_Town_Speaker_Resix
 	msgbox New_Bark_Town_Text_Resix_Objectives, MSGBOX_DEFAULT
 	closemessage
+	setspeaker New_Bark_Town_Speaker_Resix
 	msgbox New_Bark_Town_Text_Resix_Purpsix, MSGBOX_DEFAULT
 	closemessage
 
-	applymovement LOCALID_RESIX, New_Bark_Town_Mov_Emote_Sad
-	applymovement LOCALID_BLUSIX, New_Bark_Town_Mov_Emote_Sad
-	applymovement LOCALID_GREESIX, New_Bark_Town_Mov_Emote_Sad
-	applymovement LOCALID_YELLOSIX, New_Bark_Town_Mov_Emote_Sad
-	applymovement LOCALID_BROWSIX, New_Bark_Town_Mov_Emote_Sad
-	waitmovement 0
+	@ Use follower sad emote (FOLLOWER_EMOTION_SAD = 2)
+	setfieldeffectargument 1, MAP_NUM(MAP_NEW_BARK_TOWN)
+	setfieldeffectargument 2, MAP_GROUP(MAP_NEW_BARK_TOWN)
+	setfieldeffectargument 7, 2
+	setfieldeffectargument 0, LOCALID_RESIX
+	dofieldeffect FLDEFF_EMOTE
+	setfieldeffectargument 0, LOCALID_BLUSIX
+	dofieldeffect FLDEFF_EMOTE
+	setfieldeffectargument 0, LOCALID_GREESIX
+	dofieldeffect FLDEFF_EMOTE
+	setfieldeffectargument 0, LOCALID_YELLOSIX
+	dofieldeffect FLDEFF_EMOTE
+	setfieldeffectargument 0, LOCALID_BROWSIX
+	dofieldeffect FLDEFF_EMOTE
+	waitfieldeffect FLDEFF_EMOTE
 
 	setspeaker New_Bark_Town_Speaker_Greesix
 	msgbox New_Bark_Town_Text_Greesix_Pirate, MSGBOX_DEFAULT
@@ -98,29 +165,39 @@ New_Bark_Town_EventScript_CameraDone:
 	msgbox New_Bark_Town_Text_Resix_Hoenn, MSGBOX_DEFAULT
 	closemessage
 
-	applymovement LOCALID_BLUSIX, New_Bark_Town_Mov_Line_Blusix
-	waitmovement 0
-	hideobjectat LOCALID_BLUSIX, MAP_NEW_BARK_TOWN
-	removeobject LOCALID_BLUSIX
+	applymovement LOCALID_BLUSIX, New_Bark_Town_Mov_Line_Bros_Lead
+	applymovement LOCALID_GREESIX, New_Bark_Town_Mov_Line_Bros_Delay4
+	applymovement LOCALID_YELLOSIX, New_Bark_Town_Mov_Line_Bros_Delay8
+	applymovement LOCALID_BROWSIX, New_Bark_Town_Mov_Line_Bros_Delay16
 
-	applymovement LOCALID_GREESIX, New_Bark_Town_Mov_Line_Greesix
-	waitmovement 0
-	hideobjectat LOCALID_GREESIX, MAP_NEW_BARK_TOWN
-	removeobject LOCALID_GREESIX
+	special StorePlayerCoordsInVars
+	goto_if_eq VAR_0x8005, 11, New_Bark_Town_EventScript_Resix_ToPlayer_Y11
+	goto_if_eq VAR_0x8005, 12, New_Bark_Town_EventScript_Resix_ToPlayer_Y12
+	goto_if_eq VAR_0x8005, 14, New_Bark_Town_EventScript_Resix_ToPlayer_Y14
+	goto New_Bark_Town_EventScript_Resix_ToPlayer_Y13
 
-	applymovement LOCALID_YELLOSIX, New_Bark_Town_Mov_Line_Yellosix
-	waitmovement 0
-	hideobjectat LOCALID_YELLOSIX, MAP_NEW_BARK_TOWN
-	removeobject LOCALID_YELLOSIX
+New_Bark_Town_EventScript_Resix_ToPlayer_Y11:
+	applymovement LOCALID_CAMERA, New_Bark_Town_Mov_Resix_ToPlayer_Y11_Delayed
+	applymovement LOCALID_RESIX, New_Bark_Town_Mov_Resix_ToPlayer_Y11_Delayed
+	goto New_Bark_Town_EventScript_Resix_ToPlayer_Done
 
-	applymovement LOCALID_BROWSIX, New_Bark_Town_Mov_Line_Browsix
-	waitmovement 0
-	hideobjectat LOCALID_BROWSIX, MAP_NEW_BARK_TOWN
-	removeobject LOCALID_BROWSIX
+New_Bark_Town_EventScript_Resix_ToPlayer_Y12:
+	applymovement LOCALID_CAMERA, New_Bark_Town_Mov_Resix_ToPlayer_Y12_Delayed
+	applymovement LOCALID_RESIX, New_Bark_Town_Mov_Resix_ToPlayer_Y12_Delayed
+	goto New_Bark_Town_EventScript_Resix_ToPlayer_Done
 
+New_Bark_Town_EventScript_Resix_ToPlayer_Y14:
+	applymovement LOCALID_CAMERA, New_Bark_Town_Mov_Resix_ToPlayer_Y14_Delayed
+	applymovement LOCALID_RESIX, New_Bark_Town_Mov_Resix_ToPlayer_Y14_Delayed
+	goto New_Bark_Town_EventScript_Resix_ToPlayer_Done
+
+New_Bark_Town_EventScript_Resix_ToPlayer_Y13:
+	applymovement LOCALID_CAMERA, New_Bark_Town_Mov_Resix_ToPlayer_Y13_Delayed
+	applymovement LOCALID_RESIX, New_Bark_Town_Mov_Resix_ToPlayer_Y13_Delayed
+
+New_Bark_Town_EventScript_Resix_ToPlayer_Done:
+	waitmovement LOCALID_RESIX
 	applymovement LOCALID_PLAYER, Common_Movement_FaceRight
-	waitmovement 0
-	applymovement LOCALID_RESIX, New_Bark_Town_Mov_Resix_ToPlayer
 	waitmovement 0
 	playse SE_PIN
 	applymovement LOCALID_RESIX, New_Bark_Town_Mov_Resix_Exclaim
@@ -134,8 +211,14 @@ New_Bark_Town_EventScript_CameraDone:
 
 	applymovement LOCALID_RESIX, New_Bark_Town_Mov_Resix_Exit
 	waitmovement 0
+	hideobjectat LOCALID_BLUSIX, MAP_NEW_BARK_TOWN
+	hideobjectat LOCALID_GREESIX, MAP_NEW_BARK_TOWN
+	hideobjectat LOCALID_YELLOSIX, MAP_NEW_BARK_TOWN
+	hideobjectat LOCALID_BROWSIX, MAP_NEW_BARK_TOWN
 	hideobjectat LOCALID_RESIX, MAP_NEW_BARK_TOWN
-	removeobject LOCALID_RESIX
+
+	applymovement LOCALID_CAMERA, New_Bark_Town_Mov_Camera_ReturnToPlayer
+	waitmovement 0
 
 	setflag FLAG_HEXAGON_BROS_SCENE_DONE
 	special RemoveCameraObject
@@ -147,17 +230,28 @@ New_Bark_Town_EventScript_HexagonBros_Done::
 	releaseall
 	end
 
+New_Bark_Town_EventScript_HexagonBros_Trigger::
+	goto_if_set FLAG_HEXAGON_BROS_SCENE_DONE, New_Bark_Town_EventScript_HexagonBros_Trigger_Done
+	call New_Bark_Town_EventScript_ShowHexagonBros
+	goto New_Bark_Town_EventScript_HexagonBros
+
+New_Bark_Town_EventScript_HexagonBros_Trigger_Done:
+	end
+
+New_Bark_Town_EventScript_ShowHexagonBros:
+	showobjectat LOCALID_RESIX, MAP_NEW_BARK_TOWN
+	showobjectat LOCALID_GREESIX, MAP_NEW_BARK_TOWN
+	showobjectat LOCALID_YELLOSIX, MAP_NEW_BARK_TOWN
+	showobjectat LOCALID_BROWSIX, MAP_NEW_BARK_TOWN
+	showobjectat LOCALID_BLUSIX, MAP_NEW_BARK_TOWN
+	return
+
 New_Bark_Town_EventScript_HideHexagonBros:
 	hideobjectat LOCALID_RESIX, MAP_NEW_BARK_TOWN
 	hideobjectat LOCALID_GREESIX, MAP_NEW_BARK_TOWN
 	hideobjectat LOCALID_YELLOSIX, MAP_NEW_BARK_TOWN
 	hideobjectat LOCALID_BROWSIX, MAP_NEW_BARK_TOWN
 	hideobjectat LOCALID_BLUSIX, MAP_NEW_BARK_TOWN
-	removeobject LOCALID_RESIX
-	removeobject LOCALID_GREESIX
-	removeobject LOCALID_YELLOSIX
-	removeobject LOCALID_BROWSIX
-	removeobject LOCALID_BLUSIX
 	return
 
 @ ================================
@@ -196,6 +290,7 @@ New_Bark_Town_Text_PortalAsk_Pallet:
 New_Bark_Town_EventScript_SnagemGrunt1::
 	lock
 	faceplayer
+	setspeaker New_Bark_Town_Speaker_SnagemGrunt1
 	msgbox New_Bark_Town_Text_Grunt1, MSGBOX_NPC
 	closemessage
 	release
@@ -204,12 +299,15 @@ New_Bark_Town_EventScript_SnagemGrunt1::
 New_Bark_Town_EventScript_SnagemGrunt2_Wanderer::
 	lock
 	faceplayer
+	setspeaker New_Bark_Town_Speaker_SnagemGrunt2
 	msgbox New_Bark_Town_Text_Grunt2_AskWanderer, MSGBOX_YESNO
 	goto_if_eq VAR_RESULT, FALSE, New_Bark_Town_EventScript_Grunt2_No
 
 	closemessage
+	setspeaker New_Bark_Town_Speaker_SnagemGrunt2
 	msgbox New_Bark_Town_Text_Grunt2_EasterEgg, MSGBOX_NPC
 	closemessage
+	setspeaker New_Bark_Town_Speaker_SnagemGrunt2
 	msgbox New_Bark_Town_Text_Grunt2_Destroyed, MSGBOX_NPC
 	closemessage
 
@@ -228,6 +326,7 @@ New_Bark_Town_EventScript_Grunt2_No::
 New_Bark_Town_EventScript_SnagemGrunt3::
 	lock
 	faceplayer
+	setspeaker New_Bark_Town_Speaker_SnagemGrunt3
 	msgbox New_Bark_Town_Text_Grunt3, MSGBOX_NPC
 	closemessage
 	release
@@ -239,87 +338,199 @@ New_Bark_Town_Mov_Grunt2_StepAside:
 	walk_up
 	step_end
 
-New_Bark_Town_Mov_Camera_PanToResix:
-	walk_up
-	walk_up
-	walk_up
-	walk_up
-	walk_up
-	walk_up
-	walk_up
-	walk_up
-	step_end
-
-New_Bark_Town_Mov_Emote_Sad:
-	emote_x
-	step_end
-
-New_Bark_Town_Mov_Line_Blusix:
+New_Bark_Town_Mov_Camera_PanToResix_Y11:
+	walk_right
+	walk_right
+	walk_right
 	walk_right
 	walk_right
 	walk_down
 	walk_down
-	walk_down
-	walk_down
-	walk_down
-	walk_down
-	walk_down
-	walk_down
-	walk_down
-	walk_down
 	step_end
 
-New_Bark_Town_Mov_Line_Greesix:
+New_Bark_Town_Mov_Camera_PanToResix_Y12:
+	walk_right
+	walk_right
+	walk_right
+	walk_right
 	walk_right
 	walk_down
-	walk_down
-	walk_down
-	walk_down
-	walk_down
-	walk_down
-	walk_down
-	walk_down
-	walk_down
-	walk_down
 	step_end
 
-New_Bark_Town_Mov_Line_Yellosix:
-	walk_down
-	walk_down
-	walk_down
-	walk_down
-	walk_down
-	walk_down
-	walk_down
-	walk_down
-	walk_down
-	walk_down
+New_Bark_Town_Mov_Camera_PanToResix_Y13:
+	walk_right
+	walk_right
+	walk_right
+	walk_right
+	walk_right
 	step_end
 
-New_Bark_Town_Mov_Line_Browsix:
+New_Bark_Town_Mov_Camera_PanToResix_Y14:
+	walk_right
+	walk_right
+	walk_right
+	walk_right
+	walk_right
+	walk_up
+	step_end
+
+New_Bark_Town_Mov_Camera_ReturnToPlayer:
 	walk_left
-	walk_down
-	walk_down
-	walk_down
-	walk_down
-	walk_down
-	walk_down
-	walk_down
-	walk_down
-	walk_down
-	walk_down
 	step_end
 
-New_Bark_Town_Mov_Resix_ToPlayer:
-	walk_right
+New_Bark_Town_Mov_Line_Bros_Lead:
+	walk_up
+	walk_left
+	walk_left
+	walk_left
+	walk_left
+	walk_left
+	walk_left
+	walk_left
+	walk_left
+	walk_left
+	walk_left
+	walk_left
+	walk_left
+	walk_left
+	walk_left
+	walk_left
+	walk_left
+	step_end
+
+New_Bark_Town_Mov_Line_Bros_Delay4:
+	delay_4
+	walk_up
+	walk_left
+	walk_left
+	walk_left
+	walk_left
+	walk_left
+	walk_left
+	walk_left
+	walk_left
+	walk_left
+	walk_left
+	walk_left
+	walk_left
+	walk_left
+	walk_left
+	walk_left
+	walk_left
+	step_end
+
+New_Bark_Town_Mov_Line_Bros_Delay8:
+	delay_8
+	walk_up
+	walk_left
+	walk_left
+	walk_left
+	walk_left
+	walk_left
+	walk_left
+	walk_left
+	walk_left
+	walk_left
+	walk_left
+	walk_left
+	walk_left
+	walk_left
+	walk_left
+	walk_left
+	walk_left
+	step_end
+
+New_Bark_Town_Mov_Line_Bros_Delay16:
+	delay_16
+	walk_up
+	walk_left
+	walk_left
+	walk_left
+	walk_left
+	walk_left
+	walk_left
+	walk_left
+	walk_left
+	walk_left
+	walk_left
+	walk_left
+	walk_left
+	walk_left
+	walk_left
+	walk_left
+	walk_left
+	step_end
+
+New_Bark_Town_Mov_Resix_ToPlayer_Y11:
+	walk_up
+	walk_up
+	walk_left
+	walk_left
+	walk_left
+	walk_left
+	step_end
+
+New_Bark_Town_Mov_Resix_ToPlayer_Y11_Delayed:
+	delay_16
+	delay_8
+	walk_up
+	walk_up
+	walk_left
+	walk_left
+	walk_left
+	walk_left
+	step_end
+
+New_Bark_Town_Mov_Resix_ToPlayer_Y12:
+	walk_up
+	walk_left
+	walk_left
+	walk_left
+	walk_left
+	step_end
+
+New_Bark_Town_Mov_Resix_ToPlayer_Y12_Delayed:
+	delay_16
+	delay_8
+	walk_up
+	walk_left
+	walk_left
+	walk_left
+	walk_left
+	step_end
+
+New_Bark_Town_Mov_Resix_ToPlayer_Y13:
+	walk_left
+	walk_left
+	walk_left
+	walk_left
+	step_end
+
+New_Bark_Town_Mov_Resix_ToPlayer_Y13_Delayed:
+	delay_16
+	delay_8
+	walk_left
+	walk_left
+	walk_left
+	walk_left
+	step_end
+
+New_Bark_Town_Mov_Resix_ToPlayer_Y14:
 	walk_down
+	walk_left
+	walk_left
+	walk_left
+	walk_left
+	step_end
+
+New_Bark_Town_Mov_Resix_ToPlayer_Y14_Delayed:
+	delay_16
+	delay_8
 	walk_down
-	walk_down
-	walk_down
-	walk_down
-	walk_down
-	walk_down
-	walk_down
+	walk_left
+	walk_left
+	walk_left
+	walk_left
 	step_end
 
 New_Bark_Town_Mov_Resix_Exclaim:
@@ -331,11 +542,15 @@ New_Bark_Town_Mov_Resix_FacePlayer:
 	step_end
 
 New_Bark_Town_Mov_Resix_Exit:
-	face_down
 	walk_down
-	walk_down
-	walk_down
-	walk_down
+	walk_left
+	walk_left
+	walk_left
+	walk_left
+	walk_left
+	walk_left
+	walk_left
+	walk_left
 	step_end
 
 New_Bark_Town_Text_Grunt1:
@@ -373,6 +588,18 @@ New_Bark_Town_Speaker_Yellosix:
 New_Bark_Town_Speaker_Browsix:
 	.string "BROWSIX$"
 
+New_Bark_Town_Speaker_SnagemGrunt1:
+	.string "GRUNT$"
+
+New_Bark_Town_Speaker_SnagemGrunt2:
+	.string "GRUNT$"
+
+New_Bark_Town_Speaker_SnagemGrunt3:
+	.string "GRUNT$"
+
+New_Bark_Town_Speaker_Birch:
+	.string "BIRCH$"
+
 @ ---------- TEXT (Hexagon Bros) ----------
 
 New_Bark_Town_Text_Resix_SoundOff:
@@ -394,11 +621,11 @@ New_Bark_Town_Text_Browsix_Name:
 New_Bark_Town_Text_Resix_Objectives:
 	.string "Objective check. Stay together,\n"
 	.string "keep a clear head, and find\l"
-	.string "Purpsix.$"
+	.string "PURPSIX.$"
 
 New_Bark_Town_Text_Resix_Purpsix:
 	.string "... ...\p"
-	.string "I miss Purpsix!!$"
+	.string "I miss PURPSIX!!$"
 
 New_Bark_Town_Text_Greesix_Pirate:
 	.string "Remember what the Pirate said!$"
@@ -407,7 +634,7 @@ New_Bark_Town_Text_Resix_Hoenn:
 	.string "Oh right, he said he seen one\n"
 	.string "of us morons in Hoenn.\p"
 	.string "We haven't been there yet so it\n"
-	.string "has to be Purpsix!\p"
+	.string "has to be PURPSIX!\p"
 	.string "That's it, we head to Hoenn.\p"
 	.string "Move out!$"
 
@@ -426,8 +653,25 @@ NewBarkTown_EventScript_Door::
 	msgbox NewBarkTown_EventScript_Door_Text, MSGBOX_SIGN
 	end
 
+New_Bark_Town_EventScript_HoopaRing::
+	end
+
 NewBarkTown_EventScript_Door_Text:
 	.string "It's locked.$"
+
+New_Bark_Town_Text_Birch_Call:
+	.string "Hey Champ! How did things go with\n"
+	.string "Kurt? ... ... Ah I see. Sorry you\l"
+	.string "had to deal with that.\p"
+	.string "Are you still in Azalea Town? ...\l"
+	.string "... Huh?? New Bark Town!\p"
+	.string "Geez I was hoping you could check\n"
+	.string "out Ilex Forest to see if Celebi\l"
+	.string "was there.\p"
+	.string "Oh wait! Victor is on Route 34 and\n"
+	.string "he has a TIME AMULET.\p"
+	.string "I can warp you over to him.\n"
+	.string "Doing it now!$"
 
 NewBarkTown_EventScript_PlayersHouseMailbox::
 	msgbox NewBarkTown_EventScript_PlayersHouseMailbox_Text, MSGBOX_SIGN
@@ -452,26 +696,31 @@ NewBarkTown_EventScript_LabSign_Text:
 
 New_Bark_Town_EventScript_Resix_Talk::
 	faceplayer
+	setspeaker New_Bark_Town_Speaker_Resix
 	msgbox New_Bark_Town_Text_Resix_Talk, MSGBOX_NPC
 	end
 
 New_Bark_Town_EventScript_Blusix_Talk::
 	faceplayer
+	setspeaker New_Bark_Town_Speaker_Blusix
 	msgbox New_Bark_Town_Text_Blusix_Talk, MSGBOX_NPC
 	end
 
 New_Bark_Town_EventScript_Greesix_Talk::
 	faceplayer
+	setspeaker New_Bark_Town_Speaker_Greesix
 	msgbox New_Bark_Town_Text_Greesix_Talk, MSGBOX_NPC
 	end
 
 New_Bark_Town_EventScript_Yellosix_Talk::
 	faceplayer
+	setspeaker New_Bark_Town_Speaker_Yellosix
 	msgbox New_Bark_Town_Text_Yellosix_Talk, MSGBOX_NPC
 	end
 
 New_Bark_Town_EventScript_Browsix_Talk::
 	faceplayer
+	setspeaker New_Bark_Town_Speaker_Browsix
 	msgbox New_Bark_Town_Text_Browsix_Talk, MSGBOX_NPC
 	end
 

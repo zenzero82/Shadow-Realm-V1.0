@@ -1,13 +1,21 @@
 CherrygroveCity_House1_MapScripts::
 	.byte 0
 
+CherrygroveCity_House1_Speaker_Man:
+	.string "DAN$"
+
+CherrygroveCity_House1_Speaker_Boy:
+	.string "RYAN$"
+
 CherrygroveCity_House1_EventScript_Man::
 	faceplayer
+	setspeaker CherrygroveCity_House1_Speaker_Man
 	msgbox CherrygroveCity_House1_Text_Man, MSGBOX_NPC
 	end
 
 CherrygroveCity_House1_EventScript_Boy::
 	faceplayer
+	setspeaker CherrygroveCity_House1_Speaker_Boy
 	msgbox CherrygroveCity_House1_Text_Boy, MSGBOX_NPC
 	end
 

@@ -17,6 +17,7 @@
 #include "field_poison.h"
 #include "field_screen_effect.h"
 #include "field_specials.h"
+#include "field_weather.h"
 #include "fldeff_misc.h"
 #include "follower_npc.h"
 #include "item_menu.h"
@@ -30,10 +31,13 @@
 #include "secret_base.h"
 #include "sound.h"
 #include "start_menu.h"
+#include "option_menu.h"
 #include "trainer_see.h"
 #include "trainer_hill.h"
+#include "overworld.h"
 #include "vs_seeker.h"
 #include "wild_encounter.h"
+#include "overworld_wild_encounters.h"
 #include "shadow_heart.h"
 #include "roaming_shadow_hunter.h"
 #include "constants/event_bg.h"
@@ -139,6 +143,7 @@ void FieldClearPlayerInput(struct FieldInput *input)
     input->input_field_1_1 = FALSE;
     input->input_field_1_2 = FALSE;
     input->input_field_1_3 = FALSE;
+    input->input_field_1_4 = FALSE;
     input->dpadDirection = 0;
 }
 
@@ -162,6 +167,14 @@ void FieldGetPlayerInput(struct FieldInput *input, u16 newKeys, u16 heldKeys)
                 input->pressedBButton = TRUE;
             if (newKeys & R_BUTTON && !FlagGet(DN_FLAG_SEARCHING))
                 input->pressedRButton = TRUE;
+        }
+
+        if ((heldKeys & (START_BUTTON | SELECT_BUTTON | L_BUTTON)) == (START_BUTTON | SELECT_BUTTON | L_BUTTON)
+         && (newKeys & (START_BUTTON | SELECT_BUTTON | L_BUTTON)))
+        {
+            input->input_field_1_4 = TRUE;
+            input->pressedStartButton = FALSE;
+            input->pressedSelectButton = FALSE;
         }
 
         if (heldKeys & (DPAD_UP | DPAD_DOWN | DPAD_LEFT | DPAD_RIGHT))
@@ -263,6 +276,16 @@ int ProcessPlayerFieldInput(struct FieldInput *input)
     }
     if (input->pressedAButton && TrySetupDiveDownScript() == TRUE)
         return TRUE;
+    if (input->input_field_1_4)
+    {
+        PlaySE(SE_WIN_OPEN);
+        PlayRainStoppingSoundEffect();
+        CleanupOverworldWindowsAndTilemaps();
+        OptionMenu_SetNewGameSetup(TRUE);
+        gMain.savedCallback = CB2_ReturnToField;
+        SetMainCallback2(CB2_InitOptionMenu);
+        return TRUE;
+    }
     if (input->pressedStartButton)
     {
         PlaySE(SE_WIN_OPEN);
@@ -867,6 +890,14 @@ static bool8 CheckStandardWildEncounter(u16 metatileBehavior)
 {
     if (FlagGet(OW_FLAG_NO_ENCOUNTER))
         return FALSE;
+
+    if (gSaveBlock2Ptr->optionsOverworldWildEncounters == OPTIONS_OVERWORLD_WILD_ON)
+    {
+        if (MetatileBehavior_IsLandWildEncounter(metatileBehavior))
+            OverworldWildEncounters_TrySpawn();
+        sPrevMetatileBehavior = metatileBehavior;
+        return FALSE;
+    }
 
     if (sWildEncounterImmunitySteps < 4)
     {

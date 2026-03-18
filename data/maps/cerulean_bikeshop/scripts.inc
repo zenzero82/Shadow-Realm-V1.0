@@ -73,6 +73,16 @@ CeruleanBikeShop_EventScript_Looker_After::
 	setspeaker CeruleanBikeShop_Speaker_Looker
 	msgbox CeruleanBikeShop_Text_Looker_After, MSGBOX_NPC
 	closemessage
+	setflag FLAG_QUEST_CERULEAN_NPC_BIKESHOP_LOOKER
+	call QuestJournal_EventScript_CheckCeruleanCityNPCs
+	getplayerxy VAR_0x8004, VAR_0x8005
+	compare VAR_0x8004, 5
+	goto_if_ne CeruleanBikeShop_EventScript_Looker_ExitCheckDone
+	compare VAR_0x8005, 6
+	goto_if_eq CeruleanBikeShop_EventScript_Looker_ExitAround
+	compare VAR_0x8005, 7
+	goto_if_eq CeruleanBikeShop_EventScript_Looker_ExitAround
+CeruleanBikeShop_EventScript_Looker_ExitCheckDone::
 	compare VAR_TEMP_1, 0
 	goto_if_eq CeruleanBikeShop_EventScript_Looker_ExitLeft
 	compare VAR_TEMP_1, 2
@@ -101,9 +111,17 @@ CeruleanBikeShop_EventScript_Looker_ExitDirect::
 	waitmovement 0
 	goto CeruleanBikeShop_EventScript_Looker_ExitDone
 
+CeruleanBikeShop_EventScript_Looker_ExitAround::
+	applymovement LOCALID_LOOKER, CeruleanBikeShop_Movement_Looker_ExitAround
+	waitmovement 0
+	goto CeruleanBikeShop_EventScript_Looker_ExitDone
+
 CeruleanBikeShop_EventScript_Looker_ExitDone::
+	turnobject LOCALID_LOOKER, DIR_SOUTH
 	setflag FLAG_HIDE_CERULEAN_BIKESHOP_LOOKER
 	removeobject LOCALID_LOOKER
+	playse SE_EXIT
+	waitse
 	releaseall
 	end
 
@@ -165,4 +183,11 @@ CeruleanBikeShop_Movement_Looker_ExitDirect:
 	walk_down
 	walk_down
 	walk_down
+	step_end
+
+CeruleanBikeShop_Movement_Looker_ExitAround:
+	walk_left
+	walk_down
+	walk_down
+	walk_right
 	step_end

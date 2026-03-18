@@ -26,19 +26,6 @@
   ],
   "object_events": [
     {
-      "graphics_id": "OBJ_EVENT_GFX_HOOPA_RING",
-      "x": 21,
-      "y": 16,
-      "elevation": 0,
-      "movement_type": "MOVEMENT_TYPE_NONE",
-      "movement_range_x": 0,
-      "movement_range_y": 0,
-      "trainer_type": "TRAINER_TYPE_NONE",
-      "trainer_sight_or_berry_tree_id": "0",
-      "script": "New_Bark_Town_EventScript_Portal_ToPalletForest",
-      "flag": "0"
-    },
-    {
       "graphics_id": "OBJ_EVENT_GFX_RESIX",
       "x": 7,
       "y": 13,
@@ -49,7 +36,7 @@
       "trainer_type": "TRAINER_TYPE_NONE",
       "trainer_sight_or_berry_tree_id": "0",
       "script": "New_Bark_Town_EventScript_Resix_Talk",
-      "flag": "0"
+      "flag": "FLAG_HEXAGON_BROS_SCENE_DONE"
     },
     {
       "graphics_id": "OBJ_EVENT_GFX_GREESIX",
@@ -62,7 +49,7 @@
       "trainer_type": "TRAINER_TYPE_NONE",
       "trainer_sight_or_berry_tree_id": "0",
       "script": "New_Bark_Town_EventScript_Greesix_Talk",
-      "flag": "0"
+      "flag": "FLAG_HEXAGON_BROS_SCENE_DONE"
     },
     {
       "graphics_id": "OBJ_EVENT_GFX_YELLOSIX",
@@ -75,7 +62,7 @@
       "trainer_type": "TRAINER_TYPE_NONE",
       "trainer_sight_or_berry_tree_id": "0",
       "script": "New_Bark_Town_EventScript_Yellosix_Talk",
-      "flag": "0"
+      "flag": "FLAG_HEXAGON_BROS_SCENE_DONE"
     },
     {
       "graphics_id": "OBJ_EVENT_GFX_BROWSIX",
@@ -88,7 +75,7 @@
       "trainer_type": "TRAINER_TYPE_NONE",
       "trainer_sight_or_berry_tree_id": "0",
       "script": "New_Bark_Town_EventScript_Browsix_Talk",
-      "flag": "0"
+      "flag": "FLAG_HEXAGON_BROS_SCENE_DONE"
     },
     {
       "graphics_id": "OBJ_EVENT_GFX_BLUSIX",
@@ -101,7 +88,20 @@
       "trainer_type": "TRAINER_TYPE_NONE",
       "trainer_sight_or_berry_tree_id": "0",
       "script": "New_Bark_Town_EventScript_Blusix_Talk",
-      "flag": "0"
+      "flag": "FLAG_HEXAGON_BROS_SCENE_DONE"
+    },
+    {
+      "graphics_id": "OBJ_EVENT_GFX_HOOPA_RING_TIME_AMULET",
+      "x": 20,
+      "y": 11,
+      "elevation": 0,
+      "movement_type": "MOVEMENT_TYPE_NONE",
+      "movement_range_x": 0,
+      "movement_range_y": 0,
+      "trainer_type": "TRAINER_TYPE_NONE",
+      "trainer_sight_or_berry_tree_id": "0",
+      "script": "New_Bark_Town_EventScript_HoopaRing",
+      "flag": "FLAG_HIDE_NEW_BARK_HOOPA_RING"
     }
   ],
   "warp_events": [
@@ -144,8 +144,35 @@
   "coord_events": [
     {
       "type": "trigger",
-      "x": 7,
-      "y": 21,
+      "x": 2,
+      "y": 11,
+      "elevation": 0,
+      "var": "VAR_TEMP_0",
+      "var_value": "0",
+      "script": "NULL"
+    },
+    {
+      "type": "trigger",
+      "x": 2,
+      "y": 12,
+      "elevation": 0,
+      "var": "VAR_TEMP_0",
+      "var_value": "0",
+      "script": "NULL"
+    },
+    {
+      "type": "trigger",
+      "x": 2,
+      "y": 13,
+      "elevation": 0,
+      "var": "VAR_TEMP_0",
+      "var_value": "0",
+      "script": "NULL"
+    },
+    {
+      "type": "trigger",
+      "x": 2,
+      "y": 14,
       "elevation": 0,
       "var": "VAR_TEMP_0",
       "var_value": "0",

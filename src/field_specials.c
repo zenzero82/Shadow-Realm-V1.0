@@ -70,6 +70,7 @@
 #include "constants/battle_frontier.h"
 #include "constants/weather.h"
 #include "constants/metatile_labels.h"
+#include "constants/species.h"
 #include "constants/rgb.h"
 #include "palette.h"
 #include "battle_util.h"
@@ -78,6 +79,29 @@
 #define TAG_ITEM_ICON 5500
 
 #define GFXTAG_MULTICHOICE_SCROLL_ARROWS 2000
+
+#define KUKUI_SHADOW_MEOWTH_ID 8
+
+static s8 FindKukuiShadowMeowthIndex(void)
+{
+    s32 i;
+
+    for (i = 0; i < PARTY_SIZE; i++)
+    {
+        struct Pokemon *mon = &gPlayerParty[i];
+
+        if (GetMonData(mon, MON_DATA_SPECIES, NULL) != SPECIES_MEOWTH)
+            continue;
+        if (!GetMonData(mon, MON_DATA_IS_SHADOW, NULL))
+            continue;
+        if (GetMonData(mon, MON_DATA_SHADOW_ID, NULL) != KUKUI_SHADOW_MEOWTH_ID)
+            continue;
+
+        return i;
+    }
+
+    return -1;
+}
 #define PALTAG_MULTICHOICE_SCROLL_ARROWS 100
 
 #define ELEVATOR_WINDOW_WIDTH  3
@@ -4789,6 +4813,45 @@ bool32 CheckPartyHasSpecies(u32 givenSpecies)
             return TRUE;
 
     return FALSE;
+}
+
+void Special_Kukui_CheckShadowMeowthInParty(void)
+{
+    gSpecialVar_Result = (FindKukuiShadowMeowthIndex() >= 0);
+}
+
+void Special_Kukui_TakeShadowMeowth(void)
+{
+    s8 index = FindKukuiShadowMeowthIndex();
+
+    if (index < 0 || gSaveBlock1Ptr->kukuiShadowMonActive)
+    {
+        gSpecialVar_Result = FALSE;
+        return;
+    }
+
+    CopyMon(&gSaveBlock1Ptr->kukuiShadowMon, &gPlayerParty[index], sizeof(struct Pokemon));
+    gSaveBlock1Ptr->kukuiShadowMonActive = TRUE;
+    ZeroMonData(&gPlayerParty[index]);
+    CompactPartySlots();
+    CalculatePlayerPartyCount();
+    gSpecialVar_Result = TRUE;
+}
+
+void Special_Kukui_ReturnShadowMeowth(void)
+{
+    u8 result;
+
+    if (!gSaveBlock1Ptr->kukuiShadowMonActive)
+    {
+        gSpecialVar_Result = FALSE;
+        return;
+    }
+
+    result = GiveMonToPlayer(&gSaveBlock1Ptr->kukuiShadowMon);
+    ZeroMonData(&gSaveBlock1Ptr->kukuiShadowMon);
+    gSaveBlock1Ptr->kukuiShadowMonActive = FALSE;
+    gSpecialVar_Result = result;
 }
 
 void UseBlankMessageToCancelPokemonPic(void)

@@ -1974,7 +1974,7 @@ const struct Ability gAbilitiesInfo[ABILITIES_COUNT] =
     [ABILITY_QUICK_DRAW] =
     {
         .name = _("Quick Draw"),
-        .description = COMPOUND_STRING("Moves first occasionally."),
+        .description = COMPOUND_STRING("30% chance to move first."),
         .aiRating = 4,
     },
 

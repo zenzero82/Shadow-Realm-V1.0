@@ -61,7 +61,7 @@ enum
 
 #define TAG_HEALTHBAR_PAL               TAG_HEALTHBAR_PLAYER1_TILE
 #define TAG_HEALTHBOX_PAL               TAG_HEALTHBOX_PLAYER1_PAL
-#define TAG_SHADOW_PAL                  TAG_HEALTHBOX_PLAYER1_TILE
+#define TAG_SHADOW_PAL                  TAG_HEALTHBOX_FRAME_OPPONENT1_PAL
 
 #define TAG_SHADOW_TILE                 0xD759
 
@@ -155,5 +155,9 @@ void UpdateAbilityPopup(u8 battlerId);
 void CategoryIcons_LoadSpritesGfx(void);
 void TryToAddMoveInfoWindow(void);
 void TryToHideMoveInfoWindow(void);
+
+extern u8 gStatusSummaryBarPalSlot;
+extern u8 gStatusSummaryBallsPalSlot;
+void ReserveStatusSummaryPalettes(void);
 
 #endif // GUARD_BATTLE_INTERFACE_H

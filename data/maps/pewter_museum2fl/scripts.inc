@@ -16,6 +16,8 @@ pewter_museum2fl_EventScript_Nerd::
 	setspeaker pewter_museum2fl_Speaker_Nerd
 	msgbox pewter_museum2fl_Text_Nerd, MSGBOX_DEFAULT
 	closemessage
+	setflag FLAG_QUEST_PEWTER_NPC_MUSEUM2F_NERD
+	call QuestJournal_EventScript_CheckPewterCityNPCs
 	release
 	end
 
@@ -25,6 +27,8 @@ pewter_museum2fl_EventScript_Balding::
 	setspeaker pewter_museum2fl_Speaker_Balding
 	msgbox pewter_museum2fl_Text_Balding, MSGBOX_DEFAULT
 	closemessage
+	setflag FLAG_QUEST_PEWTER_NPC_MUSEUM2F_BALDING
+	call QuestJournal_EventScript_CheckPewterCityNPCs
 	release
 	end
 
@@ -34,6 +38,8 @@ pewter_museum2fl_EventScript_Twin::
 	setspeaker pewter_museum2fl_Speaker_Twin
 	msgbox pewter_museum2fl_Text_Twin, MSGBOX_DEFAULT
 	closemessage
+	setflag FLAG_QUEST_PEWTER_NPC_MUSEUM2F_TWIN
+	call QuestJournal_EventScript_CheckPewterCityNPCs
 	release
 	end
 

@@ -52,6 +52,7 @@ script Route1_AfterScene {
     goto_if_ne (VAR_RESULT, 0, Route1_SkipDex)
 
     setflag (FLAG_SYS_POKEDEX_GET)
+    setflag (FLAG_DEXNAV_GET)
     msgbox (T_R1_GetDex, MSGBOX_DEFAULT)
 
 Route1_SkipDex:

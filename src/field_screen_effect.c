@@ -730,6 +730,8 @@ void Task_DoDoorWarp(u8 taskId)
     switch (task->tState)
     {
     case DOORWARP_OPEN_DOOR:
+        if (FieldIsDoorAnimationRunning())
+            return;
         // Stop running.
         if (TestPlayerAvatarFlags(PLAYER_AVATAR_FLAG_DASH))
             SetPlayerAvatarTransitionFlags(PLAYER_AVATAR_FLAG_ON_FOOT);

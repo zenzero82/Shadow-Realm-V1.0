@@ -19,3 +19,39 @@ pewter_pokemart_Pokemart:
 	.2byte ITEM_PARALYZE_HEAL
 	.2byte ITEM_AWAKENING
 	pokemartlistend
+
+pewter_pokemart_Speaker_Lass:
+	.string "KARA$"
+
+pewter_pokemart_Speaker_Youngster:
+	.string "JOSH$"
+
+pewter_pokemart_EventScript_Lass::
+	lock
+	faceplayer
+	setspeaker pewter_pokemart_Speaker_Lass
+	msgbox pewter_pokemart_Text_Lass, MSGBOX_DEFAULT
+	closemessage
+	setflag FLAG_QUEST_PEWTER_NPC_POKEMART_LASS
+	call QuestJournal_EventScript_CheckPewterCityNPCs
+	release
+	end
+
+pewter_pokemart_EventScript_Youngster::
+	lock
+	faceplayer
+	setspeaker pewter_pokemart_Speaker_Youngster
+	msgbox pewter_pokemart_Text_Youngster, MSGBOX_DEFAULT
+	closemessage
+	setflag FLAG_QUEST_PEWTER_NPC_POKEMART_YOUNGSTER
+	call QuestJournal_EventScript_CheckPewterCityNPCs
+	release
+	end
+
+pewter_pokemart_Text_Lass:
+	.string "Pewter stays pretty calm.\n"
+	.string "Even with the rumors, people\l"
+	.string "still say hello.$"
+
+pewter_pokemart_Text_Youngster:
+	.string "I'm saving for REPELS.$"

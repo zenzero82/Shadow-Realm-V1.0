@@ -1,2 +1,71 @@
 vermilion_gym_MapScripts::
 	.byte 0
+
+VermilionCity_Gym_EventScript_TrashCan1::
+	goto VermilionCity_Gym_EventScript_TrashCanCommon
+
+VermilionCity_Gym_EventScript_TrashCan2::
+	goto VermilionCity_Gym_EventScript_TrashCanCommon
+
+VermilionCity_Gym_EventScript_TrashCan3::
+	goto VermilionCity_Gym_EventScript_TrashCanCommon
+
+VermilionCity_Gym_EventScript_TrashCan4::
+	goto VermilionCity_Gym_EventScript_TrashCanCommon
+
+VermilionCity_Gym_EventScript_TrashCan5::
+	goto VermilionCity_Gym_EventScript_TrashCanCommon
+
+VermilionCity_Gym_EventScript_TrashCan6::
+	goto VermilionCity_Gym_EventScript_TrashCanCommon
+
+VermilionCity_Gym_EventScript_TrashCan7::
+	goto VermilionCity_Gym_EventScript_TrashCanCommon
+
+VermilionCity_Gym_EventScript_TrashCan8::
+	goto VermilionCity_Gym_EventScript_TrashCanCommon
+
+VermilionCity_Gym_EventScript_TrashCan9::
+	goto VermilionCity_Gym_EventScript_TrashCanCommon
+
+VermilionCity_Gym_EventScript_TrashCan10::
+	goto VermilionCity_Gym_EventScript_TrashCanCommon
+
+VermilionCity_Gym_EventScript_TrashCan11::
+	goto VermilionCity_Gym_EventScript_TrashCanCommon
+
+VermilionCity_Gym_EventScript_TrashCan12::
+	goto VermilionCity_Gym_EventScript_TrashCanCommon
+
+VermilionCity_Gym_EventScript_TrashCan13::
+	goto VermilionCity_Gym_EventScript_TrashCanCommon
+
+VermilionCity_Gym_EventScript_TrashCan14::
+	goto VermilionCity_Gym_EventScript_TrashCanCommon
+
+VermilionCity_Gym_EventScript_TrashCan15::
+	goto VermilionCity_Gym_EventScript_TrashCanCommon
+
+VermilionCity_Gym_EventScript_TrashCanCommon::
+	msgbox VermilionCity_Gym_Text_TrashCan, MSGBOX_SIGN
+	end
+
+VermilionCity_Gym_EventScript_GymStatue::
+	goto_if_set FLAG_BADGE11_GET, VermilionCity_Gym_EventScript_GymStatuePostVictory
+	msgbox VermilionCity_Gym_Text_GymStatue, MSGBOX_SIGN
+	end
+
+VermilionCity_Gym_EventScript_GymStatuePostVictory::
+	msgbox VermilionCity_Gym_Text_GymStatuePlayerWon, MSGBOX_SIGN
+	end
+
+VermilionCity_Gym_Text_TrashCan:
+	.string "Just trash here.$"
+
+VermilionCity_Gym_Text_GymStatue:
+	.string "VERMILION GYM\n"
+	.string "LEADER: LT. SURGE$"
+
+VermilionCity_Gym_Text_GymStatuePlayerWon:
+	.string "WINNING TRAINERS:\n"
+	.string "RED, GARY, GOLD$"

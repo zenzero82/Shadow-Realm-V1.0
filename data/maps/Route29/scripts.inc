@@ -1,23 +1,39 @@
 Route29_MapScripts::
 	.byte 0
 
+Route29_Speaker_Youngster:
+	.string "RICK$"
+
+Route29_Speaker_Lass:
+	.string "EMMA$"
+
+Route29_Speaker_FatMan:
+	.string "GORDON$"
+
+Route29_Speaker_Boy:
+	.string "TOM$"
+
 Route29_EventScript_Youngster::
 	faceplayer
+	setspeaker Route29_Speaker_Youngster
 	msgbox Route29_Text_Youngster, MSGBOX_NPC
 	end
 
 Route29_EventScript_Lass::
 	faceplayer
+	setspeaker Route29_Speaker_Lass
 	msgbox Route29_Text_Lass, MSGBOX_NPC
 	end
 
 Route29_EventScript_FatMan::
 	faceplayer
+	setspeaker Route29_Speaker_FatMan
 	msgbox Route29_Text_FatMan, MSGBOX_NPC
 	end
 
 Route29_EventScript_Boy::
 	faceplayer
+	setspeaker Route29_Speaker_Boy
 	msgbox Route29_Text_Boy, MSGBOX_NPC
 	end
 

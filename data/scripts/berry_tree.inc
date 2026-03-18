@@ -260,7 +260,7 @@ BerryTree_Text_ItsSoftLoamySoil:
 	.string "It's soft, loamy soil.$"
 
 BerryTree_Text_WantToPlant:
-	.string "It's soft, loamy soil.\n"
+	.string "It seems like a BERRY can be planted.\p"
 	.string "Want to plant a BERRY?$"
 
 BerryTree_Text_PlantedOneBerry:

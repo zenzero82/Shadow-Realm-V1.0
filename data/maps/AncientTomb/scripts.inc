@@ -58,7 +58,7 @@ AncientTomb_EventScript_Registeel::
 	lock
 	faceplayer
 	waitse
-	playmoncry SPECIES_REGISTEEL, CRY_MODE_ENCOUNTER
+	playmoncry SPECIES_REGISTEEL, CRY_MODE_NORMAL
 	delay 40
 	waitmoncry
 	setwildbattle SPECIES_REGISTEEL, 40

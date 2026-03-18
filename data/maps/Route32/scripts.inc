@@ -23,6 +23,21 @@ Route32_Speaker_Fisherman3:
 Route32_Speaker_BirdKeeper:
 	.string "MILO$"
 
+Route32_Speaker_AquaGrunt:
+	.string "MASON$"
+
+Route32_Speaker_FatMan:
+	.string "HANK$"
+
+Route32_Speaker_Camper:
+	.string "CALEB$"
+
+Route32_Speaker_YoungsterNPC:
+	.string "OLLIE$"
+
+Route32_Speaker_Cooltrainer:
+	.string "KARA$"
+
 @ =========================================================
 @ TRAINERS
 @ =========================================================
@@ -105,22 +120,32 @@ Route32_EventScript_BirdKeeper_After::
 
 Route32_EventScript_FatMan::
 	faceplayer
+	setspeaker Route32_Speaker_FatMan
 	msgbox Route32_Text_FatMan, MSGBOX_NPC
 	end
 
 Route32_EventScript_Camper::
 	faceplayer
+	setspeaker Route32_Speaker_Camper
 	msgbox Route32_Text_Camper, MSGBOX_NPC
 	end
 
 Route32_EventScript_YoungsterNPC::
 	faceplayer
+	setspeaker Route32_Speaker_YoungsterNPC
 	msgbox Route32_Text_YoungsterNPC, MSGBOX_NPC
 	end
 
 Route32_EventScript_Cooltrainer::
 	faceplayer
+	setspeaker Route32_Speaker_Cooltrainer
 	msgbox Route32_Text_Cooltrainer, MSGBOX_NPC
+	end
+
+Route32_EventScript_AquaGrunt::
+	faceplayer
+	setspeaker Route32_Speaker_AquaGrunt
+	msgbox Route32_Text_AquaGrunt, MSGBOX_NPC
 	end
 
 @ =========================================================
@@ -217,6 +242,10 @@ Route32_Text_YoungsterNPC:
 Route32_Text_Cooltrainer:
 	.string "I keep my team ready for the cave.\n"
 	.string "It's rough down there.$"
+
+Route32_Text_AquaGrunt:
+	.string "Can't let you through this way.\n"
+	.string "Scram.$"
 
 Route32_Text_SignRuins:
 	.string "RUINS OF ALPH AHEAD.$"

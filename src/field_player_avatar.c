@@ -24,6 +24,7 @@
 #include "task.h"
 #include "tv.h"
 #include "wild_encounter.h"
+#include "overworld_wild_encounters.h"
 #include "constants/abilities.h"
 #include "constants/event_objects.h"
 #include "constants/event_object_movement.h"
@@ -891,8 +892,13 @@ u8 CheckForObjectEventCollision(struct ObjectEvent *objectEvent, s16 x, s16 y, u
         IncrementGameStat(GAME_STAT_JUMPED_DOWN_LEDGES);
         return COLLISION_LEDGE_JUMP;
     }
-    if (collision == COLLISION_OBJECT_EVENT && TryPushBoulder(x, y, direction))
-        return COLLISION_PUSHED_BOULDER;
+    if (collision == COLLISION_OBJECT_EVENT)
+    {
+        if (objectEvent->isPlayer && OverworldWildEncounters_TryStartBattleAtCoords(x, y, objectEvent->currentElevation))
+            return COLLISION_OBJECT_EVENT;
+        if (TryPushBoulder(x, y, direction))
+            return COLLISION_PUSHED_BOULDER;
+    }
 
     if (collision == COLLISION_NONE)
     {

@@ -22,21 +22,32 @@ NewBarkTown_Lab_Speaker_Rowan:
 @ =================================================
 
 NewBarkTown_Lab_EventScript_Silver::
+	lock
 	goto_if_set FLAG_SHADOW_TRACKER_UNLOCKED, NewBarkTown_Lab_EventScript_Silver_After
 	setspeaker NewBarkTown_Lab_Speaker_Silver
 	msgbox NewBarkTown_Lab_Text_Silver_Familiar, MSGBOX_DEFAULT
 	closemessage
+	playse SE_PIN
+	applymovement LOCALID_SILVER, NewBarkTown_Lab_Movement_Silver_Exclaim
+	waitmovement 0
 	applymovement LOCALID_SILVER, Common_Movement_FacePlayer
 	waitmovement 0
 	setspeaker NewBarkTown_Lab_Speaker_Silver
-	msgbox NewBarkTown_Lab_Text_Silver_GetLost, MSGBOX_NPC
+	msgbox NewBarkTown_Lab_Text_Silver_Leave, MSGBOX_NPC
+	closemessage
+	applymovement LOCALID_SILVER, NewBarkTown_Lab_Movement_Silver_Exit
+	waitmovement 0
+	playse SE_EXIT
+	removeobject LOCALID_SILVER
 	setflag FLAG_SHADOW_TRACKER_UNLOCKED
 	call NewBarkTown_Lab_EventScript_RowanCall
+	release
 	end
 
 NewBarkTown_Lab_EventScript_Silver_After::
 	setspeaker NewBarkTown_Lab_Speaker_Silver
-	msgbox NewBarkTown_Lab_Text_Silver_GetLost, MSGBOX_NPC
+	msgbox NewBarkTown_Lab_Text_Silver_Leave, MSGBOX_NPC
+	release
 	end
 
 NewBarkTown_Lab_EventScript_RowanCall::
@@ -50,12 +61,16 @@ NewBarkTown_Lab_EventScript_RowanCall::
 @ =================================================
 
 NewBarkTown_Lab_Text_Silver_Familiar:
-	.string "This place feels familiar for\n"
-	.string "some reason...$"
+	.string "This place is familiar...$"
 
-NewBarkTown_Lab_Text_Silver_GetLost:
-	.string "Get lost, kid. This script\n"
-	.string "isn't ready yet.$"
+NewBarkTown_Lab_Text_Silver_Leave:
+	.string "Who are you?\p"
+	.string "Whatever, I came looking for\n"
+	.string "Prof. Elm but doesn't seem like\n"
+	.string "he's around. Not really like I\n"
+	.string "care much for taking orders.\l"
+	.string "Even from family...\p"
+	.string "Out of my way.$"
 
 NewBarkTown_Lab_Text_Rowan_Call:
 	.string "Hello there! Lucas and Dawn\n"
@@ -64,6 +79,24 @@ NewBarkTown_Lab_Text_Rowan_Call:
 	.string "shadow pokemon fled.\p"
 	.string "Your Shadow Tracker should\n"
 	.string "pick up their signals.$"
+
+NewBarkTown_Lab_Movement_Silver_Exclaim:
+	emote_exclamation_mark
+	step_end
+
+NewBarkTown_Lab_Movement_Silver_Exit:
+	walk_right
+	walk_down
+	walk_down
+	walk_down
+	walk_down
+	walk_down
+	walk_down
+	walk_left
+	walk_left
+	walk_left
+	walk_left
+	step_end
 
 NewBarkTown_Lab_EventScript_HealingMachine1::
 	msgbox NewBarkTown_Lab_EventScript_HealingMachine1_Text, MSGBOX_SIGN

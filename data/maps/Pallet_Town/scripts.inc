@@ -44,6 +44,8 @@ PalletTown_EventScript_Woman::
     setspeaker Speaker_Mara
     msgbox PalletTown_Text_Teacher, MSGBOX_NPC
     closemessage
+    setflag FLAG_QUEST_PALLET_TOWN_NPC_WOMAN
+    call QuestJournal_EventScript_CheckPalletTownNPCs
     release
     end
 
@@ -53,6 +55,8 @@ PalletTown_EventScript_Fatman::
     setspeaker Speaker_Gus
     msgbox PalletTown_Text_Fisher, MSGBOX_NPC
     closemessage
+    setflag FLAG_QUEST_PALLET_TOWN_NPC_FATMAN
+    call QuestJournal_EventScript_CheckPalletTownNPCs
     release
     end
 
@@ -113,6 +117,52 @@ PalletTown_EventScript_Route1AideTalk::
     closemessage
     release
     end
+
+QuestJournal_EventScript_CheckPalletTownNPCs::
+    checkflag FLAG_QUEST_PALLET_TOWN_COMPLETED
+    goto_if_eq QuestJournal_EventScript_CheckPalletTownNPCs_End
+    checkflag FLAG_QUEST_PALLET_TOWN_STARTED
+    goto_if_eq QuestJournal_EventScript_CheckPalletTownNPCs_Woman
+    return
+QuestJournal_EventScript_CheckPalletTownNPCs_Woman:
+    checkflag FLAG_QUEST_PALLET_TOWN_NPC_WOMAN
+    goto_if_eq QuestJournal_EventScript_CheckPalletTownNPCs_Fatman
+    return
+QuestJournal_EventScript_CheckPalletTownNPCs_Fatman:
+    checkflag FLAG_QUEST_PALLET_TOWN_NPC_FATMAN
+    goto_if_eq QuestJournal_EventScript_CheckPalletTownNPCs_RedsMom
+    return
+QuestJournal_EventScript_CheckPalletTownNPCs_RedsMom:
+    checkflag FLAG_QUEST_PALLET_TOWN_NPC_REDS_MOM
+    goto_if_eq QuestJournal_EventScript_CheckPalletTownNPCs_Daisy
+    return
+QuestJournal_EventScript_CheckPalletTownNPCs_Daisy:
+    checkflag FLAG_QUEST_PALLET_TOWN_NPC_DAISY
+    goto_if_eq QuestJournal_EventScript_CheckPalletTownNPCs_Done
+    return
+QuestJournal_EventScript_CheckPalletTownNPCs_Done:
+    setflag FLAG_QUEST_PALLET_TOWN_COMPLETED
+    call QuestJournal_EventScript_QuestCompleteAlert
+QuestJournal_EventScript_CheckPalletTownNPCs_End:
+    return
+
+QuestJournal_EventScript_NewQuestAlert::
+    playse SE_DING_DONG
+    msgbox QuestJournal_Text_NewQuest, MSGBOX_DEFAULT
+    closemessage
+    return
+
+QuestJournal_EventScript_NewQuestsAlert::
+    playse SE_DING_DONG
+    msgbox QuestJournal_Text_NewQuests, MSGBOX_DEFAULT
+    closemessage
+    return
+
+QuestJournal_EventScript_QuestCompleteAlert::
+    playse SE_DING_DONG
+    msgbox QuestJournal_Text_QuestComplete, MSGBOX_DEFAULT
+    closemessage
+    return
 
 
 @ -------- TRIGGER 0 --------
@@ -315,6 +365,17 @@ PalletTown_Text_BluesHouseSign:
 PalletTown_Text_OaksLabSign:
     .string "OAK POKéMON\n"
     .string "RESEARCH LAB$"
+
+QuestJournal_Text_NewQuest:
+    .string "New Quest added to the\n"
+    .string "Quest Journal!$"
+
+QuestJournal_Text_NewQuests:
+    .string "New Quests have been added\n"
+    .string "to the Quest Journal!$"
+
+QuestJournal_Text_QuestComplete:
+    .string "Quest fulfilled!$"
 
 PalletTown_Text_Route1Aide_Intro:
     .string "Route 1 is just ahead.\p"

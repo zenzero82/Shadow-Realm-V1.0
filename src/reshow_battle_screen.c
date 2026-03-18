@@ -81,6 +81,8 @@ static void CB2_ReshowBattleScreenAfterMenu(void)
     case 4:
         FreeAllSpritePalettes();
         gReservedSpritePaletteCount = MAX_BATTLERS_COUNT;
+        gStatusSummaryBarPalSlot = 0xFF;
+        gStatusSummaryBallsPalSlot = 0xFF;
         break;
     case 5:
         ClearSpritesHealthboxAnimData();
@@ -180,6 +182,16 @@ static void CB2_ReshowBattleScreenAfterMenu(void)
                 CreateBattlerSprite(b);
         }
 
+        // --- EXTRA HARD RESET on resume: clear any stale overlay callbacks on ALL battlers ---
+        for (b = 0; b < gBattlersCount; b++)
+        {
+            if (gBattleSpritesDataPtr->healthBoxesData[b].shadowSpriteIdPrimary < MAX_SPRITES)
+                gSprites[gBattleSpritesDataPtr->healthBoxesData[b].shadowSpriteIdPrimary].callback = SpriteCB_SetInvisible;
+            if (gBattleSpritesDataPtr->healthBoxesData[b].shadowSpriteIdSecondary < MAX_SPRITES)
+                gSprites[gBattleSpritesDataPtr->healthBoxesData[b].shadowSpriteIdSecondary].callback = SpriteCB_SetInvisible;
+        }
+        // -------------------------------------------------------------------------------------
+
         // Re-apply correct shadow overlays for the current opponent(s)
         {
             u8 opp = GetBattlerAtPosition(B_POSITION_OPPONENT_LEFT);
@@ -195,16 +207,6 @@ static void CB2_ReshowBattleScreenAfterMenu(void)
         // Make sure every battler’s OBJ sprite is visible
         for (b = 0; b < gBattlersCount; b++)
             ShadowHud_SyncForBattler(b);
-
-        // --- EXTRA HARD RESET on resume: clear any stale overlay callbacks on ALL battlers ---
-        for (b = 0; b < gBattlersCount; b++)
-        {
-            if (gBattleSpritesDataPtr->healthBoxesData[b].shadowSpriteIdPrimary < MAX_SPRITES)
-                gSprites[gBattleSpritesDataPtr->healthBoxesData[b].shadowSpriteIdPrimary].callback = SpriteCB_SetInvisible;
-            if (gBattleSpritesDataPtr->healthBoxesData[b].shadowSpriteIdSecondary < MAX_SPRITES)
-                gSprites[gBattleSpritesDataPtr->healthBoxesData[b].shadowSpriteIdSecondary].callback = SpriteCB_SetInvisible;
-        }
-        // -------------------------------------------------------------------------------------
 
     }
     // -----------------------------------------------------------------------
@@ -264,6 +266,8 @@ static void CB2_ReshowBlankBattleScreenAfterMenu(void)
     case 4:
         FreeAllSpritePalettes();
         gReservedSpritePaletteCount = MAX_BATTLERS_COUNT;
+        gStatusSummaryBarPalSlot = 0xFF;
+        gStatusSummaryBallsPalSlot = 0xFF;
         break;
     case 5:
         ClearSpritesHealthboxAnimData();

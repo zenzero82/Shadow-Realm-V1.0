@@ -345,6 +345,7 @@ const struct TrainerClass gTrainerClasses[TRAINER_CLASS_COUNT] =
     [TRAINER_CLASS_ELITE_FOUR] = { _("ELITE FOUR"), 25, BALL_ULTRA },
     [TRAINER_CLASS_LEADER] = { _("LEADER"), 25 },
     [TRAINER_CLASS_KANTO_LEADER] = { _("KANTO LEADER"), 25 },
+    [TRAINER_CLASS_JOHTO_LEADER] = { _("JOHTO LEADER"), 25 },
     [TRAINER_CLASS_SCHOOL_KID] = { _("SCHOOL KID") },
     [TRAINER_CLASS_SR_AND_JR] = { _("SR. AND JR."), 4 },
     [TRAINER_CLASS_WINSTRATE] = { _("WINSTRATE"), 10 },
@@ -586,6 +587,9 @@ static void CB2_InitBattleInternal(void)
         DrawBattleEntryBackground();
     FreeAllSpritePalettes();
     gReservedSpritePaletteCount = MAX_BATTLERS_COUNT;
+    gStatusSummaryBarPalSlot = 0xFF;
+    gStatusSummaryBallsPalSlot = 0xFF;
+    ReserveOpponentBallThrowPaletteSlot();
     SetVBlankCallback(VBlankCB_Battle);
     SetUpBattleVarsAndBirchZigzagoon();
 
@@ -2092,7 +2096,15 @@ u8 CreateNPCTrainerPartyFromTrainer(struct Pokemon *party, const struct Trainer 
 
             if (B_TRAINER_CLASS_POKE_BALLS >= GEN_7 && ball == -1)
             {
-                ball = ItemIdToBallId(gTrainerClasses[trainer->trainerClass].ball ?: ITEM_POKE_BALL);
+                if (trainer->trainerClass == TRAINER_CLASS_JOHTO_LEADER)
+                {
+                    if (trainer->trainerPic == TRAINER_PIC_LEADER_BUGSY)
+                        ball = BALL_NET;
+                    else if (trainer->trainerPic == TRAINER_PIC_LEADER_FALKNER)
+                        ball = BALL_PREMIER;
+                }
+                if (ball == -1)
+                    ball = ItemIdToBallId(gTrainerClasses[trainer->trainerClass].ball ?: ITEM_POKE_BALL);
                 SetMonData(&party[i], MON_DATA_POKEBALL, &ball);
             }
         }
@@ -5536,6 +5548,7 @@ static void HandleEndTurn_BattleWon(void)
             PlayBGM(MUS_VICTORY_AQUA_MAGMA);
             break;
         case TRAINER_CLASS_KANTO_LEADER:
+        case TRAINER_CLASS_JOHTO_LEADER:
             PlayBGM(MUS_HG_VICTORY_GYM_LEADER);
             break;
         case TRAINER_CLASS_LEADER:

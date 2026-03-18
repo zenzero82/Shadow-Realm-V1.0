@@ -770,8 +770,8 @@
     {
       "id": "MAPSEC_ROUTE_10_POKECENTER",
       "name": "ROUTE 10",
-      "x": 0,
-      "y": 0,
+      "x": 18,
+      "y": 3,
       "width": 1,
       "height": 1
     },
@@ -850,8 +850,8 @@
     {
       "id": "MAPSEC_ROUTE_10",
       "name": "ROUTE 10",
-      "x": 0,
-      "y": 0,
+      "x": 18,
+      "y": 3,
       "width": 1,
       "height": 1
     },
@@ -1705,7 +1705,7 @@
     },
     {
       "id": "MAPSEC_SHADOW_REALM",
-      "name": "Miror B's Lair",
+      "name": "The Void",
       "x": 0,
       "y": 0,
       "width": 1,

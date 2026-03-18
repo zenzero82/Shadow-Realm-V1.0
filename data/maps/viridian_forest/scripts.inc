@@ -18,7 +18,7 @@
 .set LOCALID_BUGCATCHER_7,    7
 
 .set LOCALID_ITEMBALL_POTION1,       8
-.set LOCALID_ITEMBALL_ESCAPE_ROPE,   9
+.set LOCALID_ITEMBALL_EXP_SHARE,     9
 .set LOCALID_ITEMBALL_TIME_FLUTE,   10
 .set LOCALID_ITEMBALL_PARALYZE_HEAL, 11
 .set LOCALID_ITEMBALL_POKE_BALL,    12
@@ -270,9 +270,9 @@ ViridianForest_EventScript_RocketGrunt_After::
     setspeaker ViridianForest_Speaker_GruntRocket
     msgbox ViridianForest_Text_RocketGrunt_After, MSGBOX_DEFAULT
     closemessage
+    fadescreenswapbuffers FADE_TO_BLACK
     hideobjectat LOCALID_ROCKET_GRUNT, MAP_VIRIDIAN_FOREST
     removeobject LOCALID_ROCKET_GRUNT
-    fadescreenswapbuffers FADE_TO_BLACK
     fadescreenswapbuffers FADE_FROM_BLACK
     releaseall
     end
@@ -336,8 +336,8 @@ ViridianForest_EventScript_Item_Time_Flute::
     removeobject LOCALID_ITEMBALL_TIME_FLUTE
     end
 
-ViridianForest_EventScript_Item_EscapeRope::
-    finditem ITEM_ESCAPE_ROPE
+ViridianForest_EventScript_Item_ExpShare::
+    finditem ITEM_EXP_SHARE
     goto_if_eq VAR_0x8007, FALSE, ViridianForest_EventScript_Item_Done
-    removeobject LOCALID_ITEMBALL_ESCAPE_ROPE
+    removeobject LOCALID_ITEMBALL_EXP_SHARE
     end

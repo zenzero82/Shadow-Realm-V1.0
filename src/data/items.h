@@ -14172,6 +14172,35 @@ const struct Item gItemsInfo[] =
         .iconPic = gItemIcon_ShadowMonitor,
         .iconPalette = gItemIconPalette_ShadowMonitor,
     },
+    [ITEM_QUEST_JOURNAL] =
+    {
+        .name = _("Quest Journal"),
+        .price = 0,
+        .description = COMPOUND_STRING(
+            "Keeps track of game\n"
+            "events and progress."),
+        .importance = 1,
+        .pocket = POCKET_KEY_ITEMS,
+        .type = ITEM_USE_FIELD,
+        .fieldUseFunc = ItemUseOutOfBattle_QuestJournal,
+        .iconPic = gItemIcon_QuestJournal,
+        .iconPalette = gItemIconPalette_QuestJournal,
+    },
+    [ITEM_PHOTO_CAMERA] =
+    {
+        .name = _("Photo Camera"),
+        .price = 0,
+        .description = COMPOUND_STRING(
+            "Lines up your party\n"
+            "for a photo on the\n"
+            "field."),
+        .importance = 1,
+        .pocket = POCKET_KEY_ITEMS,
+        .type = ITEM_USE_FIELD,
+        .fieldUseFunc = ItemUseOutOfBattle_PhotoCamera,
+        .iconPic = gItemIcon_Scanner,
+        .iconPalette = gItemIconPalette_Scanner,
+    },
 
     [ITEM_TIME_FLUTE] =
     {

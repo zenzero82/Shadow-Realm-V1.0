@@ -1,9 +1,13 @@
 route2_entrance1_MapScripts::
 	.byte 0
 
+route2_entrance1_Speaker_Officer:
+	.string "OFFICER$"
+
 route2_entrance1_EventScript_Officer::
 	lock
 	faceplayer
+	setspeaker route2_entrance1_Speaker_Officer
 	msgbox route2_entrance1_Text_Officer, MSGBOX_DEFAULT
 	closemessage
 	release

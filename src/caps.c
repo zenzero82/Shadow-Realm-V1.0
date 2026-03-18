@@ -5,7 +5,7 @@
 #include "pokemon.h"
 
 
-u32 GetCurrentLevelCap(void)
+static u32 GetLevelCapForMode(u8 levelCapMode)
 {
     static const u32 sLevelCapFlagMap[][2] =
     {
@@ -21,13 +21,9 @@ u32 GetCurrentLevelCap(void)
     };
 
     u32 i;
-    u8 levelCapMode = gSaveBlock2Ptr->optionsLevelCap;
 
     if (levelCapMode > OPTIONS_LEVEL_CAP_HARD)
         levelCapMode = OPTIONS_LEVEL_CAP_NORMAL;
-
-    if (levelCapMode == OPTIONS_LEVEL_CAP_OFF)
-        return MAX_LEVEL;
 
     if (B_LEVEL_CAP_TYPE == LEVEL_CAP_FLAG_LIST)
     {
@@ -51,6 +47,32 @@ u32 GetCurrentLevelCap(void)
     }
 
     return MAX_LEVEL;
+}
+
+u32 GetCurrentLevelCap(void)
+{
+    u8 levelCapMode = gSaveBlock2Ptr->optionsLevelCap;
+
+    if (levelCapMode > OPTIONS_LEVEL_CAP_HARD)
+        levelCapMode = OPTIONS_LEVEL_CAP_NORMAL;
+
+    if (levelCapMode == OPTIONS_LEVEL_CAP_OFF)
+        return MAX_LEVEL;
+
+    return GetLevelCapForMode(levelCapMode);
+}
+
+u32 GetLevelCapForObedience(void)
+{
+    u8 levelCapMode = gSaveBlock2Ptr->optionsLevelCap;
+
+    if (levelCapMode > OPTIONS_LEVEL_CAP_HARD)
+        levelCapMode = OPTIONS_LEVEL_CAP_NORMAL;
+
+    if (levelCapMode == OPTIONS_LEVEL_CAP_OFF)
+        levelCapMode = OPTIONS_LEVEL_CAP_NORMAL;
+
+    return GetLevelCapForMode(levelCapMode);
 }
 
 u32 GetSoftLevelCapExpValue(u32 level, u32 expValue)

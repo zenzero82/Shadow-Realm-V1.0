@@ -853,7 +853,7 @@ static const struct WindowTemplate sShadowMonitorTabWindowTemplate =
     .tilemapLeft = 1,
     .tilemapTop = 0,
     .width = 7,
-    .height = 2,
+    .height = 3,
     .paletteNum = 0,
     .baseBlock = 0x2A0,
 };
@@ -3147,6 +3147,8 @@ static void Task_LoadInfoScreen(u8 taskId)
             u16 r2;
 
             sPokedexView->currentPage = PAGE_INFO;
+            if (gIsShadowMonitorOpen)
+                sPokedexView->selectedScreen = AREA_SCREEN;
             gPokedexVBlankCB = gMain.vblankCallback;
             SetVBlankCallback(NULL);
             r2 = 0;
@@ -3288,6 +3290,24 @@ static void Task_HandleInfoScreenInput(u8 taskId)
         PlaySE(SE_DEX_SCROLL);
         return;
     }
+    if (gIsShadowMonitorOpen)
+    {
+        if (JOY_NEW(B_BUTTON))
+        {
+            BeginNormalPaletteFade(PALETTES_ALL, 0, 0, 16, RGB_BLACK);
+            gTasks[taskId].func = Task_ExitInfoScreen;
+            PlaySE(SE_PC_OFF);
+            return;
+        }
+        if (JOY_NEW(A_BUTTON))
+        {
+            BeginNormalPaletteFade(PALETTES_ALL & ~(0x14), 0, 0, 16, RGB_BLACK);
+            sPokedexView->screenSwitchState = 1;
+            gTasks[taskId].func = Task_SwitchScreensFromInfoScreen;
+            PlaySE(SE_PIN);
+        }
+        return;
+    }
     if (JOY_NEW(B_BUTTON))
     {
         BeginNormalPaletteFade(PALETTES_ALL, 0, 0, 16, RGB_BLACK);
@@ -3358,6 +3378,11 @@ static void Task_SwitchScreensFromInfoScreen(u8 taskId)
     {
         DestroyShadowHeartBarSprites();
         FreeAndDestroyMonPicSprite(gTasks[taskId].tMonSpriteId);
+        if (gIsShadowMonitorOpen)
+        {
+            gTasks[taskId].func = Task_LoadAreaScreen;
+            return;
+        }
         switch (sPokedexView->screenSwitchState)
         {
         case 1:
@@ -3471,6 +3496,8 @@ static void Task_SwitchScreensFromAreaScreen(u8 taskId)
 {
     if (!gPaletteFade.active)
     {
+        if (gIsShadowMonitorOpen && sPokedexView->screenSwitchState != 1)
+            sPokedexView->screenSwitchState = 1;
         switch (sPokedexView->screenSwitchState)
         {
         case 1:

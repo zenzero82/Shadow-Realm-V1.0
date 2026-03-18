@@ -2342,8 +2342,8 @@ MatchCall_Text_RowanShadowHunter:
 MatchCall_Text_MattUnionCave:
 	.string "… … … … … …\n"
 	.string "… … … … … Beep!\p"
-	.string "???: We were able to Lure MICHAEL\l"
-	.string "out of VIOLET. The MAURDER should\l"
+	.string "???: We were able to Lure MICHAEL\n"
+	.string "out of VIOLET. The MARAUDER should\l"
 	.string "be finishing up getting the\l"
 	.string "blueprints from that Old Man.\p"
 	.string "Make your way over to OLIVINE CITY.\n"

@@ -2,7 +2,7 @@
   "id": "MAP_SAFFRON_MART",
   "name": "saffron_mart",
   "layout": "LAYOUT_VIRIDIAN_POKEMART",
-  "music": "MUS_POKE_MART",
+  "music": "MUS_HG_POKE_MART",
   "region_map_section": "MAPSEC_SAFFRON_CITY",
   "requires_flash": false,
   "weather": "WEATHER_NONE",

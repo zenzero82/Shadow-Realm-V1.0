@@ -105,6 +105,7 @@ static void SetDefaultOptions(void)
     gSaveBlock2Ptr->regionMapZoom = FALSE;
     gSaveBlock2Ptr->optionsShinyOdds = OPTIONS_SHINY_ODDS_8192;
     gSaveBlock2Ptr->optionsLevelCap = OPTIONS_LEVEL_CAP_NORMAL;
+    gSaveBlock2Ptr->optionsOverworldWildEncounters = OPTIONS_OVERWORLD_WILD_OFF;
 }
 
 static void ClearPokedexFlags(void)
@@ -175,6 +176,7 @@ void NewGameInitData(void)
     PlayTimeCounter_Reset();
     ClearPokedexFlags();
     InitEventData();
+    FlagSet(I_EXP_SHARE_FLAG);
     SetLastHealLocationWarp(HEAL_LOCATION_PALLET_TOWN);
     ClearTVShowData();
     ResetGabbyAndTy();

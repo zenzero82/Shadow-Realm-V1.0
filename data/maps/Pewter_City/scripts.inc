@@ -1,4 +1,5 @@
 Pewter_City_MapScripts::
+    map_script MAP_SCRIPT_ON_FRAME_TABLE, PewterCity_OnFrame
     .byte 0
 
 @ ==============================
@@ -39,8 +40,22 @@ PewterCity_Speaker_Tess:
 @ Signs / existing NPCs
 @ --------------------
 
+PewterCity_OnFrame:
+    map_script_2 VAR_TEMP_1, 0, PewterCity_EventScript_CityEnter
+    .2byte 0
+
 PewterCity_EventScript_CityEnter::
+    setvar VAR_TEMP_1, 1
     setflag FLAG_VISITED_PEWTER_CITY
+    checkflag FLAG_QUEST_PEWTER_NPCS_STARTED
+    goto_if_eq PewterCity_EventScript_CityEnter_QuestSkip
+    checkflag FLAG_QUEST_PEWTER_NPCS_COMPLETED
+    goto_if_eq PewterCity_EventScript_CityEnter_QuestSkip
+    lockall
+    setflag FLAG_QUEST_PEWTER_NPCS_STARTED
+    call QuestJournal_EventScript_NewQuestAlert
+    releaseall
+PewterCity_EventScript_CityEnter_QuestSkip:
     end
 
 PewterCity_EventScript_CitySign::
@@ -79,6 +94,8 @@ PewterCity_EventScript_Fatman::
     setspeaker PewterCity_Speaker_Hank
     msgbox PewterCity_Text_Fatman, MSGBOX_DEFAULT
     closemessage
+    setflag FLAG_QUEST_PEWTER_NPC_FATMAN
+    call QuestJournal_EventScript_CheckPewterCityNPCs
     release
     end
 
@@ -131,6 +148,19 @@ PewterCity_EventScript_OldMan::
     setspeaker PewterCity_Speaker_Elias
     msgbox PewterCity_Text_OldMan, MSGBOX_DEFAULT
     closemessage
+    setflag FLAG_QUEST_PEWTER_NPC_OLD_MAN
+    call QuestJournal_EventScript_CheckPewterCityNPCs
+    checkflag FLAG_QUEST_MT_MOON_STARTED
+    goto_if_eq PewterCity_EventScript_OldMan_Done
+    checkflag FLAG_QUEST_MT_MOON_COMPLETED
+    goto_if_eq PewterCity_EventScript_OldMan_Done
+    checkflag FLAG_QUEST_BROCK_COMPLETED
+    goto_if_eq PewterCity_EventScript_OldMan_GiveQuest
+    goto PewterCity_EventScript_OldMan_Done
+PewterCity_EventScript_OldMan_GiveQuest:
+    setflag FLAG_QUEST_MT_MOON_STARTED
+    call QuestJournal_EventScript_NewQuestAlert
+PewterCity_EventScript_OldMan_Done:
     release
     end
 
@@ -140,6 +170,8 @@ PewterCity_EventScript_Lass::
     setspeaker PewterCity_Speaker_Nina
     msgbox PewterCity_Text_Lass, MSGBOX_DEFAULT
     closemessage
+    setflag FLAG_QUEST_PEWTER_NPC_LASS
+    call QuestJournal_EventScript_CheckPewterCityNPCs
     release
     end
 
@@ -149,6 +181,8 @@ PewterCity_EventScript_Twin::
     setspeaker PewterCity_Speaker_Tess
     msgbox PewterCity_Text_Twin, MSGBOX_DEFAULT
     closemessage
+    setflag FLAG_QUEST_PEWTER_NPC_TWIN
+    call QuestJournal_EventScript_CheckPewterCityNPCs
     release
     end
 
@@ -178,6 +212,90 @@ PewterCity_EventScript_Rockruff::
     waitmoncry
     release
     end
+
+QuestJournal_EventScript_CheckPewterCityNPCs::
+    checkflag FLAG_QUEST_PEWTER_NPCS_COMPLETED
+    goto_if_eq QuestJournal_EventScript_CheckPewterCityNPCs_End
+    checkflag FLAG_QUEST_PEWTER_NPCS_STARTED
+    goto_if_eq QuestJournal_EventScript_CheckPewterCityNPCs_Fatman
+    return
+QuestJournal_EventScript_CheckPewterCityNPCs_Fatman:
+    checkflag FLAG_QUEST_PEWTER_NPC_FATMAN
+    goto_if_eq QuestJournal_EventScript_CheckPewterCityNPCs_OldMan
+    return
+QuestJournal_EventScript_CheckPewterCityNPCs_OldMan:
+    checkflag FLAG_QUEST_PEWTER_NPC_OLD_MAN
+    goto_if_eq QuestJournal_EventScript_CheckPewterCityNPCs_Lass
+    return
+QuestJournal_EventScript_CheckPewterCityNPCs_Lass:
+    checkflag FLAG_QUEST_PEWTER_NPC_LASS
+    goto_if_eq QuestJournal_EventScript_CheckPewterCityNPCs_Twin
+    return
+QuestJournal_EventScript_CheckPewterCityNPCs_Twin:
+    checkflag FLAG_QUEST_PEWTER_NPC_TWIN
+    goto_if_eq QuestJournal_EventScript_CheckPewterCityNPCs_House1Boy
+    return
+QuestJournal_EventScript_CheckPewterCityNPCs_House1Boy:
+    checkflag FLAG_QUEST_PEWTER_NPC_HOUSE1_BOY
+    goto_if_eq QuestJournal_EventScript_CheckPewterCityNPCs_House2OldMan
+    return
+QuestJournal_EventScript_CheckPewterCityNPCs_House2OldMan:
+    checkflag FLAG_QUEST_PEWTER_NPC_HOUSE2_OLD_MAN
+    goto_if_eq QuestJournal_EventScript_CheckPewterCityNPCs_MuseumScientist1
+    return
+QuestJournal_EventScript_CheckPewterCityNPCs_MuseumScientist1:
+    checkflag FLAG_QUEST_PEWTER_NPC_MUSEUM_SCIENTIST1
+    goto_if_eq QuestJournal_EventScript_CheckPewterCityNPCs_MuseumScientist2
+    return
+QuestJournal_EventScript_CheckPewterCityNPCs_MuseumScientist2:
+    checkflag FLAG_QUEST_PEWTER_NPC_MUSEUM_SCIENTIST2
+    goto_if_eq QuestJournal_EventScript_CheckPewterCityNPCs_MuseumAttendant
+    return
+QuestJournal_EventScript_CheckPewterCityNPCs_MuseumAttendant:
+    checkflag FLAG_QUEST_PEWTER_NPC_MUSEUM_ATTENDANT
+    goto_if_eq QuestJournal_EventScript_CheckPewterCityNPCs_MuseumHiker
+    return
+QuestJournal_EventScript_CheckPewterCityNPCs_MuseumHiker:
+    checkflag FLAG_QUEST_PEWTER_NPC_MUSEUM_HIKER
+    goto_if_eq QuestJournal_EventScript_CheckPewterCityNPCs_MuseumOldMan
+    return
+QuestJournal_EventScript_CheckPewterCityNPCs_MuseumOldMan:
+    checkflag FLAG_QUEST_PEWTER_NPC_MUSEUM_OLD_MAN
+    goto_if_eq QuestJournal_EventScript_CheckPewterCityNPCs_Museum2FNerd
+    return
+QuestJournal_EventScript_CheckPewterCityNPCs_Museum2FNerd:
+    checkflag FLAG_QUEST_PEWTER_NPC_MUSEUM2F_NERD
+    goto_if_eq QuestJournal_EventScript_CheckPewterCityNPCs_Museum2FBalding
+    return
+QuestJournal_EventScript_CheckPewterCityNPCs_Museum2FBalding:
+    checkflag FLAG_QUEST_PEWTER_NPC_MUSEUM2F_BALDING
+    goto_if_eq QuestJournal_EventScript_CheckPewterCityNPCs_Museum2FTwin
+    return
+QuestJournal_EventScript_CheckPewterCityNPCs_Museum2FTwin:
+    checkflag FLAG_QUEST_PEWTER_NPC_MUSEUM2F_TWIN
+    goto_if_eq QuestJournal_EventScript_CheckPewterCityNPCs_PokecenterBeauty
+    return
+QuestJournal_EventScript_CheckPewterCityNPCs_PokecenterBeauty:
+    checkflag FLAG_QUEST_PEWTER_NPC_POKECENTER_BEAUTY
+    goto_if_eq QuestJournal_EventScript_CheckPewterCityNPCs_PokecenterBugCatcher
+    return
+QuestJournal_EventScript_CheckPewterCityNPCs_PokecenterBugCatcher:
+    checkflag FLAG_QUEST_PEWTER_NPC_POKECENTER_BUG_CATCHER
+    goto_if_eq QuestJournal_EventScript_CheckPewterCityNPCs_PokemartLass
+    return
+QuestJournal_EventScript_CheckPewterCityNPCs_PokemartLass:
+    checkflag FLAG_QUEST_PEWTER_NPC_POKEMART_LASS
+    goto_if_eq QuestJournal_EventScript_CheckPewterCityNPCs_PokemartYoungster
+    return
+QuestJournal_EventScript_CheckPewterCityNPCs_PokemartYoungster:
+    checkflag FLAG_QUEST_PEWTER_NPC_POKEMART_YOUNGSTER
+    goto_if_eq QuestJournal_EventScript_CheckPewterCityNPCs_Done
+    return
+QuestJournal_EventScript_CheckPewterCityNPCs_Done:
+    setflag FLAG_QUEST_PEWTER_NPCS_COMPLETED
+    call QuestJournal_EventScript_QuestCompleteAlert
+QuestJournal_EventScript_CheckPewterCityNPCs_End:
+    return
 
 
 PewterCity_Text_Sign:
@@ -357,6 +475,11 @@ PewterCity_EventScript_BrockWesScene::
     removeobject 2
 
     setflag FLAG_PEWTER_BROCK_WES_SCENE_DONE
+    checkflag FLAG_QUEST_BROCK_STARTED
+    goto_if_eq PewterCity_EventScript_BrockWesScene_QuestSkip
+    setflag FLAG_QUEST_BROCK_STARTED
+    call QuestJournal_EventScript_NewQuestAlert
+PewterCity_EventScript_BrockWesScene_QuestSkip:
 
     releaseall
     end

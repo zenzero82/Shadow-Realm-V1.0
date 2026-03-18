@@ -1,8 +1,12 @@
 Route30_MrPokemonsHouse_MapScripts::
 	.byte 0
 
+Route30_MrPokemonsHouse_Speaker_MrPokemon:
+	.string "Mr. POKéMON$"
+
 Route30_MrPokemonsHouse_EventScript_Gentleman::
 	faceplayer
+	setspeaker Route30_MrPokemonsHouse_Speaker_MrPokemon
 	msgbox Route30_MrPokemonsHouse_Text_Gentleman, MSGBOX_NPC
 	end
 

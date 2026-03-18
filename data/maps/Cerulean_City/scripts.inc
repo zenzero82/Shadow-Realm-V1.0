@@ -8,12 +8,31 @@
 
 Cerulean_City_MapScripts::
     map_script MAP_SCRIPT_ON_TRANSITION, CeruleanCity_EventScript_CityEnter
+    map_script MAP_SCRIPT_ON_FRAME_TABLE, CeruleanCity_OnFrame
     .byte 0
 
 CeruleanCity_EventScript_CityEnter::
+    setvar VAR_TEMP_1, 0
     setflag FLAG_VISITED_CERULEAN_CITY
     call_if_set FLAG_CERULEAN_POLICE_MOVED_26, CeruleanCity_EventScript_SetPolice26Moved
     call_if_set FLAG_CERULEAN_POLICE_MOVED_27, CeruleanCity_EventScript_SetPolice27Moved
+    end
+
+CeruleanCity_OnFrame:
+    map_script_2 VAR_TEMP_1, 0, CeruleanCity_EventScript_CityEnterQuest
+    .2byte 0
+
+CeruleanCity_EventScript_CityEnterQuest::
+    setvar VAR_TEMP_1, 1
+    checkflag FLAG_QUEST_CERULEAN_NPCS_STARTED
+    goto_if_eq CeruleanCity_EventScript_CityEnterQuest_End
+    checkflag FLAG_QUEST_CERULEAN_NPCS_COMPLETED
+    goto_if_eq CeruleanCity_EventScript_CityEnterQuest_End
+    lockall
+    setflag FLAG_QUEST_CERULEAN_NPCS_STARTED
+    call QuestJournal_EventScript_NewQuestAlert
+    releaseall
+CeruleanCity_EventScript_CityEnterQuest_End:
     end
 
 @ =================================================
@@ -159,11 +178,11 @@ CeruleanCity_EventScript_MistyMichael_Scene::
     setspeaker CeruleanCity_Speaker_Michael
     msgbox CeruleanCity_Text_Michael_ToMisty, MSGBOX_NPC
     closemessage
-    fadescreen FADE_TO_BLACK
+    fadescreenswapbuffers FADE_TO_BLACK
     setflag FLAG_HIDE_CERULEAN_MICHAEL
     hideobjectat LOCALID_MICHAEL, MAP_CERULEAN_CITY
     removeobject LOCALID_MICHAEL
-    fadescreen FADE_FROM_BLACK
+    fadescreenswapbuffers FADE_FROM_BLACK
     call CeruleanCity_EventScript_PlayerWalkToMistyFromTrigger
     applymovement LOCALID_PLAYER, Common_Movement_FaceUp
     waitmovement 0
@@ -173,6 +192,16 @@ CeruleanCity_EventScript_MistyMichael_Scene::
     msgbox CeruleanCity_Text_Misty_AfterScene, MSGBOX_DEFAULT
     closemessage
     setflag FLAG_CERULEAN_MISTY_MICHAEL_SCENE_DONE
+    checkflag FLAG_QUEST_CERULEAN_WES_COMPLETED
+    goto_if_eq CeruleanCity_EventScript_MistyMichael_QuestStartCape
+    setflag FLAG_QUEST_CERULEAN_WES_COMPLETED
+    call QuestJournal_EventScript_QuestCompleteAlert
+CeruleanCity_EventScript_MistyMichael_QuestStartCape:
+    checkflag FLAG_QUEST_CAPE_WES_STARTED
+    goto_if_eq CeruleanCity_EventScript_MistyMichael_QuestDone
+    setflag FLAG_QUEST_CAPE_WES_STARTED
+    call QuestJournal_EventScript_NewQuestAlert
+CeruleanCity_EventScript_MistyMichael_QuestDone:
     releaseall
     end
 
@@ -341,11 +370,13 @@ CeruleanCity_EventScript_CooltrainerM1::
     @goto_if_set FLAG_RETURNED_MACHINE_PART, CeruleanCity_EventScript_CooltrainerMReturnedPart
     setspeaker CeruleanCity_Speaker_CooltrainerM
     msgbox CeruleanCity_Text_CooltrainerM1, MSGBOX_NPC
+    call QuestJournal_EventScript_CheckCeruleanCityNPCs
     end
 
 CeruleanCity_EventScript_CooltrainerMReturnedPart::
     setspeaker CeruleanCity_Speaker_CooltrainerM
     msgbox CeruleanCity_Text_CooltrainerM2, MSGBOX_NPC
+    call QuestJournal_EventScript_CheckCeruleanCityNPCs
     end
 
 
@@ -356,6 +387,7 @@ CeruleanCity_EventScript_CooltrainerMReturnedPart::
 CeruleanCity_EventScript_Boy::
     setspeaker CeruleanCity_Speaker_Boy
     msgbox CeruleanCity_Text_SuperNerd, MSGBOX_NPC
+    call QuestJournal_EventScript_CheckCeruleanCityNPCs
     end
 
 
@@ -385,6 +417,8 @@ CeruleanCity_EventScript_Slowbro::
 CeruleanCity_EventScript_SlowbroWoman::
     setspeaker CeruleanCity_Speaker_SlowbroWoman
     msgbox CeruleanCity_Text_SlowbroWoman_Stub, MSGBOX_NPC
+    setflag FLAG_QUEST_CERULEAN_NPC_SLOWBRO_WOMAN
+    call QuestJournal_EventScript_CheckCeruleanCityNPCs
     end
 
 
@@ -398,11 +432,15 @@ CeruleanCity_EventScript_Fisher::
     @goto_if_eq VAR_CERULEAN_CITY_STATE, 2, CeruleanCity_EventScript_FisherDuringRocket
     setspeaker CeruleanCity_Speaker_Fisher
     msgbox CeruleanCity_Text_Fisher, MSGBOX_NPC
+    setflag FLAG_QUEST_CERULEAN_NPC_FISHER
+    call QuestJournal_EventScript_CheckCeruleanCityNPCs
     end
 
 CeruleanCity_EventScript_FisherDuringRocket::
     setspeaker CeruleanCity_Speaker_Fisher
     msgbox CeruleanCity_Text_Fisher_RocketTip, MSGBOX_NPC
+    setflag FLAG_QUEST_CERULEAN_NPC_FISHER
+    call QuestJournal_EventScript_CheckCeruleanCityNPCs
     end
 
 
@@ -413,6 +451,8 @@ CeruleanCity_EventScript_FisherDuringRocket::
 CeruleanCity_EventScript_Youngster::
     setspeaker CeruleanCity_Speaker_Youngster
     msgbox CeruleanCity_Text_Youngster1, MSGBOX_NPC
+    setflag FLAG_QUEST_CERULEAN_NPC_YOUNGSTER
+    call QuestJournal_EventScript_CheckCeruleanCityNPCs
     end
 
 
@@ -423,11 +463,15 @@ CeruleanCity_EventScript_Youngster::
 CeruleanCity_EventScript_BugCatcher::
     setspeaker CeruleanCity_Speaker_BugCatcher
     msgbox CeruleanCity_Text_BugCatcher, MSGBOX_NPC
+    setflag FLAG_QUEST_CERULEAN_NPC_BUG_CATCHER
+    call QuestJournal_EventScript_CheckCeruleanCityNPCs
     end
 
 CeruleanCity_EventScript_Boy2::
     setspeaker CeruleanCity_Speaker_Boy2
     msgbox CeruleanCity_Text_Boy2, MSGBOX_NPC
+    setflag FLAG_QUEST_CERULEAN_NPC_BOY2
+    call QuestJournal_EventScript_CheckCeruleanCityNPCs
     end
 
 CeruleanCity_EventScript_RocketGruntF::
@@ -464,6 +508,9 @@ CeruleanCity_EventScript_Policeman1::
     setobjectxyperm LOCALID_CERULEAN_POLICEMAN_2, 48, 20
     turnobject LOCALID_CERULEAN_POLICEMAN_2, DIR_NORTH
     setflag FLAG_CERULEAN_POLICE_MOVED_27
+    setflag FLAG_QUEST_CERULEAN_NPC_POLICEMAN1
+    call QuestJournal_EventScript_CheckCeruleanCityNPCs
+    call QuestJournal_EventScript_CheckRoute9Guards
 CeruleanCity_EventScript_Policeman1_End::
     releaseall
     end
@@ -471,6 +518,8 @@ CeruleanCity_EventScript_Policeman1_End::
 CeruleanCity_EventScript_Policeman1_Blocked::
     setspeaker CeruleanCity_Speaker_Policeman1
     msgbox CeruleanCity_Text_Policeman1, MSGBOX_NPC
+    setflag FLAG_QUEST_CERULEAN_NPC_POLICEMAN1
+    call QuestJournal_EventScript_CheckCeruleanCityNPCs
     releaseall
     end
 
@@ -488,6 +537,9 @@ CeruleanCity_EventScript_Policeman2::
     setobjectxyperm LOCALID_CERULEAN_POLICEMAN_1, 48, 17
     turnobject LOCALID_CERULEAN_POLICEMAN_1, DIR_SOUTH
     setflag FLAG_CERULEAN_POLICE_MOVED_26
+    setflag FLAG_QUEST_CERULEAN_NPC_POLICEMAN2
+    call QuestJournal_EventScript_CheckCeruleanCityNPCs
+    call QuestJournal_EventScript_CheckRoute9Guards
 CeruleanCity_EventScript_Policeman2_End::
     releaseall
     end
@@ -495,6 +547,8 @@ CeruleanCity_EventScript_Policeman2_End::
 CeruleanCity_EventScript_Policeman2_Blocked::
     setspeaker CeruleanCity_Speaker_Policeman2
     msgbox CeruleanCity_Text_Policeman2, MSGBOX_NPC
+    setflag FLAG_QUEST_CERULEAN_NPC_POLICEMAN2
+    call QuestJournal_EventScript_CheckCeruleanCityNPCs
     releaseall
     end
 
@@ -508,8 +562,29 @@ CeruleanCity_EventScript_SetPolice27Moved::
     turnobject LOCALID_CERULEAN_POLICEMAN_2, DIR_NORTH
     return
 
+QuestJournal_EventScript_CheckRoute9Guards::
+    checkflag FLAG_QUEST_ROUTE9_GUARDS_COMPLETED
+    goto_if_eq QuestJournal_EventScript_CheckRoute9Guards_End
+    checkflag FLAG_QUEST_ROUTE9_GUARDS_STARTED
+    goto_if_eq QuestJournal_EventScript_CheckRoute9Guards_Check26
+    return
+QuestJournal_EventScript_CheckRoute9Guards_Check26:
+    checkflag FLAG_CERULEAN_POLICE_MOVED_26
+    goto_if_eq QuestJournal_EventScript_CheckRoute9Guards_Complete
+    goto QuestJournal_EventScript_CheckRoute9Guards_Check27
+QuestJournal_EventScript_CheckRoute9Guards_Check27:
+    checkflag FLAG_CERULEAN_POLICE_MOVED_27
+    goto_if_eq QuestJournal_EventScript_CheckRoute9Guards_Complete
+    return
+QuestJournal_EventScript_CheckRoute9Guards_Complete:
+	setflag FLAG_QUEST_ROUTE9_GUARDS_COMPLETED
+	call QuestJournal_EventScript_QuestCompleteAlert
+QuestJournal_EventScript_CheckRoute9Guards_End:
+	return
+
 CeruleanCity_EventScript_CaveGate_Block::
     lockall
+CeruleanCity_EventScript_CaveGate_Block_NoLock::
     checkflag FLAG_CERULEAN_MISTY_MICHAEL_SCENE_DONE
     goto_if_eq CeruleanCity_EventScript_CaveGate_Block_End
     turnobject LOCALID_CERULEAN_GATE_OFFICER, DIR_EAST
@@ -522,6 +597,95 @@ CeruleanCity_EventScript_CaveGate_Block::
 CeruleanCity_EventScript_CaveGate_Block_End::
     releaseall
     end
+
+CeruleanCity_EventScript_CaveGate_Officer::
+    lockall
+    checkflag FLAG_CERULEAN_MISTY_MICHAEL_SCENE_DONE
+    goto_if_unset FLAG_CERULEAN_MISTY_MICHAEL_SCENE_DONE, CeruleanCity_EventScript_CaveGate_Block_NoLock
+    setspeaker CeruleanCity_Speaker_PoliceGate
+    msgbox CeruleanCity_Text_PoliceGate_Allowed, MSGBOX_NPC
+    releaseall
+    end
+
+QuestJournal_EventScript_CheckCeruleanCityNPCs::
+    checkflag FLAG_QUEST_CERULEAN_NPCS_COMPLETED
+    goto_if_eq QuestJournal_EventScript_CheckCeruleanCityNPCs_End
+    checkflag FLAG_QUEST_CERULEAN_NPCS_STARTED
+    goto_if_eq QuestJournal_EventScript_CheckCeruleanCityNPCs_SlowbroWoman
+    return
+QuestJournal_EventScript_CheckCeruleanCityNPCs_SlowbroWoman:
+    checkflag FLAG_QUEST_CERULEAN_NPC_SLOWBRO_WOMAN
+    goto_if_eq QuestJournal_EventScript_CheckCeruleanCityNPCs_Fisher
+    return
+QuestJournal_EventScript_CheckCeruleanCityNPCs_Fisher:
+    checkflag FLAG_QUEST_CERULEAN_NPC_FISHER
+    goto_if_eq QuestJournal_EventScript_CheckCeruleanCityNPCs_Youngster
+    return
+QuestJournal_EventScript_CheckCeruleanCityNPCs_Youngster:
+    checkflag FLAG_QUEST_CERULEAN_NPC_YOUNGSTER
+    goto_if_eq QuestJournal_EventScript_CheckCeruleanCityNPCs_BugCatcher
+    return
+QuestJournal_EventScript_CheckCeruleanCityNPCs_BugCatcher:
+    checkflag FLAG_QUEST_CERULEAN_NPC_BUG_CATCHER
+    goto_if_eq QuestJournal_EventScript_CheckCeruleanCityNPCs_Boy2
+    return
+QuestJournal_EventScript_CheckCeruleanCityNPCs_Boy2:
+    checkflag FLAG_QUEST_CERULEAN_NPC_BOY2
+    goto_if_eq QuestJournal_EventScript_CheckCeruleanCityNPCs_Policeman1
+    return
+QuestJournal_EventScript_CheckCeruleanCityNPCs_Policeman1:
+    checkflag FLAG_QUEST_CERULEAN_NPC_POLICEMAN1
+    goto_if_eq QuestJournal_EventScript_CheckCeruleanCityNPCs_Policeman2
+    return
+QuestJournal_EventScript_CheckCeruleanCityNPCs_Policeman2:
+    checkflag FLAG_QUEST_CERULEAN_NPC_POLICEMAN2
+    goto_if_eq QuestJournal_EventScript_CheckCeruleanCityNPCs_House1Balding
+    return
+QuestJournal_EventScript_CheckCeruleanCityNPCs_House1Balding:
+    checkflag FLAG_QUEST_CERULEAN_NPC_HOUSE1_BALDING
+    goto_if_eq QuestJournal_EventScript_CheckCeruleanCityNPCs_House1Woman
+    return
+QuestJournal_EventScript_CheckCeruleanCityNPCs_House1Woman:
+    checkflag FLAG_QUEST_CERULEAN_NPC_HOUSE1_WOMAN
+    goto_if_eq QuestJournal_EventScript_CheckCeruleanCityNPCs_House2OldMan
+    return
+QuestJournal_EventScript_CheckCeruleanCityNPCs_House2OldMan:
+    checkflag FLAG_QUEST_CERULEAN_NPC_HOUSE2_OLD_MAN
+    goto_if_eq QuestJournal_EventScript_CheckCeruleanCityNPCs_House2OldWoman
+    return
+QuestJournal_EventScript_CheckCeruleanCityNPCs_House2OldWoman:
+    checkflag FLAG_QUEST_CERULEAN_NPC_HOUSE2_OLD_WOMAN
+    goto_if_eq QuestJournal_EventScript_CheckCeruleanCityNPCs_House3Hiker
+    return
+QuestJournal_EventScript_CheckCeruleanCityNPCs_House3Hiker:
+    checkflag FLAG_QUEST_CERULEAN_NPC_HOUSE3_HIKER
+    goto_if_eq QuestJournal_EventScript_CheckCeruleanCityNPCs_BikeshopLooker
+    return
+QuestJournal_EventScript_CheckCeruleanCityNPCs_BikeshopLooker:
+    checkflag FLAG_QUEST_CERULEAN_NPC_BIKESHOP_LOOKER
+    goto_if_eq QuestJournal_EventScript_CheckCeruleanCityNPCs_PokecenterSuperNerd
+    return
+QuestJournal_EventScript_CheckCeruleanCityNPCs_PokecenterSuperNerd:
+    checkflag FLAG_QUEST_CERULEAN_NPC_POKECENTER_SUPER_NERD
+    goto_if_eq QuestJournal_EventScript_CheckCeruleanCityNPCs_PokecenterGentleman
+    return
+QuestJournal_EventScript_CheckCeruleanCityNPCs_PokecenterGentleman:
+    checkflag FLAG_QUEST_CERULEAN_NPC_POKECENTER_GENTLEMAN
+    goto_if_eq QuestJournal_EventScript_CheckCeruleanCityNPCs_PokemartBattleGirl
+    return
+QuestJournal_EventScript_CheckCeruleanCityNPCs_PokemartBattleGirl:
+    checkflag FLAG_QUEST_CERULEAN_NPC_POKEMART_BATTLE_GIRL
+    goto_if_eq QuestJournal_EventScript_CheckCeruleanCityNPCs_PokemartJuggler
+    return
+QuestJournal_EventScript_CheckCeruleanCityNPCs_PokemartJuggler:
+    checkflag FLAG_QUEST_CERULEAN_NPC_POKEMART_JUGGLER
+    goto_if_eq QuestJournal_EventScript_CheckCeruleanCityNPCs_Done
+    return
+QuestJournal_EventScript_CheckCeruleanCityNPCs_Done:
+    setflag FLAG_QUEST_CERULEAN_NPCS_COMPLETED
+    call QuestJournal_EventScript_QuestCompleteAlert
+QuestJournal_EventScript_CheckCeruleanCityNPCs_End:
+    return
 
 CeruleanCity_EventScript_Light::
     msgbox CeruleanCity_Text_Light, MSGBOX_SIGN
@@ -653,8 +817,8 @@ CeruleanCity_Text_Slowbro_Stub:
     .string "Something about them feels... off.$"
 
 CeruleanCity_Text_SlowbroWoman_Stub:
-    .string "This trainer keeps glancing north.\p"
-    .string "Like they're waiting for someone...$"
+    .string "I just learned that Slowpoke has\n"
+    .string "other forms! So cool.$"
 
 CeruleanCity_Text_Fisher:
     .string "I'm a huge fan of CERULEAN GYM's\n"
@@ -801,8 +965,12 @@ CeruleanCity_Text_PoliceGate_Block:
     .string "an unknown accomplice going in and\l"
     .string "out of CERULEAN CAVE.\p"
     .string "MICHAEL hasn't come back this way\n"
-    .string "yet, so I can't let anyone pass\n"
+    .string "yet, so I can't let anyone pass\l"
     .string "without his word.$"
+
+CeruleanCity_Text_PoliceGate_Allowed:
+    .string "You got the word? All right.\p"
+    .string "Route 24's open. Watch yourself.$"
 
 CeruleanCity_Text_Light:
     .string "Portable lights. Someone set\n"

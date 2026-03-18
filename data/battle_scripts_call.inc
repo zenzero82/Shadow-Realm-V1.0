@@ -8,6 +8,7 @@ gBattleScript_PlayerCall_Shadow_Normal:
     waitmessage B_WAIT_TIME_SHORT
     printstring STRINGID_SHADOWCALMEDSLIGHTLY
     waitmessage B_WAIT_TIME_SHORT
+    call BattleScript_PlayerCall_TryClearConfusion
     end2
     .size gBattleScript_PlayerCall_Shadow_Normal, .-gBattleScript_PlayerCall_Shadow_Normal
 
@@ -21,6 +22,7 @@ gBattleScript_PlayerCall_Shadow_ReverseEnded:
     printstring STRINGID_SHADOWCAMETOSENSES
     waitmessage B_WAIT_TIME_SHORT
     callnative BS_ClearReverseModeAfterCall
+    call BattleScript_PlayerCall_TryClearConfusion
     end2
     .size gBattleScript_PlayerCall_Shadow_ReverseEnded, .-gBattleScript_PlayerCall_Shadow_ReverseEnded
 
@@ -41,14 +43,27 @@ gBattleScript_PlayerCall_NonShadow:
     waitmessage B_WAIT_TIME_LONG
     printstring STRINGID_TRAINERENCOURAGEDMON
     waitmessage B_WAIT_TIME_SHORT
+    call BattleScript_PlayerCall_TryClearConfusion
     end2
 
 BattleScript_PlayerCall_NonShadow_End:
     pause B_WAIT_TIME_SHORTEST
     printstring STRINGID_STATSWONTINCREASE
     waitmessage B_WAIT_TIME_LONG
+    call BattleScript_PlayerCall_TryClearConfusion
     end2
     .size gBattleScript_PlayerCall_NonShadow, .-gBattleScript_PlayerCall_NonShadow
+
+BattleScript_PlayerCall_TryClearConfusion:
+    jumpifstatus2 BS_ATTACKER, STATUS2_CONFUSION, BattleScript_PlayerCall_ClearConfusion
+    return
+
+BattleScript_PlayerCall_ClearConfusion:
+    clearstatusfromeffect BS_ATTACKER, MOVE_EFFECT_CONFUSION
+    printstring STRINGID_PKMNHEALEDCONFUSION
+    waitmessage B_WAIT_TIME_LONG
+    updatestatusicon BS_ATTACKER
+    return
 
     .align 2
 .global BattleScript_ShadowPokemonHint

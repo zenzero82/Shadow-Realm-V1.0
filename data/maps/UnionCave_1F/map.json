@@ -17,10 +17,10 @@
     {
       "local_id": "LOCALID_ROAMING_HUNTER_UNION_CAVE_1F",
       "graphics_id": "OBJ_EVENT_GFX_VAR_0",
-      "x": 9,
-      "y": 8,
+      "x": 22,
+      "y": 55,
       "elevation": 0,
-      "movement_type": "MOVEMENT_TYPE_FACE_DOWN",
+      "movement_type": "MOVEMENT_TYPE_FACE_UP",
       "movement_range_x": 0,
       "movement_range_y": 0,
       "trainer_type": "TRAINER_TYPE_NONE",
@@ -102,7 +102,7 @@
       "movement_range_x": 0,
       "movement_range_y": 0,
       "trainer_type": "TRAINER_TYPE_NONE",
-      "trainer_sight_or_berry_tree_id": "ITEM_ESCAPE_ROPE",
+      "trainer_sight_or_berry_tree_id": "ITEM_POTION",
       "script": "Common_EventScript_FindItem",
       "flag": "FLAG_ITEM_UNION_CAVE_1F_ESCAPE_ROPE"
     },
@@ -114,9 +114,9 @@
       "movement_type": "MOVEMENT_TYPE_FACE_DOWN_AND_LEFT",
       "movement_range_x": 0,
       "movement_range_y": 0,
-      "trainer_type": "TRAINER_TYPE_NONE",
+      "trainer_type": "TRAINER_TYPE_NORMAL",
       "trainer_sight_or_berry_tree_id": "4",
-      "script": "UnionCave_1F_EventScript_FirebreatherNPC",
+      "script": "UnionCave_1F_EventScript_FirebreatherTrainer",
       "flag": "0"
     },
     {

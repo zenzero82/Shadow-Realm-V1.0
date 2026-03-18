@@ -2,7 +2,7 @@
   "id": "MAP_DIGLETTS_CAVE_SOUTH",
   "name": "DiglettsCave_South",
   "layout": "LAYOUT_DIGLETTS_CAVE_SOUTH",
-  "music": "MUS_DUMMY",
+  "music": "MUS_HG_UNION_CAVE",
   "region_map_section": "MAPSEC_DIGLETTS_CAVE",
   "requires_flash": false,
   "weather": "WEATHER_NONE",

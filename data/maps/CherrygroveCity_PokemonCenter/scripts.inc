@@ -6,18 +6,30 @@ CherrygroveCity_PokemonCenter_OnTransition:
 	setrespawn HEAL_LOCATION_CHERRYGROVE_CITY
 	end
 
+CherrygroveCity_PokemonCenter_Speaker_Fisherman:
+	.string "BRUCE$"
+
+CherrygroveCity_PokemonCenter_Speaker_Lass:
+	.string "KARA$"
+
+CherrygroveCity_PokemonCenter_Speaker_Gentleman:
+	.string "EDWARD$"
+
 CherrygroveCity_PokemonCenter_EventScript_Fisherman::
 	faceplayer
+	setspeaker CherrygroveCity_PokemonCenter_Speaker_Fisherman
 	msgbox CherrygroveCity_PokemonCenter_Text_Fisherman, MSGBOX_NPC
 	end
 
 CherrygroveCity_PokemonCenter_EventScript_Lass::
 	faceplayer
+	setspeaker CherrygroveCity_PokemonCenter_Speaker_Lass
 	msgbox CherrygroveCity_PokemonCenter_Text_Lass, MSGBOX_NPC
 	end
 
 CherrygroveCity_PokemonCenter_EventScript_Gentleman::
 	faceplayer
+	setspeaker CherrygroveCity_PokemonCenter_Speaker_Gentleman
 	msgbox CherrygroveCity_PokemonCenter_Text_Gentleman, MSGBOX_NPC
 	end
 

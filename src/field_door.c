@@ -334,6 +334,7 @@ static const u8 sDoorAnimPalettes_Rocket_Door[] = {2, 2, 2, 2, 2, 2, 2, 2,};
 static const u8 sDoorAnimPalettes_SSAqua[] = {7, 7, 7, 7, 7, 7, 7, 7,};
 static const u8 sDoorAnimPalettes_OaksLabDoor[] = {10, 10, 10, 10, 10, 10, 10, 10};
 static const u8 sDoorAnimPalettes_JohtoGym[] = {3, 3, 3, 3, 3, 3, 3, 3};
+static const u8 sDoorAnimPalettes_VioletCity_Door[] = {2, 2, 2, 2, 2, 2, 2, 2};
 
 
 static const struct DoorGraphics sDoorAnimGraphicsTable[] =
@@ -395,9 +396,11 @@ static const struct DoorGraphics sDoorAnimGraphicsTable[] =
     {METATILE_TrainerHill_Door_Elevator_Roof, DOOR_SOUND_SLIDING, DOOR_SIZE_1x2, sDoorAnimTiles_TrainerHillRoofElevator, sDoorAnimPalettes_TrainerHillRoofElevator},
     {METATILE_FRLG_Pallet_Door_Green, DOOR_SOUND_NORMAL, DOOR_SIZE_1x1, sDoorAnimTiles_NewBarkTown_Door_Green, sDoorAnimPalettes_OaksLabDoor},
     {METATILE_FRLG_Pallet_Door_Red, DOOR_SOUND_NORMAL, DOOR_SIZE_1x1, sDoorAnimTiles_NewBarkTown_Door_Red, sDoorAnimPalettes_NewBarkTown_Door_Red},
+    {0x24E, DOOR_SOUND_NORMAL, DOOR_SIZE_1x1, sDoorAnimTiles_Pewter, sDoorAnimPalettes_Pewter},
+    {0x230, DOOR_SOUND_NORMAL, DOOR_SIZE_1x1, sDoorAnimTiles_General, sDoorAnimPalettes_VioletCity_Door},
     {METATILE_johto_general_og_Door, DOOR_SOUND_NORMAL, DOOR_SIZE_1x1, sDoorAnimTiles_Generaljk, sDoorAnimPalettes_Generaljk},
-    {METATILE_johto_general_og_Door_Sliding, DOOR_SOUND_SLIDING, DOOR_SIZE_1x1, sDoorAnimTiles_PokeCenterjk, sDoorAnimPalettes_PokeCenterjk},
-    {METATILE_johto_general_og_Door_Gym, DOOR_SOUND_SLIDING, DOOR_SIZE_1x1, sDoorAnimTiles_JohtoGym, sDoorAnimPalettes_JohtoGym},
+    {METATILE_johto_general_og_johto_shop, DOOR_SOUND_SLIDING, DOOR_SIZE_1x1, sDoorAnimTiles_PokeCenterjk, sDoorAnimPalettes_PokeCenterjk},
+    {METATILE_johto_general_og_johto_gym, DOOR_SOUND_SLIDING, DOOR_SIZE_1x1, sDoorAnimTiles_JohtoGym, sDoorAnimPalettes_JohtoGym},
     {METATILE_goldenrod_city_Goldenrod, DOOR_SOUND_NORMAL, DOOR_SIZE_1x1, sDoorAnimTiles_Goldenrod, sDoorAnimPalettes_Goldenrod},
     {METATILE_new_bark_Door_Blue, DOOR_SOUND_NORMAL, DOOR_SIZE_1x1, sDoorAnimTiles_NewBarkTown_Door_Blue, sDoorAnimPalettes_NewBarkTown_Door_Blue},
     {METATILE_new_bark_Door_Red, DOOR_SOUND_NORMAL, DOOR_SIZE_1x1, sDoorAnimTiles_NewBarkTown_Door_Red, sDoorAnimPalettes_NewBarkTown_Door_Red},
@@ -410,6 +413,7 @@ static const struct DoorGraphics sDoorAnimGraphicsTable[] =
     {METATILE_fuchsia_city_Fuchsia, DOOR_SOUND_NORMAL, DOOR_SIZE_1x1, sDoorAnimTiles_Fuchsia, sDoorAnimPalettes_Fuchsia},
     {METATILE_fuchsia_city_Red_Door, DOOR_SOUND_SLIDING, DOOR_SIZE_1x1, sDoorAnimTiles_Fuchsia_Red_Door, sDoorAnimPalettes_Fuchsia_Red_Door},
     {METATILE_viridian_Viridian_Door, DOOR_SOUND_NORMAL, DOOR_SIZE_1x1, sDoorAnimTiles_Viridian, sDoorAnimPalettes_Viridian},
+    {0x26B, DOOR_SOUND_NORMAL, DOOR_SIZE_1x1, sDoorAnimTiles_Pewter, sDoorAnimPalettes_Pewter},
     {},
 };
 

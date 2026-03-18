@@ -130,6 +130,7 @@ static void CreateAreaMarkerSprites(void);
 static void LoadAreaUnknownGraphics(void);
 static void CreateAreaUnknownSprites(void);
 static void Task_HandlePokedexAreaScreenInput(u8);
+static void UpdateAreaScreenForTimeOfDay(void);
 static void ResetPokedexAreaMapBg(void);
 static void DestroyAreaScreenSprites(void);
 static void AddTimeOfDayLabels(void);
@@ -269,15 +270,19 @@ static const struct WindowTemplate sTimeOfDayWindowLabelTemplates[] =
 static const struct WindowTemplate sShadowMonitorHeaderWindowTemplate =
 {
     .bg = LABEL_WINDOW_BG,
-    .tilemapLeft = 1,
+    .tilemapLeft = 0,
     .tilemapTop = 0,
-    .width = 7,
-    .height = 2,
+    .width = 32,
+    .height = 3,
     .paletteNum = 0,
     .baseBlock = 0x2A0,
 };
 
 static EWRAM_DATA u8 sShadowMonitorHeaderWindowId;
+#define SHADOW_MONITOR_HEADER_TILE_ID 255
+#define SHADOW_MONITOR_HEADER_TILE_COLOR 0xFF
+static const u8 sShadowMonitorHeaderBlankTile[32] = { [0 ... 31] = SHADOW_MONITOR_HEADER_TILE_COLOR };
+static const u16 sShadowMonitorHeaderBlankTilemap[32 * 3] = { [0 ... 95] = SHADOW_MONITOR_HEADER_TILE_ID };
 
 static void ResetDrawAreaGlowState(void)
 {
@@ -862,7 +867,10 @@ static void Task_ShowPokedexAreaScreen(u8 taskId)
             ShadowMonitor_SetupAreaHeader();
         if (POKEDEX_PLUS_HGSS)
             LoadHGSSScreenSelectBarSubmenu();
-        ShowBg(2);
+        if (!gIsShadowMonitorOpen)
+            ShowBg(2);
+        else
+            HideBg(2);
         ShowBg(3); // TryShowPokedexAreaMap will have done this already
         SetGpuRegBits(REG_OFFSET_DISPCNT, DISPCNT_OBJ_ON);
         break;
@@ -911,11 +919,19 @@ static void Task_UpdatePokedexAreaScreen(u8 taskId)
     case 5:
         SetGpuReg(REG_OFFSET_BLDCNT, BLDCNT_TGT1_BG0 | BLDCNT_EFFECT_BLEND | BLDCNT_TGT2_BG0 | BLDCNT_TGT2_ALL);
         StartAreaGlow();
-        AddTimeOfDayLabels();
-        ShowEncounterInfoLabel();
-        if (ShouldShowAreaUnknownLabel())
-            ShowAreaUnknownLabel();
-        ShowBg(2);
+        if (OW_TIME_OF_DAY_ENCOUNTERS && !gIsShadowMonitorOpen)
+        {
+            AddTimeOfDayLabels();
+            ShowEncounterInfoLabel();
+            if (ShouldShowAreaUnknownLabel())
+                ShowAreaUnknownLabel();
+        }
+        if (gIsShadowMonitorOpen)
+            ShadowMonitor_SetupAreaHeader();
+        if (!gIsShadowMonitorOpen)
+            ShowBg(2);
+        else
+            HideBg(2);
         SetGpuRegBits(REG_OFFSET_DISPCNT, DISPCNT_OBJ_ON);
         break;
     case 6:
@@ -940,6 +956,23 @@ static void Task_HandlePokedexAreaScreenInput(u8 taskId)
             return;
         break;
     case 1:
+        if (gIsShadowMonitorOpen)
+        {
+            if (JOY_NEW(B_BUTTON)
+             || JOY_NEW(DPAD_LEFT)
+             || (JOY_NEW(L_BUTTON) && gSaveBlock2Ptr->optionsButtonMode == OPTIONS_BUTTON_MODE_LR)
+             || JOY_NEW(DPAD_RIGHT)
+             || (JOY_NEW(R_BUTTON) && gSaveBlock2Ptr->optionsButtonMode == OPTIONS_BUTTON_MODE_LR))
+            {
+                gTasks[taskId].data[1] = 1;
+                PlaySE(SE_DEX_PAGE);
+            }
+            else
+            {
+                return;
+            }
+            break;
+        }
         if (JOY_NEW(B_BUTTON))
         {
             gTasks[taskId].data[1] = 1;
@@ -962,17 +995,17 @@ static void Task_HandlePokedexAreaScreenInput(u8 taskId)
         }
         else if (!gIsShadowMonitorOpen && JOY_NEW(DPAD_UP) && OW_TIME_OF_DAY_ENCOUNTERS == TRUE)
         {
-            gTasks[taskId].data[1] = 3;
             gAreaTimeOfDay = TryDecrementTimeOfDay(gAreaTimeOfDay);
-            sPokedexAreaScreen->areaState = DEX_UPDATE_AREA_SCREEN;
+            UpdateAreaScreenForTimeOfDay();
             PlaySE(SE_DEX_PAGE);
+            return;
         }
         else if (!gIsShadowMonitorOpen && JOY_NEW(DPAD_DOWN) && OW_TIME_OF_DAY_ENCOUNTERS == TRUE)
         {
-            gTasks[taskId].data[1] = 3;
             gAreaTimeOfDay = TryIncrementTimeOfDay(gAreaTimeOfDay);
-            sPokedexAreaScreen->areaState = DEX_UPDATE_AREA_SCREEN;
+            UpdateAreaScreenForTimeOfDay();
             PlaySE(SE_DEX_PAGE);
+            return;
         }
         else
         {
@@ -1005,6 +1038,27 @@ static void Task_HandlePokedexAreaScreenInput(u8 taskId)
     }
 
     gTasks[taskId].tState++;
+}
+
+static void UpdateAreaScreenForTimeOfDay(void)
+{
+    DestroyAreaScreenSprites();
+    FindMapsWithMon(sPokedexAreaScreen->species);
+    BuildAreaGlowTilemap();
+    LoadBgTilemap(2, sPokedexAreaScreen->areaGlowTilemap, sizeof(sPokedexAreaScreen->areaGlowTilemap), 0);
+    CpuCopy32(sAreaGlow_Pal, &gPlttBufferUnfaded[BG_PLTT_ID(GLOW_PALETTE)], sizeof(sAreaGlow_Pal));
+    ChangeBgY(2, -BG_SCREEN_SIZE, BG_COORD_SET);
+    CreateAreaMarkerSprites();
+    AddTimeOfDayLabels();
+    ShowEncounterInfoLabel();
+    if (ShouldShowAreaUnknownLabel())
+        ShowAreaUnknownLabel();
+    StartAreaGlow();
+    if (!gIsShadowMonitorOpen)
+        ShowBg(2);
+    else
+        HideBg(2);
+    SetGpuRegBits(REG_OFFSET_DISPCNT, DISPCNT_OBJ_ON);
 }
 
 static void ResetPokedexAreaMapBg(void)
@@ -1096,13 +1150,17 @@ static void ShadowMonitor_SetupAreaHeader(void)
     u8 x;
 
     FillBgTilemapBufferRect_Palette0(LABEL_WINDOW_BG, 0, 0, 0, 32, 32);
+    LoadBgTiles(sPokedexAreaMapTemplate.bg, sShadowMonitorHeaderBlankTile,
+                sizeof(sShadowMonitorHeaderBlankTile), SHADOW_MONITOR_HEADER_TILE_ID);
+    LoadBgTilemap(sPokedexAreaMapTemplate.bg, sShadowMonitorHeaderBlankTilemap,
+                  sizeof(sShadowMonitorHeaderBlankTilemap), 0);
 
     if (sShadowMonitorHeaderWindowId == WINDOW_NONE)
         sShadowMonitorHeaderWindowId = AddWindow(&sShadowMonitorHeaderWindowTemplate);
     if (sShadowMonitorHeaderWindowId == WINDOW_NONE)
         return;
 
-    FillWindowPixelBuffer(sShadowMonitorHeaderWindowId, PIXEL_FILL(0));
+    FillWindowPixelBuffer(sShadowMonitorHeaderWindowId, PIXEL_FILL(15));
     PutWindowTilemap(sShadowMonitorHeaderWindowId);
     x = GetStringCenterAlignXOffset(FONT_NORMAL, sText_Tracker, tabWidth);
     AddTextPrinterParameterized4(sShadowMonitorHeaderWindowId, FONT_NORMAL, x, tabY, 0, 0, sTextColor, TEXT_SKIP_DRAW, sText_Tracker);

@@ -7174,6 +7174,7 @@ BattleScript_PrintUproarOverTurns::
 
 BattleScript_ThrashConfuses::
 	chosenstatus2animation BS_ATTACKER, STATUS2_CONFUSION
+	updatestatusicon BS_ATTACKER
 	printstring STRINGID_PKMNFATIGUECONFUSION
 	waitmessage B_WAIT_TIME_LONG
 	end2
@@ -7223,6 +7224,7 @@ BattleScript_MoveUsedPowder::
 BattleScript_MoveUsedIsConfusedNoMore::
 	printstring STRINGID_PKMNHEALEDCONFUSION
 	waitmessage B_WAIT_TIME_LONG
+	updatestatusicon BS_ATTACKER
 	return
 
 BattleScript_PrintPayDayMoneyString::
@@ -7393,6 +7395,7 @@ BattleScript_MoveEffectWrap::
 
 BattleScript_MoveEffectConfusion::
 	chosenstatus2animation BS_EFFECT_BATTLER, STATUS2_CONFUSION
+	updatestatusicon BS_EFFECT_BATTLER
 	printstring STRINGID_PKMNWASCONFUSED
 	waitmessage B_WAIT_TIME_LONG
 	return
@@ -8775,6 +8778,7 @@ BattleScript_BerryCureConfusionRet::
 	playanimation BS_SCRIPTING, B_ANIM_HELD_ITEM_EFFECT
 	printstring STRINGID_PKMNSITEMSNAPPEDOUT
 	waitmessage B_WAIT_TIME_LONG
+	updatestatusicon BS_SCRIPTING
 	removeitem BS_SCRIPTING
 	return
 
@@ -9821,6 +9825,7 @@ BattleScript_ConfuseSideLoop:
 	jumpifabsent BS_TARGET, BattleScript_ConfuseSideIncrement
 	trysetconfusion BattleScript_ConfuseSideIncrement
 	status2animation BS_EFFECT_BATTLER, STATUS2_CONFUSION
+	updatestatusicon BS_EFFECT_BATTLER
 BattleScript_ConfuseSidePrintMessage:
 	printfromtable gStatus2StringIds
 	waitmessage B_WAIT_TIME_LONG

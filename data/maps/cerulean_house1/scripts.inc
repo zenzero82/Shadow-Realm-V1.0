@@ -13,6 +13,8 @@ cerulean_house1_EventScript_BaldingMan::
 	setspeaker cerulean_house1_Speaker_BaldingMan
 	msgbox cerulean_house1_Text_BaldingMan, MSGBOX_DEFAULT
 	closemessage
+	setflag FLAG_QUEST_CERULEAN_NPC_HOUSE1_BALDING
+	call QuestJournal_EventScript_CheckCeruleanCityNPCs
 	release
 	end
 
@@ -22,6 +24,8 @@ cerulean_house1_EventScript_Woman::
 	setspeaker cerulean_house1_Speaker_Woman
 	msgbox cerulean_house1_Text_Woman, MSGBOX_DEFAULT
 	closemessage
+	setflag FLAG_QUEST_CERULEAN_NPC_HOUSE1_WOMAN
+	call QuestJournal_EventScript_CheckCeruleanCityNPCs
 	release
 	end
 

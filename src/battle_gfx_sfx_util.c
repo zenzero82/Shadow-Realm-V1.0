@@ -878,9 +878,15 @@ void BattleGfxSfxDummy2(u16 species)
 void DecompressTrainerFrontPic(u16 frontPicId, u8 battler)
 {
     u8 position = GetBattlerPosition(battler);
+    u32 palIndex;
+
     DecompressPicFromTable(&gTrainerSprites[frontPicId].frontPic,
                            gMonSpritesGfxPtr->spritesGfx[position]);
-    LoadSpritePalette(&gTrainerSprites[frontPicId].palette);
+    palIndex = IndexOfSpritePaletteTag(gTrainerSprites[frontPicId].palette.tag);
+    if (palIndex == 0xFF)
+        LoadSpritePalette(&gTrainerSprites[frontPicId].palette);
+    else
+        LoadPalette(gTrainerSprites[frontPicId].palette.data, OBJ_PLTT_ID(palIndex), PLTT_SIZE_4BPP);
 }
 
 void DecompressTrainerBackPic(u16 backPicId, u8 battler)

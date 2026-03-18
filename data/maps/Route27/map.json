@@ -17,6 +17,11 @@
       "map": "MAP_NEW_BARK_TOWN",
       "offset": 11,
       "direction": "left"
+    },
+    {
+      "map": "MAP_ROUTE26",
+      "offset": -42,
+      "direction": "right"
     }
   ],
   "object_events": [],

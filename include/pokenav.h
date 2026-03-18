@@ -378,6 +378,7 @@ struct Sprite *GetSpinningPokenavSprite(void);
 void HideSpinningPokenavSprite(void);
 void UpdateRegionMapRightHeaderTiles(u32 menuGfxId);
 void UpdateRegionMapHeaderGfx(void);
+void UpdateMainMenuHeaderGfx(void);
 void HideMainOrSubMenuLeftHeader(u32 id, bool32 onRightSide);
 void SlideMenuHeaderUp(void);
 void PokenavFillPalette(u32 palIndex, u16 fillValue);

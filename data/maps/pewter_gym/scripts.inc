@@ -54,6 +54,7 @@ PewterCity_Gym_EventScript_Brock::
     msgbox PewterCity_Gym_Text_Brock_Intro, MSGBOX_DEFAULT
     call PewterCity_Gym_EventScript_Brock_CroagunkIntro
     turnobject LOCALID_BROCK, DIR_SOUTH
+    setspeaker PewterGym_Speaker_Brock
     msgbox PewterCity_Gym_Text_Brock_Apology, MSGBOX_DEFAULT
     trainerbattle_no_intro TRAINER_BROCK_KANTO, PewterCity_Gym_Text_Brock_WinLoss
 
@@ -61,9 +62,20 @@ PewterCity_Gym_EventScript_Brock::
     waitmessage
     call Common_EventScript_PlayGymBadgeFanfare
 
+    setspeaker PewterGym_Speaker_Brock
     msgbox PewterCity_Gym_Text_Brock_FightDone, MSGBOX_DEFAULT
     setflag FLAG_BADGE09_GET
     call PewterCity_Gym_EventScript_SetGymTrainers
+    checkflag FLAG_QUEST_BROCK_COMPLETED
+    goto_if_eq PewterCity_Gym_EventScript_Brock_QuestStartCerulean
+    setflag FLAG_QUEST_BROCK_COMPLETED
+    call QuestJournal_EventScript_QuestCompleteAlert
+PewterCity_Gym_EventScript_Brock_QuestStartCerulean:
+    checkflag FLAG_QUEST_CERULEAN_WES_STARTED
+    goto_if_eq PewterCity_Gym_EventScript_Brock_QuestDone
+    setflag FLAG_QUEST_CERULEAN_WES_STARTED
+    call QuestJournal_EventScript_NewQuestAlert
+PewterCity_Gym_EventScript_Brock_QuestDone:
 
     closemessage
     release
@@ -86,6 +98,7 @@ PewterCity_Gym_EventScript_Brock_CroagunkIntro::
     waitmoncry
 
     turnobject LOCALID_BROCK, DIR_EAST
+    setspeaker PewterGym_Speaker_Brock
     msgbox PewterCity_Gym_Text_Brock_Croagunk, MSGBOX_DEFAULT
 
     applymovement LOCALID_BROCK_CROAGUNK, PewterGym_Move_Croagunk_ReturnBall
@@ -172,7 +185,7 @@ PewterCity_Gym_Text_Brock_Apology:
 
 PewterCity_Gym_Text_Brock_WinLoss:
     .string "Your POKéMON's power and resolve\n"
-    .string "broke right through my rock-solid\n"
+    .string "broke right through my rock-solid\l"
     .string "defense…\p"
     .string "Looks like KANTO has another trainer\n"
     .string "ready to stand up to CIPHER.\p"

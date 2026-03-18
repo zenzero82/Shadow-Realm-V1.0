@@ -20,6 +20,10 @@
 #include "gpu_regs.h"
 #include "trig.h"
 #include "graphics.h"
+#include "string_util.h"
+#include "text.h"
+#include "window.h"
+#include "menu.h"
 #include "constants/rgb.h"
 #include "constants/songs.h"
 
@@ -27,6 +31,7 @@ enum {
     TAG_VERSION = 1000,
     TAG_PRESS_START_COPYRIGHT,
     TAG_LOGO_SHINE,
+    TAG_TITLE_VERSION_TEXT,
 };
 
 #define VERSION_BANNER_RIGHT_TILEOFFSET 64
@@ -36,6 +41,9 @@ enum {
 #define VERSION_BANNER_Y_GOAL 63
 #define START_BANNER_X 128
 #define START_BANNER_Y 148
+#define TITLE_VERSION_TEXT_BLOCKS 2
+#define TITLE_VERSION_TEXT_X (DISPLAY_WIDTH - 16 - ((TITLE_VERSION_TEXT_BLOCKS - 1) * 32))
+#define TITLE_VERSION_TEXT_Y (DISPLAY_HEIGHT - 16)
 
 #define CLEAR_SAVE_BUTTON_COMBO (B_BUTTON | SELECT_BUTTON | DPAD_UP)
 #define RESET_RTC_BUTTON_COMBO (B_BUTTON | SELECT_BUTTON | DPAD_LEFT)
@@ -53,11 +61,15 @@ static void CB2_GoToResetRtcScreen(void);
 static void CB2_GoToBerryFixScreen(void);
 static void CB2_GoToCopyrightScreen(void);
 static void UpdateLegendaryMarkingColor(u8);
+static void CreateTitleVersionTextSprites(void);
+static void TitleScreen_DrawTextTilesSmall(const u8 *string, void *dst, s32 bytesToBuffer);
 
 static void SpriteCB_VersionBannerLeft(struct Sprite *sprite);
 static void SpriteCB_VersionBannerRight(struct Sprite *sprite);
 static void SpriteCB_PressStartCopyrightBanner(struct Sprite *sprite);
 static void SpriteCB_PokemonLogoShine(struct Sprite *sprite);
+
+void DrawTextWindowAndBufferTiles(const u8 *string, void *dst, u8 zero1, u8 zero2, s32 bytesToBuffer);
 
 // const rom data
 static const u16 sUnusedUnknownPal[] = INCBIN_U16("graphics/title_screen/unused.gbapal");
@@ -67,6 +79,72 @@ static const u32 sTitleScreenRayquazaTilemap[] = INCBIN_U32("graphics/title_scre
 static const u32 sTitleScreenLogoShineGfx[] = INCBIN_U32("graphics/title_screen/logo_shine.4bpp.lz");
 static const u32 sTitleScreenCloudsGfx[] = INCBIN_U32("graphics/title_screen/clouds.4bpp.lz");
 static const u16 sTitleScreenLogoShinePal[] = INCBIN_U16("graphics/title_screen/logo_shine.gbapal");
+static const u8 sText_TitleVersion[] = _("V 1.4.2");
+
+static const struct WindowTemplate sTitleScreenWindowTemplates[] =
+{
+    DUMMY_WIN_TEMPLATE
+};
+
+static const u16 sTitleVersionTextPal[16] =
+{
+    RGB(0, 0, 0),
+    RGB(8, 8, 8),
+    RGB(3, 3, 3),
+    RGB(8, 8, 8),
+    RGB(0, 0, 0),
+    RGB(0, 0, 0),
+    RGB(0, 0, 0),
+    RGB(0, 0, 0),
+    RGB(0, 0, 0),
+    RGB(0, 0, 0),
+    RGB(0, 0, 0),
+    RGB(0, 0, 0),
+    RGB(0, 0, 0),
+    RGB(0, 0, 0),
+    RGB(8, 8, 8),
+    RGB(3, 3, 3),
+};
+
+static const struct SpritePalette sSpritePalette_TitleVersionText[] =
+{
+    {
+        .data = sTitleVersionTextPal,
+        .tag = TAG_TITLE_VERSION_TEXT
+    },
+    {},
+};
+
+static EWRAM_DATA u8 sTitleVersionTextTileBuffer[TITLE_VERSION_TEXT_BLOCKS * 0x100] = {0};
+static EWRAM_DATA u8 *sTitleVersionTextTileBuffers[TITLE_VERSION_TEXT_BLOCKS] = {0};
+
+static const struct OamData sTitleVersionTextOamData =
+{
+    .y = DISPLAY_HEIGHT,
+    .affineMode = ST_OAM_AFFINE_OFF,
+    .objMode = ST_OAM_OBJ_NORMAL,
+    .mosaic = FALSE,
+    .bpp = ST_OAM_4BPP,
+    .shape = SPRITE_SHAPE(32x16),
+    .x = 0,
+    .matrixNum = 0,
+    .size = SPRITE_SIZE(32x16),
+    .tileNum = 0,
+    .priority = 0,
+    .paletteNum = 0,
+    .affineParam = 0,
+};
+
+static const struct SpriteTemplate sTitleVersionTextSpriteTemplate =
+{
+    .tileTag = TAG_TITLE_VERSION_TEXT,
+    .paletteTag = TAG_TITLE_VERSION_TEXT,
+    .oam = &sTitleVersionTextOamData,
+    .anims = gDummySpriteAnimTable,
+    .images = NULL,
+    .affineAnims = gDummySpriteAffineAnimTable,
+    .callback = SpriteCallbackDummy,
+};
 
 
 
@@ -448,6 +526,77 @@ static void CreatePressStartBanner(s16 x, s16 y)
     }
 }
 
+static void CreateTitleVersionTextSprites(void)
+{
+    struct SpriteSheet sheet;
+    struct SpriteTemplate temp;
+    u8 i;
+
+    sTitleVersionTextTileBuffers[0] = sTitleVersionTextTileBuffer;
+    sTitleVersionTextTileBuffers[1] = sTitleVersionTextTileBuffer + 0x100;
+
+    TitleScreen_DrawTextTilesSmall(sText_TitleVersion, sTitleVersionTextTileBuffers[0], TITLE_VERSION_TEXT_BLOCKS);
+
+    for (i = 0; i < TITLE_VERSION_TEXT_BLOCKS; i++)
+    {
+        sheet.data = sTitleVersionTextTileBuffers[i];
+        sheet.size = 0x100;
+        sheet.tag = TAG_TITLE_VERSION_TEXT + i;
+        LoadSpriteSheet(&sheet);
+    }
+
+    LoadSpritePalette(&sSpritePalette_TitleVersionText[0]);
+
+    for (i = 0; i < TITLE_VERSION_TEXT_BLOCKS; i++)
+    {
+        temp = sTitleVersionTextSpriteTemplate;
+        temp.tileTag += i;
+        CreateSprite(&temp, TITLE_VERSION_TEXT_X + (i * 32), TITLE_VERSION_TEXT_Y, 0);
+    }
+}
+
+static void TitleScreen_DrawTextTilesSmall(const u8 *string, void *dst, s32 bytesToBuffer)
+{
+    s32 i, tileBytesToBuffer, remainingBytes;
+    u16 windowId;
+    u8 txtColor[3];
+    u8 *tileData1, *tileData2;
+    struct WindowTemplate winTemplate = {0};
+
+    winTemplate.width = 24;
+    winTemplate.height = 2;
+    windowId = AddWindow(&winTemplate);
+    FillWindowPixelBuffer(windowId, PIXEL_FILL(0));
+    tileData1 = (u8 *)GetWindowAttribute(windowId, WINDOW_TILE_DATA);
+    tileData2 = (winTemplate.width * TILE_SIZE_4BPP) + tileData1;
+
+    txtColor[0] = TEXT_COLOR_TRANSPARENT;
+    txtColor[1] = TEXT_DYNAMIC_COLOR_6;
+    txtColor[2] = TEXT_DYNAMIC_COLOR_5;
+    AddTextPrinterParameterized4(windowId, FONT_SMALL, 0, 2, 0, 0, txtColor, TEXT_SKIP_DRAW, string);
+
+    tileBytesToBuffer = bytesToBuffer;
+    if (tileBytesToBuffer > 6u)
+        tileBytesToBuffer = 6;
+    remainingBytes = bytesToBuffer - 6;
+    if (tileBytesToBuffer > 0)
+    {
+        for (i = tileBytesToBuffer; i != 0; i--)
+        {
+            CpuCopy16(tileData1, dst, 0x80);
+            CpuCopy16(tileData2, dst + 0x80, 0x80);
+            tileData1 += 0x80;
+            tileData2 += 0x80;
+            dst += 0x100;
+        }
+    }
+
+    if (remainingBytes > 0)
+        CpuFill16((0 << 4) | 0, dst, (u32)(remainingBytes) * 0x100);
+
+    RemoveWindow(windowId);
+}
+
 #undef sAnimate
 #undef sTimer
 
@@ -609,6 +758,8 @@ void CB2_InitTitleScreen(void)
         ResetTasks();
         ResetSpriteData();
         FreeAllSpritePalettes();
+        InitWindows(sTitleScreenWindowTemplates);
+        DeactivateAllTextPrinters();
         gReservedSpritePaletteCount = 9;
         LoadCompressedSpriteSheet(&sSpriteSheet_EmeraldVersion[0]);
         LoadCompressedSpriteSheet(&sSpriteSheet_PressStart[0]);
@@ -757,6 +908,7 @@ static void Task_TitleScreenPhase2(u8 taskId)
                                     | DISPCNT_BG2_ON
                                     | DISPCNT_OBJ_ON);
         CreatePressStartBanner(START_BANNER_X, START_BANNER_Y);
+        CreateTitleVersionTextSprites();
         gTasks[taskId].tBg1Y = 0;
         gTasks[taskId].func = Task_TitleScreenPhase3;
     }

@@ -91,7 +91,7 @@ IslandCave_EventScript_Regice::
 	lock
 	faceplayer
 	waitse
-	playmoncry SPECIES_REGICE, CRY_MODE_ENCOUNTER
+	playmoncry SPECIES_REGICE, CRY_MODE_NORMAL
 	delay 40
 	waitmoncry
 	setwildbattle SPECIES_REGICE, 40

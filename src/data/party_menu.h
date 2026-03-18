@@ -641,6 +641,7 @@ static const u8 sPartyBoxCurrSelectionReversePalIds2[] = {209, 210, 211};
 
 static const u8 sPartyBoxHpTextPalIdsNormal[] = {51, 61};
 static const u8 sPartyBoxHpTextPalIdsShadow[] = {47, 31};
+static const u8 sPartyBoxHpTextPalIdsSelected[] = {61, 51};
 static const u8 sPartyBoxHpTextPalIdsReverse[] = {200, 201};
 static const u8 sPartyBoxHpTextPalOffsets[] = {13, 14};
 

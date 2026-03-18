@@ -180,102 +180,6 @@ Pallet_Town_Western_Forest_Text_Player_IntroThought2_Gone:
     .string "to see if anyone knows anything.$"
 
 
-@ ================================
-@ WEST FOREST PLASMA/GALACTIC TEST
-@ ================================
-
-Pallet_Town_Western_Forest_EventScript_PlasmaGrunt::
-    setspeaker PalletTownWesternForest_Speaker_PlasmaGrunt
-    trainerbattle_single TRAINER_VF_PLASMA, Pallet_Town_Western_Forest_Text_Plasma_Intro, Pallet_Town_Western_Forest_Text_Plasma_Defeat, Pallet_Town_Western_Forest_EventScript_PlasmaGrunt_After
-    goto Pallet_Town_Western_Forest_EventScript_PlasmaGrunt_After
-    end
-
-Pallet_Town_Western_Forest_EventScript_PlasmaGrunt_After::
-    settrainerflag TRAINER_VF_PLASMA
-    setspeaker PalletTownWesternForest_Speaker_PlasmaGrunt
-    msgbox Pallet_Town_Western_Forest_Text_Plasma_After, MSGBOX_DEFAULT
-    closemessage
-    release
-    end
-
-Pallet_Town_Western_Forest_EventScript_GalacticGrunt::
-    setspeaker PalletTownWesternForest_Speaker_GalacticGrunt
-    trainerbattle_single TRAINER_VF_GALACTIC, Pallet_Town_Western_Forest_Text_Galactic_Intro, Pallet_Town_Western_Forest_Text_Galactic_Defeat, Pallet_Town_Western_Forest_EventScript_GalacticGrunt_After
-    goto Pallet_Town_Western_Forest_EventScript_GalacticGrunt_After
-    end
-
-Pallet_Town_Western_Forest_EventScript_GalacticGrunt_After::
-    settrainerflag TRAINER_VF_GALACTIC
-    setspeaker PalletTownWesternForest_Speaker_GalacticGrunt
-    msgbox Pallet_Town_Western_Forest_Text_Galactic_After, MSGBOX_DEFAULT
-    closemessage
-    release
-    end
-
-Pallet_Town_Western_Forest_EventScript_SkullGrunt::
-    setspeaker PalletTownWesternForest_Speaker_SkullGrunt
-    trainerbattle_single TRAINER_VF_SKULL, Pallet_Town_Western_Forest_Text_Skull_Intro, Pallet_Town_Western_Forest_Text_Skull_Defeat, Pallet_Town_Western_Forest_EventScript_SkullGrunt_After
-    goto Pallet_Town_Western_Forest_EventScript_SkullGrunt_After
-    end
-
-Pallet_Town_Western_Forest_EventScript_SkullGrunt_After::
-    settrainerflag TRAINER_VF_SKULL
-    setspeaker PalletTownWesternForest_Speaker_SkullGrunt
-    msgbox Pallet_Town_Western_Forest_Text_Skull_After, MSGBOX_DEFAULT
-    closemessage
-    release
-    end
-
-Pallet_Town_Western_Forest_EventScript_FlareGrunt::
-    setspeaker PalletTownWesternForest_Speaker_FlareGrunt
-    trainerbattle_single TRAINER_VF_FLARE, Pallet_Town_Western_Forest_Text_Flare_Intro, Pallet_Town_Western_Forest_Text_Flare_Defeat, Pallet_Town_Western_Forest_EventScript_FlareGrunt_After
-    goto Pallet_Town_Western_Forest_EventScript_FlareGrunt_After
-    end
-
-Pallet_Town_Western_Forest_EventScript_FlareGrunt_After::
-    settrainerflag TRAINER_VF_FLARE
-    setspeaker PalletTownWesternForest_Speaker_FlareGrunt
-    msgbox Pallet_Town_Western_Forest_Text_Flare_After, MSGBOX_DEFAULT
-    closemessage
-    release
-    end
-
-Pallet_Town_Western_Forest_Text_Plasma_Intro:
-    .string "TEAM PLASMA has a mission here.$"
-
-Pallet_Town_Western_Forest_Text_Plasma_Defeat:
-    .string "No... our plans!$"
-
-Pallet_Town_Western_Forest_Text_Plasma_After:
-    .string "This changes nothing.$"
-
-Pallet_Town_Western_Forest_Text_Galactic_Intro:
-    .string "TEAM GALACTIC will reshape the world.$"
-
-Pallet_Town_Western_Forest_Text_Galactic_Defeat:
-    .string "We were too hasty...$"
-
-Pallet_Town_Western_Forest_Text_Galactic_After:
-    .string "We'll be back with a better plan.$"
-
-Pallet_Town_Western_Forest_Text_Skull_Intro:
-    .string "TEAM SKULL's here to cause trouble.$"
-
-Pallet_Town_Western_Forest_Text_Skull_Defeat:
-    .string "Yo... that's not cool.$"
-
-Pallet_Town_Western_Forest_Text_Skull_After:
-    .string "Maybe we should chill...$"
-
-Pallet_Town_Western_Forest_Text_Flare_Intro:
-    .string "TEAM FLARE will build a new world.$"
-
-Pallet_Town_Western_Forest_Text_Flare_Defeat:
-    .string "Our plan needs refinement.$"
-
-Pallet_Town_Western_Forest_Text_Flare_After:
-    .string "Beauty will prevail eventually.$"
-
 
 @ ================================
 @ WEST FOREST BADGE TEST NPC
@@ -416,19 +320,6 @@ Pallet_Town_Western_Forest_PortalNo_Littleroot::
 Pallet_Town_Western_Forest_Text_PortalAsk_Littleroot:
     .string "The portal feels different...\p"
     .string "Warp to LITTLEROOT TOWN?$"
-
-PalletTownWesternForest_Speaker_PlasmaGrunt:
-    .string "PLASMA GRUNT$"
-
-PalletTownWesternForest_Speaker_GalacticGrunt:
-    .string "GALACTIC GRUNT$"
-
-PalletTownWesternForest_Speaker_SkullGrunt:
-    .string "SKULL GRUNT$"
-
-PalletTownWesternForest_Speaker_FlareGrunt:
-    .string "FLARE GRUNT$"
-
 
 Speaker_Jeremy:
     .string "JEREMY$"

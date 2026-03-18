@@ -1009,6 +1009,7 @@ gBattleAnimGeneral_AquaRingHeal::
 	delay 4
 	createsprite gGuardRingSpriteTemplate, ANIM_ATTACKER, 0
 	waitforvisualfinish
+	createvisualtask AnimTask_BlendParticle, 5, ANIM_TAG_GUARD_RING, 0, 14, 0, RGB_BLUE
 	playsewithpan SE_SHINY, SOUND_PAN_ATTACKER
 	createvisualtask AnimTask_BlendColorCycle, 2, F_PAL_ATK_SIDE, 0, 2, 0, 10, RGB_WHITE
 	waitforvisualfinish
@@ -2103,7 +2104,7 @@ gBattleAnimMove_ShadowSneak::
 	clearmonbg ANIM_ATTACKER
 	invisible ANIM_ATTACKER
 	delay 0x1
-	createvisualtask AnimTask_DestinyBondWhiteShadow, 0x5, 0x0, 0x30
+	createvisualtask AnimTask_DestinyBondWhiteShadowSingleTarget, 0x5, 0x0, 0x30
 	delay 0x30
 	createvisualtask AnimTask_BlendColorCycle, 2, F_PAL_TARGET, 2, 2, 0, 15, RGB_BLACK
 	createsprite gShadowSneakImpactSpriteTemplate, ANIM_TARGET, 2, 0xfff6, 0xfff6, 0x0

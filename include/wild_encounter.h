@@ -68,5 +68,8 @@ u8 ChooseWildMonIndex_WaterRock(void);
 u8 ChooseHiddenMonIndex(void);
 bool32 MapHasNoEncounterData(void);
 enum TimeOfDay GetTimeOfDayForEncounters(u32 headerId, enum WildPokemonArea area);
+#define WILD_MON_CHECK_REPEL    (1 << 0)
+#define WILD_MON_CHECK_KEEN_EYE (1 << 1)
+bool8 TryGetRandomWildMonForArea(const struct WildPokemonInfo *wildMonInfo, enum WildPokemonArea area, u8 flags, u16 *species, u8 *level);
 
 #endif // GUARD_WILD_ENCOUNTER_H

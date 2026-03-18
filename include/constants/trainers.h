@@ -492,8 +492,9 @@
 #define TRAINER_CLASS_ACE_TRAINER    0x5A
 #define TRAINER_CLASS_TEAM_FLARE_ADMIN 0x5B
 #define TRAINER_CLASS_TEAM_GALACTIC_ADMIN 0x5C
+#define TRAINER_CLASS_JOHTO_LEADER   0x5D
 
-#define TRAINER_CLASS_COUNT          0x5D
+#define TRAINER_CLASS_COUNT          0x5E
 
 #define TRAINER_ENCOUNTER_MUSIC_MALE         0 // standard male encounter music
 #define TRAINER_ENCOUNTER_MUSIC_FEMALE       1 // standard female encounter music

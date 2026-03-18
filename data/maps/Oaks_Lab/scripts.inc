@@ -262,7 +262,10 @@ OaksLab_EventScript_Leo_Talk_HasStarter::
     setflag FLAG_SYS_NATIONAL_DEX
     special EnableNationalPokedex
     setflag FLAG_SYS_POKEDEX_GET
+    setflag FLAG_DEXNAV_GET
     special SetUnlockedPokedexFlags
+    call OaksLab_EventScript_Leo_GiveDexnav
+    call OaksLab_EventScript_Leo_GiveQuestJournal
     goto OaksLab_EventScript_Leo_Talk_Release
 
 OaksLab_EventScript_Leo_Talk_Release::
@@ -270,6 +273,7 @@ OaksLab_EventScript_Leo_Talk_Release::
     end
 OaksLab_EventScript_Leo_PostStarter::
     setspeaker OaksLab_Speaker_Leo
+    call OaksLab_EventScript_Leo_GiveQuestJournal
     msgbox OaksLab_Text_Leo_PostStarter, MSGBOX_DEFAULT
     closemessage
     release
@@ -312,6 +316,26 @@ OaksLab_EventScript_ReceivePokedex::
     playfanfare MUS_OBTAIN_ITEM
     message OaksLab_Text_ReceivedPokedex
     waitfanfare
+    return
+
+OaksLab_EventScript_Leo_GiveDexnav::
+    setspeaker OaksLab_Speaker_Leo
+    msgbox OaksLab_Text_Leo_Dexnav, MSGBOX_DEFAULT
+    closemessage
+    playfanfare MUS_OBTAIN_ITEM
+    message OaksLab_Text_ReceivedDexnav
+    waitfanfare
+    return
+
+OaksLab_EventScript_Leo_GiveQuestJournal::
+    checkflag FLAG_QUEST_PALLET_TOWN_STARTED
+    goto_if_eq OaksLab_EventScript_Leo_GiveQuestJournal_End
+    setspeaker OaksLab_Speaker_Leo
+    msgbox OaksLab_Text_Leo_QuestJournal, MSGBOX_DEFAULT
+    giveitem ITEM_QUEST_JOURNAL
+    setflag FLAG_QUEST_PALLET_TOWN_STARTED
+    call QuestJournal_EventScript_NewQuestAlert
+OaksLab_EventScript_Leo_GiveQuestJournal_End:
     return
 
 @ ---------------- BG SIGN SCRIPTS ----------------
@@ -399,9 +423,12 @@ OaksLab_LeoIntro_HaveSeenRoute1:
     setflag FLAG_SYS_NATIONAL_DEX
     special EnableNationalPokedex
     setflag FLAG_SYS_POKEDEX_GET
+    setflag FLAG_DEXNAV_GET
     special SetUnlockedPokedexFlags
+    call OaksLab_EventScript_Leo_GiveDexnav
 
 OaksLab_LeoIntro_AfterDex:
+    call OaksLab_EventScript_Leo_GiveQuestJournal
     setflag FLAG_OAKS_LAB_LEO_SCENE_DONE
     setflag FLAG_HIDE_PALLET_LEO
 
@@ -566,9 +593,10 @@ OaksLab_StarterBall_Ralts_Ready:
     setvar VAR_PLAYER_STARTER_SPECIES, SPECIES_IMPIDIMP
     setvar VAR_0x8004, SPECIES_IMPIDIMP
 
-    showmonpic VAR_PLAYER_STARTER_SPECIES, 10, 3
+    showmonpic SPECIES_IMPIDIMP, 10, 3
     waitse
-    playmoncry VAR_PLAYER_STARTER_SPECIES, CRY_MODE_NORMAL
+    playmoncry SPECIES_IMPIDIMP, CRY_MODE_NORMAL
+    waitmoncry
 
     msgbox OaksLab_Text_Ball_Ralts_Inspect, MSGBOX_YESNO
     compare VAR_RESULT, YES
@@ -597,9 +625,10 @@ OaksLab_StarterBall_Honedge_Ready:
     setvar VAR_PLAYER_STARTER_SPECIES, SPECIES_HONEDGE
     setvar VAR_0x8004, SPECIES_HONEDGE
 
-    showmonpic VAR_PLAYER_STARTER_SPECIES, 10, 3
+    showmonpic SPECIES_HONEDGE, 10, 3
     waitse
-    playmoncry VAR_PLAYER_STARTER_SPECIES, CRY_MODE_NORMAL
+    playmoncry SPECIES_HONEDGE, CRY_MODE_NORMAL
+    waitmoncry
 
     msgbox OaksLab_Text_Ball_Honedge_Inspect, MSGBOX_YESNO
     compare VAR_RESULT, YES
@@ -628,9 +657,10 @@ OaksLab_StarterBall_Zorua_Ready:
     setvar VAR_PLAYER_STARTER_SPECIES, SPECIES_SLOWPOKE_GALAR
     setvar VAR_0x8004, SPECIES_SLOWPOKE_GALAR
 
-    showmonpic VAR_PLAYER_STARTER_SPECIES, 10, 3
+    showmonpic SPECIES_SLOWPOKE_GALAR, 10, 3
     waitse
-    playmoncry VAR_PLAYER_STARTER_SPECIES, CRY_MODE_NORMAL
+    playmoncry SPECIES_SLOWPOKE_GALAR, CRY_MODE_NORMAL
+    waitmoncry
 
     msgbox OaksLab_Text_Ball_Zorua_Inspect, MSGBOX_YESNO
     compare VAR_RESULT, YES
@@ -783,6 +813,17 @@ OaksLab_Text_Leo_GrantNationalDex:
     .string "on your journey.\p"
     .string "It can really help document the strange\n"
     .string "appearance of POKéMON in this region.$"
+OaksLab_Text_Leo_Dexnav:
+    .string "Here, take the DEXNAV too.\p"
+    .string "It helps you search for POKéMON nearby.\p"
+    .string "When searching, hold A to slow-walk so\n"
+    .string "they don't run away.$"
+OaksLab_Text_Leo_QuestJournal:
+    .string "You should also take this Quest Journal\n"
+    .string "to keep track of the crazy things\l"
+    .string "happening.\p"
+    .string "Maybe your first entry can be speaking\n"
+    .string "with everyone in Pallet Town.$"
 OaksLab_Text_Nia_PostStarter:
     .string "We don't know much about what is\n"
     .string "happening.\p"
@@ -824,6 +865,8 @@ OaksLab_Text_Receive_Starter_Generic:
 
 OaksLab_Text_ReceivedPokedex:
     .string "You received the POKEDEX!$"
+OaksLab_Text_ReceivedDexnav:
+    .string "You received the DEXNAV!$"
 
 OaksLab_Text_OaksPC:
     .string "OAK's PC is full of notes on\n"

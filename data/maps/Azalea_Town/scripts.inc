@@ -1,5 +1,49 @@
 Azalea_Town_MapScripts::
+	map_script MAP_SCRIPT_ON_FRAME_TABLE, AzaleaTown_OnFrame
 	.byte 0
+
+#define LOCALID_AZALEA_AQUA_GRUNT_ILEX 4
+#define LOCALID_AZALEA_AQUA_GRUNT_GYM 5
+#define LOCALID_AZALEA_ILEX_OFFICER 6
+
+Azalea_Town_Speaker_Youngster:
+	.string "TIM$"
+
+Azalea_Town_Speaker_Lass:
+	.string "LUCY$"
+
+Azalea_Town_Speaker_Rocket:
+	.string "GRUNT$"
+
+Azalea_Town_Speaker_Officer:
+	.string "OFFICER$"
+
+AzaleaTown_OnFrame:
+	map_script_2 VAR_TEMP_1, 0, AzaleaTown_EventScript_CityEnter
+	.2byte 0
+
+AzaleaTown_EventScript_CityEnter::
+	setvar VAR_TEMP_1, 1
+	setflag FLAG_VISITED_AZALEA_TOWN
+	checkflag FLAG_KURTS_HOUSE_MARAUDER_SCENE_DONE
+	goto_if_eq AzaleaTown_EventScript_CityEnter_AfterMarauder
+	clearflag FLAG_HIDE_AZALEA_AQUA_GRUNTS
+	setflag FLAG_HIDE_AZALEA_ILEX_OFFICER
+	goto AzaleaTown_EventScript_CityEnter_QuestStart
+AzaleaTown_EventScript_CityEnter_AfterMarauder:
+	setflag FLAG_HIDE_AZALEA_AQUA_GRUNTS
+	clearflag FLAG_HIDE_AZALEA_ILEX_OFFICER
+AzaleaTown_EventScript_CityEnter_QuestStart:
+	checkflag FLAG_QUEST_AZALEA_NPCS_STARTED
+	goto_if_eq AzaleaTown_EventScript_CityEnter_QuestSkip
+	checkflag FLAG_QUEST_AZALEA_NPCS_COMPLETED
+	goto_if_eq AzaleaTown_EventScript_CityEnter_QuestSkip
+	lockall
+	setflag FLAG_QUEST_AZALEA_NPCS_STARTED
+	call QuestJournal_EventScript_NewQuestAlert
+	releaseall
+AzaleaTown_EventScript_CityEnter_QuestSkip:
+	end
 
 
 __stub_Azalea_Town::
@@ -50,18 +94,98 @@ AzaleaTown_EventScript_AzaleaSign_Text:
 
 AzaleaTown_EventScript_Youngster::
 	faceplayer
+	setspeaker Azalea_Town_Speaker_Youngster
 	msgbox AzaleaTown_Text_Youngster, MSGBOX_NPC
+	closemessage
+	setflag FLAG_QUEST_AZALEA_NPC_YOUNGSTER
+	call AzaleaTown_EventScript_CheckAzaleaQuest
 	end
 
 AzaleaTown_EventScript_Lass::
 	faceplayer
+	setspeaker Azalea_Town_Speaker_Lass
 	msgbox AzaleaTown_Text_Lass, MSGBOX_NPC
+	closemessage
+	setflag FLAG_QUEST_AZALEA_NPC_LASS
+	call AzaleaTown_EventScript_CheckAzaleaQuest
 	end
 
 AzaleaTown_EventScript_Rocket::
 	faceplayer
+	setspeaker Azalea_Town_Speaker_Rocket
 	msgbox AzaleaTown_Text_Rocket, MSGBOX_NPC
+	closemessage
+	setflag FLAG_QUEST_AZALEA_NPC_ROCKET
+	call AzaleaTown_EventScript_CheckAzaleaQuest
 	end
+
+AzaleaTown_EventScript_AquaGruntGym::
+	faceplayer
+	setspeaker Azalea_Town_Speaker_Rocket
+	msgbox AzaleaTown_Text_AquaGruntGym, MSGBOX_NPC
+	end
+
+AzaleaTown_EventScript_IlexOfficer::
+	faceplayer
+	setspeaker Azalea_Town_Speaker_Officer
+	msgbox AzaleaTown_Text_IlexOfficer, MSGBOX_NPC
+	end
+
+AzaleaTown_EventScript_CheckAzaleaQuest::
+	checkflag FLAG_QUEST_AZALEA_NPCS_STARTED
+	goto_if_eq AzaleaTown_EventScript_CheckAzaleaQuest_CheckCompleted
+	return
+AzaleaTown_EventScript_CheckAzaleaQuest_CheckCompleted:
+	checkflag FLAG_QUEST_AZALEA_NPCS_COMPLETED
+	goto_if_eq AzaleaTown_EventScript_CheckAzaleaQuest_Done
+	checkflag FLAG_QUEST_AZALEA_NPC_YOUNGSTER
+	goto_if_eq AzaleaTown_EventScript_CheckAzaleaQuest_CheckLass
+	return
+AzaleaTown_EventScript_CheckAzaleaQuest_CheckLass:
+	checkflag FLAG_QUEST_AZALEA_NPC_LASS
+	goto_if_eq AzaleaTown_EventScript_CheckAzaleaQuest_CheckRocket
+	return
+AzaleaTown_EventScript_CheckAzaleaQuest_CheckRocket:
+	checkflag FLAG_QUEST_AZALEA_NPC_ROCKET
+	goto_if_eq AzaleaTown_EventScript_CheckAzaleaQuest_CheckHouse1BlackBelt
+	return
+AzaleaTown_EventScript_CheckAzaleaQuest_CheckHouse1BlackBelt:
+	checkflag FLAG_QUEST_AZALEA_NPC_HOUSE1_BLACK_BELT
+	goto_if_eq AzaleaTown_EventScript_CheckAzaleaQuest_CheckHouse1LittleBoy
+	return
+AzaleaTown_EventScript_CheckAzaleaQuest_CheckHouse1LittleBoy:
+	checkflag FLAG_QUEST_AZALEA_NPC_HOUSE1_LITTLE_BOY
+	goto_if_eq AzaleaTown_EventScript_CheckAzaleaQuest_CheckKurtsHouseKurt
+	return
+AzaleaTown_EventScript_CheckAzaleaQuest_CheckKurtsHouseKurt:
+	checkflag FLAG_QUEST_AZALEA_NPC_KURTS_HOUSE_KURT
+	goto_if_eq AzaleaTown_EventScript_CheckAzaleaQuest_CheckMartRocker
+	return
+AzaleaTown_EventScript_CheckAzaleaQuest_CheckMartRocker:
+	checkflag FLAG_QUEST_AZALEA_NPC_MART_ROCKER
+	goto_if_eq AzaleaTown_EventScript_CheckAzaleaQuest_CheckMartBugCatcher
+	return
+AzaleaTown_EventScript_CheckAzaleaQuest_CheckMartBugCatcher:
+	checkflag FLAG_QUEST_AZALEA_NPC_MART_BUG_CATCHER
+	goto_if_eq AzaleaTown_EventScript_CheckAzaleaQuest_CheckPokecenterFisherman
+	return
+AzaleaTown_EventScript_CheckAzaleaQuest_CheckPokecenterFisherman:
+	checkflag FLAG_QUEST_AZALEA_NPC_POKECENTER_FISHERMAN
+	goto_if_eq AzaleaTown_EventScript_CheckAzaleaQuest_CheckPokecenterGentleman
+	return
+AzaleaTown_EventScript_CheckAzaleaQuest_CheckPokecenterGentleman:
+	checkflag FLAG_QUEST_AZALEA_NPC_POKECENTER_GENTLEMAN
+	goto_if_eq AzaleaTown_EventScript_CheckAzaleaQuest_CheckPokecenterWoman
+	return
+AzaleaTown_EventScript_CheckAzaleaQuest_CheckPokecenterWoman:
+	checkflag FLAG_QUEST_AZALEA_NPC_POKECENTER_WOMAN
+	goto_if_eq AzaleaTown_EventScript_CheckAzaleaQuest_AllDone
+	return
+AzaleaTown_EventScript_CheckAzaleaQuest_AllDone:
+	setflag FLAG_QUEST_AZALEA_NPCS_COMPLETED
+	call QuestJournal_EventScript_QuestCompleteAlert
+AzaleaTown_EventScript_CheckAzaleaQuest_Done:
+	return
 
 AzaleaTown_Text_Youngster:
 	.string "BUGSY's gym is buzzing.\n"
@@ -73,3 +197,12 @@ AzaleaTown_Text_Lass:
 
 AzaleaTown_Text_Rocket:
 	.string "Can't let you pass kid.$"
+
+AzaleaTown_Text_AquaGruntGym:
+	.string "We're taking care of business\n"
+	.string "here. Savvy?$"
+
+AzaleaTown_Text_IlexOfficer:
+	.string "A little late but I managed to\n"
+	.string "drive those grunts out of town\l"
+	.string "with the help of Bugsy!$"

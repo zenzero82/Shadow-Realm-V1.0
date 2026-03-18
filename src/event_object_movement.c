@@ -559,6 +559,9 @@ static const struct SpritePalette sObjectEventSpritePalettes[] = {
     {gObjectEventPal_Poochyena,             OBJ_EVENT_PAL_TAG_POOCHYENA},
     {gObjectEventPal_RedLeaf,               OBJ_EVENT_PAL_TAG_RED_LEAF},
     {gObjectEventPal_Lyra,                  OBJ_EVENT_PAL_TAG_LYRA},
+    {gObjectEventPal_AquaMemberM,           OBJ_EVENT_PAL_TAG_AQUA_MEMBER_M},
+    {gObjectEventPal_AquaMemberF,           OBJ_EVENT_PAL_TAG_AQUA_MEMBER_F},
+    {gObjectEventPal_Matt,                  OBJ_EVENT_PAL_TAG_MATT},
     {gObjectEventPal_Deoxys,                OBJ_EVENT_PAL_TAG_DEOXYS},
     {gObjectEventPal_BirthIslandStone,      OBJ_EVENT_PAL_TAG_BIRTH_ISLAND_STONE},
     {gObjectEventPal_HoOh,                  OBJ_EVENT_PAL_TAG_HO_OH},
@@ -566,6 +569,7 @@ static const struct SpritePalette sObjectEventSpritePalettes[] = {
     {gObjectEventPal_RubySapphireBrendan,   OBJ_EVENT_PAL_TAG_RS_BRENDAN},
     {gObjectEventPal_RubySapphireMay,       OBJ_EVENT_PAL_TAG_RS_MAY},
     {gObjectEventPal_HoopaRing,             OBJ_EVENT_PAL_TAG_HOOPA_RING},
+    {gObjectEventPal_HoopaRingTimeAmulet,   OBJ_EVENT_PAL_TAG_HOOPA_RING_TIME_AMULET},
     {gObjectEventPal_BrockGen1,             OBJ_EVENT_PAL_TAG_BROCK_GEN1},
     {gObjectEventPal_RocketGruntMGen1,      OBJ_EVENT_PAL_TAG_ROCKET_GRUNT_M_GEN1},
     {gObjectEventPal_RocketGruntFGen1,      OBJ_EVENT_PAL_TAG_ROCKET_GRUNT_F_GEN1},
@@ -764,6 +768,12 @@ static const struct SpritePalette sObjectEventSpritePalettes[] = {
     {gObjectEventPal_Ash,                    OBJ_EVENT_PAL_TAG_ASH},
     {gObjectEventPal_Ironmask,               OBJ_EVENT_PAL_TAG_IRONMASK},
     {gObjectEventPal_MirrorB,                OBJ_EVENT_PAL_TAG_MIRROR_B},
+    {gObjectEventPal_Resix,                  OBJ_EVENT_PAL_TAG_RESIX},
+    {gObjectEventPal_Blusix,                 OBJ_EVENT_PAL_TAG_BLUSIX},
+    {gObjectEventPal_Greesix,                OBJ_EVENT_PAL_TAG_GREESIX},
+    {gObjectEventPal_Purpsix,                OBJ_EVENT_PAL_TAG_PURPSIX},
+    {gObjectEventPal_Browsix,                OBJ_EVENT_PAL_TAG_BROWSIX},
+    {gObjectEventPal_Yellosix,               OBJ_EVENT_PAL_TAG_YELLOSIX},
 
 #if OW_FOLLOWERS_POKEBALLS
     {gObjectEventPal_MasterBall,            OBJ_EVENT_PAL_TAG_BALL_MASTER},
@@ -3417,8 +3427,11 @@ static void SetBerryTreeGraphicsById(struct ObjectEvent *objectEvent, u8 berryId
     const struct ObjectEventGraphicsInfo *graphicsInfo = GetObjectEventGraphicsInfo(graphicsId);
     struct Sprite *sprite = &gSprites[objectEvent->spriteId];
 
-    // Palette slots are shared; only the frame table changes for Gen2.
-    UpdateSpritePalette(&sObjectEventSpritePalettes[gBerryTreePaletteSlotTablePointers[berryId][berryStage] - 2], sprite);
+    // Use the matching palette table for the selected berry set.
+    const u8 *const *paletteTable = useGen2
+        ? gBerryTreePaletteSlotTablePointersGen2
+        : gBerryTreePaletteSlotTablePointers;
+    UpdateSpritePalette(&sObjectEventSpritePalettes[paletteTable[berryId][berryStage] - 2], sprite);
 
     sprite->oam.shape = graphicsInfo->oam->shape;
     sprite->oam.size = graphicsInfo->oam->size;
@@ -3959,6 +3972,9 @@ static const u8 *GetObjectEventScriptPointerByLocalIdAndMap(u8 localId, u8 mapNu
 {
     if (localId == OBJ_EVENT_ID_FOLLOWER)
         return EventScript_Follower;
+    if (localId >= OBJ_EVENT_ID_OVERWORLD_WILD_BASE
+     && localId < OBJ_EVENT_ID_OVERWORLD_WILD_BASE + OBJ_EVENT_ID_OVERWORLD_WILD_COUNT)
+        return EventScript_OverworldWildMon;
     return GetObjectEventTemplateByLocalIdAndMap(localId, mapNum, mapGroup)->script;
 }
 
@@ -3970,6 +3986,9 @@ const u8 *GetObjectEventScriptPointerByObjectEventId(u8 objectEventId)
 u16 GetObjectEventFlagIdByLocalIdAndMap(u8 localId, u8 mapNum, u8 mapGroup)
 {
     const struct ObjectEventTemplate *obj = GetObjectEventTemplateByLocalIdAndMap(localId, mapNum, mapGroup);
+    if (localId >= OBJ_EVENT_ID_OVERWORLD_WILD_BASE
+     && localId < OBJ_EVENT_ID_OVERWORLD_WILD_BASE + OBJ_EVENT_ID_OVERWORLD_WILD_COUNT)
+        return 0;
 #ifdef UBFIX
     // BUG: The function may return NULL, and attempting to read from NULL may freeze the game using modern compilers.
     if (obj == NULL)
@@ -4196,6 +4215,41 @@ bool8 MovementType_WanderAround_Step4(struct ObjectEvent *objectEvent, struct Sp
     u8 chosenDirection;
 
     memcpy(directions, gStandardDirections, sizeof directions);
+    if (objectEvent->localId >= OBJ_EVENT_ID_OVERWORLD_WILD_BASE
+     && objectEvent->localId < OBJ_EVENT_ID_OVERWORLD_WILD_BASE + OBJ_EVENT_ID_OVERWORLD_WILD_COUNT)
+    {
+        u8 i;
+        for (i = 0; i < ARRAY_COUNT(directions); i++)
+        {
+            u8 j = Random() & 3;
+            u8 tmp = directions[i];
+            directions[i] = directions[j];
+            directions[j] = tmp;
+        }
+
+        for (i = 0; i < ARRAY_COUNT(directions); i++)
+        {
+            s16 x = objectEvent->currentCoords.x;
+            s16 y = objectEvent->currentCoords.y;
+            u8 direction = directions[i];
+
+            MoveCoords(direction, &x, &y);
+            if (GetCollisionAtCoords(objectEvent, x, y, direction) != COLLISION_NONE)
+                continue;
+            if (IsElevationMismatchAt(objectEvent->currentElevation, x, y))
+                continue;
+            if (!MetatileBehavior_IsLandWildEncounter(MapGridGetMetatileBehaviorAt(x, y)))
+                continue;
+
+            SetObjectEventDirection(objectEvent, direction);
+            sprite->sTypeFuncId = 5;
+            return TRUE;
+        }
+
+        sprite->sTypeFuncId = 1;
+        return TRUE;
+    }
+
     chosenDirection = directions[Random() & 3];
     SetObjectEventDirection(objectEvent, chosenDirection);
     sprite->sTypeFuncId = 5;

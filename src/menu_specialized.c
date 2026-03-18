@@ -180,9 +180,9 @@ static const struct ListMenuTemplate sMoveRelearnerMovesListTemplate =
     .item_X = 8,
     .cursor_X = 0,
     .upText_Y = 1,
-    .cursorPal = 2,
-    .fillValue = 1,
-    .cursorShadowPal = 3,
+    .cursorPal = 3,
+    .fillValue = 0,
+    .cursorShadowPal = 2,
     .lettersSpacing = 0,
     .itemVerticalPadding = 0,
     .scrollMultiple = LIST_NO_MULTIPLE_SCROLL,
@@ -190,6 +190,8 @@ static const struct ListMenuTemplate sMoveRelearnerMovesListTemplate =
     .cursorKind = CURSOR_BLACK_ARROW,
     .textNarrowWidth = 68,
 };
+
+static const u8 sMoveRelearnerTextColors[] = { TEXT_COLOR_TRANSPARENT, TEXT_COLOR_WHITE, TEXT_COLOR_DARK_GRAY };
 
 //--------------
 // Mailbox menu
@@ -711,7 +713,7 @@ void InitMoveRelearnerWindows(bool8 useContestWindow)
     LoadPalette(gStandardMenuPalette, BG_PLTT_ID(15), PLTT_SIZE_4BPP);
 
     for (i = 0; i < ARRAY_COUNT(sMoveRelearnerWindowTemplates) - 1; i++)
-        FillWindowPixelBuffer(i, PIXEL_FILL(1));
+        FillWindowPixelBuffer(i, PIXEL_FILL(0));
 
     if (!useContestWindow)
     {
@@ -759,21 +761,21 @@ static void MoveRelearnerLoadBattleMoveDescription(u32 chosenMove)
     if (B_SHOW_CATEGORY_ICON == TRUE)
         MoveRelearnerShowHideCategoryIcon(chosenMove);
 
-    FillWindowPixelBuffer(RELEARNERWIN_DESC_BATTLE, PIXEL_FILL(1));
+    FillWindowPixelBuffer(RELEARNERWIN_DESC_BATTLE, PIXEL_FILL(0));
     str = gText_MoveRelearnerBattleMoves;
     x = GetStringCenterAlignXOffset(FONT_NORMAL, str, 128);
-    AddTextPrinterParameterized(RELEARNERWIN_DESC_BATTLE, FONT_NORMAL, str, x, 1, TEXT_SKIP_DRAW, NULL);
+    AddTextPrinterParameterized4(RELEARNERWIN_DESC_BATTLE, FONT_NORMAL, x, 1, 0, 0, sMoveRelearnerTextColors, TEXT_SKIP_DRAW, str);
 
     str = gText_MoveRelearnerPP;
-    AddTextPrinterParameterized(RELEARNERWIN_DESC_BATTLE, FONT_NORMAL, str, 4, 41, TEXT_SKIP_DRAW, NULL);
+    AddTextPrinterParameterized4(RELEARNERWIN_DESC_BATTLE, FONT_NORMAL, 4, 41, 0, 0, sMoveRelearnerTextColors, TEXT_SKIP_DRAW, str);
 
     str = gText_MoveRelearnerPower;
     x = GetStringRightAlignXOffset(FONT_NORMAL, str, 106);
-    AddTextPrinterParameterized(RELEARNERWIN_DESC_BATTLE, FONT_NORMAL, str, x, 25, TEXT_SKIP_DRAW, NULL);
+    AddTextPrinterParameterized4(RELEARNERWIN_DESC_BATTLE, FONT_NORMAL, x, 25, 0, 0, sMoveRelearnerTextColors, TEXT_SKIP_DRAW, str);
 
     str = gText_MoveRelearnerAccuracy;
     x = GetStringRightAlignXOffset(FONT_NORMAL, str, 106);
-    AddTextPrinterParameterized(RELEARNERWIN_DESC_BATTLE, FONT_NORMAL, str, x, 41, TEXT_SKIP_DRAW, NULL);
+    AddTextPrinterParameterized4(RELEARNERWIN_DESC_BATTLE, FONT_NORMAL, x, 41, 0, 0, sMoveRelearnerTextColors, TEXT_SKIP_DRAW, str);
     if (chosenMove == LIST_CANCEL)
     {
         // On "Cancel", skip printing move data
@@ -781,11 +783,11 @@ static void MoveRelearnerLoadBattleMoveDescription(u32 chosenMove)
         return;
     }
     str = gTypesInfo[GetMoveType(chosenMove)].name;
-    AddTextPrinterParameterized(RELEARNERWIN_DESC_BATTLE, FONT_NORMAL, str, 4, 25, TEXT_SKIP_DRAW, NULL);
+    AddTextPrinterParameterized4(RELEARNERWIN_DESC_BATTLE, FONT_NORMAL, 4, 25, 0, 0, sMoveRelearnerTextColors, TEXT_SKIP_DRAW, str);
 
     x = 4 + GetStringWidth(FONT_NORMAL, gText_MoveRelearnerPP, 0);
     ConvertIntToDecimalStringN(buffer, GetMovePP(chosenMove), STR_CONV_MODE_LEFT_ALIGN, 2);
-    AddTextPrinterParameterized(RELEARNERWIN_DESC_BATTLE, FONT_NORMAL, buffer, x, 41, TEXT_SKIP_DRAW, NULL);
+    AddTextPrinterParameterized4(RELEARNERWIN_DESC_BATTLE, FONT_NORMAL, x, 41, 0, 0, sMoveRelearnerTextColors, TEXT_SKIP_DRAW, buffer);
 
     if (GetMovePower(chosenMove) < 2)
     {
@@ -796,7 +798,7 @@ static void MoveRelearnerLoadBattleMoveDescription(u32 chosenMove)
         ConvertIntToDecimalStringN(buffer, GetMovePower(chosenMove), STR_CONV_MODE_LEFT_ALIGN, 3);
         str = buffer;
     }
-    AddTextPrinterParameterized(RELEARNERWIN_DESC_BATTLE, FONT_NORMAL, str, 106, 25, TEXT_SKIP_DRAW, NULL);
+    AddTextPrinterParameterized4(RELEARNERWIN_DESC_BATTLE, FONT_NORMAL, 106, 25, 0, 0, sMoveRelearnerTextColors, TEXT_SKIP_DRAW, str);
 
     if (GetMoveAccuracy(chosenMove) == 0)
     {
@@ -807,8 +809,9 @@ static void MoveRelearnerLoadBattleMoveDescription(u32 chosenMove)
         ConvertIntToDecimalStringN(buffer, GetMoveAccuracy(chosenMove), STR_CONV_MODE_LEFT_ALIGN, 3);
         str = buffer;
     }
-    AddTextPrinterParameterized(RELEARNERWIN_DESC_BATTLE, FONT_NORMAL, str, 106, 41, TEXT_SKIP_DRAW, NULL);
-    AddTextPrinterParameterized(RELEARNERWIN_DESC_BATTLE, FONT_NARROW, GetMoveDescription(chosenMove), 0, 65, 0, NULL);
+    AddTextPrinterParameterized4(RELEARNERWIN_DESC_BATTLE, FONT_NORMAL, 106, 41, 0, 0, sMoveRelearnerTextColors, TEXT_SKIP_DRAW, str);
+    AddTextPrinterParameterized4(RELEARNERWIN_DESC_BATTLE, FONT_NARROW, 0, 65, 0, 0, sMoveRelearnerTextColors, TEXT_SKIP_DRAW, GetMoveDescription(chosenMove));
+    CopyWindowToVram(RELEARNERWIN_DESC_BATTLE, COPYWIN_GFX);
 }
 
 static void MoveRelearnerMenuLoadContestMoveDescription(u32 chosenMove)
@@ -817,18 +820,18 @@ static void MoveRelearnerMenuLoadContestMoveDescription(u32 chosenMove)
     const u8 *str;
 
     MoveRelearnerShowHideHearts(chosenMove);
-    FillWindowPixelBuffer(RELEARNERWIN_DESC_CONTEST, PIXEL_FILL(1));
+    FillWindowPixelBuffer(RELEARNERWIN_DESC_CONTEST, PIXEL_FILL(0));
     str = gText_MoveRelearnerContestMovesTitle;
     x = GetStringCenterAlignXOffset(FONT_NORMAL, str, 128);
-    AddTextPrinterParameterized(RELEARNERWIN_DESC_CONTEST, FONT_NORMAL, str, x, 1, TEXT_SKIP_DRAW, NULL);
+    AddTextPrinterParameterized4(RELEARNERWIN_DESC_CONTEST, FONT_NORMAL, x, 1, 0, 0, sMoveRelearnerTextColors, TEXT_SKIP_DRAW, str);
 
     str = gText_MoveRelearnerAppeal;
     x = GetStringRightAlignXOffset(FONT_NORMAL, str, 92);
-    AddTextPrinterParameterized(RELEARNERWIN_DESC_CONTEST, FONT_NORMAL, str, x, 25, TEXT_SKIP_DRAW, NULL);
+    AddTextPrinterParameterized4(RELEARNERWIN_DESC_CONTEST, FONT_NORMAL, x, 25, 0, 0, sMoveRelearnerTextColors, TEXT_SKIP_DRAW, str);
 
     str = gText_MoveRelearnerJam;
     x = GetStringRightAlignXOffset(FONT_NORMAL, str, 92);
-    AddTextPrinterParameterized(RELEARNERWIN_DESC_CONTEST, FONT_NORMAL, str, x, 41, TEXT_SKIP_DRAW, NULL);
+    AddTextPrinterParameterized4(RELEARNERWIN_DESC_CONTEST, FONT_NORMAL, x, 41, 0, 0, sMoveRelearnerTextColors, TEXT_SKIP_DRAW, str);
 
     if (chosenMove == MENU_NOTHING_CHOSEN)
     {
@@ -837,10 +840,10 @@ static void MoveRelearnerMenuLoadContestMoveDescription(u32 chosenMove)
     }
 
     str = gContestMoveTypeTextPointers[GetMoveContestCategory(chosenMove)];
-    AddTextPrinterParameterized(RELEARNERWIN_DESC_CONTEST, FONT_NORMAL, str, 4, 25, TEXT_SKIP_DRAW, NULL);
+    AddTextPrinterParameterized4(RELEARNERWIN_DESC_CONTEST, FONT_NORMAL, 4, 25, 0, 0, sMoveRelearnerTextColors, TEXT_SKIP_DRAW, str);
 
     str = gContestEffectDescriptionPointers[GetMoveContestEffect(chosenMove)];
-    AddTextPrinterParameterized(RELEARNERWIN_DESC_CONTEST, FONT_NARROW, str, 0, 65, TEXT_SKIP_DRAW, NULL);
+    AddTextPrinterParameterized4(RELEARNERWIN_DESC_CONTEST, FONT_NARROW, 0, 65, 0, 0, sMoveRelearnerTextColors, TEXT_SKIP_DRAW, str);
 
     CopyWindowToVram(RELEARNERWIN_DESC_CONTEST, COPYWIN_GFX);
 }
@@ -857,10 +860,10 @@ void MoveRelearnerPrintMessage(u8 *str)
 {
     u8 speed;
 
-    FillWindowPixelBuffer(RELEARNERWIN_MSG, PIXEL_FILL(1));
+    FillWindowPixelBuffer(RELEARNERWIN_MSG, PIXEL_FILL(0));
     gTextFlags.canABSpeedUpPrint = TRUE;
     speed = GetPlayerTextSpeedDelay();
-    AddTextPrinterParameterized2(RELEARNERWIN_MSG, FONT_NORMAL, str, speed, NULL, TEXT_COLOR_DARK_GRAY, TEXT_COLOR_WHITE, 3);
+    AddTextPrinterParameterized2(RELEARNERWIN_MSG, FONT_NORMAL, str, speed, NULL, TEXT_COLOR_WHITE, TEXT_COLOR_TRANSPARENT, TEXT_COLOR_DARK_GRAY);
 }
 
 bool16 MoveRelearnerRunTextPrinters(void)

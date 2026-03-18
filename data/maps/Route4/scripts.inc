@@ -1,4 +1,5 @@
 Route4_MapScripts::
+	map_script MAP_SCRIPT_ON_TRANSITION, Route4_EventScript_SetHikerVisibility
 	.byte 0
 
 @ =========================================================
@@ -20,9 +21,16 @@ Route4_Speaker_Picnicker2:
 Route4_Speaker_Brendan:
 	.string "BRENDAN$"
 
+Route4_Speaker_Hiker:
+	.string "HIKER$"
+
 @ =========================================================
 @ TRAINERS
 @ =========================================================
+
+Route4_EventScript_Sign::
+	msgbox Route4_Text_MtMoonSquareSign, MSGBOX_SIGN
+	end
 
 Route4_EventScript_BlackBelt::
 	setspeaker Route4_Speaker_BlackBelt
@@ -108,6 +116,30 @@ Route4_EventScript_Brendan3_After::
 	release
 	end
 
+Route4_EventScript_SetHikerVisibility::
+	checkflag FLAG_BADGE09_GET
+	goto_if_eq Route4_EventScript_HikerHide
+	clearflag FLAG_HIDE_ROUTE4_HIKER
+	return
+
+Route4_EventScript_HikerHide::
+	setflag FLAG_HIDE_ROUTE4_HIKER
+	return
+
+Route4_EventScript_Hiker::
+	lock
+	faceplayer
+	checkflag FLAG_BADGE09_GET
+	goto_if_eq Route4_EventScript_HikerEnd
+	setspeaker Route4_Speaker_Hiker
+	msgbox Route4_Text_Hiker_Block, MSGBOX_NPC
+	closemessage
+	applymovement LOCALID_PLAYER, Common_Movement_FaceDown
+	waitmovement 0
+Route4_EventScript_HikerEnd:
+	release
+	end
+
 @ =========================================================
 @ TEXT
 @ =========================================================
@@ -176,3 +208,14 @@ Route4_Text_Brendan3_Defeat:
 
 Route4_Text_Brendan3_After:
 	.string "I'll keep training on Route 4.$"
+
+Route4_Text_Hiker_Block:
+	.string "Hold it! MT. MOON is dangerous.\p"
+	.string "Come back after you've earned the\n"
+	.string "BOULDER BADGE.$"
+
+Route4_Text_MtMoonSquareSign:
+	.string "MT.MOON NEW ENTRANCE\n"
+	.string "DUE TO CAVE-IN\p"
+	.string "WATCH YOUR STEP$"
+

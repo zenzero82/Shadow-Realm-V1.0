@@ -684,89 +684,166 @@
 #define FLAG_UNUSED_0x267  0x267 // Unused Flag
 #define FLAG_ETHAN_CALL_AFTER_BRYONY        FLAG_UNUSED_0x267
 #define FLAG_UNUSED_0x268  0x268 // Unused Flag
+#define FLAG_HIDE_WES_HIDEOUT_LYRA          FLAG_UNUSED_0x268
 #define FLAG_UNUSED_0x269  0x269 // Unused Flag
+#define FLAG_HIDE_WES_HIDEOUT_MEGANIUM      FLAG_UNUSED_0x269
 #define FLAG_UNUSED_0x26A  0x26A // Unused Flag
+#define FLAG_WES_HIDEOUT_WES_TRIGGERED      FLAG_UNUSED_0x26A
 #define FLAG_UNUSED_0x26B  0x26B // Unused Flag
+#define FLAG_KURTS_HOUSE_MARAUDER_SCENE_DONE     FLAG_UNUSED_0x26B
 #define FLAG_UNUSED_0x26C  0x26C // Unused Flag
+#define FLAG_HIDE_VIOLET_ROSS              FLAG_UNUSED_0x26C
 #define FLAG_UNUSED_0x26D  0x26D // Unused Flag
+#define FLAG_HIDE_SLOWPOKE_WELL_FLARES     FLAG_UNUSED_0x26D
 #define FLAG_UNUSED_0x26E  0x26E // Unused Flag
+#define FLAG_QUEST_PALLET_TOWN_STARTED        FLAG_UNUSED_0x26E
 #define FLAG_UNUSED_0x26F  0x26F // Unused Flag
+#define FLAG_QUEST_PALLET_TOWN_COMPLETED      FLAG_UNUSED_0x26F
 #define FLAG_UNUSED_0x270  0x270 // Unused Flag
+#define FLAG_QUEST_PALLET_TOWN_NPC_WOMAN     FLAG_UNUSED_0x270
 #define FLAG_UNUSED_0x271  0x271 // Unused Flag
+#define FLAG_QUEST_PALLET_TOWN_NPC_FATMAN    FLAG_UNUSED_0x271
 #define FLAG_UNUSED_0x272  0x272 // Unused Flag
+#define FLAG_QUEST_VIOLET_NPCS_STARTED         FLAG_UNUSED_0x272
 #define FLAG_UNUSED_0x273  0x273 // Unused Flag
+#define FLAG_QUEST_VIOLET_NPCS_COMPLETED       FLAG_UNUSED_0x273
 #define FLAG_UNUSED_0x274  0x274 // Unused Flag
+#define FLAG_QUEST_PALLET_TOWN_NPC_REDS_MOM  FLAG_UNUSED_0x274
 #define FLAG_UNUSED_0x275  0x275 // Unused Flag
+#define FLAG_QUEST_PALLET_TOWN_NPC_DAISY     FLAG_UNUSED_0x275
 #define FLAG_UNUSED_0x276  0x276 // Unused Flag
+#define FLAG_QUEST_VIRIDIAN_GYM_STARTED       FLAG_UNUSED_0x276
 #define FLAG_UNUSED_0x277  0x277 // Unused Flag
+#define FLAG_QUEST_VIRIDIAN_GYM_COMPLETED     FLAG_UNUSED_0x277
 #define FLAG_UNUSED_0x278  0x278 // Unused Flag
+#define FLAG_QUEST_BROCK_STARTED              FLAG_UNUSED_0x278
 #define FLAG_UNUSED_0x279  0x279 // Unused Flag
+#define FLAG_QUEST_BROCK_COMPLETED            FLAG_UNUSED_0x279
 #define FLAG_UNUSED_0x27A  0x27A // Unused Flag
+#define FLAG_QUEST_CERULEAN_WES_STARTED       FLAG_UNUSED_0x27A
 #define FLAG_UNUSED_0x27B  0x27B // Unused Flag
+#define FLAG_QUEST_CERULEAN_WES_COMPLETED     FLAG_UNUSED_0x27B
 #define FLAG_UNUSED_0x27C  0x27C // Unused Flag
+#define FLAG_QUEST_CAPE_WES_STARTED           FLAG_UNUSED_0x27C
 #define FLAG_UNUSED_0x27D  0x27D // Unused Flag
+#define FLAG_QUEST_CAPE_WES_COMPLETED         FLAG_UNUSED_0x27D
 #define FLAG_UNUSED_0x27E  0x27E // Unused Flag
+#define FLAG_HIDE_ROUTE4_HIKER          FLAG_UNUSED_0x27E
 #define FLAG_UNUSED_0x27F  0x27F // Unused Flag
+#define FLAG_QUEST_PEWTER_NPCS_STARTED        FLAG_UNUSED_0x27F
 #define FLAG_UNUSED_0x280  0x280 // Unused Flag
+#define FLAG_QUEST_PEWTER_NPCS_COMPLETED      FLAG_UNUSED_0x280
 #define FLAG_UNUSED_0x281  0x281 // Unused Flag
+#define FLAG_QUEST_PEWTER_NPC_FATMAN          FLAG_UNUSED_0x281
 #define FLAG_UNUSED_0x282  0x282 // Unused Flag
+#define FLAG_QUEST_PEWTER_NPC_OLD_MAN         FLAG_UNUSED_0x282
 #define FLAG_UNUSED_0x283  0x283 // Unused Flag
+#define FLAG_QUEST_PEWTER_NPC_LASS            FLAG_UNUSED_0x283
 #define FLAG_UNUSED_0x284  0x284 // Unused Flag
+#define FLAG_QUEST_PEWTER_NPC_TWIN            FLAG_UNUSED_0x284
 #define FLAG_UNUSED_0x285  0x285 // Unused Flag
+#define FLAG_QUEST_MT_MOON_STARTED            FLAG_UNUSED_0x285
 #define FLAG_UNUSED_0x286  0x286 // Unused Flag
+#define FLAG_QUEST_MT_MOON_COMPLETED          FLAG_UNUSED_0x286
 #define FLAG_UNUSED_0x287  0x287 // Unused Flag
+#define FLAG_QUEST_MT_MOON_NPC_CLERK          FLAG_UNUSED_0x287
 #define FLAG_UNUSED_0x288  0x288 // Unused Flag
+#define FLAG_QUEST_MT_MOON_NPC_LASS           FLAG_UNUSED_0x288
 #define FLAG_UNUSED_0x289  0x289 // Unused Flag
+#define FLAG_QUEST_MT_MOON_NPC_ARIANA         FLAG_UNUSED_0x289
 #define FLAG_UNUSED_0x28A  0x28A // Unused Flag
+#define FLAG_DEXNAV_SEARCHING               FLAG_UNUSED_0x28A
 #define FLAG_UNUSED_0x28B  0x28B // Unused Flag
+#define FLAG_DEXNAV_GET                     FLAG_UNUSED_0x28B
 #define FLAG_UNUSED_0x28C  0x28C // Unused Flag
+#define FLAG_DEXNAV_DETECTOR_MODE           FLAG_UNUSED_0x28C
 #define FLAG_UNUSED_0x28D  0x28D // Unused Flag
+#define FLAG_QUEST_CERULEAN_NPCS_STARTED        FLAG_UNUSED_0x28D
 #define FLAG_UNUSED_0x28E  0x28E // Unused Flag
+#define FLAG_QUEST_CERULEAN_NPCS_COMPLETED      FLAG_UNUSED_0x28E
 #define FLAG_UNUSED_0x28F  0x28F // Unused Flag
 #define FLAG_UNUSED_0x290  0x290 // Unused Flag
 #define FLAG_UNUSED_0x291  0x291 // Unused Flag
 #define FLAG_UNUSED_0x292  0x292 // Unused Flag
+#define FLAG_QUEST_CERULEAN_NPC_SLOWBRO_WOMAN   FLAG_UNUSED_0x292
 #define FLAG_UNUSED_0x293  0x293 // Unused Flag
+#define FLAG_QUEST_CERULEAN_NPC_FISHER          FLAG_UNUSED_0x293
 #define FLAG_UNUSED_0x294  0x294 // Unused Flag
+#define FLAG_QUEST_CERULEAN_NPC_YOUNGSTER       FLAG_UNUSED_0x294
 #define FLAG_UNUSED_0x295  0x295 // Unused Flag
+#define FLAG_QUEST_CERULEAN_NPC_BUG_CATCHER     FLAG_UNUSED_0x295
 #define FLAG_UNUSED_0x296  0x296 // Unused Flag
+#define FLAG_QUEST_CERULEAN_NPC_BOY2            FLAG_UNUSED_0x296
 #define FLAG_UNUSED_0x297  0x297 // Unused Flag
 #define FLAG_UNUSED_0x298  0x298 // Unused Flag
 #define FLAG_UNUSED_0x299  0x299 // Unused Flag
 #define FLAG_UNUSED_0x29A  0x29A // Unused Flag
 #define FLAG_UNUSED_0x29B  0x29B // Unused Flag
+#define FLAG_QUEST_CERULEAN_NPC_POLICEMAN1      FLAG_UNUSED_0x29B
 #define FLAG_UNUSED_0x29C  0x29C // Unused Flag
+#define FLAG_QUEST_CERULEAN_NPC_POLICEMAN2      FLAG_UNUSED_0x29C
 #define FLAG_UNUSED_0x29D  0x29D // Unused Flag
+#define FLAG_QUEST_CERULEAN_NPC_GATE_OFFICER    FLAG_UNUSED_0x29D
 #define FLAG_UNUSED_0x29E  0x29E // Unused Flag
+#define FLAG_QUEST_TALK_WES_STARTED             FLAG_UNUSED_0x29E
 #define FLAG_UNUSED_0x29F  0x29F // Unused Flag
+#define FLAG_QUEST_TALK_WES_COMPLETED           FLAG_UNUSED_0x29F
 #define FLAG_UNUSED_0x2A0  0x2A0 // Unused Flag
+#define FLAG_QUEST_TALK_TEAM_STARTED            FLAG_UNUSED_0x2A0
 #define FLAG_UNUSED_0x2A1  0x2A1 // Unused Flag
+#define FLAG_QUEST_TALK_TEAM_COMPLETED          FLAG_UNUSED_0x2A1
 #define FLAG_UNUSED_0x2A2  0x2A2 // Unused Flag
+#define FLAG_QUEST_SNAG_MACHINE_STARTED         FLAG_UNUSED_0x2A2
 #define FLAG_UNUSED_0x2A3  0x2A3 // Unused Flag
+#define FLAG_QUEST_SNAG_MACHINE_COMPLETED       FLAG_UNUSED_0x2A3
 #define FLAG_UNUSED_0x2A4  0x2A4 // Unused Flag
+#define FLAG_QUEST_SHADOW_TRAINER_STARTED       FLAG_UNUSED_0x2A4
 #define FLAG_UNUSED_0x2A5  0x2A5 // Unused Flag
+#define FLAG_QUEST_SHADOW_TRAINER_COMPLETED     FLAG_UNUSED_0x2A5
 #define FLAG_UNUSED_0x2A6  0x2A6 // Unused Flag
+#define FLAG_QUEST_DEFEAT_MISTY_STARTED         FLAG_UNUSED_0x2A6
 #define FLAG_UNUSED_0x2A7  0x2A7 // Unused Flag
+#define FLAG_QUEST_DEFEAT_MISTY_COMPLETED       FLAG_UNUSED_0x2A7
 #define FLAG_UNUSED_0x2A8  0x2A8 // Unused Flag
+#define FLAG_QUEST_ROUTE9_GUARDS_STARTED        FLAG_UNUSED_0x2A8
 #define FLAG_UNUSED_0x2A9  0x2A9 // Unused Flag
+#define FLAG_QUEST_ROUTE9_GUARDS_COMPLETED      FLAG_UNUSED_0x2A9
 #define FLAG_UNUSED_0x2AA  0x2AA // Unused Flag
+#define FLAG_QUEST_ROCK_TUNNEL_STARTED          FLAG_UNUSED_0x2AA
 #define FLAG_UNUSED_0x2AB  0x2AB // Unused Flag
+#define FLAG_QUEST_ROCK_TUNNEL_COMPLETED        FLAG_UNUSED_0x2AB
 #define FLAG_UNUSED_0x2AC  0x2AC // Unused Flag
+#define FLAG_QUEST_KUKUI_SHADOW_STARTED         FLAG_UNUSED_0x2AC
 #define FLAG_UNUSED_0x2AD  0x2AD // Unused Flag
+#define FLAG_QUEST_KUKUI_SHADOW_COMPLETED       FLAG_UNUSED_0x2AD
 #define FLAG_UNUSED_0x2AE  0x2AE // Unused Flag
+#define FLAG_KUKUI_SHADOW_MEOWTH_TAKEN          FLAG_UNUSED_0x2AE
 #define FLAG_UNUSED_0x2AF  0x2AF // Unused Flag
+#define FLAG_KUKUI_SHADOW_MEOWTH_RETURNED       FLAG_UNUSED_0x2AF
 #define FLAG_UNUSED_0x2B0  0x2B0 // Unused Flag
+#define FLAG_HIDE_ILEX_JJ_GROUP                 FLAG_UNUSED_0x2B0
 #define FLAG_UNUSED_0x2B1  0x2B1 // Unused Flag
+#define FLAG_WES_ZANDER_REPORT_DONE          FLAG_UNUSED_0x2B1
 #define FLAG_UNUSED_0x2B2  0x2B2 // Unused Flag
+#define FLAG_HOOH_BROUGHT                       FLAG_UNUSED_0x2B2
 #define FLAG_UNUSED_0x2B3  0x2B3 // Unused Flag
+#define FLAG_AERODACTYL_BROUGHT                 FLAG_UNUSED_0x2B3
 #define FLAG_UNUSED_0x2B4  0x2B4 // Unused Flag
+#define FLAG_KABUTO_BROUGHT                     FLAG_UNUSED_0x2B4
 #define FLAG_UNUSED_0x2B5  0x2B5 // Unused Flag
+#define FLAG_OMANYTE_BROUGHT                    FLAG_UNUSED_0x2B5
 #define FLAG_UNUSED_0x2B6  0x2B6 // Unused Flag
+#define FLAG_COMPLETED_KABUTO_PUZZLE            FLAG_UNUSED_0x2B6
 #define FLAG_UNUSED_0x2B7  0x2B7 // Unused Flag
+#define FLAG_COMPLETED_HOOH_PUZZLE              FLAG_UNUSED_0x2B7
 #define FLAG_UNUSED_0x2B8  0x2B8 // Unused Flag
+#define FLAG_COMPLETED_OMANYTE_PUZZLE           FLAG_UNUSED_0x2B8
 #define FLAG_UNUSED_0x2B9  0x2B9 // Unused Flag
+#define FLAG_COMPLETED_AERODACTYL_PUZZLE        FLAG_UNUSED_0x2B9
 #define FLAG_UNUSED_0x2BA  0x2BA // Unused Flag
+#define FLAG_QUEST_PLASMA_TUNNEL_STARTED        FLAG_UNUSED_0x2BA
 #define FLAG_UNUSED_0x2BB  0x2BB // Unused Flag
+#define FLAG_QUEST_PLASMA_TUNNEL_COMPLETED      FLAG_UNUSED_0x2BB
 
 // Event Flags
 #define FLAG_HIDE_ROUTE_101_BIRCH_STARTERS_BAG                      0x2BC
@@ -800,6 +877,7 @@
 #define FLAG_HIDE_PETALBURG_CITY_WALLYS_MOM                         0x2D8
 
 #define FLAG_UNUSED_0x2D9                                           0x2D9 // Unused Flag
+#define FLAG_SLOWPOKE_WELL_FLARE1_MOVED                             FLAG_UNUSED_0x2D9
 
 #define FLAG_HIDE_LILYCOVE_FAN_CLUB_INTERVIEWER                     0x2DA
 #define FLAG_HIDE_RUSTBORO_CITY_AQUA_GRUNT                          0x2DB
@@ -1202,6 +1280,7 @@
 #define FLAG_ITEM_OLD_MAGMA_HIDEOUT_B1F_MAX_ELIXIR                  0x466 // Unused Flag, leftover from the Ruby Magma hideout
 #define FLAG_ITEM_OLD_MAGMA_HIDEOUT_B2F_NEST_BALL                   0x467 // Unused Flag, leftover from the Ruby Magma hideout
 #define FLAG_UNUSED_0x468                                           0x468 // Unused Flag
+#define FLAG_QUEST_DEFEAT_FALKNER_STARTED                           FLAG_UNUSED_0x468
 #define FLAG_ITEM_MT_PYRE_2F_ULTRA_BALL                             0x469
 #define FLAG_ITEM_MT_PYRE_4F_SEA_INCENSE                            0x46A
 #define FLAG_ITEM_SAFARI_ZONE_SOUTH_WEST_MAX_REVIVE                 0x46B
@@ -1210,8 +1289,10 @@
 #define FLAG_ITEM_ROUTE_119_NUGGET                                  0x46E
 #define FLAG_ITEM_ROUTE_104_POTION                                  0x46F
 #define FLAG_UNUSED_0x470                                           0x470 // Unused Flag
+#define FLAG_QUEST_DEFEAT_FALKNER_COMPLETED                         FLAG_UNUSED_0x470
 #define FLAG_ITEM_ROUTE_103_PP_UP                                   0x471
 #define FLAG_UNUSED_0x472                                           0x472 // Unused Flag
+#define FLAG_QUEST_SLOWPOKE_WELL_FLARE_STARTED                      FLAG_UNUSED_0x472
 #define FLAG_ITEM_ROUTE_108_STAR_PIECE                              0x473
 #define FLAG_ITEM_ROUTE_109_POTION                                  0x474
 #define FLAG_ITEM_ROUTE_110_ELIXIR                                  0x475
@@ -1219,6 +1300,7 @@
 #define FLAG_ITEM_ROUTE_113_HYPER_POTION                            0x477
 #define FLAG_ITEM_ROUTE_115_HEAL_POWDER                             0x478
 #define FLAG_UNUSED_0x479                                           0x479 // Unused Flag
+#define FLAG_QUEST_SLOWPOKE_WELL_FLARE_COMPLETED                    FLAG_UNUSED_0x479
 #define FLAG_ITEM_ROUTE_116_POTION                                  0x47A
 #define FLAG_ITEM_ROUTE_119_ELIXIR_2                                0x47B
 #define FLAG_ITEM_ROUTE_120_REVIVE                                  0x47C
@@ -1247,7 +1329,7 @@
 
 
 #define FLAG_ITEM_VIRIDIAN_FOREST_POTION                            0x497
-#define FLAG_ITEM_VIRIDIAN_FOREST_ESCAPE_ROPE                       0x498
+#define FLAG_ITEM_VIRIDIAN_FOREST_EXP_SHARE                         0x498
 #define FLAG_ITEM_VIRIDIAN_FOREST_TIME_FLUTE                        0x499
 #define FLAG_ITEM_VIRIDIAN_FOREST_PARALYZE_HEAL                     0x49A
 #define FLAG_ITEM_VIRIDIAN_FOREST_POKE_BALL                         0x49B
@@ -1293,48 +1375,149 @@
 #define FLAG_ITEM_UNION_CAVE_1F_POTION                              0x4C3
 #define FLAG_ITEM_UNION_CAVE_1F_REPEL                               0x4C4
 #define FLAG_ITEM_UNION_CAVE_1F_ESCAPE_ROPE                         0x4C5
+#define FLAG_ITEM_ILEX_FOREST_SUPER_POTION                          FLAG_UNUSED_0x8FE
+#define FLAG_ITEM_ILEX_FOREST_SUPER_REPEL                           FLAG_UNUSED_0x8FF
+#define FLAG_ITEM_ILEX_FOREST_GREAT_BALL                            FLAG_UNUSED_0x90C
 #define FLAG_HIDE_UNION_CAVE_MATT                                   0x4C6
 #define FLAG_UNUSED_0x4C7                                           0x4C7 // Unused Flag
+#define FLAG_ITEM_RUINSOFALPH_LUM_BERRY_1                           FLAG_UNUSED_0x4C7
 #define FLAG_UNUSED_0x4C8                                           0x4C8 // Unused Flag
+#define FLAG_ITEM_RUINSOFALPH_CHARCOAL                              FLAG_UNUSED_0x4C8
 #define FLAG_UNUSED_0x4C9                                           0x4C9 // Unused Flag
+#define FLAG_ITEM_RUINSOFALPH_MAX_REVIVE_1                          FLAG_UNUSED_0x4C9
 #define FLAG_UNUSED_0x4CA                                           0x4CA // Unused Flag
+#define FLAG_ITEM_RUINSOFALPH_SACRED_ASH                            FLAG_UNUSED_0x4CA
 #define FLAG_UNUSED_0x4CB                                           0x4CB // Unused Flag
+#define FLAG_ITEM_RUINSOFALPH_HEAL_POWDER_1                         FLAG_UNUSED_0x4CB
 #define FLAG_UNUSED_0x4CC                                           0x4CC // Unused Flag
+#define FLAG_ITEM_RUINSOFALPH_ENERGY_ROOT                           FLAG_UNUSED_0x4CC
 #define FLAG_UNUSED_0x4CD                                           0x4CD // Unused Flag
+#define FLAG_ITEM_RUINSOFALPH_SITRUS_BERRY_2                        FLAG_UNUSED_0x4CD
 #define FLAG_UNUSED_0x4CE                                           0x4CE // Unused Flag
+#define FLAG_ITEM_RUINSOFALPH_MOON_STONE                            FLAG_UNUSED_0x4CE
 #define FLAG_UNUSED_0x4CF                                           0x4CF // Unused Flag
+#define FLAG_ITEM_RUINSOFALPH_HEAL_POWDER_2                         FLAG_UNUSED_0x4CF
 #define FLAG_UNUSED_0x4D0                                           0x4D0 // Unused Flag
+#define FLAG_ITEM_RUINSOFALPH_ENERGY_POWDER                         FLAG_UNUSED_0x4D0
 #define FLAG_UNUSED_0x4D1                                           0x4D1 // Unused Flag
+#define FLAG_ITEM_RUINSOFALPH_ORAN_BERRY                            FLAG_UNUSED_0x4D1
 #define FLAG_UNUSED_0x4D2                                           0x4D2 // Unused Flag
+#define FLAG_ITEM_RUINSOFALPH_PECHA_BERRY                           FLAG_UNUSED_0x4D2
 #define FLAG_UNUSED_0x4D3                                           0x4D3 // Unused Flag
+#define FLAG_ITEM_RUINSOFALPH_STARDUST                              FLAG_UNUSED_0x4D3
 #define FLAG_UNUSED_0x4D4                                           0x4D4 // Unused Flag
+#define FLAG_ITEM_RUINSOFALPH_STAR_PIECE                            FLAG_UNUSED_0x4D4
 #define FLAG_UNUSED_0x4D5                                           0x4D5 // Unused Flag
+#define FLAG_ITEM_RUINSOFALPH_LUM_BERRY_2                           FLAG_UNUSED_0x4D5
 #define FLAG_UNUSED_0x4D6                                           0x4D6 // Unused Flag
+#define FLAG_ITEM_RUINSOFALPH_WATER_STONE                           FLAG_UNUSED_0x4D6
 #define FLAG_UNUSED_0x4D7                                           0x4D7 // Unused Flag
+#define FLAG_ITEM_DOME_FOSSIL                                      FLAG_UNUSED_0x4D7
 #define FLAG_UNUSED_0x4D8                                           0x4D8 // Unused Flag
+#define FLAG_ITEM_HELIX_FOSSIL                                     FLAG_UNUSED_0x4D8
 #define FLAG_UNUSED_0x4D9                                           0x4D9 // Unused Flag
+#define FLAG_ITEM_OLD_AMBER                                        FLAG_UNUSED_0x4D9
 #define FLAG_UNUSED_0x4DA                                           0x4DA // Unused Flag
+#define FLAG_ITEM_GS_BALL                                          FLAG_UNUSED_0x4DA
 #define FLAG_UNUSED_0x4DB                                           0x4DB // Unused Flag
+#define FLAG_QUEST_VIOLET_NPC_SAGE                                  FLAG_UNUSED_0x4DB
 #define FLAG_UNUSED_0x4DC                                           0x4DC // Unused Flag
+#define FLAG_QUEST_VIOLET_NPC_POLICEMAN                             FLAG_UNUSED_0x4DC
 #define FLAG_UNUSED_0x4DD                                           0x4DD // Unused Flag
+#define FLAG_QUEST_VIOLET_NPC_POLICEMAN_GATE                        FLAG_UNUSED_0x4DD
 #define FLAG_UNUSED_0x4DE                                           0x4DE // Unused Flag
+#define FLAG_QUEST_VIOLET_NPC_WOMAN                                 FLAG_UNUSED_0x4DE
 #define FLAG_UNUSED_0x4DF                                           0x4DF // Unused Flag
+#define FLAG_QUEST_VIOLET_NPC_OLD_MAN                               FLAG_UNUSED_0x4DF
 #define FLAG_UNUSED_0x4E0                                           0x4E0 // Unused Flag
+#define FLAG_QUEST_VIOLET_NPC_BOY                                   FLAG_UNUSED_0x4E0
 #define FLAG_UNUSED_0x4E1                                           0x4E1 // Unused Flag
+#define FLAG_QUEST_VIOLET_NPC_SUPER_NERD                            FLAG_UNUSED_0x4E1
 #define FLAG_UNUSED_0x4E2                                           0x4E2 // Unused Flag
+#define FLAG_QUEST_KURT_APRICOT_STARTED                             FLAG_UNUSED_0x4E2
 #define FLAG_UNUSED_0x4E3                                           0x4E3 // Unused Flag
+#define FLAG_QUEST_KURT_APRICOT_COMPLETED                           FLAG_UNUSED_0x4E3
 #define FLAG_UNUSED_0x4E4                                           0x4E4 // Unused Flag
+#define FLAG_QUEST_AZALEA_NPCS_STARTED                              FLAG_UNUSED_0x4E4
 #define FLAG_UNUSED_0x4E5                                           0x4E5 // Unused Flag
+#define FLAG_QUEST_AZALEA_NPCS_COMPLETED                            FLAG_UNUSED_0x4E5
 #define FLAG_UNUSED_0x4E6                                           0x4E6 // Unused Flag
+#define FLAG_QUEST_DEFEAT_BUGSY_STARTED                             FLAG_UNUSED_0x4E6
 #define FLAG_UNUSED_0x4E7                                           0x4E7 // Unused Flag
+#define FLAG_QUEST_DEFEAT_BUGSY_COMPLETED                           FLAG_UNUSED_0x4E7
+#define FLAG_QUEST_GOLDS_MOM_STARTED                                FLAG_UNUSED_0x8F6
+#define FLAG_QUEST_GOLDS_MOM_COMPLETED                              FLAG_UNUSED_0x8F7
+#define FLAG_HIDE_NEW_BARK_HOOPA_RING                               FLAG_UNUSED_0x8F8
+#define FLAG_HIDE_ROUTE34_HOOPA_RING                                FLAG_UNUSED_0x8F9
+#define FLAG_BIRCH_TIME_AMULET_CALL_DONE                            FLAG_UNUSED_0x8FA
+#define FLAG_ROUTE34_HOOPA_SCENE                                    FLAG_UNUSED_0x8FB
+#define FLAG_ROUTE34_VICTOR_SCENE_DONE                              FLAG_UNUSED_0x8FC
+#define FLAG_EXP_SHARE_ALWAYS_ON                                    FLAG_UNUSED_0x8FD
 #define FLAG_UNUSED_0x4E8                                           0x4E8 // Unused Flag
+#define FLAG_HIDE_AZALEA_AQUA_GRUNTS                                FLAG_UNUSED_0x4E8
 #define FLAG_SHADOW_TRACKER_UNLOCKED                               0x4E9
 #define FLAG_ROAMING_HUNTER_ALERT_PENDING                          0x4EA
 #define FLAG_ROAMING_HUNTER_NPC_HIDE                               0x4EB
 #define FLAG_UNUSED_0x4EC                                           0x4EC // Unused Flag
+#define FLAG_QUEST_AZALEA_NPC_YOUNGSTER                             FLAG_UNUSED_0x4EC
 #define FLAG_UNUSED_0x4ED                                           0x4ED // Unused Flag
+#define FLAG_QUEST_AZALEA_NPC_LASS                                  FLAG_UNUSED_0x4ED
 #define FLAG_UNUSED_0x4EE                                           0x4EE // Unused Flag
+#define FLAG_QUEST_AZALEA_NPC_ROCKET                                FLAG_UNUSED_0x4EE
 #define FLAG_UNUSED_0x4EF                                           0x4EF // Unused Flag
+#define FLAG_HIDE_AZALEA_ILEX_OFFICER                               FLAG_UNUSED_0x4EF
+
+#define FLAG_QUEST_PEWTER_NPC_HOUSE1_BOY                            0x501
+#define FLAG_QUEST_PEWTER_NPC_HOUSE2_OLD_MAN                         0x502
+#define FLAG_QUEST_PEWTER_NPC_MUSEUM_SCIENTIST1                      0x503
+#define FLAG_QUEST_PEWTER_NPC_MUSEUM_SCIENTIST2                      0x504
+#define FLAG_QUEST_PEWTER_NPC_MUSEUM_ATTENDANT                       0x505
+#define FLAG_QUEST_PEWTER_NPC_MUSEUM_HIKER                           0x506
+#define FLAG_QUEST_PEWTER_NPC_MUSEUM_OLD_MAN                         0x507
+#define FLAG_QUEST_PEWTER_NPC_MUSEUM2F_NERD                          0x508
+#define FLAG_QUEST_PEWTER_NPC_MUSEUM2F_BALDING                       0x509
+#define FLAG_QUEST_PEWTER_NPC_MUSEUM2F_TWIN                          0x50A
+#define FLAG_QUEST_PEWTER_NPC_POKECENTER_BEAUTY                      0x50B
+#define FLAG_QUEST_PEWTER_NPC_POKECENTER_BUG_CATCHER                 0x50C
+#define FLAG_QUEST_PEWTER_NPC_POKEMART_LASS                          0x50D
+#define FLAG_QUEST_PEWTER_NPC_POKEMART_YOUNGSTER                     0x50E
+
+#define FLAG_QUEST_CERULEAN_NPC_HOUSE1_BALDING                       0x50F
+#define FLAG_QUEST_CERULEAN_NPC_HOUSE1_WOMAN                         0x510
+#define FLAG_QUEST_CERULEAN_NPC_HOUSE2_OLD_MAN                       0x511
+#define FLAG_QUEST_CERULEAN_NPC_HOUSE2_OLD_WOMAN                     0x512
+#define FLAG_QUEST_CERULEAN_NPC_HOUSE3_HIKER                         0x513
+#define FLAG_QUEST_CERULEAN_NPC_BIKESHOP_LOOKER                      0x514
+#define FLAG_QUEST_CERULEAN_NPC_POKECENTER_SUPER_NERD                0x515
+#define FLAG_QUEST_CERULEAN_NPC_POKECENTER_GENTLEMAN                 0x516
+#define FLAG_QUEST_CERULEAN_NPC_POKEMART_BATTLE_GIRL                 0x517
+#define FLAG_QUEST_CERULEAN_NPC_POKEMART_JUGGLER                     0x518
+
+#define FLAG_QUEST_VIOLET_NPC_HOUSE1_HIKER                           0x519
+#define FLAG_QUEST_VIOLET_NPC_HOUSE2_WOMAN                           0x51A
+#define FLAG_QUEST_VIOLET_NPC_HOUSE2_LITTLE_BOY                      0x51B
+#define FLAG_QUEST_VIOLET_NPC_MART_OLD_WOMAN                          0x51C
+#define FLAG_QUEST_VIOLET_NPC_MART_ROCKER                            0x51D
+#define FLAG_QUEST_VIOLET_NPC_POKECENTER_GAMEBOY_KID                 0x51E
+#define FLAG_QUEST_VIOLET_NPC_POKECENTER_GENTLEMAN                   0x51F
+#define FLAG_QUEST_VIOLET_NPC_POKECENTER_BEAUTY                      0x520
+#define FLAG_QUEST_VIOLET_NPC_SCHOOL_SCIENTIST                       0x521
+#define FLAG_QUEST_VIOLET_NPC_SCHOOL_SUPER_NERD                      0x522
+#define FLAG_QUEST_VIOLET_NPC_SCHOOL_LITTLE_BOY                      0x523
+#define FLAG_QUEST_VIOLET_NPC_SCHOOL_TWIN                            0x524
+#define FLAG_QUEST_VIOLET_NPC_SCHOOL_LITTLE_BOY2                     0x525
+#define FLAG_QUEST_VIOLET_NPC_SCHOOL_LITTLE_GIRL2                    0x526
+#define FLAG_QUEST_VIOLET_NPC_SCHOOL_LASS                            0x527
+#define FLAG_QUEST_VIOLET_NPC_SCHOOL_YOUNGSTER                       0x528
+
+#define FLAG_QUEST_AZALEA_NPC_HOUSE1_BLACK_BELT                      0x529
+#define FLAG_QUEST_AZALEA_NPC_HOUSE1_LITTLE_BOY                      0x52A
+#define FLAG_QUEST_AZALEA_NPC_KURTS_HOUSE_KURT                       0x52B
+#define FLAG_QUEST_AZALEA_NPC_MART_ROCKER                            0x52C
+#define FLAG_QUEST_AZALEA_NPC_MART_BUG_CATCHER                       0x52D
+#define FLAG_QUEST_AZALEA_NPC_POKECENTER_FISHERMAN                   0x52E
+#define FLAG_QUEST_AZALEA_NPC_POKECENTER_GENTLEMAN                   0x52F
+#define FLAG_QUEST_AZALEA_NPC_POKECENTER_WOMAN                       0x530
 
 #define FLAG_DEFEATED_RUSTBORO_GYM                                  0x4F0
 #define FLAG_DEFEATED_DEWFORD_GYM                                   0x4F1

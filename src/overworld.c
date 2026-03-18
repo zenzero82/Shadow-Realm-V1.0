@@ -25,6 +25,7 @@
 #include "fieldmap.h"
 #include "fldeff.h"
 #include "follower_npc.h"
+#include "overworld_wild_encounters.h"
 #include "gpu_regs.h"
 #include "heal_location.h"
 #include "constants/heal_locations.h"
@@ -885,8 +886,11 @@ if (I_VS_SEEKER_CHARGING != 0)
 
     ApplyWeatherColorMapToPals(NUM_PALS_IN_PRIMARY, NUM_PALS_TOTAL - NUM_PALS_IN_PRIMARY); // palettes [6,12]
     UpdateTimeOfDay();
-    if (MapHasNaturalLight(gMapHeader.mapType) && gWeatherPtr->colorMapIndex == 0)
+    if (MapHasNaturalLight(gMapHeader.mapType)
+     && (gWeatherPtr->colorMapIndex == 0 || GetSavedWeather() == WEATHER_NONE))
     {
+        if (GetSavedWeather() == WEATHER_NONE)
+            gWeatherPtr->colorMapIndex = 0;
         UpdateAltBgPalettes(PALETTES_BG);
         UpdatePalettesWithTime(PALETTES_ALL);
     }
@@ -2154,6 +2158,16 @@ static bool32 LoadMapInStepsLink(u8 *state)
         if (FreeTempTileDataBuffersIfPossible() != TRUE)
         {
             LoadMapTilesetPalettes(gMapHeader.mapLayout);
+            ApplyWeatherColorMapToPals(NUM_PALS_IN_PRIMARY, NUM_PALS_TOTAL - NUM_PALS_IN_PRIMARY);
+            UpdateTimeOfDay();
+            if (MapHasNaturalLight(gMapHeader.mapType)
+             && (gWeatherPtr->colorMapIndex == 0 || GetSavedWeather() == WEATHER_NONE))
+            {
+                if (GetSavedWeather() == WEATHER_NONE)
+                    gWeatherPtr->colorMapIndex = 0;
+                UpdateAltBgPalettes(PALETTES_BG);
+                UpdatePalettesWithTime(PALETTES_ALL);
+            }
             (*state)++;
         }
         break;
@@ -2229,6 +2243,16 @@ static bool32 LoadMapInStepsLocal(u8 *state, bool32 a2)
         if (FreeTempTileDataBuffersIfPossible() != TRUE)
         {
             LoadMapTilesetPalettes(gMapHeader.mapLayout);
+            ApplyWeatherColorMapToPals(NUM_PALS_IN_PRIMARY, NUM_PALS_TOTAL - NUM_PALS_IN_PRIMARY);
+            UpdateTimeOfDay();
+            if (MapHasNaturalLight(gMapHeader.mapType)
+             && (gWeatherPtr->colorMapIndex == 0 || GetSavedWeather() == WEATHER_NONE))
+            {
+                if (GetSavedWeather() == WEATHER_NONE)
+                    gWeatherPtr->colorMapIndex = 0;
+                UpdateAltBgPalettes(PALETTES_BG);
+                UpdatePalettesWithTime(PALETTES_ALL);
+            }
             (*state)++;
         }
         break;
@@ -2276,6 +2300,16 @@ static bool32 ReturnToFieldLocal(u8 *state)
         InitViewGraphics();
         TryLoadTrainerHillEReaderPalette();
         FollowerNPC_BindToSurfBlobOnReloadScreen();
+        UpdateTimeOfDay();
+        if (MapHasNaturalLight(gMapHeader.mapType)
+         && (gWeatherPtr->colorMapIndex == 0 || GetSavedWeather() == WEATHER_NONE))
+        {
+            if (GetSavedWeather() == WEATHER_NONE)
+                gWeatherPtr->colorMapIndex = 0;
+            UpdateAltBgPalettes(PALETTES_BG);
+            UpdatePalettesWithTime(PALETTES_ALL);
+        }
+        UpdateSpritePaletteWithWeather(gSprites[gPlayerAvatar.spriteId].oam.paletteNum, FALSE);
         (*state)++;
         break;
     case 2:
@@ -2458,6 +2492,7 @@ static void InitObjectEventsLink(void)
     ResetObjectEvents();
     TrySpawnObjectEvents(0, 0);
     TryRunOnWarpIntoMapScript();
+    OverworldWildEncounters_OnMapLoad();
 }
 
 static void InitObjectEventsLocal(void)
@@ -2477,6 +2512,7 @@ static void InitObjectEventsLocal(void)
     FollowerNPC_HandleSprite();
     UpdateFollowingPokemon();
     TryRunOnWarpIntoMapScript();
+    OverworldWildEncounters_OnMapLoad();
 }
 
 static void InitObjectEventsReturnToField(void)
@@ -2484,6 +2520,7 @@ static void InitObjectEventsReturnToField(void)
     SpawnObjectEventsOnReturnToField(0, 0);
     RotatingGate_InitPuzzleAndGraphics();
     RunOnReturnToFieldMapScript();
+    OverworldWildEncounters_OnMapLoad();
 }
 
 static void SetCameraToTrackPlayer(void)

@@ -10,6 +10,27 @@ AzaleaTown_Gym_MapScripts::
 	map_script MAP_SCRIPT_ON_TRANSITION, AzaleaTown_Gym_OnTransition
 	.byte 0
 
+AzaleaTown_Gym_Speaker_GymGuy:
+	.string "GUIDE$"
+
+AzaleaTown_Gym_Speaker_Bugsy:
+	.string "BUGSY$"
+
+AzaleaTown_Gym_Speaker_BugCatcherAl:
+	.string "AL$"
+
+AzaleaTown_Gym_Speaker_BugCatcherJosh:
+	.string "JOSH$"
+
+AzaleaTown_Gym_Speaker_BugCatcherBenny:
+	.string "BENNY$"
+
+AzaleaTown_Gym_Speaker_TwinAmy:
+	.string "AMY$"
+
+AzaleaTown_Gym_Speaker_TwinMay:
+	.string "MAY$"
+
 AzaleaTown_Gym_OnTransition::
 	setflag FLAG_HIDE_AZALEA_ARIADOS_LEFT
 	setflag FLAG_HIDE_AZALEA_ARIADOS_MID
@@ -489,6 +510,7 @@ AzaleaTown_Gym_EventScript_Trigger_11::
 AzaleaTown_Gym_EventScript_GymGuy::
 	lock
 	faceplayer
+	setspeaker AzaleaTown_Gym_Speaker_GymGuy
 	goto_if_set FLAG_BADGE18_GET, AzaleaTown_Gym_EventScript_GymGuy2
 	msgbox AzaleaTown_Gym_Text_GymGuide, MSGBOX_DEFAULT
 	closemessage
@@ -496,27 +518,32 @@ AzaleaTown_Gym_EventScript_GymGuy::
 	end
 
 AzaleaTown_Gym_EventScript_GymGuy2::
+	setspeaker AzaleaTown_Gym_Speaker_GymGuy
 	msgbox AzaleaTown_Gym_Text_GymGuideWin, MSGBOX_DEFAULT
 	closemessage
 	release
 	end
 
 AzaleaTown_Gym_EventScript_Al::
+	setspeaker AzaleaTown_Gym_Speaker_BugCatcherAl
 	trainerbattle_single TRAINER_AZALEA_AL AzaleaTown_Gym_Text_BugCatcherAlSeen, AzaleaTown_Gym_Text_BugCatcherAlBeaten
 	msgbox AzaleaTown_Gym_Text_BugCatcherAlAfter, MSGBOX_AUTOCLOSE
 	end
 
 AzaleaTown_Gym_EventScript_Josh::
+	setspeaker AzaleaTown_Gym_Speaker_BugCatcherJosh
 	trainerbattle_single TRAINER_AZALEA_JOSH AzaleaTown_Gym_Text_BugCatcherJoshSeen, AzaleaTown_Gym_Text_BugCatcherJoshBeaten
 	msgbox AzaleaTown_Gym_Text_BugCatcherJoshAfter, MSGBOX_AUTOCLOSE
 	end
 
 AzaleaTown_Gym_EventScript_Benny::
+	setspeaker AzaleaTown_Gym_Speaker_BugCatcherBenny
 	trainerbattle_single TRAINER_AZALEA_BENNY AzaleaTown_Gym_Text_BugCatcherBennySeen, AzaleaTown_Gym_Text_BugCatcherBennyBeaten
 	msgbox AzaleaTown_Gym_Text_BugCatcherBennyAfter, MSGBOX_AUTOCLOSE
 	end
 
 AzaleaTown_Gym_EventScript_Amy::
+	setspeaker AzaleaTown_Gym_Speaker_TwinAmy
 	trainerbattle_double TRAINER_AZALEA_AMY_AND_MAY, AzaleaTown_Gym_Text_TwinsAmyMay1Seen, AzaleaTown_Gym_Text_TwinsAmyMay1Beaten, AzaleaTown_Gym_Text_TwinsNotEnoughMons
 	special GetPlayerBigGuyGirlString
 	msgbox AzaleaTown_Gym_Text_TwinsAmyMay1After, MSGBOX_DEFAULT
@@ -524,6 +551,7 @@ AzaleaTown_Gym_EventScript_Amy::
 	end
 	
 AzaleaTown_Gym_EventScript_May::
+	setspeaker AzaleaTown_Gym_Speaker_TwinMay
 	trainerbattle_double TRAINER_AZALEA_AMY_AND_MAY, AzaleaTown_Gym_Text_TwinsAmyMay2Seen, AzaleaTown_Gym_Text_TwinsAmyMay2Beaten, AzaleaTown_Gym_Text_TwinsNotEnoughMons
 	special GetPlayerBigGuyGirlString
 	msgbox AzaleaTown_Gym_Text_TwinsAmyMay2After, MSGBOX_DEFAULT
@@ -533,12 +561,16 @@ AzaleaTown_Gym_EventScript_May::
 AzaleaTown_Gym_EventScript_Bugsy::
 	lock
 	faceplayer
+	setspeaker AzaleaTown_Gym_Speaker_Bugsy
 	goto_if_set FLAG_DEFEATED_AZALEA_TOWN_GYM, AzaleaTown_Gym_EventScript_Bugsy_Defeated
 	msgbox AzaleaTown_Gym_Text_BugsyIntro, MSGBOX_DEFAULT
+	setspeaker AzaleaTown_Gym_Speaker_Bugsy
 	trainerbattle_no_intro TRAINER_BUGSY_1, AzaleaTown_Gym_Text_BugsyBeaten
+	setspeaker AzaleaTown_Gym_Speaker_Bugsy
 	message AzaleaTown_Gym_Text_ReceivedHiveBadge
 	waitmessage
 	call Common_EventScript_PlayGymBadgeFanfare
+	setspeaker AzaleaTown_Gym_Speaker_Bugsy
 	msgbox AzaleaTown_Gym_Text_HiveBadgeSpeech, MSGBOX_DEFAULT
 	setflag FLAG_BADGE18_GET
 	setflag FLAG_DEFEATED_AZALEA_TOWN_GYM
@@ -546,9 +578,24 @@ AzaleaTown_Gym_EventScript_Bugsy::
 	setvar VAR_0x8008, 18
 	call Common_EventScript_SetGymTrainers
 	giveitem ITEM_TM09
+	setspeaker AzaleaTown_Gym_Speaker_Bugsy
 	msgbox AzaleaTown_Gym_Text_FuryCutterSpeech, MSGBOX_DEFAULT
 	setvar VAR_AZALEA_TOWN_STATE, 5
 	closemessage
+	checkflag FLAG_QUEST_DEFEAT_BUGSY_STARTED
+	goto_if_eq AzaleaTown_Gym_EventScript_Bugsy_QuestDone
+	checkflag FLAG_QUEST_DEFEAT_BUGSY_COMPLETED
+	goto_if_eq AzaleaTown_Gym_EventScript_Bugsy_QuestDone
+	setflag FLAG_QUEST_DEFEAT_BUGSY_COMPLETED
+	call QuestJournal_EventScript_QuestCompleteAlert
+AzaleaTown_Gym_EventScript_Bugsy_QuestDone:
+	checkflag FLAG_QUEST_SLOWPOKE_WELL_FLARE_STARTED
+	goto_if_eq AzaleaTown_Gym_EventScript_Bugsy_SlowpokeQuestDone
+	checkflag FLAG_QUEST_SLOWPOKE_WELL_FLARE_COMPLETED
+	goto_if_eq AzaleaTown_Gym_EventScript_Bugsy_SlowpokeQuestDone
+	setflag FLAG_QUEST_SLOWPOKE_WELL_FLARE_STARTED
+	call QuestJournal_EventScript_NewQuestAlert
+AzaleaTown_Gym_EventScript_Bugsy_SlowpokeQuestDone:
 	setflag FLAG_HIDE_AZALEA_TOWN_FARFETCHD
 	setflag FLAG_GET_HEADBUTT
 	clearflag FLAG_HIDE_ILEX_FOREST_APPRENTICE
@@ -557,6 +604,7 @@ AzaleaTown_Gym_EventScript_Bugsy::
 	end
 
 AzaleaTown_Gym_EventScript_Bugsy_Defeated::
+	setspeaker AzaleaTown_Gym_Speaker_Bugsy
 	msgbox AzaleaTown_Gym_Text_BugsyAdvice, MSGBOX_DEFAULT
 	closemessage
 	release
@@ -678,16 +726,16 @@ AzaleaTown_Gym_Text_GymStatuePlayerWon:
 
 AzaleaTown_Gym_Text_BugsyIntro:
 	.string "I'm BUGSY!\p"
-	.string "After the trouble in SLOWPOKE\n"
-	.string "WELL, I started studying how\l"
-	.string "bug POKéMON react to shadows.\p"
+	.string "After the all the strange things\n"
+	.string "going on, I started studying how\l"
+	.string "bug POKéMON react to pressure.\p"
 	.string "If you want the HIVEBADGE,\n"
-	.string "show me your resolve!$"
+	.string "you have to take it by force!$"
 
 AzaleaTown_Gym_Text_BugsyBeaten:
 	.string "Whoa, amazing!\p"
-	.string "Your strength cut through the\n"
-	.string "shadows. Take this BADGE.$"
+	.string "Your strength was too much\n"
+	.string "to handle! Take this BADGE.$"
 
 AzaleaTown_Gym_Text_ReceivedHiveBadge:
 	.string "{PLAYER} received HIVEBADGE.$"
@@ -695,8 +743,7 @@ AzaleaTown_Gym_Text_ReceivedHiveBadge:
 AzaleaTown_Gym_Text_HiveBadgeSpeech:
 	.string "The HIVEBADGE proves your\n"
 	.string "bond is strong.\p"
-	.string "POKéMON up to L30 will obey you,\n"
-	.string "even traded ones.\p"
+	.string "POKéMON can grow to level 32 now.\p"
 	.string "POKéMON that know CUT can use it\n"
 	.string "outside of battle.\p"
 	.string "Here, take this too.$"
@@ -708,11 +755,15 @@ AzaleaTown_Gym_Text_FuryCutterSpeech:
 	.string "So even though the power is 25, it\n"
 	.string "is really between 50 and 125 power!\p"
 	.string "Isn't that great?\n"
-	.string "I discovered it!$"
+	.string "I discovered it!\p"
+	.string "One more thing before you go.\n"
+	.string "Can you check out Slopoke Well\l"
+	.string "for me?\p"
+	.string "Seems like some troublemakers are there.$"
 
 AzaleaTown_Gym_Text_BugsyAdvice:
-	.string "Bug POKéMON are deep. Shadows make\n"
-	.string "them even stranger.\p"
+	.string "Bug POKéMON are tough. Training\n"
+	.string "makes them even tougher.\p"
 	.string "Keep studying your favorites.$"
 
 AzaleaTown_Gym_Text_BugsyRematch:
@@ -728,7 +779,7 @@ AzaleaTown_Gym_Text_BugsyRematchDefeat:
 	.string "My research must not be complete...$"
 
 AzaleaTown_Gym_Text_BugCatcherBennySeen:
-	.string "Those FLARE grunts in the WELL?\n"
+	.string "Those grunts in the WELL?\n"
 	.string "They don't scare me!$"
 
 AzaleaTown_Gym_Text_BugCatcherBennyBeaten:
@@ -739,45 +790,43 @@ AzaleaTown_Gym_Text_BugCatcherBennyAfter:
 	.string "Next time, I'll be ready.$"
 
 AzaleaTown_Gym_Text_BugCatcherAlSeen:
-	.string "BUGSY says bugs sense shadow\n"
+	.string "BUGSY says bugs sense evil\n"
 	.string "energy first. Watch this!$"
 
 AzaleaTown_Gym_Text_BugCatcherAlBeaten:
-	.string "Your heart is tougher...$"
+	.string "Your heart is pure...$"
 
 AzaleaTown_Gym_Text_BugCatcherAlAfter:
 	.string "If AZALEA gets dark again,\n"
 	.string "I'll stand with my bugs.$"
 
 AzaleaTown_Gym_Text_BugCatcherJoshSeen:
-	.string "You drove FLARE out of the WELL?\n"
-	.string "Then prove it to me!$"
+	.string "Then prove your power to me!$"
 
 AzaleaTown_Gym_Text_BugCatcherJoshBeaten:
-	.string "Urrgh! Still strong...$"
+	.string "Urrgh! So strong...$"
 
 AzaleaTown_Gym_Text_BugCatcherJoshAfter:
 	.string "I should teach them better moves\n"
-	.string "for shadow fights...$"
+	.string "for battle...$"
 
 AzaleaTown_Gym_Text_TwinsAmyMay1Seen:
-	.string "AMY: Challenging BUGSY?\n"
+	.string "Challenging BUGSY?\n"
 	.string "He won't lose!$"
 
 AzaleaTown_Gym_Text_TwinsAmyMay1Beaten:
-	.string "AMY & MAY: Oh, double\n"
-	.string "goodness!$"
+	.string "Oh, double goodness!$"
 
 AzaleaTown_Gym_Text_TwinsAmyMay1After:
-	.string "AMY: You're really strong!\p"
+	.string "You're really strong!\p"
 	.string "But BUGSY protects AZALEA.\n"
-	.string "His SCYTHER won't fall!$"
+	.string "His SCIZOR won't fall!$"
 
 AzaleaTown_Gym_Text_TwinsAmyMay2Seen:
-	.string "MAY: You want to see the LEADER?\n"
+	.string "You want to see the LEADER?\n"
 	.string "Good luck!\p"
-	.string "BUGSY is focused after what\n"
-	.string "happened in the WELL!$"
+	.string "BUGSY is focused after\n"
+	.string "CIPHER showed up!$"
 
 AzaleaTown_Gym_Text_TwinsAmyMay2Beaten:
 	.string "AMY & MAY: Oh, double\n"
@@ -787,17 +836,17 @@ AzaleaTown_Gym_Text_TwinsNotEnoughMons:
 	.string "You need two POKéMON to battle.$"
 
 AzaleaTown_Gym_Text_TwinsAmyMay2After:
-	.string "MAY: Our bug POKéMON lost...\p"
+	.string "Our bug POKéMON lost...\p"
 	.string "BUGSY's won't. He trains to\n"
-	.string "counter shadow tricks!$"
+	.string "counter tricks!$"
 
 AzaleaTown_Gym_Text_GymGuide:
 	.string "Yo, challenger!\p"
 	.string "BUGSY's young, but he's sharp.\n"
-	.string "After the WELL incident, he\n"
+	.string "After the WELL incident, he\l"
 	.string "trained for shadow trouble.\p"
 	.string "BUG POKéMON strike fast and hard.\n"
-	.string "Bring answers for SCYTHER.\p"
+	.string "Bring answers for SCIZOR.\p"
 	.string "Good luck!$"
 
 AzaleaTown_Gym_Text_GymGuideWin:

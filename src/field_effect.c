@@ -262,7 +262,7 @@ static const u16 sNewGameBirch_Pal[16] = INCBIN_U16("graphics/birch_speech/birch
 
 static const u32 sPokeballGlow_Gfx[] = INCBIN_U32("graphics/field_effects/pics/pokeball_glow.4bpp");
 static const u16 sPokeballGlow_Pal[16] = INCBIN_U16("graphics/field_effects/palettes/pokeball_glow.gbapal");
-static const u16 sPokecenterMonitor_Gfx[] = INCBIN_U16("graphics/field_effects/pics/pokemoncenter_monitor.4bpp");
+static const u16 sPokecenterMonitor_Gfx_Frlg[] = INCBIN_U16("graphics/field_effects/pics/pokecenter_monitor/frlg.4bpp");
 static const u32 sPokecenterMonitor0_Gfx[] = INCBIN_U32("graphics/field_effects/pics/pokecenter_monitor/0.4bpp");
 static const u32 sPokecenterMonitor1_Gfx[] = INCBIN_U32("graphics/field_effects/pics/pokecenter_monitor/1.4bpp");
 static const u32 sHofMonitorBig_Gfx[] = INCBIN_U32("graphics/field_effects/pics/hof_monitor_big.4bpp");
@@ -426,8 +426,10 @@ static const struct SpriteFrameImage sPicTable_PokecenterMonitor[] =
 
 static const struct SpriteFrameImage sPicTable_PokecenterMonitor_KantoJohto[] =
 {
-    {sPokecenterMonitor_Gfx + 0x000, 0x200},
-    {sPokecenterMonitor_Gfx + 0x100, 0x200}
+    {sPokecenterMonitor_Gfx_Frlg + 0x000, 0x100},
+    {sPokecenterMonitor_Gfx_Frlg + 0x080, 0x100},
+    {sPokecenterMonitor_Gfx_Frlg + 0x100, 0x100},
+    {sPokecenterMonitor_Gfx_Frlg + 0x180, 0x100}
 };
 
 static const struct SpriteFrameImage sPicTable_HofMonitorBig[] =
@@ -583,7 +585,7 @@ static const struct SpriteTemplate sSpriteTemplate_PokecenterMonitor_KantoJohto 
 {
     .tileTag = TAG_NONE,
     .paletteTag = FLDEFF_PAL_TAG_GENERAL_0,
-    .oam = &sOam_32x32,
+    .oam = &sOam_32x16,
     .anims = sAnims_Flicker,
     .images = sPicTable_PokecenterMonitor_KantoJohto,
     .affineAnims = gDummySpriteAffineAnimTable,
@@ -1329,6 +1331,9 @@ static bool8 ShouldUseKantoJohtoPokecenterMonitor(void)
     return (healLocation >= HEAL_LOCATION_PEWTER_CITY);
 }
 
+#define KANTO_JOHTO_MONITOR_X_OFFSET -4
+#define KANTO_JOHTO_MONITOR_Y_OFFSET 8
+
 static u8 CreatePokecenterMonitorSprite(s16 x, s16 y)
 {
     u8 spriteId;
@@ -1336,7 +1341,10 @@ static u8 CreatePokecenterMonitorSprite(s16 x, s16 y)
     bool8 useKantoJohto = ShouldUseKantoJohtoPokecenterMonitor();
 
     if (useKantoJohto)
-        x += 4;
+    {
+        x += KANTO_JOHTO_MONITOR_X_OFFSET;
+        y += KANTO_JOHTO_MONITOR_Y_OFFSET;
+    }
 
     spriteId = CreateSpriteAtEnd(useKantoJohto ? &sSpriteTemplate_PokecenterMonitor_KantoJohto
                                                : &sSpriteTemplate_PokecenterMonitor,
@@ -1348,6 +1356,9 @@ static u8 CreatePokecenterMonitorSprite(s16 x, s16 y)
         SetSubspriteTables(sprite, &sSubspriteTable_PokecenterMonitor);
     return spriteId;
 }
+
+#undef KANTO_JOHTO_MONITOR_X_OFFSET
+#undef KANTO_JOHTO_MONITOR_Y_OFFSET
 
 static void SpriteCB_PokecenterMonitor(struct Sprite *sprite)
 {

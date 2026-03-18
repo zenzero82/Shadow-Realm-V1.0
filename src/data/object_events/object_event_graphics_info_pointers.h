@@ -255,6 +255,7 @@ extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_UnusedMauvi
 extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_UnusedMauvilleOldMan2;
 //misc(NEW)
 extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_HoopaRing;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_HoopaRingTimeAmulet;
 //Kanto
 extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_BrockGen1;
 extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_RocketGruntMGen1;
@@ -753,6 +754,7 @@ const struct ObjectEventGraphicsInfo *const gObjectEventGraphicsInfoPointers[NUM
     [OBJ_EVENT_GFX_LIGHT_SPRITE] =             &gObjectEventGraphicsInfo_BallLight,
     //misc (NEW)
     [OBJ_EVENT_GFX_HOOPA_RING] =                &gObjectEventGraphicsInfo_HoopaRing,
+    [OBJ_EVENT_GFX_HOOPA_RING_TIME_AMULET] =    &gObjectEventGraphicsInfo_HoopaRingTimeAmulet,
 
     //Kanto
     [OBJ_EVENT_GFX_BROCK_GEN1]   =             &gObjectEventGraphicsInfo_BrockGen1,

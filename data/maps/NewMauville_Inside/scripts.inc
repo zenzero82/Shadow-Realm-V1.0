@@ -178,7 +178,7 @@ NewMauville_Inside_EventScript_Voltorb1::
 	faceplayer
 	setwildbattle SPECIES_VOLTORB, 25
 	waitse
-	playmoncry SPECIES_VOLTORB, CRY_MODE_ENCOUNTER
+	playmoncry SPECIES_VOLTORB, CRY_MODE_NORMAL
 	delay 40
 	waitmoncry
 	setflag FLAG_SYS_CTRL_OBJ_DELETE
@@ -202,7 +202,7 @@ NewMauville_Inside_EventScript_Voltorb2::
 	faceplayer
 	setwildbattle SPECIES_VOLTORB, 25
 	waitse
-	playmoncry SPECIES_VOLTORB, CRY_MODE_ENCOUNTER
+	playmoncry SPECIES_VOLTORB, CRY_MODE_NORMAL
 	delay 40
 	waitmoncry
 	setflag FLAG_SYS_CTRL_OBJ_DELETE
@@ -226,7 +226,7 @@ NewMauville_Inside_EventScript_Voltorb3::
 	faceplayer
 	setwildbattle SPECIES_VOLTORB, 25
 	waitse
-	playmoncry SPECIES_VOLTORB, CRY_MODE_ENCOUNTER
+	playmoncry SPECIES_VOLTORB, CRY_MODE_NORMAL
 	delay 40
 	waitmoncry
 	setflag FLAG_SYS_CTRL_OBJ_DELETE

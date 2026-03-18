@@ -480,3 +480,27 @@ const u16 gMetatileAttributes_wescave2[] = INCBIN_U16("data/tilesets/secondary/w
 
 const u16 gMetatiles_ruinsofAlphOutside[] = INCBIN_U16("data/tilesets/secondary/ruinsof_alph_outside/metatiles.bin");
 const u16 gMetatileAttributes_ruinsofAlphOutside[] = INCBIN_U16("data/tilesets/secondary/ruinsof_alph_outside/metatile_attributes.bin");
+
+const u16 gMetatiles_RuinsOfAlph_B1F[] = INCBIN_U16("data/tilesets/secondary/ruins_of_alph_b1f/metatiles.bin");
+const u16 gMetatileAttributes_RuinsOfAlph_B1F[] = INCBIN_U16("data/tilesets/secondary/ruins_of_alph_b1f/metatile_attributes.bin");
+
+const u16 gMetatiles_RuinsOfAlphWriting[] = INCBIN_U16("data/tilesets/secondary/ruins_of_alph_writing/metatiles.bin");
+const u16 gMetatileAttributes_RuinsOfAlphWriting[] = INCBIN_U16("data/tilesets/secondary/ruins_of_alph_writing/metatile_attributes.bin");
+
+const u16 gMetatiles_PokemonLeague[] = INCBIN_U16("data/tilesets/secondary/pokemon_league/metatiles.bin");
+const u16 gMetatileAttributes_PokemonLeague[] = INCBIN_U16("data/tilesets/secondary/pokemon_league/metatile_attributes.bin");
+
+const u16 gMetatiles_Lighthouse[] = INCBIN_U16("data/tilesets/secondary/lighthouse/metatiles.bin");
+const u16 gMetatileAttributes_Lighthouse[] = INCBIN_U16("data/tilesets/secondary/lighthouse/metatile_attributes.bin");
+
+const u16 gMetatiles_CianwoodCity_Gym[] = INCBIN_U16("data/tilesets/secondary/cianwood_city_gym/metatiles.bin");
+const u16 gMetatileAttributes_CianwoodCity_Gym[] = INCBIN_U16("data/tilesets/secondary/cianwood_city_gym/metatile_attributes.bin");
+
+const u16 gMetatiles_distortion[] = INCBIN_U16("data/tilesets/secondary/distortion/metatiles.bin");
+const u16 gMetatileAttributes_distortion[] = INCBIN_U16("data/tilesets/secondary/distortion/metatile_attributes.bin");
+
+const u16 gMetatiles_Cave_DragonsDen[] = INCBIN_U16("data/tilesets/secondary/cave_dragons_den/metatiles.bin");
+const u16 gMetatileAttributes_Cave_DragonsDen[] = INCBIN_U16("data/tilesets/secondary/cave_dragons_den/metatile_attributes.bin");
+
+const u16 gMetatiles_DragonsDen_Shrine[] = INCBIN_U16("data/tilesets/secondary/dragons_den_shrine/metatiles.bin");
+const u16 gMetatileAttributes_DragonsDen_Shrine[] = INCBIN_U16("data/tilesets/secondary/dragons_den_shrine/metatile_attributes.bin");

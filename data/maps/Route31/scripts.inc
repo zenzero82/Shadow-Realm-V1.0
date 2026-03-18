@@ -1,23 +1,39 @@
 Route31_MapScripts::
 	.byte 0
 
+Route31_Speaker_Youngster:
+	.string "JARED$"
+
+Route31_Speaker_BugCatcher:
+	.string "ELI$"
+
+Route31_Speaker_FatMan:
+	.string "ARTHUR$"
+
+Route31_Speaker_Boy:
+	.string "NOAH$"
+
 Route31_EventScript_Youngster::
 	faceplayer
+	setspeaker Route31_Speaker_Youngster
 	msgbox Route31_Text_Youngster, MSGBOX_NPC
 	end
 
 Route31_EventScript_BugCatcher::
 	faceplayer
+	setspeaker Route31_Speaker_BugCatcher
 	msgbox Route31_Text_BugCatcher, MSGBOX_NPC
 	end
 
 Route31_EventScript_FatMan::
 	faceplayer
+	setspeaker Route31_Speaker_FatMan
 	msgbox Route31_Text_FatMan, MSGBOX_NPC
 	end
 
 Route31_EventScript_Boy::
 	faceplayer
+	setspeaker Route31_Speaker_Boy
 	msgbox Route31_Text_Boy, MSGBOX_NPC
 	end
 

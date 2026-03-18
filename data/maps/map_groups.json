@@ -742,7 +742,6 @@
   ],
   "gMapGroup_IndoorViridian": [
     "viridian_pokecenter",
-    "viridian_pokecenter_2fl",
     "viridian_pokemart",
     "viridian_house1",
     "viridian_house2",
@@ -750,7 +749,6 @@
   ],
   "gMapGroup_IndoorPewter": [
     "pewter_pokecenter",
-    "pewter_pokecenter_2fl",
     "pewter_pokemart",
     "pewter_house1",
     "pewter_house2",
@@ -966,10 +964,42 @@
     "BellchimeTrail",
     "EcruteakCity_Gym"
   ],
-  "gMapGroup_IndoorOlivine": [],
-  "gMapGroup_IndoorCianwood": [],
-  "gMapGroup_IndoorMahogany": [],
-  "gMapGroup_IndoorBlackthorn": [],
+  "gMapGroup_IndoorOlivine": [
+    "Olivine_pokecenter",
+    "Olivine_gym",
+    "Olivine_cafe",
+    "Olivine_mart",
+    "Olivine_house1",
+    "Olivine_house2",
+    "Olivine_house3",
+    "Olivine_portoutside",
+    "Olivine_portinside",
+    "Olivine_lighthouse"
+  ],
+  "gMapGroup_IndoorCianwood": [
+    "Cianwood_pokecenter",
+    "Cianwood_house1",
+    "Cianwood_house2",
+    "Cianwood_house3",
+    "Cianwood_shop",
+    "Cianwood_gym"
+  ],
+  "gMapGroup_IndoorMahogany": [
+    "Mahogany_pokecenter",
+    "Mahogany_gym",
+    "Mahogany_shop",
+    "Mahogany_house1",
+    "Lakeofrage_house1",
+    "Lakeofrage_house2",
+    "Blackthorn_mart"
+  ],
+  "gMapGroup_IndoorBlackthorn": [
+    "Blackthorn_pokecenter",
+    "Blackthorn_gym",
+    "Blackthorn_house1",
+    "Blackthorn_house2",
+    "Blackthorn_house3"
+  ],
   "gMapGroup_IndoorJohtoRoutes": [
     "Gate_Route29_Route46",
     "Gate_Route31_VioletCity",
@@ -1055,6 +1085,7 @@
   ],
   "gMapGroup_ShadowRealm": [
     "Shadow_Realm",
-    "Mirorb_Lair"
+    "Mirorb_Lair",
+    "Nothing"
   ]
 }

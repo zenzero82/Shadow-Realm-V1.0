@@ -278,6 +278,9 @@ $(FONTGFXDIR)/frlg_female.fwjpnfont: $(FONTGFXDIR)/japanese_frlg_female.png
 $(TITLESCREENGFXDIR)/pokemon_logo.gbapal: %.gbapal: %.pal
 	$(GFX) $< $@ -num_colors 224
 
+graphics/battle_interface/healthbox_singles_opponent_shadow.gbapal: graphics/battle_interface/healthbox_singles_opponent_shadow.pal
+	$(GFX) $< $@
+
 $(TITLESCREENGFXDIR)/emerald_version.8bpp: %.8bpp: %.png
 	$(GFX) $< $@ -mwidth 8 -mheight 4
 

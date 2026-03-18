@@ -29,6 +29,8 @@ SPECIAL_SPRITESHEET_OPTIONS = {
     "graphics/pokemon/zygarde": ["-mwidth", "8", "-mheight", "8"],
     "graphics/pokemon/mimikyu": ["-mwidth", "4", "-mheight", "4"],
     "graphics/pokemon/pikachu/shadow": ["-mwidth", "4", "-mheight", "4"],
+    "graphics/pokemon/pangoro/shadow": ["-mwidth", "4", "-mheight", "4"],
+    "graphics/pokemon/skarmory/shadow": ["-mwidth", "4", "-mheight", "4"],
 
 }
 

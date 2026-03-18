@@ -61,7 +61,7 @@ Route114_EventScript_Poochyena::
 	lock
 	faceplayer
 	waitse
-	playmoncry SPECIES_POOCHYENA, CRY_MODE_ENCOUNTER
+	playmoncry SPECIES_POOCHYENA, CRY_MODE_NORMAL
 	msgbox Route114_Text_Poochyena, MSGBOX_DEFAULT
 	waitmoncry
 	release

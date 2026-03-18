@@ -20,6 +20,7 @@
 #include "field_weather.h"
 #include "fldeff.h"
 #include "follower_npc.h"
+#include "constants/event_objects.h"
 #include "item.h"
 #include "item_menu.h"
 #include "item_use.h"
@@ -37,6 +38,7 @@
 #include "sound.h"
 #include "strings.h"
 #include "pokedex.h"
+#include "quest_journal.h"
 #include "shadow_monitor.h"
 #include "string_util.h"
 #include "task.h"
@@ -78,6 +80,7 @@ static void Task_StartUseLure(u8 taskId);
 static void Task_UseRepel(u8);
 static void Task_UseLure(u8 taskId);
 static void Task_CloseCantUseKeyItemMessage(u8);
+static void Task_CloseCantUseItemMessageWait(u8);
 static void SetDistanceOfClosestHiddenItem(u8, s16, s16);
 static void CB2_OpenPokeblockFromBag(void);
 static void ItemUseOnFieldCB_Honey(u8 taskId);
@@ -115,6 +118,25 @@ static const MainCallback sItemUseCallbacks[] =
 };
 
 static const u8 sClockwiseDirections[] = {DIR_NORTH, DIR_EAST, DIR_SOUTH, DIR_WEST};
+
+#define PHOTO_CAMERA_MAX_MON 6
+
+static const s8 sPhotoCameraSlotOffsets[PHOTO_CAMERA_MAX_MON] = {-3, -2, -1, 1, 2, 3};
+static const u8 sPhotoCameraPartyOrder[PHOTO_CAMERA_MAX_MON] = {0, 2, 4, 1, 3, 5};
+static const u8 sPhotoCameraLocalIds[PHOTO_CAMERA_MAX_MON] =
+{
+    LOCALID_PHOTO_CAMERA_MON_1,
+    LOCALID_PHOTO_CAMERA_MON_2,
+    LOCALID_PHOTO_CAMERA_MON_3,
+    LOCALID_PHOTO_CAMERA_MON_4,
+    LOCALID_PHOTO_CAMERA_MON_5,
+    LOCALID_PHOTO_CAMERA_MON_6,
+};
+
+static u8 sPhotoCameraObjectIds[PHOTO_CAMERA_MAX_MON];
+static bool8 sPhotoCameraFollowerHidden;
+static u8 sPhotoCameraFollowerObjId;
+static bool8 sPhotoCameraFollowerWasInvisible;
 
 static const struct YesNoFuncTable sUseTMHMYesNoFuncTable =
 {
@@ -173,7 +195,7 @@ static void DisplayCannotUseItemMessage(u8 taskId, bool8 isUsingRegisteredKeyIte
     if (!isUsingRegisteredKeyItemOnField)
     {
         if (!InBattlePyramid())
-            DisplayItemMessage(taskId, FONT_NORMAL, gStringVar4, CloseItemMessage);
+            DisplayItemMessageWithBg(taskId, FONT_NORMAL, gStringVar4, 0, Task_CloseCantUseItemMessageWait);
         else
             DisplayItemMessageInBattlePyramid(taskId, gText_DadsAdvice, Task_CloseBattlePyramidBagMessage);
     }
@@ -199,6 +221,15 @@ static void Task_CloseCantUseKeyItemMessage(u8 taskId)
     DestroyTask(taskId);
     ScriptUnfreezeObjectEvents();
     UnlockPlayerFieldControls();
+}
+
+static void Task_CloseCantUseItemMessageWait(u8 taskId)
+{
+    if (JOY_NEW(A_BUTTON | B_BUTTON))
+    {
+        PlaySE(SE_SELECT);
+        CloseItemMessage(taskId);
+    }
 }
 
 u8 CheckIfItemIsTMHMOrEvolutionStone(u16 itemId)
@@ -330,7 +361,11 @@ void ItemUseOutOfBattle_Rod(u8 taskId)
     }
     else
     {
-        DisplayDadsAdviceCannotUseItemMessage(taskId, gTasks[taskId].tUsingRegisteredKeyItem);
+        gMain.savedCallback = CB2_ReturnToField;
+        ScriptUnfreezeObjectEvents();
+        UnlockPlayerFieldControls();
+        DestroyTask(taskId);
+        SetMainCallback2(CB2_OpenQuestJournal);
     }
 }
 
@@ -1626,6 +1661,251 @@ void ItemUseOutOfBattle_PokeFlute(u8 taskId)
     }
 }
 
+static bool8 PhotoCamera_IsPartySlotUsable(u8 partyIndex, u8 partyCount)
+{
+    if (partyIndex >= partyCount)
+        return FALSE;
+    if (!GetMonData(&gPlayerParty[partyIndex], MON_DATA_SANITY_HAS_SPECIES))
+        return FALSE;
+    if (GetMonData(&gPlayerParty[partyIndex], MON_DATA_IS_EGG))
+        return FALSE;
+
+    return TRUE;
+}
+
+static bool8 PhotoCamera_IsTileFree(s16 x, s16 y, u8 elevation, bool8 allowPlayer)
+{
+    u8 behavior;
+    (void)elevation;
+    (void)allowPlayer;
+
+    if (GetMapBorderIdAt(x, y) == CONNECTION_INVALID)
+        return FALSE;
+    if (MapGridGetCollisionAt(x, y))
+        return FALSE;
+    behavior = MapGridGetMetatileBehaviorAt(x, y);
+    if (MetatileBehavior_IsSurfableWaterOrUnderwater(behavior))
+        return FALSE;
+
+    return TRUE;
+}
+
+static bool8 PhotoCamera_CanUseAt(s16 baseX, s16 baseY, u8 elevation)
+{
+    u8 i;
+    u8 needed = 0;
+    u8 active = 0;
+    u8 usable = 0;
+    u8 partyCount = CalculatePlayerPartyCount();
+
+    if (!IsPlayerStandingStill())
+        return FALSE;
+
+    if (!PhotoCamera_IsTileFree(baseX, baseY, elevation, TRUE))
+        return FALSE;
+
+    for (i = 0; i < PHOTO_CAMERA_MAX_MON; i++)
+    {
+        u8 partyIndex = sPhotoCameraPartyOrder[i];
+        s16 x;
+
+        if (!PhotoCamera_IsPartySlotUsable(partyIndex, partyCount))
+            continue;
+
+        usable++;
+        needed++;
+        x = baseX + sPhotoCameraSlotOffsets[i];
+        if (!PhotoCamera_IsTileFree(x, baseY, elevation, FALSE))
+            return FALSE;
+    }
+
+    if (usable == 0)
+        return FALSE;
+
+    for (i = 0; i < OBJECT_EVENTS_COUNT; i++)
+        if (gObjectEvents[i].active)
+            active++;
+
+    if (active + needed > OBJECT_EVENTS_COUNT)
+        return FALSE;
+
+    return TRUE;
+}
+
+static u16 PhotoCamera_GetGraphicsId(struct Pokemon *mon)
+{
+    u16 species = GetMonData(mon, MON_DATA_SPECIES);
+    bool8 isShiny = IsMonShiny(mon);
+    u8 gender = GetMonGender(mon);
+    bool8 isShadow = GetMonData(mon, MON_DATA_IS_SHADOW);
+    u16 graphicsId = species + OBJ_EVENT_MON;
+
+    if (isShiny)
+        graphicsId |= OBJ_EVENT_MON_SHINY;
+    if (gender == MON_FEMALE)
+        graphicsId |= OBJ_EVENT_MON_FEMALE;
+    if (isShadow)
+        graphicsId |= OBJ_EVENT_MON_SHADOW;
+
+    return graphicsId;
+}
+
+static void PhotoCamera_ClearObjects(void)
+{
+    u8 i;
+
+    for (i = 0; i < PHOTO_CAMERA_MAX_MON; i++)
+    {
+        if (sPhotoCameraObjectIds[i] != OBJECT_EVENTS_COUNT)
+            RemoveObjectEvent(&gObjectEvents[sPhotoCameraObjectIds[i]]);
+        sPhotoCameraObjectIds[i] = OBJECT_EVENTS_COUNT;
+    }
+}
+
+static void PhotoCamera_HideFollower(void)
+{
+    struct ObjectEvent *follower = GetFollowerObject();
+
+    sPhotoCameraFollowerHidden = FALSE;
+    sPhotoCameraFollowerObjId = OBJECT_EVENTS_COUNT;
+    sPhotoCameraFollowerWasInvisible = FALSE;
+    if (follower == NULL)
+        return;
+
+    sPhotoCameraFollowerHidden = TRUE;
+    sPhotoCameraFollowerObjId = (u8)(follower - gObjectEvents);
+    sPhotoCameraFollowerWasInvisible = follower->invisible;
+    follower->invisible = TRUE;
+}
+
+static void PhotoCamera_RestoreFollower(void)
+{
+    struct ObjectEvent *follower;
+
+    if (!sPhotoCameraFollowerHidden || sPhotoCameraFollowerObjId == OBJECT_EVENTS_COUNT)
+        return;
+
+    follower = &gObjectEvents[sPhotoCameraFollowerObjId];
+    if (!follower->active)
+        return;
+
+    follower->invisible = sPhotoCameraFollowerWasInvisible;
+}
+
+static bool8 PhotoCamera_SpawnPartyLine(s16 baseX, s16 baseY, u8 elevation)
+{
+    u8 i;
+    u8 spawned = 0;
+    u8 partyCount = CalculatePlayerPartyCount();
+
+    for (i = 0; i < PHOTO_CAMERA_MAX_MON; i++)
+        sPhotoCameraObjectIds[i] = OBJECT_EVENTS_COUNT;
+
+    for (i = 0; i < PHOTO_CAMERA_MAX_MON; i++)
+    {
+        u8 partyIndex = sPhotoCameraPartyOrder[i];
+        u16 graphicsId;
+        u8 objectEventId;
+        s16 x;
+
+        if (!PhotoCamera_IsPartySlotUsable(partyIndex, partyCount))
+            continue;
+
+        x = baseX + sPhotoCameraSlotOffsets[i];
+        graphicsId = PhotoCamera_GetGraphicsId(&gPlayerParty[partyIndex]);
+        objectEventId = SpawnSpecialObjectEventParameterized(
+            graphicsId,
+            MOVEMENT_TYPE_WALK_SLOWLY_IN_PLACE_DOWN,
+            sPhotoCameraLocalIds[i],
+            x,
+            baseY,
+            elevation);
+        if (objectEventId == OBJECT_EVENTS_COUNT)
+            return FALSE;
+
+        ObjectEventTurn(&gObjectEvents[objectEventId], DIR_SOUTH);
+        sPhotoCameraObjectIds[i] = objectEventId;
+        spawned++;
+    }
+
+    return (spawned != 0);
+}
+
+static void PhotoCamera_End(u8 taskId)
+{
+    bool8 usedRegisteredKeyItem = gTasks[taskId].tUsingRegisteredKeyItem;
+
+    PhotoCamera_ClearObjects();
+    PhotoCamera_RestoreFollower();
+    ScriptUnfreezeObjectEvents();
+    UnlockPlayerFieldControls();
+
+    DestroyTask(taskId);
+    if (usedRegisteredKeyItem)
+        SetMainCallback2(CB2_ReturnToField);
+    else
+        SetMainCallback2(CB2_ReturnToBagMenuPocket);
+}
+
+static void Task_PhotoCamera_HandleInput(u8 taskId)
+{
+    if (JOY_NEW(B_BUTTON))
+        PhotoCamera_End(taskId);
+}
+
+static void ItemUseOnFieldCB_PhotoCamera(u8 taskId)
+{
+    struct ObjectEvent *player = &gObjectEvents[gPlayerAvatar.objectEventId];
+    s16 baseX = player->currentCoords.x;
+    s16 baseY = player->currentCoords.y;
+    u8 elevation = player->currentElevation;
+
+    if (!PhotoCamera_CanUseAt(baseX, baseY, elevation))
+    {
+        DisplayCannotUseItemMessage(taskId, gTasks[taskId].tUsingRegisteredKeyItem, gText_CanNotUseAtThisTime);
+        return;
+    }
+
+    LockPlayerFieldControls();
+    FreezeObjectEvents();
+    StopPlayerAvatar();
+    ObjectEventTurn(&gObjectEvents[gPlayerAvatar.objectEventId], DIR_SOUTH);
+    PlayerFreeze();
+    PhotoCamera_HideFollower();
+
+    if (!PhotoCamera_SpawnPartyLine(baseX, baseY, elevation))
+    {
+        PhotoCamera_ClearObjects();
+        PhotoCamera_RestoreFollower();
+        ScriptUnfreezeObjectEvents();
+        UnlockPlayerFieldControls();
+        DisplayCannotUseItemMessage(taskId, gTasks[taskId].tUsingRegisteredKeyItem, gText_CanNotUseAtThisTime);
+        return;
+    }
+
+    gTasks[taskId].func = Task_PhotoCamera_HandleInput;
+}
+
+void ItemUseOutOfBattle_PhotoCamera(u8 taskId)
+{
+    if (!gTasks[taskId].tUsingRegisteredKeyItem)
+    {
+        struct ObjectEvent *player = &gObjectEvents[gPlayerAvatar.objectEventId];
+        s16 baseX = player->currentCoords.x;
+        s16 baseY = player->currentCoords.y;
+        u8 elevation = player->currentElevation;
+
+        if (!PhotoCamera_CanUseAt(baseX, baseY, elevation))
+        {
+            DisplayCannotUseItemMessage(taskId, FALSE, gText_CanNotUseAtThisTime);
+            return;
+        }
+    }
+
+    sItemUseOnFieldCB = ItemUseOnFieldCB_PhotoCamera;
+    SetUpItemUseOnFieldCallback(taskId);
+}
+
 static void ItemUseOnFieldCB_TownMap(u8 taskId)
 {
     LockPlayerFieldControls();
@@ -1643,6 +1923,26 @@ void ItemUseOutOfBattle_ShadowMonitor(u8 taskId)
     else
     {
         DisplayDadsAdviceCannotUseItemMessage(taskId, gTasks[taskId].tUsingRegisteredKeyItem);
+    }
+}
+
+void ItemUseOutOfBattle_QuestJournal(u8 taskId)
+{
+    if (!gTasks[taskId].tUsingRegisteredKeyItem)
+    {
+        gMain.savedCallback = (gBagPosition.exitCallback != NULL)
+            ? gBagPosition.exitCallback
+            : CB2_ReturnToField;
+        gBagMenu->newScreenCallback = CB2_OpenQuestJournal;
+        Task_FadeAndCloseBagMenu(taskId);
+    }
+    else
+    {
+        gMain.savedCallback = CB2_ReturnToField;
+        ScriptUnfreezeObjectEvents();
+        UnlockPlayerFieldControls();
+        DestroyTask(taskId);
+        SetMainCallback2(CB2_OpenQuestJournal);
     }
 }
 

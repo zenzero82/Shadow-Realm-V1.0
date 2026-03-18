@@ -513,8 +513,15 @@
 #define MUS_ENCOUNTER_TEAM_PLASMA       625  // mus_encounter_team_plasma.mid
 #define MUS_BATTLE_TEAM_SKULL           626  // mus_battle_team_skull.mid
 #define MUS_HEXAGONBROS                 627  // mus_hexagonbros.mid
+#define MUS_ELM_LAB                     628  // mus_elm_lab.mid
+#define MUS_HG_POKE_MART                629  // mus_hg_poke_mart.mid
+#define MUS_HG_ICE_PATH                 630  // mus_hg_ice_path.mid
+#define MUS_HG_VICTORY_ROAD             631  // mus_hg_victory_road.mid
+#define MUS_HG_GAME_CORNER              632  // mus_hg_game_corner.mid
+#define MUS_HG_DANCE_THEATER            633  // mus_hg_dance_theater.mid
+#define MUS_HG_POKEMON_LEAGUE           634  // mus_hg_pokemon_league.mid
 
-#define END_MUS                     MUS_HEXAGONBROS
+#define END_MUS                     MUS_HG_POKEMON_LEAGUE
 
 // These PH_* constants are phoneme sounds used by the "bard" NPC (see src/bard_music.c and src/mauville_old_man.c).
 // Each comes in a triplet of PH_*_BLEND, PH_*_HELD, and PH_*_SOLO, and the name of each triplet incorporates the English phonetic sound it represents.

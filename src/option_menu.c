@@ -29,9 +29,10 @@ enum
     TD_SOUND,
     TD_BUTTONMODE,
     TD_FRAMETYPE,
-	TD_TIMER,
+    TD_TIMER,
     TD_PAGE,
     TD_SHINY_ODDS,
+    TD_OVERWORLD_WILD,
     TD_LEVEL_CAP,
     TD_PAGE_SELECTION_OPTIONS,
     TD_PAGE_SELECTION_FEATURES,
@@ -53,6 +54,7 @@ enum
 enum
 {
     MENUITEM_FEATURES_SHINY_ODDS,
+    MENUITEM_FEATURES_OVERWORLD_WILD,
     MENUITEM_FEATURES_COUNT,
 };
 
@@ -101,6 +103,8 @@ static u8   ButtonMode_ProcessInput(u8 selection);
 static void ButtonMode_DrawChoices(u8 selection);
 static u8   ShinyOdds_ProcessInput(u8 selection);
 static void ShinyOdds_DrawChoices(u8 selection);
+static u8   OverworldWild_ProcessInput(u8 selection);
+static void OverworldWild_DrawChoices(u8 selection);
 static u8   LevelCap_ProcessInput(u8 selection);
 static void LevelCap_DrawChoices(u8 selection);
 static void DrawOptionMenuTexts(u8 page, u8 selection);
@@ -122,6 +126,7 @@ static void OptionMenu_LoadCursorMap(u8 selection);
 static void OptionMenu_HideNewGameButtons(void);
 static void OptionMenu_ChangePage(u8 taskId, s8 direction);
 static u8 OptionMenu_ClampShinyOdds(u8 value);
+static u8 OptionMenu_ClampOverworldWild(u8 value);
 static u8 OptionMenu_ClampLevelCap(u8 value);
 
 // EWRAM vars
@@ -176,6 +181,7 @@ const u8 localText_ShinyOdds512[] = _("{COLOR 1}{HIGHLIGHT TRANSPARENT}512");
 const u8 localText_LevelCapOff[] = _("{COLOR 1}{HIGHLIGHT TRANSPARENT}OFF");
 const u8 localText_LevelCapNormal[] = _("{COLOR 1}{HIGHLIGHT TRANSPARENT}NORMAL");
 const u8 localText_LevelCapHard[] = _("{COLOR 1}{HIGHLIGHT TRANSPARENT}HARD");
+const u8 localText_OverworldWild[] = _("{COLOR 2}{HIGHLIGHT TRANSPARENT}VISIBLE WILD");
 const u8 localText_TextSpeedDescription[] = _("{COLOR 1}{HIGHLIGHT TRANSPARENT}Choose from three text speed levels.");
 const u8 localText_BattleSceneDescription[] = _("{COLOR 1}{HIGHLIGHT TRANSPARENT}Show or disable animations\nduring battles.");
 const u8 localText_BattleStyleDescription[] = _("{COLOR 1}{HIGHLIGHT TRANSPARENT}Configure the rules that apply in\ncombat.");
@@ -183,6 +189,7 @@ const u8 localText_SoundDescription[] = _("{COLOR 1}{HIGHLIGHT TRANSPARENT}Set t
 const u8 localText_FrameDescription[] = _("{COLOR 1}{HIGHLIGHT TRANSPARENT}Configure menu borders.");
 const u8 localText_ButtonModeDescription[] = _("{COLOR 1}{HIGHLIGHT TRANSPARENT}Configures the behavior of the\nL and R buttons.");
 const u8 localText_ShinyOddsDescription[] = _("{COLOR 1}{HIGHLIGHT TRANSPARENT}Choose the shiny encounter rate.");
+const u8 localText_OverworldWildDescription[] = _("{COLOR 1}{HIGHLIGHT TRANSPARENT}Show wild Pokemon on the map\n(land encounters only).");
 const u8 localText_LevelCapOffDescription[] = _("{COLOR 1}{HIGHLIGHT TRANSPARENT}Off: Overleveling is allowed.");
 const u8 localText_LevelCapNormalDescription[] = _("{COLOR 1}{HIGHLIGHT TRANSPARENT}Normal: Level Cap per Badge.");
 const u8 localText_LevelCapHardDescription[] = _("{COLOR 1}{HIGHLIGHT TRANSPARENT}Hard: Level Cap per previous Badge.\n(You will be underleveled)");
@@ -210,6 +217,7 @@ static const u8 *const sOptionMenuItemsNamesOptions[MENUITEM_COUNT] =
 static const u8 *const sOptionMenuItemsNamesFeatures[MENUITEM_FEATURES_COUNT] =
 {
     localText_ShinyOdds,
+    localText_OverworldWild,
 };
 
 static const u8 *const sOptionMenuItemsNamesDifficulty[MENUITEM_DIFFICULTY_COUNT] =
@@ -230,6 +238,7 @@ static const u8 *const sOptionMenuDescriptionsOptions[MENUITEM_COUNT] =
 static const u8 *const sOptionMenuDescriptionsFeatures[MENUITEM_FEATURES_COUNT] =
 {
     localText_ShinyOddsDescription,
+    localText_OverworldWildDescription,
 };
 
 static const u8 *const sOptionMenuDescriptionsDifficulty[MENUITEM_DIFFICULTY_COUNT] =
@@ -436,9 +445,11 @@ void CB2_InitOptionMenu(void)
         gTasks[taskId].data[TD_BUTTONMODE] = gSaveBlock2Ptr->optionsButtonMode;
         gTasks[taskId].data[TD_FRAMETYPE] = gSaveBlock2Ptr->optionsWindowFrameType;
         gTasks[taskId].data[TD_SHINY_ODDS] = OptionMenu_ClampShinyOdds(gSaveBlock2Ptr->optionsShinyOdds);
+        gTasks[taskId].data[TD_OVERWORLD_WILD] = OptionMenu_ClampOverworldWild(gSaveBlock2Ptr->optionsOverworldWildEncounters);
         gTasks[taskId].data[TD_LEVEL_CAP] = OptionMenu_ClampLevelCap(gSaveBlock2Ptr->optionsLevelCap);
         sOptionMenuLevelCapSelection = gTasks[taskId].data[TD_LEVEL_CAP];
         gSaveBlock2Ptr->optionsShinyOdds = gTasks[taskId].data[TD_SHINY_ODDS];
+        gSaveBlock2Ptr->optionsOverworldWildEncounters = gTasks[taskId].data[TD_OVERWORLD_WILD];
         gSaveBlock2Ptr->optionsLevelCap = gTasks[taskId].data[TD_LEVEL_CAP];
 
         OptionMenu_DrawChoicesForPage(taskId);
@@ -566,11 +577,25 @@ static void Task_OptionMenuProcessInput(u8 taskId)
             }
             break;
         case OPTION_MENU_PAGE_FEATURES:
-            previousOption = gTasks[taskId].data[TD_SHINY_ODDS];
-            gTasks[taskId].data[TD_SHINY_ODDS] = ShinyOdds_ProcessInput(gTasks[taskId].data[TD_SHINY_ODDS]);
+            switch (gTasks[taskId].data[TD_MENUSELECTION])
+            {
+            case MENUITEM_FEATURES_SHINY_ODDS:
+                previousOption = gTasks[taskId].data[TD_SHINY_ODDS];
+                gTasks[taskId].data[TD_SHINY_ODDS] = ShinyOdds_ProcessInput(gTasks[taskId].data[TD_SHINY_ODDS]);
 
-            if (previousOption != gTasks[taskId].data[TD_SHINY_ODDS])
-                ShinyOdds_DrawChoices(gTasks[taskId].data[TD_SHINY_ODDS]);
+                if (previousOption != gTasks[taskId].data[TD_SHINY_ODDS])
+                    ShinyOdds_DrawChoices(gTasks[taskId].data[TD_SHINY_ODDS]);
+                break;
+            case MENUITEM_FEATURES_OVERWORLD_WILD:
+                previousOption = gTasks[taskId].data[TD_OVERWORLD_WILD];
+                gTasks[taskId].data[TD_OVERWORLD_WILD] = OverworldWild_ProcessInput(gTasks[taskId].data[TD_OVERWORLD_WILD]);
+
+                if (previousOption != gTasks[taskId].data[TD_OVERWORLD_WILD])
+                    OverworldWild_DrawChoices(gTasks[taskId].data[TD_OVERWORLD_WILD]);
+                break;
+            default:
+                return;
+            }
             break;
         case OPTION_MENU_PAGE_DIFFICULTY:
             previousOption = gTasks[taskId].data[TD_LEVEL_CAP];
@@ -625,6 +650,7 @@ static void Task_OptionMenuSave(u8 taskId)
 		gSaveBlock2Ptr->optionsButtonMode = gTasks[taskId].data[TD_BUTTONMODE];
 		gSaveBlock2Ptr->optionsWindowFrameType = gTasks[taskId].data[TD_FRAMETYPE];
 		gSaveBlock2Ptr->optionsShinyOdds = gTasks[taskId].data[TD_SHINY_ODDS];
+		gSaveBlock2Ptr->optionsOverworldWildEncounters = gTasks[taskId].data[TD_OVERWORLD_WILD];
 		gSaveBlock2Ptr->optionsLevelCap = gTasks[taskId].data[TD_LEVEL_CAP];
 
 		BeginNormalPaletteFade(0xFFFFFFFF, 0, 0, 0x10, 0);
@@ -937,6 +963,13 @@ static u8 OptionMenu_ClampShinyOdds(u8 value)
     return value;
 }
 
+static u8 OptionMenu_ClampOverworldWild(u8 value)
+{
+    if (value >= OPTIONS_OVERWORLD_WILD_COUNT)
+        return OPTIONS_OVERWORLD_WILD_OFF;
+    return value;
+}
+
 static u8 OptionMenu_ClampLevelCap(u8 value)
 {
     if (value > OPTIONS_LEVEL_CAP_HARD)
@@ -1188,6 +1221,41 @@ static void ShinyOdds_DrawChoices(u8 selection)
     DrawOptionMenuChoice(localText_ShinyOdds512,  216, 16, styles[4]);
 }
 
+static u8 OverworldWild_ProcessInput(u8 selection)
+{
+    if (gMain.newKeys & DPAD_RIGHT)
+    {
+        if (selection < OPTIONS_OVERWORLD_WILD_ON)
+            selection++;
+        else
+            selection = 0;
+
+        sArrowPressed = TRUE;
+    }
+    if (gMain.newKeys & DPAD_LEFT)
+    {
+        if (selection != 0)
+            selection--;
+        else
+            selection = OPTIONS_OVERWORLD_WILD_ON;
+
+        sArrowPressed = TRUE;
+    }
+    return selection;
+}
+
+static void OverworldWild_DrawChoices(u8 selection)
+{
+    u8 styles[2];
+
+    styles[0] = 5;
+    styles[1] = 5;
+    styles[selection] = 1;
+
+    DrawOptionMenuChoice(localText_BattleSceneOff, 112, 32, styles[0]);
+    DrawOptionMenuChoice(localText_BattleSceneOn,  162, 32, styles[1]);
+}
+
 static u8 LevelCap_ProcessInput(u8 selection)
 {
     if (gMain.newKeys & DPAD_RIGHT)
@@ -1281,6 +1349,7 @@ static void OptionMenu_DrawChoicesForPage(u8 taskId)
         break;
     case OPTION_MENU_PAGE_FEATURES:
         ShinyOdds_DrawChoices(gTasks[taskId].data[TD_SHINY_ODDS]);
+        OverworldWild_DrawChoices(gTasks[taskId].data[TD_OVERWORLD_WILD]);
         break;
     case OPTION_MENU_PAGE_DIFFICULTY:
         LevelCap_DrawChoices(gTasks[taskId].data[TD_LEVEL_CAP]);

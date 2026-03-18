@@ -22,6 +22,11 @@
       "map": "MAP_ROUTE40",
       "offset": 32,
       "direction": "left"
+    },
+    {
+      "map": "MAP_OLIVINE_PORTOUTSIDE",
+      "offset": 5,
+      "direction": "down"
     }
   ],
   "object_events": [
@@ -34,7 +39,7 @@
       "movement_range_x": 0,
       "movement_range_y": 0,
       "trainer_type": "TRAINER_TYPE_NONE",
-      "trainer_sight_or_berry_tree_id": "3",
+      "trainer_sight_or_berry_tree_id": "0",
       "script": "NULL",
       "flag": "0"
     },
@@ -47,7 +52,7 @@
       "movement_range_x": 0,
       "movement_range_y": 0,
       "trainer_type": "TRAINER_TYPE_NONE",
-      "trainer_sight_or_berry_tree_id": "3",
+      "trainer_sight_or_berry_tree_id": "0",
       "script": "NULL",
       "flag": "0"
     },
@@ -60,7 +65,7 @@
       "movement_range_x": 0,
       "movement_range_y": 0,
       "trainer_type": "TRAINER_TYPE_NONE",
-      "trainer_sight_or_berry_tree_id": "3",
+      "trainer_sight_or_berry_tree_id": "0",
       "script": "NULL",
       "flag": "0"
     },
@@ -73,7 +78,7 @@
       "movement_range_x": 0,
       "movement_range_y": 0,
       "trainer_type": "TRAINER_TYPE_NONE",
-      "trainer_sight_or_berry_tree_id": "3",
+      "trainer_sight_or_berry_tree_id": "0",
       "script": "NULL",
       "flag": "0"
     },
@@ -86,7 +91,7 @@
       "movement_range_x": 0,
       "movement_range_y": 0,
       "trainer_type": "TRAINER_TYPE_NONE",
-      "trainer_sight_or_berry_tree_id": "3",
+      "trainer_sight_or_berry_tree_id": "0",
       "script": "NULL",
       "flag": "0"
     },
@@ -99,7 +104,7 @@
       "movement_range_x": 0,
       "movement_range_y": 0,
       "trainer_type": "TRAINER_TYPE_NONE",
-      "trainer_sight_or_berry_tree_id": "3",
+      "trainer_sight_or_berry_tree_id": "0",
       "script": "NULL",
       "flag": "0"
     },
@@ -112,7 +117,7 @@
       "movement_range_x": 0,
       "movement_range_y": 0,
       "trainer_type": "TRAINER_TYPE_NONE",
-      "trainer_sight_or_berry_tree_id": "3",
+      "trainer_sight_or_berry_tree_id": "0",
       "script": "NULL",
       "flag": "0"
     },
@@ -125,7 +130,7 @@
       "movement_range_x": 0,
       "movement_range_y": 0,
       "trainer_type": "TRAINER_TYPE_NONE",
-      "trainer_sight_or_berry_tree_id": "3",
+      "trainer_sight_or_berry_tree_id": "0",
       "script": "NULL",
       "flag": "0"
     },
@@ -138,7 +143,7 @@
       "movement_range_x": 0,
       "movement_range_y": 0,
       "trainer_type": "TRAINER_TYPE_NONE",
-      "trainer_sight_or_berry_tree_id": "3",
+      "trainer_sight_or_berry_tree_id": "0",
       "script": "NULL",
       "flag": "0"
     },
@@ -151,7 +156,7 @@
       "movement_range_x": 0,
       "movement_range_y": 0,
       "trainer_type": "TRAINER_TYPE_NONE",
-      "trainer_sight_or_berry_tree_id": "3",
+      "trainer_sight_or_berry_tree_id": "0",
       "script": "NULL",
       "flag": "0"
     },
@@ -164,7 +169,7 @@
       "movement_range_x": 0,
       "movement_range_y": 0,
       "trainer_type": "TRAINER_TYPE_NONE",
-      "trainer_sight_or_berry_tree_id": "3",
+      "trainer_sight_or_berry_tree_id": "0",
       "script": "NULL",
       "flag": "0"
     },
@@ -187,56 +192,56 @@
       "x": 15,
       "y": 43,
       "elevation": 0,
-      "dest_map": "MAP_OLIVINE_CITY",
+      "dest_map": "MAP_OLIVINE_POKECENTER",
       "dest_warp_id": "0"
     },
     {
       "x": 26,
       "y": 40,
       "elevation": 0,
-      "dest_map": "MAP_OLIVINE_CITY",
+      "dest_map": "MAP_OLIVINE_MART",
       "dest_warp_id": "0"
     },
     {
       "x": 11,
       "y": 27,
       "elevation": 0,
-      "dest_map": "MAP_OLIVINE_CITY",
+      "dest_map": "MAP_OLIVINE_GYM",
       "dest_warp_id": "0"
     },
     {
       "x": 39,
       "y": 49,
       "elevation": 0,
-      "dest_map": "MAP_OLIVINE_CITY",
+      "dest_map": "MAP_OLIVINE_LIGHTHOUSE",
       "dest_warp_id": "0"
     },
     {
       "x": 8,
       "y": 43,
       "elevation": 0,
-      "dest_map": "MAP_OLIVINE_CITY",
+      "dest_map": "MAP_OLIVINE_CAFE",
       "dest_warp_id": "0"
     },
     {
       "x": 31,
       "y": 24,
       "elevation": 0,
-      "dest_map": "MAP_OLIVINE_CITY",
+      "dest_map": "MAP_OLIVINE_HOUSE2",
       "dest_warp_id": "0"
     },
     {
       "x": 27,
       "y": 24,
       "elevation": 0,
-      "dest_map": "MAP_OLIVINE_CITY",
+      "dest_map": "MAP_OLIVINE_HOUSE1",
       "dest_warp_id": "0"
     },
     {
       "x": 19,
       "y": 36,
       "elevation": 0,
-      "dest_map": "MAP_OLIVINE_CITY",
+      "dest_map": "MAP_OLIVINE_HOUSE3",
       "dest_warp_id": "0"
     }
   ],

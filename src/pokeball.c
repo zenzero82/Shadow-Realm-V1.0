@@ -10,6 +10,7 @@
 #include "sound.h"
 #include "sprite.h"
 #include "palette.h"
+#include "battle_interface.h"
 #include "task.h"
 #include "trig.h"
 #include "util.h"
@@ -38,6 +39,97 @@ static void SpriteCB_ReleaseMonFromBall(struct Sprite *sprite);
 static void SpriteCB_ReleaseMon2FromBall(struct Sprite *sprite);
 static void HandleBallAnimEnd(struct Sprite *sprite);
 static void SpriteCB_PokeballReleaseMon(struct Sprite *sprite);
+
+static inline void EnsureBattleReservedObjPals(void)
+{
+    if (gReservedSpritePaletteCount < MAX_BATTLERS_COUNT)
+        gReservedSpritePaletteCount = MAX_BATTLERS_COUNT;
+}
+
+#define TAG_OPP_BALL_THROW_PAL 0xD7F6
+#define OPP_BALL_THROW_PAL_SLOT 14
+
+static const struct SpritePalette sOpponentBallThrowReserve =
+{
+    gBallPal_Poke, TAG_OPP_BALL_THROW_PAL
+};
+
+void ReserveOpponentBallThrowPaletteSlot(void)
+{
+    LoadSpritePaletteInSlot(&sOpponentBallThrowReserve, OPP_BALL_THROW_PAL_SLOT);
+}
+
+static u8 LoadBallSpritePalette(u8 ballId)
+{
+    const u8 fallbackSlot = 15;
+    u32 palIndex;
+    u8 slot;
+    u8 skipSlotA = gStatusSummaryBarPalSlot;
+    u8 skipSlotB = gStatusSummaryBallsPalSlot;
+
+    EnsureBattleReservedObjPals();
+    palIndex = IndexOfSpritePaletteTag(gBallSpritePalettes[ballId].tag);
+
+    if (palIndex != 0xFF
+        && ((skipSlotA != 0xFF && palIndex == skipSlotA)
+            || (skipSlotB != 0xFF && palIndex == skipSlotB)))
+    {
+        // Keep status summary palettes isolated.
+        FreeSpritePaletteByTag(gBallSpritePalettes[ballId].tag);
+        palIndex = 0xFF;
+    }
+
+    if (palIndex == 0xFF)
+    {
+        for (slot = gReservedSpritePaletteCount; slot < 16; slot++)
+        {
+            if ((skipSlotA != 0xFF && slot == skipSlotA)
+                || (skipSlotB != 0xFF && slot == skipSlotB))
+                continue;
+            if (GetSpritePaletteTagByPaletteNum(slot) == TAG_NONE)
+                break;
+        }
+
+        if (slot < 16)
+        {
+            palIndex = LoadSpritePaletteInSlot(&gBallSpritePalettes[ballId], slot);
+        }
+        else if (fallbackSlot >= gReservedSpritePaletteCount)
+        {
+            u16 fallbackTag = GetSpritePaletteTagByPaletteNum(fallbackSlot);
+
+            if (fallbackTag == TAG_NONE || fallbackTag == gBallSpritePalettes[ballId].tag)
+                palIndex = LoadSpritePaletteInSlot(&gBallSpritePalettes[ballId], fallbackSlot);
+        }
+    }
+
+    if (palIndex != 0xFF)
+        LoadPalette(gBallSpritePalettes[ballId].data, OBJ_PLTT_ID(palIndex), PLTT_SIZE_4BPP);
+
+    return palIndex;
+}
+
+static u8 LoadOpponentBallSpritePalette(u8 ballId)
+{
+    u32 palIndex = 0xFF;
+    u16 slotTag = GetSpritePaletteTagByPaletteNum(OPP_BALL_THROW_PAL_SLOT);
+
+    EnsureBattleReservedObjPals();
+    if (OPP_BALL_THROW_PAL_SLOT >= gReservedSpritePaletteCount
+        && (slotTag == TAG_NONE
+            || slotTag == TAG_OPP_BALL_THROW_PAL
+            || slotTag == gBallSpritePalettes[ballId].tag))
+    {
+        palIndex = LoadSpritePaletteInSlot(&gBallSpritePalettes[ballId], OPP_BALL_THROW_PAL_SLOT);
+        if (palIndex != 0xFF)
+            LoadPalette(gBallSpritePalettes[ballId].data, OBJ_PLTT_ID(palIndex), PLTT_SIZE_4BPP);
+    }
+
+    if (palIndex == 0xFF)
+        palIndex = LoadBallSpritePalette(ballId);
+
+    return palIndex;
+}
 static void SpriteCB_ReleasedMonFlyOut(struct Sprite *sprite);
 static void SpriteCB_TradePokeball(struct Sprite *sprite);
 static void SpriteCB_TradePokeballSendOff(struct Sprite *sprite);
@@ -597,7 +689,17 @@ static void Task_DoPokeballSendOutAnim(u8 taskId)
     gSprites[ballSpriteId].data[0] = 0x80;
     gSprites[ballSpriteId].data[1] = 0;
     gSprites[ballSpriteId].data[7] = throwCaseId;
-    ApplyBallSpritePalette(ballId, ballSpriteId);
+    if (!IsBattlerPlayer(battler))
+    {
+        u32 palIndex = LoadOpponentBallSpritePalette(ballId);
+
+        if (palIndex != 0xFF)
+            gSprites[ballSpriteId].oam.paletteNum = palIndex;
+    }
+    else
+    {
+        ApplyBallSpritePalette(ballId, ballSpriteId);
+    }
 
     switch (throwCaseId)
     {
@@ -1569,13 +1671,8 @@ static void SpriteCB_HitAnimHealthoxEffect(struct Sprite *sprite)
 void LoadBallGfx(u8 ballId)
 {
     u16 var;
-    u32 palIndex;
 
-    palIndex = IndexOfSpritePaletteTag(gBallSpritePalettes[ballId].tag);
-    if (palIndex == 0xFF)
-        palIndex = LoadSpritePalette(&gBallSpritePalettes[ballId]);
-    else
-        LoadPalette(gBallSpritePalettes[ballId].data, OBJ_PLTT_ID(palIndex), PLTT_SIZE_4BPP);
+    LoadBallSpritePalette(ballId);
 
     if (GetSpriteTileStartByTag(gBallSpriteSheets[ballId].tag) == 0xFFFF)
     {
@@ -1597,21 +1694,20 @@ void LoadBallGfx(u8 ballId)
 
 static void ApplyBallSpritePalette(u8 ballId, u8 spriteId)
 {
-    u32 palIndex = IndexOfSpritePaletteTag(gBallSpritePalettes[ballId].tag);
+    u32 palIndex = LoadBallSpritePalette(ballId);
 
     if (palIndex == 0xFF)
-        palIndex = LoadSpritePalette(&gBallSpritePalettes[ballId]);
-    if (palIndex == 0xFF)
-        palIndex = gSprites[spriteId].oam.paletteNum & 0xF;
+        return;
 
     gSprites[spriteId].oam.paletteNum = palIndex;
-    LoadPalette(gBallSpritePalettes[ballId].data, OBJ_PLTT_ID(palIndex), PLTT_SIZE_4BPP);
 }
 
 void FreeBallGfx(u8 ballId)
 {
     FreeSpriteTilesByTag(gBallSpriteSheets[ballId].tag);
     FreeSpritePaletteByTag(gBallSpritePalettes[ballId].tag);
+    if (gMain.inBattle)
+        ReserveOpponentBallThrowPaletteSlot();
 }
 
 static u16 GetBattlerPokeballItemId(u8 battler)

@@ -35,11 +35,11 @@ static const struct HunterSpawnPoint sHunterSpawnPoints_Kanto[] =
 
 static const struct HunterSpawnPoint sHunterSpawnPoints_Johto[] =
 {
-    {MAP_GROUP(MAP_DARK_CAVE_SOUTH_SIDE), MAP_NUM(MAP_DARK_CAVE_SOUTH_SIDE), 7, 8},
+    {MAP_GROUP(MAP_DARK_CAVE_SOUTH_SIDE), MAP_NUM(MAP_DARK_CAVE_SOUTH_SIDE), 17, 10},
     {MAP_GROUP(MAP_DARK_CAVE_NORTH_SIDE), MAP_NUM(MAP_DARK_CAVE_NORTH_SIDE), 6, 7},
-    {MAP_GROUP(MAP_UNION_CAVE_1F),        MAP_NUM(MAP_UNION_CAVE_1F),        9, 8},
-    {MAP_GROUP(MAP_UNION_CAVE_B1F),       MAP_NUM(MAP_UNION_CAVE_B1F),       7, 10},
-    {MAP_GROUP(MAP_ILEX_FOREST),          MAP_NUM(MAP_ILEX_FOREST),          8, 9},
+    {MAP_GROUP(MAP_UNION_CAVE_1F),        MAP_NUM(MAP_UNION_CAVE_1F),        22, 55},
+    {MAP_GROUP(MAP_UNION_CAVE_B1F),       MAP_NUM(MAP_UNION_CAVE_B1F),       23, 25},
+    {MAP_GROUP(MAP_ILEX_FOREST),          MAP_NUM(MAP_ILEX_FOREST),          10, 24},
 };
 
 static const struct HunterSpawnPoint sHunterSpawnPoints_Hoenn[] =

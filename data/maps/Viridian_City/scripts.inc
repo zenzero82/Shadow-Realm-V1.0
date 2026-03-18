@@ -192,9 +192,8 @@ ViridianCity_EventScript_JJ_AfterBattle::
     closemessage
 
     setflag FLAG_VIRIDIAN_JJ_BATTLE_DONE
-    call ViridianCity_EventScript_HideJJGroup
-
     fadescreenswapbuffers FADE_TO_BLACK
+    call ViridianCity_EventScript_HideJJGroup
     fadescreenswapbuffers FADE_FROM_BLACK
     releaseall
     end
@@ -351,6 +350,11 @@ ViridianCity_GymScene_GruntReturn_T3::
 
 ViridianCity_GymScene_End::
     setflag FLAG_VIRIDIAN_GONZAP_SCENE_DONE
+    checkflag FLAG_QUEST_VIRIDIAN_GYM_COMPLETED
+    goto_if_eq ViridianCity_GymScene_End_QuestDone
+    setflag FLAG_QUEST_VIRIDIAN_GYM_COMPLETED
+    call QuestJournal_EventScript_QuestCompleteAlert
+ViridianCity_GymScene_End_QuestDone:
     releaseall
     end
 

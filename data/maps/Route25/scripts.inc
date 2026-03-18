@@ -110,6 +110,20 @@ Route25_EventScript_Michael_HasBoulderBadge:
 	setspeaker Route25_Speaker_Michael
 	msgbox Route25_Text_Michael_Intro2, MSGBOX_DEFAULT
 	closemessage
+	checkflag FLAG_QUEST_CAPE_WES_COMPLETED
+	goto_if_eq Route25_EventScript_Michael_QuestTalkWes
+	checkflag FLAG_QUEST_CAPE_WES_STARTED
+	goto_if_eq Route25_EventScript_Michael_QuestComplete
+	goto Route25_EventScript_Michael_QuestTalkWes
+Route25_EventScript_Michael_QuestComplete:
+	setflag FLAG_QUEST_CAPE_WES_COMPLETED
+	call QuestJournal_EventScript_QuestCompleteAlert
+Route25_EventScript_Michael_QuestTalkWes:
+	checkflag FLAG_QUEST_TALK_WES_STARTED
+	goto_if_eq Route25_EventScript_Michael_QuestDone
+	setflag FLAG_QUEST_TALK_WES_STARTED
+	call QuestJournal_EventScript_NewQuestAlert
+Route25_EventScript_Michael_QuestDone:
 	setflag FLAG_ROUTE_25_MICHAEL_INTRO_DONE
 	goto Route25_EventScript_Michael_End
 
@@ -365,10 +379,16 @@ Route25_Movement_Eusine_ExitUp:
 	walk_left
 	walk_left
 	walk_left
+	walk_left
+	walk_left
+	walk_left
 	step_end
 
 Route25_Movement_Eusine_ExitDown:
 	walk_down
+	walk_left
+	walk_left
+	walk_left
 	walk_left
 	walk_left
 	walk_left

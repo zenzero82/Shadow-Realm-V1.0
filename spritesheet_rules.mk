@@ -2,6 +2,7 @@ POKEMONGFXDIR := graphics/pokemon
 OBJEVENTGFXDIR := graphics/object_events/pics
 FLDEFFGFXDIR := graphics/field_effects/pics
 MISCGFXDIR := graphics/misc
+SLIDINGPUZZLESDIR := graphics/sliding_puzzle/puzzles
 
 $(OBJEVENTGFXDIR)/people/brendan/walking.4bpp: %.4bpp: %.png
 	$(GFX) $< $@ -mwidth 2 -mheight 4
@@ -4978,6 +4979,24 @@ $(OBJEVENTGFXDIR)/misc/ball_%.4bpp: $(OBJEVENTGFXDIR)/misc/ball_%.png ; $(GFX) $
 graphics/door_anims/battle_tower_multi_corridor.4bpp: %.4bpp: %.png
 	$(GFX) $< $@ -mwidth 2 -mheight 4
 
+graphics/sliding_puzzle/bg.4bpp: %.4bpp: %.png
+	$(GFX) $< $@
+
+graphics/sliding_puzzle/cursor.4bpp: %.4bpp: %.png
+	$(GFX) $< $@
+
+$(SLIDINGPUZZLESDIR)/kabuto/tiles.4bpp: %.4bpp: %.png
+	$(GFX) $< $@ -mwidth 4 -mheight 4
+
+$(SLIDINGPUZZLESDIR)/omanyte/tiles.4bpp: %.4bpp: %.png
+	$(GFX) $< $@ -mwidth 4 -mheight 4
+
+$(SLIDINGPUZZLESDIR)/aerodactyl/tiles.4bpp: %.4bpp: %.png
+	$(GFX) $< $@ -mwidth 4 -mheight 4
+
+$(SLIDINGPUZZLESDIR)/ho_oh/tiles.4bpp: %.4bpp: %.png
+	$(GFX) $< $@ -mwidth 4 -mheight 4
+
 $(OBJEVENTGFXDIR)/misc/hoopa_ring.4bpp: %.4bpp: %.png
 	$(GFX) $< $@ -mwidth 8 -mheight 8
 
@@ -5583,6 +5602,24 @@ $(OBJEVENTGFXDIR)/xd/ironmask.4bpp: graphics/object_events/pics/xd/ironmask.png
 	$(GFX) $< $@ -mwidth 2 -mheight 4
 
 $(OBJEVENTGFXDIR)/xd/mirror_b.4bpp: graphics/object_events/pics/xd/mirror_b.png
+	$(GFX) $< $@ -mwidth 2 -mheight 4
+
+$(OBJEVENTGFXDIR)/shadow_hunters/resix.4bpp: graphics/object_events/pics/shadow_hunters/resix.png
+	$(GFX) $< $@ -mwidth 2 -mheight 4
+
+$(OBJEVENTGFXDIR)/shadow_hunters/blusix.4bpp: graphics/object_events/pics/shadow_hunters/blusix.png
+	$(GFX) $< $@ -mwidth 2 -mheight 4
+
+$(OBJEVENTGFXDIR)/shadow_hunters/greesix.4bpp: graphics/object_events/pics/shadow_hunters/greesix.png
+	$(GFX) $< $@ -mwidth 2 -mheight 4
+
+$(OBJEVENTGFXDIR)/shadow_hunters/purpsix.4bpp: graphics/object_events/pics/shadow_hunters/purpsix.png
+	$(GFX) $< $@ -mwidth 2 -mheight 4
+
+$(OBJEVENTGFXDIR)/shadow_hunters/browsix.4bpp: graphics/object_events/pics/shadow_hunters/browsix.png
+	$(GFX) $< $@ -mwidth 2 -mheight 4
+
+$(OBJEVENTGFXDIR)/shadow_hunters/yellosix.4bpp: graphics/object_events/pics/shadow_hunters/yellosix.png
 	$(GFX) $< $@ -mwidth 2 -mheight 4
 
 

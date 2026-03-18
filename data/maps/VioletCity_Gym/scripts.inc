@@ -1,4 +1,5 @@
 VioletCity_Gym_MapScripts::
+	map_script MAP_SCRIPT_ON_TRANSITION, VioletCity_Gym_OnTransition
 	.byte 0
 
 VioletCity_Gym_Speaker_Falkner:
@@ -12,6 +13,12 @@ VioletCity_Gym_Speaker_BirdKeeper1:
 
 VioletCity_Gym_Speaker_BirdKeeper2:
 	.string "KYLE$"
+
+VioletCity_Gym_OnTransition:
+	goto_if_unset FLAG_BADGE17_GET, VioletCity_Gym_OnTransition_Done
+	call VioletCity_Gym_EventScript_SetGymTrainers
+VioletCity_Gym_OnTransition_Done:
+	end
 
 VioletCity_Gym_EventScript_GymGuy::
 	lock
@@ -32,6 +39,7 @@ VioletCity_Gym_EventScript_GymGuy_After::
 
 VioletCity_Gym_EventScript_BirdKeeper1::
 	setspeaker VioletCity_Gym_Speaker_BirdKeeper1
+	goto_if_set FLAG_BADGE17_GET, VioletCity_Gym_EventScript_BirdKeeper1_After
 	trainerbattle_single TRAINER_VIOLET_GYM_BIRD_KEEPER_1, VioletCity_Gym_Text_BirdKeeper1_Intro, VioletCity_Gym_Text_BirdKeeper1_Defeat, VioletCity_Gym_EventScript_BirdKeeper1_After
 	end
 
@@ -44,6 +52,7 @@ VioletCity_Gym_EventScript_BirdKeeper1_After::
 
 VioletCity_Gym_EventScript_BirdKeeper2::
 	setspeaker VioletCity_Gym_Speaker_BirdKeeper2
+	goto_if_set FLAG_BADGE17_GET, VioletCity_Gym_EventScript_BirdKeeper2_After
 	trainerbattle_single TRAINER_VIOLET_GYM_BIRD_KEEPER_2, VioletCity_Gym_Text_BirdKeeper2_Intro, VioletCity_Gym_Text_BirdKeeper2_Defeat, VioletCity_Gym_EventScript_BirdKeeper2_After
 	end
 
@@ -68,6 +77,12 @@ VioletCity_Gym_EventScript_Falkner::
 	setflag FLAG_BADGE17_GET
 	addvar VAR_NUM_BADGES, 1
 	setvar VAR_0x8008, 17
+	call VioletCity_Gym_EventScript_SetGymTrainers
+	checkflag FLAG_QUEST_DEFEAT_FALKNER_COMPLETED
+	goto_if_eq VioletCity_Gym_EventScript_Falkner_QuestCheck_Done
+	setflag FLAG_QUEST_DEFEAT_FALKNER_COMPLETED
+	call QuestJournal_EventScript_QuestCompleteAlert
+VioletCity_Gym_EventScript_Falkner_QuestCheck_Done:
 	closemessage
 	release
 	end
@@ -78,6 +93,11 @@ VioletCity_Gym_EventScript_Falkner_After::
 	closemessage
 	release
 	end
+
+VioletCity_Gym_EventScript_SetGymTrainers::
+	settrainerflag TRAINER_VIOLET_GYM_BIRD_KEEPER_1
+	settrainerflag TRAINER_VIOLET_GYM_BIRD_KEEPER_2
+	return
 
 VioletCity_Gym_Text_GymGuy_Intro:
 	.string "Yo, challenger!\p"
@@ -126,14 +146,17 @@ VioletCity_Gym_Text_ReceivedZephyrBadge:
 	.string "{PLAYER} received the ZEPHYRBADGE!$"
 
 VioletCity_Gym_Text_Falkner_Badge:
-	.string "With the ZEPHYRBADGE, POKéMON\n"
-	.string "up to L20 will obey you.\p"
-	.string "It also lets you use FLASH\n"
-	.string "outside of battle.$"
+	.string "I can't believe you defeated me!\n"
+	.string "The ZEPHYRBADGE is yours.$"
 
 VioletCity_Gym_Text_Falkner_After:
 	.string "Keep your eyes on the skies.\n"
-	.string "Shadows move swiftly.$"
+	.string "Shadows move swiftly.\p"
+	.string "When you beat a GYM LEADER, your\n"
+	.string "POKéMON can grow stronger. Each badge\l"
+	.string "raises the limit.\p"
+	.string "If we're talking levels, you can\n"
+	.string "reach level 28 now.$"
 
 VioletCity_Gym_EventScript_Statue::
 	lockall

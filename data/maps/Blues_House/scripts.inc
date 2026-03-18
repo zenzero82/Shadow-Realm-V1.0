@@ -11,6 +11,13 @@ PalletTown_House2_EventScript_Blue::
 	setspeaker Speaker_Daisy
 	msgbox PalletTown_House2_Text_Hello, MSGBOX_DEFAULT
 	closemessage
+	setflag FLAG_QUEST_PALLET_TOWN_NPC_DAISY
+	checkflag FLAG_QUEST_VIRIDIAN_GYM_STARTED
+	goto_if_eq PalletTown_House2_EventScript_Blue_QuestSkip
+	setflag FLAG_QUEST_VIRIDIAN_GYM_STARTED
+	call QuestJournal_EventScript_NewQuestAlert
+PalletTown_House2_EventScript_Blue_QuestSkip:
+	call QuestJournal_EventScript_CheckPalletTownNPCs
 
 	release
 	end

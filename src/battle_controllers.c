@@ -3005,7 +3005,12 @@ void BtlController_HandleHealthBarUpdate(u32 battler, bool32 updateHpText)
 void DoStatusIconUpdate(u32 battler)
 {
     struct Pokemon *mon = GetBattlerMon(battler);
+    u32 status2 = gBattleResources->bufferA[battler][5]
+        | (gBattleResources->bufferA[battler][6] << 8)
+        | (gBattleResources->bufferA[battler][7] << 16)
+        | (gBattleResources->bufferA[battler][8] << 24);
 
+    gBattleMons[battler].status2 = status2;
     UpdateHealthboxAttribute(gHealthboxSpriteIds[battler], mon, HEALTHBOX_STATUS_ICON);
     gBattleSpritesDataPtr->healthBoxesData[battler].statusAnimActive = 0;
     gBattlerControllerFuncs[battler] = Controller_WaitForStatusAnimation;
@@ -3152,9 +3157,8 @@ void BtlController_HandleIntroTrainerBallThrow(u32 battler, u16 tagTrainerPal, c
         StoreSpriteCallbackInData6(&gSprites[gBattleStruct->trainerSlideSpriteIds[battler]], SpriteCB_FreePlayerSpriteLoadMonSprite);
         StartSpriteAnim(&gSprites[gBattleStruct->trainerSlideSpriteIds[battler]], ShouldDoSlideInAnim(battler) ? 2 : 1);
 
-        paletteNum = AllocSpritePalette(tagTrainerPal);
-        LoadPalette(trainerPal, OBJ_PLTT_ID(paletteNum), PLTT_SIZE_4BPP);
-        gSprites[gBattleStruct->trainerSlideSpriteIds[battler]].oam.paletteNum = paletteNum;
+        LoadPalette(trainerPal, OBJ_PLTT_ID(battler), PLTT_SIZE_4BPP);
+        gSprites[gBattleStruct->trainerSlideSpriteIds[battler]].oam.paletteNum = battler;
     }
     else
     {
@@ -3236,11 +3240,13 @@ static void SpriteCB_FreePlayerSpriteLoadMonSprite(struct Sprite *sprite)
 {
     u8 battler = sprite->sBattlerId;
     u8 spriteId = sprite - gSprites;
+    u8 palNum = sprite->oam.paletteNum;
 
     // Free player trainer sprite
     DestroyTrainerFrontPicBottomSprite(spriteId);
     FreeSpriteOamMatrix(sprite);
-    FreeSpritePaletteByTag(GetSpritePaletteTagByPaletteNum(sprite->oam.paletteNum));
+    if (palNum >= gReservedSpritePaletteCount)
+        FreeSpritePaletteByTag(GetSpritePaletteTagByPaletteNum(palNum));
     DestroySprite(sprite);
 
     // Load mon sprite

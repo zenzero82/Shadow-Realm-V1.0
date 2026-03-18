@@ -380,6 +380,9 @@ const u32 gObjectEventPic_MovingBox[] = INCBIN_U32("graphics/object_events/pics/
 const u16 gObjectEventPal_MovingBox[] = INCBIN_U16("graphics/object_events/palettes/moving_box.gbapal");
 const u16 gObjectEventPal_RedLeaf[] = INCBIN_U16("graphics/object_events/palettes/red_leaf.gbapal");
 const u16 gObjectEventPal_Lyra[] = INCBIN_U16("graphics/object_events/palettes/lyra.gbapal");
+const u16 gObjectEventPal_AquaMemberM[] = INCBIN_U16("graphics/object_events/palettes/aqua_member_m.gbapal");
+const u16 gObjectEventPal_AquaMemberF[] = INCBIN_U16("graphics/object_events/palettes/aqua_member_f.gbapal");
+const u16 gObjectEventPal_Matt[] = INCBIN_U16("graphics/object_events/palettes/matt.gbapal");
 const u32 gObjectEventPic_Red[] = INCBIN_U32("graphics/object_events/pics/people/red.4bpp");
 const u32 gObjectEventPic_Leaf[] = INCBIN_U32("graphics/object_events/pics/people/leaf.4bpp");
 const u32 gObjectEventPic_Lyra[] = INCBIN_U32("graphics/object_events/pics/people/lyra.4bpp");
@@ -487,6 +490,7 @@ const u16 gFieldEffectObjectPalette_CaveDust[] = INCBIN_U16("graphics/field_effe
 //misc (NEW)
 const u32 gObjectEventPic_HoopaRing[] = INCBIN_U32("graphics/object_events/pics/misc/hoopa_ring.4bpp");
 const u16 gObjectEventPal_HoopaRing[] = INCBIN_U16("graphics/object_events/pics/misc/hoopa_ring.gbapal");
+const u16 gObjectEventPal_HoopaRingTimeAmulet[] = INCBIN_U16("graphics/object_events/palettes/time_amulet_ring.gbapal");
 
 //Kanto Trainers
 const u16 gObjectEventPal_BrockGen1[] = INCBIN_U16("graphics/object_events/pics/gen1/brock.gbapal");
@@ -1092,6 +1096,13 @@ const u16 gObjectEventPal_Ironmask[] = INCBIN_U16("graphics/object_events/pics/x
 
 const u32 gObjectEventPic_MirrorB[] = INCBIN_U32("graphics/object_events/pics/xd/mirror_b.4bpp");
 const u16 gObjectEventPal_MirrorB[] = INCBIN_U16("graphics/object_events/pics/xd/mirror_b.gbapal");
+
+const u16 gObjectEventPal_Resix[] = INCBIN_U16("graphics/object_events/pics/shadow_hunters/resix.gbapal");
+const u16 gObjectEventPal_Blusix[] = INCBIN_U16("graphics/object_events/pics/shadow_hunters/blusix.gbapal");
+const u16 gObjectEventPal_Greesix[] = INCBIN_U16("graphics/object_events/pics/shadow_hunters/greesix.gbapal");
+const u16 gObjectEventPal_Purpsix[] = INCBIN_U16("graphics/object_events/pics/shadow_hunters/purpsix.gbapal");
+const u16 gObjectEventPal_Browsix[] = INCBIN_U16("graphics/object_events/pics/shadow_hunters/browsix.gbapal");
+const u16 gObjectEventPal_Yellosix[] = INCBIN_U16("graphics/object_events/pics/shadow_hunters/yellosix.gbapal");
 
 const u32 gObjectEventPic_Cassidy[] = INCBIN_U32("graphics/object_events/pics/shadow_hunters/cassidy.4bpp");
 const u32 gObjectEventPic_Butch[] = INCBIN_U32("graphics/object_events/pics/shadow_hunters/butch.4bpp");

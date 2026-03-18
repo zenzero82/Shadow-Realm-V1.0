@@ -70,6 +70,8 @@ PalletTown_RedsHouse_1F_EventScript_MomSpeech::
 	msgbox RedsHouse_Text_MomRepeatLine, MSGBOX_DEFAULT
 	closemessage
 
+	setflag FLAG_QUEST_PALLET_TOWN_NPC_REDS_MOM
+	call QuestJournal_EventScript_CheckPalletTownNPCs
 	setflag FLAG_REDS_HOUSE_MOM_INTRO_DONE
 	setvar VAR_TEMP_0, 1
 	return
@@ -79,6 +81,15 @@ PalletTown_RedsHouse_1F_EventScript_TV::
 	playbgm MUS_NEWSORRE, FALSE
 	msgbox RedsHouse_Text_TV, MSGBOX_SIGN
 	fadedefaultbgm
+	end
+
+PalletTown_RedsHouse_1F_EventScript_MrMime::
+	lock
+	faceplayer
+	waitse
+	playmoncry SPECIES_MR_MIME, CRY_MODE_NORMAL
+	waitmoncry
+	release
 	end
 
 RedsHouse_Move_Mom_ExclaimFaceDown:

@@ -1848,7 +1848,6 @@ u32 sub_81347A4(u8 a0)
         if (gSaveBlock2Ptr->optionsButtonMode == OPTIONS_BUTTON_MODE_LR && JOY_NEW(L_BUTTON))
         {
             if (sMonSummaryScreen->curPageIndex == PSS_PAGE_MOVES
-                && sUnknown_203B16D == 4
                 && sMonSummaryScreen->unk3268 != TRUE
                 && PSS_CanUseMoveRelearner())
                 return FALSE;
@@ -1928,6 +1927,16 @@ static void sub_8134840(u8 taskId)
                 }
                 return;
             }
+        }
+
+        if (sMonSummaryScreen->curPageIndex == PSS_PAGE_MOVES
+            && JOY_NEW(L_BUTTON)
+            && sMonSummaryScreen->unk3268 != TRUE
+            && PSS_CanUseMoveRelearner())
+        {
+            PlaySE(SE_SELECT);
+            PSS_BeginMoveRelearnerFromSummary();
+            return;
         }
 
         if ((!FuncIsActiveTask(sub_8134BAC)) || FuncIsActiveTask(sub_813B3F0))
@@ -2685,13 +2694,25 @@ static void PSS_GetDataPokemon(void)
         if (StringCompare(sMonSummaryScreen->summary.nickname, gSpeciesInfo[dexNum].speciesName) == 0)
             StringCopy(sMonSummaryScreen->summary.genderSymbol, gText_StringDummy);
 
-    GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_OT_NAME, tempStr);
-    StringCopyN_Multibyte(sMonSummaryScreen->summary.ot_name, tempStr, PLAYER_NAME_LENGTH);
+    {
+        bool8 isShadow = GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_IS_SHADOW);
 
-    ConvertInternationalString(sMonSummaryScreen->summary.ot_name, GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_LANGUAGE));
+        if (isShadow)
+        {
+            StringCopy(sMonSummaryScreen->summary.ot_name, gText_FiveMarks);
+            StringCopy(sMonSummaryScreen->summary.ot_id, gText_FiveMarks);
+        }
+        else
+        {
+            GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_OT_NAME, tempStr);
+            StringCopyN_Multibyte(sMonSummaryScreen->summary.ot_name, tempStr, PLAYER_NAME_LENGTH);
 
-    otId = GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_OT_ID) & 0xffff;
-    ConvertIntToDecimalStringN(sMonSummaryScreen->summary.ot_id, otId, STR_CONV_MODE_LEADING_ZEROS, 5);
+            ConvertInternationalString(sMonSummaryScreen->summary.ot_name, GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_LANGUAGE));
+
+            otId = GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_OT_ID) & 0xffff;
+            ConvertIntToDecimalStringN(sMonSummaryScreen->summary.ot_id, otId, STR_CONV_MODE_LEADING_ZEROS, 5);
+        }
+    }
 
     ConvertIntToDecimalStringN(tempStr, GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_LEVEL), STR_CONV_MODE_LEFT_ALIGN, 3);
 	StringCopy(sMonSummaryScreen->summary.level, gText_Lv);
@@ -3116,16 +3137,28 @@ static void PSS_ShowInfoPokemon(void)
 			AddTextPrinterParameterized3(sMonSummaryScreen->window[3], 2, 80 + sUnknown_203B144->unk00, 3 + yOffset, sPSSTextColours[RED], TEXT_SPEED_FF, sMonSummaryScreen->summary.dexNum);
 		else	
 			AddTextPrinterParameterized3(sMonSummaryScreen->window[3], 2, 80 + sUnknown_203B144->unk00, 3 + yOffset, sPSSTextColours[DARK], TEXT_SPEED_FF, sMonSummaryScreen->summary.dexNum);
-		if ((gSaveBlock2Ptr->playerTrainerId[0] | (gSaveBlock2Ptr->playerTrainerId[1] << 8) | (gSaveBlock2Ptr->playerTrainerId[2] << 16) | (gSaveBlock2Ptr->playerTrainerId[3] << 24)) == GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_OT_ID))
 		{
-			if (gSaveBlock2Ptr->playerGender == FEMALE)
-				AddTextPrinterParameterized3(sMonSummaryScreen->window[3], 2, 80, 39 + yOffset, sPSSTextColours[RED], TEXT_SPEED_FF, sMonSummaryScreen->summary.ot_name);
-			if (gSaveBlock2Ptr->playerGender == MALE)
-				AddTextPrinterParameterized3(sMonSummaryScreen->window[3], 2, 80, 39 + yOffset, sPSSTextColours[BLUE], TEXT_SPEED_FF, sMonSummaryScreen->summary.ot_name);
+			bool8 isShadow = GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_IS_SHADOW);
+
+			if (isShadow)
+			{
+				AddTextPrinterParameterized3(sMonSummaryScreen->window[3], 2, 80, 39 + yOffset, sPSSTextColours[DARK], TEXT_SPEED_FF, sMonSummaryScreen->summary.ot_name);
+				AddTextPrinterParameterized3(sMonSummaryScreen->window[3], 2, 80, 51 + yOffset, sPSSTextColours[DARK], TEXT_SPEED_FF, sMonSummaryScreen->summary.ot_id);
+			}
+			else if ((gSaveBlock2Ptr->playerTrainerId[0] | (gSaveBlock2Ptr->playerTrainerId[1] << 8) | (gSaveBlock2Ptr->playerTrainerId[2] << 16) | (gSaveBlock2Ptr->playerTrainerId[3] << 24)) == GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_OT_ID))
+			{
+				if (gSaveBlock2Ptr->playerGender == FEMALE)
+					AddTextPrinterParameterized3(sMonSummaryScreen->window[3], 2, 80, 39 + yOffset, sPSSTextColours[RED], TEXT_SPEED_FF, sMonSummaryScreen->summary.ot_name);
+				if (gSaveBlock2Ptr->playerGender == MALE)
+					AddTextPrinterParameterized3(sMonSummaryScreen->window[3], 2, 80, 39 + yOffset, sPSSTextColours[BLUE], TEXT_SPEED_FF, sMonSummaryScreen->summary.ot_name);
+				AddTextPrinterParameterized3(sMonSummaryScreen->window[3], 2, 80, 51 + yOffset, sPSSTextColours[DARK], TEXT_SPEED_FF, sMonSummaryScreen->summary.ot_id);
+			}
+			else
+			{
+				AddTextPrinterParameterized3(sMonSummaryScreen->window[3], 2, 80, 39 + yOffset, sPSSTextColours[DARK], TEXT_SPEED_FF, sMonSummaryScreen->summary.ot_name);
+				AddTextPrinterParameterized3(sMonSummaryScreen->window[3], 2, 80, 51 + yOffset, sPSSTextColours[DARK], TEXT_SPEED_FF, sMonSummaryScreen->summary.ot_id);
+			}
 		}
-		else
-			AddTextPrinterParameterized3(sMonSummaryScreen->window[3], 2, 80, 39 + yOffset, sPSSTextColours[DARK], TEXT_SPEED_FF, sMonSummaryScreen->summary.ot_name);
-		AddTextPrinterParameterized3(sMonSummaryScreen->window[3], 2, 80, 51 + yOffset, sPSSTextColours[DARK], TEXT_SPEED_FF, sMonSummaryScreen->summary.ot_id);
 		AddTextPrinterParameterized3(sMonSummaryScreen->window[3], 2, 80, 63 + yOffset, sPSSTextColours[DARK], TEXT_SPEED_FF, sMonSummaryScreen->summary.heldItem);
     }
     else
@@ -3161,7 +3194,7 @@ static void PSS_ShowMonStats(void)
     const u8 *expLabel = isShadow ? gText_PSS_StoredExp : gText_PSS_ExpPoints;
     const u8 *nextLabel = isShadow ? gText_PSS_LvAfterPure : gText_PSS_ToNextLv;
 
-    AddTextPrinterParameterized3(sMonSummaryScreen->window[3], 2, 10, 4, sPSSTextColours[WHITE_SOLID], TEXT_SPEED_FF, gText_PSS_HP);
+    AddTextPrinterParameterized3(sMonSummaryScreen->window[3], 2, 10, 4, sPSSTextColours[WHITE], TEXT_SPEED_FF, gText_PSS_HP);
     AddTextPrinterParameterized3(sMonSummaryScreen->window[3], 2, 10, 76, sPSSTextColours[WHITE], TEXT_SPEED_FF, expLabel);
     AddTextPrinterParameterized3(sMonSummaryScreen->window[3], 2, 10, 90, sPSSTextColours[WHITE], TEXT_SPEED_FF, nextLabel);
     AddTextPrinterParameterized3(sMonSummaryScreen->window[3], 2, 10, 16, sPSSTextColours[WHITE + sPSSNatureStatTable[nature][0]], TEXT_SPEED_FF, gText_PSS_Attack);
@@ -3306,9 +3339,16 @@ static void PSS_CheckIfMonIsEgg(void)
 
 static void PSS_BufferNatureString(void)
 {
-    u8 nature = GetNature(&sMonSummaryScreen->currentMon);
+    if (GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_IS_SHADOW))
+    {
+        DynamicPlaceholderTextUtil_SetPlaceholderPtr(2, gText_FiveMarks);
+    }
+    else
+    {
+        u8 nature = GetNature(&sMonSummaryScreen->currentMon);
 
-    DynamicPlaceholderTextUtil_SetPlaceholderPtr(2, gNaturesInfo[nature].name);
+        DynamicPlaceholderTextUtil_SetPlaceholderPtr(2, gNaturesInfo[nature].name);
+    }
     DynamicPlaceholderTextUtil_SetPlaceholderPtr(5, gText_EmptyString5);
 }
 
@@ -4149,7 +4189,9 @@ static void sub_8138CD8(u8 id)
         }
         else if (JOY_NEW(L_BUTTON))
         {
-            if (sUnknown_203B16D == 4 && sMonSummaryScreen->unk3268 != TRUE && PSS_CanUseMoveRelearner())
+            if (sMonSummaryScreen->curPageIndex == PSS_PAGE_MOVES
+                && sMonSummaryScreen->unk3268 != TRUE
+                && PSS_CanUseMoveRelearner())
             {
                 PlaySE(SE_SELECT);
                 PSS_BeginMoveRelearnerFromSummary();
@@ -5844,10 +5886,7 @@ static void PSS_PlayMonCry(void)
     {
         u16 species = GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_SPECIES);
 
-        if (ShouldPlayNormalMonCry(&sMonSummaryScreen->currentMon) == TRUE)
-            PlayCry_ByMode(species, 0, CRY_MODE_NORMAL);
-        else
-            PlayCry_ByMode(species, 0, CRY_MODE_WEAK);
+        PlayCry_ByMode(species, 0, CRY_MODE_NORMAL);
     }
 }
 

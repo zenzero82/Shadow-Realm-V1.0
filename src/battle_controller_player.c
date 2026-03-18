@@ -2676,6 +2676,8 @@ static void PlayerHandleBattleDebug(u32 battler)
     AddBagItem(ITEM_DARK_BALL, 50);
     AddBagItem(ITEM_SNAG_MACHINE, 1);
     AddBagItem(ITEM_SHADOW_MONITOR, 1);
+    AddBagItem(ITEM_TIME_FLUTE, 1);
+    AddBagItem(ITEM_PHOTO_CAMERA, 1);
     FlagSet(FLAG_HAS_SNAG_MACHINE);
     FlagSet(FLAG_RECEIVED_SNAG_MACHINE);
     FlagSet(FLAG_RECEIVED_SHADOW_MONITOR);

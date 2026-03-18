@@ -18,7 +18,6 @@ cerulean_pokemart_Pokemart_Items:
 	.2byte ITEM_ANTIDOTE
 	.2byte ITEM_PARALYZE_HEAL
 	.2byte ITEM_AWAKENING
-	.2byte ITEM_ESCAPE_ROPE
 	.2byte ITEM_REPEL
 	pokemartlistend
 
@@ -34,6 +33,8 @@ cerulean_pokemart_EventScript_BattleGirl::
 	setspeaker cerulean_pokemart_Speaker_BattleGirl
 	msgbox cerulean_pokemart_Text_BattleGirl, MSGBOX_DEFAULT
 	closemessage
+	setflag FLAG_QUEST_CERULEAN_NPC_POKEMART_BATTLE_GIRL
+	call QuestJournal_EventScript_CheckCeruleanCityNPCs
 	release
 	end
 
@@ -43,6 +44,8 @@ cerulean_pokemart_EventScript_Juggler::
 	setspeaker cerulean_pokemart_Speaker_Juggler
 	msgbox cerulean_pokemart_Text_Juggler, MSGBOX_DEFAULT
 	closemessage
+	setflag FLAG_QUEST_CERULEAN_NPC_POKEMART_JUGGLER
+	call QuestJournal_EventScript_CheckCeruleanCityNPCs
 	release
 	end
 

@@ -2596,6 +2596,8 @@ static void LoadPartyBoxHpTextPalette(u8 palOffset, u16 palFlags)
         palIds = sPartyBoxHpTextPalIdsReverse;
     else if (palFlags & PARTY_PAL_SHADOW)
         palIds = sPartyBoxHpTextPalIdsShadow;
+    else if (palFlags & PARTY_PAL_SELECTED)
+        palIds = sPartyBoxHpTextPalIdsSelected;
 
     LoadPalette(GetPartyMenuPalBufferPtr(palIds[0]), sPartyBoxHpTextPalOffsets[0] + palOffset, PLTT_SIZEOF(1));
     LoadPalette(GetPartyMenuPalBufferPtr(palIds[1]), sPartyBoxHpTextPalOffsets[1] + palOffset, PLTT_SIZEOF(1));

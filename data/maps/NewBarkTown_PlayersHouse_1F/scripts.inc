@@ -1,44 +1,82 @@
 NewBarkTown_PlayersHouse_1F_MapScripts::
 	.byte 0
 
+NewBarkTown_PlayersHouse_1F_Speaker_Mom:
+	.string "GOLD'S MOM$"
+
+NewBarkTown_PlayersHouse_1F_Speaker_MomsFriend:
+	.string "MOM'S FRIEND$"
+
 NewBarkTown_PlayersHouse_1F_EventScript_MomsFriend::
+	lock
 	faceplayer
+	setspeaker NewBarkTown_PlayersHouse_1F_Speaker_MomsFriend
 	msgbox NewBarkTown_PlayersHouse_1F_Text_MomsFriend, MSGBOX_DEFAULT
+	release
 	end
 
 NewBarkTown_PlayersHouse_1F_EventScript_Mom::
+	lock
 	faceplayer
 	goto_if_set FLAG_ENABLE_GOLD_MOM_SAVINGS, NewBarkTown_PlayersHouse_1F_EventScript_MomSavingsMenu
+	setspeaker NewBarkTown_PlayersHouse_1F_Speaker_Mom
 	msgbox NewBarkTown_PlayersHouse_1F_Text_Mom, MSGBOX_DEFAULT
+	setspeaker NewBarkTown_PlayersHouse_1F_Speaker_Mom
 	msgbox NewBarkTown_PlayersHouse_1F_Text_Mom_SavingsOffer, MSGBOX_YESNO
 	goto_if_eq VAR_RESULT, FALSE, NewBarkTown_PlayersHouse_1F_EventScript_MomSavingsNo
 	setflag FLAG_ENABLE_GOLD_MOM_SAVINGS
 	setflag FLAG_ENABLE_MOM_MATCH_CALL
 	special GoldMomSavingsInit
+	setspeaker NewBarkTown_PlayersHouse_1F_Speaker_Mom
 	msgbox NewBarkTown_PlayersHouse_1F_Text_Mom_SavingsYes, MSGBOX_DEFAULT
+	call NewBarkTown_PlayersHouse_1F_EventScript_GoldsMomQuestComplete
+	release
 	end
 
 NewBarkTown_PlayersHouse_1F_EventScript_MomSavingsNo::
+	setspeaker NewBarkTown_PlayersHouse_1F_Speaker_Mom
 	msgbox NewBarkTown_PlayersHouse_1F_Text_Mom_SavingsNo, MSGBOX_DEFAULT
+	call NewBarkTown_PlayersHouse_1F_EventScript_GoldsMomQuestComplete
+	release
 	end
 
 NewBarkTown_PlayersHouse_1F_EventScript_MomSavingsMenu::
 	special BufferGoldMomSavings
 	specialvar VAR_RESULT, GoldMomSavingsHasMoney
 	goto_if_eq VAR_RESULT, FALSE, NewBarkTown_PlayersHouse_1F_EventScript_MomSavingsEmpty
+	setspeaker NewBarkTown_PlayersHouse_1F_Speaker_Mom
 	msgbox NewBarkTown_PlayersHouse_1F_Text_Mom_SavingsBalance, MSGBOX_YESNO
 	goto_if_eq VAR_RESULT, FALSE, NewBarkTown_PlayersHouse_1F_EventScript_MomSavingsKeep
 	special GoldMomSavingsWithdrawAll
+	setspeaker NewBarkTown_PlayersHouse_1F_Speaker_Mom
 	msgbox NewBarkTown_PlayersHouse_1F_Text_Mom_SavingsWithdrawn, MSGBOX_DEFAULT
+	release
 	end
 
 NewBarkTown_PlayersHouse_1F_EventScript_MomSavingsKeep::
+	setspeaker NewBarkTown_PlayersHouse_1F_Speaker_Mom
 	msgbox NewBarkTown_PlayersHouse_1F_Text_Mom_SavingsKeep, MSGBOX_DEFAULT
+	release
 	end
 
 NewBarkTown_PlayersHouse_1F_EventScript_MomSavingsEmpty::
+	setspeaker NewBarkTown_PlayersHouse_1F_Speaker_Mom
 	msgbox NewBarkTown_PlayersHouse_1F_Text_Mom_SavingsEmpty, MSGBOX_DEFAULT
+	release
 	end
+
+NewBarkTown_PlayersHouse_1F_EventScript_GoldsMomQuestComplete::
+	checkflag FLAG_QUEST_GOLDS_MOM_COMPLETED
+	goto_if_eq NewBarkTown_PlayersHouse_1F_EventScript_GoldsMomQuestComplete_Done
+	checkflag FLAG_QUEST_GOLDS_MOM_STARTED
+	goto_if_eq NewBarkTown_PlayersHouse_1F_EventScript_GoldsMomQuestComplete_Do
+	setflag FLAG_QUEST_GOLDS_MOM_STARTED
+	call QuestJournal_EventScript_NewQuestAlert
+NewBarkTown_PlayersHouse_1F_EventScript_GoldsMomQuestComplete_Do::
+	setflag FLAG_QUEST_GOLDS_MOM_COMPLETED
+	call QuestJournal_EventScript_QuestCompleteAlert
+NewBarkTown_PlayersHouse_1F_EventScript_GoldsMomQuestComplete_Done::
+	return
 
 NewBarkTown_PlayersHouse_1F_Text_Mom:
 	.string "Hello, and who might you be?\p"
@@ -50,8 +88,8 @@ NewBarkTown_PlayersHouse_1F_Text_Mom:
 	.string "found.\p"
 	.string "I have been treating Ethan like\n"
 	.string "my son these past few months.\p"
-	.string "It seems like you are helping the\n"
-	.string "Team in these crazy times.$"
+	.string "It seems like you are helping him\n"
+	.string "and the Team in these crazy times.$"
 
 NewBarkTown_PlayersHouse_1F_Text_Mom_SavingsOffer:
 	.string "I have been holding accounts for\n"
@@ -90,4 +128,4 @@ NewBarkTown_PlayersHouse_1F_Text_MomsFriend:
 	.string "There was so much noise outside\n"
 	.string "just before you walked in.\p"
 	.string "Seems like we finally got some\l"
-	.string "peace and queit now.$"
+	.string "peace and quiet now.$"

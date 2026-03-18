@@ -98,7 +98,8 @@ static void ResetBldCnt(void);
 static void InitMenuOptionGlow(void);
 static void Task_CurrentMenuOptionGlow(u8);
 static void SetMenuOptionGlow(void);
-static void ClearPokenavMessageBoxFill(u8 *tilemap);
+static void SetPokenavMainMenuBgPriorities(void);
+static void SetPokenavDefaultBgPriorities(void);
 
 static const u16 sPokenavBgDotsPal[] = INCBIN_U16("graphics/pokenav/bg_dots.gbapal");
 static const u32 sPokenavBgDotsTiles[] = INCBIN_U32("graphics/pokenav/bg_dots.4bpp.lz");
@@ -299,7 +300,7 @@ static const struct OamData sOamData_MenuOption =
     .x = 0,
     .size = SPRITE_SIZE(32x16),
     .tileNum = 0,
-    .priority = 2,
+    .priority = 0,
     .paletteNum = 0,
 };
 
@@ -343,7 +344,7 @@ static const struct OamData sBlueLightOamData =
     .x = 0,
     .size = SPRITE_SIZE(32x16),
     .tileNum = 0,
-    .priority = 2,
+    .priority = 0,
     .paletteNum = 0,
 };
 
@@ -458,11 +459,12 @@ static u32 LoopedTask_OpenMenu(s32 state)
     {
     case 0:
         InitBgTemplates(sPokenavMainMenuBgTemplates, ARRAY_COUNT(sPokenavMainMenuBgTemplates));
+        SetPokenavMainMenuBgPriorities();
+        UpdateMainMenuHeaderGfx();
         DecompressAndCopyTileDataToVram(1, gPokenavMessageBox_Gfx, 0, 0, 0);
-        CpuFill16(0, (void *)BG_CHAR_ADDR(1) + TILE_OFFSET_4BPP(0x1FF), TILE_SIZE_4BPP);
         SetBgTilemapBuffer(1, gfx->bg1TilemapBuffer);
+        memset(gfx->bg1TilemapBuffer, 0, sizeof(gfx->bg1TilemapBuffer));
         CopyToBgTilemapBuffer(1, gPokenavMessageBox_Tilemap, 0, 0);
-        ClearPokenavMessageBoxFill(gfx->bg1TilemapBuffer);
         CopyBgTilemapBufferToVram(1);
         CopyPaletteIntoBufferUnfaded(gPokenavMessageBox_Pal, BG_PLTT_ID(1), PLTT_SIZE_4BPP);
         ChangeBgX(1, 0, BG_COORD_SET);
@@ -586,6 +588,7 @@ static u32 LoopedTask_OpenConditionMenu(s32 state)
     switch (state)
     {
     case 0:
+        SetPokenavDefaultBgPriorities();
         ResetBldCnt();
         StartOptionAnimations_Exit();
         HideMainOrSubMenuLeftHeader(POKENAV_GFX_MAIN_MENU, FALSE);
@@ -625,6 +628,7 @@ static u32 LoopedTask_ReturnToMainMenu(s32 state)
     switch (state)
     {
     case 0:
+        SetPokenavMainMenuBgPriorities();
         ResetBldCnt();
         StartOptionAnimations_Exit();
         HideMainOrSubMenuLeftHeader(POKENAV_GFX_CONDITION_MENU, FALSE);
@@ -636,6 +640,7 @@ static u32 LoopedTask_ReturnToMainMenu(s32 state)
             return LT_PAUSE;
         DrawCurrentMenuOptionLabels();
         LoadLeftHeaderGfxForIndex(0);
+        UpdateMainMenuHeaderGfx();
         return LT_INC_AND_PAUSE;
     case 2:
         StartOptionAnimations_Enter();
@@ -663,6 +668,7 @@ static u32 LoopedTask_OpenConditionSearchMenu(s32 state)
     switch (state)
     {
     case 0:
+        SetPokenavDefaultBgPriorities();
         ResetBldCnt();
         StartOptionAnimations_Exit();
         PlaySE(SE_SELECT);
@@ -696,6 +702,7 @@ static u32 LoopedTask_ReturnToConditionMenu(s32 state)
     switch (state)
     {
     case 0:
+        SetPokenavDefaultBgPriorities();
         ResetBldCnt();
         StartOptionAnimations_Exit();
         HideMainOrSubMenuLeftHeader(POKENAV_GFX_SEARCH_MENU, FALSE);
@@ -767,6 +774,7 @@ static u32 LoopedTask_OpenPokenavFeature(s32 state)
         if (WaitForHelpBar())
             return LT_PAUSE;
         SlideMenuHeaderUp();
+        SetPokenavDefaultBgPriorities();
         ResetBldCnt();
         StartOptionAnimations_Exit();
         switch (GetPokenavMenuType())
@@ -1344,6 +1352,20 @@ static void ResetBldCnt(void)
     SetGpuReg(REG_OFFSET_BLDCNT, 0);
 }
 
+static void SetPokenavMainMenuBgPriorities(void)
+{
+    SetBgAttribute(1, BG_ATTR_PRIORITY, 3);
+    SetBgAttribute(2, BG_ATTR_PRIORITY, 1);
+    SetBgAttribute(3, BG_ATTR_PRIORITY, 2);
+}
+
+static void SetPokenavDefaultBgPriorities(void)
+{
+    SetBgAttribute(1, BG_ATTR_PRIORITY, 1);
+    SetBgAttribute(2, BG_ATTR_PRIORITY, 2);
+    SetBgAttribute(3, BG_ATTR_PRIORITY, 3);
+}
+
 static void InitMenuOptionGlow(void)
 {
     SetMenuOptionGlow();
@@ -1372,33 +1394,6 @@ static void SetMenuOptionGlow(void)
     CpuFill16(0, gScanlineEffectRegBuffers[1], DISPLAY_HEIGHT * 2);
     CpuFill16(RGB(16, 23, 28), &gScanlineEffectRegBuffers[0][r4], 0x20);
     CpuFill16(RGB(16, 23, 28), &gScanlineEffectRegBuffers[1][r4], 0x20);
-}
-
-static void ClearPokenavMessageBoxFill(u8 *tilemap)
-{
-    const u16 blank = 0x1FF;
-    const u16 fillPal0 = 0x0003;
-    const u16 fillPal1 = 0x1003;
-    u16 *tilemap16 = (u16 *)tilemap;
-    u32 x;
-    u32 y;
-
-    // Keep only the message box tiles (cols 2-27, rows 16-19); blank everything else.
-    for (y = 0; y < DISPLAY_TILE_HEIGHT; y++)
-    {
-        for (x = 0; x < DISPLAY_TILE_WIDTH; x++)
-        {
-            u32 i = y * DISPLAY_TILE_WIDTH + x;
-            if (y < 16 || y > 19 || x < 2 || x > 27)
-            {
-                tilemap16[i] = blank;
-            }
-            else if (tilemap16[i] == fillPal0 || tilemap16[i] == fillPal1)
-            {
-                tilemap16[i] = blank;
-            }
-        }
-    }
 }
 
 void ResetBldCnt_(void)

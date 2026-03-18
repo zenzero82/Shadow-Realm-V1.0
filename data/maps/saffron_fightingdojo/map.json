@@ -2,7 +2,7 @@
   "id": "MAP_SAFFRON_FIGHTINGDOJO",
   "name": "saffron_fightingdojo",
   "layout": "LAYOUT_SAFFRON_FIGHTINGDOJO",
-  "music": "MUS_DUMMY",
+  "music": "MUS_RG_GYM",
   "region_map_section": "MAPSEC_SAFFRON_CITY",
   "requires_flash": false,
   "weather": "WEATHER_NONE",

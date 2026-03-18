@@ -248,7 +248,8 @@ struct SaveBlock3
     u8 itemFlags[ITEM_FLAGS_COUNT];
 #endif
 #if USE_DEXNAV_SEARCH_LEVELS == TRUE
-    u8 dexNavSearchLevels[NUM_SPECIES];
+#define DEXNAV_SEARCH_LEVELS_SIZE ((POKEMON_SLOTS_NUMBER + 1) / 2)
+    u8 dexNavSearchLevels[DEXNAV_SEARCH_LEVELS_SIZE];
 #endif
     u8 dexNavChain;
 }; /* max size 1624 bytes */
@@ -586,7 +587,8 @@ struct SaveBlock2
     /*0x18*/ struct Pokedex pokedex;
     /*0x90*/ u8 optionsShinyOdds;
     /*0x91*/ u8 optionsLevelCap;
-    /*0x92*/ u8 filler_92[0x6];
+    /*0x92*/ u8 optionsOverworldWildEncounters;
+    /*0x93*/ u8 filler_93[0x5];
     /*0x98*/ struct Time localTimeOffset;
     /*0xA0*/ struct Time lastBerryTreeUpdate;
     /*0xA8*/ u32 gcnLinkFlags; // Read by Pokémon Colosseum/XD
@@ -1143,7 +1145,9 @@ struct SaveBlock1
     /*0x31DC*/ struct Roamer roamer[ROAMER_COUNT];
     // Shadow Pokémon registry: indexed by shadowID (1..MAX_SHADOW_MON_IDS)
     /*0x31F8*/ u8 shadowMonStates[MAX_SHADOW_MON_IDS + 1];
-    /*0x31F9*/ struct RoamingShadowHunterSave roamingShadowHunter;
+    /*0x3???*/ struct RoamingShadowHunterSave roamingShadowHunter;
+    /*0x3???*/ struct Pokemon kukuiShadowMon;
+    /*0x3???*/ bool8 kukuiShadowMonActive;
 #if FREE_ENIGMA_BERRY == FALSE
     /*0x31F8*/ struct EnigmaBerry enigmaBerry;
 #endif //FREE_ENIGMA_BERRY
