@@ -36,6 +36,7 @@
 #include "constants/game_stat.h"
 #include "constants/item.h"
 #include "constants/items.h"
+#include "constants/headbutt.h"
 #include "constants/heal_locations.h"
 #include "constants/layouts.h"
 #include "constants/lilycove_lady.h"
@@ -1950,3 +1951,35 @@ gText_ShadowPurifyMultipleReady::
 
 EventScript_OverworldWildMon::
 	end
+
+	.include "data/maps/Distortion_World/scripts.inc"
+
+	.include "data/maps/Gio_Chamber/scripts.inc"
+
+	.include "data/maps/Nascour_Lair/scripts.inc"
+
+	.include "data/maps/Guzma_Lair/scripts.inc"
+
+	.include "data/maps/Lusamine_Lair/scripts.inc"
+
+	.include "data/maps/Colress_Lair/scripts.inc"
+
+	.include "data/maps/Maxie_Lair/scripts.inc"
+
+	.include "data/maps/Ghetsis_Lair/scripts.inc"
+
+	.include "data/maps/Archie_Lair/scripts.inc"
+
+	.include "data/maps/Lysandre_Lair/scripts.inc"
+
+	.include "data/maps/Rose_Lair/scripts.inc"
+
+	.include "data/maps/Sada_Turo_Lair/scripts.inc"
+
+	.include "data/maps/Greevil_Lair/scripts.inc"
+
+	.include "data/maps/Cyrus_Lair/scripts.inc"
+
+	.include "data/maps/Evice_Lair/scripts.inc"
+
+	.include "data/maps/Nightmare_Realm/scripts.inc"

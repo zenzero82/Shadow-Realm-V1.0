@@ -40,6 +40,8 @@ NewBarkTown_Lab_EventScript_Silver::
 	playse SE_EXIT
 	removeobject LOCALID_SILVER
 	setflag FLAG_SHADOW_TRACKER_UNLOCKED
+	setflag FLAG_QUEST_NEW_BARK_NPC_SILVER
+	call QuestJournal_EventScript_CheckNewBarkNPCs
 	call NewBarkTown_Lab_EventScript_RowanCall
 	release
 	end
@@ -66,16 +68,16 @@ NewBarkTown_Lab_Text_Silver_Familiar:
 NewBarkTown_Lab_Text_Silver_Leave:
 	.string "Who are you?\p"
 	.string "Whatever, I came looking for\n"
-	.string "Prof. Elm but doesn't seem like\n"
-	.string "he's around. Not really like I\n"
+	.string "Prof. Elm but doesn't seem like\l"
+	.string "he's around. Not really like I\l"
 	.string "care much for taking orders.\l"
 	.string "Even from family...\p"
 	.string "Out of my way.$"
 
 NewBarkTown_Lab_Text_Rowan_Call:
 	.string "Hello there! Lucas and Dawn\n"
-	.string "managed to place tracking\n"
-	.string "devices on trainers whose\n"
+	.string "managed to place tracking\l"
+	.string "devices on trainers whose\l"
 	.string "shadow pokemon fled.\p"
 	.string "Your Shadow Tracker should\n"
 	.string "pick up their signals.$"
@@ -85,17 +87,15 @@ NewBarkTown_Lab_Movement_Silver_Exclaim:
 	step_end
 
 NewBarkTown_Lab_Movement_Silver_Exit:
-	walk_right
-	walk_down
-	walk_down
-	walk_down
-	walk_down
-	walk_down
-	walk_down
 	walk_left
 	walk_left
 	walk_left
-	walk_left
+	walk_down
+	walk_down
+	walk_down
+	walk_down
+	walk_down
+	walk_down
 	step_end
 
 NewBarkTown_Lab_EventScript_HealingMachine1::

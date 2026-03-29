@@ -50847,6 +50847,314 @@
               }
             ]
           }
+        },
+        {
+          "map": "MAP_SLOWPOKE_WELL_B1F",
+          "base_label": "gSlowpokeWell_B1F",
+          "land_mons": {
+            "encounter_rate": 10,
+            "mons": [
+              {
+                "min_level": 23,
+                "max_level": 26,
+                "species": "SPECIES_SLOWPOKE"
+              },
+              {
+                "min_level": 23,
+                "max_level": 26,
+                "species": "SPECIES_SLOWPOKE"
+              },
+              {
+                "min_level": 23,
+                "max_level": 26,
+                "species": "SPECIES_SLOWPOKE"
+              },
+              {
+                "min_level": 23,
+                "max_level": 26,
+                "species": "SPECIES_SLOWPOKE"
+              },
+              {
+                "min_level": 23,
+                "max_level": 26,
+                "species": "SPECIES_SLOWPOKE"
+              },
+              {
+                "min_level": 23,
+                "max_level": 26,
+                "species": "SPECIES_SLOWPOKE"
+              },
+              {
+                "min_level": 23,
+                "max_level": 26,
+                "species": "SPECIES_SLOWPOKE"
+              },
+              {
+                "min_level": 23,
+                "max_level": 26,
+                "species": "SPECIES_SLOWPOKE"
+              },
+              {
+                "min_level": 23,
+                "max_level": 26,
+                "species": "SPECIES_SLOWPOKE"
+              },
+              {
+                "min_level": 23,
+                "max_level": 26,
+                "species": "SPECIES_SLOWPOKE"
+              },
+              {
+                "min_level": 23,
+                "max_level": 26,
+                "species": "SPECIES_SLOWPOKE"
+              },
+              {
+                "min_level": 23,
+                "max_level": 26,
+                "species": "SPECIES_SLOWPOKE"
+              }
+            ]
+          },
+          "water_mons": {
+            "encounter_rate": 4,
+            "mons": [
+              {
+                "min_level": 23,
+                "max_level": 26,
+                "species": "SPECIES_SLOWPOKE"
+              },
+              {
+                "min_level": 23,
+                "max_level": 26,
+                "species": "SPECIES_SLOWPOKE"
+              },
+              {
+                "min_level": 23,
+                "max_level": 26,
+                "species": "SPECIES_SLOWPOKE"
+              },
+              {
+                "min_level": 23,
+                "max_level": 26,
+                "species": "SPECIES_SLOWPOKE"
+              },
+              {
+                "min_level": 23,
+                "max_level": 26,
+                "species": "SPECIES_SLOWPOKE"
+              }
+            ]
+          },
+          "fishing_mons": {
+            "encounter_rate": 30,
+            "mons": [
+              {
+                "min_level": 23,
+                "max_level": 26,
+                "species": "SPECIES_SLOWPOKE"
+              },
+              {
+                "min_level": 23,
+                "max_level": 26,
+                "species": "SPECIES_SLOWPOKE"
+              },
+              {
+                "min_level": 23,
+                "max_level": 26,
+                "species": "SPECIES_SLOWPOKE"
+              },
+              {
+                "min_level": 23,
+                "max_level": 26,
+                "species": "SPECIES_SLOWPOKE"
+              },
+              {
+                "min_level": 23,
+                "max_level": 26,
+                "species": "SPECIES_SLOWPOKE"
+              },
+              {
+                "min_level": 23,
+                "max_level": 26,
+                "species": "SPECIES_SLOWPOKE"
+              },
+              {
+                "min_level": 23,
+                "max_level": 26,
+                "species": "SPECIES_SLOWPOKE"
+              },
+              {
+                "min_level": 23,
+                "max_level": 26,
+                "species": "SPECIES_SLOWPOKE"
+              },
+              {
+                "min_level": 23,
+                "max_level": 26,
+                "species": "SPECIES_SLOWPOKE"
+              },
+              {
+                "min_level": 23,
+                "max_level": 26,
+                "species": "SPECIES_SLOWPOKE"
+              }
+            ]
+          }
+        },
+        {
+          "map": "MAP_SLOWPOKE_WELL_B2F",
+          "base_label": "gSlowpokeWell_B2F",
+          "land_mons": {
+            "encounter_rate": 10,
+            "mons": [
+              {
+                "min_level": 23,
+                "max_level": 26,
+                "species": "SPECIES_SLOWPOKE"
+              },
+              {
+                "min_level": 23,
+                "max_level": 26,
+                "species": "SPECIES_SLOWPOKE"
+              },
+              {
+                "min_level": 23,
+                "max_level": 26,
+                "species": "SPECIES_SLOWPOKE"
+              },
+              {
+                "min_level": 23,
+                "max_level": 26,
+                "species": "SPECIES_SLOWPOKE"
+              },
+              {
+                "min_level": 23,
+                "max_level": 26,
+                "species": "SPECIES_SLOWPOKE"
+              },
+              {
+                "min_level": 23,
+                "max_level": 26,
+                "species": "SPECIES_SLOWPOKE"
+              },
+              {
+                "min_level": 23,
+                "max_level": 26,
+                "species": "SPECIES_SLOWPOKE"
+              },
+              {
+                "min_level": 23,
+                "max_level": 26,
+                "species": "SPECIES_SLOWPOKE"
+              },
+              {
+                "min_level": 23,
+                "max_level": 26,
+                "species": "SPECIES_SLOWPOKE"
+              },
+              {
+                "min_level": 23,
+                "max_level": 26,
+                "species": "SPECIES_SLOWPOKE"
+              },
+              {
+                "min_level": 23,
+                "max_level": 26,
+                "species": "SPECIES_SLOWPOKE"
+              },
+              {
+                "min_level": 23,
+                "max_level": 26,
+                "species": "SPECIES_SLOWPOKE"
+              }
+            ]
+          },
+          "water_mons": {
+            "encounter_rate": 4,
+            "mons": [
+              {
+                "min_level": 23,
+                "max_level": 26,
+                "species": "SPECIES_SLOWPOKE"
+              },
+              {
+                "min_level": 23,
+                "max_level": 26,
+                "species": "SPECIES_SLOWPOKE"
+              },
+              {
+                "min_level": 23,
+                "max_level": 26,
+                "species": "SPECIES_SLOWPOKE"
+              },
+              {
+                "min_level": 23,
+                "max_level": 26,
+                "species": "SPECIES_SLOWPOKE"
+              },
+              {
+                "min_level": 23,
+                "max_level": 26,
+                "species": "SPECIES_SLOWPOKE"
+              }
+            ]
+          },
+          "fishing_mons": {
+            "encounter_rate": 30,
+            "mons": [
+              {
+                "min_level": 23,
+                "max_level": 26,
+                "species": "SPECIES_SLOWPOKE"
+              },
+              {
+                "min_level": 23,
+                "max_level": 26,
+                "species": "SPECIES_SLOWPOKE"
+              },
+              {
+                "min_level": 23,
+                "max_level": 26,
+                "species": "SPECIES_SLOWPOKE"
+              },
+              {
+                "min_level": 23,
+                "max_level": 26,
+                "species": "SPECIES_SLOWPOKE"
+              },
+              {
+                "min_level": 23,
+                "max_level": 26,
+                "species": "SPECIES_SLOWPOKE"
+              },
+              {
+                "min_level": 23,
+                "max_level": 26,
+                "species": "SPECIES_SLOWPOKE"
+              },
+              {
+                "min_level": 23,
+                "max_level": 26,
+                "species": "SPECIES_SLOWPOKE"
+              },
+              {
+                "min_level": 23,
+                "max_level": 26,
+                "species": "SPECIES_SLOWPOKE"
+              },
+              {
+                "min_level": 23,
+                "max_level": 26,
+                "species": "SPECIES_SLOWPOKE"
+              },
+              {
+                "min_level": 23,
+                "max_level": 26,
+                "species": "SPECIES_SLOWPOKE"
+              }
+            ]
+          }
         }
       ]
     },

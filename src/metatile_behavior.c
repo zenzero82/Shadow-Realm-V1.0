@@ -36,7 +36,7 @@ static const u8 sTileBitAttributes[NUM_METATILE_BEHAVIORS] =
     [MB_ICE]                                = TILE_FLAG_UNUSED,
     [MB_SAND]                               = TILE_FLAG_UNUSED,
     [MB_SEAWEED]                            = TILE_FLAG_UNUSED | TILE_FLAG_SURFABLE | TILE_FLAG_HAS_ENCOUNTERS,
-    [MB_UNUSED_23]                          = TILE_FLAG_UNUSED,
+    [MB_HEADBUTT_TREE]                      = TILE_FLAG_UNUSED,
     [MB_ASHGRASS]                           = TILE_FLAG_UNUSED | TILE_FLAG_HAS_ENCOUNTERS,
     [MB_FOOTPRINTS]                         = TILE_FLAG_UNUSED | TILE_FLAG_HAS_ENCOUNTERS,
     [MB_THIN_ICE]                           = TILE_FLAG_UNUSED,
@@ -775,6 +775,14 @@ bool8 MetatileBehavior_IsFootprints(u8 metatileBehavior)
         return FALSE;
 }
 
+bool8 MetatileBehavior_IsHeadbuttTree(u8 metatileBehavior)
+{
+    if (metatileBehavior == MB_HEADBUTT_TREE)
+        return TRUE;
+    else
+        return FALSE;
+}
+
 // For the sections of log bridges that span water / water's edge.
 // Note that the rest of the metatiles for these bridges use MB_NORMAL.
 // This is used to allow encounters on the water below the bridge.
@@ -1070,6 +1078,22 @@ bool8 MetatileBehavior_IsTrickHousePuzzleDoor(u8 metatileBehavior)
 bool8 MetatileBehavior_IsRegionMap(u8 metatileBehavior)
 {
     if (metatileBehavior == MB_REGION_MAP)
+        return TRUE;
+    else
+        return FALSE;
+}
+
+bool8 MetatileBehavior_IsRegionMapKanto(u8 metatileBehavior)
+{
+    if (metatileBehavior == MB_REGION_MAP_KANTO)
+        return TRUE;
+    else
+        return FALSE;
+}
+
+bool8 MetatileBehavior_IsRegionMapJohto(u8 metatileBehavior)
+{
+    if (metatileBehavior == MB_REGION_MAP_JOHTO)
         return TRUE;
     else
         return FALSE;

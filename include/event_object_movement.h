@@ -111,6 +111,7 @@ struct LockedAnimObjectEvents
 extern const struct OamData gObjectEventBaseOam_32x8;
 extern const struct OamData gObjectEventBaseOam_32x32;
 extern const struct OamData gObjectEventBaseOam_64x64;
+extern const struct OamData gObjectEventBaseOam_64x64HighPriority;
 extern const struct SubspriteTable sOamTables_32x32[];
 extern const struct SubspriteTable sOamTables_64x64[];
 extern const union AnimCmd *const sAnimTable_Following[];
@@ -127,6 +128,8 @@ u8 GetObjectEventIdByLocalIdAndMap(u8 localId, u8 mapNum, u8 mapGroupId);
 bool8 TryGetObjectEventIdByLocalIdAndMap(u8 localId, u8 mapNum, u8 mapGroupId, u8 *objectEventId);
 u8 GetObjectEventIdByXY(s16 x, s16 y);
 void SetObjectEventDirection(struct ObjectEvent *objectEvent, u8 direction);
+void ForcePlayerFacingDirection(u8 direction);
+void ClearPlayerFacingDirectionOverride(void);
 u8 GetFirstInactiveObjectEventId(void);
 u8 GetObjectEventIdByLocalId(u8);
 void RemoveObjectEvent(struct ObjectEvent *objectEvent);

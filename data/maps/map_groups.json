@@ -990,15 +990,15 @@
     "Mahogany_shop",
     "Mahogany_house1",
     "Lakeofrage_house1",
-    "Lakeofrage_house2",
-    "Blackthorn_mart"
+    "Lakeofrage_house2"
   ],
   "gMapGroup_IndoorBlackthorn": [
     "Blackthorn_pokecenter",
     "Blackthorn_gym",
     "Blackthorn_house1",
     "Blackthorn_house2",
-    "Blackthorn_house3"
+    "Blackthorn_house3",
+    "Blackthorn_mart"
   ],
   "gMapGroup_IndoorJohtoRoutes": [
     "Gate_Route29_Route46",
@@ -1086,6 +1086,22 @@
   "gMapGroup_ShadowRealm": [
     "Shadow_Realm",
     "Mirorb_Lair",
-    "Nothing"
+    "Nothing",
+    "Distortion_World",
+    "Gio_Chamber",
+    "Nascour_Lair",
+    "Guzma_Lair",
+    "Lusamine_Lair",
+    "Colress_Lair",
+    "Ghetsis_Lair",
+    "Maxie_Lair",
+    "Archie_Lair",
+    "Lysandre_Lair",
+    "Rose_Lair",
+    "Sada_Turo_Lair",
+    "Greevil_Lair",
+    "Evice_Lair",
+    "Cyrus_Lair",
+    "Nightmare_Realm"
   ]
 }

@@ -72,6 +72,7 @@ Violet_City_EventScript_PlayerEmerges::
 	setobjectxy VIOLET_LOCALID_HOOPA_RING, 14, 38
 	setobjectxyperm VIOLET_LOCALID_HOOPA_RING, 14, 38
 	showobjectat VIOLET_LOCALID_HOOPA_RING, MAP_VIOLET_CITY
+	setobjectsubpriority VIOLET_LOCALID_HOOPA_RING, MAP_VIOLET_CITY, 0
 	setvar VAR_0x8004, VIOLET_LOCALID_HOOPA_RING
 	setvar VAR_0x8001, 14
 	setvar VAR_0x8002, 38

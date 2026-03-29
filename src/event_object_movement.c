@@ -198,6 +198,9 @@ const struct ObjectEventTemplate *GetObjectEventTemplateByLocalIdAndMap(u8 local
 static void RemoveObjectEventIfOutsideView(struct ObjectEvent *);
 static void SpawnObjectEventOnReturnToField(u8, s16, s16);
 static void SetPlayerAvatarObjectEventIdAndObjectId(u8, u8);
+static void ForcePlayerFacingDirectionInternal(u8 direction);
+
+static EWRAM_DATA u8 sPlayerFacingOverride = DIR_NONE;
 static u8 UpdateSpritePalette(const struct SpritePalette *spritePalette, struct Sprite *sprite);
 static void ResetObjectEventFldEffData(struct ObjectEvent *);
 static u8 LoadSpritePaletteIfTagExists(const struct SpritePalette *);
@@ -706,6 +709,13 @@ static const struct SpritePalette sObjectEventSpritePalettes[] = {
     {gObjectEventPal_ZinzolinGen5,        OBJ_EVENT_PAL_TAG_ZINZOLIN_GEN5},
     {gObjectEventPal_JuniperGen5,        OBJ_EVENT_PAL_TAG_JUNIPER_GEN5},
     {gObjectEventPal_ProfBirch,          OBJ_EVENT_PAL_TAG_PROF_BIRCH},
+    {gObjectEventPal_Archie,             OBJ_EVENT_PAL_TAG_ARCHIE},
+    {gObjectEventPal_Shelly,             OBJ_EVENT_PAL_TAG_SHELLY},
+    {gObjectEventPal_MagmaMemberM,       OBJ_EVENT_PAL_TAG_MAGMA_MEMBER_M},
+    {gObjectEventPal_MagmaMemberF,       OBJ_EVENT_PAL_TAG_MAGMA_MEMBER_F},
+    {gObjectEventPal_Maxie,              OBJ_EVENT_PAL_TAG_MAXIE},
+    {gObjectEventPal_Courtney,           OBJ_EVENT_PAL_TAG_COURTNEY},
+    {gObjectEventPal_Tabitha,            OBJ_EVENT_PAL_TAG_TABITHA},
     {gObjectEventPal_LysanderGen6, OBJ_EVENT_PAL_TAG_LYSANDER_GEN6},
     {gObjectEventPal_AlianaGen6, OBJ_EVENT_PAL_TAG_ALIANA_GEN6},
     {gObjectEventPal_AzGen6, OBJ_EVENT_PAL_TAG_AZ_GEN6},
@@ -751,6 +761,8 @@ static const struct SpritePalette sObjectEventSpritePalettes[] = {
     {gObjectEventPal_ArvenGen9, OBJ_EVENT_PAL_TAG_ARVEN_GEN9},
     {gObjectEventPal_PennyGen9, OBJ_EVENT_PAL_TAG_PENNY_GEN9},
     {gObjectEventPal_GeetaGen9, OBJ_EVENT_PAL_TAG_GEETA_GEN9},
+    {gObjectEventPal_SadaGen9, OBJ_EVENT_PAL_TAG_SADA_GEN9},
+    {gObjectEventPal_TuroGen9, OBJ_EVENT_PAL_TAG_TURO_GEN9},
     {gObjectEventPal_Wes,                   OBJ_EVENT_PAL_TAG_WES},
     {gObjectEventPal_CipherPeonM,           OBJ_EVENT_PAL_TAG_CIPHER_PEON_M},
     {gObjectEventPal_Ardos,                  OBJ_EVENT_PAL_TAG_ARDOS},
@@ -1696,6 +1708,9 @@ static u8 InitObjectEventStateFromTemplate(const struct ObjectEventTemplate *tem
     objectEvent->triggerGroundEffectsOnMove = TRUE;
     objectEvent->graphicsId = template->graphicsId;
     SetObjectEventDynamicGraphicsId(objectEvent);
+    if (objectEvent->graphicsId == OBJ_EVENT_GFX_HOOPA_RING
+        || objectEvent->graphicsId == OBJ_EVENT_GFX_HOOPA_RING_TIME_AMULET)
+        objectEvent->fixedPriority = TRUE;
     if (IS_OW_MON_OBJ(objectEvent))
     {
         if (template->script && template->script[0] == 0x7d)
@@ -3960,12 +3975,48 @@ void SetObjectEventDirection(struct ObjectEvent *objectEvent, u8 direction)
 {
     s8 d2;
     objectEvent->previousMovementDirection = objectEvent->facingDirection;
+    if (objectEvent->isPlayer && sPlayerFacingOverride != DIR_NONE)
+    {
+        objectEvent->facingDirection = sPlayerFacingOverride;
+        objectEvent->movementDirection = sPlayerFacingOverride;
+        return;
+    }
     if (!objectEvent->facingDirectionLocked)
     {
         d2 = direction;
         objectEvent->facingDirection = d2;
     }
     objectEvent->movementDirection = direction;
+}
+
+static void ForcePlayerFacingDirectionInternal(u8 direction)
+{
+    struct ObjectEvent *playerObj = &gObjectEvents[gPlayerAvatar.objectEventId];
+
+    sPlayerFacingOverride = direction;
+    if (direction == DIR_NONE)
+    {
+        playerObj->facingDirectionLocked = FALSE;
+        return;
+    }
+
+    playerObj->facingDirectionLocked = TRUE;
+    SetObjectEventDirection(playerObj, direction);
+    if (!playerObj->inanimate)
+    {
+        StartSpriteAnim(&gSprites[playerObj->spriteId], GetFaceDirectionAnimNum(playerObj->facingDirection));
+        SeekSpriteAnim(&gSprites[playerObj->spriteId], 0);
+    }
+}
+
+void ForcePlayerFacingDirection(u8 direction)
+{
+    ForcePlayerFacingDirectionInternal(direction);
+}
+
+void ClearPlayerFacingDirectionOverride(void)
+{
+    ForcePlayerFacingDirectionInternal(DIR_NONE);
 }
 
 static const u8 *GetObjectEventScriptPointerByLocalIdAndMap(u8 localId, u8 mapNum, u8 mapGroup)

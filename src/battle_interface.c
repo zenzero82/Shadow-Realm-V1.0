@@ -3549,6 +3549,23 @@ void DestroyAbilityPopUp(u8 battler)
     gBattleScripting.fixedPopup = FALSE;
 }
 
+void BattleInterface_RestoreAbilityPopupPalette(void)
+{
+    u32 palIndex = IndexOfSpritePaletteTag(ABILITY_POP_UP_TAG);
+
+    if (palIndex != 0xFF)
+        LoadPalette(sAbilityPopUpPalette, OBJ_PLTT_ID(palIndex), PLTT_SIZE_4BPP);
+
+    if (gBattleStruct->ballSpriteIds[0] != MAX_SPRITES)
+    {
+        u16 palTag = gSprites[gBattleStruct->ballSpriteIds[0]].template->paletteTag;
+        u32 ballPalIndex = IndexOfSpritePaletteTag(palTag);
+
+        if (ballPalIndex != 0xFF)
+            LoadPalette(GetItemIconPalette(gBallToDisplay), OBJ_PLTT_ID(ballPalIndex), PLTT_SIZE_4BPP);
+    }
+}
+
 static void Task_FreeAbilityPopUpGfx(u8 taskId)
 {
     if (!gSprites[gTasks[taskId].tSpriteId1].inUse

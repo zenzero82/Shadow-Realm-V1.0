@@ -1,9 +1,13 @@
 Gate_IlexForest_Route34_MapScripts::
 	.byte 0
 
+Gate_IlexForest_Route34_Speaker_Lass:
+	.string "LASS$"
+
 Route34IlexForestGate_EventScript_Lass::
 	lock
 	faceplayer
+	setspeaker Gate_IlexForest_Route34_Speaker_Lass
 	msgbox Route34IlexForestGate_Text_Lass, MSGBOX_DEFAULT
 	closemessage
 	release
@@ -29,4 +33,3 @@ Route34IlexForestGate_Text_Lass:
 
 Route34IlexForestGate_Text_Butterfree:
 	.string "BUTTERFREE: Freeh!$"
-

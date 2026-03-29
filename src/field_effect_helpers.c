@@ -10,6 +10,7 @@
 #include "palette.h"
 #include "sound.h"
 #include "sprite.h"
+#include "surf_ow.h"
 #include "trig.h"
 #include "constants/event_objects.h"
 #include "constants/field_effects.h"
@@ -1195,17 +1196,20 @@ u32 FldEff_SurfBlob(void)
     u8 spriteId;
 
     SetSpritePosToOffsetMapCoords((s16 *)&gFieldEffectArguments[0], (s16 *)&gFieldEffectArguments[1], 8, 8);
-    spriteId = CreateSpriteAtEnd(gFieldEffectObjectTemplatePointers[FLDEFFOBJ_SURF_BLOB], gFieldEffectArguments[0], gFieldEffectArguments[1], 150);
-    if (spriteId != MAX_SPRITES)
+    if (!SurfOw_CreateSpritePair(gFieldEffectArguments[2], gFieldEffectArguments[0], gFieldEffectArguments[1], 150, &spriteId))
     {
-        struct Sprite *sprite = &gSprites[spriteId];
-        sprite->coordOffsetEnabled = TRUE;
-        sprite->sPlayerObjId = gFieldEffectArguments[2];
-        // Can use either gender's palette, so try to use the one that should be loaded
-        sprite->oam.paletteNum = LoadPlayerObjectEventPalette(gSaveBlock2Ptr->playerGender);
-        sprite->sVelocity = -1;
-        sprite->sPrevX = -1;
-        sprite->sPrevY = -1;
+        spriteId = CreateSpriteAtEnd(gFieldEffectObjectTemplatePointers[FLDEFFOBJ_SURF_BLOB], gFieldEffectArguments[0], gFieldEffectArguments[1], 150);
+        if (spriteId != MAX_SPRITES)
+        {
+            struct Sprite *sprite = &gSprites[spriteId];
+            sprite->coordOffsetEnabled = TRUE;
+            sprite->sPlayerObjId = gFieldEffectArguments[2];
+            // Can use either gender's palette, so try to use the one that should be loaded
+            sprite->oam.paletteNum = LoadPlayerObjectEventPalette(gSaveBlock2Ptr->playerGender);
+            sprite->sVelocity = -1;
+            sprite->sPrevX = -1;
+            sprite->sPrevY = -1;
+        }
     }
     FieldEffectActiveListRemove(FLDEFF_SURF_BLOB);
     return spriteId;
@@ -1252,6 +1256,26 @@ void UpdateSurfBlobFieldEffect(struct Sprite *sprite)
     SynchroniseSurfPosition(playerObj, sprite);
     UpdateBobbingEffect(playerObj, playerSprite, sprite);
     sprite->oam.priority = playerSprite->oam.priority;
+    if (SurfOw_ShouldOverridePlayerPriority(sprite->sPlayerObjId))
+    {
+        u8 direction = playerObj->movementDirection;
+        bool8 facingSouth = (direction == DIR_SOUTH || direction == DIR_SOUTHWEST || direction == DIR_SOUTHEAST);
+        u8 priority = playerSprite->oam.priority;
+
+        if (facingSouth)
+        {
+            if (priority > 0)
+                priority--;
+        }
+        else
+        {
+            if (priority < 3)
+                priority++;
+        }
+
+        sprite->oam.priority = priority;
+        sprite->subpriority = playerSprite->subpriority;
+    }
 }
 
 static void SynchroniseSurfAnim(struct ObjectEvent *playerObj, struct Sprite *sprite)
@@ -1885,4 +1909,3 @@ static void UpdateGrassFieldEffectSubpriority(struct Sprite *sprite, u8 elevatio
         }
     }
 }
-

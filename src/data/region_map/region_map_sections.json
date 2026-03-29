@@ -1705,11 +1705,15 @@
     },
     {
       "id": "MAPSEC_SHADOW_REALM",
-      "name": "The Void",
+      "name": "Nightmare Realm",
       "x": 0,
       "y": 0,
       "width": 1,
       "height": 1
+    },
+    {
+      "id": "MAPSEC_DISTORTION_WORLD",
+      "name": "Distortion_World"
     }
   ]
 }

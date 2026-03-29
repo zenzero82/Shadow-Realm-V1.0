@@ -19334,8 +19334,12 @@ Move_SHADOW_BLITZ::
 	createvisualtask AnimTask_ShakeMon, 2, ANIM_TARGET, 3, 0, 6, 1
 	playsewithpan SE_M_COMET_PUNCH, SOUND_PAN_TARGET
 	waitforvisualfinish
+	clearmonbg ANIM_TARGET
+	clearmonbg ANIM_ATTACKER
 	restorebg
 	waitbgfadein
+	clearmonbg ANIM_TARGET
+	clearmonbg ANIM_ATTACKER
 	blendoff
 	end
 
@@ -19730,7 +19734,11 @@ Move_SHADOW_DOWN::
 	splitbgprio_all
 	playsewithpan SE_M_FLAME_WHEEL2, SOUND_PAN_TARGET
 	createvisualtask AnimTask_ShakeMon2, 2, ANIM_TARGET, 4, 0, 13, 1
+	waitforvisualfinish
 	clearmonbg ANIM_DEF_PARTNER
+	clearmonbg ANIM_TARGET
+	createvisualtask AnimTask_UnfadeObjPalettes, 2
+	blendoff
 	end
 
 Move_SHADOW_HALF::
@@ -19798,6 +19806,7 @@ Move_SHADOW_MIST::
 	call MistCloud
 	call MistCloud
 	delay 16
+	clearmonbg ANIM_ATK_PARTNER
 	monbg ANIM_TARGET
 	splitbgprio_all
 	setalpha 12, 8
@@ -19929,7 +19938,7 @@ ShadowShedShatteredWall:
 	end
 
 Move_SHADOW_HOLD::
-	loadspritegfx ANIM_TAG_CHAIN_LINK @Chain
+	loadspritegfx ANIM_TAG_PURPLE_CHAIN @Chain
 	monbg ANIM_DEF_PARTNER
 	splitbgprio ANIM_TARGET
 	setalpha 12, 8
@@ -19941,6 +19950,7 @@ Move_SHADOW_HOLD::
 	createsprite gChainBindingSpriteTemplate, ANIM_TARGET, 2, 0xfff0, 0x0
 	delay 0x4
 	createsprite gChainBindingSpriteTemplate, ANIM_TARGET, 2, 0xfff0, 0x10
+	setarg 7, 0xFFFF
 	waitforvisualfinish
 	createvisualtask AnimTask_BlendBattleAnimPal, 0xa, F_PAL_BG, 0x1, 0x10, 0x0, 0x0
 	waitforvisualfinish
@@ -29938,6 +29948,7 @@ gBattleAnimStatus_Shadow::
 	delay 8
 	call ShadowAuraEffect
 	waitforvisualfinish
+	createvisualtask AnimTask_RestoreAbilityPopupPalette, 2
 	end
 
 gBattleAnimStatus_Reverse_Mode::

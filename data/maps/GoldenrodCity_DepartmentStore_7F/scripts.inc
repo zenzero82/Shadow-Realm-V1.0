@@ -1,2 +1,17 @@
 GoldenrodCity_DepartmentStore_7F_MapScripts::
+	map_script MAP_SCRIPT_ON_TRANSITION, GoldenrodCity_DepartmentStore_7F_OnTransition
 	.byte 0
+
+GoldenrodCity_DepartmentStore_7F_OnTransition:
+	gettimeofday
+	compare VAR_0x8000, TIME_NIGHT
+	goto_if_eq GoldenrodCity_DepartmentStore_7F_SetNight
+	goto GoldenrodCity_DepartmentStore_7F_SetDay
+
+GoldenrodCity_DepartmentStore_7F_SetNight::
+	setmaplayoutindex LAYOUT_GOLDENROD_CITY_DEPARTMENT_STORE_7FNIGHT
+	return
+
+GoldenrodCity_DepartmentStore_7F_SetDay::
+	setmaplayoutindex LAYOUT_GOLDENROD_CITY_DEPARTMENT_STORE_7F
+	return

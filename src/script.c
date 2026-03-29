@@ -9,6 +9,7 @@
 #include "constants/flags.h"
 #include "constants/map_scripts.h"
 #include "field_message_box.h"
+#include "field_name_box.h"
 
 #define RAM_SCRIPT_MAGIC 51
 
@@ -41,6 +42,7 @@ void InitScriptContext(struct ScriptContext *ctx, void *cmdTable, void *cmdTable
 {
     s32 i;
 
+    gSpeakerName = NULL;
     ctx->mode = SCRIPT_MODE_STOPPED;
     ctx->scriptPtr = NULL;
     ctx->stackDepth = 0;
@@ -74,6 +76,7 @@ void StopScript(struct ScriptContext *ctx)
 {
     ctx->mode = SCRIPT_MODE_STOPPED;
     ctx->scriptPtr = NULL;
+    gSpeakerName = NULL;
 }
 
 bool8 RunScriptCommand(struct ScriptContext *ctx)

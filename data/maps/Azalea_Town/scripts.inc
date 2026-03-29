@@ -55,7 +55,11 @@ AzaleaTown_EventScript_GymSign::
 	end
 
 AzaleaTown_EventScript_GymSign_Text:
-	.string "A POKéMON GYM statue.$"
+	.string "AZALEA TOWN\n"
+	.string "POKéMON GYM\p"
+	.string "LEADER: BUGSY\p"
+	.string "The Walking Bug POKéMON\n"
+	.string "Encyclopedia$"
 
 AzaleaTown_EventScript_KurtSign::
 	msgbox AzaleaTown_EventScript_KurtSign_Text, MSGBOX_SIGN
@@ -115,8 +119,6 @@ AzaleaTown_EventScript_Rocket::
 	setspeaker Azalea_Town_Speaker_Rocket
 	msgbox AzaleaTown_Text_Rocket, MSGBOX_NPC
 	closemessage
-	setflag FLAG_QUEST_AZALEA_NPC_ROCKET
-	call AzaleaTown_EventScript_CheckAzaleaQuest
 	end
 
 AzaleaTown_EventScript_AquaGruntGym::
@@ -143,10 +145,6 @@ AzaleaTown_EventScript_CheckAzaleaQuest_CheckCompleted:
 	return
 AzaleaTown_EventScript_CheckAzaleaQuest_CheckLass:
 	checkflag FLAG_QUEST_AZALEA_NPC_LASS
-	goto_if_eq AzaleaTown_EventScript_CheckAzaleaQuest_CheckRocket
-	return
-AzaleaTown_EventScript_CheckAzaleaQuest_CheckRocket:
-	checkflag FLAG_QUEST_AZALEA_NPC_ROCKET
 	goto_if_eq AzaleaTown_EventScript_CheckAzaleaQuest_CheckHouse1BlackBelt
 	return
 AzaleaTown_EventScript_CheckAzaleaQuest_CheckHouse1BlackBelt:

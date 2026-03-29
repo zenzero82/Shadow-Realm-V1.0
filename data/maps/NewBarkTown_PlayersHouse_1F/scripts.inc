@@ -12,6 +12,9 @@ NewBarkTown_PlayersHouse_1F_EventScript_MomsFriend::
 	faceplayer
 	setspeaker NewBarkTown_PlayersHouse_1F_Speaker_MomsFriend
 	msgbox NewBarkTown_PlayersHouse_1F_Text_MomsFriend, MSGBOX_DEFAULT
+	closemessage
+	setflag FLAG_QUEST_NEW_BARK_NPC_PLAYERS_HOUSE_FRIEND
+	call QuestJournal_EventScript_CheckNewBarkNPCs
 	release
 	end
 
@@ -30,6 +33,7 @@ NewBarkTown_PlayersHouse_1F_EventScript_Mom::
 	setspeaker NewBarkTown_PlayersHouse_1F_Speaker_Mom
 	msgbox NewBarkTown_PlayersHouse_1F_Text_Mom_SavingsYes, MSGBOX_DEFAULT
 	call NewBarkTown_PlayersHouse_1F_EventScript_GoldsMomQuestComplete
+	call NewBarkTown_PlayersHouse_1F_EventScript_RecordMomNpc
 	release
 	end
 
@@ -37,6 +41,7 @@ NewBarkTown_PlayersHouse_1F_EventScript_MomSavingsNo::
 	setspeaker NewBarkTown_PlayersHouse_1F_Speaker_Mom
 	msgbox NewBarkTown_PlayersHouse_1F_Text_Mom_SavingsNo, MSGBOX_DEFAULT
 	call NewBarkTown_PlayersHouse_1F_EventScript_GoldsMomQuestComplete
+	call NewBarkTown_PlayersHouse_1F_EventScript_RecordMomNpc
 	release
 	end
 
@@ -50,20 +55,28 @@ NewBarkTown_PlayersHouse_1F_EventScript_MomSavingsMenu::
 	special GoldMomSavingsWithdrawAll
 	setspeaker NewBarkTown_PlayersHouse_1F_Speaker_Mom
 	msgbox NewBarkTown_PlayersHouse_1F_Text_Mom_SavingsWithdrawn, MSGBOX_DEFAULT
+	call NewBarkTown_PlayersHouse_1F_EventScript_RecordMomNpc
 	release
 	end
 
 NewBarkTown_PlayersHouse_1F_EventScript_MomSavingsKeep::
 	setspeaker NewBarkTown_PlayersHouse_1F_Speaker_Mom
 	msgbox NewBarkTown_PlayersHouse_1F_Text_Mom_SavingsKeep, MSGBOX_DEFAULT
+	call NewBarkTown_PlayersHouse_1F_EventScript_RecordMomNpc
 	release
 	end
 
 NewBarkTown_PlayersHouse_1F_EventScript_MomSavingsEmpty::
 	setspeaker NewBarkTown_PlayersHouse_1F_Speaker_Mom
 	msgbox NewBarkTown_PlayersHouse_1F_Text_Mom_SavingsEmpty, MSGBOX_DEFAULT
+	call NewBarkTown_PlayersHouse_1F_EventScript_RecordMomNpc
 	release
 	end
+
+NewBarkTown_PlayersHouse_1F_EventScript_RecordMomNpc::
+	setflag FLAG_QUEST_NEW_BARK_NPC_PLAYERS_HOUSE_MOM
+	call QuestJournal_EventScript_CheckNewBarkNPCs
+	return
 
 NewBarkTown_PlayersHouse_1F_EventScript_GoldsMomQuestComplete::
 	checkflag FLAG_QUEST_GOLDS_MOM_COMPLETED
@@ -76,6 +89,14 @@ NewBarkTown_PlayersHouse_1F_EventScript_GoldsMomQuestComplete_Do::
 	setflag FLAG_QUEST_GOLDS_MOM_COMPLETED
 	call QuestJournal_EventScript_QuestCompleteAlert
 NewBarkTown_PlayersHouse_1F_EventScript_GoldsMomQuestComplete_Done::
+	call NewBarkTown_PlayersHouse_1F_EventScript_SetBirchCallPending
+	return
+
+NewBarkTown_PlayersHouse_1F_EventScript_SetBirchCallPending::
+	checkflag FLAG_BIRCH_TIME_AMULET_CALL_DONE
+	goto_if_eq NewBarkTown_PlayersHouse_1F_EventScript_SetBirchCallPending_Done
+	setvar VAR_BIRCH_TIME_AMULET_CALL_PENDING, 1
+NewBarkTown_PlayersHouse_1F_EventScript_SetBirchCallPending_Done:
 	return
 
 NewBarkTown_PlayersHouse_1F_Text_Mom:
@@ -93,7 +114,7 @@ NewBarkTown_PlayersHouse_1F_Text_Mom:
 
 NewBarkTown_PlayersHouse_1F_Text_Mom_SavingsOffer:
 	.string "I have been holding accounts for\n"
-	.string "the Team so they do not spend all\n"
+	.string "the Team so they do not spend all\l"
 	.string "their money.\p"
 	.string "Want me to save some of your\n"
 	.string "battle money?$"
@@ -127,5 +148,5 @@ NewBarkTown_PlayersHouse_1F_Text_Mom_SavingsKeep:
 NewBarkTown_PlayersHouse_1F_Text_MomsFriend:
 	.string "There was so much noise outside\n"
 	.string "just before you walked in.\p"
-	.string "Seems like we finally got some\l"
+	.string "Seems like we finally got some\n"
 	.string "peace and quiet now.$"

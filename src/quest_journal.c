@@ -173,7 +173,7 @@ static const u8 sText_QuestVioletNPCsTitle[] = _("Talk to every NPC in Violet.")
 static const u8 sText_QuestVioletNPCsDesc[] = _("{COLOR 1}{HIGHLIGHT TRANSPARENT}Learn about whats happening in\nViolet City. Might help!");
 static const u8 sText_QuestFalknerTitle[] = _("Defeat Falkner!");
 static const u8 sText_QuestFalknerDesc[] = _("{COLOR 1}{HIGHLIGHT TRANSPARENT}Show Falkner you can fly high and\nsnatch the ZEPHYR BADGE.");
-static const u8 sText_QuestKurtTitle[] = _("Kurt the Apricot Master");
+static const u8 sText_QuestKurtTitle[] = _("Kurt the Apricorn Master");
 static const u8 sText_QuestKurtDesc[] = _("{COLOR 1}{HIGHLIGHT TRANSPARENT}Head down to Azalea Town and find\nKurt.");
 static const u8 sText_QuestAzaleaNPCsTitle[] = _("Talk to every NPC in Azalea.");
 static const u8 sText_QuestAzaleaNPCsDesc[] = _("{COLOR 1}{HIGHLIGHT TRANSPARENT}Learn about whats happening in\nAzalea Town. Might help!");
@@ -181,6 +181,10 @@ static const u8 sText_QuestBugsyTitle[] = _("Defeat Bugsy!");
 static const u8 sText_QuestBugsyDesc[] = _("{COLOR 1}{HIGHLIGHT TRANSPARENT}Prove to Bugsy that you're the ruler\nof the Hive. Get that HIVE BADGE!");
 static const u8 sText_QuestSlowpokeWellTitle[] = _("Slowpoke Well Flared Up!");
 static const u8 sText_QuestSlowpokeWellDesc[] = _("{COLOR 1}{HIGHLIGHT TRANSPARENT}Team Flare is up to something.\nFind out what it is!");
+static const u8 sText_QuestCherrygroveNPCsTitle[] = _("Talk to every NPC in Cherrygrove.");
+static const u8 sText_QuestCherrygroveNPCsDesc[] = _("{COLOR 1}{HIGHLIGHT TRANSPARENT}Learn about whats happening in\nCherrygrove City. Might help!");
+static const u8 sText_QuestNewBarkNPCsTitle[] = _("Talk to every NPC in New Bark.");
+static const u8 sText_QuestNewBarkNPCsDesc[] = _("{COLOR 1}{HIGHLIGHT TRANSPARENT}Learn about whats happening in\nNew Bark Town. Might help!");
 static const u8 sText_QuestGoldsMomTitle[] = _("Gold's Mom Our Favorite Banker");
 static const u8 sText_QuestGoldsMomDesc[] = _("{COLOR 1}{HIGHLIGHT TRANSPARENT}Check on Gold's mom in New Bark\nTown to see how she's doing.");
 static const u8 sText_QuestShadowTrainerTitle[] = _("Find the Shadow Trainer on Rt 10.");
@@ -319,6 +323,18 @@ static const struct QuestJournalEntry sQuestJournalEntries[] =
         .description = sText_QuestSlowpokeWellDesc,
         .flagStarted = FLAG_QUEST_SLOWPOKE_WELL_FLARE_STARTED,
         .flagCompleted = FLAG_QUEST_SLOWPOKE_WELL_FLARE_COMPLETED,
+    },
+    {
+        .title = sText_QuestCherrygroveNPCsTitle,
+        .description = sText_QuestCherrygroveNPCsDesc,
+        .flagStarted = FLAG_QUEST_CHERRYGROVE_NPCS_STARTED,
+        .flagCompleted = FLAG_QUEST_CHERRYGROVE_NPCS_COMPLETED,
+    },
+    {
+        .title = sText_QuestNewBarkNPCsTitle,
+        .description = sText_QuestNewBarkNPCsDesc,
+        .flagStarted = FLAG_QUEST_NEW_BARK_NPCS_STARTED,
+        .flagCompleted = FLAG_QUEST_NEW_BARK_NPCS_COMPLETED,
     },
     {
         .title = sText_QuestGoldsMomTitle,

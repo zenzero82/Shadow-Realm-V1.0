@@ -113,6 +113,7 @@ WesHideout_Underground_EventScript_LyraScene::
 	setobjectxy LOCALID_HOOPA_RING, 25, 11
 	setobjectxyperm LOCALID_HOOPA_RING, 25, 11
 	showobjectat LOCALID_HOOPA_RING, MAP_WES_HIDEOUT_UNDERGROUND
+	setobjectsubpriority LOCALID_HOOPA_RING, MAP_WES_HIDEOUT_UNDERGROUND, 0
 
 	setvar VAR_0x8004, LOCALID_HOOPA_RING
 	setvar VAR_0x8001, 25

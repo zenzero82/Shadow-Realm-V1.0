@@ -31,6 +31,7 @@
 #include "pokemon_summary_screen.h"
 #include "party_menu.h"
 #include "pokemon_storage_system.h"
+#include "field_move.h"
 #include "region_map.h"
 #include "save.h"
 #include "script.h"
@@ -11261,6 +11262,7 @@ void SetBoxMonDataAt(u8 boxId, u8 boxPosition, s32 request, const void *value)
         {
             SetBoxMonData(boxMon, request, value);
             BoxStorage_MarkBoxDirty(boxId);
+            FieldMove_MarkSurfBoxCacheDirty();
         }
     }
 }
@@ -11318,6 +11320,7 @@ void SetBoxMonNickAt(u8 boxId, u8 boxPosition, const u8 *nick)
         {
             SetBoxMonData(boxMon, MON_DATA_NICKNAME, nick);
             BoxStorage_MarkBoxDirty(boxId);
+            FieldMove_MarkSurfBoxCacheDirty();
         }
     }
 }
@@ -11342,6 +11345,7 @@ void SetBoxMonAt(u8 boxId, u8 boxPosition, struct BoxPokemon *src)
         {
             *boxMon = *src;
             BoxStorage_MarkBoxDirty(boxId);
+            FieldMove_MarkSurfBoxCacheDirty();
         }
     }
 }
@@ -11372,6 +11376,7 @@ void CreateBoxMonAt(u8 boxId, u8 boxPosition, u16 species, u8 level, u8 fixedIV,
                      hasFixedPersonality, personality,
                      otIDType, otID);
         BoxStorage_MarkBoxDirty(boxId);
+        FieldMove_MarkSurfBoxCacheDirty();
     }
 }
 
@@ -11384,6 +11389,7 @@ void ZeroBoxMonAt(u8 boxId, u8 boxPosition)
         {
             ZeroBoxMonData(boxMon);
             BoxStorage_MarkBoxDirty(boxId);
+            FieldMove_MarkSurfBoxCacheDirty();
         }
     }
 }

@@ -20,6 +20,7 @@
 #include "constants/trainer_hill.h"
 #include "constants/item.h"
 #include "constants/items.h"
+#include "constants/headbutt.h"
 #include "config/save.h"
 #include "constants/shadow.h"
 #include "roaming_shadow_hunter.h"
@@ -588,7 +589,8 @@ struct SaveBlock2
     /*0x90*/ u8 optionsShinyOdds;
     /*0x91*/ u8 optionsLevelCap;
     /*0x92*/ u8 optionsOverworldWildEncounters;
-    /*0x93*/ u8 filler_93[0x5];
+    /*0x93*/ u8 optionsAutoSave;
+    /*0x94*/ u8 filler_94[0x4];
     /*0x98*/ struct Time localTimeOffset;
     /*0xA0*/ struct Time lastBerryTreeUpdate;
     /*0xA8*/ u32 gcnLinkFlags; // Read by Pokémon Colosseum/XD
@@ -1051,6 +1053,13 @@ struct ExternalEventFlags
 
 } __attribute__((packed));/*size = 0x15*/
 
+struct HeadbuttTreeUsage
+{
+    u32 key;
+    u16 lastUsedDay;
+    u16 padding;
+};
+
 struct SaveBlock1
 {
     /*0x00*/ struct Coords16 pos;
@@ -1088,7 +1097,8 @@ struct SaveBlock1
     /*0x988*/ u8 filler1[0x34]; // Previously Dex Flags, feel free to remove.
 #endif //FREE_EXTRA_SEEN_FLAGS_SAVEBLOCK1
     /*0x9BC*/ u16 berryBlenderRecords[3];
-    /*0x9C2*/ u8 unused_9C2[6];
+    /*0x9C2*/ u16 autosaveStepCounter;
+    /*0x9C4*/ u8 unused_9C4[4];
 #if FREE_MATCH_CALL == FALSE
     /*0x9C8*/ u16 trainerRematchStepCounter;
     /*0x9CA*/ u8 trainerRematches[MAX_REMATCH_ENTRIES];
@@ -1168,6 +1178,9 @@ struct SaveBlock1
 #if FREE_UNION_ROOM_CHAT == FALSE
     /*0x3???*/ u8 registeredTexts[UNION_ROOM_KB_ROW_COUNT][21];
 #endif //FREE_UNION_ROOM_CHAT
+#if 1
+    /*0x3???*/ struct HeadbuttTreeUsage headbuttTreeUsage[HEADBUTT_TREE_TRACKED_MAX];
+#endif
 #if FREE_TRAINER_HILL == FALSE
     /*0x3???*/ struct TrainerHillSave trainerHill;
 #endif //FREE_TRAINER_HILL

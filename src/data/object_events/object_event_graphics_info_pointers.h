@@ -480,6 +480,8 @@ extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_NemonaGen9;
 extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_ArvenGen9;
 extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_PennyGen9;
 extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_GeetaGen9;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_SadaGen9;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_TuroGen9;
 
 //XD(Orre)
 extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_Wes;
@@ -955,6 +957,8 @@ const struct ObjectEventGraphicsInfo *const gObjectEventGraphicsInfoPointers[NUM
     [OBJ_EVENT_GFX_ARVEN_GEN9]  = &gObjectEventGraphicsInfo_ArvenGen9,
     [OBJ_EVENT_GFX_PENNY_GEN9]  = &gObjectEventGraphicsInfo_PennyGen9,
     [OBJ_EVENT_GFX_GEETA_GEN9]  = &gObjectEventGraphicsInfo_GeetaGen9,
+    [OBJ_EVENT_GFX_SADA_GEN9]  = &gObjectEventGraphicsInfo_SadaGen9,
+    [OBJ_EVENT_GFX_TURO_GEN9]  = &gObjectEventGraphicsInfo_TuroGen9,
 
     //XD(Orre)
     [OBJ_EVENT_GFX_WES]   =                    &gObjectEventGraphicsInfo_Wes,

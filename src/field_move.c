@@ -4,48 +4,316 @@
 #include "fldeff.h"
 #include "fldeff_misc.h"
 #include "party_menu.h"
+#include "pokemon.h"
+#include "pokemon_storage_system.h"
+#include "random.h"
+#include "surf_ow.h"
+#include "string_util.h"
 #include "constants/field_move.h"
 #include "constants/moves.h"
 #include "constants/party_menu.h"
+#include "constants/pokemon.h"
+#include "constants/species.h"
+
+EWRAM_DATA struct FieldMoveMonInfo gFieldMoveMonInfo = {0};
+
+struct SurfBoxCache
+{
+    bool8 dirty;
+    bool8 initialized;
+    u16 owCount;
+    u16 anyCount;
+    u16 owSlots[TOTAL_BOXES_COUNT * IN_BOX_COUNT];
+    u16 anySlots[TOTAL_BOXES_COUNT * IN_BOX_COUNT];
+};
+
+static EWRAM_DATA struct SurfBoxCache sSurfBoxCache;
+
+void FieldMove_MarkSurfBoxCacheDirty(void)
+{
+    sSurfBoxCache.dirty = TRUE;
+}
+
+static void RebuildSurfBoxCache(void)
+{
+    u8 boxId;
+    u8 boxPos;
+
+    sSurfBoxCache.owCount = 0;
+    sSurfBoxCache.anyCount = 0;
+
+    for (boxId = 0; boxId < TOTAL_BOXES_COUNT; boxId++)
+    {
+        for (boxPos = 0; boxPos < IN_BOX_COUNT; boxPos++)
+        {
+            if (!GetBoxMonDataAt(boxId, boxPos, MON_DATA_SANITY_HAS_SPECIES))
+                continue;
+            if (GetBoxMonDataAt(boxId, boxPos, MON_DATA_SANITY_IS_EGG))
+                continue;
+
+            u16 monSpecies = GetBoxMonDataAt(boxId, boxPos, MON_DATA_SPECIES);
+            if (monSpecies == SPECIES_NONE)
+                continue;
+            if (!CanLearnTeachableMove(monSpecies, MOVE_SURF))
+                continue;
+
+            u16 slot = (boxId * IN_BOX_COUNT) + boxPos;
+            sSurfBoxCache.anySlots[sSurfBoxCache.anyCount++] = slot;
+            if (SurfOw_IsSpeciesEligible(monSpecies))
+                sSurfBoxCache.owSlots[sSurfBoxCache.owCount++] = slot;
+        }
+    }
+
+    sSurfBoxCache.dirty = FALSE;
+    sSurfBoxCache.initialized = TRUE;
+}
+
+static bool8 GetRandomSurfBoxSlot(const u16 *slots, u16 count, u8 *boxId, u8 *boxPos)
+{
+    if (count == 0)
+        return FALSE;
+
+    u16 slot = slots[Random() % count];
+    *boxId = slot / IN_BOX_COUNT;
+    *boxPos = slot % IN_BOX_COUNT;
+    return TRUE;
+}
+
+static bool8 GetRandomSurfBoxSlot_Ow(u8 *boxId, u8 *boxPos)
+{
+    if (!sSurfBoxCache.initialized || sSurfBoxCache.dirty)
+        RebuildSurfBoxCache();
+
+    return GetRandomSurfBoxSlot(sSurfBoxCache.owSlots, sSurfBoxCache.owCount, boxId, boxPos);
+}
+
+static bool8 GetRandomSurfBoxSlot_Any(u8 *boxId, u8 *boxPos)
+{
+    if (!sSurfBoxCache.initialized || sSurfBoxCache.dirty)
+        RebuildSurfBoxCache();
+
+    return GetRandomSurfBoxSlot(sSurfBoxCache.anySlots, sSurfBoxCache.anyCount, boxId, boxPos);
+}
+
+void ClearFieldMoveMonInfo(void)
+{
+    gFieldMoveMonInfo.valid = FALSE;
+    gFieldMoveMonInfo.species = SPECIES_NONE;
+    gFieldMoveMonInfo.move = MOVE_NONE;
+    gFieldMoveMonInfo.personality = 0;
+    gFieldMoveMonInfo.isShiny = FALSE;
+    gFieldMoveMonInfo.boxId = 0;
+    gFieldMoveMonInfo.boxPos = 0;
+    gFieldMoveMonInfo.partyIndex = PARTY_SIZE;
+    gFieldMoveMonInfo.fromBox = FALSE;
+    gFieldMoveMonInfo.nickname[0] = '\0';
+}
+
+const struct FieldMoveMonInfo *GetFieldMoveMonInfo(void)
+{
+    return &gFieldMoveMonInfo;
+}
+
+bool8 FindFieldMoveMonForMove(u16 move, u8 *partyIndex, bool8 *fromBox, u16 *species)
+{
+    u32 i;
+    struct FieldMoveMonInfo pick = {0};
+
+    ClearFieldMoveMonInfo();
+    *partyIndex = PARTY_SIZE;
+    *fromBox = FALSE;
+    *species = SPECIES_NONE;
+
+    if (move == MOVE_SURF)
+    {
+        for (i = PARTY_SIZE; i-- > 0;)
+        {
+            u16 monSpecies = GetMonData(&gPlayerParty[i], MON_DATA_SPECIES);
+
+            if (monSpecies == SPECIES_NONE)
+                continue;
+            if (GetMonData(&gPlayerParty[i], MON_DATA_IS_EGG))
+                continue;
+            if (!SurfOw_IsSpeciesEligible(monSpecies))
+                continue;
+            if (CanLearnTeachableMove(monSpecies, move))
+            {
+                gFieldMoveMonInfo.valid = TRUE;
+                gFieldMoveMonInfo.fromBox = FALSE;
+                gFieldMoveMonInfo.partyIndex = i;
+                gFieldMoveMonInfo.species = monSpecies;
+                gFieldMoveMonInfo.move = move;
+                gFieldMoveMonInfo.personality = GetMonData(&gPlayerParty[i], MON_DATA_PERSONALITY);
+                gFieldMoveMonInfo.isShiny = GetMonData(&gPlayerParty[i], MON_DATA_IS_SHINY);
+                GetMonData(&gPlayerParty[i], MON_DATA_NICKNAME, gFieldMoveMonInfo.nickname);
+                StringGet_Nickname(gFieldMoveMonInfo.nickname);
+                *partyIndex = i;
+                *species = monSpecies;
+                return TRUE;
+            }
+        }
+
+        u8 boxId;
+        u8 boxPos;
+        if (GetRandomSurfBoxSlot_Ow(&boxId, &boxPos))
+        {
+            u16 monSpecies = GetBoxMonDataAt(boxId, boxPos, MON_DATA_SPECIES);
+
+            pick.valid = TRUE;
+            pick.boxId = boxId;
+            pick.boxPos = boxPos;
+            pick.partyIndex = PARTY_SIZE;
+            pick.fromBox = TRUE;
+            pick.species = monSpecies;
+            pick.move = move;
+            pick.personality = GetBoxMonDataAt(boxId, boxPos, MON_DATA_PERSONALITY);
+            pick.isShiny = GetBoxMonDataAt(boxId, boxPos, MON_DATA_IS_SHINY);
+            GetBoxMonNickAt(boxId, boxPos, pick.nickname);
+            StringGet_Nickname(pick.nickname);
+        }
+
+        if (pick.valid)
+        {
+            gFieldMoveMonInfo = pick;
+            *fromBox = TRUE;
+            *species = pick.species;
+            return TRUE;
+        }
+    }
+
+    for (i = PARTY_SIZE; i-- > 0;)
+    {
+        u16 monSpecies = GetMonData(&gPlayerParty[i], MON_DATA_SPECIES);
+
+        if (monSpecies == SPECIES_NONE)
+            continue;
+        if (GetMonData(&gPlayerParty[i], MON_DATA_IS_EGG))
+            continue;
+        if (CanLearnTeachableMove(monSpecies, move))
+        {
+            gFieldMoveMonInfo.valid = TRUE;
+            gFieldMoveMonInfo.fromBox = FALSE;
+            gFieldMoveMonInfo.partyIndex = i;
+            gFieldMoveMonInfo.species = monSpecies;
+            gFieldMoveMonInfo.move = move;
+            gFieldMoveMonInfo.personality = GetMonData(&gPlayerParty[i], MON_DATA_PERSONALITY);
+            gFieldMoveMonInfo.isShiny = GetMonData(&gPlayerParty[i], MON_DATA_IS_SHINY);
+            GetMonData(&gPlayerParty[i], MON_DATA_NICKNAME, gFieldMoveMonInfo.nickname);
+            StringGet_Nickname(gFieldMoveMonInfo.nickname);
+            *partyIndex = i;
+            *species = monSpecies;
+            return TRUE;
+        }
+    }
+
+    if (move == MOVE_SURF)
+    {
+        u8 boxId;
+        u8 boxPos;
+        if (GetRandomSurfBoxSlot_Any(&boxId, &boxPos))
+        {
+            u16 monSpecies = GetBoxMonDataAt(boxId, boxPos, MON_DATA_SPECIES);
+
+            pick.valid = TRUE;
+            pick.boxId = boxId;
+            pick.boxPos = boxPos;
+            pick.partyIndex = PARTY_SIZE;
+            pick.fromBox = TRUE;
+            pick.species = monSpecies;
+            pick.move = move;
+            pick.personality = GetBoxMonDataAt(boxId, boxPos, MON_DATA_PERSONALITY);
+            pick.isShiny = GetBoxMonDataAt(boxId, boxPos, MON_DATA_IS_SHINY);
+            GetBoxMonNickAt(boxId, boxPos, pick.nickname);
+            StringGet_Nickname(pick.nickname);
+        }
+    }
+    else
+    {
+        u32 boxCount = 0;
+        pick = (struct FieldMoveMonInfo){0};
+        for (u8 boxId = 0; boxId < TOTAL_BOXES_COUNT; boxId++)
+        {
+            for (u8 boxPos = 0; boxPos < IN_BOX_COUNT; boxPos++)
+            {
+                if (!GetBoxMonDataAt(boxId, boxPos, MON_DATA_SANITY_HAS_SPECIES))
+                    continue;
+                if (GetBoxMonDataAt(boxId, boxPos, MON_DATA_SANITY_IS_EGG))
+                    continue;
+                u16 monSpecies = GetBoxMonDataAt(boxId, boxPos, MON_DATA_SPECIES);
+
+                if (monSpecies == SPECIES_NONE)
+                    continue;
+                if (!CanLearnTeachableMove(monSpecies, move))
+                    continue;
+
+                boxCount++;
+                if ((Random() % boxCount) == 0)
+                {
+                    pick.valid = TRUE;
+                    pick.boxId = boxId;
+                    pick.boxPos = boxPos;
+                    pick.partyIndex = PARTY_SIZE;
+                    pick.fromBox = TRUE;
+                    pick.species = monSpecies;
+                    pick.move = move;
+                    pick.personality = GetBoxMonDataAt(boxId, boxPos, MON_DATA_PERSONALITY);
+                    pick.isShiny = GetBoxMonDataAt(boxId, boxPos, MON_DATA_IS_SHINY);
+                    GetBoxMonNickAt(boxId, boxPos, pick.nickname);
+                    StringGet_Nickname(pick.nickname);
+                }
+            }
+        }
+    }
+
+    if (pick.valid)
+    {
+        gFieldMoveMonInfo = pick;
+        *fromBox = TRUE;
+        *species = pick.species;
+        return TRUE;
+    }
+
+    return FALSE;
+}
 
 static bool32 IsFieldMoveUnlocked_Cut(void)
 {
-    return FlagGet(FLAG_BADGE01_GET);
+    return TRUE;
 }
 
 static bool32 IsFieldMoveUnlocked_Flash(void)
 {
-    return FlagGet(FLAG_BADGE02_GET);
+    return TRUE;
 }
 
 static bool32 IsFieldMoveUnlocked_RockSmash(void)
 {
-    return FlagGet(FLAG_BADGE03_GET);
+    return TRUE;
 }
 
 static bool32 IsFieldMoveUnlocked_Strength(void)
 {
-    return FlagGet(FLAG_BADGE04_GET);
+    return TRUE;
 }
 
 static bool32 IsFieldMoveUnlocked_Surf(void)
 {
-    return FlagGet(FLAG_BADGE05_GET);
+    return TRUE;
 }
 
 static bool32 IsFieldMoveUnlocked_Fly(void)
 {
-    return FlagGet(FLAG_BADGE06_GET);
+    return TRUE;
 }
 
 static bool32 IsFieldMoveUnlocked_Dive(void)
 {
-    return FlagGet(FLAG_BADGE07_GET);
+    return TRUE;
 }
 
 static bool32 IsFieldMoveUnlocked_Waterfall(void)
 {
-    return FlagGet(FLAG_BADGE08_GET);
+    return TRUE;
 }
 
 static bool32 IsFieldMoveUnlocked_Teleport(void)

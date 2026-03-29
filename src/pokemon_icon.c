@@ -17,7 +17,7 @@ extern const u8 gMonIcon_PikachuFShadow[];
 extern const u8 gMonIcon_PikachuShadow[];
 
 static u16 sShadowIconPaletteBuffer[16];
-static void LoadShadowMonIconPalette(u16 species);
+static bool8 LoadShadowMonIconPalette(u16 species);
 
 struct MonIconSpriteTemplate
 {
@@ -50,13 +50,14 @@ const u8 gMonIconShadowPaletteIndex = MON_ICON_SHADOW_PALETTE_INDEX;
 // Ensure the table’s section is kept by referencing it from read-only data.
 const struct SpritePalette *const gMonIconPaletteTableRef __attribute__((used)) = gMonIconPaletteTable;
 
-static void LoadShadowMonIconPalette(u16 species)
+static bool8 LoadShadowMonIconPalette(u16 species)
 {
     const u16 *palette = GetShadowMonPalette(species);
     if (palette == NULL)
-        return;
+        return FALSE;
 
     memcpy(sShadowIconPaletteBuffer, palette, sizeof(sShadowIconPaletteBuffer));
+    return TRUE;
 }
 
 static const struct OamData sMonIconOamData =
@@ -169,6 +170,7 @@ u8 CreateMonIcon(u16 species, void (*callback)(struct Sprite *), s16 x, s16 y, u
     u16 iconSpecies = GetIconSpecies(species, personality);
     const struct ShadowGraphicsOverride *shadow = GetShadowGraphicsOverride(iconSpecies);
     bool8 useShadowIcon = isShadow && shadow != NULL && shadow->icon != NULL;
+    bool8 hasShadowPalette = FALSE;
     struct MonIconSpriteTemplate iconTemplate =
     {
         .oam = &sMonIconOamData,
@@ -178,9 +180,13 @@ u8 CreateMonIcon(u16 species, void (*callback)(struct Sprite *), s16 x, s16 y, u
         .callback = callback,
     };
 
-    if (useShadowIcon)
+    if (isShadow)
+        hasShadowPalette = LoadShadowMonIconPalette(iconSpecies);
+
+    if (useShadowIcon || hasShadowPalette)
     {
-        LoadShadowMonIconPalette(iconSpecies);
+        if (!hasShadowPalette)
+            memcpy(sShadowIconPaletteBuffer, gMonIconPalette_Shadow, sizeof(sShadowIconPaletteBuffer));
         u8 palIndex = IndexOfSpritePaletteTag(POKE_ICON_SHADOW_PAL_TAG);
         if (palIndex == 0xFF)
             LoadSpritePalette(&gMonIconPaletteTable[gMonIconShadowPaletteIndex]);

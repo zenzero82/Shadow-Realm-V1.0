@@ -9,6 +9,7 @@
 #include "sprite.h"
 #include "window.h"
 #include "string_util.h"
+#include "strings.h"
 #include "sound.h"
 #include "event_data.h"
 #include "constants/flags.h"
@@ -55,6 +56,13 @@
 #define STAT_NEUTRAL 0
 #define STAT_INCREASE 1
 
+#define EV_IV_EDIT_COL_EV 0
+#define EV_IV_EDIT_COL_IV 1
+#define EV_IV_ROW_COUNT 6
+#define EV_IV_MAX 252
+#define IV_MAX 31
+#define EV_IV_TOTAL_MAX 510
+
 
 //coordenada x del sprite pokémon, se mide en tiles de 8 pixeles
 //x coordinate of the pokémon sprite, measured in tiles of 8 pixels
@@ -94,6 +102,10 @@ struct EvIvDisplayScreen
     u8 cursorPos;
     u8 lastIdx;
     bool8 isBoxMon;
+    bool8 editMode;
+    bool8 editValueMode;
+    u8 selectedRow;
+    u8 selectedColumn;
 
     u8 stats_ev[NUM_STATS];
     u8 stats_iv[NUM_STATS];
@@ -122,6 +134,7 @@ static u8 EvIvLoadGfx(void);
 static void EvIvVblankHandler(void);
 static void Task_WaitForExit(u8);
 static void UpdateCurrentMon(void);
+static void UpdateCurrentStats(void);
 static void Task_EvIvReturn(u8);
 static void BufferMonData(struct Pokemon * mon);
 static s16 SeekToNextMonInBox(struct BoxPokemon *boxMons, u8 curIndex, u8 maxIndex, u8 flags);
@@ -133,9 +146,14 @@ static void Task_ScriptShowMonPic(u8 taskId);
 static void HidePokemonPic2(u8 taskId);
 
 static void PrintStat(u8 nature, u8 stat);
+static void PrintStatCursor(void);
 static u8 GetDigitsDec(u32 num);
 static u8 GetDigitsHex(u32 num);
 static u8 GetColorByNature(u8 nature, u8 statIndex);
+static bool8 TryAdjustSelectedValue(s8 delta);
+static void MoveSelectedRow(s8 delta);
+static u8 GetSelectedStat(void);
+static void SetSelectedStatData(u16 field, u8 value);
 
 extern void SummaryScreen_ReturnFromEvIv(u8 cursorPos);
 extern const u8 gFireRedMenuElements_Gfx[];
@@ -353,7 +371,8 @@ const u8 gText_Percent[] = _("% ");
 const u8 gText_eviv_Tittle[] = _("POKéMON EV-IV");
 
 #if EV_IV_TEXT == LANGUAGE_SPANISH
-const u8 gText_eviv_Buttons[] = _("{DPAD_UPDOWN}SEL. {A_BUTTON}{B_BUTTON}SALIR");
+const u8 gText_eviv_Buttons[] = _("{DPAD_UPDOWN}SEL. {B_BUTTON}SALIR");
+const u8 gText_eviv_Edit[] = _("{A_BUTTON} EDITAR");
 const u8 gText_eviv_Hp[]     = _(" ");
 const u8 gText_eviv_Atk[]    = _(" ");
 const u8 gText_eviv_Def[]    = _(" ");
@@ -370,7 +389,8 @@ static const u8 sText_Power[]  = _("  Power: ");
 const u8 gText_Steps_to_hatching[]  = _("Pasos para\neclosionar: ");
 
 #elif EV_IV_TEXT == LANGUAGE_ENGLISH
-const u8 gText_eviv_Buttons[] = _("{DPAD_UPDOWN}SEL. {A_BUTTON}{B_BUTTON}EXIT");
+const u8 gText_eviv_Buttons[] = _("{DPAD_UPDOWN}SEL. {B_BUTTON}EXIT");
+const u8 gText_eviv_Edit[] = _("{A_BUTTON} EDIT");
 const u8 gText_eviv_Hp[]     = _(" ");
 const u8 gText_eviv_Atk[]    = _(" ");
 const u8 gText_eviv_Def[]    = _(" ");
@@ -451,6 +471,10 @@ void Show_EvIv(struct Pokemon * party, u8 cursorPos, u8 lastIdx, MainCallback sa
     gEvIv->savedCallback = savedCallback;
     gEvIv->isBoxMon = isboxMon;
     gEvIv->return_summary_screen = return_summary_screen;
+    gEvIv->editMode = FALSE;
+    gEvIv->editValueMode = FALSE;
+    gEvIv->selectedRow = 0;
+    gEvIv->selectedColumn = EV_IV_EDIT_COL_EV;
 
     BufferMonData(&gEvIv->currentMon);
 
@@ -486,10 +510,17 @@ static void Task_EvIvInit(u8 taskId)
         CopyToBgTilemapBuffer(1, gBgEvIvTilemap, 0, 0);
         break;
     case 4:
+    {
+        u8 titleX = 0x10;
+        u8 buttonsX = 0x98;
+        u16 editX = buttonsX - GetStringWidth(2, gText_eviv_Edit, 0) - 4;
+
         FillWindowPixelBuffer(WIN_TOP_BOX, 0);
-        AddTextPrinterParameterized3(WIN_TOP_BOX, 2, 0x10, 2, sWhiteTextColor, 0, gText_eviv_Tittle);
-        AddTextPrinterParameterized3(WIN_TOP_BOX, 0, 0x98, 1, sWhiteTextColor, 0, gText_eviv_Buttons);
+        AddTextPrinterParameterized3(WIN_TOP_BOX, 2, titleX, 2, sWhiteTextColor, 0, gText_eviv_Tittle);
+        AddTextPrinterParameterized3(WIN_TOP_BOX, 2, editX, 2, sWhiteTextColor, 0, gText_eviv_Edit);
+        AddTextPrinterParameterized3(WIN_TOP_BOX, 0, buttonsX, 1, sWhiteTextColor, 0, gText_eviv_Buttons);
         break;
+    }
     case 5:
         PutWindowTilemap(WIN_TOP_BOX);
         ShowSprite(&gEvIv->currentMon);
@@ -526,6 +557,58 @@ static void Task_WaitForExit(u8 taskId)
         gEvIv->state++;
         break;
     case 1:
+        if (gEvIv->editMode)
+        {
+            bool8 redraw = FALSE;
+
+            if (gEvIv->editValueMode)
+            {
+                if (JOY_REPEAT(DPAD_LEFT) || JOY_REPEAT(DPAD_RIGHT))
+                {
+                    gEvIv->selectedColumn ^= 1;
+                    redraw = TRUE;
+                }
+
+                if (JOY_REPEAT(DPAD_UP))
+                    TryAdjustSelectedValue(+1);
+                else if (JOY_REPEAT(DPAD_DOWN))
+                    TryAdjustSelectedValue(-1);
+
+                if (JOY_NEW(B_BUTTON))
+                {
+                    gEvIv->editValueMode = FALSE;
+                    redraw = TRUE;
+                }
+            }
+            else
+            {
+                if (JOY_REPEAT(DPAD_UP))
+                {
+                    MoveSelectedRow(-1);
+                    redraw = TRUE;
+                }
+                else if (JOY_REPEAT(DPAD_DOWN))
+                {
+                    MoveSelectedRow(+1);
+                    redraw = TRUE;
+                }
+
+                if (JOY_NEW(A_BUTTON))
+                {
+                    gEvIv->editValueMode = TRUE;
+                    redraw = TRUE;
+                }
+                else if (JOY_NEW(B_BUTTON))
+                {
+                    gEvIv->editMode = FALSE;
+                    redraw = TRUE;
+                }
+            }
+
+            if (redraw)
+                EvIvPrintText(&gEvIv->currentMon);
+            break;
+        }
         if (gEvIv->lastIdx)
         {
             if (JOY_REPEAT(DPAD_DOWN))
@@ -588,7 +671,17 @@ static void Task_WaitForExit(u8 taskId)
             }
         }
 
-        if (JOY_NEW(A_BUTTON) || JOY_NEW(B_BUTTON))
+        if (JOY_NEW(A_BUTTON))
+        {
+            if (!GetMonData(&gEvIv->currentMon, MON_DATA_IS_EGG, NULL))
+            {
+                gEvIv->editMode = TRUE;
+                gEvIv->editValueMode = FALSE;
+                gEvIv->selectedColumn = EV_IV_EDIT_COL_EV;
+                EvIvPrintText(&gEvIv->currentMon);
+            }
+        }
+        else if (JOY_NEW(B_BUTTON))
         {
             PlaySE(SE_RG_CARD_FLIP);
             BeginNormalPaletteFade(0xFFFFFFFF, 0, 0, 16, RGB_BLACK);
@@ -608,6 +701,12 @@ static void UpdateCurrentMon(void)
     HidePokemonPic2(gEvIv->spriteTaskId);
     EvIvPrintText(&gEvIv->currentMon);
     ShowSprite(&gEvIv->currentMon);
+}
+
+static void UpdateCurrentStats(void)
+{
+    BufferMonData(&gEvIv->currentMon);
+    EvIvPrintText(&gEvIv->currentMon);
 }
 
 static void Task_EvIvReturn(u8 taskId)
@@ -946,6 +1045,46 @@ static void Task_ScriptShowMonPic(u8 taskId)
 #define SPDEF_Y     SPATK_Y + 14
 #define SPEED_Y     SPDEF_Y + 14
 
+static const u8 sEvIvStatOrder[EV_IV_ROW_COUNT] =
+{
+    STAT_HP,
+    STAT_ATK,
+    STAT_DEF,
+    STAT_SPATK,
+    STAT_SPDEF,
+    STAT_SPEED,
+};
+
+static const u8 sEvIvStatRowY[EV_IV_ROW_COUNT] =
+{
+    HP_Y,
+    ATK_Y,
+    DEF_Y,
+    SPATK_Y,
+    SPDEF_Y,
+    SPEED_Y,
+};
+
+static const u16 sEvIvEvDataIds[EV_IV_ROW_COUNT] =
+{
+    MON_DATA_HP_EV,
+    MON_DATA_ATK_EV,
+    MON_DATA_DEF_EV,
+    MON_DATA_SPATK_EV,
+    MON_DATA_SPDEF_EV,
+    MON_DATA_SPEED_EV,
+};
+
+static const u16 sEvIvIvDataIds[EV_IV_ROW_COUNT] =
+{
+    MON_DATA_HP_IV,
+    MON_DATA_ATK_IV,
+    MON_DATA_DEF_IV,
+    MON_DATA_SPATK_IV,
+    MON_DATA_SPDEF_IV,
+    MON_DATA_SPEED_IV,
+};
+
 
 static void PrintWindow0(struct Pokemon *mon);
 static void PrintWindow1(u8 nature, u8 isEgg);
@@ -1078,11 +1217,25 @@ static void PrintWindow1(u8 nature, u8 isEgg)
         AddTextPrinterParameterized3(WIN_STATS, 2, BS_X, SPDEF_Y, sBlackTextColor, 0, gText_CensorEgg);
         AddTextPrinterParameterized3(WIN_STATS, 2, BS_X, SPEED_Y, sBlackTextColor, 0, gText_CensorEgg);
     }
+
+    if (gEvIv->editMode && !isEgg)
+        PrintStatCursor();
 }
 
 static void PrintStat(u8 nature, u8 stat)
 {
     u8 color_idx = GetColorByNature(nature, stat);
+    const u8 *bsColor = sTextColorByNature[color_idx];
+    const u8 *evColor = sTextColorByNature[color_idx];
+    const u8 *ivColor = sTextColorByNature[color_idx];
+
+    if (gEvIv->editValueMode && GetSelectedStat() == stat)
+    {
+        if (gEvIv->selectedColumn == EV_IV_EDIT_COL_EV)
+            evColor = sWhiteTextColor;
+        else
+            ivColor = sWhiteTextColor;
+    }
 
     ConvertIntToDecimalStringN(gStringVar1, gEvIv->stats_bs[stat], STR_CONV_MODE_RIGHT_ALIGN, 3);
     ConvertIntToDecimalStringN(gStringVar2, gEvIv->stats_ev[stat], STR_CONV_MODE_RIGHT_ALIGN, 3);
@@ -1091,37 +1244,103 @@ static void PrintStat(u8 nature, u8 stat)
     switch (stat)
     {
     case STAT_HP:
-        AddTextPrinterParameterized3(WIN_STATS, 2, BS_X, HP_Y, sTextColorByNature[color_idx], 0, gStringVar1);
-        AddTextPrinterParameterized3(WIN_STATS, 2, EV_X, HP_Y, sTextColorByNature[color_idx], 0, gStringVar2);
-        AddTextPrinterParameterized3(WIN_STATS, 2, IV_X, HP_Y, sTextColorByNature[color_idx], 0, gStringVar3);
+        AddTextPrinterParameterized3(WIN_STATS, 2, BS_X, HP_Y, bsColor, 0, gStringVar1);
+        AddTextPrinterParameterized3(WIN_STATS, 2, EV_X, HP_Y, evColor, 0, gStringVar2);
+        AddTextPrinterParameterized3(WIN_STATS, 2, IV_X, HP_Y, ivColor, 0, gStringVar3);
         break;
     case STAT_ATK:
-        AddTextPrinterParameterized3(WIN_STATS, 2, BS_X, ATK_Y, sTextColorByNature[color_idx], 0, gStringVar1);
-        AddTextPrinterParameterized3(WIN_STATS, 2, EV_X, ATK_Y, sTextColorByNature[color_idx], 0, gStringVar2);
-        AddTextPrinterParameterized3(WIN_STATS, 2, IV_X, ATK_Y, sTextColorByNature[color_idx], 0, gStringVar3);
+        AddTextPrinterParameterized3(WIN_STATS, 2, BS_X, ATK_Y, bsColor, 0, gStringVar1);
+        AddTextPrinterParameterized3(WIN_STATS, 2, EV_X, ATK_Y, evColor, 0, gStringVar2);
+        AddTextPrinterParameterized3(WIN_STATS, 2, IV_X, ATK_Y, ivColor, 0, gStringVar3);
         break;
     case STAT_DEF:
-        AddTextPrinterParameterized3(WIN_STATS, 2, BS_X, DEF_Y, sTextColorByNature[color_idx], 0, gStringVar1);
-        AddTextPrinterParameterized3(WIN_STATS, 2, EV_X, DEF_Y, sTextColorByNature[color_idx], 0, gStringVar2);
-        AddTextPrinterParameterized3(WIN_STATS, 2, IV_X, DEF_Y, sTextColorByNature[color_idx], 0, gStringVar3);
+        AddTextPrinterParameterized3(WIN_STATS, 2, BS_X, DEF_Y, bsColor, 0, gStringVar1);
+        AddTextPrinterParameterized3(WIN_STATS, 2, EV_X, DEF_Y, evColor, 0, gStringVar2);
+        AddTextPrinterParameterized3(WIN_STATS, 2, IV_X, DEF_Y, ivColor, 0, gStringVar3);
         break;
     case STAT_SPATK:
-        AddTextPrinterParameterized3(WIN_STATS, 2, BS_X, SPATK_Y, sTextColorByNature[color_idx], 0, gStringVar1);
-        AddTextPrinterParameterized3(WIN_STATS, 2, EV_X, SPATK_Y, sTextColorByNature[color_idx], 0, gStringVar2);
-        AddTextPrinterParameterized3(WIN_STATS, 2, IV_X, SPATK_Y, sTextColorByNature[color_idx], 0, gStringVar3);
+        AddTextPrinterParameterized3(WIN_STATS, 2, BS_X, SPATK_Y, bsColor, 0, gStringVar1);
+        AddTextPrinterParameterized3(WIN_STATS, 2, EV_X, SPATK_Y, evColor, 0, gStringVar2);
+        AddTextPrinterParameterized3(WIN_STATS, 2, IV_X, SPATK_Y, ivColor, 0, gStringVar3);
         break;
     case STAT_SPDEF:
-        AddTextPrinterParameterized3(WIN_STATS, 2, BS_X, SPDEF_Y, sTextColorByNature[color_idx], 0, gStringVar1);
-        AddTextPrinterParameterized3(WIN_STATS, 2, EV_X, SPDEF_Y, sTextColorByNature[color_idx], 0, gStringVar2);
-        AddTextPrinterParameterized3(WIN_STATS, 2, IV_X, SPDEF_Y, sTextColorByNature[color_idx], 0, gStringVar3);
+        AddTextPrinterParameterized3(WIN_STATS, 2, BS_X, SPDEF_Y, bsColor, 0, gStringVar1);
+        AddTextPrinterParameterized3(WIN_STATS, 2, EV_X, SPDEF_Y, evColor, 0, gStringVar2);
+        AddTextPrinterParameterized3(WIN_STATS, 2, IV_X, SPDEF_Y, ivColor, 0, gStringVar3);
         break;
     case STAT_SPEED:
-        AddTextPrinterParameterized3(WIN_STATS, 2, BS_X, SPEED_Y, sTextColorByNature[color_idx], 0, gStringVar1);
-        AddTextPrinterParameterized3(WIN_STATS, 2, EV_X, SPEED_Y, sTextColorByNature[color_idx], 0, gStringVar2);
-        AddTextPrinterParameterized3(WIN_STATS, 2, IV_X, SPEED_Y, sTextColorByNature[color_idx], 0, gStringVar3);
+        AddTextPrinterParameterized3(WIN_STATS, 2, BS_X, SPEED_Y, bsColor, 0, gStringVar1);
+        AddTextPrinterParameterized3(WIN_STATS, 2, EV_X, SPEED_Y, evColor, 0, gStringVar2);
+        AddTextPrinterParameterized3(WIN_STATS, 2, IV_X, SPEED_Y, ivColor, 0, gStringVar3);
         break;
     default:
         break;
+    }
+}
+
+static void PrintStatCursor(void)
+{
+    u8 y = sEvIvStatRowY[gEvIv->selectedRow];
+    AddTextPrinterParameterized3(WIN_STATS, 2, 0, y, sWhiteTextColor, 0, gText_SelectorArrow2);
+}
+
+static bool8 TryAdjustSelectedValue(s8 delta)
+{
+    u8 row = gEvIv->selectedRow;
+    u8 stat = sEvIvStatOrder[row];
+    s16 current;
+    s16 newValue;
+
+    if (gEvIv->selectedColumn == EV_IV_EDIT_COL_EV)
+    {
+        current = gEvIv->stats_ev[stat];
+        newValue = current + delta;
+        if (newValue < 0 || newValue > EV_IV_MAX)
+            return FALSE;
+        if ((gEvIv->totalStatsEV - current + newValue) > EV_IV_TOTAL_MAX)
+            return FALSE;
+        SetSelectedStatData(sEvIvEvDataIds[row], (u8)newValue);
+    }
+    else
+    {
+        current = gEvIv->stats_iv[stat];
+        newValue = current + delta;
+        if (newValue < 0 || newValue > IV_MAX)
+            return FALSE;
+        SetSelectedStatData(sEvIvIvDataIds[row], (u8)newValue);
+    }
+
+    UpdateCurrentStats();
+    return TRUE;
+}
+
+static void MoveSelectedRow(s8 delta)
+{
+    s8 next = gEvIv->selectedRow + delta;
+    if (next < 0)
+        next = EV_IV_ROW_COUNT - 1;
+    else if (next >= EV_IV_ROW_COUNT)
+        next = 0;
+    gEvIv->selectedRow = next;
+}
+
+static u8 GetSelectedStat(void)
+{
+    return sEvIvStatOrder[gEvIv->selectedRow];
+}
+
+static void SetSelectedStatData(u16 field, u8 value)
+{
+    if (gEvIv->isBoxMon)
+    {
+        struct BoxPokemon *boxMon = &gEvIv->monList.boxMons[gEvIv->cursorPos];
+        SetBoxMonData(boxMon, field, &value);
+    }
+    else
+    {
+        struct Pokemon *mon = &gEvIv->monList.mons[gEvIv->cursorPos];
+        SetMonData(mon, field, &value);
+        CalculateMonStats(mon);
     }
 }
 

@@ -97,6 +97,15 @@ SlowpokeWell_B1F_EventScript_Flare3_After::
 	release
 	end
 
+SlowpokeWell_B1F_EventScript_GalarSlowpoke::
+	lock
+	faceplayer
+	waitse
+	playmoncry SPECIES_SLOWPOKE_GALAR, CRY_MODE_NORMAL
+	waitmoncry
+	release
+	end
+
 SlowpokeWell_B1F_EventScript_Bryony::
 	goto SlowpokeWell_B1F_EventScript_BryonyScene
 
@@ -104,14 +113,16 @@ SlowpokeWell_B1F_EventScript_BryonyScene::
 	goto_if_set FLAG_ETHAN_CALL_AFTER_BRYONY, SlowpokeWell_B1F_EventScript_BryonyScene_Done
 	lockall
 	setvar VAR_TEMP_0, 1
-	applymovement LOCALID_PLAYER, Common_Movement_FaceUp
+	applymovement LOCALID_PLAYER, SlowpokeWell_B1F_Movement_PlayerFaceDownLock
 	waitmovement 0
+	special Special_LockPlayerFacingDown
 	special SpawnCameraObject
 	applymovement LOCALID_CAMERA, SlowpokeWell_B1F_Movement_CameraToBryony
 	waitmovement 0
 	setspeaker SlowpokeWell_B1F_Speaker_Bryony
 	msgbox SlowpokeWell_B1F_Text_Bryony_GalarSlowpoke, MSGBOX_NPC
 	closemessage
+	setspeaker SlowpokeWell_B1F_Speaker_Bryony
 	msgbox SlowpokeWell_B1F_Text_Bryony_Xerosic, MSGBOX_NPC
 	closemessage
 	playse SE_PIN
@@ -121,9 +132,11 @@ SlowpokeWell_B1F_EventScript_BryonyScene::
 	applymovement LOCALID_CAMERA, SlowpokeWell_B1F_Movement_CameraFollowBryony
 	waitmovement 0
 	special RemoveCameraObject
+	applymovement LOCALID_PLAYER, Common_Movement_FaceDown
+	waitmovement 0
 	playbgm MUS_ENCOUNTER_SUSPICIOUS, FALSE
 	setspeaker SlowpokeWell_B1F_Speaker_Bryony
-	trainerbattle_single TRAINER_SLOWPOKEWELL_BRYONY, SlowpokeWell_B1F_Text_Bryony_Intro, SlowpokeWell_B1F_Text_Bryony_Defeat, SlowpokeWell_B1F_EventScript_Bryony_After
+	trainerbattle TRAINER_BATTLE_CONTINUE_SCRIPT, LOCALID_SLOWPOKE_WELL_BRYONY, TRAINER_SLOWPOKEWELL_BRYONY, SlowpokeWell_B1F_Text_Bryony_Intro, SlowpokeWell_B1F_Text_Bryony_Defeat, SlowpokeWell_B1F_EventScript_Bryony_After, OBJ_ID_NONE, TRAINER_NONE, NULL, NULL, NULL, NULL, NULL, FALSE, TRUE, FALSE, FALSE
 	end
 
 SlowpokeWell_B1F_EventScript_BryonyScene_Done::
@@ -156,7 +169,19 @@ SlowpokeWell_B1F_Movement_CameraFollowBryony:
 	walk_right
 	step_end
 
+SlowpokeWell_B1F_Movement_PlayerFaceDownLock:
+	face_down
+	lock_facing_direction
+	step_end
+
+SlowpokeWell_B1F_Movement_PlayerUnlockFacing:
+	unlock_facing_direction
+	step_end
+
 SlowpokeWell_B1F_EventScript_Bryony_After::
+	special Special_ClearPlayerFacingOverride
+	applymovement LOCALID_PLAYER, SlowpokeWell_B1F_Movement_PlayerUnlockFacing
+	waitmovement 0
 	setspeaker SlowpokeWell_B1F_Speaker_Bryony
 	msgbox SlowpokeWell_B1F_Text_Bryony_After, MSGBOX_NPC
 	closemessage
@@ -174,7 +199,9 @@ SlowpokeWell_B1F_EventScript_Bryony_After::
 	hideobjectat 6, MAP_VIOLET_CITY
 	fadescreen FADE_FROM_BLACK
 	checkflag FLAG_QUEST_SLOWPOKE_WELL_FLARE_STARTED
-	goto_if_eq SlowpokeWell_B1F_EventScript_Bryony_QuestDone
+	goto_if_eq SlowpokeWell_B1F_EventScript_Bryony_CheckQuestComplete
+	goto SlowpokeWell_B1F_EventScript_Bryony_QuestDone
+SlowpokeWell_B1F_EventScript_Bryony_CheckQuestComplete::
 	checkflag FLAG_QUEST_SLOWPOKE_WELL_FLARE_COMPLETED
 	goto_if_eq SlowpokeWell_B1F_EventScript_Bryony_QuestDone
 	setflag FLAG_QUEST_SLOWPOKE_WELL_FLARE_COMPLETED

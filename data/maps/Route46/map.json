@@ -71,8 +71,8 @@
       "x": 20,
       "y": 11,
       "elevation": 0,
-      "dest_map": "MAP_ROUTE46",
-      "dest_warp_id": "0"
+      "dest_map": "MAP_DARK_CAVE_SOUTH_SIDE",
+      "dest_warp_id": "2"
     }
   ],
   "coord_events": [],

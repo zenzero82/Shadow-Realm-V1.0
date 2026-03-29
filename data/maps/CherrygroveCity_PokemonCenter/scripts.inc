@@ -19,18 +19,27 @@ CherrygroveCity_PokemonCenter_EventScript_Fisherman::
 	faceplayer
 	setspeaker CherrygroveCity_PokemonCenter_Speaker_Fisherman
 	msgbox CherrygroveCity_PokemonCenter_Text_Fisherman, MSGBOX_NPC
+	closemessage
+	setflag FLAG_QUEST_CHERRYGROVE_NPC_POKECENTER_FISHERMAN
+	call QuestJournal_EventScript_CheckCherrygroveNPCs
 	end
 
 CherrygroveCity_PokemonCenter_EventScript_Lass::
 	faceplayer
 	setspeaker CherrygroveCity_PokemonCenter_Speaker_Lass
 	msgbox CherrygroveCity_PokemonCenter_Text_Lass, MSGBOX_NPC
+	closemessage
+	setflag FLAG_QUEST_CHERRYGROVE_NPC_POKECENTER_LASS
+	call QuestJournal_EventScript_CheckCherrygroveNPCs
 	end
 
 CherrygroveCity_PokemonCenter_EventScript_Gentleman::
 	faceplayer
 	setspeaker CherrygroveCity_PokemonCenter_Speaker_Gentleman
 	msgbox CherrygroveCity_PokemonCenter_Text_Gentleman, MSGBOX_NPC
+	closemessage
+	setflag FLAG_QUEST_CHERRYGROVE_NPC_POKECENTER_GENTLEMAN
+	call QuestJournal_EventScript_CheckCherrygroveNPCs
 	end
 
 CherrygroveCity_PokemonCenter_Text_Fisherman:

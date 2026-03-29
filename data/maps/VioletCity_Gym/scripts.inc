@@ -39,7 +39,6 @@ VioletCity_Gym_EventScript_GymGuy_After::
 
 VioletCity_Gym_EventScript_BirdKeeper1::
 	setspeaker VioletCity_Gym_Speaker_BirdKeeper1
-	goto_if_set FLAG_BADGE17_GET, VioletCity_Gym_EventScript_BirdKeeper1_After
 	trainerbattle_single TRAINER_VIOLET_GYM_BIRD_KEEPER_1, VioletCity_Gym_Text_BirdKeeper1_Intro, VioletCity_Gym_Text_BirdKeeper1_Defeat, VioletCity_Gym_EventScript_BirdKeeper1_After
 	end
 
@@ -52,7 +51,6 @@ VioletCity_Gym_EventScript_BirdKeeper1_After::
 
 VioletCity_Gym_EventScript_BirdKeeper2::
 	setspeaker VioletCity_Gym_Speaker_BirdKeeper2
-	goto_if_set FLAG_BADGE17_GET, VioletCity_Gym_EventScript_BirdKeeper2_After
 	trainerbattle_single TRAINER_VIOLET_GYM_BIRD_KEEPER_2, VioletCity_Gym_Text_BirdKeeper2_Intro, VioletCity_Gym_Text_BirdKeeper2_Defeat, VioletCity_Gym_EventScript_BirdKeeper2_After
 	end
 

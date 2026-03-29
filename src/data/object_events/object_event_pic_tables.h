@@ -1973,6 +1973,14 @@ static const struct SpriteFrameImage sPicTable_GeetaGen9[] = {
     overworld_ascending_frames(gObjectEventPic_GeetaGen9, 2, 4),
 };
 
+static const struct SpriteFrameImage sPicTable_SadaGen9[] = {
+    overworld_ascending_frames(gObjectEventPic_SadaGen9, 2, 4),
+};
+
+static const struct SpriteFrameImage sPicTable_TuroGen9[] = {
+    overworld_ascending_frames(gObjectEventPic_TuroGen9, 2, 4),
+};
+
 //XD(Orre)
 static const struct SpriteFrameImage sPicTable_Wes[] = {
     overworld_ascending_frames(gObjectEventPic_Wes, 2, 4),

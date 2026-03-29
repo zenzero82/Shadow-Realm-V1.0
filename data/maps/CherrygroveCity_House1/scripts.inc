@@ -11,12 +11,18 @@ CherrygroveCity_House1_EventScript_Man::
 	faceplayer
 	setspeaker CherrygroveCity_House1_Speaker_Man
 	msgbox CherrygroveCity_House1_Text_Man, MSGBOX_NPC
+	closemessage
+	setflag FLAG_QUEST_CHERRYGROVE_NPC_HOUSE1_MAN
+	call QuestJournal_EventScript_CheckCherrygroveNPCs
 	end
 
 CherrygroveCity_House1_EventScript_Boy::
 	faceplayer
 	setspeaker CherrygroveCity_House1_Speaker_Boy
 	msgbox CherrygroveCity_House1_Text_Boy, MSGBOX_NPC
+	closemessage
+	setflag FLAG_QUEST_CHERRYGROVE_NPC_HOUSE1_BOY
+	call QuestJournal_EventScript_CheckCherrygroveNPCs
 	end
 
 CherrygroveCity_House1_Text_Man:

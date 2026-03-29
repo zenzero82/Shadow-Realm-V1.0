@@ -5489,7 +5489,7 @@ $(OBJEVENTGFXDIR)/gen7/molayne_gen7.4bpp: graphics/object_events/pics/gen7/molay
 	$(GFX) $< $@ -mwidth 2 -mheight 4
 
 $(OBJEVENTGFXDIR)/gen7/plumeria_gen7.4bpp: graphics/object_events/pics/gen7/plumeria_gen7.png
-	$(GFX) $< $@ -mwidth 2 -mheight 4
+	$(GFX) $< $@ -mwidth 4 -mheight 4
 
 $(OBJEVENTGFXDIR)/gen7/selene_gen7.4bpp: graphics/object_events/pics/gen7/selene_gen7.png
 	$(GFX) $< $@ -mwidth 2 -mheight 4
@@ -5550,6 +5550,12 @@ $(OBJEVENTGFXDIR)/gen9/nemona_gen9.4bpp: graphics/object_events/pics/gen9/nemona
 	$(GFX) $< $@ -mwidth 2 -mheight 4
 
 $(OBJEVENTGFXDIR)/gen9/penny_gen9.4bpp: graphics/object_events/pics/gen9/penny_gen9.png
+	$(GFX) $< $@ -mwidth 2 -mheight 4
+
+$(OBJEVENTGFXDIR)/gen9/sada_gen9.4bpp: graphics/object_events/pics/gen9/sada_gen9.png
+	$(GFX) $< $@ -mwidth 2 -mheight 4
+
+$(OBJEVENTGFXDIR)/gen9/turo_gen9.4bpp: graphics/object_events/pics/gen9/turo_gen9.png
 	$(GFX) $< $@ -mwidth 2 -mheight 4
 
 #XD(Orre)

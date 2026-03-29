@@ -139,6 +139,8 @@ const u32 gObjectEventPic_AquaMemberM[] = INCBIN_U32("graphics/object_events/pic
 const u32 gObjectEventPic_AquaMemberF[] = INCBIN_U32("graphics/object_events/pics/people/team_aqua/aqua_member_f.4bpp");
 const u32 gObjectEventPic_MagmaMemberM[] = INCBIN_U32("graphics/object_events/pics/people/team_magma/magma_member_m.4bpp");
 const u32 gObjectEventPic_MagmaMemberF[] = INCBIN_U32("graphics/object_events/pics/people/team_magma/magma_member_f.4bpp");
+const u16 gObjectEventPal_MagmaMemberM[] = INCBIN_U16("graphics/object_events/pics/people/team_magma/magma_member_m.gbapal");
+const u16 gObjectEventPal_MagmaMemberF[] = INCBIN_U16("graphics/object_events/pics/people/team_magma/magma_member_f.gbapal");
 const u32 gObjectEventPic_Sidney[] = INCBIN_U32("graphics/object_events/pics/people/elite_four/sidney.4bpp");
 const u32 gObjectEventPic_Phoebe[] = INCBIN_U32("graphics/object_events/pics/people/elite_four/phoebe.4bpp");
 const u32 gObjectEventPic_Glacia[] = INCBIN_U32("graphics/object_events/pics/people/elite_four/glacia.4bpp");
@@ -164,6 +166,11 @@ const u32 gObjectEventPic_Matt[] = INCBIN_U32("graphics/object_events/pics/peopl
 const u32 gObjectEventPic_Maxie[] = INCBIN_U32("graphics/object_events/pics/people/team_magma/maxie.4bpp");
 const u32 gObjectEventPic_Courtney[] = INCBIN_U32("graphics/object_events/pics/people/team_magma/courtney.4bpp");
 const u32 gObjectEventPic_Tabitha[] = INCBIN_U32("graphics/object_events/pics/people/team_magma/tabitha.4bpp");
+const u16 gObjectEventPal_Archie[] = INCBIN_U16("graphics/object_events/pics/people/team_aqua/archie.gbapal");
+const u16 gObjectEventPal_Shelly[] = INCBIN_U16("graphics/object_events/pics/people/team_aqua/shelly.gbapal");
+const u16 gObjectEventPal_Maxie[] = INCBIN_U16("graphics/object_events/pics/people/team_magma/maxie.gbapal");
+const u16 gObjectEventPal_Courtney[] = INCBIN_U16("graphics/object_events/pics/people/team_magma/courtney.gbapal");
+const u16 gObjectEventPal_Tabitha[] = INCBIN_U16("graphics/object_events/pics/people/team_magma/tabitha.gbapal");
 const u32 gObjectEventPic_TuberMSwimming[] = INCBIN_U32("graphics/object_events/pics/people/tuber_m_swimming.4bpp");
 const u32 gObjectEventPic_Mom[] = INCBIN_U32("graphics/object_events/pics/people/mom.4bpp");
 const u16 gObjectEventPal_Kyogre[] = INCBIN_U16("graphics/object_events/palettes/kyogre.gbapal");
@@ -1043,6 +1050,12 @@ const u16 gObjectEventPal_PennyGen9[] = INCBIN_U16("graphics/object_events/pics/
 
 const u32 gObjectEventPic_GeetaGen9[] = INCBIN_U32("graphics/object_events/pics/gen9/geeta_gen9.4bpp");
 const u16 gObjectEventPal_GeetaGen9[] = INCBIN_U16("graphics/object_events/pics/gen9/geeta_gen9.gbapal");
+
+const u32 gObjectEventPic_SadaGen9[] = INCBIN_U32("graphics/object_events/pics/gen9/sada_gen9.4bpp");
+const u16 gObjectEventPal_SadaGen9[] = INCBIN_U16("graphics/object_events/pics/gen9/sada_gen9.gbapal");
+
+const u32 gObjectEventPic_TuroGen9[] = INCBIN_U32("graphics/object_events/pics/gen9/turo_gen9.4bpp");
+const u16 gObjectEventPal_TuroGen9[] = INCBIN_U16("graphics/object_events/pics/gen9/turo_gen9.gbapal");
 
 //XD(Orre) Trainers
 const u16 gObjectEventPal_Wes[] = INCBIN_U16("graphics/object_events/pics/xd/wes.gbapal");

@@ -1,2 +1,17 @@
 celadon_apartmentroofnight_MapScripts::
+	map_script MAP_SCRIPT_ON_TRANSITION, celadon_apartmentroofnight_OnTransition
 	.byte 0
+
+celadon_apartmentroofnight_OnTransition:
+	gettimeofday
+	compare VAR_0x8000, TIME_NIGHT
+	goto_if_eq celadon_apartmentroofnight_SetNight
+	goto celadon_apartmentroofnight_SetDay
+
+celadon_apartmentroofnight_SetNight::
+	setmaplayoutindex LAYOUT_CELADON_APARTMENTROOFNIGHT
+	return
+
+celadon_apartmentroofnight_SetDay::
+	setmaplayoutindex LAYOUT_CELADON_APARTMENTROOFDAY
+	return

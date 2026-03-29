@@ -11,12 +11,18 @@ NewBarkTown_House1_EventScript_Woman::
 	faceplayer
 	setspeaker NewBarkTown_House1_Speaker_Woman
 	msgbox NewBarkTown_House1_Text_Woman, MSGBOX_NPC
+	closemessage
+	setflag FLAG_QUEST_NEW_BARK_NPC_HOUSE1_WOMAN
+	call QuestJournal_EventScript_CheckNewBarkNPCs
 	end
 
 NewBarkTown_House1_EventScript_Lass::
 	faceplayer
 	setspeaker NewBarkTown_House1_Speaker_Lass
 	msgbox NewBarkTown_House1_Text_Lass, MSGBOX_NPC
+	closemessage
+	setflag FLAG_QUEST_NEW_BARK_NPC_HOUSE1_LASS
+	call QuestJournal_EventScript_CheckNewBarkNPCs
 	end
 
 NewBarkTown_House1_Text_Woman:

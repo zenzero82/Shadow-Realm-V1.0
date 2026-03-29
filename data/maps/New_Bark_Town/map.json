@@ -149,7 +149,7 @@
       "elevation": 0,
       "var": "VAR_TEMP_0",
       "var_value": "0",
-      "script": "NULL"
+      "script": "New_Bark_Town_EventScript_HexagonBros_Trigger"
     },
     {
       "type": "trigger",
@@ -158,7 +158,7 @@
       "elevation": 0,
       "var": "VAR_TEMP_0",
       "var_value": "0",
-      "script": "NULL"
+      "script": "New_Bark_Town_EventScript_HexagonBros_Trigger"
     },
     {
       "type": "trigger",
@@ -167,7 +167,7 @@
       "elevation": 0,
       "var": "VAR_TEMP_0",
       "var_value": "0",
-      "script": "NULL"
+      "script": "New_Bark_Town_EventScript_HexagonBros_Trigger"
     },
     {
       "type": "trigger",
@@ -176,7 +176,7 @@
       "elevation": 0,
       "var": "VAR_TEMP_0",
       "var_value": "0",
-      "script": "NULL"
+      "script": "New_Bark_Town_EventScript_HexagonBros_Trigger"
     }
   ],
   "bg_events": [

@@ -56,6 +56,20 @@
       "elevation": 0,
       "dest_map": "MAP_DARK_CAVE_SOUTH_SIDE",
       "dest_warp_id": "0"
+    },
+    {
+      "x": 56,
+      "y": 47,
+      "elevation": 0,
+      "dest_map": "MAP_ROUTE46",
+      "dest_warp_id": "2"
+    },
+    {
+      "x": 34,
+      "y": 6,
+      "elevation": 0,
+      "dest_map": "MAP_DARK_CAVE_NORTH_SIDE",
+      "dest_warp_id": "0"
     }
   ],
   "coord_events": [],

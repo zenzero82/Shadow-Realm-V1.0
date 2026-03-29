@@ -2,8 +2,10 @@
 #include "event_data.h"
 #include "event_scripts.h"
 #include "field_effect.h"
+#include "field_move.h"
 #include "fldeff.h"
 #include "party_menu.h"
+#include "pokemon.h"
 #include "script.h"
 #include "string_util.h"
 #include "task.h"
@@ -38,7 +40,19 @@ bool8 FldEff_UseStrength(void)
     u8 taskId = CreateFieldMoveTask();
     gTasks[taskId].data[8] = (u32)StartStrengthFieldEffect >> 16;
     gTasks[taskId].data[9] = (u32)StartStrengthFieldEffect;
-    GetMonNickname(&gPlayerParty[gFieldEffectArguments[0]], gStringVar1);
+    if (gFieldEffectArguments[0] & FIELD_MOVE_MON_FROM_BOX)
+    {
+        const struct FieldMoveMonInfo *info = GetFieldMoveMonInfo();
+
+        if (info->valid)
+            StringCopy(gStringVar1, GetSpeciesName(info->species));
+        else
+            StringCopy(gStringVar1, GetSpeciesName(SPECIES_NONE));
+    }
+    else
+    {
+        GetMonNickname(&gPlayerParty[gFieldEffectArguments[0]], gStringVar1);
+    }
     return FALSE;
 }
 

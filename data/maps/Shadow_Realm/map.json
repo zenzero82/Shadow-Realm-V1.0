@@ -5,7 +5,7 @@
   "music": "MUS_DUMMY",
   "region_map_section": "MAPSEC_SHADOW_REALM",
   "requires_flash": false,
-  "weather": "WEATHER_FOG",
+  "weather": "WEATHER_SHADE",
   "map_type": "MAP_TYPE_UNKNOWN",
   "allow_cycling": false,
   "allow_escaping": false,
@@ -14,7 +14,113 @@
   "battle_scene": "MAP_BATTLE_SCENE_NORMAL",
   "connections": null,
   "object_events": [],
-  "warp_events": [],
+  "warp_events": [
+    {
+      "x": 10,
+      "y": 59,
+      "elevation": 0,
+      "dest_map": "MAP_GIO_CHAMBER",
+      "dest_warp_id": "0"
+    },
+    {
+      "x": 53,
+      "y": 6,
+      "elevation": 0,
+      "dest_map": "MAP_CYRUS_LAIR",
+      "dest_warp_id": "0"
+    },
+    {
+      "x": 91,
+      "y": 46,
+      "elevation": 0,
+      "dest_map": "MAP_COLRESS_LAIR",
+      "dest_warp_id": "0"
+    },
+    {
+      "x": 16,
+      "y": 39,
+      "elevation": 0,
+      "dest_map": "MAP_NASCOUR_LAIR",
+      "dest_warp_id": "0"
+    },
+    {
+      "x": 7,
+      "y": 23,
+      "elevation": 0,
+      "dest_map": "MAP_MIRORB_LAIR",
+      "dest_warp_id": "0"
+    },
+    {
+      "x": 30,
+      "y": 11,
+      "elevation": 0,
+      "dest_map": "MAP_MAXIE_LAIR",
+      "dest_warp_id": "0"
+    },
+    {
+      "x": 76,
+      "y": 11,
+      "elevation": 0,
+      "dest_map": "MAP_ARCHIE_LAIR",
+      "dest_warp_id": "0"
+    },
+    {
+      "x": 9,
+      "y": 7,
+      "elevation": 0,
+      "dest_map": "MAP_EVICE_LAIR",
+      "dest_warp_id": "0"
+    },
+    {
+      "x": 94,
+      "y": 7,
+      "elevation": 0,
+      "dest_map": "MAP_GREEVIL_LAIR",
+      "dest_warp_id": "0"
+    },
+    {
+      "x": 73,
+      "y": 36,
+      "elevation": 0,
+      "dest_map": "MAP_GHETSIS_LAIR",
+      "dest_warp_id": "0"
+    },
+    {
+      "x": 89,
+      "y": 23,
+      "elevation": 0,
+      "dest_map": "MAP_LYSANDRE_LAIR",
+      "dest_warp_id": "0"
+    },
+    {
+      "x": 33,
+      "y": 27,
+      "elevation": 0,
+      "dest_map": "MAP_LUSAMINE_LAIR",
+      "dest_warp_id": "0"
+    },
+    {
+      "x": 36,
+      "y": 53,
+      "elevation": 0,
+      "dest_map": "MAP_GUZMA_LAIR",
+      "dest_warp_id": "0"
+    },
+    {
+      "x": 68,
+      "y": 58,
+      "elevation": 0,
+      "dest_map": "MAP_ROSE_LAIR",
+      "dest_warp_id": "0"
+    },
+    {
+      "x": 53,
+      "y": 43,
+      "elevation": 0,
+      "dest_map": "MAP_SADA_TURO_LAIR",
+      "dest_warp_id": "0"
+    }
+  ],
   "coord_events": [],
   "bg_events": []
 }

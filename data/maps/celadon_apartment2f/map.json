@@ -14,7 +14,36 @@
   "battle_scene": "MAP_BATTLE_SCENE_NORMAL",
   "connections": null,
   "object_events": [],
-  "warp_events": [],
+  "warp_events": [
+    {
+      "x": 12,
+      "y": 2,
+      "elevation": 0,
+      "dest_map": "MAP_CELADON_APARTMENT1F",
+      "dest_warp_id": "1"
+    },
+    {
+      "x": 4,
+      "y": 2,
+      "elevation": 0,
+      "dest_map": "MAP_CELADON_APARTMENT1F",
+      "dest_warp_id": "2"
+    },
+    {
+      "x": 11,
+      "y": 2,
+      "elevation": 0,
+      "dest_map": "MAP_CELADON_APARTMENT3F",
+      "dest_warp_id": "1"
+    },
+    {
+      "x": 2,
+      "y": 2,
+      "elevation": 0,
+      "dest_map": "MAP_CELADON_APARTMENT3F",
+      "dest_warp_id": "0"
+    }
+  ],
   "coord_events": [],
   "bg_events": []
 }

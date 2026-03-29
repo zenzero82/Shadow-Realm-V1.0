@@ -1,5 +1,6 @@
 New_Bark_Town_MapScripts::
-	map_script MAP_SCRIPT_ON_TRANSITION, New_Bark_Town_OnTransition
+	map_script MAP_SCRIPT_ON_LOAD, New_Bark_Town_OnLoad
+	map_script MAP_SCRIPT_ON_FRAME_TABLE, New_Bark_Town_OnFrame
 	.byte 0
 
 @ Local IDs from map.json:
@@ -24,29 +25,50 @@ New_Bark_Town_MapScripts::
 @ HEXAGON BROS SCENE
 @ ================================
 
-New_Bark_Town_OnTransition:
+New_Bark_Town_OnLoad:
+	setvar VAR_TEMP_1, 0
+	end
+
+New_Bark_Town_OnFrame:
+	map_script_2 VAR_TEMP_1, 0, New_Bark_Town_EventScript_OnEnter
+	.2byte 0
+
+New_Bark_Town_EventScript_OnEnter::
+	setvar VAR_TEMP_1, 1
 	setflag FLAG_HIDE_NEW_BARK_HOOPA_RING
 	checkflag FLAG_BIRCH_TIME_AMULET_CALL_DONE
 	goto_if_eq VAR_RESULT, TRUE, New_Bark_Town_OnTransition_BirchDone
-	checkflag FLAG_QUEST_GOLDS_MOM_COMPLETED
-	goto_if_eq VAR_RESULT, FALSE, New_Bark_Town_OnTransition_BirchDone
+	goto_if_ne VAR_BIRCH_TIME_AMULET_CALL_PENDING, 1, New_Bark_Town_OnTransition_BirchDone
 	special StorePlayerCoordsInVars
 	goto_if_ne VAR_0x8004, 20, New_Bark_Town_OnTransition_BirchDone
-	goto_if_ne VAR_0x8005, 11, New_Bark_Town_OnTransition_BirchDone
-	goto New_Bark_Town_EventScript_BirchCallWarp
+	goto_if_eq VAR_0x8005, 11, New_Bark_Town_EventScript_BirchCallWarp
+	goto_if_eq VAR_0x8005, 12, New_Bark_Town_EventScript_BirchCallWarp
+	goto New_Bark_Town_OnTransition_BirchDone
 New_Bark_Town_OnTransition_BirchDone:
 	checkflag FLAG_HEXAGON_BROS_SCENE_DONE
 	goto_if_eq VAR_RESULT, TRUE, New_Bark_Town_OnTransition_HideBros
 	call New_Bark_Town_EventScript_ShowHexagonBros
-	end
+	goto New_Bark_Town_OnTransition_QuestStart
 
 New_Bark_Town_OnTransition_HideBros:
 	call New_Bark_Town_EventScript_HideHexagonBros
+New_Bark_Town_OnTransition_QuestStart:
+	checkflag FLAG_QUEST_NEW_BARK_NPCS_STARTED
+	goto_if_eq New_Bark_Town_OnTransition_End
+	checkflag FLAG_QUEST_NEW_BARK_NPCS_COMPLETED
+	goto_if_eq New_Bark_Town_OnTransition_End
+	lockall
+	setflag FLAG_QUEST_NEW_BARK_NPCS_STARTED
+	call QuestJournal_EventScript_NewQuestAlert
+	call QuestJournal_EventScript_CheckNewBarkNPCs
+	releaseall
+New_Bark_Town_OnTransition_End:
 	end
 
 New_Bark_Town_EventScript_BirchCallWarp::
 	lockall
 	setflag FLAG_BIRCH_TIME_AMULET_CALL_DONE
+	setvar VAR_BIRCH_TIME_AMULET_CALL_PENDING, 0
 	setspeaker New_Bark_Town_Speaker_Birch
 	pokenavcall New_Bark_Town_Text_Birch_Call
 	waitmessage
@@ -55,12 +77,14 @@ New_Bark_Town_EventScript_BirchCallWarp::
 	clearflag FLAG_HIDE_NEW_BARK_HOOPA_RING
 	addobject LOCALID_HOOPA_RING
 	hideobjectat LOCALID_HOOPA_RING, MAP_NEW_BARK_TOWN
-	setobjectxy LOCALID_HOOPA_RING, 20, 11
-	setobjectxyperm LOCALID_HOOPA_RING, 20, 11
+	setobjectxy LOCALID_HOOPA_RING, 20, 12
+	setobjectxyperm LOCALID_HOOPA_RING, 20, 12
 	showobjectat LOCALID_HOOPA_RING, MAP_NEW_BARK_TOWN
+	setobjectsubpriority LOCALID_HOOPA_RING, MAP_NEW_BARK_TOWN, 1
+	setobjectsubpriority LOCALID_PLAYER, MAP_NEW_BARK_TOWN, 0
 	setvar VAR_0x8004, LOCALID_HOOPA_RING
 	setvar VAR_0x8001, 20
-	setvar VAR_0x8002, 11
+	setvar VAR_0x8002, 12
 	special Special_HoopaRingSpawnGrow
 	waitstate
 	setvar VAR_0x8000, LOCALID_PLAYER
@@ -74,6 +98,7 @@ New_Bark_Town_EventScript_BirchCallWarp::
 	hideobjectat LOCALID_HOOPA_RING, MAP_NEW_BARK_TOWN
 	setflag FLAG_HIDE_NEW_BARK_HOOPA_RING
 	removeobject LOCALID_HOOPA_RING
+	resetobjectsubpriority LOCALID_PLAYER, MAP_NEW_BARK_TOWN
 
 	setflag FLAG_ROUTE34_HOOPA_SCENE
 	releaseall
@@ -217,11 +242,11 @@ New_Bark_Town_EventScript_Resix_ToPlayer_Done:
 	hideobjectat LOCALID_BROWSIX, MAP_NEW_BARK_TOWN
 	hideobjectat LOCALID_RESIX, MAP_NEW_BARK_TOWN
 
-	applymovement LOCALID_CAMERA, New_Bark_Town_Mov_Camera_ReturnToPlayer
-	waitmovement 0
-
-	setflag FLAG_HEXAGON_BROS_SCENE_DONE
+	special StorePlayerCoordsInVars
 	special RemoveCameraObject
+	special SetCameraFocusCoordsFromVars
+	setflag FLAG_HEXAGON_BROS_SCENE_DONE
+	setflag FLAG_QUEST_NEW_BARK_NPC_HEXAGON_BROS
 	fadenewbgm MUS_HG_NEW_BARK
 	releaseall
 	end
@@ -376,6 +401,10 @@ New_Bark_Town_Mov_Camera_PanToResix_Y14:
 
 New_Bark_Town_Mov_Camera_ReturnToPlayer:
 	walk_left
+	step_end
+
+New_Bark_Town_Mov_PlayerIntoRing:
+	walk_up
 	step_end
 
 New_Bark_Town_Mov_Line_Bros_Lead:
@@ -698,30 +727,45 @@ New_Bark_Town_EventScript_Resix_Talk::
 	faceplayer
 	setspeaker New_Bark_Town_Speaker_Resix
 	msgbox New_Bark_Town_Text_Resix_Talk, MSGBOX_NPC
+	closemessage
+	setflag FLAG_QUEST_NEW_BARK_NPC_HEXAGON_BROS
+	call QuestJournal_EventScript_CheckNewBarkNPCs
 	end
 
 New_Bark_Town_EventScript_Blusix_Talk::
 	faceplayer
 	setspeaker New_Bark_Town_Speaker_Blusix
 	msgbox New_Bark_Town_Text_Blusix_Talk, MSGBOX_NPC
+	closemessage
+	setflag FLAG_QUEST_NEW_BARK_NPC_HEXAGON_BROS
+	call QuestJournal_EventScript_CheckNewBarkNPCs
 	end
 
 New_Bark_Town_EventScript_Greesix_Talk::
 	faceplayer
 	setspeaker New_Bark_Town_Speaker_Greesix
 	msgbox New_Bark_Town_Text_Greesix_Talk, MSGBOX_NPC
+	closemessage
+	setflag FLAG_QUEST_NEW_BARK_NPC_HEXAGON_BROS
+	call QuestJournal_EventScript_CheckNewBarkNPCs
 	end
 
 New_Bark_Town_EventScript_Yellosix_Talk::
 	faceplayer
 	setspeaker New_Bark_Town_Speaker_Yellosix
 	msgbox New_Bark_Town_Text_Yellosix_Talk, MSGBOX_NPC
+	closemessage
+	setflag FLAG_QUEST_NEW_BARK_NPC_HEXAGON_BROS
+	call QuestJournal_EventScript_CheckNewBarkNPCs
 	end
 
 New_Bark_Town_EventScript_Browsix_Talk::
 	faceplayer
 	setspeaker New_Bark_Town_Speaker_Browsix
 	msgbox New_Bark_Town_Text_Browsix_Talk, MSGBOX_NPC
+	closemessage
+	setflag FLAG_QUEST_NEW_BARK_NPC_HEXAGON_BROS
+	call QuestJournal_EventScript_CheckNewBarkNPCs
 	end
 
 New_Bark_Town_Text_Resix_Talk:
@@ -740,3 +784,55 @@ New_Bark_Town_Text_Yellosix_Talk:
 New_Bark_Town_Text_Browsix_Talk:
 	.string "We will find our brother. We do\n"
 	.string "not linger.$"
+
+QuestJournal_EventScript_CheckNewBarkNPCs::
+	checkflag FLAG_QUEST_NEW_BARK_NPCS_COMPLETED
+	goto_if_eq QuestJournal_EventScript_CheckNewBarkNPCs_End
+	checkflag FLAG_QUEST_NEW_BARK_NPCS_STARTED
+	goto_if_eq QuestJournal_EventScript_CheckNewBarkNPCs_AutoFlags
+	return
+QuestJournal_EventScript_CheckNewBarkNPCs_AutoFlags:
+	checkflag FLAG_HEXAGON_BROS_SCENE_DONE
+	goto_if_eq QuestJournal_EventScript_CheckNewBarkNPCs_CheckSilver
+	setflag FLAG_QUEST_NEW_BARK_NPC_HEXAGON_BROS
+QuestJournal_EventScript_CheckNewBarkNPCs_CheckSilver:
+	checkflag FLAG_SHADOW_TRACKER_UNLOCKED
+	goto_if_eq QuestJournal_EventScript_CheckNewBarkNPCs_HexagonBros
+	setflag FLAG_QUEST_NEW_BARK_NPC_SILVER
+QuestJournal_EventScript_CheckNewBarkNPCs_HexagonBros:
+	checkflag FLAG_QUEST_NEW_BARK_NPC_HEXAGON_BROS
+	goto_if_eq QuestJournal_EventScript_CheckNewBarkNPCs_Silver
+	return
+QuestJournal_EventScript_CheckNewBarkNPCs_Silver:
+	checkflag FLAG_QUEST_NEW_BARK_NPC_SILVER
+	goto_if_eq QuestJournal_EventScript_CheckNewBarkNPCs_House1Woman
+	return
+QuestJournal_EventScript_CheckNewBarkNPCs_House1Woman:
+	checkflag FLAG_QUEST_NEW_BARK_NPC_HOUSE1_WOMAN
+	goto_if_eq QuestJournal_EventScript_CheckNewBarkNPCs_House1Lass
+	return
+QuestJournal_EventScript_CheckNewBarkNPCs_House1Lass:
+	checkflag FLAG_QUEST_NEW_BARK_NPC_HOUSE1_LASS
+	goto_if_eq QuestJournal_EventScript_CheckNewBarkNPCs_House2Woman
+	return
+QuestJournal_EventScript_CheckNewBarkNPCs_House2Woman:
+	checkflag FLAG_QUEST_NEW_BARK_NPC_HOUSE2_WOMAN
+	goto_if_eq QuestJournal_EventScript_CheckNewBarkNPCs_House2Girl
+	return
+QuestJournal_EventScript_CheckNewBarkNPCs_House2Girl:
+	checkflag FLAG_QUEST_NEW_BARK_NPC_HOUSE2_GIRL
+	goto_if_eq QuestJournal_EventScript_CheckNewBarkNPCs_PlayersHouseMom
+	return
+QuestJournal_EventScript_CheckNewBarkNPCs_PlayersHouseMom:
+	checkflag FLAG_QUEST_NEW_BARK_NPC_PLAYERS_HOUSE_MOM
+	goto_if_eq QuestJournal_EventScript_CheckNewBarkNPCs_PlayersHouseFriend
+	return
+QuestJournal_EventScript_CheckNewBarkNPCs_PlayersHouseFriend:
+	checkflag FLAG_QUEST_NEW_BARK_NPC_PLAYERS_HOUSE_FRIEND
+	goto_if_eq QuestJournal_EventScript_CheckNewBarkNPCs_Done
+	return
+QuestJournal_EventScript_CheckNewBarkNPCs_Done:
+	setflag FLAG_QUEST_NEW_BARK_NPCS_COMPLETED
+	call QuestJournal_EventScript_QuestCompleteAlert
+QuestJournal_EventScript_CheckNewBarkNPCs_End:
+	return

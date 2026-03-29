@@ -302,6 +302,8 @@ gSpecials::
 	def_special StartHoopaRingShrink
 	def_special Special_HoopaRingSpawnGrow
 	def_special Special_HoopaRingShrinkDespawn
+	def_special Special_LockPlayerFacingDown
+	def_special Special_ClearPlayerFacingOverride
 	def_special Special_ObjectEventAbsorb
 	def_special Special_ObjectEventEmerge
 	def_special SetObjectEventPortalAffineAnims
@@ -592,3 +594,6 @@ gSpecials::
 	def_special Special_Kukui_CheckShadowMeowthInParty
 	def_special Special_Kukui_TakeShadowMeowth
 	def_special Special_Kukui_ReturnShadowMeowth
+	def_special Special_KurtApricornMenu
+	def_special Special_HeadbuttTree
+	def_special Special_HeadbuttTree_StartBattle

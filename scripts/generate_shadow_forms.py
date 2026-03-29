@@ -117,6 +117,7 @@ Meganium
 Melmetal
 Meloetta
 Mesprit
+Meowth
 Meowscarada
 Mespirit
 Mew
@@ -223,7 +224,7 @@ def load_overworld_tile_counts():
     lines = path.read_text().splitlines()
     counts = {}
     for i, line in enumerate(lines):
-        if "overworld.4bpp" not in line or "/shadow/overworld.4bpp" in line:
+        if "overworld.4bpp" not in line:
             continue
         match = pattern.search(line)
         if not match:
@@ -288,7 +289,8 @@ def png_tile_counts(png_path):
             f.seek(16)
             width = int.from_bytes(f.read(4), "big")
             height = int.from_bytes(f.read(4), "big")
-            return max(1, width // 8), max(1, height // 8)
+            frame_width = width // 6 if width % 6 == 0 else width
+            return max(1, frame_width // 8), max(1, height // 8)
     except Exception:
         return 4, 4
 
@@ -378,6 +380,19 @@ for raw_name, slug, species_constant in species_data:
             break
     palette_path = path / palette_file if palette_file else None
     has_palette = palette_file is not None
+    overworld_palette_file = None
+    overworld_palette_candidates = [
+        "overworld_normal.gbapal",
+        "overworld.gbapal",
+    ]
+    for candidate in overworld_palette_candidates:
+        if (path / candidate).exists():
+            overworld_palette_file = candidate
+            break
+    overworld_palette_path = (
+        path / overworld_palette_file if overworld_palette_file else None
+    )
+    has_overworld_palette = overworld_palette_file is not None
     if front_file is None:
         front_file = find_graphics_file(path, ("anim_front", "front"))
     if back_file is None:
@@ -420,6 +435,9 @@ for raw_name, slug, species_constant in species_data:
             "icon_file": icon_file,
             "overworld_file": overworld_file,
             "overworld_tile_counts": overworld_tile_counts,
+            "overworld_palette_file": overworld_palette_file,
+            "overworld_palette_path": overworld_palette_path,
+            "has_overworld_palette": has_overworld_palette,
             "palette_file": palette_file,
             "has_palette": has_palette,
             "palette_path": palette_path,
@@ -483,6 +501,12 @@ def generate_shadow_forms_inc(entries):
                 )
                 lines.append("#endif")
             lines.append("#endif")
+        if entry["has_overworld_palette"]:
+            lines.append("#if OW_POKEMON_OBJECT_EVENTS && OW_PKMN_OBJECTS_SHARE_PALETTES == FALSE")
+            lines.append(
+                f"const u16 gOverworldPalette_{camel}Shadow[] = INCBIN_U16(\"{entry['overworld_palette_path'].as_posix()}\");"
+            )
+            lines.append("#endif")
         lines.append("")
     return "\n".join(lines)
 
@@ -506,6 +530,10 @@ for entry in species_entries:
         header_lines.append("#endif")
     if entry["has_palette"]:
         header_lines.append(f"extern const u16 gMonPalette_{camel}Shadow[];")
+    if entry["has_overworld_palette"]:
+        header_lines.append("#if OW_POKEMON_OBJECT_EVENTS && OW_PKMN_OBJECTS_SHARE_PALETTES == FALSE")
+        header_lines.append(f"extern const u16 gOverworldPalette_{camel}Shadow[];")
+        header_lines.append("#endif")
     header_lines.append(f"extern const u8 gMonIcon_{camel}Shadow[];")
     if entry["has_female_icon"]:
         header_lines.append("#if P_GENDER_DIFFERENCES && P_CUSTOM_GENDER_DIFF_ICONS")
@@ -589,7 +617,11 @@ for entry in species_entries:
     pic_table_lines.append(f"    [SPECIES_{constant}] = sPicTable_{camel}Shadow,")
     if entry["has_female_overworld"]:
         female_table_lines.append(f"    [SPECIES_{constant}] = sPicTable_{camel}FShadow,")
-    if entry["has_palette"]:
+    if entry["has_overworld_palette"]:
+        palette_array_lines.append(
+            f"    [SPECIES_{constant}] = gOverworldPalette_{camel}Shadow,"
+        )
+    elif entry["has_palette"]:
         palette_array_lines.append(
             f"    [SPECIES_{constant}] = gMonPalette_{camel}Shadow,"
         )

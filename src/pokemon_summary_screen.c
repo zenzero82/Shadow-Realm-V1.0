@@ -152,7 +152,7 @@ static const u8 gText_PSS_Speed[] = _("Speed");
 static const u8 gText_PSS_ExpPoints[] = _("Exp. Points");
 static const u8 gText_PSS_ToNextLv[] = _("To Next Lv.");
 static const u8 gText_PSS_StoredExp[] = _("Stored Exp");
-static const u8 gText_PSS_LvAfterPure[] = _("Lv After Pure");
+static const u8 gText_PSS_LvAfterPure[] = _("Lv After Pur.");
 static const u8 gText_PSS_TrainerMemo[] = _("Trainer Memo");
 static const u8 gText_PSS_Ability[] = _("Ability");
 static const u8 gText_PSS_Category[] = _("Category");
@@ -287,8 +287,6 @@ static void PSS_LoadIconStatus(u16, u16);
 static void PSS_LoadHpBar(u16, u16);
 static void PSS_LoadExpBar(u16, u16);
 static void PSS_LoadPokeball(void);
-static void PSS_GetInfoPageLevelGenderCoords(s16 *levelX, s16 *levelWidth, s16 *genderX, s16 *genderWidth);
-static void PSS_GetOtherPageLevelGenderCoords(s16 *levelX, s16 *genderX, s16 *genderWidth);
 static void PSS_ClearWindow2Tilemap(void);
 static void PSS_SetMovesInfoWindow4Position(void);
 static void PSS_SetMonSpritePositionForPage(void);
@@ -3040,27 +3038,31 @@ static void PSS_AddTextToWin2(const u8 * msg)
     {
         if (sMonSummaryScreen->curPageIndex == PSS_PAGE_INFO)
         {
-            s16 levelX;
-            s16 levelWidth;
             s16 genderX;
             s16 genderWidth;
 
-            PSS_GetInfoPageLevelGenderCoords(&levelX, &levelWidth, &genderX, &genderWidth);
-            AddTextPrinterParameterized3(sMonSummaryScreen->window[2], 2, levelX, 0, sPSSTextColours[DARK], 0xff, sMonSummaryScreen->summary.level);
+            genderWidth = GetStringWidth(2, sMonSummaryScreen->summary.genderSymbol, 0);
+            genderX = 80 - genderWidth;
+            if (genderX < 0)
+                genderX = 0;
 
-            if (GetMonGender(&sMonSummaryScreen->currentMon) == MON_FEMALE)
-                AddTextPrinterParameterized3(sMonSummaryScreen->window[2], 2, genderX, 0, sPSSTextColours[RED], 0, sMonSummaryScreen->summary.genderSymbol);
-            else
-                AddTextPrinterParameterized3(sMonSummaryScreen->window[2], 2, genderX, 0, sPSSTextColours[BLUE], 0, sMonSummaryScreen->summary.genderSymbol);
+            if (genderWidth > 0)
+            {
+                if (GetMonGender(&sMonSummaryScreen->currentMon) == MON_FEMALE)
+                    AddTextPrinterParameterized3(sMonSummaryScreen->window[2], 2, genderX, 0, sPSSTextColours[RED], 0, sMonSummaryScreen->summary.genderSymbol);
+                else
+                    AddTextPrinterParameterized3(sMonSummaryScreen->window[2], 2, genderX, 0, sPSSTextColours[BLUE], 0, sMonSummaryScreen->summary.genderSymbol);
+            }
         }
         else
         {
-            s16 levelX;
             s16 genderX;
             s16 genderWidth;
 
-            PSS_GetOtherPageLevelGenderCoords(&levelX, &genderX, &genderWidth);
-            AddTextPrinterParameterized3(sMonSummaryScreen->window[2], 2, levelX, 0, sPSSTextColours[DARK], 0xff, sMonSummaryScreen->summary.level);
+            genderWidth = GetStringWidth(2, sMonSummaryScreen->summary.genderSymbol, 0);
+            genderX = 80 - genderWidth;
+            if (genderX < 0)
+                genderX = 0;
 
             if (genderWidth > 0)
             {
@@ -3138,6 +3140,12 @@ static void PSS_ShowInfoPokemon(void)
 		else	
 			AddTextPrinterParameterized3(sMonSummaryScreen->window[3], 2, 80 + sUnknown_203B144->unk00, 3 + yOffset, sPSSTextColours[DARK], TEXT_SPEED_FF, sMonSummaryScreen->summary.dexNum);
 		{
+			s16 levelY = (3 + yOffset) - 24;
+			if (levelY < 0)
+				levelY = 0;
+			AddTextPrinterParameterized3(sMonSummaryScreen->window[3], 2, 80 + sUnknown_203B144->unk00, levelY, sPSSTextColours[DARK], TEXT_SPEED_FF, sMonSummaryScreen->summary.level);
+		}
+		{
 			bool8 isShadow = GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_IS_SHADOW);
 
 			if (isShadow)
@@ -3163,26 +3171,10 @@ static void PSS_ShowInfoPokemon(void)
     }
     else
     {
-        u8 eggCycles;
-        u8 hatchMsgIndex;
-
-        eggCycles = GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_FRIENDSHIP);
-
-        if (eggCycles <= 5)
-            hatchMsgIndex = 3;
-        else if (eggCycles <= 10)
-            hatchMsgIndex = 2;
-        else if (eggCycles <= 40)
-            hatchMsgIndex = 1;
-        else
-            hatchMsgIndex = 0;
-
-        if (sMonSummaryScreen->isBadEgg)
-            hatchMsgIndex = 0;
+        const u8 statusYOffset = 28;
 
 		AddTextPrinterParameterized3(sMonSummaryScreen->window[3], 2, labelX, 7 + yOffset, sPSSTextColours[WHITE], TEXT_SPEED_FF, gText_PSS_Name);
-		AddTextPrinterParameterized3(sMonSummaryScreen->window[3], 2, labelX, 31 + yOffset, sPSSTextColours[WHITE], TEXT_SPEED_FF, gText_PSS_Status);
-		AddTextPrinterParameterized4(sMonSummaryScreen->window[3], 2, 80, 32 + yOffset, 0, -2, sPSSTextColours[DARK], TEXT_SPEED_FF, sUnknown_8463EC4[hatchMsgIndex]);
+		AddTextPrinterParameterized3(sMonSummaryScreen->window[3], 2, labelX, 31 + yOffset + statusYOffset, sPSSTextColours[WHITE], TEXT_SPEED_FF, gText_PSS_Status);
 		AddTextPrinterParameterized3(sMonSummaryScreen->window[3], 2, 80, 8 + yOffset, sPSSTextColours[DARK], TEXT_SPEED_FF, sMonSummaryScreen->summary.specieName);
     }
 }
@@ -3515,7 +3507,6 @@ static void PSS_ShowEggInfo(void)
     if (sMonSummaryScreen->isBadEgg)
         hatchMsgIndex = 0;
 
-    AddTextPrinterParameterized3(sMonSummaryScreen->window[4], 2, 6, 0, sPSSTextColours[WHITE], TEXT_SPEED_FF, gText_PSS_TrainerMemo);
     AddTextPrinterParameterized4(sMonSummaryScreen->window[4], 2, 16, memoTextY, 0, -2, sPSSTextColours[DARK], TEXT_SPEED_FF, sUnknown_8463EC4[hatchMsgIndex]);
 }
 
@@ -4731,57 +4722,6 @@ static void PSS_LoadPokeball(void)
 static void PSS_SetInvisiblePokeball(u8 invisible)
 {
     gSprites[sMonSummaryScreen->spriteId_0].invisible = invisible;
-}
-
-static void PSS_GetInfoPageLevelGenderCoords(s16 *levelX, s16 *levelWidth, s16 *genderX, s16 *genderWidth)
-{
-    s16 levelW = GetStringWidth(2, sMonSummaryScreen->summary.level, 0);
-    s16 levelPosX = 66 - levelW;
-    s16 maxLevelX = 80 - levelW;
-    s16 genderW = GetStringWidth(2, sMonSummaryScreen->summary.genderSymbol, 0);
-    s16 genderPosX;
-
-    if (levelPosX < 0)
-        levelPosX = 0;
-    if (levelPosX > maxLevelX)
-        levelPosX = maxLevelX;
-
-    genderPosX = levelPosX + levelW + 4;
-    if (genderPosX + genderW > 80)
-        genderPosX = 80 - genderW;
-
-    *levelX = levelPosX;
-    *levelWidth = levelW;
-    *genderX = genderPosX;
-    *genderWidth = genderW;
-}
-
-static void PSS_GetOtherPageLevelGenderCoords(s16 *levelX, s16 *genderX, s16 *genderWidth)
-{
-    s16 levelW = GetStringWidth(2, sMonSummaryScreen->summary.level, 0);
-    s16 genderW = GetStringWidth(2, sMonSummaryScreen->summary.genderSymbol, 0);
-    s16 levelPosX;
-    s16 genderPosX = 0;
-
-    if (genderW == 0)
-    {
-        levelPosX = 80 - levelW;
-        if (levelPosX < 0)
-            levelPosX = 0;
-    }
-    else
-    {
-        levelPosX = 80 - levelW - genderW - 4;
-        if (levelPosX < 0)
-            levelPosX = 0;
-        genderPosX = levelPosX + levelW + 4;
-        if (genderPosX + genderW > 80)
-            genderPosX = 80 - genderW;
-    }
-
-    *levelX = levelPosX;
-    *genderX = genderPosX;
-    *genderWidth = genderW;
 }
 
 static void PSS_ClearWindow2Tilemap(void)

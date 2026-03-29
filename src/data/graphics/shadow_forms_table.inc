@@ -790,6 +790,13 @@
         .icon = gMonIcon_MespritShadow,
     },
     {
+        .species = SPECIES_MEOWTH,
+        .frontPic = gMonFrontPic_MeowthShadow,
+        .backPic = gMonBackPic_MeowthShadow,
+        .palette = gMonPalette_MeowthShadow,
+        .icon = gMonIcon_MeowthShadow,
+    },
+    {
         .species = SPECIES_MEOWSCARADA,
         .frontPic = gMonFrontPic_MeowscaradaShadow,
         .backPic = gMonBackPic_MeowscaradaShadow,

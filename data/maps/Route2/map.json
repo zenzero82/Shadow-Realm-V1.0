@@ -36,7 +36,7 @@
       "trainer_type": "TRAINER_TYPE_NONE",
       "trainer_sight_or_berry_tree_id": "0",
       "script": "EventScript_CutTree",
-      "flag": "FLAG_TEMP_5"
+      "flag": "FLAG_HIDE_ROUTE2_CUTTREE_1"
     },
     {
       "graphics_id": "OBJ_EVENT_GFX_CUTTABLE_TREE_G1",
@@ -49,7 +49,7 @@
       "trainer_type": "TRAINER_TYPE_NONE",
       "trainer_sight_or_berry_tree_id": "0",
       "script": "EventScript_CutTree",
-      "flag": "FLAG_TEMP_5"
+      "flag": "FLAG_HIDE_ROUTE2_CUTTREE_2"
     },
     {
       "graphics_id": "OBJ_EVENT_GFX_CUTTABLE_TREE_G1",
@@ -62,7 +62,7 @@
       "trainer_type": "TRAINER_TYPE_NONE",
       "trainer_sight_or_berry_tree_id": "0",
       "script": "EventScript_CutTree",
-      "flag": "0"
+      "flag": "FLAG_HIDE_ROUTE2_CUTTREE_3"
     },
     {
       "graphics_id": "OBJ_EVENT_GFX_CUTTABLE_TREE_G1",
@@ -75,7 +75,7 @@
       "trainer_type": "TRAINER_TYPE_NONE",
       "trainer_sight_or_berry_tree_id": "0",
       "script": "EventScript_CutTree",
-      "flag": "0"
+      "flag": "FLAG_HIDE_ROUTE2_CUTTREE_4"
     },
     {
       "graphics_id": "OBJ_EVENT_GFX_SPECIES(PIDGEY)",

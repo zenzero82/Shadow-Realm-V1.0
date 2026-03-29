@@ -1,5 +1,6 @@
 #include "global.h"
 #include "battle_anim.h"
+#include "battle_interface.h"
 #include "contest.h"
 #include "gpu_regs.h"
 #include "graphics.h"
@@ -39,6 +40,18 @@ static void UpdateMonScrollingBgMask(u8);
 static void AnimTask_WaitAndRestoreVisibility(u8);
 
 static const u16 sCurseLinesPalette[] = { RGB_WHITE };
+
+void AnimTask_RestoreAbilityPopupPalette(u8 taskId)
+{
+    BattleInterface_RestoreAbilityPopupPalette();
+    DestroyAnimVisualTask(taskId);
+}
+
+void AnimTask_UnfadeObjPalettes(u8 taskId)
+{
+    UnfadePlttBuffer(PALETTES_OBJECTS);
+    DestroyAnimVisualTask(taskId);
+}
 
 void AnimTask_BlendBattleAnimPal(u8 taskId)
 {

@@ -62,6 +62,7 @@
 #include "constants/flags.h"
 #include "constants/items.h"
 #include "constants/map_groups.h"
+#include "constants/maps.h"
 #include "constants/rgb.h"
 #include "constants/songs.h"
 #include "constants/species.h"
@@ -91,6 +92,7 @@ enum UtilDebugMenu
 {
     DEBUG_UTIL_MENU_ITEM_FLY,
     DEBUG_UTIL_MENU_ITEM_WARP,
+    DEBUG_UTIL_MENU_ITEM_WARP_SHADOW_REALM,
     DEBUG_UTIL_MENU_ITEM_WEATHER,
     DEBUG_UTIL_MENU_ITEM_FONT_TEST,
     DEBUG_UTIL_MENU_ITEM_TIME_MENU,
@@ -394,6 +396,7 @@ static void DebugTask_HandleMenuInput_BerryFunctions(u8 taskId);
 
 static void DebugAction_Util_Fly(u8 taskId);
 static void DebugAction_Util_Warp_Warp(u8 taskId);
+static void DebugAction_Util_Warp_ShadowRealm(u8 taskId);
 static void DebugAction_Util_Warp_SelectMapGroup(u8 taskId);
 static void DebugAction_Util_Warp_SelectMap(u8 taskId);
 static void DebugAction_Util_Warp_SelectWarp(u8 taskId);
@@ -647,6 +650,7 @@ static const struct ListMenuItem sDebugMenu_Items_Utilities[] =
 {
     [DEBUG_UTIL_MENU_ITEM_FLY]             = {COMPOUND_STRING("Fly to map…{CLEAR_TO 110}{RIGHT_ARROW}"),       DEBUG_UTIL_MENU_ITEM_FLY},
     [DEBUG_UTIL_MENU_ITEM_WARP]            = {COMPOUND_STRING("Warp to map warp…{CLEAR_TO 110}{RIGHT_ARROW}"), DEBUG_UTIL_MENU_ITEM_WARP},
+    [DEBUG_UTIL_MENU_ITEM_WARP_SHADOW_REALM] = {COMPOUND_STRING("Warp: Shadow Realm"),                         DEBUG_UTIL_MENU_ITEM_WARP_SHADOW_REALM},
     [DEBUG_UTIL_MENU_ITEM_WEATHER]         = {COMPOUND_STRING("Set weather…{CLEAR_TO 110}{RIGHT_ARROW}"),      DEBUG_UTIL_MENU_ITEM_WEATHER},
     [DEBUG_UTIL_MENU_ITEM_FONT_TEST]       = {COMPOUND_STRING("Font Test…{CLEAR_TO 110}{RIGHT_ARROW}"),        DEBUG_UTIL_MENU_ITEM_FONT_TEST},
     [DEBUG_UTIL_MENU_ITEM_TIME_MENU]       = {COMPOUND_STRING("Time Functions…{CLEAR_TO 110}{RIGHT_ARROW}"),   DEBUG_UTIL_MENU_ITEM_TIME_MENU},
@@ -858,6 +862,7 @@ static void (*const sDebugMenu_Actions_Utilities[])(u8) =
 {
     [DEBUG_UTIL_MENU_ITEM_FLY]             = DebugAction_Util_Fly,
     [DEBUG_UTIL_MENU_ITEM_WARP]            = DebugAction_Util_Warp_Warp,
+    [DEBUG_UTIL_MENU_ITEM_WARP_SHADOW_REALM] = DebugAction_Util_Warp_ShadowRealm,
     [DEBUG_UTIL_MENU_ITEM_WEATHER]         = DebugAction_Util_Weather,
     [DEBUG_UTIL_MENU_ITEM_FONT_TEST]       = DebugAction_Util_FontTest,
     [DEBUG_UTIL_MENU_ITEM_TIME_MENU]       = DebugAction_Util_OpenTimeMenu,
@@ -2001,6 +2006,14 @@ static void DebugAction_Util_Warp_Warp(u8 taskId)
     gTasks[taskId].tMapGroup = 0;
     gTasks[taskId].tMapNum = 0;
     gTasks[taskId].tWarp = 0;
+}
+
+static void DebugAction_Util_Warp_ShadowRealm(u8 taskId)
+{
+    Debug_DestroyMenu_Full(taskId);
+    SetWarpDestination(MAP_GROUP(MAP_SHADOW_REALM), MAP_NUM(MAP_SHADOW_REALM), WARP_ID_NONE, 91, 64);
+    DoWarp();
+    ResetInitialPlayerAvatarState();
 }
 
 static void DebugAction_Util_Warp_SelectMapGroup(u8 taskId)

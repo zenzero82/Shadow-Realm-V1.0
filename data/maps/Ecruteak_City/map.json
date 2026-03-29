@@ -277,21 +277,14 @@
       "x": 19,
       "y": 40,
       "elevation": 0,
-      "dest_map": "MAP_ECRUTEAK_CITY",
+      "dest_map": "MAP_ECRUTEAK_CITY_HOUSE1",
       "dest_warp_id": "0"
     },
     {
       "x": 28,
       "y": 47,
       "elevation": 0,
-      "dest_map": "MAP_ECRUTEAK_CITY",
-      "dest_warp_id": "0"
-    },
-    {
-      "x": 47,
-      "y": 47,
-      "elevation": 0,
-      "dest_map": "MAP_ECRUTEAK_CITY",
+      "dest_map": "MAP_ECRUTEAK_CITY_HOUSE2",
       "dest_warp_id": "0"
     },
     {
@@ -319,8 +312,22 @@
       "x": 8,
       "y": 35,
       "elevation": 0,
-      "dest_map": "MAP_ECRUTEAK_CITY",
+      "dest_map": "MAP_GATE_ECRUTEAK_CITY_ROUTE38",
+      "dest_warp_id": "1"
+    },
+    {
+      "x": 33,
+      "y": 55,
+      "elevation": 0,
+      "dest_map": "MAP_ROUTE37",
       "dest_warp_id": "0"
+    },
+    {
+      "x": 34,
+      "y": 55,
+      "elevation": 0,
+      "dest_map": "MAP_ROUTE37",
+      "dest_warp_id": "1"
     }
   ],
   "coord_events": [],

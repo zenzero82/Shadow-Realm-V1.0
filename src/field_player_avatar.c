@@ -7,6 +7,7 @@
 #include "field_effect.h"
 #include "field_effect_helpers.h"
 #include "field_screen_effect.h"
+#include "field_move.h"
 #include "field_player_avatar.h"
 #include "fieldmap.h"
 #include "follower_npc.h"
@@ -20,6 +21,7 @@
 #include "script.h"
 #include "sound.h"
 #include "sprite.h"
+#include "surf_ow.h"
 #include "strings.h"
 #include "task.h"
 #include "tv.h"
@@ -1519,16 +1521,15 @@ u8 GetPlayerAvatarGenderByGraphicsId(u16 gfxId)
 
 bool8 PartyHasMonWithSurf(void)
 {
-    u8 i;
-
     if (!TestPlayerAvatarFlags(PLAYER_AVATAR_FLAG_SURFING))
     {
-        for (i = 0; i < PARTY_SIZE; i++)
+        u8 partyIndex;
+        bool8 fromBox;
+        u16 species;
+
+        if (FindFieldMoveMonForMove(MOVE_SURF, &partyIndex, &fromBox, &species))
         {
-            if (GetMonData(&gPlayerParty[i], MON_DATA_SPECIES) == SPECIES_NONE)
-                break;
-            if (MonKnowsMove(&gPlayerParty[i], MOVE_SURF))
-                return TRUE;
+            return TRUE;
         }
     }
     return FALSE;
@@ -1908,7 +1909,9 @@ static void Task_WaitStopSurfing(u8 taskId)
         ObjectEventSetHeldMovement(playerObjEvent, GetFaceDirectionMovementAction(playerObjEvent->facingDirection));
         gPlayerAvatar.preventStep = FALSE;
         UnlockPlayerFieldControls();
+        SurfOw_DestroySprites(playerObjEvent->fieldEffectSpriteId);
         DestroySprite(&gSprites[playerObjEvent->fieldEffectSpriteId]);
+        SurfOw_ClearCurrent();
 #ifdef BUGFIX
         // If this is not defined but the player steps into grass from surfing, they will appear over the grass instead of in the grass.
         playerObjEvent->triggerGroundEffectsOnMove = TRUE;

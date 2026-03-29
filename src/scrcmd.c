@@ -2134,8 +2134,23 @@ bool8 ScrCmd_bufferpartymonnick(struct ScriptContext *ctx)
 
     Script_RequestEffects(SCREFF_V1);
 
-    GetMonData(&gPlayerParty[partyIndex], MON_DATA_NICKNAME, sScriptStringVars[stringVarIndex]);
-    StringGet_Nickname(sScriptStringVars[stringVarIndex]);
+    if (partyIndex >= PARTY_SIZE)
+    {
+        if (gFieldMoveMonInfo.valid)
+        {
+            StringCopy(sScriptStringVars[stringVarIndex], gFieldMoveMonInfo.nickname);
+            StringGet_Nickname(sScriptStringVars[stringVarIndex]);
+        }
+        else
+        {
+            sScriptStringVars[stringVarIndex][0] = EOS;
+        }
+    }
+    else
+    {
+        GetMonData(&gPlayerParty[partyIndex], MON_DATA_NICKNAME, sScriptStringVars[stringVarIndex]);
+        StringGet_Nickname(sScriptStringVars[stringVarIndex]);
+    }
     return FALSE;
 }
 
@@ -2290,25 +2305,52 @@ bool8 ScrCmd_checkfieldmove(struct ScriptContext *ctx)
     enum FieldMove fieldMove = ScriptReadByte(ctx);
     bool32 doUnlockedCheck = ScriptReadByte(ctx);
     u16 move;
+    u8 partyIndex;
+    bool8 fromBox;
+    u16 species;
 
     Script_RequestEffects(SCREFF_V1);
 
+    if (doUnlockedCheck > 1)
+    {
+        ctx->scriptPtr--;
+        doUnlockedCheck = FALSE;
+    }
+
     gSpecialVar_Result = PARTY_SIZE;
+    gSpecialVar_0x8004 = SPECIES_NONE;
+    gSpecialVar_0x8005 = FALSE;
+    gSpecialVar_0x8006 = 0;
     if (doUnlockedCheck && !IsFieldMoveUnlocked(fieldMove))
+    {
+        ClearFieldMoveMonInfo();
         return FALSE;
+    }
 
     move = FieldMove_GetMoveId(fieldMove);
-    for (u32 i = 0; i < PARTY_SIZE; i++)
+    if (gFieldMoveMonInfo.valid && gFieldMoveMonInfo.move == move)
     {
-        u16 species = GetMonData(&gPlayerParty[i], MON_DATA_SPECIES, NULL);
-        if (!species)
-            break;
-        if (!GetMonData(&gPlayerParty[i], MON_DATA_IS_EGG) && MonKnowsMove(&gPlayerParty[i], move) == TRUE)
+        gSpecialVar_0x8004 = gFieldMoveMonInfo.species;
+        gSpecialVar_0x8005 = gFieldMoveMonInfo.fromBox;
+        if (gFieldMoveMonInfo.fromBox)
         {
-            gSpecialVar_Result = i;
-            gSpecialVar_0x8004 = species;
-            break;
+            gSpecialVar_0x8006 = FIELD_MOVE_MON_FROM_BOX;
         }
+        else
+        {
+            gSpecialVar_Result = gSpecialVar_0x8006 = gFieldMoveMonInfo.partyIndex;
+        }
+        return FALSE;
+    }
+
+    if (FindFieldMoveMonForMove(move, &partyIndex, &fromBox, &species))
+    {
+        gSpecialVar_0x8004 = species;
+        gSpecialVar_0x8005 = fromBox;
+        if (fromBox)
+            gSpecialVar_0x8006 = FIELD_MOVE_MON_FROM_BOX;
+        else
+            gSpecialVar_Result = gSpecialVar_0x8006 = partyIndex;
     }
 
     return FALSE;

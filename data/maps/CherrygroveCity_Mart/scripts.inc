@@ -36,12 +36,18 @@ CherrygroveCity_Mart_EventScript_Youngster::
 	faceplayer
 	setspeaker CherrygroveCity_Mart_Speaker_Youngster
 	msgbox CherrygroveCity_Mart_Text_Youngster, MSGBOX_NPC
+	closemessage
+	setflag FLAG_QUEST_CHERRYGROVE_NPC_MART_YOUNGSTER
+	call QuestJournal_EventScript_CheckCherrygroveNPCs
 	end
 
 CherrygroveCity_Mart_EventScript_BugCatcher::
 	faceplayer
 	setspeaker CherrygroveCity_Mart_Speaker_BugCatcher
 	msgbox CherrygroveCity_Mart_Text_BugCatcher, MSGBOX_NPC
+	closemessage
+	setflag FLAG_QUEST_CHERRYGROVE_NPC_MART_BUG_CATCHER
+	call QuestJournal_EventScript_CheckCherrygroveNPCs
 	end
 
 CherrygroveCity_Mart_Text_Youngster:

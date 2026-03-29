@@ -473,10 +473,12 @@
 #define OBJ_EVENT_GFX_COURTNEY         456
 #define OBJ_EVENT_GFX_TABITHA          457
 #define OBJ_EVENT_GFX_HOOPA_RING_TIME_AMULET 458
+#define OBJ_EVENT_GFX_SADA_GEN9              459
+#define OBJ_EVENT_GFX_TURO_GEN9              460
 // NOTE: The maximum amount of object events has been expanded from 255 to 65535.
 // Since dynamic graphics ids still require at least 16 free values, the actual limit
 // is 65519, but even considering follower Pokémon, this should be more than enough :)
-#define NUM_OBJ_EVENT_GFX                                               459
+#define NUM_OBJ_EVENT_GFX                                               461
 
 
 // These are dynamic object gfx ids.
@@ -622,6 +624,7 @@
 #define OBJ_EVENT_PAL_TAG_RS_MAY                  0x1123
 #define OBJ_EVENT_PAL_TAG_DYNAMIC                 0x1124
 //misc (NEW)
+#define OBJ_EVENT_PAL_TAG_SURF_OW                 0x11F0
 #define OBJ_EVENT_PAL_TAG_HOOPA_RING              0x1125
 #define OBJ_EVENT_PAL_TAG_HOOPA_RING_TIME_AMULET  0x117F
 //Kanto
@@ -820,6 +823,8 @@
 #define OBJ_EVENT_PAL_TAG_ARVEN_GEN9               0x1927
 #define OBJ_EVENT_PAL_TAG_PENNY_GEN9               0x1928
 #define OBJ_EVENT_PAL_TAG_GEETA_GEN9               0x1929
+#define OBJ_EVENT_PAL_TAG_SADA_GEN9                0x193A
+#define OBJ_EVENT_PAL_TAG_TURO_GEN9                0x193B
 //XD(Orre)
 #define OBJ_EVENT_PAL_TAG_WES                     0x1A00
 #define OBJ_EVENT_PAL_TAG_CIPHER_PEON_M           0x1A01
@@ -847,6 +852,13 @@
 #define OBJ_EVENT_PAL_TAG_PURPSIX                 0x1A17
 #define OBJ_EVENT_PAL_TAG_BROWSIX                 0x1A18
 #define OBJ_EVENT_PAL_TAG_YELLOSIX                0x1A19
+#define OBJ_EVENT_PAL_TAG_ARCHIE                  0x1A1A
+#define OBJ_EVENT_PAL_TAG_SHELLY                  0x1A1B
+#define OBJ_EVENT_PAL_TAG_MAGMA_MEMBER_M          0x1A1C
+#define OBJ_EVENT_PAL_TAG_MAGMA_MEMBER_F          0x1A1D
+#define OBJ_EVENT_PAL_TAG_MAXIE                   0x1A1E
+#define OBJ_EVENT_PAL_TAG_COURTNEY                0x1A1F
+#define OBJ_EVENT_PAL_TAG_TABITHA                 0x1A20
 
 #if OW_FOLLOWERS_POKEBALLS
 // Vanilla

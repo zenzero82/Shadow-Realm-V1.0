@@ -29,7 +29,22 @@
       "flag": "FLAG_ROAMING_HUNTER_NPC_HIDE"
     }
   ],
-  "warp_events": [],
+  "warp_events": [
+    {
+      "x": 6,
+      "y": 38,
+      "elevation": 0,
+      "dest_map": "MAP_DARK_CAVE_SOUTH_SIDE",
+      "dest_warp_id": "3"
+    },
+    {
+      "x": 45,
+      "y": 9,
+      "elevation": 0,
+      "dest_map": "MAP_ROUTE45",
+      "dest_warp_id": "0"
+    }
+  ],
   "coord_events": [],
   "bg_events": []
 }

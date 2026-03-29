@@ -75,7 +75,7 @@
       "trainer_type": "TRAINER_TYPE_NONE",
       "trainer_sight_or_berry_tree_id": "0",
       "script": "EventScript_CutTree",
-      "flag": "0"
+      "flag": "FLAG_HIDE_ROUTE32_CUTTREE_1"
     },
     {
       "graphics_id": "OBJ_EVENT_GFX_YOUNGSTER2_GEN2",
@@ -231,7 +231,7 @@
       "trainer_type": "TRAINER_TYPE_NONE",
       "trainer_sight_or_berry_tree_id": "0",
       "script": "EventScript_CutTree",
-      "flag": "0"
+      "flag": "FLAG_HIDE_ROUTE32_CUTTREE_2"
     },
     {
       "graphics_id": "OBJ_EVENT_GFX_BIRD_KEEPER_M_GEN2",

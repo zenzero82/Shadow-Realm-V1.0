@@ -390,7 +390,7 @@ static const struct SpriteFrameImage sPicTable_KyogreShadow[] = {
 };
 
 static const struct SpriteFrameImage sPicTable_KyuremShadow[] = {
-    overworld_ascending_frames(gObjectEventPic_KyuremShadow, 4, 4),
+    overworld_ascending_frames(gObjectEventPic_KyuremShadow, 8, 8),
 };
 
 static const struct SpriteFrameImage sPicTable_LandorusShadow[] = {
@@ -398,11 +398,11 @@ static const struct SpriteFrameImage sPicTable_LandorusShadow[] = {
 };
 
 static const struct SpriteFrameImage sPicTable_LatiasShadow[] = {
-    overworld_ascending_frames(gObjectEventPic_LatiasShadow, 8, 8),
+    overworld_ascending_frames(gObjectEventPic_LatiasShadow, 4, 4),
 };
 
 static const struct SpriteFrameImage sPicTable_LatiosShadow[] = {
-    overworld_ascending_frames(gObjectEventPic_LatiosShadow, 8, 8),
+    overworld_ascending_frames(gObjectEventPic_LatiosShadow, 4, 4),
 };
 
 static const struct SpriteFrameImage sPicTable_LucarioShadow[] = {
@@ -451,6 +451,10 @@ static const struct SpriteFrameImage sPicTable_MeloettaShadow[] = {
 
 static const struct SpriteFrameImage sPicTable_MespritShadow[] = {
     overworld_ascending_frames(gObjectEventPic_MespritShadow, 4, 4),
+};
+
+static const struct SpriteFrameImage sPicTable_MeowthShadow[] = {
+    overworld_ascending_frames(gObjectEventPic_MeowthShadow, 4, 4),
 };
 
 static const struct SpriteFrameImage sPicTable_MeowscaradaShadow[] = {
@@ -674,7 +678,7 @@ static const struct SpriteFrameImage sPicTable_TerrakionShadow[] = {
 };
 
 static const struct SpriteFrameImage sPicTable_ThundurusShadow[] = {
-    overworld_ascending_frames(gObjectEventPic_ThundurusShadow, 8, 8),
+    overworld_ascending_frames(gObjectEventPic_ThundurusShadow, 4, 4),
 };
 
 static const struct SpriteFrameImage sPicTable_TingLuShadow[] = {
@@ -682,7 +686,7 @@ static const struct SpriteFrameImage sPicTable_TingLuShadow[] = {
 };
 
 static const struct SpriteFrameImage sPicTable_TornadusShadow[] = {
-    overworld_ascending_frames(gObjectEventPic_TornadusShadow, 8, 8),
+    overworld_ascending_frames(gObjectEventPic_TornadusShadow, 4, 4),
 };
 
 static const struct SpriteFrameImage sPicTable_TorterraShadow[] = {
@@ -782,7 +786,7 @@ static const struct SpriteFrameImage sPicTable_ZeraoraShadow[] = {
 };
 
 static const struct SpriteFrameImage sPicTable_ZygardeShadow[] = {
-    overworld_ascending_frames(gObjectEventPic_ZygardeShadow, 4, 4),
+    overworld_ascending_frames(gObjectEventPic_ZygardeShadow, 8, 8),
 };
 
 static const struct SpriteFrameImage *const sShadowOverworldPicTables[NUM_SPECIES] = {
@@ -898,6 +902,7 @@ static const struct SpriteFrameImage *const sShadowOverworldPicTables[NUM_SPECIE
     [SPECIES_MELMETAL] = sPicTable_MelmetalShadow,
     [SPECIES_MELOETTA] = sPicTable_MeloettaShadow,
     [SPECIES_MESPRIT] = sPicTable_MespritShadow,
+    [SPECIES_MEOWTH] = sPicTable_MeowthShadow,
     [SPECIES_MEOWSCARADA] = sPicTable_MeowscaradaShadow,
     [SPECIES_MEW] = sPicTable_MewShadow,
     [SPECIES_MEWTWO] = sPicTable_MewtwoShadow,
@@ -1012,7 +1017,7 @@ static const u16 *const sShadowOverworldPalettes[NUM_SPECIES] = {
     [SPECIES_BLISSEY] = gMonPalette_BlisseyShadow,
     [SPECIES_BISHARP] = gMonPalette_BisharpShadow,
     [SPECIES_BUZZWOLE] = gMonPalette_BuzzwoleShadow,
-    [SPECIES_CALYREX] = gMonPalette_CalyrexShadow,
+    [SPECIES_CALYREX] = gOverworldPalette_CalyrexShadow,
     [SPECIES_CAMERUPT] = gMonPalette_CameruptShadow,
     [SPECIES_CELESTEELA] = gMonPalette_CelesteelaShadow,
     [SPECIES_CENTISKORCH] = gMonPalette_CentiskorchShadow,
@@ -1102,12 +1107,13 @@ static const u16 *const sShadowOverworldPalettes[NUM_SPECIES] = {
     [SPECIES_MELMETAL] = gMonPalette_MelmetalShadow,
     [SPECIES_MELOETTA] = gMonPalette_MeloettaShadow,
     [SPECIES_MESPRIT] = gMonPalette_MespritShadow,
+    [SPECIES_MEOWTH] = gMonPalette_MeowthShadow,
     [SPECIES_MEOWSCARADA] = gMonPalette_MeowscaradaShadow,
     [SPECIES_MEW] = gMonPalette_MewShadow,
     [SPECIES_MEWTWO] = gMonPalette_MewtwoShadow,
     [SPECIES_MILOTIC] = gMonPalette_MiloticShadow,
     [SPECIES_MIMIKYU] = gMonPalette_MimikyuShadow,
-    [SPECIES_MIRAIDON] = gMonPalette_MiraidonShadow,
+    [SPECIES_MIRAIDON] = gOverworldPalette_MiraidonShadow,
     [SPECIES_MOLTRES] = gMonPalette_MoltresShadow,
     [SPECIES_NAGANADEL] = gMonPalette_NaganadelShadow,
     [SPECIES_NECROZMA] = gMonPalette_NecrozmaShadow,
@@ -1115,14 +1121,14 @@ static const u16 *const sShadowOverworldPalettes[NUM_SPECIES] = {
     [SPECIES_NIHILEGO] = gMonPalette_NihilegoShadow,
     [SPECIES_OBSTAGOON] = gMonPalette_ObstagoonShadow,
     [SPECIES_PALOSSAND] = gMonPalette_PalossandShadow,
-    [SPECIES_PALKIA] = gMonPalette_PalkiaShadow,
+    [SPECIES_PALKIA] = gOverworldPalette_PalkiaShadow,
     [SPECIES_PANGORO] = gMonPalette_PangoroShadow,
     [SPECIES_PECHARUNT] = gMonPalette_PecharuntShadow,
     [SPECIES_PHEROMOSA] = gMonPalette_PheromosaShadow,
     [SPECIES_PRIMARINA] = gMonPalette_PrimarinaShadow,
     [SPECIES_QUAQUAVAL] = gMonPalette_QuaquavalShadow,
     [SPECIES_RAIKOU] = gMonPalette_RaikouShadow,
-    [SPECIES_RAYQUAZA] = gMonPalette_RayquazaShadow,
+    [SPECIES_RAYQUAZA] = gOverworldPalette_RayquazaShadow,
     [SPECIES_REGICE] = gMonPalette_RegiceShadow,
     [SPECIES_REGIDRAGO] = gMonPalette_RegidragoShadow,
     [SPECIES_REGIELEKI] = gMonPalette_RegielekiShadow,
@@ -1182,7 +1188,7 @@ static const u16 *const sShadowOverworldPalettes[NUM_SPECIES] = {
     [SPECIES_ZAMAZENTA] = gMonPalette_ZamazentaShadow,
     [SPECIES_ZAPDOS] = gMonPalette_ZapdosShadow,
     [SPECIES_ZARUDE] = gMonPalette_ZarudeShadow,
-    [SPECIES_ZEKROM] = gMonPalette_ZekromShadow,
+    [SPECIES_ZEKROM] = gOverworldPalette_ZekromShadow,
     [SPECIES_ZERAORA] = gMonPalette_ZeraoraShadow,
     [SPECIES_ZYGARDE] = gMonPalette_ZygardeShadow,
 };

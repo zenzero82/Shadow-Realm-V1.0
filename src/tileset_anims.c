@@ -1006,8 +1006,8 @@ static void TilesetAnim_AzaleaTown_Gym_29(u16 timer)
 static void QueueAnimTiles_AzaleaTown_Gym_Flower(u16 timer)
 {
     AppendTilesetAnimToBuffer(gTilesetAnims_AzaleaTown_Gym_Flower[timer % ARRAY_COUNT(gTilesetAnims_AzaleaTown_Gym_Flower)],
-        (u16 *)(BG_VRAM + TILE_OFFSET_4BPP(NUM_TILES_IN_PRIMARY + 99)),
-        0x80);
+        (u16 *)(BG_VRAM + TILE_OFFSET_4BPP(NUM_TILES_IN_PRIMARY + 227)),
+        4 * TILE_SIZE_4BPP);
 }
 
 

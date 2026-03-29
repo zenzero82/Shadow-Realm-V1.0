@@ -82,6 +82,10 @@ def scan_shadow_species():
             "tile_w": max(1, width // 8),
             "tile_h": max(1, height // 8),
         }
+        palette_candidates = ["overworld_normal.gbapal", "overworld.gbapal"]
+        data["has_overworld_palette"] = any(
+            (png.parent / candidate).exists() for candidate in palette_candidates
+        )
         female_png = png.parent / "overworldf.png"
         if female_png.exists():
             fw, fh = read_png_dimensions(female_png)
@@ -166,8 +170,11 @@ def main():
     lines.append("")
     lines.append("#if OW_POKEMON_OBJECT_EVENTS && OW_PKMN_OBJECTS_SHARE_PALETTES == FALSE")
     lines.append("static const u16 *const sShadowOverworldPalettes[NUM_SPECIES] = {")
-    for _, const_name, camel, _ in table:
-        lines.append(f"    [{const_name}] = gMonPalette_{camel}Shadow,")
+    for _, const_name, camel, data in table:
+        if data.get("has_overworld_palette"):
+            lines.append(f"    [{const_name}] = gOverworldPalette_{camel}Shadow,")
+        else:
+            lines.append(f"    [{const_name}] = gMonPalette_{camel}Shadow,")
     lines.append("};")
     lines.append("#endif")
     lines.append("#endif")

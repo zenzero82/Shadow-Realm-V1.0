@@ -21,6 +21,27 @@
       "elevation": 0,
       "dest_map": "MAP_CELADON_CITY",
       "dest_warp_id": "3"
+    },
+    {
+      "x": 12,
+      "y": 2,
+      "elevation": 0,
+      "dest_map": "MAP_CELADON_APARTMENT2F",
+      "dest_warp_id": "0"
+    },
+    {
+      "x": 4,
+      "y": 2,
+      "elevation": 0,
+      "dest_map": "MAP_CELADON_APARTMENT2F",
+      "dest_warp_id": "0"
+    },
+    {
+      "x": 2,
+      "y": 1,
+      "elevation": 0,
+      "dest_map": "MAP_CELADON_CITY",
+      "dest_warp_id": "7"
     }
   ],
   "coord_events": [],

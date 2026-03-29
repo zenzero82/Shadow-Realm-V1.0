@@ -582,10 +582,9 @@ AzaleaTown_Gym_EventScript_Bugsy::
 	msgbox AzaleaTown_Gym_Text_FuryCutterSpeech, MSGBOX_DEFAULT
 	setvar VAR_AZALEA_TOWN_STATE, 5
 	closemessage
-	checkflag FLAG_QUEST_DEFEAT_BUGSY_STARTED
-	goto_if_eq AzaleaTown_Gym_EventScript_Bugsy_QuestDone
 	checkflag FLAG_QUEST_DEFEAT_BUGSY_COMPLETED
 	goto_if_eq AzaleaTown_Gym_EventScript_Bugsy_QuestDone
+	setflag FLAG_QUEST_DEFEAT_BUGSY_STARTED
 	setflag FLAG_QUEST_DEFEAT_BUGSY_COMPLETED
 	call QuestJournal_EventScript_QuestCompleteAlert
 AzaleaTown_Gym_EventScript_Bugsy_QuestDone:

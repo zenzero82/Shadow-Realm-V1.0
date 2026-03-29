@@ -6204,6 +6204,7 @@ u16 GetBattleBGM(void)
         case TRAINER_CLASS_TEAM_PLASMA:
             return MUS_BATTLE_TEAM_PLASMA;
         case TRAINER_CLASS_TEAM_FLARE:
+        case TRAINER_CLASS_TEAM_FLARE_ADMIN:
             return MUS_BATTLE_TEAM_FLARE;
         case TRAINER_CLASS_TEAM_SKULL:
             return MUS_BATTLE_TEAM_SKULL;

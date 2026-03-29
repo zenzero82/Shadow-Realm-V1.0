@@ -2,9 +2,10 @@
 EventScript_CutTree::
 	lockall
 	checkfieldmove FIELD_MOVE_CUT, TRUE
-	goto_if_eq VAR_RESULT, PARTY_SIZE, EventScript_CheckTreeCantCut
-	setfieldeffectargument 0, VAR_RESULT
-	bufferpartymonnick STR_VAR_1, VAR_RESULT
+	goto_if_eq VAR_RESULT, PARTY_SIZE, EventScript_CutTree_CheckBox
+EventScript_CutTree_AfterCheck:
+	setfieldeffectargument 0, VAR_0x8006
+	call EventScript_BufferFieldMoveUserName
 	buffermovename STR_VAR_2, MOVE_CUT
 	msgbox Text_WantToCut, MSGBOX_YESNO
 	goto_if_eq VAR_RESULT, NO, EventScript_CancelCut
@@ -28,6 +29,14 @@ EventScript_CutTreeDown:: @ fallthrough
 EventScript_UseCut::
 	lockall
 	goto EventScript_CutTreeCommon
+
+EventScript_CutTree_CheckBox:
+	goto_if_eq VAR_0x8005, TRUE, EventScript_CutTree_AfterCheck
+	goto EventScript_CheckTreeCantCut
+
+EventScript_BufferFieldMoveUserName::
+	bufferpartymonnick STR_VAR_1, VAR_RESULT
+	return
 
 Movement_CutTreeDown:
 	cut_tree
@@ -64,9 +73,10 @@ EventScript_UseRockSmash::
 EventScript_RockSmash::
 	lockall
 	checkfieldmove FIELD_MOVE_ROCK_SMASH, TRUE
-	goto_if_eq VAR_RESULT, PARTY_SIZE, EventScript_CantSmashRock
-	setfieldeffectargument 0, VAR_RESULT
-	bufferpartymonnick STR_VAR_1, VAR_RESULT
+	goto_if_eq VAR_RESULT, PARTY_SIZE, EventScript_RockSmash_CheckBox
+EventScript_RockSmash_AfterCheck:
+	setfieldeffectargument 0, VAR_0x8006
+	call EventScript_BufferFieldMoveUserName
 	buffermovename STR_VAR_2, MOVE_ROCK_SMASH
 	msgbox Text_WantToSmash, MSGBOX_YESNO
 	goto_if_eq VAR_RESULT, NO, EventScript_CancelSmash
@@ -91,6 +101,10 @@ EventScript_SmashRock:: @ fallthrough
 	waitstate
 	releaseall
 	end
+
+EventScript_RockSmash_CheckBox:
+	goto_if_eq VAR_0x8005, TRUE, EventScript_RockSmash_AfterCheck
+	goto EventScript_CantSmashRock
 
 EventScript_FollowerFieldMove:
 	getdirectiontoface VAR_0x8005, OBJ_EVENT_ID_FOLLOWER, OBJ_EVENT_ID_PLAYER
@@ -221,12 +235,113 @@ Text_CantSmash:
 	.string "It's a rugged rock, but a POKéMON\n"
 	.string "may be able to smash it.$"
 
+@ Interact with headbutt tree
+EventScript_HeadbuttTree::
+	lockall
+	specialvar VAR_RESULT, Special_HeadbuttTree
+	goto_if_eq VAR_RESULT, HEADBUTT_RESULT_NO_MON, EventScript_Headbutt_NoMon
+	goto_if_eq VAR_RESULT, HEADBUTT_RESULT_TOO_SOON, EventScript_Headbutt_TooSoon
+	goto_if_eq VAR_RESULT, HEADBUTT_RESULT_NO_TREE, EventScript_Headbutt_NoTree
+	playse SE_M_HEADBUTT
+	waitse
+	bufferpartymonnick STR_VAR_1, VAR_0x8004
+	buffermovename STR_VAR_2, MOVE_HEADBUTT
+	msgbox Text_MonUsedFieldMove, MSGBOX_DEFAULT
+	closemessage
+	goto_if_eq VAR_RESULT, HEADBUTT_RESULT_NOTHING, EventScript_Headbutt_Nothing
+	goto_if_eq VAR_RESULT, HEADBUTT_RESULT_APRICORN_1, EventScript_Headbutt_Apricorn1
+	goto_if_eq VAR_RESULT, HEADBUTT_RESULT_APRICORN_2, EventScript_Headbutt_Apricorn2
+	goto_if_eq VAR_RESULT, HEADBUTT_RESULT_APRICORN_10, EventScript_Headbutt_Apricorn10
+	goto_if_eq VAR_RESULT, HEADBUTT_RESULT_BATTLE, EventScript_Headbutt_Battle
+	releaseall
+	end
+
+EventScript_Headbutt_NoMon::
+	msgbox Text_Headbutt_NoMon, MSGBOX_DEFAULT
+	releaseall
+	end
+
+EventScript_Headbutt_TooSoon::
+	msgbox Text_Headbutt_TooSoon, MSGBOX_DEFAULT
+	releaseall
+	end
+
+EventScript_Headbutt_NoTree::
+	msgbox Text_Headbutt_NoTree, MSGBOX_DEFAULT
+	releaseall
+	end
+
+EventScript_Headbutt_Nothing::
+	msgbox Text_Headbutt_Nothing, MSGBOX_DEFAULT
+	releaseall
+	end
+
+EventScript_Headbutt_Apricorn1::
+	playfanfare MUS_OBTAIN_ITEM
+	msgbox Text_Headbutt_Apricorn1, MSGBOX_DEFAULT
+	waitfanfare
+	releaseall
+	end
+
+EventScript_Headbutt_Apricorn2::
+	playfanfare MUS_OBTAIN_ITEM
+	msgbox Text_Headbutt_Apricorn2, MSGBOX_DEFAULT
+	waitfanfare
+	releaseall
+	end
+
+EventScript_Headbutt_Apricorn10::
+	playfanfare MUS_OBTAIN_ITEM
+	msgbox Text_Headbutt_Apricorn10, MSGBOX_DEFAULT
+	waitfanfare
+	releaseall
+	end
+
+EventScript_Headbutt_Battle::
+	msgbox Text_Headbutt_WildMon, MSGBOX_DEFAULT
+	closemessage
+	special Special_HeadbuttTree_StartBattle
+	waitstate
+	releaseall
+	end
+
+Text_Headbutt_NoMon:
+	.string "None of your POKéMON can use\n"
+	.string "HEADBUTT.$"
+
+Text_Headbutt_TooSoon:
+	.string "It looks like nothing else will\n"
+	.string "fall from this tree today.$"
+
+Text_Headbutt_NoTree:
+	.string "There is nothing to headbutt\n"
+	.string "here.$"
+
+Text_Headbutt_Nothing:
+	.string "Nothing happened.$"
+
+Text_Headbutt_Apricorn1:
+	.string "An APRICORN fell from the tree!$"
+
+Text_Headbutt_Apricorn2:
+	.string "Several APRICORNS fell from the\n"
+	.string "tree!$"
+
+Text_Headbutt_Apricorn10:
+	.string "A bunch of APRICORNS fell from\n"
+	.string "the tree!$"
+
+Text_Headbutt_WildMon:
+	.string "A wild POKéMON dropped from the\n"
+	.string "tree!$"
+
 EventScript_StrengthBoulder::
 	lockall
 	goto_if_set FLAG_SYS_USE_STRENGTH, EventScript_CheckActivatedBoulder
 	checkfieldmove FIELD_MOVE_STRENGTH, TRUE
-	goto_if_eq VAR_RESULT, PARTY_SIZE, EventScript_CantStrength
-	setfieldeffectargument 0, VAR_RESULT
+	goto_if_eq VAR_RESULT, PARTY_SIZE, EventScript_Strength_CheckBox
+EventScript_Strength_AfterCheck:
+	setfieldeffectargument 0, VAR_0x8006
 	msgbox Text_WantToStrength, MSGBOX_YESNO
 	goto_if_eq VAR_RESULT, NO, EventScript_CancelStrength
 	closemessage
@@ -263,6 +378,10 @@ EventScript_CancelStrength::
 	releaseall
 	end
 
+EventScript_Strength_CheckBox:
+	goto_if_eq VAR_0x8005, TRUE, EventScript_Strength_AfterCheck
+	goto EventScript_CantStrength
+
 Text_WantToStrength:
 	.string "It's a big boulder, but a POKéMON\n"
 	.string "may be able to push it aside.\p"
@@ -284,9 +403,10 @@ Text_StrengthActivated:
 EventScript_UseWaterfall::
 	lockall
 	checkfieldmove FIELD_MOVE_WATERFALL
-	goto_if_eq VAR_RESULT, PARTY_SIZE, EventScript_CantWaterfall
-	bufferpartymonnick STR_VAR_1, VAR_RESULT
-	setfieldeffectargument 0, VAR_RESULT
+	goto_if_eq VAR_RESULT, PARTY_SIZE, EventScript_Waterfall_CheckBox
+EventScript_Waterfall_AfterCheck:
+	call EventScript_BufferFieldMoveUserName
+	setfieldeffectargument 0, VAR_0x8006
 	msgbox Text_WantToWaterfall, MSGBOX_YESNO
 	goto_if_eq VAR_RESULT, NO, EventScript_EndWaterfall
 	msgbox Text_MonUsedWaterfall, MSGBOX_DEFAULT
@@ -294,6 +414,10 @@ EventScript_UseWaterfall::
 	dofieldeffect FLDEFF_USE_WATERFALL
 	callnative FollowerNPC_WarpSetEnd
 	goto EventScript_EndWaterfall
+
+EventScript_Waterfall_CheckBox:
+	goto_if_eq VAR_0x8005, TRUE, EventScript_Waterfall_AfterCheck
+	goto EventScript_CantWaterfall
 
 EventScript_CannotUseWaterfall::
 	lockall
@@ -319,20 +443,24 @@ Text_MonUsedWaterfall:
 EventScript_UseDive::
 	lockall
 	checkfieldmove FIELD_MOVE_DIVE
-	goto_if_eq VAR_RESULT, PARTY_SIZE, EventScript_CantDive
-	copyvar 0x8004 VAR_RESULT
-	bufferpartymonnick STR_VAR_1, VAR_RESULT
-	setfieldeffectargument 0, VAR_RESULT
+	goto_if_eq VAR_RESULT, PARTY_SIZE, EventScript_Dive_CheckBox
+EventScript_Dive_AfterCheck:
+	call EventScript_BufferFieldMoveUserName
+	setfieldeffectargument 0, VAR_0x8006
 	setfieldeffectargument 1, 1
 	msgbox Text_WantToDive, MSGBOX_YESNO
 	goto_if_eq VAR_RESULT, NO, EventScript_EndDive
 	msgbox Text_MonUsedDive, MSGBOX_DEFAULT
 	hidefollowernpc
-	setfieldeffectargument 0, VAR_0x8004
+	setfieldeffectargument 0, VAR_0x8006
 	setfieldeffectargument 1, 1
 	dofieldeffect FLDEFF_USE_DIVE
 	goto EventScript_EndDive
 	end
+
+EventScript_Dive_CheckBox:
+	goto_if_eq VAR_0x8005, TRUE, EventScript_Dive_AfterCheck
+	goto EventScript_CantDive
 
 EventScript_CantDive::
 	msgbox Text_CantDive, MSGBOX_DEFAULT
@@ -346,9 +474,10 @@ EventScript_EndDive::
 EventScript_UseDiveUnderwater::
 	lockall
 	checkfieldmove FIELD_MOVE_DIVE
-	goto_if_eq VAR_RESULT, PARTY_SIZE, EventScript_CantSurface
-	bufferpartymonnick STR_VAR_1, VAR_RESULT
-	setfieldeffectargument 0, VAR_RESULT
+	goto_if_eq VAR_RESULT, PARTY_SIZE, EventScript_DiveUnderwater_CheckBox
+EventScript_DiveUnderwater_AfterCheck:
+	call EventScript_BufferFieldMoveUserName
+	setfieldeffectargument 0, VAR_0x8006
 	setfieldeffectargument 1, 1
 	msgbox Text_WantToSurface, MSGBOX_YESNO
 	goto_if_eq VAR_RESULT, NO, EventScript_NoSurface
@@ -357,6 +486,10 @@ EventScript_UseDiveUnderwater::
 	dofieldeffect FLDEFF_USE_DIVE
 	goto EventScript_EndSurface
 	end
+
+EventScript_DiveUnderwater_CheckBox:
+	goto_if_eq VAR_0x8005, TRUE, EventScript_DiveUnderwater_AfterCheck
+	goto EventScript_CantSurface
 
 EventScript_CantSurface::
 	lockall

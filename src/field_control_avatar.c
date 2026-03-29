@@ -7,6 +7,7 @@
 #include "dexnav.h"
 #include "faraway_island.h"
 #include "event_data.h"
+#include "event_object_lock.h"
 #include "event_object_movement.h"
 #include "event_scripts.h"
 #include "fieldmap.h"
@@ -23,15 +24,19 @@
 #include "item_menu.h"
 #include "link.h"
 #include "match_call.h"
+#include "menu.h"
 #include "metatile_behavior.h"
+#include "new_game.h"
 #include "overworld.h"
 #include "pokemon.h"
 #include "safari_zone.h"
 #include "script.h"
 #include "secret_base.h"
+#include "save.h"
 #include "sound.h"
 #include "start_menu.h"
 #include "option_menu.h"
+#include "strings.h"
 #include "trainer_see.h"
 #include "trainer_hill.h"
 #include "overworld.h"
@@ -51,8 +56,12 @@
 
 static EWRAM_DATA u8 sWildEncounterImmunitySteps = 0;
 static EWRAM_DATA u16 sPrevMetatileBehavior = 0;
+static EWRAM_DATA bool8 sAutoSavePending = FALSE;
+static EWRAM_DATA bool8 sAutoSavePromptActive = FALSE;
 
 COMMON_DATA u8 gSelectedObjectEvent = 0;
+
+#define AUTOSAVE_STEP_INTERVAL 500
 
 static void GetPlayerPosition(struct MapPosition *);
 static void GetInFrontOfPlayerPosition(struct MapPosition *);
@@ -63,6 +72,12 @@ static const u8 *GetInteractedObjectEventScript(struct MapPosition *, u8, u8);
 static const u8 *GetInteractedBackgroundEventScript(struct MapPosition *, u8, u8);
 static const u8 *GetInteractedMetatileScript(struct MapPosition *, u8, u8);
 static const u8 *GetInteractedWaterScript(struct MapPosition *, u8, u8);
+static void Task_AutoSavePromptShowYesNo(u8 taskId);
+static void Task_AutoSavePromptHandleInput(u8 taskId);
+static void StartAutoSaveOverwritePrompt(void);
+static void FinishAutoSavePrompt(u8 taskId);
+static bool8 ShouldPromptAutoSaveOverwrite(void);
+static bool8 CanStartAutoSavePrompt(void);
 
 static const u8 *GetKantoBookshelfScript(u16 mapSecId)
 {
@@ -124,6 +139,7 @@ static void UpdateFollowerStepCounter(void);
 static bool8 UpdatePoisonStepCounter(void);
 #endif // OW_POISON_DAMAGE
 static bool32 TrySetUpWalkIntoSignpostScript(struct MapPosition * position, u32 metatileBehavior, u32 playerDirection);
+static void TryAutoSaveOnStep(void);
 static void SetMsgSignPostAndVarFacing(u32 playerDirection);
 static void SetUpWalkIntoSignScript(const u8 *script, u32 playerDirection);
 static u32 GetFacingSignpostType(u16 metatileBehvaior, u32 direction);
@@ -175,6 +191,14 @@ void FieldGetPlayerInput(struct FieldInput *input, u16 newKeys, u16 heldKeys)
             input->input_field_1_4 = TRUE;
             input->pressedStartButton = FALSE;
             input->pressedSelectButton = FALSE;
+        }
+
+        if ((heldKeys & (L_BUTTON | R_BUTTON | SELECT_BUTTON)) == (L_BUTTON | R_BUTTON | SELECT_BUTTON)
+         && (newKeys & (L_BUTTON | R_BUTTON | SELECT_BUTTON)))
+        {
+            input->input_field_1_3 = TRUE;
+            input->pressedSelectButton = FALSE;
+            input->pressedRButton = FALSE;
         }
 
         if (heldKeys & (DPAD_UP | DPAD_DOWN | DPAD_LEFT | DPAD_RIGHT))
@@ -240,6 +264,7 @@ int ProcessPlayerFieldInput(struct FieldInput *input)
         Shadow_HandleStepHeartDecay();
         if (TryStartStepBasedScript(&position, metatileBehavior, playerDirection) == TRUE)
             return TRUE;
+        TryAutoSaveOnStep();
     }
 
     if ((input->checkStandardWildEncounter) && ((input->dpadDirection == 0) || input->dpadDirection == playerDirection))
@@ -277,6 +302,16 @@ int ProcessPlayerFieldInput(struct FieldInput *input)
     if (input->pressedAButton && TrySetupDiveDownScript() == TRUE)
         return TRUE;
     if (input->input_field_1_4)
+    {
+        PlaySE(SE_WIN_OPEN);
+        PlayRainStoppingSoundEffect();
+        CleanupOverworldWindowsAndTilemaps();
+        OptionMenu_SetNewGameSetup(TRUE);
+        gMain.savedCallback = CB2_ReturnToField;
+        SetMainCallback2(CB2_InitOptionMenu);
+        return TRUE;
+    }
+    if (input->input_field_1_3)
     {
         PlaySE(SE_WIN_OPEN);
         PlayRainStoppingSoundEffect();
@@ -550,6 +585,10 @@ static const u8 *GetInteractedMetatileScript(struct MapPosition *position, u8 me
         return EventScript_PokeBlockFeeder;
     if (MetatileBehavior_IsTrickHousePuzzleDoor(metatileBehavior) == TRUE)
         return Route110_TrickHousePuzzle_EventScript_Door;
+    if (MetatileBehavior_IsRegionMapKanto(metatileBehavior) == TRUE)
+        return EventScript_RegionMap_Kanto;
+    if (MetatileBehavior_IsRegionMapJohto(metatileBehavior) == TRUE)
+        return EventScript_RegionMap_Johto;
     if (MetatileBehavior_IsRegionMap(metatileBehavior) == TRUE)
         return EventScript_RegionMap;
     if (MetatileBehavior_IsRunningShoesManual(metatileBehavior) == TRUE)
@@ -593,6 +632,8 @@ static const u8 *GetInteractedMetatileScript(struct MapPosition *position, u8 me
         SetMsgSignPostAndVarFacing(direction);
         return Common_EventScript_ShowPokemonCenterSign;
     }
+    if (MetatileBehavior_IsHeadbuttTree(metatileBehavior) == TRUE)
+        return EventScript_HeadbuttTree;
 
     elevation = position->elevation;
     if (elevation == MapGridGetElevationAt(position->x, position->y))
@@ -846,6 +887,116 @@ static void UpdateFollowerStepCounter(void)
 {
     if (gPlayerPartyCount > 0 && gFollowerSteps < (u16)-1)
         gFollowerSteps++;
+}
+
+static void TryAutoSaveOnStep(void)
+{
+    if (gSaveBlock2Ptr->optionsAutoSave != OPTIONS_AUTOSAVE_ON)
+    {
+        sAutoSavePending = FALSE;
+        return;
+    }
+
+    if (!sAutoSavePending)
+    {
+        if (gSaveBlock1Ptr->autosaveStepCounter < AUTOSAVE_STEP_INTERVAL)
+            gSaveBlock1Ptr->autosaveStepCounter++;
+
+        if (gSaveBlock1Ptr->autosaveStepCounter >= AUTOSAVE_STEP_INTERVAL)
+            sAutoSavePending = TRUE;
+    }
+
+    if (!sAutoSavePending)
+        return;
+
+    if (ShouldPromptAutoSaveOverwrite())
+    {
+        if (CanStartAutoSavePrompt())
+            StartAutoSaveOverwritePrompt();
+        return;
+    }
+
+    gSaveBlock1Ptr->autosaveStepCounter = 0;
+    sAutoSavePending = FALSE;
+    TrySavingData(SAVE_NORMAL);
+}
+
+static bool8 ShouldPromptAutoSaveOverwrite(void)
+{
+    if (gDifferentSaveFile != TRUE)
+        return FALSE;
+    if (gSaveFileStatus == SAVE_STATUS_EMPTY || gSaveFileStatus == SAVE_STATUS_CORRUPT)
+        return FALSE;
+    if (gSaveFileStatus == SAVE_STATUS_NO_FLASH || gSaveFileStatus == SAVE_STATUS_ERROR)
+        return FALSE;
+    return TRUE;
+}
+
+static bool8 CanStartAutoSavePrompt(void)
+{
+    if (sAutoSavePromptActive)
+        return FALSE;
+    if (ArePlayerFieldControlsLocked())
+        return FALSE;
+    if (ScriptContext_IsEnabled())
+        return FALSE;
+    if (!IsFieldMessageBoxHidden())
+        return FALSE;
+    return TRUE;
+}
+
+static void StartAutoSaveOverwritePrompt(void)
+{
+    u8 taskId;
+
+    sAutoSavePromptActive = TRUE;
+    FreezeObjectEvents();
+    PlayerFreeze();
+    StopPlayerAvatar();
+    LockPlayerFieldControls();
+
+    taskId = CreateTask(TaskDummy, 0x50);
+    DisplayItemMessageOnField(taskId, gText_DifferentSaveFile, Task_AutoSavePromptShowYesNo);
+}
+
+static void Task_AutoSavePromptShowYesNo(u8 taskId)
+{
+    DisplayYesNoMenuWithDefault(1);
+    gTasks[taskId].func = Task_AutoSavePromptHandleInput;
+}
+
+static void Task_AutoSavePromptHandleInput(u8 taskId)
+{
+    switch (Menu_ProcessInputNoWrapClearOnChoose())
+    {
+    case 0:
+        ClearDialogWindowAndFrame(0, TRUE);
+        if (TrySavingData(SAVE_OVERWRITE_DIFFERENT_FILE) == SAVE_STATUS_OK)
+            gDifferentSaveFile = FALSE;
+        gSaveBlock1Ptr->autosaveStepCounter = 0;
+        sAutoSavePending = FALSE;
+        FinishAutoSavePrompt(taskId);
+        break;
+    case MENU_B_PRESSED:
+    case 1:
+        ClearDialogWindowAndFrame(0, TRUE);
+        gSaveBlock2Ptr->optionsAutoSave = OPTIONS_AUTOSAVE_OFF;
+        gSaveBlock1Ptr->autosaveStepCounter = 0;
+        sAutoSavePending = FALSE;
+        FinishAutoSavePrompt(taskId);
+        break;
+    case MENU_NOTHING_CHOSEN:
+    default:
+        break;
+    }
+}
+
+static void FinishAutoSavePrompt(u8 taskId)
+{
+    sAutoSavePromptActive = FALSE;
+    DestroyTask(taskId);
+    ScriptUnfreezeObjectEvents();
+    UnlockPlayerFieldControls();
 }
 
 void ClearPoisonStepCounter(void)

@@ -7,6 +7,7 @@
 #include "field_control_avatar.h"
 #include "field_effect.h"
 #include "field_effect_helpers.h"
+#include "field_move.h"
 #include "field_player_avatar.h"
 #include "field_screen_effect.h"
 #include "field_weather.h"
@@ -18,6 +19,7 @@
 #include "main.h"
 #include "malloc.h"
 #include "mirage_tower.h"
+#include "constants/species.h"
 #include "menu.h"
 #include "metatile_behavior.h"
 #include "overworld.h"
@@ -29,6 +31,7 @@
 #include "sound.h"
 #include "sprite.h"
 #include "task.h"
+#include "surf_ow.h"
 #include "trainer_pokemon_sprites.h"
 #include "trig.h"
 #include "util.h"
@@ -2871,11 +2874,34 @@ bool8 FldEff_FieldMoveShowMonInit(void)
 {
     struct Pokemon *pokemon;
     bool32 noDucking = gFieldEffectArguments[0] & SHOW_MON_CRY_NO_DUCKING;
-    pokemon = &gPlayerParty[(u8)gFieldEffectArguments[0]];
-    gFieldEffectArguments[0] = GetMonData(pokemon, MON_DATA_SPECIES);
-    gFieldEffectArguments[1] = GetMonData(pokemon, MON_DATA_IS_SHINY);
-    gFieldEffectArguments[2] = GetMonData(pokemon, MON_DATA_PERSONALITY);
-    gFieldEffectArguments[0] |= noDucking;
+
+    if (gFieldEffectArguments[0] & FIELD_MOVE_MON_FROM_BOX)
+    {
+        const struct FieldMoveMonInfo *info = GetFieldMoveMonInfo();
+
+        if (info->valid)
+        {
+            gFieldEffectArguments[0] = info->species | noDucking;
+            gFieldEffectArguments[1] = info->isShiny;
+            gFieldEffectArguments[2] = info->personality;
+        }
+        else
+        {
+            gFieldEffectArguments[0] = SPECIES_NONE | noDucking;
+            gFieldEffectArguments[1] = FALSE;
+            gFieldEffectArguments[2] = 0;
+        }
+        ClearFieldMoveMonInfo();
+    }
+    else
+    {
+        pokemon = &gPlayerParty[(u8)gFieldEffectArguments[0]];
+        gFieldEffectArguments[0] = GetMonData(pokemon, MON_DATA_SPECIES);
+        gFieldEffectArguments[1] = GetMonData(pokemon, MON_DATA_IS_SHINY);
+        gFieldEffectArguments[2] = GetMonData(pokemon, MON_DATA_PERSONALITY);
+        gFieldEffectArguments[0] |= noDucking;
+    }
+
     FieldEffectStart(FLDEFF_FIELD_MOVE_SHOW_MON);
     FieldEffectActiveListRemove(FLDEFF_FIELD_MOVE_SHOW_MON_INIT);
     return FALSE;
@@ -3270,6 +3296,7 @@ static void SpriteCB_FieldMoveMonSlideOffscreen(struct Sprite *sprite)
 
 u8 FldEff_UseSurf(void)
 {
+    SurfOw_CacheCurrentFromFieldMoveMonInfo(gPlayerAvatar.objectEventId);
     u8 taskId = CreateTask(Task_SurfFieldEffect, 0xff);
     gTasks[taskId].tMonId = gFieldEffectArguments[0];
     Overworld_ClearSavedMusic();

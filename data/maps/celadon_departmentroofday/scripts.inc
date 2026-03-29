@@ -1,2 +1,17 @@
 celadon_departmentroofday_MapScripts::
+	map_script MAP_SCRIPT_ON_TRANSITION, celadon_departmentroofday_OnTransition
 	.byte 0
+
+celadon_departmentroofday_OnTransition:
+	gettimeofday
+	compare VAR_0x8000, TIME_NIGHT
+	goto_if_eq celadon_departmentroofday_SetNight
+	goto celadon_departmentroofday_SetDay
+
+celadon_departmentroofday_SetNight::
+	setmaplayoutindex LAYOUT_CELADON_DEPARTMENTROOFNIGHT
+	return
+
+celadon_departmentroofday_SetDay::
+	setmaplayoutindex LAYOUT_CELADON_DEPARTMENTROOFDAY
+	return

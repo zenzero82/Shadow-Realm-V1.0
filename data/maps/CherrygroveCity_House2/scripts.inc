@@ -11,12 +11,18 @@ CherrygroveCity_House2_EventScript_Youngster::
 	faceplayer
 	setspeaker CherrygroveCity_House2_Speaker_Youngster
 	msgbox CherrygroveCity_House2_Text_Youngster, MSGBOX_NPC
+	closemessage
+	setflag FLAG_QUEST_CHERRYGROVE_NPC_HOUSE2_YOUNGSTER
+	call QuestJournal_EventScript_CheckCherrygroveNPCs
 	end
 
 CherrygroveCity_House2_EventScript_BattleGirl::
 	faceplayer
 	setspeaker CherrygroveCity_House2_Speaker_BattleGirl
 	msgbox CherrygroveCity_House2_Text_BattleGirl, MSGBOX_NPC
+	closemessage
+	setflag FLAG_QUEST_CHERRYGROVE_NPC_HOUSE2_BATTLE_GIRL
+	call QuestJournal_EventScript_CheckCherrygroveNPCs
 	end
 
 CherrygroveCity_House2_Text_Youngster:

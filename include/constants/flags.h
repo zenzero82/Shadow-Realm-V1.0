@@ -96,6 +96,7 @@
 #define FLAG_HIDE_OAKS_LAB_HOOPA_RING 0x48 // hides Hoopa Ring in Oak's Lab (object 7)
 #define FLAG_OAKS_LAB_NEWGAME_INTRO_DONE 0x49
 #define FLAG_UNUSED_0x04A    0x4A // Unused Flag
+#define FLAG_HIDE_ILEX_HOOPA_RING FLAG_UNUSED_0x04A
 #define FLAG_HIDE_WEST_FOREST_HOOPA_RING 0x4B // hides Hoopa Ring in Pallet Town Western Forest (object 1)
 #define FLAG_HIDE_ROUTE_25_EUSINE 0x4C // hides Eusine after Route 25 scene
 #define FLAG_CERULEAN_POLICE_MOVED_26 0x4D // Policeman (object 26) moved aside after Cascade Badge
@@ -470,6 +471,8 @@
 #define FLAG_REGISTERED_GLACIA               (TRAINER_REGISTERED_FLAGS_START + REMATCH_GLACIA)
 #define FLAG_REGISTERED_DRAKE                (TRAINER_REGISTERED_FLAGS_START + REMATCH_DRAKE)
 #define FLAG_REGISTERED_WALLACE              (TRAINER_REGISTERED_FLAGS_START + REMATCH_WALLACE)
+
+#define FLAG_RECEIVED_ODD_EGG                0x1A0
 
 #define FLAG_UNUSED_0x1AA                    0x1AA // Unused Flag
 #define FLAG_WES_HIDEOUT_LYRA_SCENE          FLAG_UNUSED_0x1AA
@@ -1445,6 +1448,30 @@
 #define FLAG_QUEST_DEFEAT_BUGSY_STARTED                             FLAG_UNUSED_0x4E6
 #define FLAG_UNUSED_0x4E7                                           0x4E7 // Unused Flag
 #define FLAG_QUEST_DEFEAT_BUGSY_COMPLETED                           FLAG_UNUSED_0x4E7
+#define FLAG_QUEST_CHERRYGROVE_NPCS_STARTED                         FLAG_UNUSED_0x28F
+#define FLAG_QUEST_CHERRYGROVE_NPCS_COMPLETED                       FLAG_UNUSED_0x290
+#define FLAG_QUEST_CHERRYGROVE_NPC_BOY                              FLAG_UNUSED_0x291
+#define FLAG_QUEST_CHERRYGROVE_NPC_LASS                             FLAG_UNUSED_0x297
+#define FLAG_QUEST_CHERRYGROVE_NPC_POKECENTER_FISHERMAN             FLAG_UNUSED_0x298
+#define FLAG_QUEST_CHERRYGROVE_NPC_POKECENTER_LASS                  FLAG_UNUSED_0x299
+#define FLAG_QUEST_CHERRYGROVE_NPC_POKECENTER_GENTLEMAN             FLAG_UNUSED_0x29A
+#define FLAG_QUEST_CHERRYGROVE_NPC_MART_YOUNGSTER                   FLAG_UNUSED_0x88F
+#define FLAG_QUEST_CHERRYGROVE_NPC_MART_BUG_CATCHER                 FLAG_UNUSED_0x8E3
+#define FLAG_QUEST_CHERRYGROVE_NPC_HOUSE1_MAN                       FLAG_UNUSED_0x90E
+#define FLAG_QUEST_CHERRYGROVE_NPC_HOUSE1_BOY                       FLAG_UNUSED_0x90F
+#define FLAG_QUEST_CHERRYGROVE_NPC_HOUSE2_YOUNGSTER                 FLAG_UNUSED_0x910
+#define FLAG_QUEST_CHERRYGROVE_NPC_HOUSE2_BATTLE_GIRL               FLAG_UNUSED_0x911
+#define FLAG_QUEST_CHERRYGROVE_NPC_HOUSE3_OLD_MAN                   FLAG_UNUSED_0x912
+#define FLAG_QUEST_NEW_BARK_NPCS_STARTED                            FLAG_UNUSED_0x913
+#define FLAG_QUEST_NEW_BARK_NPCS_COMPLETED                          FLAG_UNUSED_0x914
+#define FLAG_QUEST_NEW_BARK_NPC_HEXAGON_BROS                        FLAG_UNUSED_0x915
+#define FLAG_QUEST_NEW_BARK_NPC_SILVER                              FLAG_UNUSED_0x916
+#define FLAG_QUEST_NEW_BARK_NPC_HOUSE1_WOMAN                        FLAG_UNUSED_0x917
+#define FLAG_QUEST_NEW_BARK_NPC_HOUSE1_LASS                         FLAG_UNUSED_0x918
+#define FLAG_QUEST_NEW_BARK_NPC_HOUSE2_WOMAN                        FLAG_UNUSED_0x919
+#define FLAG_QUEST_NEW_BARK_NPC_HOUSE2_GIRL                         FLAG_UNUSED_0x91C
+#define FLAG_QUEST_NEW_BARK_NPC_PLAYERS_HOUSE_MOM                   FLAG_UNUSED_0x91D
+#define FLAG_QUEST_NEW_BARK_NPC_PLAYERS_HOUSE_FRIEND                FLAG_UNUSED_0x91E
 #define FLAG_QUEST_GOLDS_MOM_STARTED                                FLAG_UNUSED_0x8F6
 #define FLAG_QUEST_GOLDS_MOM_COMPLETED                              FLAG_UNUSED_0x8F7
 #define FLAG_HIDE_NEW_BARK_HOOPA_RING                               FLAG_UNUSED_0x8F8
@@ -1466,6 +1493,7 @@
 #define FLAG_QUEST_AZALEA_NPC_ROCKET                                FLAG_UNUSED_0x4EE
 #define FLAG_UNUSED_0x4EF                                           0x4EF // Unused Flag
 #define FLAG_HIDE_AZALEA_ILEX_OFFICER                               FLAG_UNUSED_0x4EF
+#define FLAG_HIDE_KURTS_HOUSE_SKARMORY                              FLAG_UNUSED_0x90D
 
 #define FLAG_QUEST_PEWTER_NPC_HOUSE1_BOY                            0x501
 #define FLAG_QUEST_PEWTER_NPC_HOUSE2_OLD_MAN                         0x502
@@ -1518,6 +1546,21 @@
 #define FLAG_QUEST_AZALEA_NPC_POKECENTER_FISHERMAN                   0x52E
 #define FLAG_QUEST_AZALEA_NPC_POKECENTER_GENTLEMAN                   0x52F
 #define FLAG_QUEST_AZALEA_NPC_POKECENTER_WOMAN                       0x530
+
+#define FLAG_HIDE_ROUTE2_CUTTREE_1                                  0x531
+#define FLAG_HIDE_ROUTE2_CUTTREE_2                                  0x532
+#define FLAG_HIDE_ROUTE2_CUTTREE_3                                  0x533
+#define FLAG_HIDE_ROUTE2_CUTTREE_4                                  0x534
+#define FLAG_HIDE_ROUTE10_CUTTREE_1                                 0x535
+#define FLAG_HIDE_ROUTE10_CUTTREE_2                                 0x536
+#define FLAG_HIDE_ROUTE10_CUTTREE_3                                 0x537
+#define FLAG_HIDE_ROUTE10_CUTTREE_4                                 0x538
+#define FLAG_HIDE_ROUTE25_CUTTREE_1                                 0x539
+#define FLAG_HIDE_ROUTE29_CUTTREE_1                                 0x53A
+#define FLAG_HIDE_ROUTE31_CUTTREE_1                                 0x53B
+#define FLAG_HIDE_ROUTE32_CUTTREE_1                                 0x53C
+#define FLAG_HIDE_ROUTE32_CUTTREE_2                                 0x53D
+#define FLAG_HIDE_VIOLET_CITY_CUTTREE_1                             0x53E
 
 #define FLAG_DEFEATED_RUSTBORO_GYM                                  0x4F0
 #define FLAG_DEFEATED_DEWFORD_GYM                                   0x4F1

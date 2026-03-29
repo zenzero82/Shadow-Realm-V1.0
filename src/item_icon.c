@@ -168,9 +168,7 @@ const void *GetItemIconPic(u16 itemId)
         return gItemsInfo[0].iconPic;
     if (itemId >= ITEM_TM01 && itemId < ITEM_HM01 + NUM_HIDDEN_MACHINES)
     {
-        if (itemId < ITEM_TM01 + NUM_TECHNICAL_MACHINES)
-            return gItemIcon_TM;
-        return gItemIcon_HM;
+        return gItemIcon_TM;
     }
 
     return gItemsInfo[itemId].iconPic;

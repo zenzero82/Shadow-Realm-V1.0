@@ -79,7 +79,7 @@ static const u32 sTitleScreenRayquazaTilemap[] = INCBIN_U32("graphics/title_scre
 static const u32 sTitleScreenLogoShineGfx[] = INCBIN_U32("graphics/title_screen/logo_shine.4bpp.lz");
 static const u32 sTitleScreenCloudsGfx[] = INCBIN_U32("graphics/title_screen/clouds.4bpp.lz");
 static const u16 sTitleScreenLogoShinePal[] = INCBIN_U16("graphics/title_screen/logo_shine.gbapal");
-static const u8 sText_TitleVersion[] = _("V 1.4.2");
+static const u8 sText_TitleVersion[] = _("Demo 1.01");
 
 static const struct WindowTemplate sTitleScreenWindowTemplates[] =
 {

@@ -184,6 +184,9 @@ extern const u32 gObjectEventPic_BuzzwoleShadow[];
 extern const u32 gMonFrontPic_CalyrexShadow[];
 extern const u32 gMonBackPic_CalyrexShadow[];
 extern const u16 gMonPalette_CalyrexShadow[];
+#if OW_POKEMON_OBJECT_EVENTS && OW_PKMN_OBJECTS_SHARE_PALETTES == FALSE
+extern const u16 gOverworldPalette_CalyrexShadow[];
+#endif
 extern const u8 gMonIcon_CalyrexShadow[];
 #if OW_POKEMON_OBJECT_EVENTS
 extern const u32 gObjectEventPic_CalyrexShadow[];
@@ -908,6 +911,14 @@ extern const u8 gMonIcon_MespritShadow[];
 extern const u32 gObjectEventPic_MespritShadow[];
 #endif
 
+extern const u32 gMonFrontPic_MeowthShadow[];
+extern const u32 gMonBackPic_MeowthShadow[];
+extern const u16 gMonPalette_MeowthShadow[];
+extern const u8 gMonIcon_MeowthShadow[];
+#if OW_POKEMON_OBJECT_EVENTS
+extern const u32 gObjectEventPic_MeowthShadow[];
+#endif
+
 extern const u32 gMonFrontPic_MeowscaradaShadow[];
 extern const u32 gMonBackPic_MeowscaradaShadow[];
 extern const u16 gMonPalette_MeowscaradaShadow[];
@@ -959,6 +970,9 @@ extern const u32 gObjectEventPic_MimikyuBustedShadow[];
 extern const u32 gMonFrontPic_MiraidonShadow[];
 extern const u32 gMonBackPic_MiraidonShadow[];
 extern const u16 gMonPalette_MiraidonShadow[];
+#if OW_POKEMON_OBJECT_EVENTS && OW_PKMN_OBJECTS_SHARE_PALETTES == FALSE
+extern const u16 gOverworldPalette_MiraidonShadow[];
+#endif
 extern const u8 gMonIcon_MiraidonShadow[];
 #if OW_POKEMON_OBJECT_EVENTS
 extern const u32 gObjectEventPic_MiraidonShadow[];
@@ -1023,6 +1037,9 @@ extern const u32 gObjectEventPic_PalossandShadow[];
 extern const u32 gMonFrontPic_PalkiaShadow[];
 extern const u32 gMonBackPic_PalkiaShadow[];
 extern const u16 gMonPalette_PalkiaShadow[];
+#if OW_POKEMON_OBJECT_EVENTS && OW_PKMN_OBJECTS_SHARE_PALETTES == FALSE
+extern const u16 gOverworldPalette_PalkiaShadow[];
+#endif
 extern const u8 gMonIcon_PalkiaShadow[];
 #if OW_POKEMON_OBJECT_EVENTS
 extern const u32 gObjectEventPic_PalkiaShadow[];
@@ -1079,6 +1096,9 @@ extern const u32 gObjectEventPic_RaikouShadow[];
 extern const u32 gMonFrontPic_RayquazaShadow[];
 extern const u32 gMonBackPic_RayquazaShadow[];
 extern const u16 gMonPalette_RayquazaShadow[];
+#if OW_POKEMON_OBJECT_EVENTS && OW_PKMN_OBJECTS_SHARE_PALETTES == FALSE
+extern const u16 gOverworldPalette_RayquazaShadow[];
+#endif
 extern const u8 gMonIcon_RayquazaShadow[];
 #if OW_POKEMON_OBJECT_EVENTS
 extern const u32 gObjectEventPic_RayquazaShadow[];
@@ -1559,6 +1579,9 @@ extern const u32 gObjectEventPic_ZarudeShadow[];
 extern const u32 gMonFrontPic_ZekromShadow[];
 extern const u32 gMonBackPic_ZekromShadow[];
 extern const u16 gMonPalette_ZekromShadow[];
+#if OW_POKEMON_OBJECT_EVENTS && OW_PKMN_OBJECTS_SHARE_PALETTES == FALSE
+extern const u16 gOverworldPalette_ZekromShadow[];
+#endif
 extern const u8 gMonIcon_ZekromShadow[];
 #if OW_POKEMON_OBJECT_EVENTS
 extern const u32 gObjectEventPic_ZekromShadow[];

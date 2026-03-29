@@ -54,6 +54,7 @@
 #include "pokemon_jump.h"
 #include "pokemon_storage_system.h"
 #include "pokemon_summary_screen.h"
+#include "pokeball.h"
 #include "region_map.h"
 #include "reshow_battle_screen.h"
 #include "scanline_effect.h"
@@ -314,6 +315,7 @@ static bool8 ShouldShowPartyReverseIndicator(struct Pokemon *);
 static void GetPartyReverseIndicatorCoords(struct PartyMenuBox *, s16 *, s16 *);
 static void CreatePartyMonReverseIndicatorSprite(struct PartyMenuBox *, bool8);
 static void UpdatePartyMonReverseIndicatorSprite(struct PartyMenuBox *, bool8);
+static void SetPartyReverseIndicatorVisibility(bool8);
 static void CreatePartyMonIconSpriteParameterized(u16, u32, struct PartyMenuBox *, u8, bool8);
 static void CreatePartyMonHeldItemSpriteParameterized(u16, u16, struct PartyMenuBox *);
 static void CreatePartyMonPokeballSpriteParameterized(u16, struct PartyMenuBox *);
@@ -2937,6 +2939,25 @@ static void UpdatePartyMonReverseIndicatorSprite(struct PartyMenuBox *menuBox, b
     gSprites[menuBox->reverseIndicatorSpriteId].invisible = !show;
 }
 
+static void SetPartyReverseIndicatorVisibility(bool8 show)
+{
+    u8 i;
+
+    if (sPartyMenuBoxes == NULL)
+        return;
+
+    for (i = 0; i < PARTY_SIZE; i++)
+    {
+        if (sPartyMenuBoxes[i].reverseIndicatorSpriteId == SPRITE_NONE)
+            continue;
+
+        if (show)
+            UpdatePartyMonReverseIndicatorSprite(&sPartyMenuBoxes[i], ShouldShowPartyReverseIndicator(&gPlayerParty[i]));
+        else
+            UpdatePartyMonReverseIndicatorSprite(&sPartyMenuBoxes[i], FALSE);
+    }
+}
+
 static void DisplayPartyPokemonDescriptionText(u8 stringID, struct PartyMenuBox *menuBox, u8 c)
 {
     if (c)
@@ -2953,6 +2974,8 @@ static void PartyMenuRemoveWindow(u8 *ptr)
 {
     if (*ptr != WINDOW_NONE)
     {
+        if (ptr == &sPartyMenuInternal->windowId[0])
+            SetPartyReverseIndicatorVisibility(TRUE);
         ClearStdWindowAndFrameToTransparent(*ptr, FALSE);
         RemoveWindow(*ptr);
         *ptr = WINDOW_NONE;
@@ -3038,6 +3061,8 @@ static u8 DisplaySelectionWindow(u8 windowType)
     u8 cursorDimension;
     u8 letterSpacing;
     u8 i;
+
+    SetPartyReverseIndicatorVisibility(FALSE);
 
     switch (windowType)
     {
@@ -4446,7 +4471,14 @@ static void DisplayCantUseFlashMessage(void)
 
 static void FieldCallback_Surf(void)
 {
-    gFieldEffectArguments[0] = GetCursorSelectionMonId();
+    u8 partyIndex;
+    bool8 fromBox;
+    u16 species;
+
+    if (!FindFieldMoveMonForMove(MOVE_SURF, &partyIndex, &fromBox, &species))
+        return;
+
+    gFieldEffectArguments[0] = fromBox ? FIELD_MOVE_MON_FROM_BOX : partyIndex;
     FieldEffectStart(FLDEFF_USE_SURF);
 }
 
@@ -5415,6 +5447,38 @@ void Task_AbilityCapsule(u8 taskId)
         gTasks[taskId].func = Task_ClosePartyMenu;
         break;
     }
+}
+
+void ItemUseCB_Ball(u8 taskId, TaskFunc task)
+{
+    static const u8 sText_BallChanged[] = _("{STR_VAR_1} was put in the\n{STR_VAR_2}.{PAUSE_UNTIL_PRESS}");
+    struct Pokemon *mon = &gPlayerParty[gPartyMenu.slotId];
+    u16 ballItem = gSpecialVar_ItemId;
+    u8 ballId = ItemIdToBallId(ballItem);
+    u8 currentBall = ItemIdToBallId(GetMonData(mon, MON_DATA_POKEBALL));
+
+    if (GetMonData(mon, MON_DATA_SPECIES) == SPECIES_NONE
+        || GetMonData(mon, MON_DATA_IS_EGG)
+        || currentBall == ballId)
+    {
+        gPartyMenuUseExitCallback = FALSE;
+        PlaySE(SE_SELECT);
+        DisplayPartyMenuMessage(gText_WontHaveEffect, TRUE);
+        ScheduleBgCopyTilemapToVram(2);
+        gTasks[taskId].func = task;
+        return;
+    }
+
+    gPartyMenuUseExitCallback = TRUE;
+    PlaySE(SE_USE_ITEM);
+    SetMonData(mon, MON_DATA_POKEBALL, &ballId);
+    RemoveBagItem(ballItem, 1);
+    GetMonNickname(mon, gStringVar1);
+    CopyItemName(ballItem, gStringVar2);
+    StringExpandPlaceholders(gStringVar4, sText_BallChanged);
+    DisplayPartyMenuMessage(gStringVar4, TRUE);
+    ScheduleBgCopyTilemapToVram(2);
+    gTasks[taskId].func = task;
 }
 
 void ItemUseCB_AbilityCapsule(u8 taskId, TaskFunc task)

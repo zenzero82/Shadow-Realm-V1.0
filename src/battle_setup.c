@@ -23,6 +23,7 @@
 #include "tv.h"
 #include "trainer_see.h"
 #include "field_message_box.h"
+#include "field_name_box.h"
 #include "sound.h"
 #include "strings.h"
 #include "trainer_hill.h"
@@ -38,6 +39,7 @@
 #include "fldeff_misc.h"
 #include "field_control_avatar.h"
 #include "mirage_tower.h"
+#include "data.h"
 #include "constants/map_groups.h"
 #include "constants/maps.h"
 #include "pokedex.h"
@@ -1318,6 +1320,13 @@ void ShowTrainerIntroSpeech(void)
     }
     else
     {
+        if (gSpeakerName == NULL)
+        {
+            u16 trainerId = TRAINER_BATTLE_PARAM.opponentA;
+            if (gApproachingTrainerId != 0)
+                trainerId = TRAINER_BATTLE_PARAM.opponentB;
+            gSpeakerName = GetTrainerNameFromId(trainerId);
+        }
         ShowFieldMessage(GetIntroSpeechOfApproachingTrainer());
     }
 }

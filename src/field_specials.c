@@ -1412,6 +1412,10 @@ static void Task_WaitObjectEventAffineAnim(u8 taskId)
     bool8 resumeScript = gTasks[taskId].data[5];
     bool8 restorePriority = gTasks[taskId].data[7];
     u8 savedPriority = gTasks[taskId].data[6];
+    bool8 restoreSubpriority = gTasks[taskId].data[9];
+    u8 savedSubpriority = gTasks[taskId].data[8];
+    bool8 restoreFixedPriority = gTasks[taskId].data[11];
+    bool8 savedFixedPriority = gTasks[taskId].data[10];
 
     if (objectEventId == OBJECT_EVENTS_COUNT)
     {
@@ -1451,6 +1455,10 @@ static void Task_WaitObjectEventAffineAnim(u8 taskId)
 
     if (restorePriority)
         sprite->oam.priority = savedPriority;
+    if (restoreSubpriority)
+        sprite->subpriority = savedSubpriority;
+    if (restoreFixedPriority)
+        objectEvent->fixedPriority = savedFixedPriority;
 
     if (resumeScript)
         ScriptContext_Enable();
@@ -1615,6 +1623,16 @@ void Special_HoopaRingShrinkDespawn(void)
     gTasks[taskId].data[5] = TRUE;
 }
 
+void Special_LockPlayerFacingDown(void)
+{
+    ForcePlayerFacingDirection(DIR_SOUTH);
+}
+
+void Special_ClearPlayerFacingOverride(void)
+{
+    ClearPlayerFacingDirectionOverride();
+}
+
 void Special_ObjectEventAbsorb(void)
 {
     u8 objectEventId = GetObjectEventIdFromSpecialTargetLocalId();
@@ -1629,6 +1647,9 @@ void Special_ObjectEventAbsorb(void)
     struct ObjectEvent *objectEvent = &gObjectEvents[objectEventId];
     struct Sprite *sprite = &gSprites[objectEvent->spriteId];
     u8 oldPriority = sprite->oam.priority;
+    u8 oldSubpriority = sprite->subpriority;
+    bool8 oldFixedPriority = objectEvent->fixedPriority;
+    u8 portalSubpriority = (objectEvent->localId == OBJ_EVENT_ID_PLAYER) ? 0 : 0xFF;
 
     TryAlignObjectEventToPortalCenter(objectEvent);
 
@@ -1639,7 +1660,9 @@ void Special_ObjectEventAbsorb(void)
     sprite->animPaused = TRUE;
     sprite->affineAnimPaused = FALSE;
     sprite->invisible = TRUE;
-    sprite->oam.priority = 1;
+    sprite->oam.priority = 0;
+    sprite->subpriority = portalSubpriority;
+    objectEvent->fixedPriority = TRUE;
     InitSpriteAffineAnim(sprite);
     StartSpriteAffineAnim(sprite, 0);
     if (sprite->oam.matrixNum != 0xFF)
@@ -1659,6 +1682,10 @@ void Special_ObjectEventAbsorb(void)
     gTasks[taskId].data[5] = TRUE;
     gTasks[taskId].data[6] = oldPriority;
     gTasks[taskId].data[7] = TRUE;
+    gTasks[taskId].data[8] = oldSubpriority;
+    gTasks[taskId].data[9] = TRUE;
+    gTasks[taskId].data[10] = oldFixedPriority;
+    gTasks[taskId].data[11] = TRUE;
 }
 
 void Special_ObjectEventEmerge(void)
@@ -1672,6 +1699,9 @@ void Special_ObjectEventEmerge(void)
     struct ObjectEvent *objectEvent = &gObjectEvents[objectEventId];
     struct Sprite *sprite = &gSprites[objectEvent->spriteId];
     u8 oldPriority = sprite->oam.priority;
+    u8 oldSubpriority = sprite->subpriority;
+    bool8 oldFixedPriority = objectEvent->fixedPriority;
+    u8 portalSubpriority = (objectEvent->localId == OBJ_EVENT_ID_PLAYER) ? 0 : 0xFF;
 
     TryAlignObjectEventToPortalCenter(objectEvent);
 
@@ -1683,7 +1713,9 @@ void Special_ObjectEventEmerge(void)
     sprite->affineAnimPaused = FALSE;
     objectEvent->invisible = TRUE;
     sprite->invisible = TRUE;
-    sprite->oam.priority = 1;
+    sprite->oam.priority = 0;
+    sprite->subpriority = portalSubpriority;
+    objectEvent->fixedPriority = TRUE;
     InitSpriteAffineAnim(sprite);
     StartSpriteAffineAnim(sprite, 0);
     if (sprite->oam.matrixNum != 0xFF)
@@ -1698,6 +1730,10 @@ void Special_ObjectEventEmerge(void)
     gTasks[taskId].data[4] = TRUE;
     gTasks[taskId].data[6] = oldPriority;
     gTasks[taskId].data[7] = TRUE;
+    gTasks[taskId].data[8] = oldSubpriority;
+    gTasks[taskId].data[9] = TRUE;
+    gTasks[taskId].data[10] = oldFixedPriority;
+    gTasks[taskId].data[11] = TRUE;
 }
 
 void SetObjectEventPortalAffineAnims(void)

@@ -274,7 +274,11 @@
 #define VAR_UNUSED_0x40FB                                0x40FB // Unused Var
 #define VAR_UNUSED_0x40FC                                0x40FC // Unused Var
 #define VAR_UNUSED_0x40FD                                0x40FD // Unused Var
+#define VAR_KURT_ORDER_STATE                             VAR_UNUSED_0x40FB
+#define VAR_KURT_ORDER_ITEM                              VAR_UNUSED_0x40FC
+#define VAR_KURT_ORDER_COUNT                             VAR_UNUSED_0x40FD
 #define VAR_UNUSED_0x40FE                                0x40FE // Unused Var
+#define VAR_BIRCH_TIME_AMULET_CALL_PENDING              VAR_UNUSED_0x40FE
 #define VAR_UNUSED_0x40FF                                0x40FF // Unused Var
 
 #define VARS_END                                         0x40FF

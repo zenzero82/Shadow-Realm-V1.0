@@ -106,6 +106,7 @@ static void SetDefaultOptions(void)
     gSaveBlock2Ptr->optionsShinyOdds = OPTIONS_SHINY_ODDS_8192;
     gSaveBlock2Ptr->optionsLevelCap = OPTIONS_LEVEL_CAP_NORMAL;
     gSaveBlock2Ptr->optionsOverworldWildEncounters = OPTIONS_OVERWORLD_WILD_OFF;
+    gSaveBlock2Ptr->optionsAutoSave = OPTIONS_AUTOSAVE_OFF;
 }
 
 static void ClearPokedexFlags(void)
