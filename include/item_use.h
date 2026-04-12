@@ -50,6 +50,7 @@ void Task_ItemUse_CloseMessageBoxAndReturnToField_VsSeeker(u8 taskId);
 void DisplayDadsAdviceCannotUseItemMessage(u8 taskId, bool8 isUsingRegisteredKeyItemOnField);
 void ItemUseOutOfBattle_PokeFlute(u8 taskId);
 void ItemUseOutOfBattle_TimeFlute(u8 taskId);
+void ItemUseOutOfBattle_RelicTablet(u8 taskId);
 void ItemUseOutOfBattle_TownMap(u8 taskId);
 void ItemUseOutOfBattle_ShadowMonitor(u8 taskId);
 void ItemUseOutOfBattle_QuestJournal(u8 taskId);

@@ -743,7 +743,8 @@ AzaleaTown_Gym_Text_HiveBadgeSpeech:
 	.string "The HIVEBADGE proves your\n"
 	.string "bond is strong.\p"
 	.string "POKéMON can grow to level 32 now.\p"
-	.string "POKéMON that know CUT can use it\n"
+	.string "POKéMON that can learn SURF and FLY\n"
+	.string "will now be willing to use them\l"
 	.string "outside of battle.\p"
 	.string "Here, take this too.$"
 

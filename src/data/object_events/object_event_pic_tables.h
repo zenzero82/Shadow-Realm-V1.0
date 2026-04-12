@@ -1017,6 +1017,38 @@ static const struct SpriteFrameImage sPicTable_PokeBall[] = {
     overworld_frame(gObjectEventPic_PokeBall, 2, 4, 0),
 };
 
+static const struct SpriteFrameImage sPicTable_BallTm[] = {
+    overworld_frame(gObjectEventPic_BallTm, 2, 4, 0),
+    overworld_frame(gObjectEventPic_BallTm, 2, 4, 1),
+    overworld_frame(gObjectEventPic_BallTm, 2, 4, 2),
+    overworld_frame(gObjectEventPic_BallTm, 2, 4, 3),
+    overworld_frame(gObjectEventPic_BallTm, 2, 4, 4),
+    overworld_frame(gObjectEventPic_BallTm, 2, 4, 0),
+};
+
+static const struct SpriteFrameImage sPicTable_ZygardeCube[] = {
+    overworld_frame(gObjectEventPic_ZygardeCube, 2, 4, 0),
+    overworld_frame(gObjectEventPic_ZygardeCube, 2, 4, 1),
+    overworld_frame(gObjectEventPic_ZygardeCube, 2, 4, 2),
+};
+
+static const struct SpriteFrameImage sPicTable_LaprasSurf[] = {
+    overworld_frame(gObjectEventPic_LaprasSurf, 4, 4, 0),
+    overworld_frame(gObjectEventPic_LaprasSurf, 4, 4, 1),
+    overworld_frame(gObjectEventPic_LaprasSurf, 4, 4, 2),
+    overworld_frame(gObjectEventPic_LaprasSurf, 4, 4, 3),
+    overworld_frame(gObjectEventPic_LaprasSurf, 4, 4, 4),
+    overworld_frame(gObjectEventPic_LaprasSurf, 4, 4, 5),
+};
+
+static const struct SpriteFrameImage sPicTable_TowerBeam[] = {
+    overworld_frame(gObjectEventPic_TowerBeam, 8, 8, 0),
+    overworld_frame(gObjectEventPic_TowerBeam, 8, 8, 1),
+    overworld_frame(gObjectEventPic_TowerBeam, 8, 8, 2),
+    overworld_frame(gObjectEventPic_TowerBeam, 8, 8, 3),
+    overworld_frame(gObjectEventPic_TowerBeam, 8, 8, 4),
+};
+
 extern const struct SpriteFrameImage gFieldEffectObjectPicTable_BallLight[];
 
 #if OW_FOLLOWERS_POKEBALLS
@@ -1909,6 +1941,18 @@ static const struct SpriteFrameImage sPicTable_SkullGruntMGen7[] = {
 
 static const struct SpriteFrameImage sPicTable_SkullGruntFGen7[] = {
     overworld_ascending_frames(gObjectEventPic_SkullGruntFGen7, 2, 4),
+};
+
+static const struct SpriteFrameImage sPicTable_AetherGruntMGen7[] = {
+    overworld_ascending_frames(gObjectEventPic_AetherGruntMGen7, 2, 4),
+};
+
+static const struct SpriteFrameImage sPicTable_AetherGruntFGen7[] = {
+    overworld_ascending_frames(gObjectEventPic_AetherGruntFGen7, 2, 4),
+};
+
+static const struct SpriteFrameImage sPicTable_FabaGen7[] = {
+    overworld_ascending_frames(gObjectEventPic_FabaGen7, 2, 4),
 };
 
 //Galar

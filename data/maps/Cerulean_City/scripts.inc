@@ -975,3 +975,4 @@ CeruleanCity_Text_PoliceGate_Allowed:
 CeruleanCity_Text_Light:
     .string "Portable lights. Someone set\n"
     .string "up camp nearby.$"
+

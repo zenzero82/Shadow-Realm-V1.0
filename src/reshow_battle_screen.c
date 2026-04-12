@@ -16,6 +16,7 @@
 #include "battle_anim.h"
 #include "data.h"
 #include "battle.h"
+#include "pokeball.h"
 void ShadowHud_SyncForBattler(u8 battler);
 void CreateBattlerSprite(u32 battler);
 // These two exist in the PR’s resume case 19:
@@ -83,6 +84,10 @@ static void CB2_ReshowBattleScreenAfterMenu(void)
         gReservedSpritePaletteCount = MAX_BATTLERS_COUNT;
         gStatusSummaryBarPalSlot = 0xFF;
         gStatusSummaryBallsPalSlot = 0xFF;
+        if (!IsDoubleBattle())
+            ReserveOpponentBallThrowPaletteSlot();
+        ReserveLastUsedBallPaletteSlot();
+        ReserveAbilityPopupPaletteSlot();
         break;
     case 5:
         ClearSpritesHealthboxAnimData();

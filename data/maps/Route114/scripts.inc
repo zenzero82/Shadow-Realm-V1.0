@@ -69,7 +69,7 @@ Route114_EventScript_Poochyena::
 
 Route114_EventScript_MeteorFallsSign::
 	msgbox Route114_Text_MeteorFallsSign, MSGBOX_SIGN
-	end
+	goto EventScript_GimmighoulSignpost
 
 Route114_EventScript_FossilManiacsHouseSign::
 	msgbox Route114_Text_FossilManiacsHouseSign, MSGBOX_SIGN
@@ -199,4 +199,3 @@ Route114_Text_FossilManiacsHouseSign:
 
 Route114_Text_LanettesHouse:
 	.string "LANETTE'S HOUSE$"
-

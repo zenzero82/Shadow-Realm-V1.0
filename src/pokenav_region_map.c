@@ -84,6 +84,8 @@ extern const u32 gRegionMapCityZoomText_Gfx[];
 
 static const u16 sMapSecInfoWindow_Pal[] = INCBIN_U16("graphics/pokenav/region_map/info_window.gbapal");
 static const u32 sRegionMapCityZoomTiles_Gfx[] = INCBIN_U32("graphics/pokenav/region_map/zoom_tiles.4bpp.lz");
+static const u8 sMapSecInfoTextColors[] = {TEXT_COLOR_TRANSPARENT, TEXT_COLOR_WHITE, TEXT_COLOR_LIGHT_GRAY};
+#define MAPSEC_INFO_BG_COLOR 2
 
 #include "data/region_map/city_map_tilemaps.h"
 
@@ -552,7 +554,7 @@ static void LoadPokenavRegionMapGfx(struct Pokenav_RegionMapGfx *state)
     LoadUserWindowBorderGfx_(state->infoWindowId, 0x42, BG_PLTT_ID(4));
     DrawTextBorderOuter(state->infoWindowId, 0x42, 4);
     DecompressAndCopyTileDataToVram(1, sRegionMapCityZoomTiles_Gfx, 0, 0, 0);
-    FillWindowPixelBuffer(state->infoWindowId, PIXEL_FILL(1));
+    FillWindowPixelBuffer(state->infoWindowId, PIXEL_FILL(MAPSEC_INFO_BG_COLOR));
     PutWindowTilemap(state->infoWindowId);
     CopyWindowToVram(state->infoWindowId, COPYWIN_FULL);
     CopyPaletteIntoBufferUnfaded(sMapSecInfoWindow_Pal, BG_PLTT_ID(1), sizeof(sMapSecInfoWindow_Pal));
@@ -576,18 +578,18 @@ static void UpdateMapSecInfoWindow(struct Pokenav_RegionMapGfx *state)
     switch (regionMap->mapSecType)
     {
     case MAPSECTYPE_CITY_CANFLY:
-        FillWindowPixelBuffer(state->infoWindowId, PIXEL_FILL(1));
+        FillWindowPixelBuffer(state->infoWindowId, PIXEL_FILL(MAPSEC_INFO_BG_COLOR));
         PutWindowRectTilemap(state->infoWindowId, 0, 0, 12, 2);
-        AddTextPrinterParameterized(state->infoWindowId, FONT_NARROW, regionMap->mapSecName, 0, 1, TEXT_SKIP_DRAW, NULL);
+        AddTextPrinterParameterized3(state->infoWindowId, FONT_NARROW, 0, 1, sMapSecInfoTextColors, 0, regionMap->mapSecName);
         DrawCityMap(state, regionMap->mapSecId, regionMap->posWithinMapSec);
         DrawTextBorderOuter(state->infoWindowId, 0x42, 4);
         CopyWindowToVram(state->infoWindowId, COPYWIN_FULL);
         SetCityZoomTextInvisibility(FALSE);
         break;
     case MAPSECTYPE_CITY_CANTFLY:
-        FillWindowPixelBuffer(state->infoWindowId, PIXEL_FILL(1));
+        FillWindowPixelBuffer(state->infoWindowId, PIXEL_FILL(MAPSEC_INFO_BG_COLOR));
         PutWindowRectTilemap(state->infoWindowId, 0, 0, 12, 2);
-        AddTextPrinterParameterized(state->infoWindowId, FONT_NARROW, regionMap->mapSecName, 0, 1, TEXT_SKIP_DRAW, NULL);
+        AddTextPrinterParameterized3(state->infoWindowId, FONT_NARROW, 0, 1, sMapSecInfoTextColors, 0, regionMap->mapSecName);
         FillBgTilemapBufferRect(1, 0x1041, 17, 6, 12, 11, 17);
         DrawTextBorderOuter(state->infoWindowId, 0x42, 4);
         CopyWindowToVram(state->infoWindowId, COPYWIN_FULL);
@@ -595,16 +597,16 @@ static void UpdateMapSecInfoWindow(struct Pokenav_RegionMapGfx *state)
         break;
     case MAPSECTYPE_ROUTE:
     case MAPSECTYPE_BATTLE_FRONTIER:
-        FillWindowPixelBuffer(state->infoWindowId, PIXEL_FILL(1));
+        FillWindowPixelBuffer(state->infoWindowId, PIXEL_FILL(MAPSEC_INFO_BG_COLOR));
         PutWindowTilemap(state->infoWindowId);
-        AddTextPrinterParameterized(state->infoWindowId, FONT_NARROW, regionMap->mapSecName, 0, 1, TEXT_SKIP_DRAW, NULL);
+        AddTextPrinterParameterized3(state->infoWindowId, FONT_NARROW, 0, 1, sMapSecInfoTextColors, 0, regionMap->mapSecName);
         PrintLandmarkNames(state, regionMap->mapSecId, regionMap->posWithinMapSec);
         DrawTextBorderOuter(state->infoWindowId, 0x42, 4);
         CopyWindowToVram(state->infoWindowId, COPYWIN_FULL);
         SetCityZoomTextInvisibility(TRUE);
         break;
     case MAPSECTYPE_NONE:
-        FillWindowPixelBuffer(state->infoWindowId, PIXEL_FILL(1));
+        FillWindowPixelBuffer(state->infoWindowId, PIXEL_FILL(MAPSEC_INFO_BG_COLOR));
         PutWindowTilemap(state->infoWindowId);
         DrawTextBorderOuter(state->infoWindowId, 0x42, 4);
         CopyWindowToVram(state->infoWindowId, COPYWIN_FULL);
@@ -702,7 +704,7 @@ static void PrintLandmarkNames(struct Pokenav_RegionMapGfx *state, int mapSecId,
             break;
 
         StringCopyPadded(gStringVar1, landmarkName, CHAR_SPACE, 12);
-        AddTextPrinterParameterized(state->infoWindowId, FONT_NARROW, gStringVar1, 0, i * 16 + 17, TEXT_SKIP_DRAW, NULL);
+        AddTextPrinterParameterized3(state->infoWindowId, FONT_NARROW, 0, i * 16 + 17, sMapSecInfoTextColors, 0, gStringVar1);
         i++;
     }
 }
@@ -795,6 +797,7 @@ static bool32 TryToggleRegionMap(struct Pokenav_RegionMapGfx *state)
 
     RegionMap_CycleRegion();
     UpdateRegionMapHeaderGfx();
+    LoadUserWindowBorderGfx_(state->infoWindowId, 0x42, BG_PLTT_ID(4));
     UpdateMapSecInfoWindow(state);
     DrawTextBorderOuter(state->infoWindowId, 0x42, 4);
     PutWindowTilemap(state->infoWindowId);

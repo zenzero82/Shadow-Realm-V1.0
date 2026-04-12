@@ -157,22 +157,6 @@
       "elevation": 0,
       "player_facing_dir": "BG_EVENT_PLAYER_FACING_ANY",
       "script": "PalletTown_EventScript_OaksLabSign"
-    },
-    {
-      "type": "sign",
-      "x": 4,
-      "y": 7,
-      "elevation": 0,
-      "player_facing_dir": "BG_EVENT_PLAYER_FACING_ANY",
-      "script": "PalletTown_EventScript_RedsHouseSign"
-    },
-    {
-      "type": "sign",
-      "x": 13,
-      "y": 7,
-      "elevation": 0,
-      "player_facing_dir": "BG_EVENT_PLAYER_FACING_ANY",
-      "script": "PalletTown_EventScript_BluesHouseSign"
     }
   ]
 }

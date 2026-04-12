@@ -1127,6 +1127,47 @@ static const union AnimCmd *const sAnimTable_Inanimate[] = {
     [ANIM_STAY_STILL] = sAnim_StayStill,
 };
 
+static const union AnimCmd sAnim_ZygardeCube_Frame0[] =
+{
+    ANIMCMD_FRAME(0, 16),
+    ANIMCMD_JUMP(0),
+};
+
+static const union AnimCmd sAnim_ZygardeCube_Frame1[] =
+{
+    ANIMCMD_FRAME(1, 16),
+    ANIMCMD_JUMP(0),
+};
+
+static const union AnimCmd sAnim_ZygardeCube_Frame2[] =
+{
+    ANIMCMD_FRAME(2, 16),
+    ANIMCMD_JUMP(0),
+};
+
+static const union AnimCmd *const sAnimTable_ZygardeCube[] = {
+    [ANIM_STD_FACE_SOUTH] = sAnim_ZygardeCube_Frame0,
+    [ANIM_STD_FACE_NORTH] = sAnim_ZygardeCube_Frame1,
+    [ANIM_STD_FACE_WEST] = sAnim_ZygardeCube_Frame2,
+    [ANIM_STD_FACE_EAST] = sAnim_ZygardeCube_Frame2,
+    [ANIM_STD_GO_SOUTH] = sAnim_ZygardeCube_Frame0,
+    [ANIM_STD_GO_NORTH] = sAnim_ZygardeCube_Frame1,
+    [ANIM_STD_GO_WEST] = sAnim_ZygardeCube_Frame2,
+    [ANIM_STD_GO_EAST] = sAnim_ZygardeCube_Frame2,
+    [ANIM_STD_GO_FAST_SOUTH] = sAnim_ZygardeCube_Frame0,
+    [ANIM_STD_GO_FAST_NORTH] = sAnim_ZygardeCube_Frame1,
+    [ANIM_STD_GO_FAST_WEST] = sAnim_ZygardeCube_Frame2,
+    [ANIM_STD_GO_FAST_EAST] = sAnim_ZygardeCube_Frame2,
+    [ANIM_STD_GO_FASTER_SOUTH] = sAnim_ZygardeCube_Frame0,
+    [ANIM_STD_GO_FASTER_NORTH] = sAnim_ZygardeCube_Frame1,
+    [ANIM_STD_GO_FASTER_WEST] = sAnim_ZygardeCube_Frame2,
+    [ANIM_STD_GO_FASTER_EAST] = sAnim_ZygardeCube_Frame2,
+    [ANIM_STD_GO_FASTEST_SOUTH] = sAnim_ZygardeCube_Frame0,
+    [ANIM_STD_GO_FASTEST_NORTH] = sAnim_ZygardeCube_Frame1,
+    [ANIM_STD_GO_FASTEST_WEST] = sAnim_ZygardeCube_Frame2,
+    [ANIM_STD_GO_FASTEST_EAST] = sAnim_ZygardeCube_Frame2,
+};
+
 static const union AnimCmd *const sAnimTable_HoopaRing[] = {
     [ANIM_STD_FACE_SOUTH] = sAnim_HoopaRingSpin,
     [ANIM_STD_FACE_NORTH] = sAnim_HoopaRingSpin,

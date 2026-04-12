@@ -166,8 +166,8 @@ static const u8 sText_BerrySuffix[] = _(" BERRY"); //no decapitalize until it is
 const u8 gText_EmptyString3[] = _("");
 
 static const u8 sText_TwoInGameTrainersDefeated[] = _("You defeated\n{B_TRAINER1_NAME_WITH_CLASS} and {B_TRAINER2_NAME_WITH_CLASS}!\p");
-static const u8 sText_ShadowPokemonFledTrainer[] = _("The Shadow Pokemon has fled from\n{B_TRAINER1_NAME}.\p");
-static const u8 sText_ShadowPokemonFledGeneric[] = _("The Shadow Pokemon appears to have fled.\p");
+static const u8 sText_ShadowPokemonFledTrainer[] = _("The {COLOR PURPLE}Shadow Pokemon{COLOR WHITE} has fled from\n{B_TRAINER1_NAME}.\p");
+static const u8 sText_ShadowPokemonFledGeneric[] = _("The {COLOR PURPLE}Shadow Pokemon{COLOR WHITE} appears to have fled.\p");
 
 // New battle strings.
 const u8 gText_drastically[] = _("drastically ");
@@ -762,6 +762,7 @@ const u8 *const gBattleStringsTable[STRINGID_COUNT] =
     [STRINGID_ATTACKWEAKENEDBSTRONGWINDS]           = COMPOUND_STRING("The mysterious strong winds weakened the attack!"),
     [STRINGID_STUFFCHEEKSCANTSELECT]                = COMPOUND_STRING("It can't use the move because it doesn't have a Berry!\p"),
     [STRINGID_PKMNREVERTEDTOPRIMAL]                 = COMPOUND_STRING("{B_SCR_NAME_WITH_PREFIX}'s Primal Reversion! It reverted to its primal state!"),
+    [STRINGID_PKMNREVERTEDTONORMAL]                 = COMPOUND_STRING("{B_SCR_NAME_WITH_PREFIX} reverted back to normal!"),
     [STRINGID_BUTPOKEMONCANTUSETHEMOVE]             = COMPOUND_STRING("But {B_ATK_NAME_WITH_PREFIX2} can't use the move!"),
     [STRINGID_BUTHOOPACANTUSEIT]                    = COMPOUND_STRING("But {B_ATK_NAME_WITH_PREFIX2} can't use it the way it is now!"),
     [STRINGID_BROKETHROUGHPROTECTION]               = COMPOUND_STRING("It broke through {B_DEF_NAME_WITH_PREFIX2}'s protection!"),
@@ -909,7 +910,7 @@ const u8 *const gBattleStringsTable[STRINGID_COUNT] =
     [STRINGID_FORFEITBATTLEGAVEMONEY]               = COMPOUND_STRING("You gave ¥{B_BUFF1} to the winner…{PAUSE_UNTIL_PRESS}"),
     [STRINGID_POWERCONSTRUCTPRESENCEOFMANY]         = COMPOUND_STRING("You sense the presence of many!"),
     [STRINGID_POWERCONSTRUCTTRANSFORM]              = COMPOUND_STRING("{B_ATK_NAME_WITH_PREFIX} transformed into its Complete Forme!"),
-    [STRINGID_SHADOWPKMNNOTICE]                     = COMPOUND_STRING("Oh! A Shadow Pokémon!\p"),
+    [STRINGID_SHADOWPKMNNOTICE]                     = COMPOUND_STRING("Oh! A {COLOR PURPLE}Shadow Pokémon{COLOR WHITE}!\p"),
     [STRINGID_TRAINERCALLTOMON]                     = COMPOUND_STRING("{B_ATK_TRAINER_NAME} called out to {B_ATK_NAME_WITH_PREFIX}!"),
     [STRINGID_PKMNSTOREDEXP]                        = COMPOUND_STRING("{B_BUFF1} stored{B_BUFF2} {B_BUFF3} EXP. Points!\p"),
     [STRINGID_PKMNHEARTGAUGEUPDATE]                 = COMPOUND_STRING("The door to {B_BUFF1}'s heart opened a little!\p"),
@@ -922,7 +923,7 @@ const u8 *const gBattleStringsTable[STRINGID_COUNT] =
     [STRINGID_REVERSEMODE_CALLED]                   = COMPOUND_STRING("{B_ATK_NAME_WITH_PREFIX} came to its senses!"),
     [STRINGID_GOTCHAPKMNCAUGHTTRAINER]              = COMPOUND_STRING("Gotcha! {B_DEF_NAME} was caught!{WAIT_SE}\p"),
     [STRINGID_TRAINERCALLEDTOMON]                   = COMPOUND_STRING("{B_PLAYER_NAME} called to {B_ATK_NAME_WITH_PREFIX}!\p"),
-    [STRINGID_SHADOWCALMEDSLIGHTLY]                 = COMPOUND_STRING("The Shadow Pokémon calmed down a little!\p"),
+    [STRINGID_SHADOWCALMEDSLIGHTLY]                 = COMPOUND_STRING("The {COLOR PURPLE}Shadow Pokémon{COLOR WHITE} calmed down a little!\p"),
     [STRINGID_SHADOWCAMETOSENSES]                   = COMPOUND_STRING("{B_ATK_NAME_WITH_PREFIX} came to its senses!\p"),
     [STRINGID_TRAINERENCOURAGEDMON]                 = COMPOUND_STRING("{B_ATK_NAME_WITH_PREFIX} was encouraged!\p"),
 
@@ -1685,8 +1686,8 @@ static const struct BattleWindowText sTextOnWindowsInfo_Normal[] =
     },
     [B_WIN_PP_REMAINING] = {
         .fillValue = PIXEL_FILL(0x4),
-        .fontId = FONT_NORMAL,
-        .x = 2,
+        .fontId = FONT_NARROW,
+        .x = 1,
         .y = 1,
         .speed = 0,
         .fgColor = 14,
@@ -1937,8 +1938,8 @@ static const struct BattleWindowText sTextOnWindowsInfo_Arena[] =
     },
     [B_WIN_PP_REMAINING] = {
         .fillValue = PIXEL_FILL(0x4),
-        .fontId = FONT_NORMAL,
-        .x = 2,
+        .fontId = FONT_NARROW,
+        .x = 1,
         .y = 1,
         .speed = 0,
         .fgColor = 14,
@@ -3510,6 +3511,82 @@ void BattlePutTextOnWindow(const u8 *text, u8 windowId)
     {
         u32 width = GetBattleWindowTemplatePixelWidth(gBattleScripting.windowsType, windowId);
         s32 alignX = GetStringCenterAlignXOffsetWithLetterSpacing(printerTemplate.fontId, printerTemplate.currentChar, width, printerTemplate.letterSpacing);
+        printerTemplate.x = printerTemplate.currentX = alignX;
+    }
+
+    if (windowId == ARENA_WIN_JUDGMENT_TEXT)
+        gTextFlags.useAlternateDownArrow = FALSE;
+    else
+        gTextFlags.useAlternateDownArrow = TRUE;
+
+    if ((gBattleTypeFlags & (BATTLE_TYPE_LINK | BATTLE_TYPE_RECORDED)) || gTestRunnerEnabled)
+        gTextFlags.autoScroll = TRUE;
+    else
+        gTextFlags.autoScroll = FALSE;
+
+    if (windowId == B_WIN_MSG || windowId == ARENA_WIN_JUDGMENT_TEXT)
+    {
+        if (gBattleTypeFlags & (BATTLE_TYPE_LINK | BATTLE_TYPE_RECORDED_LINK))
+            speed = 1;
+        else if (gBattleTypeFlags & BATTLE_TYPE_RECORDED)
+            speed = sRecordedBattleTextSpeeds[GetTextSpeedInRecordedBattle()];
+        else
+            speed = GetPlayerTextSpeedDelay();
+
+        gTextFlags.canABSpeedUpPrint = 1;
+    }
+    else
+    {
+        speed = textInfo[windowId].speed;
+        gTextFlags.canABSpeedUpPrint = 0;
+    }
+
+    AddTextPrinter(&printerTemplate, speed, NULL);
+
+    if (copyToVram)
+    {
+        PutWindowTilemap(windowId);
+        CopyWindowToVram(windowId, COPYWIN_FULL);
+    }
+}
+
+void BattlePutTextOnWindowRightAlign(const u8 *text, u8 windowId)
+{
+    const struct BattleWindowText *textInfo = sBattleTextOnWindowsInfo[gBattleScripting.windowsType];
+    bool32 copyToVram;
+    struct TextPrinterTemplate printerTemplate;
+    u8 speed;
+
+    if (windowId & B_WIN_COPYTOVRAM)
+    {
+        windowId &= ~B_WIN_COPYTOVRAM;
+        copyToVram = FALSE;
+    }
+    else
+    {
+        FillWindowPixelBuffer(windowId, textInfo[windowId].fillValue);
+        copyToVram = TRUE;
+    }
+
+    printerTemplate.currentChar = text;
+    printerTemplate.windowId = windowId;
+    printerTemplate.fontId = textInfo[windowId].fontId;
+    printerTemplate.x = textInfo[windowId].x;
+    printerTemplate.y = textInfo[windowId].y;
+    printerTemplate.currentX = printerTemplate.x;
+    printerTemplate.currentY = printerTemplate.y;
+    printerTemplate.letterSpacing = textInfo[windowId].letterSpacing;
+    printerTemplate.lineSpacing = textInfo[windowId].lineSpacing;
+    printerTemplate.unk = 0;
+    printerTemplate.fgColor = textInfo[windowId].fgColor;
+    printerTemplate.bgColor = textInfo[windowId].bgColor;
+    printerTemplate.shadowColor = textInfo[windowId].shadowColor;
+
+    {
+        u32 width = GetBattleWindowTemplatePixelWidth(gBattleScripting.windowsType, windowId);
+        s32 alignX = (s32)width - GetStringWidth(printerTemplate.fontId, printerTemplate.currentChar, printerTemplate.letterSpacing);
+        if (alignX < 0)
+            alignX = 0;
         printerTemplate.x = printerTemplate.currentX = alignX;
     }
 

@@ -41,6 +41,19 @@
       "trainer_sight_or_berry_tree_id": "0",
       "script": "RoamingHunter_NpcScript",
       "flag": "FLAG_ROAMING_HUNTER_NPC_HIDE"
+    },
+    {
+      "graphics_id": "OBJ_EVENT_GFX_ZYGARDE_CUBE",
+      "x": 67,
+      "y": 50,
+      "elevation": 0,
+      "movement_type": "MOVEMENT_TYPE_FACE_UP",
+      "movement_range_x": 0,
+      "movement_range_y": 0,
+      "trainer_type": "TRAINER_TYPE_NONE",
+      "trainer_sight_or_berry_tree_id": "0",
+      "script": "Common_EventScript_ZygardeCubePickup",
+      "flag": "0"
     }
   ],
   "warp_events": [

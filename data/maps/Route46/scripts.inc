@@ -7,9 +7,10 @@ Route46_EventScript_Sign::
 	msgbox Route46_Text_Sign, MSGBOX_SIGN
 	closemessage
 	release
-	end
+	goto EventScript_GimmighoulSignpost
 
 Route46_Text_Sign:
 	.string "ROUTE 46\n"
 	.string "MOUNTAIN RD. AHEAD$"
+
 

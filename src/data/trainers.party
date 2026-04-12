@@ -1235,3 +1235,105 @@ Gender: Male
 
 Vulpix
 Level: 22
+
+=== TRAINER_SILVER_HUNTER ===
+Name: SILVER
+Class: Rival
+Pic: SILVER
+Gender: Male
+Music: TRAINER_ENCOUNTER_MUSIC_INTENSE
+
+Rattata
+Level: 30
+
+=== TRAINER_CELADON_SHAUNA ===
+Name: SHAUNA
+Class: TRAINER_CLASS_LASS
+Pic: SHAUNA
+Gender: Female
+
+Quilladin
+Level: 30
+
+Floette
+Level: 30
+
+=== TRAINER_CELADON_TREVOR ===
+Name: TREVOR
+Class: TRAINER_CLASS_SCHOOL_KID
+Pic: TREVOR
+Gender: Male
+
+Frogadier
+Level: 30
+
+Lucario
+Level: 30
+
+=== TRAINER_CELADON_TIERNO ===
+Name: TIERNO
+Class: TRAINER_CLASS_CAMPER
+Pic: TIERNO
+Gender: Male
+
+Braixen
+Level: 30
+
+Gogoat
+Level: 30
+
+=== TRAINER_CELADON_SERENA ===
+Name: SERENA
+Class: TRAINER_CLASS_RIVAL
+Pic: SERENA
+Gender: Female
+
+Meowstic
+Level: 31
+
+Sylveon
+Level: 31
+
+Talonflame
+Level: 31
+
+=== TRAINER_CELADON_CALEM ===
+Name: CALEM
+Class: TRAINER_CLASS_RIVAL
+Pic: CALEM
+Gender: Male
+
+Greninja
+Level: 32
+
+Lucario
+Level: 32
+
+Noivern
+Level: 32
+
+=== TRAINER_CELADON_AETHER_GRUNT_1 ===
+Name: GRUNT
+Class: TRAINER_CLASS_AETHER
+Pic: AETHER_M
+Gender: Male
+Music: TRAINER_ENCOUNTER_MUSIC_PLASMA
+
+Golbat
+Level: 30
+
+Magneton
+Level: 30
+
+=== TRAINER_CELADON_AETHER_GRUNT_2 ===
+Name: GRUNT
+Class: TRAINER_CLASS_AETHER
+Pic: AETHER_M
+Gender: Male
+Music: TRAINER_ENCOUNTER_MUSIC_PLASMA
+
+Hypno
+Level: 30
+
+Raticate
+Level: 30

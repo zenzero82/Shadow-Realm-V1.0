@@ -34,10 +34,10 @@ enum
     TD_SHINY_ODDS,
     TD_OVERWORLD_WILD,
     TD_AUTOSAVE,
+    TD_AUTO_RUN,
+    TD_EVIV_EDITOR,
     TD_LEVEL_CAP,
     TD_PAGE_SELECTION_OPTIONS,
-    TD_PAGE_SELECTION_FEATURES,
-    TD_PAGE_SELECTION_DIFFICULTY,
 };
 
 // Menu items
@@ -56,13 +56,16 @@ enum
 {
     MENUITEM_FEATURES_SHINY_ODDS,
     MENUITEM_FEATURES_OVERWORLD_WILD,
+    MENUITEM_FEATURES_AUTO_RUN,
     MENUITEM_FEATURES_AUTOSAVE,
+    MENUITEM_FEATURES_EVIV_EDITOR,
     MENUITEM_FEATURES_COUNT,
 };
 
 enum
 {
     MENUITEM_DIFFICULTY_LEVEL_CAP,
+    MENUITEM_DIFFICULTY_COMPETITIVE_AI,
     MENUITEM_DIFFICULTY_COUNT,
 };
 
@@ -109,8 +112,13 @@ static u8   OverworldWild_ProcessInput(u8 selection);
 static void OverworldWild_DrawChoices(u8 selection);
 static u8   AutoSave_ProcessInput(u8 selection);
 static void AutoSave_DrawChoices(u8 selection);
+static u8   AutoRun_ProcessInput(u8 selection);
+static void AutoRun_DrawChoices(u8 selection);
+static u8   EvIvEditor_ProcessInput(u8 selection);
+static void EvIvEditor_DrawChoices(u8 selection);
 static u8   LevelCap_ProcessInput(u8 selection);
 static void LevelCap_DrawChoices(u8 selection);
+static void CompetitiveAI_DrawChoices(void);
 static void DrawOptionMenuTexts(u8 page, u8 selection);
 static void OptionMenu_DrawChoicesForPage(u8 taskId);
 static void DrawFrame(void);
@@ -118,6 +126,9 @@ static void OptionMenu_ClearWindow(u8 option);
 static void ShowDescription(const u8 *text);
 static void SetDescriptionForSelection(u8 page, u8 selection);
 static const u8 *OptionMenu_GetLevelCapDescription(u8 selection);
+static const u8 *OptionMenu_GetEvIvEditorDescription(u8 selection);
+static bool8 OptionMenu_IsDifficultyItemDisabled(u8 index);
+static u8 OptionMenu_ClampSelectionForPage(u8 page, u8 selection);
 static const u8 *OptionMenu_GetPageList(u8 *count);
 static u8 OptionMenu_GetPageCount(void);
 static u8 OptionMenu_GetPageIndex(u8 page);
@@ -132,12 +143,16 @@ static void OptionMenu_ChangePage(u8 taskId, s8 direction);
 static u8 OptionMenu_ClampShinyOdds(u8 value);
 static u8 OptionMenu_ClampOverworldWild(u8 value);
 static u8 OptionMenu_ClampAutoSave(u8 value);
+static u8 OptionMenu_ClampAutoRun(u8 value);
+static u8 OptionMenu_ClampEvIvEditor(u8 value);
 static u8 OptionMenu_ClampLevelCap(u8 value);
 
 // EWRAM vars
 EWRAM_DATA static bool8 sArrowPressed = FALSE;
 EWRAM_DATA static bool8 sOptionMenuNewGameSetup = FALSE;
 EWRAM_DATA static u8 sOptionMenuLevelCapSelection;
+EWRAM_DATA static u8 sOptionMenuEvIvEditorSelection;
+EWRAM_DATA static u8 sOptionMenuFeaturesSelection;
 
 // const rom data
 const u16 gPalOptionMenu[] = INCBIN_U16("graphics/option_menu/option_menu_text.gbapal");
@@ -163,7 +178,9 @@ const u8 localText_Sound[] = _("{COLOR 1}{HIGHLIGHT TRANSPARENT}SOUND");
 const u8 localText_Frame[] = _("{COLOR 1}{HIGHLIGHT TRANSPARENT}FRAME");
 const u8 localText_ButtonMode[] = _("{COLOR 1}{HIGHLIGHT TRANSPARENT}CONTROLS");
 const u8 localText_ShinyOdds[] = _("{COLOR 1}{HIGHLIGHT TRANSPARENT}SHINY ODDS");
+const u8 localText_EvIvEditor[] = _("{COLOR 1}{HIGHLIGHT TRANSPARENT}EV/IV EDITOR");
 const u8 localText_LevelCap[] = _("{COLOR 1}{HIGHLIGHT TRANSPARENT}LEVEL CAP");
+const u8 localText_CompetitiveAI[] = _("{COLOR 3}{HIGHLIGHT TRANSPARENT}COMPETITIVE AI");
 const u8 localText_TextSpeedSlow[] = _("{COLOR 1}{HIGHLIGHT TRANSPARENT}SLOW");
 const u8 localText_TextSpeedMid[] = _("{COLOR 1}{HIGHLIGHT TRANSPARENT}MID");
 const u8 localText_TextSpeedFast[] = _("{COLOR 1}{HIGHLIGHT TRANSPARENT}FAST");
@@ -186,8 +203,13 @@ const u8 localText_ShinyOdds512[] = _("{COLOR 1}{HIGHLIGHT TRANSPARENT}512");
 const u8 localText_LevelCapOff[] = _("{COLOR 1}{HIGHLIGHT TRANSPARENT}OFF");
 const u8 localText_LevelCapNormal[] = _("{COLOR 1}{HIGHLIGHT TRANSPARENT}NORMAL");
 const u8 localText_LevelCapHard[] = _("{COLOR 1}{HIGHLIGHT TRANSPARENT}HARD");
-const u8 localText_OverworldWild[] = _("{COLOR 2}{HIGHLIGHT TRANSPARENT}VISIBLE WILD");
+const u8 localText_CompetitiveAIOff[] = _("{COLOR 1}{HIGHLIGHT TRANSPARENT}OFF");
+const u8 localText_CompetitiveAIEasy[] = _("{COLOR 1}{HIGHLIGHT TRANSPARENT}EASY");
+const u8 localText_CompetitiveAINormal[] = _("{COLOR 1}{HIGHLIGHT TRANSPARENT}NORMAL");
+const u8 localText_CompetitiveAIHard[] = _("{COLOR 1}{HIGHLIGHT TRANSPARENT}HARD");
+const u8 localText_OverworldWild[] = _("{COLOR 1}{HIGHLIGHT TRANSPARENT}VISIBLE WILD");
 const u8 localText_AutoSave[] = _("{COLOR 1}{HIGHLIGHT TRANSPARENT}AUTO SAVE");
+const u8 localText_AutoRun[] = _("{COLOR 1}{HIGHLIGHT TRANSPARENT}AUTO RUN");
 const u8 localText_TextSpeedDescription[] = _("{COLOR 1}{HIGHLIGHT TRANSPARENT}Choose from three text speed levels.");
 const u8 localText_BattleSceneDescription[] = _("{COLOR 1}{HIGHLIGHT TRANSPARENT}Show or disable animations\nduring battles.");
 const u8 localText_BattleStyleDescription[] = _("{COLOR 1}{HIGHLIGHT TRANSPARENT}Configure the rules that apply in\ncombat.");
@@ -197,9 +219,13 @@ const u8 localText_ButtonModeDescription[] = _("{COLOR 1}{HIGHLIGHT TRANSPARENT}
 const u8 localText_ShinyOddsDescription[] = _("{COLOR 1}{HIGHLIGHT TRANSPARENT}Choose the shiny encounter rate.");
 const u8 localText_OverworldWildDescription[] = _("{COLOR 1}{HIGHLIGHT TRANSPARENT}Show wild Pokemon on the map\n(land encounters only).");
 const u8 localText_AutoSaveDescription[] = _("{COLOR 1}{HIGHLIGHT TRANSPARENT}Autosave every 500 steps.");
+const u8 localText_AutoRunDescription[] = _("{COLOR 1}{HIGHLIGHT TRANSPARENT}Always run while moving.");
+const u8 localText_EvIvEditorOffDescription[] = _("{COLOR 1}{HIGHLIGHT TRANSPARENT}Off: Ev/Iv work as normal.\nItems/Grinding needed.");
+const u8 localText_EvIvEditorOnDescription[] = _("{COLOR 1}{HIGHLIGHT TRANSPARENT}On: Manipulate values from the\nsummary screen. (A on EV/IV page)");
 const u8 localText_LevelCapOffDescription[] = _("{COLOR 1}{HIGHLIGHT TRANSPARENT}Off: Overleveling is allowed.");
 const u8 localText_LevelCapNormalDescription[] = _("{COLOR 1}{HIGHLIGHT TRANSPARENT}Normal: Level Cap per Badge.");
 const u8 localText_LevelCapHardDescription[] = _("{COLOR 1}{HIGHLIGHT TRANSPARENT}Hard: Level Cap per previous Badge.\n(You will be underleveled)");
+const u8 localText_CompetitiveAIDescription[] = _("{COLOR 1}{HIGHLIGHT TRANSPARENT}Coming soon.");
 const u8 localText_ExitWithSave[] = _("{COLOR 1}{HIGHLIGHT TRANSPARENT}Saving the changes made...");
 const u8 localText_ExitWithoutSave[] = _("{COLOR 1}{HIGHLIGHT TRANSPARENT}Discarding the changes made...");
 
@@ -225,12 +251,15 @@ static const u8 *const sOptionMenuItemsNamesFeatures[MENUITEM_FEATURES_COUNT] =
 {
     localText_ShinyOdds,
     localText_OverworldWild,
+    localText_AutoRun,
     localText_AutoSave,
+    localText_EvIvEditor,
 };
 
 static const u8 *const sOptionMenuItemsNamesDifficulty[MENUITEM_DIFFICULTY_COUNT] =
 {
     localText_LevelCap,
+    localText_CompetitiveAI,
 };
 
 static const u8 *const sOptionMenuDescriptionsOptions[MENUITEM_COUNT] =
@@ -247,12 +276,15 @@ static const u8 *const sOptionMenuDescriptionsFeatures[MENUITEM_FEATURES_COUNT] 
 {
     localText_ShinyOddsDescription,
     localText_OverworldWildDescription,
+    localText_AutoRunDescription,
     localText_AutoSaveDescription,
+    localText_EvIvEditorOffDescription,
 };
 
 static const u8 *const sOptionMenuDescriptionsDifficulty[MENUITEM_DIFFICULTY_COUNT] =
 {
     localText_LevelCapNormalDescription,
+    localText_CompetitiveAIDescription,
 };
 
 static const u32 *const sOptionMenuItems[MENUITEM_COUNT] =
@@ -416,6 +448,7 @@ void CB2_InitOptionMenu(void)
         break;
     case 8:
         sOptionMenuLevelCapSelection = OptionMenu_ClampLevelCap(gSaveBlock2Ptr->optionsLevelCap);
+        sOptionMenuEvIvEditorSelection = OptionMenu_ClampEvIvEditor(gSaveBlock2Ptr->optionsEvIvEditor);
 		PutWindowTilemap(0);
 		DrawOptionMenuTexts(OptionMenu_GetInitialPage(), 0);
         gMain.state++;
@@ -432,15 +465,14 @@ void CB2_InitOptionMenu(void)
 
         gTasks[taskId].data[TD_PAGE] = initialPage;
         gTasks[taskId].data[TD_PAGE_SELECTION_OPTIONS] = 0;
-        gTasks[taskId].data[TD_PAGE_SELECTION_FEATURES] = 0;
-        gTasks[taskId].data[TD_PAGE_SELECTION_DIFFICULTY] = 0;
+        sOptionMenuFeaturesSelection = 0;
         switch (initialPage)
         {
         case OPTION_MENU_PAGE_FEATURES:
-            gTasks[taskId].data[TD_MENUSELECTION] = gTasks[taskId].data[TD_PAGE_SELECTION_FEATURES];
+            gTasks[taskId].data[TD_MENUSELECTION] = sOptionMenuFeaturesSelection;
             break;
         case OPTION_MENU_PAGE_DIFFICULTY:
-            gTasks[taskId].data[TD_MENUSELECTION] = gTasks[taskId].data[TD_PAGE_SELECTION_DIFFICULTY];
+            gTasks[taskId].data[TD_MENUSELECTION] = 0;
             break;
         case OPTION_MENU_PAGE_OPTIONS:
         default:
@@ -456,11 +488,16 @@ void CB2_InitOptionMenu(void)
         gTasks[taskId].data[TD_SHINY_ODDS] = OptionMenu_ClampShinyOdds(gSaveBlock2Ptr->optionsShinyOdds);
         gTasks[taskId].data[TD_OVERWORLD_WILD] = OptionMenu_ClampOverworldWild(gSaveBlock2Ptr->optionsOverworldWildEncounters);
         gTasks[taskId].data[TD_AUTOSAVE] = OptionMenu_ClampAutoSave(gSaveBlock2Ptr->optionsAutoSave);
+        gTasks[taskId].data[TD_AUTO_RUN] = OptionMenu_ClampAutoRun(gSaveBlock2Ptr->optionsAutoRun);
+        gTasks[taskId].data[TD_EVIV_EDITOR] = OptionMenu_ClampEvIvEditor(gSaveBlock2Ptr->optionsEvIvEditor);
         gTasks[taskId].data[TD_LEVEL_CAP] = OptionMenu_ClampLevelCap(gSaveBlock2Ptr->optionsLevelCap);
         sOptionMenuLevelCapSelection = gTasks[taskId].data[TD_LEVEL_CAP];
+        sOptionMenuEvIvEditorSelection = gTasks[taskId].data[TD_EVIV_EDITOR];
         gSaveBlock2Ptr->optionsShinyOdds = gTasks[taskId].data[TD_SHINY_ODDS];
         gSaveBlock2Ptr->optionsOverworldWildEncounters = gTasks[taskId].data[TD_OVERWORLD_WILD];
         gSaveBlock2Ptr->optionsAutoSave = gTasks[taskId].data[TD_AUTOSAVE];
+        gSaveBlock2Ptr->optionsAutoRun = gTasks[taskId].data[TD_AUTO_RUN];
+        gSaveBlock2Ptr->optionsEvIvEditor = gTasks[taskId].data[TD_EVIV_EDITOR];
         gSaveBlock2Ptr->optionsLevelCap = gTasks[taskId].data[TD_LEVEL_CAP];
 
         OptionMenu_DrawChoicesForPage(taskId);
@@ -518,6 +555,7 @@ static void Task_OptionMenuProcessInput(u8 taskId)
             gTasks[taskId].data[TD_MENUSELECTION]--;
         else
             gTasks[taskId].data[TD_MENUSELECTION] = itemCount - 1;
+        gTasks[taskId].data[TD_MENUSELECTION] = OptionMenu_ClampSelectionForPage(page, gTasks[taskId].data[TD_MENUSELECTION]);
 		OptionMenu_LoadCursorMap(gTasks[taskId].data[TD_MENUSELECTION]);
 		OptionMenu_ClearWindow(DESCRIPTION);
 		SetDescriptionForSelection(page, gTasks[taskId].data[TD_MENUSELECTION]);
@@ -528,6 +566,7 @@ static void Task_OptionMenuProcessInput(u8 taskId)
             gTasks[taskId].data[TD_MENUSELECTION]++;
         else
             gTasks[taskId].data[TD_MENUSELECTION] = 0;
+        gTasks[taskId].data[TD_MENUSELECTION] = OptionMenu_ClampSelectionForPage(page, gTasks[taskId].data[TD_MENUSELECTION]);
 		OptionMenu_LoadCursorMap(gTasks[taskId].data[TD_MENUSELECTION]);
 		OptionMenu_ClearWindow(DESCRIPTION);
 		SetDescriptionForSelection(page, gTasks[taskId].data[TD_MENUSELECTION]);
@@ -604,6 +643,13 @@ static void Task_OptionMenuProcessInput(u8 taskId)
                 if (previousOption != gTasks[taskId].data[TD_OVERWORLD_WILD])
                     OverworldWild_DrawChoices(gTasks[taskId].data[TD_OVERWORLD_WILD]);
                 break;
+            case MENUITEM_FEATURES_AUTO_RUN:
+                previousOption = gTasks[taskId].data[TD_AUTO_RUN];
+                gTasks[taskId].data[TD_AUTO_RUN] = AutoRun_ProcessInput(gTasks[taskId].data[TD_AUTO_RUN]);
+
+                if (previousOption != gTasks[taskId].data[TD_AUTO_RUN])
+                    AutoRun_DrawChoices(gTasks[taskId].data[TD_AUTO_RUN]);
+                break;
             case MENUITEM_FEATURES_AUTOSAVE:
                 previousOption = gTasks[taskId].data[TD_AUTOSAVE];
                 gTasks[taskId].data[TD_AUTOSAVE] = AutoSave_ProcessInput(gTasks[taskId].data[TD_AUTOSAVE]);
@@ -611,20 +657,40 @@ static void Task_OptionMenuProcessInput(u8 taskId)
                 if (previousOption != gTasks[taskId].data[TD_AUTOSAVE])
                     AutoSave_DrawChoices(gTasks[taskId].data[TD_AUTOSAVE]);
                 break;
+            case MENUITEM_FEATURES_EVIV_EDITOR:
+                previousOption = gTasks[taskId].data[TD_EVIV_EDITOR];
+                gTasks[taskId].data[TD_EVIV_EDITOR] = EvIvEditor_ProcessInput(gTasks[taskId].data[TD_EVIV_EDITOR]);
+
+                if (previousOption != gTasks[taskId].data[TD_EVIV_EDITOR])
+                {
+                    EvIvEditor_DrawChoices(gTasks[taskId].data[TD_EVIV_EDITOR]);
+                    sOptionMenuEvIvEditorSelection = gTasks[taskId].data[TD_EVIV_EDITOR];
+                    OptionMenu_ClearWindow(DESCRIPTION);
+                    SetDescriptionForSelection(page, gTasks[taskId].data[TD_MENUSELECTION]);
+                }
+                break;
             default:
                 return;
             }
             break;
         case OPTION_MENU_PAGE_DIFFICULTY:
-            previousOption = gTasks[taskId].data[TD_LEVEL_CAP];
-            gTasks[taskId].data[TD_LEVEL_CAP] = LevelCap_ProcessInput(gTasks[taskId].data[TD_LEVEL_CAP]);
-
-            if (previousOption != gTasks[taskId].data[TD_LEVEL_CAP])
+            switch (gTasks[taskId].data[TD_MENUSELECTION])
             {
-                LevelCap_DrawChoices(gTasks[taskId].data[TD_LEVEL_CAP]);
-                sOptionMenuLevelCapSelection = gTasks[taskId].data[TD_LEVEL_CAP];
-                OptionMenu_ClearWindow(DESCRIPTION);
-                SetDescriptionForSelection(page, gTasks[taskId].data[TD_MENUSELECTION]);
+            case MENUITEM_DIFFICULTY_LEVEL_CAP:
+                previousOption = gTasks[taskId].data[TD_LEVEL_CAP];
+                gTasks[taskId].data[TD_LEVEL_CAP] = LevelCap_ProcessInput(gTasks[taskId].data[TD_LEVEL_CAP]);
+
+                if (previousOption != gTasks[taskId].data[TD_LEVEL_CAP])
+                {
+                    LevelCap_DrawChoices(gTasks[taskId].data[TD_LEVEL_CAP]);
+                    sOptionMenuLevelCapSelection = gTasks[taskId].data[TD_LEVEL_CAP];
+                    OptionMenu_ClearWindow(DESCRIPTION);
+                    SetDescriptionForSelection(page, gTasks[taskId].data[TD_MENUSELECTION]);
+                }
+                break;
+            case MENUITEM_DIFFICULTY_COMPETITIVE_AI:
+            default:
+                break;
             }
             break;
         default:
@@ -670,6 +736,8 @@ static void Task_OptionMenuSave(u8 taskId)
 		gSaveBlock2Ptr->optionsShinyOdds = gTasks[taskId].data[TD_SHINY_ODDS];
 		gSaveBlock2Ptr->optionsOverworldWildEncounters = gTasks[taskId].data[TD_OVERWORLD_WILD];
 		gSaveBlock2Ptr->optionsAutoSave = gTasks[taskId].data[TD_AUTOSAVE];
+		gSaveBlock2Ptr->optionsAutoRun = gTasks[taskId].data[TD_AUTO_RUN];
+		gSaveBlock2Ptr->optionsEvIvEditor = gTasks[taskId].data[TD_EVIV_EDITOR];
 		gSaveBlock2Ptr->optionsLevelCap = gTasks[taskId].data[TD_LEVEL_CAP];
 
 		BeginNormalPaletteFade(0xFFFFFFFF, 0, 0, 0x10, 0);
@@ -838,6 +906,8 @@ static const u8 *OptionMenu_GetDescription(u8 page, u8 index)
     case OPTION_MENU_PAGE_FEATURES:
         if (index >= MENUITEM_FEATURES_COUNT)
             index = 0;
+        if (index == MENUITEM_FEATURES_EVIV_EDITOR)
+            return OptionMenu_GetEvIvEditorDescription(sOptionMenuEvIvEditorSelection);
         return sOptionMenuDescriptionsFeatures[index];
     case OPTION_MENU_PAGE_DIFFICULTY:
         if (index == MENUITEM_DIFFICULTY_LEVEL_CAP)
@@ -862,6 +932,31 @@ static const u8 *OptionMenu_GetLevelCapDescription(u8 selection)
     default:
         return localText_LevelCapNormalDescription;
     }
+}
+
+static const u8 *OptionMenu_GetEvIvEditorDescription(u8 selection)
+{
+    switch (selection)
+    {
+    case OPTIONS_EV_IV_EDITOR_ON:
+        return localText_EvIvEditorOnDescription;
+    case OPTIONS_EV_IV_EDITOR_OFF:
+    default:
+        return localText_EvIvEditorOffDescription;
+    }
+}
+
+static bool8 OptionMenu_IsDifficultyItemDisabled(u8 index)
+{
+    return index == MENUITEM_DIFFICULTY_COMPETITIVE_AI;
+}
+
+static u8 OptionMenu_ClampSelectionForPage(u8 page, u8 selection)
+{
+    if (page == OPTION_MENU_PAGE_DIFFICULTY && OptionMenu_IsDifficultyItemDisabled(selection))
+        return MENUITEM_DIFFICULTY_LEVEL_CAP;
+
+    return selection;
 }
 
 static const u8 *OptionMenu_GetPageTitle(u8 page)
@@ -923,10 +1018,7 @@ static void OptionMenu_ChangePage(u8 taskId, s8 direction)
         gTasks[taskId].data[TD_PAGE_SELECTION_OPTIONS] = selection;
         break;
     case OPTION_MENU_PAGE_FEATURES:
-        gTasks[taskId].data[TD_PAGE_SELECTION_FEATURES] = selection;
-        break;
-    case OPTION_MENU_PAGE_DIFFICULTY:
-        gTasks[taskId].data[TD_PAGE_SELECTION_DIFFICULTY] = selection;
+        sOptionMenuFeaturesSelection = selection;
         break;
     }
 
@@ -955,10 +1047,10 @@ static void OptionMenu_ChangePage(u8 taskId, s8 direction)
         selection = gTasks[taskId].data[TD_PAGE_SELECTION_OPTIONS];
         break;
     case OPTION_MENU_PAGE_FEATURES:
-        selection = gTasks[taskId].data[TD_PAGE_SELECTION_FEATURES];
+        selection = sOptionMenuFeaturesSelection;
         break;
     case OPTION_MENU_PAGE_DIFFICULTY:
-        selection = gTasks[taskId].data[TD_PAGE_SELECTION_DIFFICULTY];
+        selection = 0;
         break;
     default:
         selection = 0;
@@ -968,6 +1060,7 @@ static void OptionMenu_ChangePage(u8 taskId, s8 direction)
     itemCount = OptionMenu_GetItemCount(page);
     if (selection >= itemCount)
         selection = 0;
+    selection = OptionMenu_ClampSelectionForPage(page, selection);
 
     gTasks[taskId].data[TD_MENUSELECTION] = selection;
     OptionMenu_LoadCursorMap(selection);
@@ -993,6 +1086,20 @@ static u8 OptionMenu_ClampAutoSave(u8 value)
 {
     if (value >= OPTIONS_AUTOSAVE_COUNT)
         return OPTIONS_AUTOSAVE_OFF;
+    return value;
+}
+
+static u8 OptionMenu_ClampAutoRun(u8 value)
+{
+    if (value >= OPTIONS_AUTO_RUN_COUNT)
+        return OPTIONS_AUTO_RUN_OFF;
+    return value;
+}
+
+static u8 OptionMenu_ClampEvIvEditor(u8 value)
+{
+    if (value >= OPTIONS_EV_IV_EDITOR_COUNT)
+        return OPTIONS_EV_IV_EDITOR_OFF;
     return value;
 }
 
@@ -1313,8 +1420,78 @@ static void AutoSave_DrawChoices(u8 selection)
     styles[1] = 5;
     styles[selection] = 1;
 
+    DrawOptionMenuChoice(localText_BattleSceneOff, 112, 64, styles[0]);
+    DrawOptionMenuChoice(localText_BattleSceneOn,  162, 64, styles[1]);
+}
+
+static u8 AutoRun_ProcessInput(u8 selection)
+{
+    if (gMain.newKeys & DPAD_RIGHT)
+    {
+        if (selection < OPTIONS_AUTO_RUN_ON)
+            selection++;
+        else
+            selection = 0;
+
+        sArrowPressed = TRUE;
+    }
+    if (gMain.newKeys & DPAD_LEFT)
+    {
+        if (selection != 0)
+            selection--;
+        else
+            selection = OPTIONS_AUTO_RUN_ON;
+
+        sArrowPressed = TRUE;
+    }
+    return selection;
+}
+
+static void AutoRun_DrawChoices(u8 selection)
+{
+    u8 styles[2];
+
+    styles[0] = 5;
+    styles[1] = 5;
+    styles[selection] = 1;
+
     DrawOptionMenuChoice(localText_BattleSceneOff, 112, 48, styles[0]);
     DrawOptionMenuChoice(localText_BattleSceneOn,  162, 48, styles[1]);
+}
+
+static u8 EvIvEditor_ProcessInput(u8 selection)
+{
+    if (gMain.newKeys & DPAD_RIGHT)
+    {
+        if (selection < OPTIONS_EV_IV_EDITOR_ON)
+            selection++;
+        else
+            selection = 0;
+
+        sArrowPressed = TRUE;
+    }
+    if (gMain.newKeys & DPAD_LEFT)
+    {
+        if (selection != 0)
+            selection--;
+        else
+            selection = OPTIONS_EV_IV_EDITOR_ON;
+
+        sArrowPressed = TRUE;
+    }
+    return selection;
+}
+
+static void EvIvEditor_DrawChoices(u8 selection)
+{
+    u8 styles[2];
+
+    styles[0] = 5;
+    styles[1] = 5;
+    styles[selection] = 1;
+
+    DrawOptionMenuChoice(localText_BattleSceneOff, 112, 80, styles[0]);
+    DrawOptionMenuChoice(localText_BattleSceneOn,  162, 80, styles[1]);
 }
 
 static u8 LevelCap_ProcessInput(u8 selection)
@@ -1352,6 +1529,16 @@ static void LevelCap_DrawChoices(u8 selection)
     DrawOptionMenuChoice(localText_LevelCapOff,    112, 16, styles[0]);
     DrawOptionMenuChoice(localText_LevelCapNormal, 148, 16, styles[1]);
     DrawOptionMenuChoice(localText_LevelCapHard,   198, 16, styles[2]);
+}
+
+static void CompetitiveAI_DrawChoices(void)
+{
+    u8 style = TEXT_COLOR_LIGHT_GRAY;
+
+    DrawOptionMenuChoice(localText_CompetitiveAIOff,    104, 32, style);
+    DrawOptionMenuChoice(localText_CompetitiveAIEasy,   136, 32, style);
+    DrawOptionMenuChoice(localText_CompetitiveAINormal, 172, 32, style);
+    DrawOptionMenuChoice(localText_CompetitiveAIHard,   208, 32, style);
 }
 
 static void DrawOptionMenuTexts(u8 page, u8 selection)
@@ -1411,10 +1598,13 @@ static void OptionMenu_DrawChoicesForPage(u8 taskId)
     case OPTION_MENU_PAGE_FEATURES:
         ShinyOdds_DrawChoices(gTasks[taskId].data[TD_SHINY_ODDS]);
         OverworldWild_DrawChoices(gTasks[taskId].data[TD_OVERWORLD_WILD]);
+        AutoRun_DrawChoices(gTasks[taskId].data[TD_AUTO_RUN]);
         AutoSave_DrawChoices(gTasks[taskId].data[TD_AUTOSAVE]);
+        EvIvEditor_DrawChoices(gTasks[taskId].data[TD_EVIV_EDITOR]);
         break;
     case OPTION_MENU_PAGE_DIFFICULTY:
         LevelCap_DrawChoices(gTasks[taskId].data[TD_LEVEL_CAP]);
+        CompetitiveAI_DrawChoices();
         break;
     }
 }

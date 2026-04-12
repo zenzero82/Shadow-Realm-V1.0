@@ -686,6 +686,13 @@ static void Task_DoPokeballSendOutAnim(u8 taskId)
     ballId = GetBattlerPokeballItemId(battler);
     LoadBallGfx(ballId);
     ballSpriteId = CreateSprite(&gBallSpriteTemplates[ballId], 32, 80, 29);
+    if (ballSpriteId == MAX_SPRITES)
+    {
+        gBattleSpritesDataPtr->healthBoxesData[battler].ballAnimActive = FALSE;
+        gDoingBattleAnim = FALSE;
+        DestroyTask(taskId);
+        return;
+    }
     gSprites[ballSpriteId].data[0] = 0x80;
     gSprites[ballSpriteId].data[1] = 0;
     gSprites[ballSpriteId].data[7] = throwCaseId;

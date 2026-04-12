@@ -14,6 +14,7 @@
 #include "text.h"
 #include "text_window.h"
 #include "string_util.h"
+#include "international_string_util.h"
 #include "event_data.h"
 #include "sprite.h"
 #include "constants/rgb.h"
@@ -21,7 +22,7 @@
 #include "constants/songs.h"
 
 #define TEXT_SPEED_FF 0xFF
-#define QUEST_JOURNAL_MAX_ENTRIES 26
+#define QUEST_JOURNAL_MAX_ENTRIES 150
 #define QUEST_JOURNAL_VISIBLE_ENTRIES 6
 #define QUEST_JOURNAL_ENTRY_TEXT_X 20
 #define QUEST_JOURNAL_ENTRY_ICON_X 12
@@ -45,6 +46,21 @@ enum
     QUEST_JOURNAL_MARKING_ICON_COUNT,
 };
 
+enum
+{
+    QUEST_JOURNAL_TAB_ALL,
+    QUEST_JOURNAL_TAB_ACTIVE,
+    QUEST_JOURNAL_TAB_INACTIVE,
+    QUEST_JOURNAL_TAB_COUNT,
+};
+
+enum
+{
+    QUEST_JOURNAL_ENTRY_STATE_COMPLETE,
+    QUEST_JOURNAL_ENTRY_STATE_INCOMPLETE,
+    QUEST_JOURNAL_ENTRY_STATE_UNOBTAINED,
+};
+
 static void QuestJournal_MainCB2(void);
 static void QuestJournal_VBlankCB(void);
 static void Task_QuestJournalFadeIn(u8 taskId);
@@ -52,6 +68,8 @@ static void Task_QuestJournalHandleInput(u8 taskId);
 static void Task_QuestJournalFadeOut(u8 taskId);
 static void Task_QuestJournalExit(u8 taskId);
 static void QuestJournal_BuildEntryList(void);
+static void QuestJournal_AddEntriesByStatePinned(u8 state, bool8 pinned);
+static void QuestJournal_AddEntriesAllPinned(bool8 pinned);
 static void QuestJournal_DrawTexts(u8 selection);
 static void QuestJournal_SetDescription(u8 selection);
 static void QuestJournal_ShowDescription(const u8 *text);
@@ -64,6 +82,8 @@ static void QuestJournal_DestroyEntryIcons(void);
 static void QuestJournal_UpdateEntryIcons(void);
 static void QuestJournal_HideButtonIcons(void);
 static bool8 QuestJournal_IsEntryUnlocked(const struct QuestJournalEntry *entry);
+static u8 QuestJournal_GetEntryState(const struct QuestJournalEntry *entry);
+static void QuestJournal_SetTab(u8 taskId, u8 tab);
 
 static const u8 sQuestJournalMarkingsGfx[] = INCBIN_U8("graphics/interface/mon_markings.4bpp");
 static const u16 sQuestJournalLegendPal[] =
@@ -132,24 +152,31 @@ static const struct SpriteTemplate sQuestJournalMarkingTemplate =
     .callback = SpriteCallbackDummy,
 };
 
-static const u8 sText_QuestJournalTitle[] = _("{COLOR 2}{HIGHLIGHT TRANSPARENT}QUEST JOURNAL");
-static const u8 sText_QuestLegendProgress[] = _("{COLOR 2}{HIGHLIGHT TRANSPARENT}IN PROG.");
-static const u8 sText_QuestLegendComplete[] = _("{COLOR 2}{HIGHLIGHT TRANSPARENT}COMPLETE");
+static const u8 sText_QuestTabAll[] = _("{COLOR 2}{HIGHLIGHT TRANSPARENT}All Quests");
+static const u8 sText_QuestTabActive[] = _("{COLOR 2}{HIGHLIGHT TRANSPARENT}Active Quests");
+static const u8 sText_QuestTabInactive[] = _("{COLOR 2}{HIGHLIGHT TRANSPARENT}Inactive Quests");
+static const u8 sText_QuestTabPage1[] = _("{COLOR 2}{HIGHLIGHT TRANSPARENT}1/3");
+static const u8 sText_QuestTabPage2[] = _("{COLOR 2}{HIGHLIGHT TRANSPARENT}2/3");
+static const u8 sText_QuestTabPage3[] = _("{COLOR 2}{HIGHLIGHT TRANSPARENT}3/3");
+static const u8 sText_QuestTabHint[] = _("{COLOR 2}{HIGHLIGHT TRANSPARENT}{R_BUTTON} Type");
+static const u8 sText_QuestStatusActive[] = _("{COLOR RED}{HIGHLIGHT TRANSPARENT}Active");
+static const u8 sText_QuestStatusDone[] = _("{COLOR 2}{HIGHLIGHT TRANSPARENT}Done");
 static const u8 sText_QuestNone[] = _("{COLOR 1}{HIGHLIGHT TRANSPARENT}No quests yet.");
 static const u8 sText_QuestEntryStyle[] = _("{COLOR 1}{HIGHLIGHT TRANSPARENT}");
+static const u8 sText_QuestEntryStylePinned[] = _("{COLOR 6}{HIGHLIGHT TRANSPARENT}");
 static const u8 sText_QuestLockedTitle[] = _("-------");
 static const u8 sText_QuestLockedDesc[] = _("{COLOR 1}{HIGHLIGHT TRANSPARENT}Quest not unlocked yet.");
-static const u8 sText_QuestPalletTitle[] = _("Talk to Every NPC in Pallet Town");
+static const u8 sText_QuestPalletTitle[] = _("NPCs in Pallet Town");
 static const u8 sText_QuestPalletDesc[] = _("{COLOR 1}{HIGHLIGHT TRANSPARENT}It's important to gather\ninformation from everyone.");
 static const u8 sText_QuestViridianTitle[] = _("Go Visit Viridian Gym");
 static const u8 sText_QuestViridianDesc[] = _("{COLOR 1}{HIGHLIGHT TRANSPARENT}Viridian seems to be in trouble.\nSeek Gary at Viridian Gym.");
-static const u8 sText_QuestPewterTitle[] = _("Talk to every NPC in Pewter.");
+static const u8 sText_QuestPewterTitle[] = _("NPCs in Pewter City");
 static const u8 sText_QuestPewterDesc[] = _("{COLOR 1}{HIGHLIGHT TRANSPARENT}Learn about whats happening in\nPewter City. Might help!");
 static const u8 sText_QuestBrockTitle[] = _("Defeat Brock!");
 static const u8 sText_QuestBrockDesc[] = _("{COLOR 1}{HIGHLIGHT TRANSPARENT}Show Brock you're worthy of the\nBOULDER BADGE.");
 static const u8 sText_QuestMtMoonTitle[] = _("Explore Mt Moon");
 static const u8 sText_QuestMtMoonDesc[] = _("{COLOR 1}{HIGHLIGHT TRANSPARENT}Explore MT Moon and the Outside\narea.");
-static const u8 sText_QuestCeruleanNPCsTitle[] = _("Talk to every NPC in Cerulean.");
+static const u8 sText_QuestCeruleanNPCsTitle[] = _("NPCs in Cerulean City");
 static const u8 sText_QuestCeruleanNPCsDesc[] = _("{COLOR 1}{HIGHLIGHT TRANSPARENT}Learn about whats happening in\nCerulean City. Might help!");
 static const u8 sText_QuestCeruleanWesTitle[] = _("Find Wes in Cerulean City");
 static const u8 sText_QuestCeruleanWesDesc[] = _("{COLOR 1}{HIGHLIGHT TRANSPARENT}Wes is waiting for you to prove\nyour strength. Look for clues.");
@@ -160,7 +187,7 @@ static const u8 sText_QuestTalkWesDesc[] = _("{COLOR 1}{HIGHLIGHT TRANSPARENT}En
 static const u8 sText_QuestTalkTeamTitle[] = _("Talk to the Team");
 static const u8 sText_QuestTalkTeamDesc[] = _("{COLOR 1}{HIGHLIGHT TRANSPARENT}Visit The Under and speak to all\nProfessors.");
 static const u8 sText_QuestKukuiShadowTitle[] = _("Finding a... specific Shadow?");
-static const u8 sText_QuestKukuiShadowDesc[] = _("{COLOR 1}{HIGHLIGHT TRANSPARENT}There is a certain Shadow POKéMON\nthat Kukui needs.");
+static const u8 sText_QuestKukuiShadowDesc[] = _("{COLOR 1}{HIGHLIGHT TRANSPARENT}There is a certain {COLOR PURPLE}Shadow POKéMON{COLOR 1}\nthat Kukui needs.");
 static const u8 sText_QuestSnagMachineTitle[] = _("The Snag Machine!");
 static const u8 sText_QuestSnagMachineDesc[] = _("{COLOR 1}{HIGHLIGHT TRANSPARENT}Talk to Wes before you leave the\nHideout.");
 static const u8 sText_QuestMistyTitle[] = _("Defeat Misty!");
@@ -169,26 +196,38 @@ static const u8 sText_QuestRoute9GuardsTitle[] = _("Talk to the Guards at Rt 9."
 static const u8 sText_QuestRoute9GuardsDesc[] = _("{COLOR 1}{HIGHLIGHT TRANSPARENT}The guards would love to see that\nshiny new badge!");
 static const u8 sText_QuestPlasmaTunnelTitle[] = _("Plasma Tunnel");
 static const u8 sText_QuestPlasmaTunnelDesc[] = _("{COLOR 1}{HIGHLIGHT TRANSPARENT}Team Plasma took over Rock Tunnel.\nDefeat them!");
-static const u8 sText_QuestVioletNPCsTitle[] = _("Talk to every NPC in Violet.");
+static const u8 sText_QuestVioletNPCsTitle[] = _("NPCs in Violet City");
 static const u8 sText_QuestVioletNPCsDesc[] = _("{COLOR 1}{HIGHLIGHT TRANSPARENT}Learn about whats happening in\nViolet City. Might help!");
 static const u8 sText_QuestFalknerTitle[] = _("Defeat Falkner!");
 static const u8 sText_QuestFalknerDesc[] = _("{COLOR 1}{HIGHLIGHT TRANSPARENT}Show Falkner you can fly high and\nsnatch the ZEPHYR BADGE.");
 static const u8 sText_QuestKurtTitle[] = _("Kurt the Apricorn Master");
 static const u8 sText_QuestKurtDesc[] = _("{COLOR 1}{HIGHLIGHT TRANSPARENT}Head down to Azalea Town and find\nKurt.");
-static const u8 sText_QuestAzaleaNPCsTitle[] = _("Talk to every NPC in Azalea.");
+static const u8 sText_QuestAzaleaNPCsTitle[] = _("NPCs in Azalea Town");
 static const u8 sText_QuestAzaleaNPCsDesc[] = _("{COLOR 1}{HIGHLIGHT TRANSPARENT}Learn about whats happening in\nAzalea Town. Might help!");
 static const u8 sText_QuestBugsyTitle[] = _("Defeat Bugsy!");
 static const u8 sText_QuestBugsyDesc[] = _("{COLOR 1}{HIGHLIGHT TRANSPARENT}Prove to Bugsy that you're the ruler\nof the Hive. Get that HIVE BADGE!");
 static const u8 sText_QuestSlowpokeWellTitle[] = _("Slowpoke Well Flared Up!");
 static const u8 sText_QuestSlowpokeWellDesc[] = _("{COLOR 1}{HIGHLIGHT TRANSPARENT}Team Flare is up to something.\nFind out what it is!");
-static const u8 sText_QuestCherrygroveNPCsTitle[] = _("Talk to every NPC in Cherrygrove.");
+static const u8 sText_QuestCherrygroveNPCsTitle[] = _("NPCs in Cherrygrove City");
 static const u8 sText_QuestCherrygroveNPCsDesc[] = _("{COLOR 1}{HIGHLIGHT TRANSPARENT}Learn about whats happening in\nCherrygrove City. Might help!");
-static const u8 sText_QuestNewBarkNPCsTitle[] = _("Talk to every NPC in New Bark.");
+static const u8 sText_QuestNewBarkNPCsTitle[] = _("NPCs in New Bark Town");
 static const u8 sText_QuestNewBarkNPCsDesc[] = _("{COLOR 1}{HIGHLIGHT TRANSPARENT}Learn about whats happening in\nNew Bark Town. Might help!");
 static const u8 sText_QuestGoldsMomTitle[] = _("Gold's Mom Our Favorite Banker");
 static const u8 sText_QuestGoldsMomDesc[] = _("{COLOR 1}{HIGHLIGHT TRANSPARENT}Check on Gold's mom in New Bark\nTown to see how she's doing.");
-static const u8 sText_QuestShadowTrainerTitle[] = _("Find the Shadow Trainer on Rt 10.");
+static const u8 sText_QuestShadowTrainerTitle[] = _("The Shadow Imitation");
 static const u8 sText_QuestShadowTrainerDesc[] = _("{COLOR 1}{HIGHLIGHT TRANSPARENT}Search Route 10 for any suspicious\ntrainers.");
+static const u8 sText_QuestBackToHQTitle[] = _("Back To HQ... ASAP!");
+static const u8 sText_QuestBackToHQDesc[] = _("{COLOR 1}{HIGHLIGHT TRANSPARENT}Birch is tripping... bad.\nLet's get to the Lab as fast as we can!");
+static const u8 sText_QuestThunderbirdTitle[] = _("The Thunderbird");
+static const u8 sText_QuestThunderbirdDesc[] = _("{COLOR 1}{HIGHLIGHT TRANSPARENT}Visit the Power Plant on Route 10\nto seek ZAPDOS.");
+static const u8 sText_QuestIcebirdTitle[] = _("The Icebird");
+static const u8 sText_QuestIcebirdDesc[] = _("{COLOR 1}{HIGHLIGHT TRANSPARENT}Visit Seafoam Islands south of\nFuchsia to seek ARTICUNO.");
+static const u8 sText_QuestFirebirdTitle[] = _("The Firebird");
+static const u8 sText_QuestFirebirdDesc[] = _("{COLOR 1}{HIGHLIGHT TRANSPARENT}Visit MT. SILVER west of the\nRECEPTION GATE to seek MOLTRES.");
+static const u8 sText_QuestPhoenixTitle[] = _("The Life Giving Phoenix");
+static const u8 sText_QuestPhoenixDesc[] = _("{COLOR 1}{HIGHLIGHT TRANSPARENT}Visit Tin Tower in Ecruteak City\nto seek HO-OH.");
+static const u8 sText_QuestShiningBeastTitle[] = _("The Shining Silver Beast");
+static const u8 sText_QuestShiningBeastDesc[] = _("{COLOR 1}{HIGHLIGHT TRANSPARENT}Visit the Whirl Islands on Route 41\nto seek LUGIA.");
 
 static const struct QuestJournalEntry sQuestJournalEntries[] =
 {
@@ -342,6 +381,42 @@ static const struct QuestJournalEntry sQuestJournalEntries[] =
         .flagStarted = FLAG_QUEST_GOLDS_MOM_STARTED,
         .flagCompleted = FLAG_QUEST_GOLDS_MOM_COMPLETED,
     },
+    {
+        .title = sText_QuestBackToHQTitle,
+        .description = sText_QuestBackToHQDesc,
+        .flagStarted = FLAG_QUEST_BACK_TO_HQ_STARTED,
+        .flagCompleted = FLAG_QUEST_BACK_TO_HQ_COMPLETED,
+    },
+    {
+        .title = sText_QuestThunderbirdTitle,
+        .description = sText_QuestThunderbirdDesc,
+        .flagStarted = FLAG_QUEST_THUNDERBIRD_STARTED,
+        .flagCompleted = FLAG_QUEST_THUNDERBIRD_COMPLETED,
+    },
+    {
+        .title = sText_QuestIcebirdTitle,
+        .description = sText_QuestIcebirdDesc,
+        .flagStarted = FLAG_QUEST_ICEBIRD_STARTED,
+        .flagCompleted = FLAG_QUEST_ICEBIRD_COMPLETED,
+    },
+    {
+        .title = sText_QuestFirebirdTitle,
+        .description = sText_QuestFirebirdDesc,
+        .flagStarted = FLAG_QUEST_FIREBIRD_STARTED,
+        .flagCompleted = FLAG_QUEST_FIREBIRD_COMPLETED,
+    },
+    {
+        .title = sText_QuestPhoenixTitle,
+        .description = sText_QuestPhoenixDesc,
+        .flagStarted = FLAG_QUEST_PHOENIX_STARTED,
+        .flagCompleted = FLAG_QUEST_PHOENIX_COMPLETED,
+    },
+    {
+        .title = sText_QuestShiningBeastTitle,
+        .description = sText_QuestShiningBeastDesc,
+        .flagStarted = FLAG_QUEST_SHINING_BEAST_STARTED,
+        .flagCompleted = FLAG_QUEST_SHINING_BEAST_COMPLETED,
+    },
 };
 
 static const u32 *const sQuestJournalCursorMaps[] =
@@ -420,6 +495,8 @@ static EWRAM_DATA u8 sQuestJournalEntryIds[QUEST_JOURNAL_MAX_ENTRIES];
 static EWRAM_DATA u8 sQuestJournalMarkingSpriteIds[QUEST_JOURNAL_MARKING_ICON_COUNT];
 static EWRAM_DATA u8 sQuestJournalEntryMarkingSpriteIds[QUEST_JOURNAL_MAX_ENTRIES];
 static EWRAM_DATA u8 sQuestJournalScrollTop = 0;
+static EWRAM_DATA u8 sQuestJournalTab = QUEST_JOURNAL_TAB_ALL;
+static EWRAM_DATA bool8 sQuestJournalEntryPinned[ARRAY_COUNT(sQuestJournalEntries)];
 
 void CB2_OpenQuestJournal(void)
 {
@@ -490,6 +567,7 @@ void CB2_OpenQuestJournal(void)
         gMain.state++;
         break;
     case 8:
+        sQuestJournalTab = QUEST_JOURNAL_TAB_ALL;
         QuestJournal_BuildEntryList();
         sQuestJournalScrollTop = 0;
         PutWindowTilemap(0);
@@ -548,11 +626,60 @@ static void Task_QuestJournalHandleInput(u8 taskId)
 {
     u8 selection = gTasks[taskId].data[0];
     u8 top = gTasks[taskId].data[1];
+    u8 i;
+    u8 entryId;
 
     if (JOY_NEW(B_BUTTON))
     {
         PlaySE(SE_SELECT);
         gTasks[taskId].func = Task_QuestJournalFadeOut;
+        return;
+    }
+
+    if (JOY_NEW(R_BUTTON))
+    {
+        PlaySE(SE_SELECT);
+        QuestJournal_SetTab(taskId, (sQuestJournalTab + 1) % QUEST_JOURNAL_TAB_COUNT);
+        return;
+    }
+
+    if (JOY_NEW(SELECT_BUTTON))
+    {
+        if (sQuestJournalEntryCount == 0)
+            return;
+
+        PlaySE(SE_SELECT);
+        entryId = sQuestJournalEntryIds[selection];
+        sQuestJournalEntryPinned[entryId] ^= 1;
+        QuestJournal_BuildEntryList();
+
+        selection = 0;
+        for (i = 0; i < sQuestJournalEntryCount; i++)
+        {
+            if (sQuestJournalEntryIds[i] == entryId)
+            {
+                selection = i;
+                break;
+            }
+        }
+
+        if (sQuestJournalEntryCount > QUEST_JOURNAL_VISIBLE_ENTRIES)
+        {
+            if (selection < top)
+                top = selection;
+            else if (selection >= top + QUEST_JOURNAL_VISIBLE_ENTRIES)
+                top = selection - (QUEST_JOURNAL_VISIBLE_ENTRIES - 1);
+        }
+        else
+        {
+            top = 0;
+        }
+
+        gTasks[taskId].data[0] = selection;
+        gTasks[taskId].data[1] = top;
+        sQuestJournalScrollTop = top;
+        QuestJournal_LoadCursorMap(selection - top);
+        QuestJournal_DrawTexts(selection);
         return;
     }
 
@@ -622,10 +749,52 @@ static void QuestJournal_BuildEntryList(void)
     sQuestJournalEntryCount = 0;
     for (i = 0; i < QUEST_JOURNAL_MAX_ENTRIES; i++)
         sQuestJournalEntryMarkingSpriteIds[i] = MAX_SPRITES;
+    if (sQuestJournalTab == QUEST_JOURNAL_TAB_ALL)
+    {
+        QuestJournal_AddEntriesAllPinned(TRUE);
+        QuestJournal_AddEntriesAllPinned(FALSE);
+    }
+    else if (sQuestJournalTab == QUEST_JOURNAL_TAB_ACTIVE)
+    {
+        QuestJournal_AddEntriesByStatePinned(QUEST_JOURNAL_ENTRY_STATE_INCOMPLETE, TRUE);
+        QuestJournal_AddEntriesByStatePinned(QUEST_JOURNAL_ENTRY_STATE_INCOMPLETE, FALSE);
+    }
+    else
+    {
+        QuestJournal_AddEntriesByStatePinned(QUEST_JOURNAL_ENTRY_STATE_COMPLETE, TRUE);
+        QuestJournal_AddEntriesByStatePinned(QUEST_JOURNAL_ENTRY_STATE_COMPLETE, FALSE);
+    }
+}
+
+static void QuestJournal_AddEntriesByStatePinned(u8 state, bool8 pinned)
+{
+    u8 i;
+
+    for (i = 0; i < ARRAY_COUNT(sQuestJournalEntries); i++)
+    {
+        const struct QuestJournalEntry *entry = &sQuestJournalEntries[i];
+
+        if (sQuestJournalEntryCount >= QUEST_JOURNAL_MAX_ENTRIES)
+            break;
+        if (sQuestJournalEntryPinned[i] != pinned)
+            continue;
+        if (QuestJournal_GetEntryState(entry) != state)
+            continue;
+
+        sQuestJournalEntryIds[sQuestJournalEntryCount++] = i;
+    }
+}
+
+static void QuestJournal_AddEntriesAllPinned(bool8 pinned)
+{
+    u8 i;
+
     for (i = 0; i < ARRAY_COUNT(sQuestJournalEntries); i++)
     {
         if (sQuestJournalEntryCount >= QUEST_JOURNAL_MAX_ENTRIES)
             break;
+        if (sQuestJournalEntryPinned[i] != pinned)
+            continue;
 
         sQuestJournalEntryIds[sQuestJournalEntryCount++] = i;
     }
@@ -635,17 +804,40 @@ static void QuestJournal_DrawTexts(u8 selection)
 {
     u8 top = sQuestJournalScrollTop;
     u8 i;
+    const u8 *tabTitle;
+    const u8 *tabPage;
+    u8 tabHintX;
+    u8 pageX;
+    u32 pageWidth;
 
     FillWindowPixelBuffer(0, PIXEL_FILL(0));
-    AddTextPrinterParameterized(0, FONT_NORMAL, sText_QuestJournalTitle, 8, 1, TEXT_SPEED_FF, NULL);
-    AddTextPrinterParameterized(0, FONT_NORMAL, sText_QuestLegendProgress, 130, 0, TEXT_SPEED_FF, NULL);
-    AddTextPrinterParameterized(0, FONT_NORMAL, sText_QuestLegendComplete, 192, 0, TEXT_SPEED_FF, NULL);
+    switch (sQuestJournalTab)
+    {
+    case QUEST_JOURNAL_TAB_ACTIVE:
+        tabTitle = sText_QuestTabActive;
+        tabPage = sText_QuestTabPage2;
+        break;
+    case QUEST_JOURNAL_TAB_INACTIVE:
+        tabTitle = sText_QuestTabInactive;
+        tabPage = sText_QuestTabPage3;
+        break;
+    default:
+        tabTitle = sText_QuestTabAll;
+        tabPage = sText_QuestTabPage1;
+        break;
+    }
+
+    AddTextPrinterParameterized(0, FONT_NORMAL, tabTitle, 8, 1, TEXT_SPEED_FF, NULL);
+    tabHintX = GetStringRightAlignXOffset(FONT_NORMAL, sText_QuestTabHint, 228);
+    pageWidth = GetStringWidth(FONT_NORMAL, tabPage, 0);
+    pageX = (tabHintX > pageWidth + 4) ? tabHintX - pageWidth - 4 : 0;
+    AddTextPrinterParameterized(0, FONT_NORMAL, tabPage, pageX, 1, TEXT_SPEED_FF, NULL);
+    AddTextPrinterParameterized(0, FONT_NORMAL, sText_QuestTabHint, tabHintX, 1, TEXT_SPEED_FF, NULL);
 
     if (sQuestJournalEntryCount == 0)
     {
         AddTextPrinterParameterized(0, FONT_NORMAL, sText_QuestNone, 8, 17, TEXT_SPEED_FF, NULL);
         QuestJournal_ShowDescription(sText_QuestNone);
-        QuestJournal_UpdateEntryIcons();
         CopyWindowToVram(0, COPYWIN_BOTH);
         return;
     }
@@ -655,21 +847,43 @@ static void QuestJournal_DrawTexts(u8 selection)
     {
         u8 entryIndex = top + i;
         const struct QuestJournalEntry *entry;
+        u8 entryId;
+        const u8 *statusText = NULL;
         u8 line[96];
+        u8 statusX;
+        u8 state;
 
         if (entryIndex >= sQuestJournalEntryCount)
             break;
 
-        entry = &sQuestJournalEntries[sQuestJournalEntryIds[entryIndex]];
-        StringCopy(line, sText_QuestEntryStyle);
+        entryId = sQuestJournalEntryIds[entryIndex];
+        entry = &sQuestJournalEntries[entryId];
+        if (sQuestJournalEntryPinned[entryId])
+            StringCopy(line, sText_QuestEntryStylePinned);
+        else
+            StringCopy(line, sText_QuestEntryStyle);
         if (QuestJournal_IsEntryUnlocked(entry))
             StringAppend(line, entry->title);
         else
             StringAppend(line, sText_QuestLockedTitle);
         AddTextPrinterParameterized(0, FONT_NORMAL, line, QUEST_JOURNAL_ENTRY_TEXT_X, (i * 16) + 17, TEXT_SPEED_FF, NULL);
+
+        if (QuestJournal_IsEntryUnlocked(entry))
+        {
+            state = QuestJournal_GetEntryState(entry);
+            if (state == QUEST_JOURNAL_ENTRY_STATE_COMPLETE)
+                statusText = sText_QuestStatusDone;
+            else if (state == QUEST_JOURNAL_ENTRY_STATE_INCOMPLETE)
+                statusText = sText_QuestStatusActive;
+        }
+
+        if (statusText != NULL)
+        {
+            statusX = GetStringRightAlignXOffset(FONT_NORMAL, statusText, 228);
+            AddTextPrinterParameterized(0, FONT_NORMAL, statusText, statusX, (i * 16) + 17, TEXT_SPEED_FF, NULL);
+        }
     }
 
-    QuestJournal_UpdateEntryIcons();
     CopyWindowToVram(0, COPYWIN_BOTH);
 }
 
@@ -734,27 +948,13 @@ static void QuestJournal_DrawFrame(void)
 static void QuestJournal_CreateLegendIcons(void)
 {
     u8 i;
-    struct SpriteSheet sheet = { sQuestJournalMarkingsGfx, 0x100, TAG_QUEST_JOURNAL_MARKINGS };
-    struct SpritePalette palette = { sQuestJournalLegendPal, PALTAG_QUEST_JOURNAL_MARKINGS };
-    const s16 xPositions[QUEST_JOURNAL_MARKING_ICON_COUNT] = { 119, 184 };
-    const s16 yPosition = 8;
 
     for (i = 0; i < QUEST_JOURNAL_MARKING_ICON_COUNT; i++)
         sQuestJournalMarkingSpriteIds[i] = MAX_SPRITES;
 
-    LoadSpriteSheet(&sheet);
-    LoadSpritePalette(&palette);
-
-    for (i = 0; i < QUEST_JOURNAL_MARKING_ICON_COUNT; i++)
-    {
-        u8 spriteId = CreateSprite(&sQuestJournalMarkingTemplate, xPositions[i], yPosition, 0);
-
-        if (spriteId != MAX_SPRITES)
-        {
-            sQuestJournalMarkingSpriteIds[i] = spriteId;
-            StartSpriteAnim(&gSprites[spriteId], i);
-        }
-    }
+    (void)sQuestJournalMarkingsGfx;
+    (void)sQuestJournalLegendPal;
+    (void)sQuestJournalMarkingTemplate;
 }
 
 static void QuestJournal_CreateEntryIcons(void)
@@ -763,31 +963,6 @@ static void QuestJournal_CreateEntryIcons(void)
 
     for (i = 0; i < QUEST_JOURNAL_MAX_ENTRIES; i++)
         sQuestJournalEntryMarkingSpriteIds[i] = MAX_SPRITES;
-
-    for (i = 0; i < sQuestJournalEntryCount; i++)
-    {
-        const struct QuestJournalEntry *entry = &sQuestJournalEntries[sQuestJournalEntryIds[i]];
-        u8 spriteId = CreateSprite(&sQuestJournalMarkingTemplate,
-                                   QUEST_JOURNAL_ENTRY_ICON_X,
-                                   (i * 16) + QUEST_JOURNAL_ENTRY_ICON_Y_BASE,
-                                   0);
-
-        if (spriteId != MAX_SPRITES)
-        {
-            sQuestJournalEntryMarkingSpriteIds[i] = spriteId;
-            if (!QuestJournal_IsEntryUnlocked(entry))
-            {
-                gSprites[spriteId].invisible = TRUE;
-            }
-            else
-            {
-                StartSpriteAnim(&gSprites[spriteId],
-                                FlagGet(entry->flagCompleted)
-                                    ? QUEST_JOURNAL_MARKING_ICON_COMPLETE
-                                    : QUEST_JOURNAL_MARKING_ICON_IN_PROGRESS);
-            }
-        }
-    }
 }
 
 static void QuestJournal_DestroyLegendIcons(void)
@@ -802,9 +977,6 @@ static void QuestJournal_DestroyLegendIcons(void)
             sQuestJournalMarkingSpriteIds[i] = MAX_SPRITES;
         }
     }
-
-    FreeSpriteTilesByTag(TAG_QUEST_JOURNAL_MARKINGS);
-    FreeSpritePaletteByTag(PALTAG_QUEST_JOURNAL_MARKINGS);
 }
 
 static void QuestJournal_DestroyEntryIcons(void)
@@ -823,40 +995,7 @@ static void QuestJournal_DestroyEntryIcons(void)
 
 static void QuestJournal_UpdateEntryIcons(void)
 {
-    u8 top = sQuestJournalScrollTop;
-    u8 i;
-
-    for (i = 0; i < QUEST_JOURNAL_MAX_ENTRIES; i++)
-    {
-        if (sQuestJournalEntryMarkingSpriteIds[i] != MAX_SPRITES)
-            gSprites[sQuestJournalEntryMarkingSpriteIds[i]].invisible = TRUE;
-    }
-
-    for (i = 0; i < sQuestJournalEntryCount; i++)
-    {
-        const struct QuestJournalEntry *entry = &sQuestJournalEntries[sQuestJournalEntryIds[i]];
-        u8 spriteId = sQuestJournalEntryMarkingSpriteIds[i];
-        s16 displayIndex = (s16)i - (s16)top;
-
-        if (spriteId == MAX_SPRITES)
-            continue;
-        if (!QuestJournal_IsEntryUnlocked(entry))
-        {
-            gSprites[spriteId].invisible = TRUE;
-            continue;
-        }
-
-        if (displayIndex < 0 || displayIndex >= QUEST_JOURNAL_VISIBLE_ENTRIES)
-            continue;
-
-        gSprites[spriteId].x = QUEST_JOURNAL_ENTRY_ICON_X;
-        gSprites[spriteId].y = (displayIndex * 16) + QUEST_JOURNAL_ENTRY_ICON_Y_BASE;
-        gSprites[spriteId].invisible = FALSE;
-        StartSpriteAnim(&gSprites[spriteId],
-                        FlagGet(entry->flagCompleted)
-                            ? QUEST_JOURNAL_MARKING_ICON_COMPLETE
-                            : QUEST_JOURNAL_MARKING_ICON_IN_PROGRESS);
-    }
+    return;
 }
 
 static void QuestJournal_HideButtonIcons(void)
@@ -879,4 +1018,28 @@ static void QuestJournal_HideButtonIcons(void)
 static bool8 QuestJournal_IsEntryUnlocked(const struct QuestJournalEntry *entry)
 {
     return FlagGet(entry->flagStarted) || FlagGet(entry->flagCompleted);
+}
+
+static u8 QuestJournal_GetEntryState(const struct QuestJournalEntry *entry)
+{
+    if (FlagGet(entry->flagCompleted))
+        return QUEST_JOURNAL_ENTRY_STATE_COMPLETE;
+    if (FlagGet(entry->flagStarted))
+        return QUEST_JOURNAL_ENTRY_STATE_INCOMPLETE;
+
+    return QUEST_JOURNAL_ENTRY_STATE_UNOBTAINED;
+}
+
+static void QuestJournal_SetTab(u8 taskId, u8 tab)
+{
+    if (sQuestJournalTab == tab)
+        return;
+
+    sQuestJournalTab = tab;
+    QuestJournal_BuildEntryList();
+    sQuestJournalScrollTop = 0;
+    gTasks[taskId].data[0] = 0;
+    gTasks[taskId].data[1] = 0;
+    QuestJournal_LoadCursorMap(0);
+    QuestJournal_DrawTexts(0);
 }

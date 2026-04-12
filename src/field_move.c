@@ -298,12 +298,12 @@ static bool32 IsFieldMoveUnlocked_Strength(void)
 
 static bool32 IsFieldMoveUnlocked_Surf(void)
 {
-    return TRUE;
+    return FlagGet(FLAG_BADGE18_GET);
 }
 
 static bool32 IsFieldMoveUnlocked_Fly(void)
 {
-    return TRUE;
+    return FlagGet(FLAG_BADGE18_GET);
 }
 
 static bool32 IsFieldMoveUnlocked_Dive(void)

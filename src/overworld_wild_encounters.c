@@ -8,20 +8,37 @@
 #include "fieldmap.h"
 #include "metatile_behavior.h"
 #include "random.h"
+#include "dexnav.h"
 #include "wild_encounter.h"
 #include "constants/event_object_movement.h"
 #include "constants/event_objects.h"
 #include "constants/global.h"
+#include "constants/items.h"
+#include "constants/moves.h"
+#include "constants/pokemon.h"
 #include "constants/trainer_types.h"
 
-#define OVERWORLD_WILD_SPAWN_TRIES 50
-#define OVERWORLD_WILD_SPAWN_RADIUS 4
-#define OVERWORLD_WILD_MIN_DISTANCE 1
+#define OVERWORLD_WILD_SPAWN_TRIES 100
+#define OVERWORLD_WILD_SPAWN_RADIUS 8
+#define OVERWORLD_WILD_MIN_PLAYER_DISTANCE 6
+#define OVERWORLD_WILD_MAX_PLAYER_DISTANCE 8
+#define OVERWORLD_WILD_MIN_WILD_DISTANCE 6
 #define OVERWORLD_WILD_MOVEMENT_RANGE 2
+#define OVERWORLD_WILD_MIN_TILES_FOR_TWO 20
+#define OVERWORLD_WILD_MIN_TILES_FOR_THREE 45
 
 EWRAM_DATA static bool8 sOverworldWildActive[OBJ_EVENT_ID_OVERWORLD_WILD_COUNT];
 EWRAM_DATA static u16 sOverworldWildSpecies[OBJ_EVENT_ID_OVERWORLD_WILD_COUNT];
 EWRAM_DATA static u8 sOverworldWildLevel[OBJ_EVENT_ID_OVERWORLD_WILD_COUNT];
+EWRAM_DATA static bool8 sOverworldWildIsDexNav[OBJ_EVENT_ID_OVERWORLD_WILD_COUNT];
+EWRAM_DATA static u8 sOverworldWildPotential[OBJ_EVENT_ID_OVERWORLD_WILD_COUNT];
+EWRAM_DATA static u8 sOverworldWildAbilityNum[OBJ_EVENT_ID_OVERWORLD_WILD_COUNT];
+EWRAM_DATA static u16 sOverworldWildHeldItem[OBJ_EVENT_ID_OVERWORLD_WILD_COUNT];
+EWRAM_DATA static u16 sOverworldWildMoves[OBJ_EVENT_ID_OVERWORLD_WILD_COUNT][MAX_MON_MOVES];
+
+static void OverworldWildEncounters_ClearSlot(u8 slot);
+static bool8 OverworldWildEncounters_FindAvailableSlot(u8 *slotOut);
+static u8 OverworldWildEncounters_GetMaxSpawns(void);
 
 static bool8 OverworldWildEncounters_Enabled(void)
 {
@@ -57,6 +74,99 @@ static bool8 OverworldWildEncounters_IsSpawnTileValid(s16 x, s16 y, u8 elevation
         return FALSE;
     if (IsElevationMismatchAt(elevation, x, y))
         return FALSE;
+
+    return TRUE;
+}
+
+static u16 OverworldWildEncounters_CountSpawnableTiles(s16 playerX, s16 playerY, u8 elevation)
+{
+    s16 minX = playerX - OVERWORLD_WILD_SPAWN_RADIUS;
+    s16 maxX = playerX + OVERWORLD_WILD_SPAWN_RADIUS;
+    s16 minY = playerY - OVERWORLD_WILD_SPAWN_RADIUS;
+    s16 maxY = playerY + OVERWORLD_WILD_SPAWN_RADIUS;
+    s16 mapMinX = MAP_OFFSET;
+    s16 mapMinY = MAP_OFFSET;
+    s16 mapMaxX = MAP_OFFSET + gMapHeader.mapLayout->width - 1;
+    s16 mapMaxY = MAP_OFFSET + gMapHeader.mapLayout->height - 1;
+    u16 count = 0;
+
+    if (minX < mapMinX)
+        minX = mapMinX;
+    if (minY < mapMinY)
+        minY = mapMinY;
+    if (maxX > mapMaxX)
+        maxX = mapMaxX;
+    if (maxY > mapMaxY)
+        maxY = mapMaxY;
+
+    for (s16 y = minY; y <= maxY; y++)
+    {
+        for (s16 x = minX; x <= maxX; x++)
+        {
+            u8 behavior = MapGridGetMetatileBehaviorAt(x, y);
+
+            if (!MetatileBehavior_IsLandWildEncounter(behavior))
+                continue;
+            if (MapGridGetCollisionAt(x, y))
+                continue;
+            if (IsElevationMismatchAt(elevation, x, y))
+                continue;
+
+            count++;
+        }
+    }
+
+    return count;
+}
+
+static u8 OverworldWildEncounters_GetMaxSpawns(void)
+{
+    s16 playerX = gSaveBlock1Ptr->pos.x;
+    s16 playerY = gSaveBlock1Ptr->pos.y;
+    u8 elevation = PlayerGetElevation();
+    u16 tiles;
+
+    if (gPlayerAvatar.objectEventId < OBJECT_EVENTS_COUNT && gObjectEvents[gPlayerAvatar.objectEventId].active)
+    {
+        playerX = gObjectEvents[gPlayerAvatar.objectEventId].currentCoords.x;
+        playerY = gObjectEvents[gPlayerAvatar.objectEventId].currentCoords.y;
+        elevation = gObjectEvents[gPlayerAvatar.objectEventId].currentElevation;
+    }
+
+    tiles = OverworldWildEncounters_CountSpawnableTiles(playerX, playerY, elevation);
+    if (tiles < OVERWORLD_WILD_MIN_TILES_FOR_TWO)
+        return tiles > 0 ? 1 : 0;
+    if (tiles < OVERWORLD_WILD_MIN_TILES_FOR_THREE)
+        return 2;
+    return OBJ_EVENT_ID_OVERWORLD_WILD_COUNT;
+}
+
+static bool8 OverworldWildEncounters_IsFarFromOtherWilds(s16 x, s16 y, u8 elevation)
+{
+    for (u8 slot = 0; slot < OBJ_EVENT_ID_OVERWORLD_WILD_COUNT; slot++)
+    {
+        u8 localId = OBJ_EVENT_ID_OVERWORLD_WILD_BASE + slot;
+        u8 objectEventId;
+        s16 dx;
+        s16 dy;
+
+        if (!sOverworldWildActive[slot])
+            continue;
+        objectEventId = GetObjectEventIdByLocalId(localId);
+        if (objectEventId == OBJECT_EVENTS_COUNT)
+            continue;
+        if (gObjectEvents[objectEventId].currentElevation != elevation)
+            continue;
+
+        dx = gObjectEvents[objectEventId].currentCoords.x - x;
+        dy = gObjectEvents[objectEventId].currentCoords.y - y;
+        if (dx < 0)
+            dx = -dx;
+        if (dy < 0)
+            dy = -dy;
+        if (dx + dy < OVERWORLD_WILD_MIN_WILD_DISTANCE)
+            return FALSE;
+    }
 
     return TRUE;
 }
@@ -114,10 +224,12 @@ static bool8 OverworldWildEncounters_FindSpawnCoords(s16 *xOut, s16 *yOut, u8 *e
             dx = -dx;
         if (dy < 0)
             dy = -dy;
-        if (dx + dy < OVERWORLD_WILD_MIN_DISTANCE)
+        if (dx + dy < OVERWORLD_WILD_MIN_PLAYER_DISTANCE || dx + dy > OVERWORLD_WILD_MAX_PLAYER_DISTANCE)
             continue;
 
         if (!OverworldWildEncounters_IsSpawnTileValid(x, y, elevation))
+            continue;
+        if (!OverworldWildEncounters_IsFarFromOtherWilds(x, y, elevation))
             continue;
 
         *xOut = x;
@@ -155,10 +267,55 @@ static bool8 OverworldWildEncounters_Spawn(u8 slot, u16 species, u8 level, s16 x
         sOverworldWildActive[slot] = TRUE;
         sOverworldWildSpecies[slot] = species;
         sOverworldWildLevel[slot] = level;
+        sOverworldWildIsDexNav[slot] = FALSE;
+        sOverworldWildPotential[slot] = 0;
+        sOverworldWildAbilityNum[slot] = 0;
+        sOverworldWildHeldItem[slot] = ITEM_NONE;
+        for (u8 i = 0; i < MAX_MON_MOVES; i++)
+            sOverworldWildMoves[slot][i] = MOVE_NONE;
         return TRUE;
     }
 
     return FALSE;
+}
+
+static bool8 OverworldWildEncounters_FindAvailableSlot(u8 *slotOut)
+{
+    for (u8 slot = 0; slot < OBJ_EVENT_ID_OVERWORLD_WILD_COUNT; slot++)
+    {
+        u8 localId = OBJ_EVENT_ID_OVERWORLD_WILD_BASE + slot;
+
+        if (sOverworldWildActive[slot])
+        {
+            if (GetObjectEventIdByLocalId(localId) != OBJECT_EVENTS_COUNT)
+                continue;
+            OverworldWildEncounters_ClearSlot(slot);
+        }
+
+        *slotOut = slot;
+        return TRUE;
+    }
+
+    return FALSE;
+}
+
+static void OverworldWildEncounters_ClearSlot(u8 slot)
+{
+    u8 localId = OBJ_EVENT_ID_OVERWORLD_WILD_BASE + slot;
+    u8 objectEventId = GetObjectEventIdByLocalId(localId);
+
+    if (objectEventId != OBJECT_EVENTS_COUNT)
+        RemoveObjectEvent(&gObjectEvents[objectEventId]);
+
+    sOverworldWildActive[slot] = FALSE;
+    sOverworldWildIsDexNav[slot] = FALSE;
+    sOverworldWildSpecies[slot] = SPECIES_NONE;
+    sOverworldWildLevel[slot] = 0;
+    sOverworldWildPotential[slot] = 0;
+    sOverworldWildAbilityNum[slot] = 0;
+    sOverworldWildHeldItem[slot] = ITEM_NONE;
+    for (u8 i = 0; i < MAX_MON_MOVES; i++)
+        sOverworldWildMoves[slot][i] = MOVE_NONE;
 }
 
 void OverworldWildEncounters_TrySpawn(void)
@@ -168,6 +325,7 @@ void OverworldWildEncounters_TrySpawn(void)
     u8 elevation;
     u16 species;
     u8 level;
+    u8 maxSpawns;
 
     if (!OverworldWildEncounters_Enabled())
         return;
@@ -177,14 +335,31 @@ void OverworldWildEncounters_TrySpawn(void)
         return;
     if (MapHasNoEncounterData())
         return;
-    for (u8 slot = 0; slot < OBJ_EVENT_ID_OVERWORLD_WILD_COUNT; slot++)
+    maxSpawns = OverworldWildEncounters_GetMaxSpawns();
+    if (maxSpawns == 0)
+    {
+        for (u8 slot = 0; slot < OBJ_EVENT_ID_OVERWORLD_WILD_COUNT; slot++)
+        {
+            if (sOverworldWildActive[slot])
+                OverworldWildEncounters_ClearSlot(slot);
+        }
+        return;
+    }
+
+    for (u8 slot = maxSpawns; slot < OBJ_EVENT_ID_OVERWORLD_WILD_COUNT; slot++)
+    {
+        if (sOverworldWildActive[slot])
+            OverworldWildEncounters_ClearSlot(slot);
+    }
+
+    for (u8 slot = 0; slot < maxSpawns; slot++)
     {
         u8 localId = OBJ_EVENT_ID_OVERWORLD_WILD_BASE + slot;
         if (sOverworldWildActive[slot])
         {
             if (GetObjectEventIdByLocalId(localId) != OBJECT_EVENTS_COUNT)
                 continue;
-            sOverworldWildActive[slot] = FALSE;
+            OverworldWildEncounters_ClearSlot(slot);
         }
 
         if (!OverworldWildEncounters_GetLandWildMon(&species, &level))
@@ -203,9 +378,63 @@ void OverworldWildEncounters_OnMapLoad(void)
         sOverworldWildActive[slot] = FALSE;
         sOverworldWildSpecies[slot] = SPECIES_NONE;
         sOverworldWildLevel[slot] = 0;
+        sOverworldWildIsDexNav[slot] = FALSE;
+        sOverworldWildPotential[slot] = 0;
+        sOverworldWildAbilityNum[slot] = 0;
+        sOverworldWildHeldItem[slot] = ITEM_NONE;
+        for (u8 i = 0; i < MAX_MON_MOVES; i++)
+            sOverworldWildMoves[slot][i] = MOVE_NONE;
         RemoveObjectEventByLocalIdAndMap(OBJ_EVENT_ID_OVERWORLD_WILD_BASE + slot, gSaveBlock1Ptr->location.mapNum, gSaveBlock1Ptr->location.mapGroup);
     }
     OverworldWildEncounters_TrySpawn();
+}
+
+void OverworldWildEncounters_OnReturnToField(void)
+{
+    if (!OverworldWildEncounters_Enabled()
+     || FlagGet(OW_FLAG_NO_ENCOUNTER)
+     || TestPlayerAvatarFlags(PLAYER_AVATAR_FLAG_SURFING)
+     || MapHasNoEncounterData())
+    {
+        for (u8 slot = 0; slot < OBJ_EVENT_ID_OVERWORLD_WILD_COUNT; slot++)
+        {
+            if (sOverworldWildActive[slot])
+                OverworldWildEncounters_ClearSlot(slot);
+        }
+        return;
+    }
+
+    OverworldWildEncounters_TrySpawn();
+}
+
+bool8 OverworldWildEncounters_SpawnDexNavMon(u16 species, u8 level, u8 potential, u8 abilityNum, u16 item, const u16 *moves,
+                                             s16 x, s16 y, u8 elevation, u8 *outLocalId)
+{
+    u8 slot;
+
+    if (!OverworldWildEncounters_IsSpawnTileValid(x, y, elevation))
+        return FALSE;
+
+    if (!OverworldWildEncounters_FindAvailableSlot(&slot))
+    {
+        slot = 0;
+        OverworldWildEncounters_ClearSlot(slot);
+    }
+
+    if (!OverworldWildEncounters_Spawn(slot, species, level, x, y, elevation))
+        return FALSE;
+
+    sOverworldWildIsDexNav[slot] = TRUE;
+    sOverworldWildPotential[slot] = potential;
+    sOverworldWildAbilityNum[slot] = abilityNum;
+    sOverworldWildHeldItem[slot] = item;
+    for (u8 i = 0; i < MAX_MON_MOVES; i++)
+        sOverworldWildMoves[slot][i] = moves[i];
+
+    if (outLocalId != NULL)
+        *outLocalId = OBJ_EVENT_ID_OVERWORLD_WILD_BASE + slot;
+
+    return TRUE;
 }
 
 bool8 OverworldWildEncounters_TryStartBattleAtCoords(s16 x, s16 y, u8 elevation)
@@ -226,9 +455,26 @@ bool8 OverworldWildEncounters_TryStartBattleAtCoords(s16 x, s16 y, u8 elevation)
 
     gIsFishingEncounter = FALSE;
     gIsSurfingEncounter = FALSE;
-    CreateWildMon(sOverworldWildSpecies[slot], sOverworldWildLevel[slot]);
+    if (sOverworldWildIsDexNav[slot])
+    {
+        gDexNavSpecies = sOverworldWildSpecies[slot];
+        CreateDexNavWildMon(sOverworldWildSpecies[slot], sOverworldWildPotential[slot], sOverworldWildLevel[slot],
+                            sOverworldWildAbilityNum[slot], sOverworldWildHeldItem[slot], sOverworldWildMoves[slot]);
+    }
+    else
+    {
+        CreateWildMon(sOverworldWildSpecies[slot], sOverworldWildLevel[slot]);
+    }
     RemoveObjectEvent(&gObjectEvents[objectEventId]);
     sOverworldWildActive[slot] = FALSE;
+    sOverworldWildIsDexNav[slot] = FALSE;
+    sOverworldWildSpecies[slot] = SPECIES_NONE;
+    sOverworldWildLevel[slot] = 0;
+    sOverworldWildPotential[slot] = 0;
+    sOverworldWildAbilityNum[slot] = 0;
+    sOverworldWildHeldItem[slot] = ITEM_NONE;
+    for (u8 i = 0; i < MAX_MON_MOVES; i++)
+        sOverworldWildMoves[slot][i] = MOVE_NONE;
     BattleSetup_StartWildBattle();
     return TRUE;
 }

@@ -23,6 +23,7 @@
 #include "gpu_regs.h"
 #include "graphics.h"
 #include "data/graphics/shadow_forms.h"
+#include "item.h"
 
 #ifndef DEBUG_SHADOW_OVERWORLD_LOG
 #define DEBUG_SHADOW_OVERWORLD_LOG 1
@@ -142,6 +143,7 @@ static bool8 ObjectEventExecSingleMovementAction(struct ObjectEvent *, struct Sp
 static bool32 UpdateMonMoveInPlace(struct ObjectEvent *, struct Sprite *);
 static void SetMovementDelay(struct Sprite *, s16);
 static bool8 WaitForMovementDelay(struct Sprite *);
+static bool8 ShouldSkipZygardeCubePickupObject(const struct ObjectEventTemplate *template);
 static u8 GetCollisionInDirection(struct ObjectEvent *, u8);
 static u32 GetCopyDirection(u8, u32, u32);
 static void TryEnableObjectEventAnim(struct ObjectEvent *, struct Sprite *);
@@ -391,6 +393,7 @@ static void (*const sMovementTypeCallbacks[])(struct Sprite *) =
     [MOVEMENT_TYPE_WALK_SLOWLY_IN_PLACE_LEFT] = MovementType_WalkSlowlyInPlace,
     [MOVEMENT_TYPE_WALK_SLOWLY_IN_PLACE_RIGHT] = MovementType_WalkSlowlyInPlace,
     [MOVEMENT_TYPE_FOLLOW_PLAYER] = MovementType_FollowPlayer,
+    [MOVEMENT_TYPE_TOWER_BEAM] = MovementType_TowerBeam,
 };
 
 static const bool8 sMovementTypeHasRange[NUM_MOVEMENT_TYPES] = {
@@ -536,6 +539,10 @@ static const struct SpritePalette sObjectEventSpritePalettes[] = {
     {gObjectEventPal_Npc2,                  OBJ_EVENT_PAL_TAG_NPC_2},
     {gObjectEventPal_Npc3,                  OBJ_EVENT_PAL_TAG_NPC_3},
     {gObjectEventPal_Npc4,                  OBJ_EVENT_PAL_TAG_NPC_4},
+    {gObjectEventPal_BallTm,                OBJ_EVENT_PAL_TAG_BALL_TM},
+    {gObjectEventPal_ZygardeCube,           OBJ_EVENT_PAL_TAG_ZYGARDE_CUBE},
+    {gObjectEventPal_LaprasSurf,            OBJ_EVENT_PAL_TAG_LAPRAS_SURF},
+    {gObjectEventPal_TowerBeam,             OBJ_EVENT_PAL_TAG_TOWER_BEAM},
     {gObjectEventPal_Npc1Reflection,        OBJ_EVENT_PAL_TAG_NPC_1_REFLECTION},
     {gObjectEventPal_Npc2Reflection,        OBJ_EVENT_PAL_TAG_NPC_2_REFLECTION},
     {gObjectEventPal_Npc3Reflection,        OBJ_EVENT_PAL_TAG_NPC_3_REFLECTION},
@@ -746,6 +753,9 @@ static const struct SpritePalette sObjectEventSpritePalettes[] = {
     {gObjectEventPal_PlumeriaGen7, OBJ_EVENT_PAL_TAG_PLUMERIA_GEN7},
     {gObjectEventPal_SkullGruntMGen7, OBJ_EVENT_PAL_TAG_SKULL_GRUNT_M_GEN7},
     {gObjectEventPal_SkullGruntFGen7, OBJ_EVENT_PAL_TAG_SKULL_GRUNT_F_GEN7},
+    {gObjectEventPal_AetherGruntMGen7, OBJ_EVENT_PAL_TAG_AETHER_GRUNT_M_GEN7},
+    {gObjectEventPal_AetherGruntFGen7, OBJ_EVENT_PAL_TAG_AETHER_GRUNT_F_GEN7},
+    {gObjectEventPal_FabaGen7, OBJ_EVENT_PAL_TAG_FABA_GEN7},
     {gObjectEventPal_VictorGen8, OBJ_EVENT_PAL_TAG_VICTOR_GEN8},
     {gObjectEventPal_GloriaGen8, OBJ_EVENT_PAL_TAG_GLORIA_GEN8},
     {gObjectEventPal_HopGen8, OBJ_EVENT_PAL_TAG_HOP_GEN8},
@@ -1765,7 +1775,9 @@ u8 Unref_TryInitLocalObjectEvent(u8 localId)
         for (i = 0; i < objectEventCount; i++)
         {
             template = &gSaveBlock1Ptr->objectEventTemplates[i];
-            if (template->localId == localId && !FlagGet(template->flagId))
+            if (template->localId == localId
+             && !FlagGet(template->flagId)
+             && !ShouldSkipZygardeCubePickupObject(template))
                 return InitObjectEventStateFromTemplate(template, gSaveBlock1Ptr->location.mapNum, gSaveBlock1Ptr->location.mapGroup);
         }
     }
@@ -3136,6 +3148,15 @@ void TrySpawnLightSprites(s16 camX, s16 camY)
     }
 }
 
+static bool8 ShouldSkipZygardeCubePickupObject(const struct ObjectEventTemplate *template)
+{
+    if (template->script == Common_EventScript_ZygardeCubePickup
+        && !CheckBagHasItem(ITEM_ZYGARDE_CUBE, 1))
+        return TRUE;
+
+    return FALSE;
+}
+
 void TrySpawnObjectEvents(s16 cameraX, s16 cameraY)
 {
     u8 i;
@@ -3161,7 +3182,9 @@ void TrySpawnObjectEvents(s16 cameraX, s16 cameraY)
             s16 npcX = template->x + MAP_OFFSET;
             s16 npcY = template->y + MAP_OFFSET;
 
-            if (top <= npcY && bottom >= npcY && left <= npcX && right >= npcX && !FlagGet(template->flagId))
+            if (top <= npcY && bottom >= npcY && left <= npcX && right >= npcX
+             && !FlagGet(template->flagId)
+             && !ShouldSkipZygardeCubePickupObject(template))
             {
                 if (template->graphicsId == OBJ_EVENT_GFX_LIGHT_SPRITE)
                     SpawnLightSprite(npcX, npcY, cameraX, cameraY, template->trainerRange_berryTreeId); // light sprite instead
@@ -5358,6 +5381,53 @@ bool8 MovementType_FaceDownLeftAndRight_Step4(struct ObjectEvent *objectEvent, s
     SetObjectEventDirection(objectEvent, direction);
     sprite->sTypeFuncId = 1;
     return TRUE;
+}
+
+movement_type_def(MovementType_TowerBeam, gMovementTypeFuncs_TowerBeam)
+
+bool8 MovementType_TowerBeam_Step0(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+{
+    ClearObjectEventMovement(objectEvent, sprite);
+    ObjectEventSetSingleMovement(objectEvent, sprite, MOVEMENT_ACTION_WALK_IN_PLACE_FAST_LEFT);
+    sprite->sTypeFuncId = 1;
+    return TRUE;
+}
+
+bool8 MovementType_TowerBeam_Step1(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+{
+    if (ObjectEventExecSingleMovementAction(objectEvent, sprite))
+    {
+        ObjectEventSetSingleMovement(objectEvent, sprite, MOVEMENT_ACTION_WALK_IN_PLACE_NORMAL_LEFT);
+        sprite->sTypeFuncId = 2;
+    }
+    return FALSE;
+}
+
+bool8 MovementType_TowerBeam_Step2(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+{
+    if (ObjectEventExecSingleMovementAction(objectEvent, sprite))
+    {
+        ObjectEventSetSingleMovement(objectEvent, sprite, MOVEMENT_ACTION_WALK_IN_PLACE_NORMAL_RIGHT);
+        sprite->sTypeFuncId = 3;
+    }
+    return FALSE;
+}
+
+bool8 MovementType_TowerBeam_Step3(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+{
+    if (ObjectEventExecSingleMovementAction(objectEvent, sprite))
+    {
+        ObjectEventSetSingleMovement(objectEvent, sprite, MOVEMENT_ACTION_WALK_IN_PLACE_NORMAL_DOWN);
+        sprite->sTypeFuncId = 4;
+    }
+    return FALSE;
+}
+
+bool8 MovementType_TowerBeam_Step4(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+{
+    if (ObjectEventExecSingleMovementAction(objectEvent, sprite))
+        sprite->sTypeFuncId = 0;
+    return FALSE;
 }
 
 movement_type_def(MovementType_RotateCounterclockwise, gMovementTypeFuncs_RotateCounterclockwise)

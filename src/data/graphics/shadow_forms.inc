@@ -897,7 +897,7 @@ const u32 gObjectEventPic_MespritShadow[] = INCBIN_COMP("graphics/pokemon/mespri
 
 const u32 gMonFrontPic_MeowthShadow[] = INCBIN_U32("graphics/pokemon/meowth/shadow/anim_front.4bpp.lz");
 const u32 gMonBackPic_MeowthShadow[] = INCBIN_U32("graphics/pokemon/meowth/shadow/back.4bpp.lz");
-const u16 gMonPalette_MeowthShadow[] = INCBIN_U16("graphics/pokemon/meowth/shadow/shadow.gbapal");
+const u16 gMonPalette_MeowthShadow[] = INCBIN_U16("graphics/pokemon/meowth/shadow/meowth_shadow.pal");
 const u8 gMonIcon_MeowthShadow[] = INCBIN_U8("graphics/pokemon/meowth/shadow/icon.4bpp");
 #if OW_POKEMON_OBJECT_EVENTS
 const u32 gObjectEventPic_MeowthShadow[] = INCBIN_COMP("graphics/pokemon/meowth/shadow/overworld.4bpp");
@@ -954,9 +954,6 @@ const u16 gMonPalette_MiraidonShadow[] = INCBIN_U16("graphics/pokemon/miraidon/s
 const u8 gMonIcon_MiraidonShadow[] = INCBIN_U8("graphics/pokemon/miraidon/shadow/icon.4bpp");
 #if OW_POKEMON_OBJECT_EVENTS
 const u32 gObjectEventPic_MiraidonShadow[] = INCBIN_COMP("graphics/pokemon/miraidon/shadow/overworld.4bpp");
-#endif
-#if OW_POKEMON_OBJECT_EVENTS && OW_PKMN_OBJECTS_SHARE_PALETTES == FALSE
-const u16 gOverworldPalette_MiraidonShadow[] = INCBIN_U16("graphics/pokemon/miraidon/shadow/overworld.gbapal");
 #endif
 
 const u32 gMonFrontPic_MoltresShadow[] = INCBIN_U32("graphics/pokemon/moltres/shadow/anim_front.4bpp.lz");
@@ -1022,9 +1019,6 @@ const u8 gMonIcon_PalkiaShadow[] = INCBIN_U8("graphics/pokemon/palkia/shadow/ico
 #if OW_POKEMON_OBJECT_EVENTS
 const u32 gObjectEventPic_PalkiaShadow[] = INCBIN_COMP("graphics/pokemon/palkia/shadow/overworld.4bpp");
 #endif
-#if OW_POKEMON_OBJECT_EVENTS && OW_PKMN_OBJECTS_SHARE_PALETTES == FALSE
-const u16 gOverworldPalette_PalkiaShadow[] = INCBIN_U16("graphics/pokemon/palkia/shadow/overworld.gbapal");
-#endif
 
 const u32 gMonFrontPic_PangoroShadow[] = INCBIN_U32("graphics/pokemon/pangoro/shadow/anim_front.4bpp.lz");
 const u32 gMonBackPic_PangoroShadow[] = INCBIN_U32("graphics/pokemon/pangoro/shadow/back.4bpp.lz");
@@ -1080,9 +1074,6 @@ const u16 gMonPalette_RayquazaShadow[] = INCBIN_U16("graphics/pokemon/rayquaza/s
 const u8 gMonIcon_RayquazaShadow[] = INCBIN_U8("graphics/pokemon/rayquaza/shadow/icon.4bpp");
 #if OW_POKEMON_OBJECT_EVENTS
 const u32 gObjectEventPic_RayquazaShadow[] = INCBIN_COMP("graphics/pokemon/rayquaza/shadow/overworld.4bpp");
-#endif
-#if OW_POKEMON_OBJECT_EVENTS && OW_PKMN_OBJECTS_SHARE_PALETTES == FALSE
-const u16 gOverworldPalette_RayquazaShadow[] = INCBIN_U16("graphics/pokemon/rayquaza/shadow/overworld.gbapal");
 #endif
 
 const u32 gMonFrontPic_RegiceShadow[] = INCBIN_U32("graphics/pokemon/regice/shadow/anim_front.4bpp.lz");
@@ -1563,9 +1554,6 @@ const u16 gMonPalette_ZekromShadow[] = INCBIN_U16("graphics/pokemon/zekrom/shado
 const u8 gMonIcon_ZekromShadow[] = INCBIN_U8("graphics/pokemon/zekrom/shadow/icon.4bpp");
 #if OW_POKEMON_OBJECT_EVENTS
 const u32 gObjectEventPic_ZekromShadow[] = INCBIN_COMP("graphics/pokemon/zekrom/shadow/overworld.4bpp");
-#endif
-#if OW_POKEMON_OBJECT_EVENTS && OW_PKMN_OBJECTS_SHARE_PALETTES == FALSE
-const u16 gOverworldPalette_ZekromShadow[] = INCBIN_U16("graphics/pokemon/zekrom/shadow/overworld.gbapal");
 #endif
 
 const u32 gMonFrontPic_ZeraoraShadow[] = INCBIN_U32("graphics/pokemon/zeraora/shadow/front.4bpp.lz");

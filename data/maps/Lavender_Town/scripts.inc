@@ -1,5 +1,10 @@
 Lavender_Town_MapScripts::
+	map_script MAP_SCRIPT_ON_TRANSITION, Lavender_Town_OnTransition
 	.byte 0
+
+Lavender_Town_OnTransition::
+	setflag FLAG_VISITED_LAVENDER_TOWN
+	end
 
 #define LOCALID_LYRA 1
 #define LOCALID_MEGANIUM 6
@@ -119,3 +124,44 @@ Lavender_Town_Text_BirchCall:
 
 Lavender_Town_Text_LyraReturn:
 	.string "We should head back ASAP!$"
+
+LavenderTown_EventScript_TownSign::
+	msgbox LavenderTown_Text_Sign, MSGBOX_SIGN
+	end
+
+
+LavenderTown_EventScript_RadioTowerSign::
+	msgbox LavenderTown_Text_KantoRadioStationSign, MSGBOX_SIGN
+	end
+
+
+LavenderTown_EventScript_VolunteerSign::
+	msgbox LavenderTown_Text_VolunteerPokemonHouseSign, MSGBOX_SIGN
+	end
+
+
+LavenderTown_EventScript_SoulHouseSign::
+	msgbox LavenderTown_Text_SoulHouseSign, MSGBOX_SIGN
+	end
+
+
+LavenderTown_Text_Sign:
+	.string "LAVENDER TOWN\p"
+	.string "The Noble Purple Town$"
+
+
+LavenderTown_Text_KantoRadioStationSign:
+	.string "KANTO RADIO STATION\p"
+	.string "Your Favorite Programs On-Air\n"
+	.string "Around the Clock!$"
+
+
+LavenderTown_Text_VolunteerPokemonHouseSign:
+	.string "LAVENDER VOLUNTEER POKéMON\n"
+	.string "HOUSE$"
+
+
+LavenderTown_Text_SoulHouseSign:
+	.string "SOUL HOUSE\p"
+	.string "May the Souls of POKéMON Rest\n"
+	.string "Easy$"

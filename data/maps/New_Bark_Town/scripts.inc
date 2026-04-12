@@ -26,6 +26,7 @@ New_Bark_Town_MapScripts::
 @ ================================
 
 New_Bark_Town_OnLoad:
+	setflag FLAG_VISITED_NEW_BARK_TOWN
 	setvar VAR_TEMP_1, 0
 	end
 
@@ -836,3 +837,25 @@ QuestJournal_EventScript_CheckNewBarkNPCs_Done:
 	call QuestJournal_EventScript_QuestCompleteAlert
 QuestJournal_EventScript_CheckNewBarkNPCs_End:
 	return
+
+NewBarkTown_Text_LabSign:
+	.string "PROF.ELM's LAB$"
+
+
+NewBarkTown_Text_Door:
+	.string "The door is locked.$"
+
+
+NewBarkTown_Text_Sign:
+	.string "NEW BARK TOWN\p"
+	.string "The Town Where the Winds of\n"
+	.string "a New Beginning Blow$"
+
+
+NewBarkTown_Text_PlayersHouse:
+	.string "{PLAYER}'s House$"
+
+
+NewBarkTown_Text_ElmsHouse:
+	.string "PROF.ELM's House$"
+

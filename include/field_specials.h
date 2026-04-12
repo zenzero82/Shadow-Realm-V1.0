@@ -39,10 +39,14 @@ bool32 CheckPartyHasSpecies(u32);
 void Special_Kukui_CheckShadowMeowthInParty(void);
 void Special_Kukui_TakeShadowMeowth(void);
 void Special_Kukui_ReturnShadowMeowth(void);
+u16 Special_OverworldWildEncounters_OnReturnToField(void);
 void Special_KurtApricornMenu(void);
 u16 Special_HeadbuttTree(void);
 u16 Special_HeadbuttTree_StartBattle(void);
+u16 SuppressGimmighoulSignpost(void);
+u16 TryClaimGimmighoulSignpost(void);
 void Special_LockPlayerFacingDown(void);
 void Special_ClearPlayerFacingOverride(void);
+void SetLastTalkedObjectFlag(void);
 
 #endif // GUARD_FIELD_SPECIALS_H

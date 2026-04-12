@@ -21405,7 +21405,7 @@ const struct MoveInfo gMovesInfo[MOVES_COUNT_ALL] =
         .description = COMPOUND_STRING(
             "A shadowy aura eliminates\n"
             "Reflect and similar moves."),
-        .effect = EFFECT_BRICK_BREAK,
+        .effect = EFFECT_SHADOW_SHED,
         .power = 0,
         .type = TYPE_SHADOW,
         .accuracy = 0,

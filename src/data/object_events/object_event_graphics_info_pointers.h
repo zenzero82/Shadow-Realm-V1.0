@@ -243,6 +243,10 @@ extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_Lugia;
 extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_HoOh;
 // Begin pokemon event objects
 extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_PokeBall;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_BallTm;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_ZygardeCube;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_LaprasSurf;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_TowerBeam;
 extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_Follower;
 extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_BallLight;
 
@@ -463,6 +467,9 @@ extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_MolayneGen7
 extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_PlumeriaGen7;
 extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_SkullGruntMGen7;
 extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_SkullGruntFGen7;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_AetherGruntMGen7;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_AetherGruntFGen7;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_FabaGen7;
 //Galar
 extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_VictorGen8;
 extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_GloriaGen8;
@@ -571,6 +578,10 @@ const struct ObjectEventGraphicsInfo *const gObjectEventGraphicsInfoPointers[NUM
     [OBJ_EVENT_GFX_CYCLING_TRIATHLETE_F] =     &gObjectEventGraphicsInfo_CyclingTriathleteF,
     [OBJ_EVENT_GFX_NURSE] =                    &gObjectEventGraphicsInfo_Nurse,
     [OBJ_EVENT_GFX_ITEM_BALL] =                &gObjectEventGraphicsInfo_PokeBall,
+    [OBJ_EVENT_GFX_BALL_TM] =                  &gObjectEventGraphicsInfo_BallTm,
+    [OBJ_EVENT_GFX_ZYGARDE_CUBE] =             &gObjectEventGraphicsInfo_ZygardeCube,
+    [OBJ_EVENT_GFX_LAPRAS_SURF] =              &gObjectEventGraphicsInfo_LaprasSurf,
+    [OBJ_EVENT_GFX_TOWER_BEAM] =               &gObjectEventGraphicsInfo_TowerBeam,
     [OBJ_EVENT_GFX_BERRY_TREE] =               &gObjectEventGraphicsInfo_BerryTree,
     [OBJ_EVENT_GFX_BERRY_TREE_EARLY_STAGES] =  &gObjectEventGraphicsInfo_BerryTreeEarlyStages,
     [OBJ_EVENT_GFX_BERRY_TREE_LATE_STAGES] =   &gObjectEventGraphicsInfo_BerryTreeLateStages,
@@ -757,7 +768,6 @@ const struct ObjectEventGraphicsInfo *const gObjectEventGraphicsInfoPointers[NUM
     //misc (NEW)
     [OBJ_EVENT_GFX_HOOPA_RING] =                &gObjectEventGraphicsInfo_HoopaRing,
     [OBJ_EVENT_GFX_HOOPA_RING_TIME_AMULET] =    &gObjectEventGraphicsInfo_HoopaRingTimeAmulet,
-
     //Kanto
     [OBJ_EVENT_GFX_BROCK_GEN1]   =             &gObjectEventGraphicsInfo_BrockGen1,
     [OBJ_EVENT_GFX_ROCKET_GRUNT_M_GEN1] =       &gObjectEventGraphicsInfo_RocketGruntMGen1,
@@ -938,6 +948,9 @@ const struct ObjectEventGraphicsInfo *const gObjectEventGraphicsInfoPointers[NUM
     [OBJ_EVENT_GFX_PLUMERIA_GEN7]  = &gObjectEventGraphicsInfo_PlumeriaGen7,
     [OBJ_EVENT_GFX_SKULL_GRUNT_M_GEN7]  = &gObjectEventGraphicsInfo_SkullGruntMGen7,
     [OBJ_EVENT_GFX_SKULL_GRUNT_F_GEN7]  = &gObjectEventGraphicsInfo_SkullGruntFGen7,
+    [OBJ_EVENT_GFX_AETHER_GRUNT_M_GEN7]  = &gObjectEventGraphicsInfo_AetherGruntMGen7,
+    [OBJ_EVENT_GFX_AETHER_GRUNT_F_GEN7]  = &gObjectEventGraphicsInfo_AetherGruntFGen7,
+    [OBJ_EVENT_GFX_FABA_GEN7]  = &gObjectEventGraphicsInfo_FabaGen7,
 
     //Galar (Gen 8)
     [OBJ_EVENT_GFX_VICTOR_GEN8]  = &gObjectEventGraphicsInfo_VictorGen8,

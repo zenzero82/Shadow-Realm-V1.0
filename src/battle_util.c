@@ -9,6 +9,7 @@
 #include "battle_setup.h"
 #include "battle_z_move.h"
 #include "battle_gimmick.h"
+#include "battle_gfx_sfx_util.h"
 #include "caps.h"
 #include "generational_changes.h"
 #include "party_menu.h"
@@ -10013,6 +10014,10 @@ bool32 CanMegaEvolve(u32 battler)
     if (holdEffect == HOLD_EFFECT_Z_CRYSTAL)
         return FALSE;
 
+    // Allow toggling Mega off if already Mega Evolved.
+    if (IsBattlerMegaEvolved(battler))
+        return TRUE;
+
     // Check if there is an entry in the form change table for regular Mega Evolution and battler is holding Mega Stone.
     if (GetBattleFormChangeTargetSpecies(battler, FORM_CHANGE_BATTLE_MEGA_EVOLUTION_ITEM) != gBattleMons[battler].species && holdEffect == HOLD_EFFECT_MEGA_STONE)
         return TRUE;
@@ -10057,6 +10062,13 @@ bool32 CanUltraBurst(u32 battler)
 
 void ActivateMegaEvolution(u32 battler)
 {
+    if (IsBattlerMegaEvolved(battler))
+    {
+        BattleScriptExecute(BattleScript_MegaReversion);
+        SetGimmickAsActivated(battler, GIMMICK_MEGA);
+        return;
+    }
+
     gLastUsedItem = gBattleMons[battler].item;
     SetActiveGimmick(battler, GIMMICK_MEGA);
     if (GetBattleFormChangeTargetSpecies(battler, FORM_CHANGE_BATTLE_MEGA_EVOLUTION_MOVE) != gBattleMons[battler].species)
@@ -10219,8 +10231,8 @@ bool32 CanBattlerFormChange(u32 battler, enum FormChanges method)
     if (gBattleMons[battler].status2 & STATUS2_TRANSFORMED
         && B_TRANSFORM_FORM_CHANGES >= GEN_5)
         return FALSE;
-    // Mega Evolved and Ultra Bursted Pokémon should always revert to normal upon fainting or ending the battle.
-    if ((IsBattlerMegaEvolved(battler) || IsBattlerUltraBursted(battler) || IsBattlerInTeraForm(battler)) && (method == FORM_CHANGE_FAINT || method == FORM_CHANGE_END_BATTLE))
+    // Ultra Bursted and Tera Pokémon should always revert to normal upon fainting or ending the battle.
+    if ((IsBattlerUltraBursted(battler) || IsBattlerInTeraForm(battler)) && (method == FORM_CHANGE_FAINT || method == FORM_CHANGE_END_BATTLE))
         return TRUE;
     else if (IsBattlerPrimalReverted(battler) && (method == FORM_CHANGE_END_BATTLE))
         return TRUE;
@@ -10260,8 +10272,8 @@ bool32 TryBattleFormChange(u32 battler, enum FormChanges method)
     {
         bool32 restoreSpecies = FALSE;
 
-        // Mega Evolved and Ultra Bursted Pokémon should always revert to normal upon fainting or ending the battle, so no need to add it to the form change tables.
-        if ((IsBattlerMegaEvolved(battler) || IsBattlerUltraBursted(battler) || IsBattlerInTeraForm(battler)) && (method == FORM_CHANGE_FAINT || method == FORM_CHANGE_END_BATTLE))
+        // Ultra Bursted and Tera Pokémon should always revert to normal upon fainting or ending the battle, so no need to add it to the form change tables.
+        if ((IsBattlerUltraBursted(battler) || IsBattlerInTeraForm(battler)) && (method == FORM_CHANGE_FAINT || method == FORM_CHANGE_END_BATTLE))
             restoreSpecies = TRUE;
 
         // Unlike Megas, Primal Reversion isn't canceled on fainting.

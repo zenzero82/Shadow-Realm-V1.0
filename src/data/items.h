@@ -2909,7 +2909,7 @@ const struct Item gItemsInfo[] =
             "Voices can be heard\n"
             "from this odd stone\n"
             "occasionally."),
-        .pocket = POCKET_TREASURES,
+        .pocket = POCKET_KEY_ITEMS,
         .type = ITEM_USE_BAG_MENU,
         .fieldUseFunc = ItemUseOutOfBattle_CannotUse,
         .flingPower = 80,
@@ -6092,6 +6092,57 @@ const struct Item gItemsInfo[] =
         .flingPower = 80,
         .iconPic = gItemIcon_Diancite,
         .iconPalette = gItemIconPalette_Diancite,
+    },
+
+    [ITEM_CHESNAUGHTITE] =
+    {
+        .name = _("Chesnaughtite"),
+        .price = 0,
+        .holdEffect = HOLD_EFFECT_MEGA_STONE,
+        .description = COMPOUND_STRING(
+            "This stone enables\n"
+            "Chesnaught to Mega\n"
+            "Evolve in battle."),
+        .pocket = POCKET_ITEMS,
+        .type = ITEM_USE_BAG_MENU,
+        .fieldUseFunc = ItemUseOutOfBattle_CannotUse,
+        .flingPower = 80,
+        .iconPic = gItemIcon_Chesnaughtite,
+        .iconPalette = gItemIconPalette_Chesnaughtite,
+    },
+
+    [ITEM_DELPHOXITE] =
+    {
+        .name = _("Delphoxite"),
+        .price = 0,
+        .holdEffect = HOLD_EFFECT_MEGA_STONE,
+        .description = COMPOUND_STRING(
+            "This stone enables\n"
+            "Delphox to Mega\n"
+            "Evolve in battle."),
+        .pocket = POCKET_ITEMS,
+        .type = ITEM_USE_BAG_MENU,
+        .fieldUseFunc = ItemUseOutOfBattle_CannotUse,
+        .flingPower = 80,
+        .iconPic = gItemIcon_Delphoxite,
+        .iconPalette = gItemIconPalette_Delphoxite,
+    },
+
+    [ITEM_GRENINJITE] =
+    {
+        .name = _("Greninjite"),
+        .price = 0,
+        .holdEffect = HOLD_EFFECT_MEGA_STONE,
+        .description = COMPOUND_STRING(
+            "This stone enables\n"
+            "Greninja to Mega\n"
+            "Evolve in battle."),
+        .pocket = POCKET_ITEMS,
+        .type = ITEM_USE_BAG_MENU,
+        .fieldUseFunc = ItemUseOutOfBattle_CannotUse,
+        .flingPower = 80,
+        .iconPic = gItemIcon_Greninjite,
+        .iconPalette = gItemIconPalette_Greninjite,
     },
 
 // Gems
@@ -14246,6 +14297,22 @@ const struct Item gItemsInfo[] =
         .effect = gItemEffect_EvoItem,
         .iconPic = gItemIcon_TimeFlute,
         .iconPalette = gItemIconPalette_TimeFlute,
+    },
+    [ITEM_RELIC_TABLET] =
+    {
+        .name = _("Relic Tablet"),
+        .price = 0,
+        .description = COMPOUND_STRING(
+            "An ancient tablet that\n"
+            "can purify Shadow\n"
+            "Pokemon."),
+        .importance = 1,
+        .pocket = POCKET_KEY_ITEMS,
+        .type = ITEM_USE_PARTY_MENU,
+        .fieldUseFunc = ItemUseOutOfBattle_RelicTablet,
+        .effect = gItemEffect_EvoItem,
+        .iconPic = gItemIcon_RelicTablet,
+        .iconPalette = gItemIconPalette_RelicTablet,
     },
     [ITEM_SNAG_MACHINE] =
     {

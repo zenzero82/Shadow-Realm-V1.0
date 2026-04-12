@@ -1,5 +1,10 @@
 Pallet_Town_MapScripts::
-    .byte 0
+	map_script MAP_SCRIPT_ON_TRANSITION, PalletTown_OnTransition
+	.byte 0
+
+PalletTown_OnTransition::
+	call PalletTown_EventScript_CityEnter
+	end
 
 @ ==============================
 @ SPEAKER DEFINITIONS

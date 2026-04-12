@@ -432,6 +432,26 @@ static const struct WindowTemplate sStartMenuBWWindowTemplates[] =
     DUMMY_WIN_TEMPLATE,
 };
 
+static const u16 sStartMenuBWTextPal[] =
+{
+    RGB(8, 8, 8),     // Background (matches panel)
+    RGB(31, 31, 31),  // White text
+    RGB(0, 0, 0),
+    RGB(25, 25, 24),  // Light gray text
+    RGB(0, 0, 0),
+    RGB(0, 0, 0),
+    RGB(0, 0, 0),
+    RGB(0, 0, 0),
+    RGB(0, 0, 0),
+    RGB(0, 0, 0),
+    RGB(0, 0, 0),
+    RGB(0, 0, 0),
+    RGB(0, 0, 0),
+    RGB(0, 0, 0),
+    RGB(0, 0, 0),
+    RGB(0, 0, 0),
+};
+
 static const struct SpriteSheet sStartMenuPanelSpriteSheet =
 {
     .data = gStartMenuBWPanelTiles,
@@ -1170,7 +1190,7 @@ static void StartMenuBW_LoadBgGfx(void)
     LoadBgTiles(BG_START_MENU_BACKGROUND, gStartMenuBWBgTiles, START_MENU_BG_TILE_SIZE, 0);
     memcpy(sStartMenuBW->bgTilemapBuffer, gStartMenuBWBgTilemap, START_MENU_BG_TILEMAP_SIZE);
     LoadPalette(gStartMenuBWBgPal, 0, 0x20);
-    Menu_LoadStdPalAt(BG_PLTT_ID(14));
+    LoadPalette(sStartMenuBWTextPal, BG_PLTT_ID(14), PLTT_SIZE_4BPP);
 }
 
 static bool8 StartMenuBW_InitGui(void)

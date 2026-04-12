@@ -91,3 +91,44 @@ MtMoon_Outside_Text_DontLitterSign:
 	.string "MT.MOON SQUARE\n"
 	.string "DON'T LITTER$"
 	
+
+MtMoon_Outside_EventScript_WhiteRock::
+	lock
+	msgbox MtMoon_Outside_Text_WhiteRockTouchIt, MSGBOX_YESNO
+	goto_if_eq VAR_RESULT, FALSE, MtMoon_Outside_EventScript_WhiteRockNoOp
+	goto_if_set FLAG_SUMMONED_MTMOON_JIRACHI, MtMoon_OutsideEventScript_WhiteRockNoReaction
+	goto_if_unset FLAG_NIGHT_POKEMON, MtMoon_Outside_EventScript_WhiteRockSpawnJirachi
+
+MtMoon_OutsideEventScript_WhiteRockNoReaction::
+	msgbox MtMoon_Outside_Text_WhiteRockTouchDay, MSGBOX_DEFAULT
+	closemessage
+	release
+	end
+
+MtMoon_Outside_EventScript_WhiteRockNoOp::
+	release
+	end
+
+MtMoon_Outside_EventScript_WhiteRockSpawnJirachi::
+	msgbox MtMoon_Outside_Text_WhiteRockTouchNight, MSGBOX_DEFAULT
+	setflag FLAG_SUMMONED_MTMOON_JIRACHI
+	closemessage
+	release
+	end
+
+MtMoon_Outside_Text_WhiteRockTouchIt:
+	.string "An unusual white rock.\n"
+	.string "The color reminds you of the moon.\p"
+	.string "Touch it?$"
+
+MtMoon_Outside_Text_WhiteRockTouchDay:
+	.string "{PLAYER} touched the unusual rock.\n"
+	.string "..........................\l"
+	.string "..........................\l"
+	.string "But nothing happened.$"
+
+MtMoon_Outside_Text_WhiteRockTouchNight:
+	.string "{PLAYER} touched the unusual rock.\n"
+	.string "..........................\l"
+	.string "..........................$"
+

@@ -743,6 +743,7 @@ struct
     [MENU_CHANGE_FORM]     = {COMPOUND_STRING("Change form"),     CursorCb_ChangeForm},
     [MENU_CHANGE_ABILITY]  = {COMPOUND_STRING("Change Ability"),  CursorCb_ChangeAbility},
     [MENU_AUTO_HEAL]       = {COMPOUND_STRING("AUTO HEAL"),       CursorCb_AutoHeal},
+    [MENU_PURIFY]          = {COMPOUND_STRING("PURIFY"),          CursorCb_Purify},
     [MENU_MAKE_LEAD]       = {COMPOUND_STRING("MAKE LEAD"),       CursorCb_MakeLead},
 };
 

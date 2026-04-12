@@ -710,6 +710,38 @@ Common_EventScript_ShowPokemonCenterSign::
 	msgbox gText_PokemonCenterSign, MSGBOX_SIGN
 	end
 
+EventScript_GimmighoulSignpost::
+	specialvar VAR_RESULT, TryClaimGimmighoulSignpost
+	goto_if_eq VAR_RESULT, FALSE, EventScript_GimmighoulSignpost_Done
+	lockall
+	msgbox gText_GimmighoulSignpost, MSGBOX_DEFAULT
+	showmonpic SPECIES_GIMMIGHOUL_ROAMING, 10, 3
+	playmoncry SPECIES_GIMMIGHOUL, CRY_MODE_NORMAL
+	waitmoncry
+	waitbuttonpress
+	hidemonpic
+	setvar VAR_0x8000, 25
+	additem ITEM_GIMMIGHOUL_COIN, 25
+	buffernumberstring STR_VAR_1, VAR_0x8000
+	msgbox gText_GimmighoulCoinsObtained, MSGBOX_DEFAULT
+	releaseall
+EventScript_GimmighoulSignpost_Done:
+	end
+
+Common_EventScript_GimmighoulStaticEncounter::
+	lock
+	faceplayer
+	setwildbattle SPECIES_GIMMIGHOUL_CHEST, 30
+	waitse
+	playmoncry SPECIES_GIMMIGHOUL, CRY_MODE_NORMAL
+	delay 40
+	waitmoncry
+	setflag FLAG_SYS_CTRL_OBJ_DELETE
+	dowildbattle
+	clearflag FLAG_SYS_CTRL_OBJ_DELETE
+	specialvar VAR_RESULT, GetBattleOutcome
+	return
+
 Common_ShowEasyChatScreen::
 	fadescreen FADE_TO_BLACK
 	special ShowEasyChatScreen
@@ -779,6 +811,7 @@ Common_EventScript_OutOfCenterPartyHeal::
 
 EventScript_RegionMap::
 	lockall
+	special SuppressGimmighoulSignpost
 	msgbox Common_Text_LookCloserAtMap, MSGBOX_DEFAULT
 	fadescreen FADE_TO_BLACK
 	special FieldShowRegionMap
@@ -788,6 +821,7 @@ EventScript_RegionMap::
 
 EventScript_RegionMap_Kanto::
 	lockall
+	special SuppressGimmighoulSignpost
 	msgbox Common_Text_LookCloserAtKantoMap, MSGBOX_DEFAULT
 	fadescreen FADE_TO_BLACK
 	special FieldShowRegionMap
@@ -797,6 +831,7 @@ EventScript_RegionMap_Kanto::
 
 EventScript_RegionMap_Johto::
 	lockall
+	special SuppressGimmighoulSignpost
 	msgbox Common_Text_LookCloserAtJohtoMap, MSGBOX_DEFAULT
 	fadescreen FADE_TO_BLACK
 	special FieldShowRegionMap
@@ -913,6 +948,14 @@ gText_PokemartSign::
 gText_PokemonCenterSign::
 	.string "“Rejuvenate your tired partners!”\n"
 	.string "POKéMON CENTER$"
+
+gText_GimmighoulSignpost::
+	.string "Oh! There's a\n"
+	.string "POKéMON here.$"
+
+gText_GimmighoulCoinsObtained::
+	.string "{PLAYER} obtained {STR_VAR_1}\n"
+	.string "Gimmighoul coins!$"
 
 gText_MomOrDadMightLikeThisProgram::
 	.string "{STR_VAR_1} might like this program.\n"
@@ -1167,6 +1210,7 @@ gText_ShadowPurifyMultipleReady::
 	.include "data/scripts/mauville_man.inc"
 	.include "data/scripts/field_move_scripts.inc"
 	.include "data/scripts/item_ball_scripts.inc"
+	.include "data/scripts/zygarde_cube.inc"
 	.include "data/scripts/profile_man.inc"
 	.include "data/scripts/day_care.inc"
 	.include "data/scripts/flash.inc"
@@ -1983,3 +2027,37 @@ EventScript_OverworldWildMon::
 	.include "data/maps/Evice_Lair/scripts.inc"
 
 	.include "data/maps/Nightmare_Realm/scripts.inc"
+
+	.include "data/maps/MtSilver_Outside/scripts.inc"
+
+	.include "data/maps/SafariZone_Entrance/scripts.inc"
+
+	.include "data/maps/SafariZone_Low_Mid/scripts.inc"
+
+	.include "data/maps/MtSilver_1F_Waterfall/scripts.inc"
+
+	.include "data/maps/MtSilver_1F_ItemRoom/scripts.inc"
+
+	.include "data/maps/MtSilver_1F_MoltresRoom/scripts.inc"
+
+	.include "data/maps/MtSilver_MountainSide/scripts.inc"
+
+	.include "data/maps/MtSilver_2F/scripts.inc"
+
+	.include "data/maps/MtSilver_3F/scripts.inc"
+
+	.include "data/maps/MtSilver_Snow/scripts.inc"
+
+	.include "data/maps/MtSilver_SummitDay/scripts.inc"
+
+	.include "data/maps/MtSilver_SummitNight/scripts.inc"
+
+	.include "data/maps/SafariZone_Top_Left/scripts.inc"
+
+	.include "data/maps/SafariZone_Low_Left/scripts.inc"
+
+	.include "data/maps/SafariZone_Top_Right/scripts.inc"
+
+	.include "data/maps/SafariZone_Top_Mid/scripts.inc"
+
+	.include "data/maps/SafariZone_Low_Right/scripts.inc"

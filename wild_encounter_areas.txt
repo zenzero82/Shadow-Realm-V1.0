@@ -1,0 +1,1097 @@
+Overworld Wild Encounter Maps (gWildMonHeaders)
+Format: MAP_NAME | Time | BaseLabel | Types
+
+MAP_ABANDONED_SHIP_HIDDEN_FLOOR_CORRIDORS | Morning | gAbandonedShip_HiddenFloorCorridors_Morning | water, fishing
+MAP_ABANDONED_SHIP_HIDDEN_FLOOR_CORRIDORS | Day | gAbandonedShip_HiddenFloorCorridors_Day | water, fishing
+MAP_ABANDONED_SHIP_HIDDEN_FLOOR_CORRIDORS | Evening | gAbandonedShip_HiddenFloorCorridors_Evening | water, fishing
+MAP_ABANDONED_SHIP_HIDDEN_FLOOR_CORRIDORS | Night | gAbandonedShip_HiddenFloorCorridors_Night | water, fishing
+MAP_ABANDONED_SHIP_ROOMS_B1F | Morning | gAbandonedShip_Rooms_B1F_Morning | water, fishing
+MAP_ABANDONED_SHIP_ROOMS_B1F | Day | gAbandonedShip_Rooms_B1F_Day | water, fishing
+MAP_ABANDONED_SHIP_ROOMS_B1F | Evening | gAbandonedShip_Rooms_B1F_Evening | water, fishing
+MAP_ABANDONED_SHIP_ROOMS_B1F | Night | gAbandonedShip_Rooms_B1F_Night | water, fishing
+MAP_ALTERING_CAVE | Morning | gAlteringCave1_Morning | land
+MAP_ALTERING_CAVE | Morning | gAlteringCave2_Morning | land
+MAP_ALTERING_CAVE | Morning | gAlteringCave3_Morning | land
+MAP_ALTERING_CAVE | Morning | gAlteringCave4_Morning | land
+MAP_ALTERING_CAVE | Morning | gAlteringCave5_Morning | land
+MAP_ALTERING_CAVE | Morning | gAlteringCave6_Morning | land
+MAP_ALTERING_CAVE | Morning | gAlteringCave7_Morning | land
+MAP_ALTERING_CAVE | Morning | gAlteringCave8_Morning | land
+MAP_ALTERING_CAVE | Morning | gAlteringCave9_Morning | land
+MAP_ALTERING_CAVE | Day | gAlteringCave1_Day | land
+MAP_ALTERING_CAVE | Day | gAlteringCave2_Day | land
+MAP_ALTERING_CAVE | Day | gAlteringCave3_Day | land
+MAP_ALTERING_CAVE | Day | gAlteringCave4_Day | land
+MAP_ALTERING_CAVE | Day | gAlteringCave5_Day | land
+MAP_ALTERING_CAVE | Day | gAlteringCave6_Day | land
+MAP_ALTERING_CAVE | Day | gAlteringCave7_Day | land
+MAP_ALTERING_CAVE | Day | gAlteringCave8_Day | land
+MAP_ALTERING_CAVE | Day | gAlteringCave9_Day | land
+MAP_ALTERING_CAVE | Evening | gAlteringCave1_Evening | land
+MAP_ALTERING_CAVE | Evening | gAlteringCave2_Evening | land
+MAP_ALTERING_CAVE | Evening | gAlteringCave3_Evening | land
+MAP_ALTERING_CAVE | Evening | gAlteringCave4_Evening | land
+MAP_ALTERING_CAVE | Evening | gAlteringCave5_Evening | land
+MAP_ALTERING_CAVE | Evening | gAlteringCave6_Evening | land
+MAP_ALTERING_CAVE | Evening | gAlteringCave7_Evening | land
+MAP_ALTERING_CAVE | Evening | gAlteringCave8_Evening | land
+MAP_ALTERING_CAVE | Evening | gAlteringCave9_Evening | land
+MAP_ALTERING_CAVE | Night | gAlteringCave1_Night | land
+MAP_ALTERING_CAVE | Night | gAlteringCave2_Night | land
+MAP_ALTERING_CAVE | Night | gAlteringCave3_Night | land
+MAP_ALTERING_CAVE | Night | gAlteringCave4_Night | land
+MAP_ALTERING_CAVE | Night | gAlteringCave5_Night | land
+MAP_ALTERING_CAVE | Night | gAlteringCave6_Night | land
+MAP_ALTERING_CAVE | Night | gAlteringCave7_Night | land
+MAP_ALTERING_CAVE | Night | gAlteringCave8_Night | land
+MAP_ALTERING_CAVE | Night | gAlteringCave9_Night | land
+MAP_ARTISAN_CAVE_1F | Morning | gArtisanCave_1F_Morning | land
+MAP_ARTISAN_CAVE_1F | Day | gArtisanCave_1F_Day | land
+MAP_ARTISAN_CAVE_1F | Evening | gArtisanCave_1F_Evening | land
+MAP_ARTISAN_CAVE_1F | Night | gArtisanCave_1F_Night | land
+MAP_ARTISAN_CAVE_B1F | Morning | gArtisanCave_B1F_Morning | land
+MAP_ARTISAN_CAVE_B1F | Day | gArtisanCave_B1F_Day | land
+MAP_ARTISAN_CAVE_B1F | Evening | gArtisanCave_B1F_Evening | land
+MAP_ARTISAN_CAVE_B1F | Night | gArtisanCave_B1F_Night | land
+MAP_BURNED_TOWER_1F | Morning | gBurnedTower_1F_Morning | land, water, rock_smash, fishing
+MAP_BURNED_TOWER_1F | Day | gBurnedTower_1F_Day | land, water, rock_smash, fishing
+MAP_BURNED_TOWER_1F | Evening | gBurnedTower_1F_Evening | land, water, rock_smash, fishing
+MAP_BURNED_TOWER_1F | Night | gBurnedTower_1F_Night | land, water, rock_smash, fishing
+MAP_BURNED_TOWER_B1F | Morning | gBurnedTower_B1F_Morning | land, water, rock_smash, fishing
+MAP_BURNED_TOWER_B1F | Day | gBurnedTower_B1F_Day | land, water, rock_smash, fishing
+MAP_BURNED_TOWER_B1F | Evening | gBurnedTower_B1F_Evening | land, water, rock_smash, fishing
+MAP_BURNED_TOWER_B1F | Night | gBurnedTower_B1F_Night | land, water, rock_smash, fishing
+MAP_CAVE_OF_ORIGIN_1F | Morning | gCaveOfOrigin_1F_Morning | land
+MAP_CAVE_OF_ORIGIN_1F | Day | gCaveOfOrigin_1F_Day | land
+MAP_CAVE_OF_ORIGIN_1F | Evening | gCaveOfOrigin_1F_Evening | land
+MAP_CAVE_OF_ORIGIN_1F | Night | gCaveOfOrigin_1F_Night | land
+MAP_CAVE_OF_ORIGIN_ENTRANCE | Morning | gCaveOfOrigin_Entrance_Morning | land
+MAP_CAVE_OF_ORIGIN_ENTRANCE | Day | gCaveOfOrigin_Entrance_Day | land
+MAP_CAVE_OF_ORIGIN_ENTRANCE | Evening | gCaveOfOrigin_Entrance_Evening | land
+MAP_CAVE_OF_ORIGIN_ENTRANCE | Night | gCaveOfOrigin_Entrance_Night | land
+MAP_CAVE_OF_ORIGIN_UNUSED_RUBY_SAPPHIRE_MAP1 | Morning | gCaveOfOrigin_UnusedRubySapphireMap1_Morning | land
+MAP_CAVE_OF_ORIGIN_UNUSED_RUBY_SAPPHIRE_MAP1 | Day | gCaveOfOrigin_UnusedRubySapphireMap1_Day | land
+MAP_CAVE_OF_ORIGIN_UNUSED_RUBY_SAPPHIRE_MAP1 | Evening | gCaveOfOrigin_UnusedRubySapphireMap1_Evening | land
+MAP_CAVE_OF_ORIGIN_UNUSED_RUBY_SAPPHIRE_MAP1 | Night | gCaveOfOrigin_UnusedRubySapphireMap1_Night | land
+MAP_CAVE_OF_ORIGIN_UNUSED_RUBY_SAPPHIRE_MAP2 | Morning | gCaveOfOrigin_UnusedRubySapphireMap2_Morning | land
+MAP_CAVE_OF_ORIGIN_UNUSED_RUBY_SAPPHIRE_MAP2 | Day | gCaveOfOrigin_UnusedRubySapphireMap2_Day | land
+MAP_CAVE_OF_ORIGIN_UNUSED_RUBY_SAPPHIRE_MAP2 | Evening | gCaveOfOrigin_UnusedRubySapphireMap2_Evening | land
+MAP_CAVE_OF_ORIGIN_UNUSED_RUBY_SAPPHIRE_MAP2 | Night | gCaveOfOrigin_UnusedRubySapphireMap2_Night | land
+MAP_CAVE_OF_ORIGIN_UNUSED_RUBY_SAPPHIRE_MAP3 | Morning | gCaveOfOrigin_UnusedRubySapphireMap3_Morning | land
+MAP_CAVE_OF_ORIGIN_UNUSED_RUBY_SAPPHIRE_MAP3 | Day | gCaveOfOrigin_UnusedRubySapphireMap3_Day | land
+MAP_CAVE_OF_ORIGIN_UNUSED_RUBY_SAPPHIRE_MAP3 | Evening | gCaveOfOrigin_UnusedRubySapphireMap3_Evening | land
+MAP_CAVE_OF_ORIGIN_UNUSED_RUBY_SAPPHIRE_MAP3 | Night | gCaveOfOrigin_UnusedRubySapphireMap3_Night | land
+MAP_CERULEAN_CAVE_1F | Morning | gCeruleanCave_1F_Morning | land, water, rock_smash, fishing
+MAP_CERULEAN_CAVE_1F | Day | gCeruleanCave_1F_Day | land, water, rock_smash, fishing
+MAP_CERULEAN_CAVE_1F | Evening | gCeruleanCave_1F_Evening | land, water, rock_smash, fishing
+MAP_CERULEAN_CAVE_1F | Night | gCeruleanCave_1F_Night | land, water, rock_smash, fishing
+MAP_CERULEAN_CAVE_B1F | Morning | gCeruleanCave_B1F_Morning | land, water, rock_smash, fishing
+MAP_CERULEAN_CAVE_B1F | Day | gCeruleanCave_B1F_Day | land, water, rock_smash, fishing
+MAP_CERULEAN_CAVE_B1F | Evening | gCeruleanCave_B1F_Evening | land, water, rock_smash, fishing
+MAP_CERULEAN_CAVE_B1F | Night | gCeruleanCave_B1F_Night | land, water, rock_smash, fishing
+MAP_CERULEAN_CAVE_B2F | Morning | gCeruleanCave_B2F_Morning | land, water, rock_smash, fishing
+MAP_CERULEAN_CAVE_B2F | Day | gCeruleanCave_B2F_Day | land, water, rock_smash, fishing
+MAP_CERULEAN_CAVE_B2F | Evening | gCeruleanCave_B2F_Evening | land, water, rock_smash, fishing
+MAP_CERULEAN_CAVE_B2F | Night | gCeruleanCave_B2F_Night | land, water, rock_smash, fishing
+MAP_CLIFF_EDGE_GATE | Morning | gCliffEdgeGate_Morning | land, water, rock_smash, fishing
+MAP_CLIFF_EDGE_GATE | Day | gCliffEdgeGate_Day | land, water, rock_smash, fishing
+MAP_CLIFF_EDGE_GATE | Evening | gCliffEdgeGate_Evening | land, water, rock_smash, fishing
+MAP_CLIFF_EDGE_GATE | Night | gCliffEdgeGate_Night | land, water, rock_smash, fishing
+MAP_DARK_CAVE_NORTH_SIDE | Morning | gDarkCave_NorthSide_Morning | land, water, rock_smash, fishing
+MAP_DARK_CAVE_NORTH_SIDE | Day | gDarkCave_NorthSide_Day | land, water, rock_smash, fishing
+MAP_DARK_CAVE_NORTH_SIDE | Evening | gDarkCave_NorthSide_Evening | land, water, rock_smash, fishing
+MAP_DARK_CAVE_NORTH_SIDE | Night | gDarkCave_NorthSide_Night | land, water, rock_smash, fishing
+MAP_DARK_CAVE_SOUTH_SIDE | Morning | gDarkCave_SouthSide_Morning | land, water, rock_smash, fishing
+MAP_DARK_CAVE_SOUTH_SIDE | Day | gDarkCave_SouthSide_Day | land, water, rock_smash, fishing
+MAP_DARK_CAVE_SOUTH_SIDE | Evening | gDarkCave_SouthSide_Evening | land, water, rock_smash, fishing
+MAP_DARK_CAVE_SOUTH_SIDE | Night | gDarkCave_SouthSide_Night | land, water, rock_smash, fishing
+MAP_DESERT_UNDERPASS | Morning | gDesertUnderpass_Morning | land
+MAP_DESERT_UNDERPASS | Day | gDesertUnderpass_Day | land
+MAP_DESERT_UNDERPASS | Evening | gDesertUnderpass_Evening | land
+MAP_DESERT_UNDERPASS | Night | gDesertUnderpass_Night | land
+MAP_DEWFORD_TOWN | Morning | gDewfordTown_Morning | water, fishing
+MAP_DEWFORD_TOWN | Day | gDewfordTown_Day | water, fishing
+MAP_DEWFORD_TOWN | Evening | gDewfordTown_Evening | water, fishing
+MAP_DEWFORD_TOWN | Night | gDewfordTown_Night | water, fishing
+MAP_DIGLETTS_CAVE_NORTH | Morning | gDiglettsCave_North_Morning | land, water, rock_smash, fishing
+MAP_DIGLETTS_CAVE_NORTH | Day | gDiglettsCave_North_Day | land, water, rock_smash, fishing
+MAP_DIGLETTS_CAVE_NORTH | Evening | gDiglettsCave_North_Evening | land, water, rock_smash, fishing
+MAP_DIGLETTS_CAVE_NORTH | Night | gDiglettsCave_North_Night | land, water, rock_smash, fishing
+MAP_DIGLETTS_CAVE_SOUTH | Morning | gDiglettsCave_South_Morning | land, water, rock_smash, fishing
+MAP_DIGLETTS_CAVE_SOUTH | Day | gDiglettsCave_South_Day | land, water, rock_smash, fishing
+MAP_DIGLETTS_CAVE_SOUTH | Evening | gDiglettsCave_South_Evening | land, water, rock_smash, fishing
+MAP_DIGLETTS_CAVE_SOUTH | Night | gDiglettsCave_South_Night | land, water, rock_smash, fishing
+MAP_DIGLETTS_CAVE_TUNNEL | Morning | gDiglettsCave_Tunnel_Morning | land, water, rock_smash, fishing
+MAP_DIGLETTS_CAVE_TUNNEL | Day | gDiglettsCave_Tunnel_Day | land, water, rock_smash, fishing
+MAP_DIGLETTS_CAVE_TUNNEL | Evening | gDiglettsCave_Tunnel_Evening | land, water, rock_smash, fishing
+MAP_DIGLETTS_CAVE_TUNNEL | Night | gDiglettsCave_Tunnel_Night | land, water, rock_smash, fishing
+MAP_DRAGONS_DEN_CAVERN | Morning | gDragonsDen_Cavern_Morning | land, water, rock_smash, fishing
+MAP_DRAGONS_DEN_CAVERN | Day | gDragonsDen_Cavern_Day | land, water, rock_smash, fishing
+MAP_DRAGONS_DEN_CAVERN | Evening | gDragonsDen_Cavern_Evening | land, water, rock_smash, fishing
+MAP_DRAGONS_DEN_CAVERN | Night | gDragonsDen_Cavern_Night | land, water, rock_smash, fishing
+MAP_DRAGONS_DEN_ENTRANCE | Morning | gDragonsDen_Entrance_Morning | land, water, rock_smash, fishing
+MAP_DRAGONS_DEN_ENTRANCE | Day | gDragonsDen_Entrance_Day | land, water, rock_smash, fishing
+MAP_DRAGONS_DEN_ENTRANCE | Evening | gDragonsDen_Entrance_Evening | land, water, rock_smash, fishing
+MAP_DRAGONS_DEN_ENTRANCE | Night | gDragonsDen_Entrance_Night | land, water, rock_smash, fishing
+MAP_DRAGONS_DEN_SHRINE | Morning | gDragonsDen_Shrine_Morning | land, water, rock_smash, fishing
+MAP_DRAGONS_DEN_SHRINE | Day | gDragonsDen_Shrine_Day | land, water, rock_smash, fishing
+MAP_DRAGONS_DEN_SHRINE | Evening | gDragonsDen_Shrine_Evening | land, water, rock_smash, fishing
+MAP_DRAGONS_DEN_SHRINE | Night | gDragonsDen_Shrine_Night | land, water, rock_smash, fishing
+MAP_EVER_GRANDE_CITY | Morning | gEverGrandeCity_Morning | water, fishing
+MAP_EVER_GRANDE_CITY | Day | gEverGrandeCity_Day | water, fishing
+MAP_EVER_GRANDE_CITY | Evening | gEverGrandeCity_Evening | water, fishing
+MAP_EVER_GRANDE_CITY | Night | gEverGrandeCity_Night | water, fishing
+MAP_FIERY_PATH | Morning | gFieryPath_Morning | land
+MAP_FIERY_PATH | Day | gFieryPath_Day | land
+MAP_FIERY_PATH | Evening | gFieryPath_Evening | land
+MAP_FIERY_PATH | Night | gFieryPath_Night | land
+MAP_GRANITE_CAVE_1F | Morning | gGraniteCave_1F_Morning | land
+MAP_GRANITE_CAVE_1F | Day | gGraniteCave_1F_Day | land
+MAP_GRANITE_CAVE_1F | Evening | gGraniteCave_1F_Evening | land
+MAP_GRANITE_CAVE_1F | Night | gGraniteCave_1F_Night | land
+MAP_GRANITE_CAVE_B1F | Morning | gGraniteCave_B1F_Morning | land
+MAP_GRANITE_CAVE_B1F | Day | gGraniteCave_B1F_Day | land
+MAP_GRANITE_CAVE_B1F | Evening | gGraniteCave_B1F_Evening | land
+MAP_GRANITE_CAVE_B1F | Night | gGraniteCave_B1F_Night | land
+MAP_GRANITE_CAVE_B2F | Morning | gGraniteCave_B2F_Morning | land, rock_smash
+MAP_GRANITE_CAVE_B2F | Day | gGraniteCave_B2F_Day | land, rock_smash
+MAP_GRANITE_CAVE_B2F | Evening | gGraniteCave_B2F_Evening | land, rock_smash
+MAP_GRANITE_CAVE_B2F | Night | gGraniteCave_B2F_Night | land, rock_smash
+MAP_GRANITE_CAVE_STEVENS_ROOM | Morning | gGraniteCave_StevensRoom_Morning | land
+MAP_GRANITE_CAVE_STEVENS_ROOM | Day | gGraniteCave_StevensRoom_Day | land
+MAP_GRANITE_CAVE_STEVENS_ROOM | Evening | gGraniteCave_StevensRoom_Evening | land
+MAP_GRANITE_CAVE_STEVENS_ROOM | Night | gGraniteCave_StevensRoom_Night | land
+MAP_ICE_PATH_1F | Morning | gIcePath_1F_Morning | land, water, rock_smash, fishing
+MAP_ICE_PATH_1F | Day | gIcePath_1F_Day | land, water, rock_smash, fishing
+MAP_ICE_PATH_1F | Evening | gIcePath_1F_Evening | land, water, rock_smash, fishing
+MAP_ICE_PATH_1F | Night | gIcePath_1F_Night | land, water, rock_smash, fishing
+MAP_ICE_PATH_B1F | Morning | gIcePath_B1F_Morning | land, water, rock_smash, fishing
+MAP_ICE_PATH_B1F | Day | gIcePath_B1F_Day | land, water, rock_smash, fishing
+MAP_ICE_PATH_B1F | Evening | gIcePath_B1F_Evening | land, water, rock_smash, fishing
+MAP_ICE_PATH_B1F | Night | gIcePath_B1F_Night | land, water, rock_smash, fishing
+MAP_ICE_PATH_B2F | Morning | gIcePath_B2F_Morning | land, water, rock_smash, fishing
+MAP_ICE_PATH_B2F | Day | gIcePath_B2F_Day | land, water, rock_smash, fishing
+MAP_ICE_PATH_B2F | Evening | gIcePath_B2F_Evening | land, water, rock_smash, fishing
+MAP_ICE_PATH_B2F | Night | gIcePath_B2F_Night | land, water, rock_smash, fishing
+MAP_ICE_PATH_B3F | Morning | gIcePath_B3F_Morning | land, water, rock_smash, fishing
+MAP_ICE_PATH_B3F | Day | gIcePath_B3F_Day | land, water, rock_smash, fishing
+MAP_ICE_PATH_B3F | Evening | gIcePath_B3F_Evening | land, water, rock_smash, fishing
+MAP_ICE_PATH_B3F | Night | gIcePath_B3F_Night | land, water, rock_smash, fishing
+MAP_ICE_PATH_B4F | Morning | gIcePath_B4F_Morning | land, water, rock_smash, fishing
+MAP_ICE_PATH_B4F | Day | gIcePath_B4F_Day | land, water, rock_smash, fishing
+MAP_ICE_PATH_B4F | Evening | gIcePath_B4F_Evening | land, water, rock_smash, fishing
+MAP_ICE_PATH_B4F | Night | gIcePath_B4F_Night | land, water, rock_smash, fishing
+MAP_ILEX_FOREST | Morning | gIlexForest_Morning | land, water
+MAP_ILEX_FOREST | Day | gIlexForest_Day | land, water
+MAP_ILEX_FOREST | Evening | gIlexForest_Evening | land, water
+MAP_ILEX_FOREST | Night | gIlexForest_Night | land, water
+MAP_INDIGO_PLATEAU | Morning | gIndigo_Plateau_Morning | land, water, rock_smash, fishing
+MAP_INDIGO_PLATEAU | Day | gIndigo_Plateau_Day | land, water, rock_smash, fishing
+MAP_INDIGO_PLATEAU | Evening | gIndigo_Plateau_Evening | land, water, rock_smash, fishing
+MAP_INDIGO_PLATEAU | Night | gIndigo_Plateau_Night | land, water, rock_smash, fishing
+MAP_JAGGED_PASS | Morning | gJaggedPass_Morning | land
+MAP_JAGGED_PASS | Day | gJaggedPass_Day | land
+MAP_JAGGED_PASS | Evening | gJaggedPass_Evening | land
+MAP_JAGGED_PASS | Night | gJaggedPass_Night | land
+MAP_LAKE_OF_RAGE | Morning | gLakeOfRage_Morning | land, water, rock_smash, fishing
+MAP_LAKE_OF_RAGE | Day | gLakeOfRage_Day | land, water, rock_smash, fishing
+MAP_LAKE_OF_RAGE | Evening | gLakeOfRage_Evening | land, water, rock_smash, fishing
+MAP_LAKE_OF_RAGE | Night | gLakeOfRage_Night | land, water, rock_smash, fishing
+MAP_LAKE_OF_RAGE_LOW_TIDE | Morning | gLakeOfRageLowTide_Morning | land, water, rock_smash, fishing
+MAP_LAKE_OF_RAGE_LOW_TIDE | Day | gLakeOfRageLowTide_Day | land, water, rock_smash, fishing
+MAP_LAKE_OF_RAGE_LOW_TIDE | Evening | gLakeOfRageLowTide_Evening | land, water, rock_smash, fishing
+MAP_LAKE_OF_RAGE_LOW_TIDE | Night | gLakeOfRageLowTide_Night | land, water, rock_smash, fishing
+MAP_LILYCOVE_CITY | Morning | gLilycoveCity_Morning | water, fishing
+MAP_LILYCOVE_CITY | Day | gLilycoveCity_Day | water, fishing
+MAP_LILYCOVE_CITY | Evening | gLilycoveCity_Evening | water, fishing
+MAP_LILYCOVE_CITY | Night | gLilycoveCity_Night | water, fishing
+MAP_MAGMA_HIDEOUT_1F | Morning | gMagmaHideout_1F_Morning | land
+MAP_MAGMA_HIDEOUT_1F | Day | gMagmaHideout_1F_Day | land
+MAP_MAGMA_HIDEOUT_1F | Evening | gMagmaHideout_1F_Evening | land
+MAP_MAGMA_HIDEOUT_1F | Night | gMagmaHideout_1F_Night | land
+MAP_MAGMA_HIDEOUT_2F_1R | Morning | gMagmaHideout_2F_1R_Morning | land
+MAP_MAGMA_HIDEOUT_2F_1R | Day | gMagmaHideout_2F_1R_Day | land
+MAP_MAGMA_HIDEOUT_2F_1R | Evening | gMagmaHideout_2F_1R_Evening | land
+MAP_MAGMA_HIDEOUT_2F_1R | Night | gMagmaHideout_2F_1R_Night | land
+MAP_MAGMA_HIDEOUT_2F_2R | Morning | gMagmaHideout_2F_2R_Morning | land
+MAP_MAGMA_HIDEOUT_2F_2R | Day | gMagmaHideout_2F_2R_Day | land
+MAP_MAGMA_HIDEOUT_2F_2R | Evening | gMagmaHideout_2F_2R_Evening | land
+MAP_MAGMA_HIDEOUT_2F_2R | Night | gMagmaHideout_2F_2R_Night | land
+MAP_MAGMA_HIDEOUT_2F_3R | Morning | gMagmaHideout_2F_3R_Morning | land
+MAP_MAGMA_HIDEOUT_2F_3R | Day | gMagmaHideout_2F_3R_Day | land
+MAP_MAGMA_HIDEOUT_2F_3R | Evening | gMagmaHideout_2F_3R_Evening | land
+MAP_MAGMA_HIDEOUT_2F_3R | Night | gMagmaHideout_2F_3R_Night | land
+MAP_MAGMA_HIDEOUT_3F_1R | Morning | gMagmaHideout_3F_1R_Morning | land
+MAP_MAGMA_HIDEOUT_3F_1R | Day | gMagmaHideout_3F_1R_Day | land
+MAP_MAGMA_HIDEOUT_3F_1R | Evening | gMagmaHideout_3F_1R_Evening | land
+MAP_MAGMA_HIDEOUT_3F_1R | Night | gMagmaHideout_3F_1R_Night | land
+MAP_MAGMA_HIDEOUT_3F_2R | Morning | gMagmaHideout_3F_2R_Morning | land
+MAP_MAGMA_HIDEOUT_3F_2R | Day | gMagmaHideout_3F_2R_Day | land
+MAP_MAGMA_HIDEOUT_3F_2R | Evening | gMagmaHideout_3F_2R_Evening | land
+MAP_MAGMA_HIDEOUT_3F_2R | Night | gMagmaHideout_3F_2R_Night | land
+MAP_MAGMA_HIDEOUT_3F_3R | Morning | gMagmaHideout_3F_3R_Morning | land
+MAP_MAGMA_HIDEOUT_3F_3R | Day | gMagmaHideout_3F_3R_Day | land
+MAP_MAGMA_HIDEOUT_3F_3R | Evening | gMagmaHideout_3F_3R_Evening | land
+MAP_MAGMA_HIDEOUT_3F_3R | Night | gMagmaHideout_3F_3R_Night | land
+MAP_MAGMA_HIDEOUT_4F | Morning | gMagmaHideout_4F_Morning | land
+MAP_MAGMA_HIDEOUT_4F | Day | gMagmaHideout_4F_Day | land
+MAP_MAGMA_HIDEOUT_4F | Evening | gMagmaHideout_4F_Evening | land
+MAP_MAGMA_HIDEOUT_4F | Night | gMagmaHideout_4F_Night | land
+MAP_METEOR_FALLS_1F_1R | Morning | gMeteorFalls_1F_1R_Morning | land, water, fishing
+MAP_METEOR_FALLS_1F_1R | Day | gMeteorFalls_1F_1R_Day | land, water, fishing
+MAP_METEOR_FALLS_1F_1R | Evening | gMeteorFalls_1F_1R_Evening | land, water, fishing
+MAP_METEOR_FALLS_1F_1R | Night | gMeteorFalls_1F_1R_Night | land, water, fishing
+MAP_METEOR_FALLS_1F_2R | Morning | gMeteorFalls_1F_2R_Morning | land, water, fishing
+MAP_METEOR_FALLS_1F_2R | Day | gMeteorFalls_1F_2R_Day | land, water, fishing
+MAP_METEOR_FALLS_1F_2R | Evening | gMeteorFalls_1F_2R_Evening | land, water, fishing
+MAP_METEOR_FALLS_1F_2R | Night | gMeteorFalls_1F_2R_Night | land, water, fishing
+MAP_METEOR_FALLS_B1F_1R | Morning | gMeteorFalls_B1F_1R_Morning | land, water, fishing
+MAP_METEOR_FALLS_B1F_1R | Day | gMeteorFalls_B1F_1R_Day | land, water, fishing
+MAP_METEOR_FALLS_B1F_1R | Evening | gMeteorFalls_B1F_1R_Evening | land, water, fishing
+MAP_METEOR_FALLS_B1F_1R | Night | gMeteorFalls_B1F_1R_Night | land, water, fishing
+MAP_METEOR_FALLS_B1F_2R | Morning | gMeteorFalls_B1F_2R_Morning | land, water, fishing
+MAP_METEOR_FALLS_B1F_2R | Day | gMeteorFalls_B1F_2R_Day | land, water, fishing
+MAP_METEOR_FALLS_B1F_2R | Evening | gMeteorFalls_B1F_2R_Evening | land, water, fishing
+MAP_METEOR_FALLS_B1F_2R | Night | gMeteorFalls_B1F_2R_Night | land, water, fishing
+MAP_METEOR_FALLS_STEVENS_CAVE | Morning | gMeteorFalls_StevensCave_Morning | land
+MAP_METEOR_FALLS_STEVENS_CAVE | Day | gMeteorFalls_StevensCave_Day | land
+MAP_METEOR_FALLS_STEVENS_CAVE | Evening | gMeteorFalls_StevensCave_Evening | land
+MAP_METEOR_FALLS_STEVENS_CAVE | Night | gMeteorFalls_StevensCave_Night | land
+MAP_MIRAGE_TOWER_1F | Morning | gMirageTower_1F_Morning | land
+MAP_MIRAGE_TOWER_1F | Day | gMirageTower_1F_Day | land
+MAP_MIRAGE_TOWER_1F | Evening | gMirageTower_1F_Evening | land
+MAP_MIRAGE_TOWER_1F | Night | gMirageTower_1F_Night | land
+MAP_MIRAGE_TOWER_2F | Morning | gMirageTower_2F_Morning | land
+MAP_MIRAGE_TOWER_2F | Day | gMirageTower_2F_Day | land
+MAP_MIRAGE_TOWER_2F | Evening | gMirageTower_2F_Evening | land
+MAP_MIRAGE_TOWER_2F | Night | gMirageTower_2F_Night | land
+MAP_MIRAGE_TOWER_3F | Morning | gMirageTower_3F_Morning | land
+MAP_MIRAGE_TOWER_3F | Day | gMirageTower_3F_Day | land
+MAP_MIRAGE_TOWER_3F | Evening | gMirageTower_3F_Evening | land
+MAP_MIRAGE_TOWER_3F | Night | gMirageTower_3F_Night | land
+MAP_MIRAGE_TOWER_4F | Morning | gMirageTower_4F_Morning | land
+MAP_MIRAGE_TOWER_4F | Day | gMirageTower_4F_Day | land
+MAP_MIRAGE_TOWER_4F | Evening | gMirageTower_4F_Evening | land
+MAP_MIRAGE_TOWER_4F | Night | gMirageTower_4F_Night | land
+MAP_MOSSDEEP_CITY | Morning | gMossdeepCity_Morning | water, fishing
+MAP_MOSSDEEP_CITY | Day | gMossdeepCity_Day | water, fishing
+MAP_MOSSDEEP_CITY | Evening | gMossdeepCity_Evening | water, fishing
+MAP_MOSSDEEP_CITY | Night | gMossdeepCity_Night | water, fishing
+MAP_MT_MOON_CAVE | Morning | gMtMoon_Cave_Morning | land
+MAP_MT_MOON_CAVE | Day | gMtMoon_Cave_Day | land
+MAP_MT_MOON_CAVE | Evening | gMtMoon_Cave_Evening | land
+MAP_MT_MOON_CAVE | Night | gMtMoon_Cave_Night | land
+MAP_MT_MOON_OUTSIDE | Morning | gMtMoon_Outside_Morning | land, water, rock_smash, fishing
+MAP_MT_MOON_OUTSIDE | Day | gMtMoon_Outside_Day | land, water, rock_smash, fishing
+MAP_MT_MOON_OUTSIDE | Evening | gMtMoon_Outside_Evening | land, water, rock_smash, fishing
+MAP_MT_MOON_OUTSIDE | Night | gMtMoon_Outside_Night | land, water, rock_smash, fishing
+MAP_MT_MORTAR_1F_NORTH | Morning | gMtMortar_1F_North_Morning | land, water, rock_smash, fishing
+MAP_MT_MORTAR_1F_NORTH | Day | gMtMortar_1F_North_Day | land, water, rock_smash, fishing
+MAP_MT_MORTAR_1F_NORTH | Evening | gMtMortar_1F_North_Evening | land, water, rock_smash, fishing
+MAP_MT_MORTAR_1F_NORTH | Night | gMtMortar_1F_North_Night | land, water, rock_smash, fishing
+MAP_MT_MORTAR_1F_SOUTH | Morning | gMtMortar_1F_South_Morning | land, water, rock_smash, fishing
+MAP_MT_MORTAR_1F_SOUTH | Day | gMtMortar_1F_South_Day | land, water, rock_smash, fishing
+MAP_MT_MORTAR_1F_SOUTH | Evening | gMtMortar_1F_South_Evening | land, water, rock_smash, fishing
+MAP_MT_MORTAR_1F_SOUTH | Night | gMtMortar_1F_South_Night | land, water, rock_smash, fishing
+MAP_MT_MORTAR_2F | Morning | gMtMortar_2F_Morning | land, water, rock_smash, fishing
+MAP_MT_MORTAR_2F | Day | gMtMortar_2F_Day | land, water, rock_smash, fishing
+MAP_MT_MORTAR_2F | Evening | gMtMortar_2F_Evening | land, water, rock_smash, fishing
+MAP_MT_MORTAR_2F | Night | gMtMortar_2F_Night | land, water, rock_smash, fishing
+MAP_MT_MORTAR_B1F | Morning | gMtMortar_B1F_Morning | land, water, rock_smash, fishing
+MAP_MT_MORTAR_B1F | Day | gMtMortar_B1F_Day | land, water, rock_smash, fishing
+MAP_MT_MORTAR_B1F | Evening | gMtMortar_B1F_Evening | land, water, rock_smash, fishing
+MAP_MT_MORTAR_B1F | Night | gMtMortar_B1F_Night | land, water, rock_smash, fishing
+MAP_MT_PYRE_1F | Morning | gMtPyre_1F_Morning | none
+MAP_MT_PYRE_1F | Day | gMtPyre_1F_Day | none
+MAP_MT_PYRE_1F | Evening | gMtPyre_1F_Evening | none
+MAP_MT_PYRE_1F | Night | gMtPyre_1F_Night | none
+MAP_MT_PYRE_2F | Morning | gMtPyre_2F_Morning | none
+MAP_MT_PYRE_2F | Day | gMtPyre_2F_Day | none
+MAP_MT_PYRE_2F | Evening | gMtPyre_2F_Evening | none
+MAP_MT_PYRE_2F | Night | gMtPyre_2F_Night | none
+MAP_MT_PYRE_3F | Morning | gMtPyre_3F_Morning | none
+MAP_MT_PYRE_3F | Day | gMtPyre_3F_Day | none
+MAP_MT_PYRE_3F | Evening | gMtPyre_3F_Evening | none
+MAP_MT_PYRE_3F | Night | gMtPyre_3F_Night | none
+MAP_MT_PYRE_4F | Morning | gMtPyre_4F_Morning | none
+MAP_MT_PYRE_4F | Day | gMtPyre_4F_Day | none
+MAP_MT_PYRE_4F | Evening | gMtPyre_4F_Evening | none
+MAP_MT_PYRE_4F | Night | gMtPyre_4F_Night | none
+MAP_MT_PYRE_5F | Morning | gMtPyre_5F_Morning | none
+MAP_MT_PYRE_5F | Day | gMtPyre_5F_Day | none
+MAP_MT_PYRE_5F | Evening | gMtPyre_5F_Evening | none
+MAP_MT_PYRE_5F | Night | gMtPyre_5F_Night | none
+MAP_MT_PYRE_6F | Morning | gMtPyre_6F_Morning | none
+MAP_MT_PYRE_6F | Day | gMtPyre_6F_Day | none
+MAP_MT_PYRE_6F | Evening | gMtPyre_6F_Evening | none
+MAP_MT_PYRE_6F | Night | gMtPyre_6F_Night | none
+MAP_MT_PYRE_EXTERIOR | Morning | gMtPyre_Exterior_Morning | land
+MAP_MT_PYRE_EXTERIOR | Day | gMtPyre_Exterior_Day | land
+MAP_MT_PYRE_EXTERIOR | Evening | gMtPyre_Exterior_Evening | land
+MAP_MT_PYRE_EXTERIOR | Night | gMtPyre_Exterior_Night | land
+MAP_MT_PYRE_SUMMIT | Morning | gMtPyre_Summit_Morning | land
+MAP_MT_PYRE_SUMMIT | Day | gMtPyre_Summit_Day | land
+MAP_MT_PYRE_SUMMIT | Evening | gMtPyre_Summit_Evening | land
+MAP_MT_PYRE_SUMMIT | Night | gMtPyre_Summit_Night | land
+MAP_MT_SILVER_1F_ITEM_ROOM | Morning | gMtSilver_1F_ItemRoom_Morning | land, water, rock_smash, fishing
+MAP_MT_SILVER_1F_ITEM_ROOM | Day | gMtSilver_1F_ItemRoom_Day | land, water, rock_smash, fishing
+MAP_MT_SILVER_1F_ITEM_ROOM | Evening | gMtSilver_1F_ItemRoom_Evening | land, water, rock_smash, fishing
+MAP_MT_SILVER_1F_ITEM_ROOM | Night | gMtSilver_1F_ItemRoom_Night | land, water, rock_smash, fishing
+MAP_MT_SILVER_1F_MOLTRES_ROOM | Morning | gMtSilver_1F_MoltresRoom_Morning | land, water, rock_smash, fishing
+MAP_MT_SILVER_1F_MOLTRES_ROOM | Day | gMtSilver_1F_MoltresRoom_Day | land, water, rock_smash, fishing
+MAP_MT_SILVER_1F_MOLTRES_ROOM | Evening | gMtSilver_1F_MoltresRoom_Evening | land, water, rock_smash, fishing
+MAP_MT_SILVER_1F_MOLTRES_ROOM | Night | gMtSilver_1F_MoltresRoom_Night | land, water, rock_smash, fishing
+MAP_MT_SILVER_1F_WATERFALL | Morning | gMtSilver_1F_Waterfall_Morning | land, water, rock_smash, fishing
+MAP_MT_SILVER_1F_WATERFALL | Day | gMtSilver_1F_Waterfall_Day | land, water, rock_smash, fishing
+MAP_MT_SILVER_1F_WATERFALL | Evening | gMtSilver_1F_Waterfall_Evening | land, water, rock_smash, fishing
+MAP_MT_SILVER_1F_WATERFALL | Night | gMtSilver_1F_Waterfall_Night | land, water, rock_smash, fishing
+MAP_MT_SILVER_2F | Morning | gMtSilver_2F_Morning | land, water, rock_smash, fishing
+MAP_MT_SILVER_2F | Day | gMtSilver_2F_Day | land, water, rock_smash, fishing
+MAP_MT_SILVER_2F | Evening | gMtSilver_2F_Evening | land, water, rock_smash, fishing
+MAP_MT_SILVER_2F | Night | gMtSilver_2F_Night | land, water, rock_smash, fishing
+MAP_MT_SILVER_3F | Morning | gMtSilver_3F_Morning | land, water, rock_smash, fishing
+MAP_MT_SILVER_3F | Day | gMtSilver_3F_Day | land, water, rock_smash, fishing
+MAP_MT_SILVER_3F | Evening | gMtSilver_3F_Evening | land, water, rock_smash, fishing
+MAP_MT_SILVER_3F | Night | gMtSilver_3F_Night | land, water, rock_smash, fishing
+MAP_MT_SILVER_MOUNTAIN_SIDE | Morning | gMtSilver_MountainSide_Morning | land, water, rock_smash, fishing
+MAP_MT_SILVER_MOUNTAIN_SIDE | Day | gMtSilver_MountainSide_Day | land, water, rock_smash, fishing
+MAP_MT_SILVER_MOUNTAIN_SIDE | Evening | gMtSilver_MountainSide_Evening | land, water, rock_smash, fishing
+MAP_MT_SILVER_MOUNTAIN_SIDE | Night | gMtSilver_MountainSide_Night | land, water, rock_smash, fishing
+MAP_MT_SILVER_OUTSIDE | Morning | gMtSilver_Outside_Morning | land, water, rock_smash, fishing
+MAP_MT_SILVER_OUTSIDE | Day | gMtSilver_Outside_Day | land, water, rock_smash, fishing
+MAP_MT_SILVER_OUTSIDE | Evening | gMtSilver_Outside_Evening | land, water, rock_smash, fishing
+MAP_MT_SILVER_OUTSIDE | Night | gMtSilver_Outside_Night | land, water, rock_smash, fishing
+MAP_MT_SILVER_SNOW | Morning | gMtSilver_Snow_Morning | land, water, rock_smash, fishing
+MAP_MT_SILVER_SNOW | Day | gMtSilver_Snow_Day | land, water, rock_smash, fishing
+MAP_MT_SILVER_SNOW | Evening | gMtSilver_Snow_Evening | land, water, rock_smash, fishing
+MAP_MT_SILVER_SNOW | Night | gMtSilver_Snow_Night | land, water, rock_smash, fishing
+MAP_MT_SILVER_SUMMIT_DAY | Morning | gMtSilver_SummitDay_Morning | land, water, rock_smash, fishing
+MAP_MT_SILVER_SUMMIT_DAY | Day | gMtSilver_SummitDay_Day | land, water, rock_smash, fishing
+MAP_MT_SILVER_SUMMIT_DAY | Evening | gMtSilver_SummitDay_Evening | land, water, rock_smash, fishing
+MAP_MT_SILVER_SUMMIT_DAY | Night | gMtSilver_SummitDay_Night | land, water, rock_smash, fishing
+MAP_MT_SILVER_SUMMIT_NIGHT | Morning | gMtSilver_SummitNight_Morning | land, water, rock_smash, fishing
+MAP_MT_SILVER_SUMMIT_NIGHT | Day | gMtSilver_SummitNight_Day | land, water, rock_smash, fishing
+MAP_MT_SILVER_SUMMIT_NIGHT | Evening | gMtSilver_SummitNight_Evening | land, water, rock_smash, fishing
+MAP_MT_SILVER_SUMMIT_NIGHT | Night | gMtSilver_SummitNight_Night | land, water, rock_smash, fishing
+MAP_NATIONAL_PARK_BUG_CONTEST | Morning | gNationalPark_BugContest_Morning | land, water, rock_smash, fishing
+MAP_NATIONAL_PARK_BUG_CONTEST | Day | gNationalPark_BugContest_Day | land, water, rock_smash, fishing
+MAP_NATIONAL_PARK_BUG_CONTEST | Evening | gNationalPark_BugContest_Evening | land, water, rock_smash, fishing
+MAP_NATIONAL_PARK_BUG_CONTEST | Night | gNationalPark_BugContest_Night | land, water, rock_smash, fishing
+MAP_NATIONAL_PARK_NORMAL | Morning | gNationalPark_Normal_Morning | land, water, rock_smash, fishing
+MAP_NATIONAL_PARK_NORMAL | Day | gNationalPark_Normal_Day | land, water, rock_smash, fishing
+MAP_NATIONAL_PARK_NORMAL | Evening | gNationalPark_Normal_Evening | land, water, rock_smash, fishing
+MAP_NATIONAL_PARK_NORMAL | Night | gNationalPark_Normal_Night | land, water, rock_smash, fishing
+MAP_NEW_MAUVILLE_ENTRANCE | Morning | gNewMauville_Entrance_Morning | land
+MAP_NEW_MAUVILLE_ENTRANCE | Day | gNewMauville_Entrance_Day | land
+MAP_NEW_MAUVILLE_ENTRANCE | Evening | gNewMauville_Entrance_Evening | land
+MAP_NEW_MAUVILLE_ENTRANCE | Night | gNewMauville_Entrance_Night | land
+MAP_NEW_MAUVILLE_INSIDE | Morning | gNewMauville_Inside_Morning | land
+MAP_NEW_MAUVILLE_INSIDE | Day | gNewMauville_Inside_Day | land
+MAP_NEW_MAUVILLE_INSIDE | Evening | gNewMauville_Inside_Evening | land
+MAP_NEW_MAUVILLE_INSIDE | Night | gNewMauville_Inside_Night | land
+MAP_PACIFIDLOG_TOWN | Morning | gPacifidlogTown_Morning | water, fishing
+MAP_PACIFIDLOG_TOWN | Day | gPacifidlogTown_Day | water, fishing
+MAP_PACIFIDLOG_TOWN | Evening | gPacifidlogTown_Evening | water, fishing
+MAP_PACIFIDLOG_TOWN | Night | gPacifidlogTown_Night | water, fishing
+MAP_PALLET_TOWN | Morning | gPallet_Town_Morning | water, fishing
+MAP_PALLET_TOWN | Day | gPallet_Town_Day | water, fishing
+MAP_PALLET_TOWN | Evening | gPallet_Town_Evening | water, fishing
+MAP_PALLET_TOWN | Night | gPallet_Town_Night | water, fishing
+MAP_PETALBURG_CITY | Morning | gPetalburgCity_Morning | water, fishing
+MAP_PETALBURG_CITY | Day | gPetalburgCity_Day | water, fishing
+MAP_PETALBURG_CITY | Evening | gPetalburgCity_Evening | water, fishing
+MAP_PETALBURG_CITY | Night | gPetalburgCity_Night | water, fishing
+MAP_PETALBURG_WOODS | Morning | gPetalburgWoods_Morning | land
+MAP_PETALBURG_WOODS | Day | gPetalburgWoods_Day | land
+MAP_PETALBURG_WOODS | Evening | gPetalburgWoods_Evening | land
+MAP_PETALBURG_WOODS | Night | gPetalburgWoods_Night | land
+MAP_ROCK_TUNNEL_1F | Morning | gRockTunnel_1F_Morning | land
+MAP_ROCK_TUNNEL_1F | Day | gRockTunnel_1F_Day | land
+MAP_ROCK_TUNNEL_1F | Evening | gRockTunnel_1F_Evening | land
+MAP_ROCK_TUNNEL_1F | Night | gRockTunnel_1F_Night | land
+MAP_ROCK_TUNNEL_B1F | Morning | gRockTunnel_B1F_Morning | land
+MAP_ROCK_TUNNEL_B1F | Day | gRockTunnel_B1F_Day | land
+MAP_ROCK_TUNNEL_B1F | Evening | gRockTunnel_B1F_Evening | land
+MAP_ROCK_TUNNEL_B1F | Night | gRockTunnel_B1F_Night | land
+MAP_ROUTE1 | Morning | gRoute1_Morning | land
+MAP_ROUTE1 | Day | gRoute1_Day | land
+MAP_ROUTE1 | Evening | gRoute1_Evening | land
+MAP_ROUTE1 | Night | gRoute1_Night | land
+MAP_ROUTE10 | Morning | gRoute10_Morning | land
+MAP_ROUTE10 | Day | gRoute10_Day | land
+MAP_ROUTE10 | Evening | gRoute10_Evening | land
+MAP_ROUTE10 | Night | gRoute10_Night | land
+MAP_ROUTE101 | Morning | gRoute101_Morning | land
+MAP_ROUTE101 | Day | gRoute101_Day | land
+MAP_ROUTE101 | Evening | gRoute101_Evening | land
+MAP_ROUTE101 | Night | gRoute101_Night | land
+MAP_ROUTE102 | Morning | gRoute102_Morning | land, water, fishing
+MAP_ROUTE102 | Day | gRoute102_Day | land, water, fishing
+MAP_ROUTE102 | Evening | gRoute102_Evening | land, water, fishing
+MAP_ROUTE102 | Night | gRoute102_Night | land, water, fishing
+MAP_ROUTE103 | Morning | gRoute103_Morning | land, water, fishing
+MAP_ROUTE103 | Day | gRoute103_Day | land, water, fishing
+MAP_ROUTE103 | Evening | gRoute103_Evening | land, water, fishing
+MAP_ROUTE103 | Night | gRoute103_Night | land, water, fishing
+MAP_ROUTE104 | Morning | gRoute104_Morning | land, water, fishing
+MAP_ROUTE104 | Day | gRoute104_Day | land, water, fishing
+MAP_ROUTE104 | Evening | gRoute104_Evening | land, water, fishing
+MAP_ROUTE104 | Night | gRoute104_Night | land, water, fishing
+MAP_ROUTE105 | Morning | gRoute105_Morning | water, fishing
+MAP_ROUTE105 | Day | gRoute105_Day | water, fishing
+MAP_ROUTE105 | Evening | gRoute105_Evening | water, fishing
+MAP_ROUTE105 | Night | gRoute105_Night | water, fishing
+MAP_ROUTE106 | Morning | gRoute106_Morning | water, fishing
+MAP_ROUTE106 | Day | gRoute106_Day | water, fishing
+MAP_ROUTE106 | Evening | gRoute106_Evening | water, fishing
+MAP_ROUTE106 | Night | gRoute106_Night | water, fishing
+MAP_ROUTE107 | Morning | gRoute107_Morning | water, fishing
+MAP_ROUTE107 | Day | gRoute107_Day | water, fishing
+MAP_ROUTE107 | Evening | gRoute107_Evening | water, fishing
+MAP_ROUTE107 | Night | gRoute107_Night | water, fishing
+MAP_ROUTE108 | Morning | gRoute108_Morning | water, fishing
+MAP_ROUTE108 | Day | gRoute108_Day | water, fishing
+MAP_ROUTE108 | Evening | gRoute108_Evening | water, fishing
+MAP_ROUTE108 | Night | gRoute108_Night | water, fishing
+MAP_ROUTE109 | Morning | gRoute109_Morning | water, fishing
+MAP_ROUTE109 | Day | gRoute109_Day | water, fishing
+MAP_ROUTE109 | Evening | gRoute109_Evening | water, fishing
+MAP_ROUTE109 | Night | gRoute109_Night | water, fishing
+MAP_ROUTE11 | Morning | gRoute11_Morning | land, water, rock_smash, fishing
+MAP_ROUTE11 | Day | gRoute11_Day | land, water, rock_smash, fishing
+MAP_ROUTE11 | Evening | gRoute11_Evening | land, water, rock_smash, fishing
+MAP_ROUTE11 | Night | gRoute11_Night | land, water, rock_smash, fishing
+MAP_ROUTE110 | Morning | gRoute110_Morning | land, water, fishing
+MAP_ROUTE110 | Day | gRoute110_Day | land, water, fishing
+MAP_ROUTE110 | Evening | gRoute110_Evening | land, water, fishing
+MAP_ROUTE110 | Night | gRoute110_Night | land, water, fishing
+MAP_ROUTE111 | Morning | gRoute111_Morning | land, water, rock_smash, fishing
+MAP_ROUTE111 | Day | gRoute111_Day | land, water, rock_smash, fishing
+MAP_ROUTE111 | Evening | gRoute111_Evening | land, water, rock_smash, fishing
+MAP_ROUTE111 | Night | gRoute111_Night | land, water, rock_smash, fishing
+MAP_ROUTE112 | Morning | gRoute112_Morning | land
+MAP_ROUTE112 | Day | gRoute112_Day | land
+MAP_ROUTE112 | Evening | gRoute112_Evening | land
+MAP_ROUTE112 | Night | gRoute112_Night | land
+MAP_ROUTE113 | Morning | gRoute113_Morning | land
+MAP_ROUTE113 | Day | gRoute113_Day | land
+MAP_ROUTE113 | Evening | gRoute113_Evening | land
+MAP_ROUTE113 | Night | gRoute113_Night | land
+MAP_ROUTE114 | Morning | gRoute114_Morning | land, water, rock_smash, fishing
+MAP_ROUTE114 | Day | gRoute114_Day | land, water, rock_smash, fishing
+MAP_ROUTE114 | Evening | gRoute114_Evening | land, water, rock_smash, fishing
+MAP_ROUTE114 | Night | gRoute114_Night | land, water, rock_smash, fishing
+MAP_ROUTE115 | Morning | gRoute115_Morning | land, water, fishing
+MAP_ROUTE115 | Day | gRoute115_Day | land, water, fishing
+MAP_ROUTE115 | Evening | gRoute115_Evening | land, water, fishing
+MAP_ROUTE115 | Night | gRoute115_Night | land, water, fishing
+MAP_ROUTE116 | Morning | gRoute116_Morning | land
+MAP_ROUTE116 | Day | gRoute116_Day | land
+MAP_ROUTE116 | Evening | gRoute116_Evening | land
+MAP_ROUTE116 | Night | gRoute116_Night | land
+MAP_ROUTE117 | Morning | gRoute117_Morning | land, water, fishing
+MAP_ROUTE117 | Day | gRoute117_Day | land, water, fishing
+MAP_ROUTE117 | Evening | gRoute117_Evening | land, water, fishing
+MAP_ROUTE117 | Night | gRoute117_Night | land, water, fishing
+MAP_ROUTE118 | Morning | gRoute118_Morning | land, water, fishing
+MAP_ROUTE118 | Day | gRoute118_Day | land, water, fishing
+MAP_ROUTE118 | Evening | gRoute118_Evening | land, water, fishing
+MAP_ROUTE118 | Night | gRoute118_Night | land, water, fishing
+MAP_ROUTE119 | Morning | gRoute119_Morning | land, water, fishing
+MAP_ROUTE119 | Day | gRoute119_Day | land, water, fishing
+MAP_ROUTE119 | Evening | gRoute119_Evening | land, water, fishing
+MAP_ROUTE119 | Night | gRoute119_Night | land, water, fishing
+MAP_ROUTE12 | Morning | gRoute12_Morning | land, water, rock_smash, fishing
+MAP_ROUTE12 | Day | gRoute12_Day | land, water, rock_smash, fishing
+MAP_ROUTE12 | Evening | gRoute12_Evening | land, water, rock_smash, fishing
+MAP_ROUTE12 | Night | gRoute12_Night | land, water, rock_smash, fishing
+MAP_ROUTE120 | Morning | gRoute120_Morning | land, water, fishing
+MAP_ROUTE120 | Day | gRoute120_Day | land, water, fishing
+MAP_ROUTE120 | Evening | gRoute120_Evening | land, water, fishing
+MAP_ROUTE120 | Night | gRoute120_Night | land, water, fishing
+MAP_ROUTE121 | Morning | gRoute121_Morning | land, water, fishing
+MAP_ROUTE121 | Day | gRoute121_Day | land, water, fishing
+MAP_ROUTE121 | Evening | gRoute121_Evening | land, water, fishing
+MAP_ROUTE121 | Night | gRoute121_Night | land, water, fishing
+MAP_ROUTE122 | Morning | gRoute122_Morning | water, fishing
+MAP_ROUTE122 | Day | gRoute122_Day | water, fishing
+MAP_ROUTE122 | Evening | gRoute122_Evening | water, fishing
+MAP_ROUTE122 | Night | gRoute122_Night | water, fishing
+MAP_ROUTE123 | Morning | gRoute123_Morning | land, water, fishing
+MAP_ROUTE123 | Day | gRoute123_Day | land, water, fishing
+MAP_ROUTE123 | Evening | gRoute123_Evening | land, water, fishing
+MAP_ROUTE123 | Night | gRoute123_Night | land, water, fishing
+MAP_ROUTE124 | Morning | gRoute124_Morning | water, fishing
+MAP_ROUTE124 | Day | gRoute124_Day | water, fishing
+MAP_ROUTE124 | Evening | gRoute124_Evening | water, fishing
+MAP_ROUTE124 | Night | gRoute124_Night | water, fishing
+MAP_ROUTE125 | Morning | gRoute125_Morning | water, fishing
+MAP_ROUTE125 | Day | gRoute125_Day | water, fishing
+MAP_ROUTE125 | Evening | gRoute125_Evening | water, fishing
+MAP_ROUTE125 | Night | gRoute125_Night | water, fishing
+MAP_ROUTE126 | Morning | gRoute126_Morning | water, fishing
+MAP_ROUTE126 | Day | gRoute126_Day | water, fishing
+MAP_ROUTE126 | Evening | gRoute126_Evening | water, fishing
+MAP_ROUTE126 | Night | gRoute126_Night | water, fishing
+MAP_ROUTE127 | Morning | gRoute127_Morning | water, fishing
+MAP_ROUTE127 | Day | gRoute127_Day | water, fishing
+MAP_ROUTE127 | Evening | gRoute127_Evening | water, fishing
+MAP_ROUTE127 | Night | gRoute127_Night | water, fishing
+MAP_ROUTE128 | Morning | gRoute128_Morning | water, fishing
+MAP_ROUTE128 | Day | gRoute128_Day | water, fishing
+MAP_ROUTE128 | Evening | gRoute128_Evening | water, fishing
+MAP_ROUTE128 | Night | gRoute128_Night | water, fishing
+MAP_ROUTE129 | Morning | gRoute129_Morning | water, fishing
+MAP_ROUTE129 | Day | gRoute129_Day | water, fishing
+MAP_ROUTE129 | Evening | gRoute129_Evening | water, fishing
+MAP_ROUTE129 | Night | gRoute129_Night | water, fishing
+MAP_ROUTE13 | Morning | gRoute13_Morning | land, water, rock_smash, fishing
+MAP_ROUTE13 | Day | gRoute13_Day | land, water, rock_smash, fishing
+MAP_ROUTE13 | Evening | gRoute13_Evening | land, water, rock_smash, fishing
+MAP_ROUTE13 | Night | gRoute13_Night | land, water, rock_smash, fishing
+MAP_ROUTE130 | Morning | gRoute130_Morning | land, water, fishing
+MAP_ROUTE130 | Day | gRoute130_Day | land, water, fishing
+MAP_ROUTE130 | Evening | gRoute130_Evening | land, water, fishing
+MAP_ROUTE130 | Night | gRoute130_Night | land, water, fishing
+MAP_ROUTE131 | Morning | gRoute131_Morning | water, fishing
+MAP_ROUTE131 | Day | gRoute131_Day | water, fishing
+MAP_ROUTE131 | Evening | gRoute131_Evening | water, fishing
+MAP_ROUTE131 | Night | gRoute131_Night | water, fishing
+MAP_ROUTE132 | Morning | gRoute132_Morning | water, fishing
+MAP_ROUTE132 | Day | gRoute132_Day | water, fishing
+MAP_ROUTE132 | Evening | gRoute132_Evening | water, fishing
+MAP_ROUTE132 | Night | gRoute132_Night | water, fishing
+MAP_ROUTE133 | Morning | gRoute133_Morning | water, fishing
+MAP_ROUTE133 | Day | gRoute133_Day | water, fishing
+MAP_ROUTE133 | Evening | gRoute133_Evening | water, fishing
+MAP_ROUTE133 | Night | gRoute133_Night | water, fishing
+MAP_ROUTE134 | Morning | gRoute134_Morning | water, fishing
+MAP_ROUTE134 | Day | gRoute134_Day | water, fishing
+MAP_ROUTE134 | Evening | gRoute134_Evening | water, fishing
+MAP_ROUTE134 | Night | gRoute134_Night | water, fishing
+MAP_ROUTE14 | Morning | gRoute14_Morning | land, water, rock_smash, fishing
+MAP_ROUTE14 | Day | gRoute14_Day | land, water, rock_smash, fishing
+MAP_ROUTE14 | Evening | gRoute14_Evening | land, water, rock_smash, fishing
+MAP_ROUTE14 | Night | gRoute14_Night | land, water, rock_smash, fishing
+MAP_ROUTE15 | Morning | gRoute15_Morning | land, water, rock_smash, fishing
+MAP_ROUTE15 | Day | gRoute15_Day | land, water, rock_smash, fishing
+MAP_ROUTE15 | Evening | gRoute15_Evening | land, water, rock_smash, fishing
+MAP_ROUTE15 | Night | gRoute15_Night | land, water, rock_smash, fishing
+MAP_ROUTE16 | Morning | gRoute16_Morning | land, water, rock_smash, fishing
+MAP_ROUTE16 | Day | gRoute16_Day | land, water, rock_smash, fishing
+MAP_ROUTE16 | Evening | gRoute16_Evening | land, water, rock_smash, fishing
+MAP_ROUTE16 | Night | gRoute16_Night | land, water, rock_smash, fishing
+MAP_ROUTE17 | Morning | gRoute17_Morning | land, water, rock_smash, fishing
+MAP_ROUTE17 | Day | gRoute17_Day | land, water, rock_smash, fishing
+MAP_ROUTE17 | Evening | gRoute17_Evening | land, water, rock_smash, fishing
+MAP_ROUTE17 | Night | gRoute17_Night | land, water, rock_smash, fishing
+MAP_ROUTE18 | Morning | gRoute18_Morning | land, water, rock_smash, fishing
+MAP_ROUTE18 | Day | gRoute18_Day | land, water, rock_smash, fishing
+MAP_ROUTE18 | Evening | gRoute18_Evening | land, water, rock_smash, fishing
+MAP_ROUTE18 | Night | gRoute18_Night | land, water, rock_smash, fishing
+MAP_ROUTE19 | Morning | gRoute19_Morning | land, water, rock_smash, fishing
+MAP_ROUTE19 | Day | gRoute19_Day | land, water, rock_smash, fishing
+MAP_ROUTE19 | Evening | gRoute19_Evening | land, water, rock_smash, fishing
+MAP_ROUTE19 | Night | gRoute19_Night | land, water, rock_smash, fishing
+MAP_ROUTE2 | Morning | gRoute2_Morning | land
+MAP_ROUTE2 | Day | gRoute2_Day | land
+MAP_ROUTE2 | Evening | gRoute2_Evening | land
+MAP_ROUTE2 | Night | gRoute2_Night | land
+MAP_ROUTE20 | Morning | gRoute20_Morning | land, water, rock_smash, fishing
+MAP_ROUTE20 | Day | gRoute20_Day | land, water, rock_smash, fishing
+MAP_ROUTE20 | Evening | gRoute20_Evening | land, water, rock_smash, fishing
+MAP_ROUTE20 | Night | gRoute20_Night | land, water, rock_smash, fishing
+MAP_ROUTE21_NORTH | Morning | gRoute21_North_Morning | land, water, rock_smash, fishing
+MAP_ROUTE21_NORTH | Day | gRoute21_North_Day | land, water, rock_smash, fishing
+MAP_ROUTE21_NORTH | Evening | gRoute21_North_Evening | land, water, rock_smash, fishing
+MAP_ROUTE21_NORTH | Night | gRoute21_North_Night | land, water, rock_smash, fishing
+MAP_ROUTE22 | Morning | gRoute22_Morning | land, water, rock_smash, fishing
+MAP_ROUTE22 | Day | gRoute22_Day | land, water, rock_smash, fishing
+MAP_ROUTE22 | Evening | gRoute22_Evening | land, water, rock_smash, fishing
+MAP_ROUTE22 | Night | gRoute22_Night | land, water, rock_smash, fishing
+MAP_ROUTE23 | Morning | gRoute23_Morning | land, water, rock_smash, fishing
+MAP_ROUTE23 | Day | gRoute23_Day | land, water, rock_smash, fishing
+MAP_ROUTE23 | Evening | gRoute23_Evening | land, water, rock_smash, fishing
+MAP_ROUTE23 | Night | gRoute23_Night | land, water, rock_smash, fishing
+MAP_ROUTE24 | Morning | gRoute24_Morning | land
+MAP_ROUTE24 | Day | gRoute24_Day | land
+MAP_ROUTE24 | Evening | gRoute24_Evening | land
+MAP_ROUTE24 | Night | gRoute24_Night | land
+MAP_ROUTE25 | Morning | gRoute25_Morning | land
+MAP_ROUTE25 | Day | gRoute25_Day | land
+MAP_ROUTE25 | Evening | gRoute25_Evening | land
+MAP_ROUTE25 | Night | gRoute25_Night | land
+MAP_ROUTE26 | Morning | gRoute26_Morning | land, water, rock_smash, fishing
+MAP_ROUTE26 | Day | gRoute26_Day | land, water, rock_smash, fishing
+MAP_ROUTE26 | Evening | gRoute26_Evening | land, water, rock_smash, fishing
+MAP_ROUTE26 | Night | gRoute26_Night | land, water, rock_smash, fishing
+MAP_ROUTE26_NORTH | Morning | gRoute26_North_Morning | land, water, rock_smash, fishing
+MAP_ROUTE26_NORTH | Day | gRoute26_North_Day | land, water, rock_smash, fishing
+MAP_ROUTE26_NORTH | Evening | gRoute26_North_Evening | land, water, rock_smash, fishing
+MAP_ROUTE26_NORTH | Night | gRoute26_North_Night | land, water, rock_smash, fishing
+MAP_ROUTE27 | Morning | gRoute27_Morning | land, water, rock_smash, fishing
+MAP_ROUTE27 | Day | gRoute27_Day | land, water, rock_smash, fishing
+MAP_ROUTE27 | Evening | gRoute27_Evening | land, water, rock_smash, fishing
+MAP_ROUTE27 | Night | gRoute27_Night | land, water, rock_smash, fishing
+MAP_ROUTE28 | Morning | gRoute28_Morning | land, water, rock_smash, fishing
+MAP_ROUTE28 | Day | gRoute28_Day | land, water, rock_smash, fishing
+MAP_ROUTE28 | Evening | gRoute28_Evening | land, water, rock_smash, fishing
+MAP_ROUTE28 | Night | gRoute28_Night | land, water, rock_smash, fishing
+MAP_ROUTE29 | Morning | gRoute29_Morning | land
+MAP_ROUTE29 | Day | gRoute29_Day | land
+MAP_ROUTE29 | Evening | gRoute29_Evening | land
+MAP_ROUTE29 | Night | gRoute29_Night | land
+MAP_ROUTE3 | Morning | gRoute3_Morning | land
+MAP_ROUTE3 | Day | gRoute3_Day | land
+MAP_ROUTE3 | Evening | gRoute3_Evening | land
+MAP_ROUTE3 | Night | gRoute3_Night | land
+MAP_ROUTE30 | Morning | gRoute30_Morning | land
+MAP_ROUTE30 | Day | gRoute30_Day | land
+MAP_ROUTE30 | Evening | gRoute30_Evening | land
+MAP_ROUTE30 | Night | gRoute30_Night | land
+MAP_ROUTE31 | Morning | gRoute31_Morning | land
+MAP_ROUTE31 | Day | gRoute31_Day | land
+MAP_ROUTE31 | Evening | gRoute31_Evening | land
+MAP_ROUTE31 | Night | gRoute31_Night | land
+MAP_ROUTE32 | Morning | gRoute32_Morning | land
+MAP_ROUTE32 | Day | gRoute32_Day | land
+MAP_ROUTE32 | Evening | gRoute32_Evening | land
+MAP_ROUTE32 | Night | gRoute32_Night | land
+MAP_ROUTE33 | Morning | gRoute33_Morning | land
+MAP_ROUTE33 | Day | gRoute33_Day | land
+MAP_ROUTE33 | Evening | gRoute33_Evening | land
+MAP_ROUTE33 | Night | gRoute33_Night | land
+MAP_ROUTE34 | Morning | gRoute34_Morning | land, water
+MAP_ROUTE34 | Day | gRoute34_Day | land, water
+MAP_ROUTE34 | Evening | gRoute34_Evening | land, water
+MAP_ROUTE34 | Night | gRoute34_Night | land, water
+MAP_ROUTE35 | Morning | gRoute35_Morning | land, water, rock_smash, fishing
+MAP_ROUTE35 | Day | gRoute35_Day | land, water, rock_smash, fishing
+MAP_ROUTE35 | Evening | gRoute35_Evening | land, water, rock_smash, fishing
+MAP_ROUTE35 | Night | gRoute35_Night | land, water, rock_smash, fishing
+MAP_ROUTE36 | Morning | gRoute36_Morning | land, water, rock_smash, fishing
+MAP_ROUTE36 | Day | gRoute36_Day | land, water, rock_smash, fishing
+MAP_ROUTE36 | Evening | gRoute36_Evening | land, water, rock_smash, fishing
+MAP_ROUTE36 | Night | gRoute36_Night | land, water, rock_smash, fishing
+MAP_ROUTE37 | Morning | gRoute37_Morning | land, water, rock_smash, fishing
+MAP_ROUTE37 | Day | gRoute37_Day | land, water, rock_smash, fishing
+MAP_ROUTE37 | Evening | gRoute37_Evening | land, water, rock_smash, fishing
+MAP_ROUTE37 | Night | gRoute37_Night | land, water, rock_smash, fishing
+MAP_ROUTE38 | Morning | gRoute38_Morning | land, water, rock_smash, fishing
+MAP_ROUTE38 | Day | gRoute38_Day | land, water, rock_smash, fishing
+MAP_ROUTE38 | Evening | gRoute38_Evening | land, water, rock_smash, fishing
+MAP_ROUTE38 | Night | gRoute38_Night | land, water, rock_smash, fishing
+MAP_ROUTE39 | Morning | gRoute39_Morning | land, water, rock_smash, fishing
+MAP_ROUTE39 | Day | gRoute39_Day | land, water, rock_smash, fishing
+MAP_ROUTE39 | Evening | gRoute39_Evening | land, water, rock_smash, fishing
+MAP_ROUTE39 | Night | gRoute39_Night | land, water, rock_smash, fishing
+MAP_ROUTE4 | Morning | gRoute4_Morning | land
+MAP_ROUTE4 | Day | gRoute4_Day | land
+MAP_ROUTE4 | Evening | gRoute4_Evening | land
+MAP_ROUTE4 | Night | gRoute4_Night | land
+MAP_ROUTE40 | Morning | gRoute40_Morning | land, water, rock_smash, fishing
+MAP_ROUTE40 | Day | gRoute40_Day | land, water, rock_smash, fishing
+MAP_ROUTE40 | Evening | gRoute40_Evening | land, water, rock_smash, fishing
+MAP_ROUTE40 | Night | gRoute40_Night | land, water, rock_smash, fishing
+MAP_ROUTE41 | Morning | gRoute41_Morning | land, water, rock_smash, fishing
+MAP_ROUTE41 | Day | gRoute41_Day | land, water, rock_smash, fishing
+MAP_ROUTE41 | Evening | gRoute41_Evening | land, water, rock_smash, fishing
+MAP_ROUTE41 | Night | gRoute41_Night | land, water, rock_smash, fishing
+MAP_ROUTE42 | Morning | gRoute42_Morning | land, water, rock_smash, fishing
+MAP_ROUTE42 | Day | gRoute42_Day | land, water, rock_smash, fishing
+MAP_ROUTE42 | Evening | gRoute42_Evening | land, water, rock_smash, fishing
+MAP_ROUTE42 | Night | gRoute42_Night | land, water, rock_smash, fishing
+MAP_ROUTE43 | Morning | gRoute43_Morning | land, water, rock_smash, fishing
+MAP_ROUTE43 | Day | gRoute43_Day | land, water, rock_smash, fishing
+MAP_ROUTE43 | Evening | gRoute43_Evening | land, water, rock_smash, fishing
+MAP_ROUTE43 | Night | gRoute43_Night | land, water, rock_smash, fishing
+MAP_ROUTE44 | Morning | gRoute44_Morning | land, water, rock_smash, fishing
+MAP_ROUTE44 | Day | gRoute44_Day | land, water, rock_smash, fishing
+MAP_ROUTE44 | Evening | gRoute44_Evening | land, water, rock_smash, fishing
+MAP_ROUTE44 | Night | gRoute44_Night | land, water, rock_smash, fishing
+MAP_ROUTE45 | Morning | gRoute45_Morning | land, water, rock_smash, fishing
+MAP_ROUTE45 | Day | gRoute45_Day | land, water, rock_smash, fishing
+MAP_ROUTE45 | Evening | gRoute45_Evening | land, water, rock_smash, fishing
+MAP_ROUTE45 | Night | gRoute45_Night | land, water, rock_smash, fishing
+MAP_ROUTE46 | Morning | gRoute46_Morning | land, water, rock_smash, fishing
+MAP_ROUTE46 | Day | gRoute46_Day | land, water, rock_smash, fishing
+MAP_ROUTE46 | Evening | gRoute46_Evening | land, water, rock_smash, fishing
+MAP_ROUTE46 | Night | gRoute46_Night | land, water, rock_smash, fishing
+MAP_ROUTE47 | Morning | gRoute47_Morning | land, water, rock_smash, fishing
+MAP_ROUTE47 | Day | gRoute47_Day | land, water, rock_smash, fishing
+MAP_ROUTE47 | Evening | gRoute47_Evening | land, water, rock_smash, fishing
+MAP_ROUTE47 | Night | gRoute47_Night | land, water, rock_smash, fishing
+MAP_ROUTE48 | Morning | gRoute48_Morning | land, water, rock_smash, fishing
+MAP_ROUTE48 | Day | gRoute48_Day | land, water, rock_smash, fishing
+MAP_ROUTE48 | Evening | gRoute48_Evening | land, water, rock_smash, fishing
+MAP_ROUTE48 | Night | gRoute48_Night | land, water, rock_smash, fishing
+MAP_ROUTE5 | Morning | gRoute5_Morning | land, water, rock_smash, fishing
+MAP_ROUTE5 | Day | gRoute5_Day | land, water, rock_smash, fishing
+MAP_ROUTE5 | Evening | gRoute5_Evening | land, water, rock_smash, fishing
+MAP_ROUTE5 | Night | gRoute5_Night | land, water, rock_smash, fishing
+MAP_ROUTE6 | Morning | gRoute6_Morning | land, water, rock_smash, fishing
+MAP_ROUTE6 | Day | gRoute6_Day | land, water, rock_smash, fishing
+MAP_ROUTE6 | Evening | gRoute6_Evening | land, water, rock_smash, fishing
+MAP_ROUTE6 | Night | gRoute6_Night | land, water, rock_smash, fishing
+MAP_ROUTE7 | Morning | gRoute7_Morning | land, water, rock_smash, fishing
+MAP_ROUTE7 | Day | gRoute7_Day | land, water, rock_smash, fishing
+MAP_ROUTE7 | Evening | gRoute7_Evening | land, water, rock_smash, fishing
+MAP_ROUTE7 | Night | gRoute7_Night | land, water, rock_smash, fishing
+MAP_ROUTE8 | Morning | gRoute8_Morning | land, water, rock_smash, fishing
+MAP_ROUTE8 | Day | gRoute8_Day | land, water, rock_smash, fishing
+MAP_ROUTE8 | Evening | gRoute8_Evening | land, water, rock_smash, fishing
+MAP_ROUTE8 | Night | gRoute8_Night | land, water, rock_smash, fishing
+MAP_ROUTE9 | Morning | gRoute9_Morning | land
+MAP_ROUTE9 | Day | gRoute9_Day | land
+MAP_ROUTE9 | Evening | gRoute9_Evening | land
+MAP_ROUTE9 | Night | gRoute9_Night | land
+MAP_RUINS_OF_ALPH_B1F | Morning | gRuinsOfAlph_B1F_Morning | land, water, rock_smash, fishing
+MAP_RUINS_OF_ALPH_B1F | Day | gRuinsOfAlph_B1F_Day | land, water, rock_smash, fishing
+MAP_RUINS_OF_ALPH_B1F | Evening | gRuinsOfAlph_B1F_Evening | land, water, rock_smash, fishing
+MAP_RUINS_OF_ALPH_B1F | Night | gRuinsOfAlph_B1F_Night | land, water, rock_smash, fishing
+MAP_RUINS_OF_ALPH_OUTSIDE | Morning | gRuinsOfAlph_Outside_Morning | land, water, rock_smash, fishing
+MAP_RUINS_OF_ALPH_OUTSIDE | Day | gRuinsOfAlph_Outside_Day | land, water, rock_smash, fishing
+MAP_RUINS_OF_ALPH_OUTSIDE | Evening | gRuinsOfAlph_Outside_Evening | land, water, rock_smash, fishing
+MAP_RUINS_OF_ALPH_OUTSIDE | Night | gRuinsOfAlph_Outside_Night | land, water, rock_smash, fishing
+MAP_RUINS_OF_ALPH_PUZZLE_AND_REWARD_CHAMBERS | Morning | gRuinsOfAlph_PuzzleAndRewardChambers_Morning | land, water, rock_smash, fishing
+MAP_RUINS_OF_ALPH_PUZZLE_AND_REWARD_CHAMBERS | Day | gRuinsOfAlph_PuzzleAndRewardChambers_Day | land, water, rock_smash, fishing
+MAP_RUINS_OF_ALPH_PUZZLE_AND_REWARD_CHAMBERS | Evening | gRuinsOfAlph_PuzzleAndRewardChambers_Evening | land, water, rock_smash, fishing
+MAP_RUINS_OF_ALPH_PUZZLE_AND_REWARD_CHAMBERS | Night | gRuinsOfAlph_PuzzleAndRewardChambers_Night | land, water, rock_smash, fishing
+MAP_RUSTURF_TUNNEL | Morning | gRusturfTunnel_Morning | land
+MAP_RUSTURF_TUNNEL | Day | gRusturfTunnel_Day | land
+MAP_RUSTURF_TUNNEL | Evening | gRusturfTunnel_Evening | land
+MAP_RUSTURF_TUNNEL | Night | gRusturfTunnel_Night | land
+MAP_SAFARI_ZONE_NORTH | Morning | gSafariZone_North_Morning | land, rock_smash
+MAP_SAFARI_ZONE_NORTH | Day | gSafariZone_North_Day | land, rock_smash
+MAP_SAFARI_ZONE_NORTH | Evening | gSafariZone_North_Evening | land, rock_smash
+MAP_SAFARI_ZONE_NORTH | Night | gSafariZone_North_Night | land, rock_smash
+MAP_SAFARI_ZONE_NORTHEAST | Morning | gSafariZone_Northeast_Morning | land, rock_smash
+MAP_SAFARI_ZONE_NORTHEAST | Day | gSafariZone_Northeast_Day | land, rock_smash
+MAP_SAFARI_ZONE_NORTHEAST | Evening | gSafariZone_Northeast_Evening | land, rock_smash
+MAP_SAFARI_ZONE_NORTHEAST | Night | gSafariZone_Northeast_Night | land, rock_smash
+MAP_SAFARI_ZONE_NORTHWEST | Morning | gSafariZone_Northwest_Morning | land, water, fishing
+MAP_SAFARI_ZONE_NORTHWEST | Day | gSafariZone_Northwest_Day | land, water, fishing
+MAP_SAFARI_ZONE_NORTHWEST | Evening | gSafariZone_Northwest_Evening | land, water, fishing
+MAP_SAFARI_ZONE_NORTHWEST | Night | gSafariZone_Northwest_Night | land, water, fishing
+MAP_SAFARI_ZONE_SOUTH | Morning | gSafariZone_South_Morning | land
+MAP_SAFARI_ZONE_SOUTH | Day | gSafariZone_South_Day | land
+MAP_SAFARI_ZONE_SOUTH | Evening | gSafariZone_South_Evening | land
+MAP_SAFARI_ZONE_SOUTH | Night | gSafariZone_South_Night | land
+MAP_SAFARI_ZONE_SOUTHEAST | Morning | gSafariZone_Southeast_Morning | land, water, fishing
+MAP_SAFARI_ZONE_SOUTHEAST | Day | gSafariZone_Southeast_Day | land, water, fishing
+MAP_SAFARI_ZONE_SOUTHEAST | Evening | gSafariZone_Southeast_Evening | land, water, fishing
+MAP_SAFARI_ZONE_SOUTHEAST | Night | gSafariZone_Southeast_Night | land, water, fishing
+MAP_SAFARI_ZONE_SOUTHWEST | Morning | gSafariZone_Southwest_Morning | land, water, fishing
+MAP_SAFARI_ZONE_SOUTHWEST | Day | gSafariZone_Southwest_Day | land, water, fishing
+MAP_SAFARI_ZONE_SOUTHWEST | Evening | gSafariZone_Southwest_Evening | land, water, fishing
+MAP_SAFARI_ZONE_SOUTHWEST | Night | gSafariZone_Southwest_Night | land, water, fishing
+MAP_SEAFLOOR_CAVERN_ENTRANCE | Morning | gSeafloorCavern_Entrance_Morning | water, fishing
+MAP_SEAFLOOR_CAVERN_ENTRANCE | Day | gSeafloorCavern_Entrance_Day | water, fishing
+MAP_SEAFLOOR_CAVERN_ENTRANCE | Evening | gSeafloorCavern_Entrance_Evening | water, fishing
+MAP_SEAFLOOR_CAVERN_ENTRANCE | Night | gSeafloorCavern_Entrance_Night | water, fishing
+MAP_SEAFLOOR_CAVERN_ROOM1 | Morning | gSeafloorCavern_Room1_Morning | land
+MAP_SEAFLOOR_CAVERN_ROOM1 | Day | gSeafloorCavern_Room1_Day | land
+MAP_SEAFLOOR_CAVERN_ROOM1 | Evening | gSeafloorCavern_Room1_Evening | land
+MAP_SEAFLOOR_CAVERN_ROOM1 | Night | gSeafloorCavern_Room1_Night | land
+MAP_SEAFLOOR_CAVERN_ROOM2 | Morning | gSeafloorCavern_Room2_Morning | land
+MAP_SEAFLOOR_CAVERN_ROOM2 | Day | gSeafloorCavern_Room2_Day | land
+MAP_SEAFLOOR_CAVERN_ROOM2 | Evening | gSeafloorCavern_Room2_Evening | land
+MAP_SEAFLOOR_CAVERN_ROOM2 | Night | gSeafloorCavern_Room2_Night | land
+MAP_SEAFLOOR_CAVERN_ROOM3 | Morning | gSeafloorCavern_Room3_Morning | land
+MAP_SEAFLOOR_CAVERN_ROOM3 | Day | gSeafloorCavern_Room3_Day | land
+MAP_SEAFLOOR_CAVERN_ROOM3 | Evening | gSeafloorCavern_Room3_Evening | land
+MAP_SEAFLOOR_CAVERN_ROOM3 | Night | gSeafloorCavern_Room3_Night | land
+MAP_SEAFLOOR_CAVERN_ROOM4 | Morning | gSeafloorCavern_Room4_Morning | land
+MAP_SEAFLOOR_CAVERN_ROOM4 | Day | gSeafloorCavern_Room4_Day | land
+MAP_SEAFLOOR_CAVERN_ROOM4 | Evening | gSeafloorCavern_Room4_Evening | land
+MAP_SEAFLOOR_CAVERN_ROOM4 | Night | gSeafloorCavern_Room4_Night | land
+MAP_SEAFLOOR_CAVERN_ROOM5 | Morning | gSeafloorCavern_Room5_Morning | land
+MAP_SEAFLOOR_CAVERN_ROOM5 | Day | gSeafloorCavern_Room5_Day | land
+MAP_SEAFLOOR_CAVERN_ROOM5 | Evening | gSeafloorCavern_Room5_Evening | land
+MAP_SEAFLOOR_CAVERN_ROOM5 | Night | gSeafloorCavern_Room5_Night | land
+MAP_SEAFLOOR_CAVERN_ROOM6 | Morning | gSeafloorCavern_Room6_Morning | land, water, fishing
+MAP_SEAFLOOR_CAVERN_ROOM6 | Day | gSeafloorCavern_Room6_Day | land, water, fishing
+MAP_SEAFLOOR_CAVERN_ROOM6 | Evening | gSeafloorCavern_Room6_Evening | land, water, fishing
+MAP_SEAFLOOR_CAVERN_ROOM6 | Night | gSeafloorCavern_Room6_Night | land, water, fishing
+MAP_SEAFLOOR_CAVERN_ROOM7 | Morning | gSeafloorCavern_Room7_Morning | land, water, fishing
+MAP_SEAFLOOR_CAVERN_ROOM7 | Day | gSeafloorCavern_Room7_Day | land, water, fishing
+MAP_SEAFLOOR_CAVERN_ROOM7 | Evening | gSeafloorCavern_Room7_Evening | land, water, fishing
+MAP_SEAFLOOR_CAVERN_ROOM7 | Night | gSeafloorCavern_Room7_Night | land, water, fishing
+MAP_SEAFLOOR_CAVERN_ROOM8 | Morning | gSeafloorCavern_Room8_Morning | land
+MAP_SEAFLOOR_CAVERN_ROOM8 | Day | gSeafloorCavern_Room8_Day | land
+MAP_SEAFLOOR_CAVERN_ROOM8 | Evening | gSeafloorCavern_Room8_Evening | land
+MAP_SEAFLOOR_CAVERN_ROOM8 | Night | gSeafloorCavern_Room8_Night | land
+MAP_SEAFOAM_ISLANDS_1F | Morning | gSeafoamIslands_1F_Morning | land, water, rock_smash, fishing
+MAP_SEAFOAM_ISLANDS_1F | Day | gSeafoamIslands_1F_Day | land, water, rock_smash, fishing
+MAP_SEAFOAM_ISLANDS_1F | Evening | gSeafoamIslands_1F_Evening | land, water, rock_smash, fishing
+MAP_SEAFOAM_ISLANDS_1F | Night | gSeafoamIslands_1F_Night | land, water, rock_smash, fishing
+MAP_SEAFOAM_ISLANDS_B1F | Morning | gSeafoamIslands_B1F_Morning | land, water, rock_smash, fishing
+MAP_SEAFOAM_ISLANDS_B1F | Day | gSeafoamIslands_B1F_Day | land, water, rock_smash, fishing
+MAP_SEAFOAM_ISLANDS_B1F | Evening | gSeafoamIslands_B1F_Evening | land, water, rock_smash, fishing
+MAP_SEAFOAM_ISLANDS_B1F | Night | gSeafoamIslands_B1F_Night | land, water, rock_smash, fishing
+MAP_SEAFOAM_ISLANDS_GYM | Morning | gSeafoamIslands_Gym_Morning | land, water, rock_smash, fishing
+MAP_SEAFOAM_ISLANDS_GYM | Day | gSeafoamIslands_Gym_Day | land, water, rock_smash, fishing
+MAP_SEAFOAM_ISLANDS_GYM | Evening | gSeafoamIslands_Gym_Evening | land, water, rock_smash, fishing
+MAP_SEAFOAM_ISLANDS_GYM | Night | gSeafoamIslands_Gym_Night | land, water, rock_smash, fishing
+MAP_SEAFOAM_ISLANDS_SECRET_CAVE | Morning | gSeafoamIslands_SecretCave_Morning | land, water, rock_smash, fishing
+MAP_SEAFOAM_ISLANDS_SECRET_CAVE | Day | gSeafoamIslands_SecretCave_Day | land, water, rock_smash, fishing
+MAP_SEAFOAM_ISLANDS_SECRET_CAVE | Evening | gSeafoamIslands_SecretCave_Evening | land, water, rock_smash, fishing
+MAP_SEAFOAM_ISLANDS_SECRET_CAVE | Night | gSeafoamIslands_SecretCave_Night | land, water, rock_smash, fishing
+MAP_SHOAL_CAVE_LOW_TIDE_ENTRANCE_ROOM | Morning | gShoalCave_LowTideEntranceRoom_Morning | land, water, fishing
+MAP_SHOAL_CAVE_LOW_TIDE_ENTRANCE_ROOM | Day | gShoalCave_LowTideEntranceRoom_Day | land, water, fishing
+MAP_SHOAL_CAVE_LOW_TIDE_ENTRANCE_ROOM | Evening | gShoalCave_LowTideEntranceRoom_Evening | land, water, fishing
+MAP_SHOAL_CAVE_LOW_TIDE_ENTRANCE_ROOM | Night | gShoalCave_LowTideEntranceRoom_Night | land, water, fishing
+MAP_SHOAL_CAVE_LOW_TIDE_ICE_ROOM | Morning | gShoalCave_LowTideIceRoom_Morning | land
+MAP_SHOAL_CAVE_LOW_TIDE_ICE_ROOM | Day | gShoalCave_LowTideIceRoom_Day | land
+MAP_SHOAL_CAVE_LOW_TIDE_ICE_ROOM | Evening | gShoalCave_LowTideIceRoom_Evening | land
+MAP_SHOAL_CAVE_LOW_TIDE_ICE_ROOM | Night | gShoalCave_LowTideIceRoom_Night | land
+MAP_SHOAL_CAVE_LOW_TIDE_INNER_ROOM | Morning | gShoalCave_LowTideInnerRoom_Morning | land, water, fishing
+MAP_SHOAL_CAVE_LOW_TIDE_INNER_ROOM | Day | gShoalCave_LowTideInnerRoom_Day | land, water, fishing
+MAP_SHOAL_CAVE_LOW_TIDE_INNER_ROOM | Evening | gShoalCave_LowTideInnerRoom_Evening | land, water, fishing
+MAP_SHOAL_CAVE_LOW_TIDE_INNER_ROOM | Night | gShoalCave_LowTideInnerRoom_Night | land, water, fishing
+MAP_SHOAL_CAVE_LOW_TIDE_LOWER_ROOM | Morning | gShoalCave_LowTideLowerRoom_Morning | land
+MAP_SHOAL_CAVE_LOW_TIDE_LOWER_ROOM | Day | gShoalCave_LowTideLowerRoom_Day | land
+MAP_SHOAL_CAVE_LOW_TIDE_LOWER_ROOM | Evening | gShoalCave_LowTideLowerRoom_Evening | land
+MAP_SHOAL_CAVE_LOW_TIDE_LOWER_ROOM | Night | gShoalCave_LowTideLowerRoom_Night | land
+MAP_SHOAL_CAVE_LOW_TIDE_STAIRS_ROOM | Morning | gShoalCave_LowTideStairsRoom_Morning | land
+MAP_SHOAL_CAVE_LOW_TIDE_STAIRS_ROOM | Day | gShoalCave_LowTideStairsRoom_Day | land
+MAP_SHOAL_CAVE_LOW_TIDE_STAIRS_ROOM | Evening | gShoalCave_LowTideStairsRoom_Evening | land
+MAP_SHOAL_CAVE_LOW_TIDE_STAIRS_ROOM | Night | gShoalCave_LowTideStairsRoom_Night | land
+MAP_SKY_PILLAR_1F | Morning | gSkyPillar_1F_Morning | land
+MAP_SKY_PILLAR_1F | Day | gSkyPillar_1F_Day | land
+MAP_SKY_PILLAR_1F | Evening | gSkyPillar_1F_Evening | land
+MAP_SKY_PILLAR_1F | Night | gSkyPillar_1F_Night | land
+MAP_SKY_PILLAR_3F | Morning | gSkyPillar_3F_Morning | land
+MAP_SKY_PILLAR_3F | Day | gSkyPillar_3F_Day | land
+MAP_SKY_PILLAR_3F | Evening | gSkyPillar_3F_Evening | land
+MAP_SKY_PILLAR_3F | Night | gSkyPillar_3F_Night | land
+MAP_SKY_PILLAR_5F | Morning | gSkyPillar_5F_Morning | land
+MAP_SKY_PILLAR_5F | Day | gSkyPillar_5F_Day | land
+MAP_SKY_PILLAR_5F | Evening | gSkyPillar_5F_Evening | land
+MAP_SKY_PILLAR_5F | Night | gSkyPillar_5F_Night | land
+MAP_SLATEPORT_CITY | Morning | gSlateportCity_Morning | water, fishing
+MAP_SLATEPORT_CITY | Day | gSlateportCity_Day | water, fishing
+MAP_SLATEPORT_CITY | Evening | gSlateportCity_Evening | water, fishing
+MAP_SLATEPORT_CITY | Night | gSlateportCity_Night | water, fishing
+MAP_SLOWPOKE_WELL_B1F | Any | gSlowpokeWell_B1F | land, water, fishing
+MAP_SLOWPOKE_WELL_B2F | Any | gSlowpokeWell_B2F | land, water, fishing
+MAP_SOOTOPOLIS_CITY | Morning | gSootopolisCity_Morning | water, fishing
+MAP_SOOTOPOLIS_CITY | Day | gSootopolisCity_Day | water, fishing
+MAP_SOOTOPOLIS_CITY | Evening | gSootopolisCity_Evening | water, fishing
+MAP_SOOTOPOLIS_CITY | Night | gSootopolisCity_Night | water, fishing
+MAP_SPROUT_TOWER_1F | Morning | gSproutTower_1F_Morning | land, water, rock_smash, fishing
+MAP_SPROUT_TOWER_1F | Day | gSproutTower_1F_Day | land, water, rock_smash, fishing
+MAP_SPROUT_TOWER_1F | Evening | gSproutTower_1F_Evening | land, water, rock_smash, fishing
+MAP_SPROUT_TOWER_1F | Night | gSproutTower_1F_Night | land, water, rock_smash, fishing
+MAP_SPROUT_TOWER_2F | Morning | gSproutTower_2F_Morning | land, water, rock_smash, fishing
+MAP_SPROUT_TOWER_2F | Day | gSproutTower_2F_Day | land, water, rock_smash, fishing
+MAP_SPROUT_TOWER_2F | Evening | gSproutTower_2F_Evening | land, water, rock_smash, fishing
+MAP_SPROUT_TOWER_2F | Night | gSproutTower_2F_Night | land, water, rock_smash, fishing
+MAP_SPROUT_TOWER_3F | Morning | gSproutTower_3F_Morning | land, water, rock_smash, fishing
+MAP_SPROUT_TOWER_3F | Day | gSproutTower_3F_Day | land, water, rock_smash, fishing
+MAP_SPROUT_TOWER_3F | Evening | gSproutTower_3F_Evening | land, water, rock_smash, fishing
+MAP_SPROUT_TOWER_3F | Night | gSproutTower_3F_Night | land, water, rock_smash, fishing
+MAP_TIN_TOWER_1F | Morning | gTinTower_1F_Morning | land, water, rock_smash, fishing
+MAP_TIN_TOWER_1F | Day | gTinTower_1F_Day | land, water, rock_smash, fishing
+MAP_TIN_TOWER_1F | Evening | gTinTower_1F_Evening | land, water, rock_smash, fishing
+MAP_TIN_TOWER_1F | Night | gTinTower_1F_Night | land, water, rock_smash, fishing
+MAP_TIN_TOWER_2F | Morning | gTinTower_2F_Morning | land, water, rock_smash, fishing
+MAP_TIN_TOWER_2F | Day | gTinTower_2F_Day | land, water, rock_smash, fishing
+MAP_TIN_TOWER_2F | Evening | gTinTower_2F_Evening | land, water, rock_smash, fishing
+MAP_TIN_TOWER_2F | Night | gTinTower_2F_Night | land, water, rock_smash, fishing
+MAP_TIN_TOWER_3F | Morning | gTinTower_3F_Morning | land, water, rock_smash, fishing
+MAP_TIN_TOWER_3F | Day | gTinTower_3F_Day | land, water, rock_smash, fishing
+MAP_TIN_TOWER_3F | Evening | gTinTower_3F_Evening | land, water, rock_smash, fishing
+MAP_TIN_TOWER_3F | Night | gTinTower_3F_Night | land, water, rock_smash, fishing
+MAP_TIN_TOWER_4F | Morning | gTinTower_4F_Morning | land, water, rock_smash, fishing
+MAP_TIN_TOWER_4F | Day | gTinTower_4F_Day | land, water, rock_smash, fishing
+MAP_TIN_TOWER_4F | Evening | gTinTower_4F_Evening | land, water, rock_smash, fishing
+MAP_TIN_TOWER_4F | Night | gTinTower_4F_Night | land, water, rock_smash, fishing
+MAP_TIN_TOWER_5F | Morning | gTinTower_5F_Morning | land, water, rock_smash, fishing
+MAP_TIN_TOWER_5F | Day | gTinTower_5F_Day | land, water, rock_smash, fishing
+MAP_TIN_TOWER_5F | Evening | gTinTower_5F_Evening | land, water, rock_smash, fishing
+MAP_TIN_TOWER_5F | Night | gTinTower_5F_Night | land, water, rock_smash, fishing
+MAP_TIN_TOWER_6F | Morning | gTinTower_6F_Morning | land, water, rock_smash, fishing
+MAP_TIN_TOWER_6F | Day | gTinTower_6F_Day | land, water, rock_smash, fishing
+MAP_TIN_TOWER_6F | Evening | gTinTower_6F_Evening | land, water, rock_smash, fishing
+MAP_TIN_TOWER_6F | Night | gTinTower_6F_Night | land, water, rock_smash, fishing
+MAP_TIN_TOWER_7F | Morning | gTinTower_7F_Morning | land, water, rock_smash, fishing
+MAP_TIN_TOWER_7F | Day | gTinTower_7F_Day | land, water, rock_smash, fishing
+MAP_TIN_TOWER_7F | Evening | gTinTower_7F_Evening | land, water, rock_smash, fishing
+MAP_TIN_TOWER_7F | Night | gTinTower_7F_Night | land, water, rock_smash, fishing
+MAP_TIN_TOWER_8F | Morning | gTinTower_8F_Morning | land, water, rock_smash, fishing
+MAP_TIN_TOWER_8F | Day | gTinTower_8F_Day | land, water, rock_smash, fishing
+MAP_TIN_TOWER_8F | Evening | gTinTower_8F_Evening | land, water, rock_smash, fishing
+MAP_TIN_TOWER_8F | Night | gTinTower_8F_Night | land, water, rock_smash, fishing
+MAP_TIN_TOWER_9F | Morning | gTinTower_9F_Morning | land, water, rock_smash, fishing
+MAP_TIN_TOWER_9F | Day | gTinTower_9F_Day | land, water, rock_smash, fishing
+MAP_TIN_TOWER_9F | Evening | gTinTower_9F_Evening | land, water, rock_smash, fishing
+MAP_TIN_TOWER_9F | Night | gTinTower_9F_Night | land, water, rock_smash, fishing
+MAP_TIN_TOWER_ROOF_DAY | Morning | gTinTower_RoofDay_Morning | land, water, rock_smash, fishing
+MAP_TIN_TOWER_ROOF_DAY | Day | gTinTower_RoofDay_Day | land, water, rock_smash, fishing
+MAP_TIN_TOWER_ROOF_DAY | Evening | gTinTower_RoofDay_Evening | land, water, rock_smash, fishing
+MAP_TIN_TOWER_ROOF_DAY | Night | gTinTower_RoofDay_Night | land, water, rock_smash, fishing
+MAP_TIN_TOWER_ROOF_NIGHT | Morning | gTinTower_RoofNight_Morning | land, water, rock_smash, fishing
+MAP_TIN_TOWER_ROOF_NIGHT | Day | gTinTower_RoofNight_Day | land, water, rock_smash, fishing
+MAP_TIN_TOWER_ROOF_NIGHT | Evening | gTinTower_RoofNight_Evening | land, water, rock_smash, fishing
+MAP_TIN_TOWER_ROOF_NIGHT | Night | gTinTower_RoofNight_Night | land, water, rock_smash, fishing
+MAP_TOHJO_FALLS_CAVERN | Morning | gTohjoFalls_Cavern_Morning | land, water, rock_smash, fishing
+MAP_TOHJO_FALLS_CAVERN | Day | gTohjoFalls_Cavern_Day | land, water, rock_smash, fishing
+MAP_TOHJO_FALLS_CAVERN | Evening | gTohjoFalls_Cavern_Evening | land, water, rock_smash, fishing
+MAP_TOHJO_FALLS_CAVERN | Night | gTohjoFalls_Cavern_Night | land, water, rock_smash, fishing
+MAP_TOHJO_FALLS_GIOVANNI_ROOM | Morning | gTohjoFalls_GiovanniRoom_Morning | land, water, rock_smash, fishing
+MAP_TOHJO_FALLS_GIOVANNI_ROOM | Day | gTohjoFalls_GiovanniRoom_Day | land, water, rock_smash, fishing
+MAP_TOHJO_FALLS_GIOVANNI_ROOM | Evening | gTohjoFalls_GiovanniRoom_Evening | land, water, rock_smash, fishing
+MAP_TOHJO_FALLS_GIOVANNI_ROOM | Night | gTohjoFalls_GiovanniRoom_Night | land, water, rock_smash, fishing
+MAP_UNDERWATER_ROUTE124 | Morning | gUnderwater_Route124_Morning | water
+MAP_UNDERWATER_ROUTE124 | Day | gUnderwater_Route124_Day | water
+MAP_UNDERWATER_ROUTE124 | Evening | gUnderwater_Route124_Evening | water
+MAP_UNDERWATER_ROUTE124 | Night | gUnderwater_Route124_Night | water
+MAP_UNDERWATER_ROUTE126 | Morning | gUnderwater_Route126_Morning | water
+MAP_UNDERWATER_ROUTE126 | Day | gUnderwater_Route126_Day | water
+MAP_UNDERWATER_ROUTE126 | Evening | gUnderwater_Route126_Evening | water
+MAP_UNDERWATER_ROUTE126 | Night | gUnderwater_Route126_Night | water
+MAP_UNION_CAVE_1F | Morning | gUnionCave_1F_Morning | land
+MAP_UNION_CAVE_1F | Day | gUnionCave_1F_Day | land
+MAP_UNION_CAVE_1F | Evening | gUnionCave_1F_Evening | land
+MAP_UNION_CAVE_1F | Night | gUnionCave_1F_Night | land
+MAP_UNION_CAVE_B1F | Morning | gUnionCave_B1F_Morning | land
+MAP_UNION_CAVE_B1F | Day | gUnionCave_B1F_Day | land
+MAP_UNION_CAVE_B1F | Evening | gUnionCave_B1F_Evening | land
+MAP_UNION_CAVE_B1F | Night | gUnionCave_B1F_Night | land
+MAP_UNION_CAVE_B2F | Morning | gUnionCave_B2F_Morning | land
+MAP_UNION_CAVE_B2F | Day | gUnionCave_B2F_Day | land
+MAP_UNION_CAVE_B2F | Evening | gUnionCave_B2F_Evening | land
+MAP_UNION_CAVE_B2F | Night | gUnionCave_B2F_Night | land
+MAP_VICTORY_ROAD_1F | Morning | gVictoryRoad_1F_Morning | land
+MAP_VICTORY_ROAD_1F | Day | gVictoryRoad_1F_Day | land
+MAP_VICTORY_ROAD_1F | Evening | gVictoryRoad_1F_Evening | land
+MAP_VICTORY_ROAD_1F | Night | gVictoryRoad_1F_Night | land
+MAP_VICTORY_ROAD_B1F | Morning | gVictoryRoad_B1F_Morning | land, rock_smash
+MAP_VICTORY_ROAD_B1F | Day | gVictoryRoad_B1F_Day | land, rock_smash
+MAP_VICTORY_ROAD_B1F | Evening | gVictoryRoad_B1F_Evening | land, rock_smash
+MAP_VICTORY_ROAD_B1F | Night | gVictoryRoad_B1F_Night | land, rock_smash
+MAP_VICTORY_ROAD_B2F | Morning | gVictoryRoad_B2F_Morning | land, water, fishing
+MAP_VICTORY_ROAD_B2F | Day | gVictoryRoad_B2F_Day | land, water, fishing
+MAP_VICTORY_ROAD_B2F | Evening | gVictoryRoad_B2F_Evening | land, water, fishing
+MAP_VICTORY_ROAD_B2F | Night | gVictoryRoad_B2F_Night | land, water, fishing
+MAP_VICTORY_ROAD_KANTO_1F | Morning | gVictoryRoadKanto_1F_Morning | land, water, rock_smash, fishing
+MAP_VICTORY_ROAD_KANTO_1F | Day | gVictoryRoadKanto_1F_Day | land, water, rock_smash, fishing
+MAP_VICTORY_ROAD_KANTO_1F | Evening | gVictoryRoadKanto_1F_Evening | land, water, rock_smash, fishing
+MAP_VICTORY_ROAD_KANTO_1F | Night | gVictoryRoadKanto_1F_Night | land, water, rock_smash, fishing
+MAP_VICTORY_ROAD_KANTO_B1F | Morning | gVictoryRoadKanto_B1F_Morning | land, water, rock_smash, fishing
+MAP_VICTORY_ROAD_KANTO_B1F | Day | gVictoryRoadKanto_B1F_Day | land, water, rock_smash, fishing
+MAP_VICTORY_ROAD_KANTO_B1F | Evening | gVictoryRoadKanto_B1F_Evening | land, water, rock_smash, fishing
+MAP_VICTORY_ROAD_KANTO_B1F | Night | gVictoryRoadKanto_B1F_Night | land, water, rock_smash, fishing
+MAP_VICTORY_ROAD_KANTO_B2F | Morning | gVictoryRoadKanto_B2F_Morning | land, water, rock_smash, fishing
+MAP_VICTORY_ROAD_KANTO_B2F | Day | gVictoryRoadKanto_B2F_Day | land, water, rock_smash, fishing
+MAP_VICTORY_ROAD_KANTO_B2F | Evening | gVictoryRoadKanto_B2F_Evening | land, water, rock_smash, fishing
+MAP_VICTORY_ROAD_KANTO_B2F | Night | gVictoryRoadKanto_B2F_Night | land, water, rock_smash, fishing
+MAP_VIRIDIAN_FOREST | Morning | gviridian_forest_Morning | land
+MAP_VIRIDIAN_FOREST | Day | gviridian_forest_Day | land
+MAP_VIRIDIAN_FOREST | Evening | gviridian_forest_Evening | land
+MAP_VIRIDIAN_FOREST | Night | gviridian_forest_Night | land
+MAP_WES_HIDEOUT_ENTRANCE | Morning | gWesHideout_Entrance_Morning | land, water, rock_smash, fishing
+MAP_WES_HIDEOUT_ENTRANCE | Day | gWesHideout_Entrance_Day | land, water, rock_smash, fishing
+MAP_WES_HIDEOUT_ENTRANCE | Evening | gWesHideout_Entrance_Evening | land, water, rock_smash, fishing
+MAP_WES_HIDEOUT_ENTRANCE | Night | gWesHideout_Entrance_Night | land, water, rock_smash, fishing
+MAP_WES_HIDEOUT_UNDERGROUND | Morning | gWesHideout_Underground_Morning | land, water, rock_smash, fishing
+MAP_WES_HIDEOUT_UNDERGROUND | Day | gWesHideout_Underground_Day | land, water, rock_smash, fishing
+MAP_WES_HIDEOUT_UNDERGROUND | Evening | gWesHideout_Underground_Evening | land, water, rock_smash, fishing
+MAP_WES_HIDEOUT_UNDERGROUND | Night | gWesHideout_Underground_Night | land, water, rock_smash, fishing
+MAP_WHIRL_ISLANDS_1F | Morning | gWhirlIslands_1F_Morning | land, water, rock_smash, fishing
+MAP_WHIRL_ISLANDS_1F | Day | gWhirlIslands_1F_Day | land, water, rock_smash, fishing
+MAP_WHIRL_ISLANDS_1F | Evening | gWhirlIslands_1F_Evening | land, water, rock_smash, fishing
+MAP_WHIRL_ISLANDS_1F | Night | gWhirlIslands_1F_Night | land, water, rock_smash, fishing
+MAP_WHIRL_ISLANDS_B1F | Morning | gWhirlIslands_B1F_Morning | land, water, rock_smash, fishing
+MAP_WHIRL_ISLANDS_B1F | Day | gWhirlIslands_B1F_Day | land, water, rock_smash, fishing
+MAP_WHIRL_ISLANDS_B1F | Evening | gWhirlIslands_B1F_Evening | land, water, rock_smash, fishing
+MAP_WHIRL_ISLANDS_B1F | Night | gWhirlIslands_B1F_Night | land, water, rock_smash, fishing
+MAP_WHIRL_ISLANDS_B1F_INNER | Morning | gWhirlIslands_B1F_Inner_Morning | land, water, rock_smash, fishing
+MAP_WHIRL_ISLANDS_B1F_INNER | Day | gWhirlIslands_B1F_Inner_Day | land, water, rock_smash, fishing
+MAP_WHIRL_ISLANDS_B1F_INNER | Evening | gWhirlIslands_B1F_Inner_Evening | land, water, rock_smash, fishing
+MAP_WHIRL_ISLANDS_B1F_INNER | Night | gWhirlIslands_B1F_Inner_Night | land, water, rock_smash, fishing
+MAP_WHIRL_ISLANDS_B2F | Morning | gWhirlIslands_B2F_Morning | land, water, rock_smash, fishing
+MAP_WHIRL_ISLANDS_B2F | Day | gWhirlIslands_B2F_Day | land, water, rock_smash, fishing
+MAP_WHIRL_ISLANDS_B2F | Evening | gWhirlIslands_B2F_Evening | land, water, rock_smash, fishing
+MAP_WHIRL_ISLANDS_B2F | Night | gWhirlIslands_B2F_Night | land, water, rock_smash, fishing
+MAP_WHIRL_ISLANDS_B3F | Morning | gWhirlIslands_B3F_Morning | land, water, rock_smash, fishing
+MAP_WHIRL_ISLANDS_B3F | Day | gWhirlIslands_B3F_Day | land, water, rock_smash, fishing
+MAP_WHIRL_ISLANDS_B3F | Evening | gWhirlIslands_B3F_Evening | land, water, rock_smash, fishing
+MAP_WHIRL_ISLANDS_B3F | Night | gWhirlIslands_B3F_Night | land, water, rock_smash, fishing
+MAP_WHIRL_ISLANDS_DESCENT | Morning | gWhirlIslands_Descent_Morning | land, water, rock_smash, fishing
+MAP_WHIRL_ISLANDS_DESCENT | Day | gWhirlIslands_Descent_Day | land, water, rock_smash, fishing
+MAP_WHIRL_ISLANDS_DESCENT | Evening | gWhirlIslands_Descent_Evening | land, water, rock_smash, fishing
+MAP_WHIRL_ISLANDS_DESCENT | Night | gWhirlIslands_Descent_Night | land, water, rock_smash, fishing
+MAP_WHIRL_ISLANDS_LUGIA_CHAMBER | Morning | gWhirlIslands_LugiaChamber_Morning | land, water, rock_smash, fishing
+MAP_WHIRL_ISLANDS_LUGIA_CHAMBER | Day | gWhirlIslands_LugiaChamber_Day | land, water, rock_smash, fishing
+MAP_WHIRL_ISLANDS_LUGIA_CHAMBER | Evening | gWhirlIslands_LugiaChamber_Evening | land, water, rock_smash, fishing
+MAP_WHIRL_ISLANDS_LUGIA_CHAMBER | Night | gWhirlIslands_LugiaChamber_Night | land, water, rock_smash, fishing
+
+gBattlePyramidWildMonHeaders
+Format: BaseLabel | Time | Types
+
+gBattlePyramid_1_Morning | Morning | land
+gBattlePyramid_2_Morning | Morning | land
+gBattlePyramid_3_Morning | Morning | land
+gBattlePyramid_4_Morning | Morning | land
+gBattlePyramid_5_Morning | Morning | land
+gBattlePyramid_6_Morning | Morning | land
+gBattlePyramid_7_Morning | Morning | land
+gBattlePyramid_1_Day | Day | land
+gBattlePyramid_2_Day | Day | land
+gBattlePyramid_3_Day | Day | land
+gBattlePyramid_4_Day | Day | land
+gBattlePyramid_5_Day | Day | land
+gBattlePyramid_6_Day | Day | land
+gBattlePyramid_7_Day | Day | land
+gBattlePyramid_1_Evening | Evening | land
+gBattlePyramid_2_Evening | Evening | land
+gBattlePyramid_3_Evening | Evening | land
+gBattlePyramid_4_Evening | Evening | land
+gBattlePyramid_5_Evening | Evening | land
+gBattlePyramid_6_Evening | Evening | land
+gBattlePyramid_7_Evening | Evening | land
+gBattlePyramid_1_Night | Night | land
+gBattlePyramid_2_Night | Night | land
+gBattlePyramid_3_Night | Night | land
+gBattlePyramid_4_Night | Night | land
+gBattlePyramid_5_Night | Night | land
+gBattlePyramid_6_Night | Night | land
+gBattlePyramid_7_Night | Night | land
+
+gBattlePikeWildMonHeaders
+Format: BaseLabel | Time | Types
+
+gBattlePike_1_Morning | Morning | land
+gBattlePike_2_Morning | Morning | land
+gBattlePike_3_Morning | Morning | land
+gBattlePike_4_Morning | Morning | land
+gBattlePike_1_Day | Day | land
+gBattlePike_2_Day | Day | land
+gBattlePike_3_Day | Day | land
+gBattlePike_4_Day | Day | land
+gBattlePike_1_Evening | Evening | land
+gBattlePike_2_Evening | Evening | land
+gBattlePike_3_Evening | Evening | land
+gBattlePike_4_Evening | Evening | land
+gBattlePike_1_Night | Night | land
+gBattlePike_2_Night | Night | land
+gBattlePike_3_Night | Night | land
+gBattlePike_4_Night | Night | land
+
+Manual Additions (not present in gWildMonHeaders)
+Format: MAP_NAME | Note
+
+MAP_SAFARI_ZONE_ENTRANCE | no encounter table in gWildMonHeaders
+MAP_SAFARI_ZONE_LOW_MID | no encounter table in gWildMonHeaders
+MAP_SAFARI_ZONE_LOW_LEFT | no encounter table in gWildMonHeaders
+MAP_SAFARI_ZONE_LOW_RIGHT | no encounter table in gWildMonHeaders
+MAP_SAFARI_ZONE_TOP_LEFT | no encounter table in gWildMonHeaders
+MAP_SAFARI_ZONE_TOP_MID | no encounter table in gWildMonHeaders
+MAP_SAFARI_ZONE_TOP_RIGHT | no encounter table in gWildMonHeaders
+MAP_FUCHSIA_SAFARIZONEENTRANCE | no encounter table in gWildMonHeaders
+MAP_FUCHSIA_SAFARIZONEBEACH | no encounter table in gWildMonHeaders
+MAP_FUCHSIA_SAFARIZONEBRUSH | no encounter table in gWildMonHeaders
+MAP_FUCHSIA_SAFARIZONEMOUNTAIN | no encounter table in gWildMonHeaders
+MAP_FUCHSIA_SAFARIZONECAVE | no encounter table in gWildMonHeaders

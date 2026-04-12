@@ -1,2 +1,7 @@
 SafariZoneGate_PokemonCenter_MapScripts::
+	map_script MAP_SCRIPT_ON_TRANSITION, SafariZoneGate_PokemonCenter_OnTransition
 	.byte 0
+
+SafariZoneGate_PokemonCenter_OnTransition::
+	setflag FLAG_VISITED_SAFARI_ZONE_GATE_JOHTO
+	end

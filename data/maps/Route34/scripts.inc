@@ -469,3 +469,4 @@ Route34_Text_Youngster_Defeat:
 
 Route34_Text_Youngster_After:
 	.string "Okay, I need more training.$"
+

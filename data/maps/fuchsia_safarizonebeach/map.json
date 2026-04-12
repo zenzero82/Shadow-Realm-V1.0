@@ -25,7 +25,29 @@
     }
   ],
   "object_events": [],
-  "warp_events": [],
+  "warp_events": [
+    {
+      "x": 19,
+      "y": 39,
+      "elevation": 0,
+      "dest_map": "MAP_FUCHSIA_SAFARIZONEENTRANCE",
+      "dest_warp_id": "1"
+    },
+    {
+      "x": 20,
+      "y": 39,
+      "elevation": 0,
+      "dest_map": "MAP_FUCHSIA_SAFARIZONEENTRANCE",
+      "dest_warp_id": "1"
+    },
+    {
+      "x": 21,
+      "y": 39,
+      "elevation": 0,
+      "dest_map": "MAP_FUCHSIA_SAFARIZONEENTRANCE",
+      "dest_warp_id": "1"
+    }
+  ],
   "coord_events": [],
   "bg_events": []
 }

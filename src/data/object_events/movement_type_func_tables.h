@@ -166,6 +166,14 @@ u8 (*const gMovementTypeFuncs_FaceDownLeftAndRight[])(struct ObjectEvent *, stru
 
 const u8 gDownLeftAndRightDirections[] = {DIR_WEST, DIR_EAST, DIR_SOUTH, DIR_SOUTH};
 
+u8 (*const gMovementTypeFuncs_TowerBeam[])(struct ObjectEvent *, struct Sprite *) = {
+    MovementType_TowerBeam_Step0,
+    MovementType_TowerBeam_Step1,
+    MovementType_TowerBeam_Step2,
+    MovementType_TowerBeam_Step3,
+    MovementType_TowerBeam_Step4,
+};
+
 u8 (*const gMovementTypeFuncs_RotateCounterclockwise[])(struct ObjectEvent *, struct Sprite *) = {
     MovementType_RotateCounterclockwise_Step0,
     MovementType_RotateCounterclockwise_Step1,

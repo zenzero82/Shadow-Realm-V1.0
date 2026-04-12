@@ -366,13 +366,13 @@ TestText:
     .string "Yo wassup!$"
 
 ShadowMonitor_Text_Given:
-    .string "Here's the Shadow Monitor I found.\pIt keeps track of every Shadow\nPokemon you snag.$"
+    .string "Here's the {COLOR PURPLE}Shadow Monitor{COLOR DARK_GRAY} I found.\pIt keeps track of every {COLOR PURPLE}Shadow\nPokemon{COLOR DARK_GRAY} you snag.$"
 
 ShadowMonitor_Text_AlreadyHave:
-    .string "You already grabbed the Shadow\nMonitor, but thanks for checking!$"
+    .string "You already grabbed the {COLOR PURPLE}Shadow\nMonitor{COLOR DARK_GRAY}, but thanks for checking!$"
 
 SnagMachine_Text_Given:
-    .string "The Snag Machine is yours now.\pIt logs every Shadow\nPokemon you capture.$"
+    .string "The Snag Machine is yours now.\pIt logs every {COLOR PURPLE}Shadow\nPokemon{COLOR DARK_GRAY} you capture.$"
 
 SnagMachine_Text_AlreadyHave:
     .string "You already have the Snag\nMachine, so I can't give it again!$"

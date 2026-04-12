@@ -44,12 +44,16 @@ static void Task_DeclineStarter(u8 taskId);
 static void Task_MoveStarterChooseCursor(u8 taskId);
 static void Task_CreateStarterLabel(u8 taskId);
 static void CreateStarterPokemonLabel(u8 selection);
-static u8 CreatePokemonFrontSprite(u16 species, u8 x, u8 y);
+static void InitStarterPreviewMons(void);
+static u8 CreatePokemonFrontSprite(u16 species, bool8 isShiny, u32 personality, u8 x, u8 y);
 static void SpriteCB_SelectionHand(struct Sprite *sprite);
 static void SpriteCB_Pokeball(struct Sprite *sprite);
 static void SpriteCB_StarterPokemon(struct Sprite *sprite);
 
 static u16 sStarterLabelWindowId;
+EWRAM_DATA static u32 sStarterPreviewPersonality[STARTER_MON_COUNT];
+EWRAM_DATA static bool8 sStarterPreviewIsShiny[STARTER_MON_COUNT];
+EWRAM_DATA static bool8 sStarterPreviewInitialized = FALSE;
 
 const u16 gBirchBagGrass_Pal[] = INCBIN_U16("graphics/starter_choose/tiles.gbapal");
 static const u16 sPokeballSelection_Pal[] = INCBIN_U16("graphics/starter_choose/pokeball_selection.gbapal");
@@ -414,6 +418,7 @@ void CB2_ChooseStarter(void)
     ResetPaletteFade();
     FreeAllSpritePalettes();
     ResetAllPicSprites();
+    InitStarterPreviewMons();
 
     LoadPalette(GetOverworldTextboxPalettePtr(), BG_PLTT_ID(14), PLTT_SIZE_4BPP);
     LoadPalette(gBirchBagGrass_Pal, BG_PLTT_ID(0), sizeof(gBirchBagGrass_Pal));
@@ -496,7 +501,11 @@ static void Task_HandleStarterChooseInput(u8 taskId)
         gTasks[taskId].tCircleSpriteId = spriteId;
 
         // Create Pokémon sprite
-        spriteId = CreatePokemonFrontSprite(GetStarterPokemon(gTasks[taskId].tStarterSelection), sPokeballCoords[selection][0], sPokeballCoords[selection][1]);
+        spriteId = CreatePokemonFrontSprite(GetStarterPokemon(gTasks[taskId].tStarterSelection),
+                                             sStarterPreviewIsShiny[selection],
+                                             sStarterPreviewPersonality[selection],
+                                             sPokeballCoords[selection][0],
+                                             sPokeballCoords[selection][1]);
         gSprites[spriteId].affineAnims = &sAffineAnims_StarterPokemon;
         gSprites[spriteId].callback = SpriteCB_StarterPokemon;
 
@@ -626,11 +635,38 @@ static void Task_CreateStarterLabel(u8 taskId)
     gTasks[taskId].func = Task_HandleStarterChooseInput;
 }
 
-static u8 CreatePokemonFrontSprite(u16 species, u8 x, u8 y)
+static void InitStarterPreviewMons(void)
+{
+    u8 i;
+    struct Pokemon mon;
+
+    for (i = 0; i < STARTER_MON_COUNT; i++)
+    {
+        CreateMon(&mon, GetStarterPokemon(i), 5, USE_RANDOM_IVS, FALSE, 0, OT_ID_PLAYER_ID, 0);
+        sStarterPreviewPersonality[i] = GetMonData(&mon, MON_DATA_PERSONALITY);
+        sStarterPreviewIsShiny[i] = GetMonData(&mon, MON_DATA_IS_SHINY);
+    }
+    sStarterPreviewInitialized = TRUE;
+}
+
+bool8 StarterChoose_GetPreviewInfo(u8 selection, u32 *personality, bool8 *isShiny)
+{
+    if (selection >= STARTER_MON_COUNT || !sStarterPreviewInitialized)
+        return FALSE;
+
+    if (personality != NULL)
+        *personality = sStarterPreviewPersonality[selection];
+    if (isShiny != NULL)
+        *isShiny = sStarterPreviewIsShiny[selection];
+
+    return TRUE;
+}
+
+static u8 CreatePokemonFrontSprite(u16 species, bool8 isShiny, u32 personality, u8 x, u8 y)
 {
     u8 spriteId;
 
-    spriteId = CreateMonPicSprite_Affine(species, FALSE, 0, MON_PIC_AFFINE_FRONT, x, y, 14, TAG_NONE);
+    spriteId = CreateMonPicSprite_Affine(species, isShiny, personality, MON_PIC_AFFINE_FRONT, x, y, 14, TAG_NONE);
     gSprites[spriteId].oam.priority = 0;
     return spriteId;
 }

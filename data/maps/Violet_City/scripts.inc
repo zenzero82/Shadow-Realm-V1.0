@@ -9,6 +9,7 @@ Violet_City_MapScripts::
 #define VIOLET_LOCALID_HOOPA_RING 5
 
 Violet_City_OnTransition::
+	setflag FLAG_VISITED_VIOLET_CITY
 	setflag FLAG_HIDE_VIOLET_MICHAEL
 	hideobjectat VIOLET_LOCALID_MICHAEL, MAP_VIOLET_CITY
 	removeobject VIOLET_LOCALID_MICHAEL
@@ -430,3 +431,9 @@ Violet_City_Text_SuperNerd:
 Violet_City_Text_Michael:
 	.string "I'm headed for ECRUTEAK.\n"
 	.string "See KURT when you can.$"
+
+VioletCity_Text_GymSign:
+	.string "VIOLET CITY POKéMON GYM\p"
+	.string "LEADER: FALKNER, The Elegant\n"
+	.string "Master of Flying POKéMON$"
+

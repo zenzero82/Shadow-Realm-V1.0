@@ -48,7 +48,7 @@ MauvilleCity_EventScript_BikeShopSign::
 
 MauvilleCity_EventScript_GameCornerSign::
 	msgbox MauvilleCity_Text_GameCornerSign, MSGBOX_SIGN
-	end
+	goto EventScript_GimmighoulSignpost
 
 MauvilleCity_EventScript_SchoolKidM::
 	lock
@@ -662,4 +662,3 @@ MauvilleCity_Text_ExplainTV:
 
 MauvilleCity_Text_BeenCheckingOutTV:
 	.string "Hi, have you been checking out TVs?$"
-

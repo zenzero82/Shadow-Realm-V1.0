@@ -44,7 +44,7 @@ static bool8 ShouldAnimBeDoneRegardlessOfSubstitute(u8 animId);
 static void Task_ClearBitWhenBattleTableAnimDone(u8 taskId);
 static void Task_ClearBitWhenSpecialAnimDone(u8 taskId);
 static void ClearSpritesBattlerHealthboxAnimData(void);
-static u16 GetHealthboxFramePalTagForBattler(u8 battlerId);
+static u16 GetHealthboxFramePalTagForBattler(u8 battlerId, bool8 isShadow, bool8 isReverse);
 
 // const rom data
 static const struct CompressedSpriteSheet sSpriteSheet_SinglesPlayerHealthbox =
@@ -182,10 +182,101 @@ const struct SpriteTemplate gSpriteTemplate_EnemyShadow =
     .callback = SpriteCallbackDummy,
 };
 
-static u16 GetHealthboxFramePalTagForBattler(u8 battlerId)
+static bool8 IsBattlerShadowMon(u8 battlerId)
+{
+    struct Pokemon *mon;
+
+    if (GetBattlerSide(battlerId) != B_SIDE_PLAYER)
+        mon = &gEnemyParty[gBattlerPartyIndexes[battlerId]];
+    else
+        mon = &gPlayerParty[gBattlerPartyIndexes[battlerId]];
+
+    return GetMonData(mon, MON_DATA_IS_SHADOW);
+}
+
+static bool8 IsBattlerReverseNowLocal(u8 battler)
+{
+    if (!IsOnPlayerSide(battler))
+        return FALSE;
+
+    if (gBattleMons[battler].species != SPECIES_NONE)
+        return gBattleMons[battler].isReverse;
+
+    if (gBattlerPartyIndexes[battler] < PARTY_SIZE)
+        return GetMonData(GetBattlerMon(battler), MON_DATA_REVERSE_MODE);
+
+    return gBattleMons[battler].isReverse;
+}
+
+static bool8 CanShareHealthboxPalette(u8 battlerId, bool8 isShadow, bool8 isReverse)
+{
+    u8 partner;
+
+    if (!IsDoubleBattle())
+        return FALSE;
+
+    partner = BATTLE_PARTNER(battlerId);
+    if (!IsBattlerAlive(partner))
+        return FALSE;
+
+    if (IsBattlerReverseNowLocal(partner) != isReverse)
+        return FALSE;
+
+    return (IsBattlerShadowMon(partner) == isShadow);
+}
+
+static u16 GetHealthboxPalTagForBattler(u8 battlerId, bool8 isShadow, bool8 isReverse)
+{
+    if (IsDoubleBattle() && !isShadow)
+        return (GetBattlerSide(battlerId) == B_SIDE_PLAYER)
+             ? TAG_HEALTHBOX_PLAYER1_PAL
+             : TAG_HEALTHBOX_OPPONENT1_PAL;
+
+    if (CanShareHealthboxPalette(battlerId, isShadow, isReverse))
+        return (GetBattlerSide(battlerId) == B_SIDE_PLAYER)
+             ? TAG_HEALTHBOX_PLAYER1_PAL
+             : TAG_HEALTHBOX_OPPONENT1_PAL;
+
+    if (GetBattlerSide(battlerId) == B_SIDE_PLAYER)
+    {
+        return (GetBattlerAtPosition(B_POSITION_PLAYER_LEFT) == battlerId)
+             ? TAG_HEALTHBOX_PLAYER1_PAL
+             : TAG_HEALTHBOX_PLAYER2_PAL;
+    }
+    else
+    {
+        return (GetBattlerAtPosition(B_POSITION_OPPONENT_LEFT) == battlerId)
+             ? TAG_HEALTHBOX_OPPONENT1_PAL
+             : TAG_HEALTHBOX_OPPONENT2_PAL;
+    }
+}
+
+static bool8 CanShareHealthboxFramePalette(u8 battlerId, bool8 isShadow, bool8 isReverse)
+{
+    u8 partner;
+
+    if (!IsDoubleBattle())
+        return FALSE;
+
+    partner = BATTLE_PARTNER(battlerId);
+    if (!IsBattlerAlive(partner))
+        return FALSE;
+
+    if (IsBattlerReverseNowLocal(partner) != isReverse)
+        return FALSE;
+
+    return (IsBattlerShadowMon(partner) == isShadow);
+}
+
+static u16 GetHealthboxFramePalTagForBattler(u8 battlerId, bool8 isShadow, bool8 isReverse)
 {
     if (gBattleTypeFlags & BATTLE_TYPE_SAFARI)
         return TAG_HEALTHBOX_FRAME_SAFARI_PAL;
+
+    if (IsDoubleBattle() && CanShareHealthboxFramePalette(battlerId, isShadow, isReverse))
+        return (GetBattlerSide(battlerId) == B_SIDE_PLAYER)
+             ? TAG_HEALTHBOX_FRAME_PLAYER1_PAL
+             : TAG_HEALTHBOX_FRAME_OPPONENT1_PAL;
 
     if (GetBattlerSide(battlerId) == B_SIDE_PLAYER)
     {
@@ -205,6 +296,7 @@ static u16 GetHealthboxFramePalTagForBattler(u8 battlerId)
 void ShdwLoadHealthboxPalette(u8 battlerId)
 {
     u8 palNum;
+    u16 palTag;
     u8 isShadow;
     struct Pokemon *mon;
     bool8 isReverse;
@@ -214,26 +306,10 @@ void ShdwLoadHealthboxPalette(u8 battlerId)
     else
         mon = &gPlayerParty[gBattlerPartyIndexes[battlerId]];
 
-    switch (battlerId)
-    {
-        default:
-        case 0:
-            FreeSpritePaletteByTag(TAG_HEALTHBOX_PLAYER1_PAL);
-            isShadow = GetMonData(mon, MON_DATA_IS_SHADOW);
-            palNum = isShadow ? 6 : 2; break;
-        case 1:
-            FreeSpritePaletteByTag(TAG_HEALTHBOX_OPPONENT1_PAL);
-            isShadow = GetMonData(mon, MON_DATA_IS_SHADOW);
-            palNum = isShadow ? 8 : 4; break;
-        case 2:
-            FreeSpritePaletteByTag(TAG_HEALTHBOX_PLAYER2_PAL);
-            isShadow = GetMonData(mon, MON_DATA_IS_SHADOW);
-            palNum = isShadow ? 7 : 3; break;
-        case 3:
-            FreeSpritePaletteByTag(TAG_HEALTHBOX_OPPONENT2_PAL);
-            isShadow = GetMonData(mon, MON_DATA_IS_SHADOW);
-            palNum = isShadow ? 9 : 5; break;
-    }
+    isShadow = GetMonData(mon, MON_DATA_IS_SHADOW);
+    palNum = (GetBattlerSide(battlerId) == B_SIDE_PLAYER)
+          ? (isShadow ? 6 : 2)
+          : (isShadow ? 8 : 4);
 
     if (gBattleMons[battlerId].species != SPECIES_NONE)
         isReverse = gBattleMons[battlerId].isReverse;
@@ -243,6 +319,7 @@ void ShdwLoadHealthboxPalette(u8 battlerId)
                   : gBattleMons[battlerId].isReverse;
 
     {
+        palTag = GetHealthboxPalTagForBattler(battlerId, isShadow, isReverse);
         const struct SpritePalette *palEntry = &gSpritePalettes_HealthBoxHealthBar[palNum];
         const u16 *palData = palEntry->data;
         if (isShadow && isReverse)
@@ -257,7 +334,7 @@ void ShdwLoadHealthboxPalette(u8 battlerId)
             struct SpritePalette healthboxPal =
             {
                 .data = palData,
-                .tag = palEntry->tag,
+                .tag = palTag,
             };
 
             FreeSpritePaletteByTag(healthboxPal.tag);
@@ -269,7 +346,7 @@ void ShdwLoadHealthboxPalette(u8 battlerId)
         struct SpritePalette framePal =
         {
             .data = NULL,
-            .tag = GetHealthboxFramePalTagForBattler(battlerId),
+            .tag = GetHealthboxFramePalTagForBattler(battlerId, isShadow, isReverse),
         };
 
         if (!isShadow)
@@ -911,13 +988,10 @@ bool8 BattleLoadAllHealthBoxesGfx(u8 state)
     {
         if (state == 1)
         {
-            LoadSpritePalette(&gSpritePalettes_HealthBoxHealthBar[0]);
-            LoadSpritePalette(&gSpritePalettes_HealthBoxHealthBar[1]);
             if (!IsDoubleBattle())
-            {
-                LoadIndicatorSpritesGfx();
-                CategoryIcons_LoadSpritesGfx();
-            }
+                LoadSpritePalette(&gSpritePalettes_HealthBoxHealthBar[0]);
+            LoadSpritePalette(&gSpritePalettes_HealthBoxHealthBar[1]);
+            // Indicator palettes are loaded on demand when the indicator becomes visible.
         }
         else if (!IsDoubleBattle())
         {

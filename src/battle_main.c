@@ -63,6 +63,7 @@
 #include "tv.h"
 #include "util.h"
 #include "wild_encounter.h"
+
 #include "window.h"
 #include "constants/abilities.h"
 #include "constants/battle_ai.h"
@@ -252,6 +253,7 @@ EWRAM_DATA bool8 gLastUsedBallMenuPresent = FALSE;
 EWRAM_DATA u8 gPartyCriticalHits[PARTY_SIZE] = {0};
 EWRAM_DATA static u8 sTriedEvolving = 0;
 EWRAM_DATA u8 gCategoryIconSpriteId = 0;
+EWRAM_DATA u8 gMoveTypeIconSpriteId = 0;
 
 COMMON_DATA void (*gPreBattleCallback1)(void) = NULL;
 COMMON_DATA void (*gBattleMainFunc)(void) = NULL;
@@ -382,6 +384,7 @@ const struct TrainerClass gTrainerClasses[TRAINER_CLASS_COUNT] =
     [TRAINER_CLASS_CIPHER_PEON] = { _("CIPHER PEON"), 0, BALL_DUSK },
     [TRAINER_CLASS_TEAM_ROCKET] = { _("TEAM ROCKET"), 0, BALL_DUSK },
     [TRAINER_CLASS_TEAM_PLASMA] = { _("TEAM PLASMA"), 0, BALL_DUSK },
+    [TRAINER_CLASS_AETHER] = { _("AETHER"), 0, BALL_DUSK },
     [TRAINER_CLASS_TEAM_SNAGEM] = {_("TEAM SNAGEM") },
     [TRAINER_CLASS_TEAM_SKULL] = { _("TEAM SKULL"), 0, BALL_DUSK },
     [TRAINER_CLASS_TEAM_FLARE] = { _("TEAM FLARE"), 0, BALL_DUSK },
@@ -589,7 +592,12 @@ static void CB2_InitBattleInternal(void)
     gReservedSpritePaletteCount = MAX_BATTLERS_COUNT;
     gStatusSummaryBarPalSlot = 0xFF;
     gStatusSummaryBallsPalSlot = 0xFF;
-    ReserveOpponentBallThrowPaletteSlot();
+    if (!IsDoubleBattle())
+    {
+        ReserveOpponentBallThrowPaletteSlot();
+        ReserveLastUsedBallPaletteSlot();
+        ReserveAbilityPopupPaletteSlot();
+    }
     SetVBlankCallback(VBlankCB_Battle);
     SetUpBattleVarsAndBirchZigzagoon();
 
@@ -3201,6 +3209,7 @@ static void BattleStartClearSetData(void)
     ClearPursuitValues();
     gSelectedMonPartyId = PARTY_SIZE; // Revival Blessing
     gCategoryIconSpriteId = 0xFF;
+    gMoveTypeIconSpriteId = 0xFF;
 
     if(IsSleepClauseEnabled())
     {

@@ -9,7 +9,7 @@ Route10_MapScripts_OnFrame:
 
 Route10_EventScript_Sign::
 	msgbox Route10_Text_Sign, MSGBOX_SIGN
-	end
+	goto EventScript_GimmighoulSignpost
 
 Route10_EventScript_PPSign::
 	msgbox Route10_Text_PowerPlant, MSGBOX_SIGN
@@ -88,6 +88,19 @@ Route10_EventScript_PlasmaGrunt_Auto_CompleteQuest_Done:
 	releaseall
 	end
 
+Route10_EventScript_Zinzolin::
+	setspeaker Route10_Speaker_Zinzolin
+	trainerbattle_single TRAINER_ZINZOLIN_POWER_PLANT, Route10_Text_Zinzolin_Intro, Route10_Text_Zinzolin_Defeat, Route10_EventScript_Zinzolin_After
+	goto Route10_EventScript_Zinzolin_After
+	end
+
+Route10_EventScript_Zinzolin_After::
+	settrainerflag TRAINER_ZINZOLIN_POWER_PLANT
+	setspeaker Route10_Speaker_Zinzolin
+	msgbox Route10_Text_Zinzolin_After, MSGBOX_DEFAULT
+	releaseall
+	end
+
 Route10_Speaker_Zander:
 	.string "Zander$"
 
@@ -146,6 +159,9 @@ Route10_Movement_PlasmaEnterCave:
 Route10_Speaker_PlasmaGrunt:
 	.string "FAYE$"
 
+Route10_Speaker_Zinzolin:
+	.string "ZINZOLIN$"
+
 Route10_Text_PlasmaGrunt_Exit:
 	.string "Out of my way! I need to let the\n"
 	.string "others know a really strong trainer\l"
@@ -164,7 +180,7 @@ Route10_Text_Zander_Intro:
 	.string "myself about stomping a twerp haha.$"
 
 Route10_Text_Zander_Defeated:
-	.string "You beat me, but Shadow POKéMON\n"
+	.string "You beat me, but {COLOR PURPLE}Shadow POKéMON{COLOR DARK_GRAY}\n"
 	.string "won't leave our side yet.\p"
 	.string "You're stepping into deep water, kid.$"
 
@@ -172,6 +188,20 @@ Route10_Text_Zander_PostBattle:
 	.string "Our associates have taken over\n"
 	.string "Rock Tunnel. You're going to have a\l"
 	.string "real tough time getting through there.$"
+
+Route10_Text_Zinzolin_Intro:
+	.string "You're too late. The THUNDERBIRD\n"
+	.string "has already been secured.\p"
+	.string "Now, allow me to test your skill\n"
+	.string "in battle.$"
+
+Route10_Text_Zinzolin_Defeat:
+	.string "Hmph... perhaps you're more capable\n"
+	.string "than I assumed.$"
+
+Route10_Text_Zinzolin_After:
+	.string "Enjoy your fleeting victory.\n"
+	.string "TEAM PLASMA's plans are inevitable.$"
 
 Route10_Text_PowerPlant:
 	.string "POWER PLANT$"

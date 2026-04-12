@@ -21,6 +21,7 @@
 #include "field_weather.h"
 #include "fldeff_misc.h"
 #include "follower_npc.h"
+#include "gimmighoul_signpost.h"
 #include "item_menu.h"
 #include "link.h"
 #include "match_call.h"
@@ -38,6 +39,11 @@
 #include "option_menu.h"
 #include "strings.h"
 #include "trainer_see.h"
+#include "constants/flags.h"
+#include "constants/maps.h"
+#include "constants/map_groups.h"
+
+extern const u8 IlexForest_EventScript_TryBirchCall[];
 #include "trainer_hill.h"
 #include "overworld.h"
 #include "vs_seeker.h"
@@ -140,10 +146,19 @@ static bool8 UpdatePoisonStepCounter(void);
 #endif // OW_POISON_DAMAGE
 static bool32 TrySetUpWalkIntoSignpostScript(struct MapPosition * position, u32 metatileBehavior, u32 playerDirection);
 static void TryAutoSaveOnStep(void);
+static bool8 TryStartIlexBirchCall(void);
 static void SetMsgSignPostAndVarFacing(u32 playerDirection);
 static void SetUpWalkIntoSignScript(const u8 *script, u32 playerDirection);
 static u32 GetFacingSignpostType(u16 metatileBehvaior, u32 direction);
 static const u8 *GetSignpostScriptAtMapPosition(struct MapPosition * position);
+
+static void SetLastSignpostPosition(const struct MapPosition *position)
+{
+    gLastSignpost.mapGroup = gSaveBlock1Ptr->location.mapGroup;
+    gLastSignpost.mapNum = gSaveBlock1Ptr->location.mapNum;
+    gLastSignpost.x = position->x - 7;
+    gLastSignpost.y = position->y - 7;
+}
 
 void FieldClearPlayerInput(struct FieldInput *input)
 {
@@ -519,8 +534,13 @@ static const u8 *GetInteractedBackgroundEventScript(struct MapPosition *position
     if (bgEvent->bgUnion.script == NULL)
         return EventScript_TestSignpostMsg;
 
-    if (GetFacingSignpostType(metatileBehavior, direction) != NOT_SIGNPOST)
+    if (GetFacingSignpostType(metatileBehavior, direction) != NOT_SIGNPOST
+     || GimmighoulSignpost_IsTracked(gSaveBlock1Ptr->location.mapGroup, gSaveBlock1Ptr->location.mapNum,
+                                     position->x - MAP_OFFSET, position->y - MAP_OFFSET))
+    {
+        SetLastSignpostPosition(position);
         SetMsgSignPostAndVarFacing(direction);
+    }
 
     switch (bgEvent->kind)
     {
@@ -785,6 +805,8 @@ static bool8 TryStartStepCountScript(u16 metatileBehavior)
     UpdateFriendshipStepCounter();
     UpdateFarawayIslandStepCounter();
     UpdateFollowerStepCounter();
+    if (TryStartIlexBirchCall() == TRUE)
+        return TRUE;
 
     if (!(gPlayerAvatar.flags & PLAYER_AVATAR_FLAG_FORCED_MOVE) && !MetatileBehavior_IsForcedMovementTile(metatileBehavior))
     {
@@ -858,6 +880,21 @@ static bool8 TryStartStepCountScript(u16 metatileBehavior)
     if (TryStartMatchCall())
         return TRUE;
     return FALSE;
+}
+
+static bool8 TryStartIlexBirchCall(void)
+{
+    if (gSaveBlock1Ptr->location.mapGroup != MAP_GROUP(MAP_ILEX_FOREST))
+        return FALSE;
+    if (gSaveBlock1Ptr->location.mapNum != MAP_NUM(MAP_ILEX_FOREST))
+        return FALSE;
+    if (!FlagGet(FLAG_HIDE_ILEX_JJ_GROUP))
+        return FALSE;
+    if (FlagGet(FLAG_ILEX_BIRCH_CALL_DONE))
+        return FALSE;
+
+    ScriptContext_SetupScript(IlexForest_EventScript_TryBirchCall);
+    return TRUE;
 }
 
 static void UNUSED ClearFriendshipStepCounter(void)
@@ -1433,15 +1470,18 @@ static bool32 TrySetUpWalkIntoSignpostScript(struct MapPosition *position, u32 m
     switch (GetFacingSignpostType(metatileBehavior, playerDirection))
     {
     case MB_POKEMON_CENTER_SIGN:
+        SetLastSignpostPosition(position);
         SetUpWalkIntoSignScript(Common_EventScript_ShowPokemonCenterSign, playerDirection);
         return TRUE;
     case MB_POKEMART_SIGN:
+        SetLastSignpostPosition(position);
         SetUpWalkIntoSignScript(Common_EventScript_ShowPokemartSign, playerDirection);
         return TRUE;
     case MB_SIGNPOST:
         script = GetSignpostScriptAtMapPosition(position);
         if (script == NULL)
             return FALSE;
+        SetLastSignpostPosition(position);
         SetUpWalkIntoSignScript(script, playerDirection);
         return TRUE;
     default:

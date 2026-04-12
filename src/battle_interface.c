@@ -49,6 +49,8 @@ static void MoveBattleBarGraphically(u8 battler, u8 whichBar);
 extern const struct SpritePalette gSpritePalettes_HealthBoxHealthBar[10];
 u32 IndexOfSpritePaletteTag(u16 tag);  // correct return type
 
+#define LAST_USED_BALL_ICON_TAG 0xD7E0
+
 static u8 GetHealthbarSpriteIdFromBattler(u8 battler);
 
 void ShadowHud_Clear(u8 battler)
@@ -884,8 +886,54 @@ static u8 GetHealthbarSpriteIdFromBattler(u8 battler)
 extern const struct SpritePalette gSpritePalettes_HealthBoxHealthBar[10];
 u32 IndexOfSpritePaletteTag(u16 tag); // from include/sprite.h
 
-static u16 GetHealthboxPalTagForBattler(u8 battler)
+static bool8 CanShareHealthboxPalette(u8 battler, bool8 isShadowNow)
 {
+    u8 partner;
+
+    if (!IsDoubleBattle())
+        return FALSE;
+
+    partner = BATTLE_PARTNER(battler);
+    if (!IsBattlerAlive(partner))
+        return FALSE;
+
+    if (IsBattlerReverseNow(battler) != IsBattlerReverseNow(partner))
+        return FALSE;
+
+    if (IsOnPlayerSide(battler))
+        return (GetMonData(GetBattlerMon(partner), MON_DATA_IS_SHADOW) == isShadowNow);
+
+    return (IsOpponentShadowNow(partner) == isShadowNow);
+}
+
+static bool8 CanShareHealthboxFramePalette(u8 battler, bool8 isShadowNow, bool8 isReverseNow)
+{
+    u8 partner;
+
+    if (!IsDoubleBattle())
+        return FALSE;
+
+    partner = BATTLE_PARTNER(battler);
+    if (!IsBattlerAlive(partner))
+        return FALSE;
+
+    if (IsBattlerReverseNow(partner) != isReverseNow)
+        return FALSE;
+
+    if (IsOnPlayerSide(battler))
+        return (GetMonData(GetBattlerMon(partner), MON_DATA_IS_SHADOW) == isShadowNow);
+
+    return (IsOpponentShadowNow(partner) == isShadowNow);
+}
+
+static u16 GetHealthboxPalTagForBattler(u8 battler, bool8 isShadowNow)
+{
+    if (IsDoubleBattle() && !isShadowNow)
+        return IsOnPlayerSide(battler) ? TAG_HEALTHBOX_PLAYER1_PAL : TAG_HEALTHBOX_OPPONENT1_PAL;
+
+    if (CanShareHealthboxPalette(battler, isShadowNow))
+        return IsOnPlayerSide(battler) ? TAG_HEALTHBOX_PLAYER1_PAL : TAG_HEALTHBOX_OPPONENT1_PAL;
+
     if (IsOnPlayerSide(battler))
     {
         return (GetBattlerAtPosition(B_POSITION_PLAYER_LEFT) == battler)
@@ -900,10 +948,16 @@ static u16 GetHealthboxPalTagForBattler(u8 battler)
     }
 }
 
-static u16 GetHealthboxFramePalTagForBattler(u8 battler)
+static u16 GetHealthboxFramePalTagForBattler(u8 battler, bool8 isShadowNow)
 {
     if (gBattleTypeFlags & BATTLE_TYPE_SAFARI)
         return TAG_HEALTHBOX_FRAME_SAFARI_PAL;
+
+    if (IsDoubleBattle() && CanShareHealthboxFramePalette(battler, isShadowNow, IsBattlerReverseNow(battler)))
+        return IsOnPlayerSide(battler) ? TAG_HEALTHBOX_FRAME_PLAYER1_PAL : TAG_HEALTHBOX_FRAME_OPPONENT1_PAL;
+
+    if (CanShareHealthboxPalette(battler, isShadowNow))
+        return IsOnPlayerSide(battler) ? TAG_HEALTHBOX_FRAME_PLAYER1_PAL : TAG_HEALTHBOX_FRAME_OPPONENT1_PAL;
 
     if (IsOnPlayerSide(battler))
     {
@@ -935,9 +989,8 @@ static void BattleHud_ApplyHealthboxPaletteInternal(u8 battler, bool8 isShadowNo
         tableIdx = left ? (isShadowNow ? 8 : 4) : (isShadowNow ? 9 : 5);
     }
 
-    const struct SpritePalette *palEntry = &gSpritePalettes_HealthBoxHealthBar[tableIdx];
-    const u16 tag = GetHealthboxPalTagForBattler(battler);
-    const u16 *src = palEntry->data;
+    const u16 tag = GetHealthboxPalTagForBattler(battler, isShadowNow);
+    const u16 *src = gSpritePalettes_HealthBoxHealthBar[tableIdx].data;
     if (isShadowNow && isReverseNow)
     {
         if (IsOnPlayerSide(battler))
@@ -950,7 +1003,8 @@ static void BattleHud_ApplyHealthboxPaletteInternal(u8 battler, bool8 isShadowNo
     u32 palIndex = IndexOfSpritePaletteTag(tag);
     if (palIndex == 0xFF)
     {
-        palIndex = LoadSpritePalette(palEntry);
+        struct SpritePalette palEntry = {.data = src, .tag = tag};
+        palIndex = LoadSpritePalette(&palEntry);
         if (palIndex == 0xFF)
             return;
     }
@@ -987,7 +1041,7 @@ static void BattleHud_ApplyHealthboxPaletteInternal(u8 battler, bool8 isShadowNo
 
     // Apply the frame palette on its own tag so the frame can be customized independently.
     {
-        const u16 frameTag = GetHealthboxFramePalTagForBattler(battler);
+        const u16 frameTag = GetHealthboxFramePalTagForBattler(battler, isShadowNow);
         const u16 *frameSrc;
 
         if (!isShadowNow)
@@ -3081,6 +3135,7 @@ static void SafariTextIntoHealthboxObject(void *dest, u8 *windowTileData, u32 wi
 }
 
 #define ABILITY_POP_UP_TAG 0xD720
+#define ABILITY_POP_UP_PAL_SLOT 9
 
 // for sprite
 #define tOriginalX      data[0]
@@ -3105,6 +3160,24 @@ static const struct SpritePalette sSpritePalette_AbilityPopUp =
 {
     sAbilityPopUpPalette, ABILITY_POP_UP_TAG
 };
+
+void ReserveAbilityPopupPaletteSlot(void)
+{
+    u8 palIndex = IndexOfSpritePaletteTag(ABILITY_POP_UP_TAG);
+
+    if (palIndex == 0xFF)
+    {
+        u16 slotTag = GetSpritePaletteTagByPaletteNum(ABILITY_POP_UP_PAL_SLOT);
+
+        if (slotTag == TAG_NONE || slotTag == ABILITY_POP_UP_TAG)
+            palIndex = LoadSpritePaletteInSlot(&sSpritePalette_AbilityPopUp, ABILITY_POP_UP_PAL_SLOT);
+        if (palIndex == 0xFF)
+            palIndex = LoadSpritePalette(&sSpritePalette_AbilityPopUp);
+    }
+
+    if (palIndex != 0xFF)
+        LoadPalette(sAbilityPopUpPalette, OBJ_PLTT_ID(palIndex), PLTT_SIZE_4BPP);
+}
 
 static const struct OamData sOamData_AbilityPopUp =
 {
@@ -3433,7 +3506,7 @@ void CreateAbilityPopUp(u8 battler, u32 ability, bool32 isDoubleBattle)
     if (!IsAnyAbilityPopUpActive())
     {
         LoadSpriteSheet(&sSpriteSheet_AbilityPopUp);
-        LoadSpritePalette(&sSpritePalette_AbilityPopUp);
+        ReserveAbilityPopupPaletteSlot();
     }
 
     gBattleStruct->battlerState[battler].activeAbilityPopUps = TRUE;
@@ -3563,6 +3636,7 @@ void BattleInterface_RestoreAbilityPopupPalette(void)
 
         if (ballPalIndex != 0xFF)
             LoadPalette(GetItemIconPalette(gBallToDisplay), OBJ_PLTT_ID(ballPalIndex), PLTT_SIZE_4BPP);
+        gSprites[gBattleStruct->ballSpriteIds[0]].oam.paletteNum = IndexOfSpritePaletteTag(LAST_USED_BALL_ICON_TAG);
     }
 }
 
@@ -3573,7 +3647,6 @@ static void Task_FreeAbilityPopUpGfx(u8 taskId)
         && !IsAnyAbilityPopUpPaletteUserActive())
     {
         FreeSpriteTilesByTag(ABILITY_POP_UP_TAG);
-        FreeSpritePaletteByTag(ABILITY_POP_UP_TAG);
         DestroyTask(taskId);
     }
 }
@@ -3583,6 +3656,7 @@ static void Task_FreeAbilityPopUpGfx(u8 taskId)
 #if B_LAST_USED_BALL_BUTTON == R_BUTTON
 #define LAST_BALL_CALL_WINDOW_TAG 0xD722
 #endif
+#define LAST_USED_BALL_PAL_SLOT 10
 
 static const struct OamData sOamData_LastUsedBall =
 {
@@ -3738,6 +3812,30 @@ static bool32 IsOpponentShadowPresent(void)
     return FALSE;
 }
 
+static void ReserveLastUsedBallPalette(u16 itemId)
+{
+    struct SpritePalette spritePalette = { .data = GetItemIconPalette(itemId), .tag = LAST_USED_BALL_ICON_TAG };
+    u8 palIndex = IndexOfSpritePaletteTag(LAST_USED_BALL_ICON_TAG);
+
+    if (palIndex == 0xFF)
+    {
+        u16 slotTag = GetSpritePaletteTagByPaletteNum(LAST_USED_BALL_PAL_SLOT);
+
+        if (slotTag == TAG_NONE || slotTag == LAST_USED_BALL_ICON_TAG)
+            palIndex = LoadSpritePaletteInSlot(&spritePalette, LAST_USED_BALL_PAL_SLOT);
+        if (palIndex == 0xFF)
+            palIndex = LoadSpritePalette(&spritePalette);
+    }
+
+    if (palIndex != 0xFF)
+        LoadPalette(spritePalette.data, OBJ_PLTT_ID(palIndex), PLTT_SIZE_4BPP);
+}
+
+void ReserveLastUsedBallPaletteSlot(void)
+{
+    ReserveLastUsedBallPalette(ITEM_POKE_BALL);
+}
+
 bool32 CanThrowLastUsedBall(void)
 {
     if (B_LAST_USED_BALL == FALSE)
@@ -3772,7 +3870,7 @@ static void TryAddCallWindowSprite(void)
         return;
     }
 
-    LoadSpritePalette(&sSpritePalette_AbilityPopUp);
+    ReserveAbilityPopupPaletteSlot();
     if (GetSpriteTileStartByTag(LAST_BALL_CALL_WINDOW_TAG) == 0xFFFF)
         LoadSpriteSheet(&sSpriteSheet_LastUsedBallCallWindow);
 
@@ -3817,7 +3915,9 @@ void TryAddLastUsedBallItemSprites(void)
     // ball
     if (gBattleStruct->ballSpriteIds[0] == MAX_SPRITES)
     {
-        gBattleStruct->ballSpriteIds[0] = AddItemIconSprite(102, 102, gBallToDisplay);
+        ReserveLastUsedBallPalette(gBallToDisplay);
+        gBattleStruct->ballSpriteIds[0] = AddItemIconSprite(LAST_USED_BALL_ICON_TAG, LAST_USED_BALL_ICON_TAG, gBallToDisplay);
+        gSprites[gBattleStruct->ballSpriteIds[0]].oam.paletteNum = IndexOfSpritePaletteTag(LAST_USED_BALL_ICON_TAG);
         gSprites[gBattleStruct->ballSpriteIds[0]].x = LAST_USED_BALL_X_0;
         gSprites[gBattleStruct->ballSpriteIds[0]].y = LAST_USED_BALL_Y;
         gSprites[gBattleStruct->ballSpriteIds[0]].sHide = FALSE;
@@ -3826,7 +3926,7 @@ void TryAddLastUsedBallItemSprites(void)
     }
 
     // window
-    LoadSpritePalette(&sSpritePalette_AbilityPopUp);
+    ReserveAbilityPopupPaletteSlot();
     if (GetSpriteTileStartByTag(LAST_BALL_WINDOW_TAG) == 0xFFFF)
         LoadSpriteSheet(&sSpriteSheet_LastUsedBallWindow);
 
@@ -3851,8 +3951,6 @@ static void DestroyLastUsedBallWinGfx(struct Sprite *sprite)
     FreeSpriteTilesByTag(LAST_BALL_WINDOW_TAG);
     DestroySprite(sprite);
     gBattleStruct->ballSpriteIds[1] = MAX_SPRITES;
-    if (!IsAnyAbilityPopUpPaletteUserActive())
-        FreeSpritePaletteByTag(ABILITY_POP_UP_TAG);
 }
 #if B_LAST_USED_BALL_BUTTON == R_BUTTON
 static void DestroyLastUsedBallCallWinGfx(struct Sprite *sprite)
@@ -3865,8 +3963,7 @@ static void DestroyLastUsedBallCallWinGfx(struct Sprite *sprite)
 
 static void DestroyLastUsedBallGfx(struct Sprite *sprite)
 {
-    FreeSpriteTilesByTag(102);
-    FreeSpritePaletteByTag(102);
+    FreeSpriteTilesByTag(LAST_USED_BALL_ICON_TAG);
     DestroySprite(sprite);
     gBattleStruct->ballSpriteIds[0] = MAX_SPRITES;
 }
@@ -3876,7 +3973,7 @@ void TryToAddMoveInfoWindow(void)
     if (!B_SHOW_MOVE_DESCRIPTION)
         return;
 
-    LoadSpritePalette(&sSpritePalette_AbilityPopUp);
+    ReserveAbilityPopupPaletteSlot();
     if (GetSpriteTileStartByTag(MOVE_INFO_WINDOW_TAG) == 0xFFFF)
         LoadSpriteSheet(&sSpriteSheet_MoveInfoWindow);
 
@@ -3897,7 +3994,7 @@ static void DestroyMoveInfoWinGfx(struct Sprite *sprite)
     FreeSpriteTilesByTag(MOVE_INFO_WINDOW_TAG);
     DestroySprite(sprite);
     gBattleStruct->moveInfoSpriteId = MAX_SPRITES;
-    if (!IsAnyAbilityPopUpPaletteUserActive())
+    if (IsDoubleBattle() && !IsAnyAbilityPopUpPaletteUserActive())
         FreeSpritePaletteByTag(ABILITY_POP_UP_TAG);
 }
 
@@ -4003,7 +4100,11 @@ static void TryHideOrRestoreLastUsedBall(u8 caseId)
         break;
     case 1: // restore
         if (gBattleStruct->ballSpriteIds[0] != MAX_SPRITES)
+        {
+            ReserveLastUsedBallPalette(gBallToDisplay);
+            gSprites[gBattleStruct->ballSpriteIds[0]].oam.paletteNum = IndexOfSpritePaletteTag(LAST_USED_BALL_ICON_TAG);
             gSprites[gBattleStruct->ballSpriteIds[0]].sHide = FALSE;
+        }
         if (gBattleStruct->ballSpriteIds[1] != MAX_SPRITES)
             gSprites[gBattleStruct->ballSpriteIds[1]].sHide = FALSE;
 #if B_LAST_USED_BALL_BUTTON == R_BUTTON
@@ -4086,7 +4187,9 @@ static void Task_BounceBall(u8 taskId)
     case 2: //Create New Icon
         if (!sprite->inUse)
         {
-            gBattleStruct->ballSpriteIds[0] = AddItemIconSprite(102, 102, gBallToDisplay);
+            ReserveLastUsedBallPalette(gBallToDisplay);
+            gBattleStruct->ballSpriteIds[0] = AddItemIconSprite(LAST_USED_BALL_ICON_TAG, LAST_USED_BALL_ICON_TAG, gBallToDisplay);
+            gSprites[gBattleStruct->ballSpriteIds[0]].oam.paletteNum = IndexOfSpritePaletteTag(LAST_USED_BALL_ICON_TAG);
             gSprites[gBattleStruct->ballSpriteIds[0]].x = LAST_USED_BALL_X_F;
             gSprites[gBattleStruct->ballSpriteIds[0]].y = LAST_USED_BALL_Y_BNC;
             task->sState++;
@@ -4159,8 +4262,19 @@ void ArrowsChangeColorLastBallCycle(bool32 showArrows)
 #endif
 }
 
+#define CATEGORY_ICON_PAL_SLOT 12
+
 void CategoryIcons_LoadSpritesGfx(void)
 {
     LoadCompressedSpriteSheet(&gSpriteSheet_CategoryIcons);
+    if (CATEGORY_ICON_PAL_SLOT >= gReservedSpritePaletteCount)
+    {
+        u16 slotTag = GetSpritePaletteTagByPaletteNum(CATEGORY_ICON_PAL_SLOT);
+        if (slotTag == TAG_NONE || slotTag == gSpritePal_CategoryIcons.tag)
+        {
+            LoadSpritePaletteInSlot(&gSpritePal_CategoryIcons, CATEGORY_ICON_PAL_SLOT);
+            return;
+        }
+    }
     LoadSpritePalette(&gSpritePal_CategoryIcons);
 }

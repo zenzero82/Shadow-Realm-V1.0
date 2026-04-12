@@ -3,8 +3,10 @@
 #include "event_data.h"
 #include "mystery_gift.h"
 #include "random.h"
+#include "gimmighoul_signpost.h"
 #include "trainer_see.h"
 #include "util.h"
+#include "event_scripts.h"
 #include "constants/event_objects.h"
 #include "constants/flags.h"
 #include "constants/map_scripts.h"
@@ -33,10 +35,13 @@ static struct ScriptContext sImmediateScriptContext;
 static bool8 sLockFieldControls;
 EWRAM_DATA u8 gMsgIsSignPost = FALSE;
 EWRAM_DATA u8 gMsgBoxIsCancelable = FALSE;
+EWRAM_DATA u8 gSuppressGimmighoulSignpost = FALSE;
 
 extern ScrCmdFunc gScriptCmdTable[];
 extern ScrCmdFunc gScriptCmdTableEnd[];
 extern void *const gNullScriptPtr;
+
+static bool8 TryStartGimmighoulSignpostScript(void);
 
 void InitScriptContext(struct ScriptContext *ctx, void *cmdTable, void *cmdTableEnd)
 {
@@ -231,6 +236,31 @@ void ScriptContext_Init(void)
 {
     InitScriptContext(&sGlobalScriptContext, gScriptCmdTable, gScriptCmdTableEnd);
     sGlobalScriptContextStatus = CONTEXT_SHUTDOWN;
+}
+
+static bool8 TryStartGimmighoulSignpostScript(void)
+{
+    u16 signpostIndex;
+
+    if (gSuppressGimmighoulSignpost)
+    {
+        gSuppressGimmighoulSignpost = FALSE;
+        gMsgIsSignPost = FALSE;
+        return FALSE;
+    }
+    if (!gMsgIsSignPost)
+        return FALSE;
+    if (!GimmighoulSignpost_ShouldTrigger(gLastSignpost.mapGroup, gLastSignpost.mapNum,
+                                          gLastSignpost.x, gLastSignpost.y, &signpostIndex))
+    {
+        gMsgIsSignPost = FALSE;
+        return FALSE;
+    }
+
+    GimmighoulSignpost_MarkUsed(signpostIndex);
+    gMsgIsSignPost = FALSE;
+    ScriptContext_SetupScript(EventScript_GimmighoulSignpost);
+    return TRUE;
 }
 
 // Runs the script until the script makes a wait* call, then returns true if

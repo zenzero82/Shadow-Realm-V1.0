@@ -2520,7 +2520,7 @@ static void InitObjectEventsReturnToField(void)
     SpawnObjectEventsOnReturnToField(0, 0);
     RotatingGate_InitPuzzleAndGraphics();
     RunOnReturnToFieldMapScript();
-    OverworldWildEncounters_OnMapLoad();
+    OverworldWildEncounters_OnReturnToField();
 }
 
 static void SetCameraToTrackPlayer(void)

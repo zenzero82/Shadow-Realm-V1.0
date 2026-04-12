@@ -28,6 +28,7 @@
 #include "metatile_behavior.h"
 #include "move.h"
 #include "overworld.h"
+#include "overworld_wild_encounters.h"
 #include "palette.h"
 #include "party_menu.h"
 #include "pokedex.h"
@@ -150,7 +151,7 @@ static u8 DexNavGetAbilityNum(u16 species, u8 searchLevel);
 static u8 DexNavGeneratePotential(u8 searchLevel);
 static u8 DexNavTryGenerateMonLevel(u16 species, enum EncounterType environment);
 static u8 GetEncounterLevelFromMapData(u16 species, enum EncounterType environment);
-static void CreateDexNavWildMon(u16 species, u8 potential, u8 level, u8 abilityNum, u16 item, u16 *moves);
+void CreateDexNavWildMon(u16 species, u8 potential, u8 level, u8 abilityNum, u16 item, u16 *moves);
 static u8 GetPlayerDistance(s16 x, s16 y);
 static u8 DexNavPickTile(enum EncounterType environment, u8 xSize, u8 ySize, bool8 smallScan);
 static void DexNavProximityUpdate(void);
@@ -444,7 +445,7 @@ static void DrawDexNavSearchMonIcon(u16 species, u8 *dst, bool8 owned)
     u8 spriteId;
 
     LoadMonIconPalette(species);
-    spriteId = CreateMonIcon(species, SpriteCB_MonIcon, SPECIES_ICON_X - 6, GetSearchWindowY() + 8, 0, 0xFFFFFFFF, FALSE);
+    spriteId = CreateMonIcon(species, SpriteCB_MonIcon, SPECIES_ICON_X - 6, GetSearchWindowY() + 8, 0, 0xFFFFFFFF, FALSE, FALSE);
     gSprites[spriteId].oam.priority = 0;
     *dst = spriteId;
 
@@ -1157,6 +1158,27 @@ static void Task_DexNavSearch(u8 taskId)
 
     if (sDexNavSearchDataPtr->proximity < 1)
     {
+        if (gSaveBlock2Ptr->optionsOverworldWildEncounters == OPTIONS_OVERWORLD_WILD_ON)
+        {
+            u8 localId = 0;
+            s16 spawnX = sDexNavSearchDataPtr->tileX;
+            s16 spawnY = sDexNavSearchDataPtr->tileY;
+            u8 elevation = MapGridGetElevationAt(spawnX, spawnY);
+
+            if (OverworldWildEncounters_SpawnDexNavMon(sDexNavSearchDataPtr->species, sDexNavSearchDataPtr->monLevel,
+                                                       sDexNavSearchDataPtr->potential, sDexNavSearchDataPtr->abilityNum,
+                                                       sDexNavSearchDataPtr->heldItem, sDexNavSearchDataPtr->moves,
+                                                       spawnX, spawnY, elevation, &localId))
+            {
+                gFieldEffectArguments[0] = localId;
+                gFieldEffectArguments[1] = gSaveBlock1Ptr->location.mapNum;
+                gFieldEffectArguments[2] = gSaveBlock1Ptr->location.mapGroup;
+                FieldEffectStart(FLDEFF_EXCLAMATION_MARK_ICON);
+                EndDexNavSearch(taskId);
+                return;
+            }
+        }
+
         gDexNavSpecies = sDexNavSearchDataPtr->species;
         CreateDexNavWildMon(sDexNavSearchDataPtr->species, sDexNavSearchDataPtr->potential, sDexNavSearchDataPtr->monLevel,
                             sDexNavSearchDataPtr->abilityNum, sDexNavSearchDataPtr->heldItem, sDexNavSearchDataPtr->moves);
@@ -1259,7 +1281,7 @@ static void DexNavUpdateSearchWindow(u8 proximity, u8 searchLevel)
 //////////////////////////////
 //// DEXNAV MON GENERATOR ////
 //////////////////////////////
-static void CreateDexNavWildMon(u16 species, u8 potential, u8 level, u8 abilityNum, u16 item, u16 *moves)
+void CreateDexNavWildMon(u16 species, u8 potential, u8 level, u8 abilityNum, u16 item, u16 *moves)
 {
     struct Pokemon *mon = &gEnemyParty[0];
     u8 iv[3] = {NUM_STATS};
@@ -2050,9 +2072,9 @@ static void TryDrawIconInSlot(u16 species, s16 x, s16 y)
     if (species == SPECIES_NONE || species > NUM_SPECIES)
         CreateNoDataIcon(x, y);   //'X' in slot
     else if (!GetSetPokedexFlag(SpeciesToNationalPokedexNum(species), FLAG_GET_SEEN))
-        CreateMonIcon(SPECIES_NONE, SpriteCB_MonIcon, x, y, 0, 0xFFFFFFFF, FALSE); //question mark
+        CreateMonIcon(SPECIES_NONE, SpriteCB_MonIcon, x, y, 0, 0xFFFFFFFF, FALSE, FALSE); //question mark
     else
-        CreateMonIcon(species, SpriteCB_MonIcon, x, y, 0, 0xFFFFFFFF, FALSE);
+        CreateMonIcon(species, SpriteCB_MonIcon, x, y, 0, 0xFFFFFFFF, FALSE, FALSE);
 }
 
 static void DrawSpeciesIcons(void)
@@ -2088,7 +2110,7 @@ static void DrawSpeciesIcons(void)
        else if (species == SPECIES_NONE || species > NUM_SPECIES)
             CreateNoDataIcon(x, y);
         else
-            CreateMonIcon(SPECIES_NONE, SpriteCB_MonIcon, x, y, 0, 0xFFFFFFFF, FALSE); //question mark if detector mode inactive
+            CreateMonIcon(SPECIES_NONE, SpriteCB_MonIcon, x, y, 0, 0xFFFFFFFF, FALSE, FALSE); //question mark if detector mode inactive
     }
 }
 

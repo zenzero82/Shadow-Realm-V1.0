@@ -1,6 +1,22 @@
 AbandonedShip_Rooms_1F_MapScripts::
 	.byte 0
 
+AbandonedShip_Rooms_1F_EventScript_Gimmighoul::
+	call Common_EventScript_GimmighoulStaticEncounter
+	goto_if_eq VAR_RESULT, B_OUTCOME_WON, AbandonedShip_Rooms_1F_EventScript_GimmighoulDefeated
+	goto_if_eq VAR_RESULT, B_OUTCOME_CAUGHT, AbandonedShip_Rooms_1F_EventScript_GimmighoulDefeated
+	release
+	end
+
+AbandonedShip_Rooms_1F_EventScript_GimmighoulDefeated::
+	setflag FLAG_HIDE_ABANDONED_SHIP_ROOMS_1F_GIMMIGHOUL
+	setvar VAR_0x8000, 75
+	additem ITEM_GIMMIGHOUL_COIN, 75
+	buffernumberstring STR_VAR_1, VAR_0x8000
+	msgbox gText_GimmighoulCoinsObtained, MSGBOX_DEFAULT
+	goto Common_EventScript_RemoveStaticPokemon
+	end
+
 AbandonedShip_Rooms_1F_EventScript_Gentleman::
 	msgbox AbandonedShip_Rooms_1F_Text_TakingALookAround, MSGBOX_NPC
 	end
@@ -74,5 +90,4 @@ AbandonedShip_Rooms_1F_Text_DemetriusDefeat:
 AbandonedShip_Rooms_1F_Text_DemetriusPostBattle:
 	.string "I'm in trouble with my mom, so I ran.\n"
 	.string "Keep it a secret where I am!$"
-
 

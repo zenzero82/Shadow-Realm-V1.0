@@ -59,8 +59,8 @@ PewterCity_EventScript_CityEnter_QuestSkip:
     end
 
 PewterCity_EventScript_CitySign::
-    msgbox PewterCity_Text_Sign, MSGBOX_NPC
-    end
+    msgbox PewterCity_Text_Sign, MSGBOX_SIGN
+    goto EventScript_GimmighoulSignpost
 
 PewterCity_EventScript_GymSign::
     msgbox PewterCity_Text_GymSign, MSGBOX_NPC
@@ -610,3 +610,4 @@ PewterCity_Text_Wes_HeadOut:
 @ -------------------------------
 @ EXTRA PEWTER NPCS CAN GO BELOW
 @ -------------------------------
+

@@ -2,15 +2,24 @@ SlowpokeWell_B1F_MapScripts::
 	map_script MAP_SCRIPT_ON_TRANSITION, SlowpokeWell_B1F_EventScript_Enter
 	.byte 0
 
-.set LOCALID_SLOWPOKE_WELL_FLARE1, 1
-.set LOCALID_SLOWPOKE_WELL_FLARE2, 2
-.set LOCALID_SLOWPOKE_WELL_FLARE3, 3
-.set LOCALID_SLOWPOKE_WELL_BRYONY, 4
-.set LOCALID_SLOWPOKE_WELL_GALAR_SLOWPOKE, 5
-
 SlowpokeWell_B1F_EventScript_Enter::
+	setvar VAR_TEMP_1, 0
+	setflag FLAG_HIDE_SLOWPOKE_WELL_BARRY
+	hideobjectat LOCALID_SLOWPOKE_WELL_BARRY, MAP_SLOWPOKE_WELL_B1F
+	removeobject LOCALID_SLOWPOKE_WELL_BARRY
+	setflag FLAG_HIDE_SLOWPOKE_WELL_BARRY_POKEBALL
+	hideobjectat LOCALID_SLOWPOKE_WELL_BARRY_BALL, MAP_SLOWPOKE_WELL_B1F
+	removeobject LOCALID_SLOWPOKE_WELL_BARRY_BALL
 	checkflag FLAG_HIDE_SLOWPOKE_WELL_FLARES
 	goto_if_eq SlowpokeWell_B1F_EventScript_Enter_HideFlares
+	checkflag FLAG_SLOWPOKE_WELL_FLARE1_MOVED
+	goto_if_eq SlowpokeWell_B1F_EventScript_Enter_Flare1Moved
+	checkflag FLAG_ETHAN_CALL_AFTER_BRYONY
+	goto_if_eq SlowpokeWell_B1F_EventScript_Enter_SetHideFlares
+	end
+
+SlowpokeWell_B1F_EventScript_Enter_Flare1Moved::
+	setobjectxyperm LOCALID_SLOWPOKE_WELL_FLARE1, 27, 24
 	checkflag FLAG_ETHAN_CALL_AFTER_BRYONY
 	goto_if_eq SlowpokeWell_B1F_EventScript_Enter_SetHideFlares
 	end
@@ -44,6 +53,9 @@ SlowpokeWell_B1F_Speaker_Bryony:
 
 SlowpokeWell_B1F_Speaker_Ethan:
 	.string "ETHAN$"
+
+SlowpokeWell_B1F_Speaker_Barry:
+	.string "Barry$"
 
 SlowpokeWell_B1F_EventScript_Flare1::
 	lock
@@ -178,6 +190,407 @@ SlowpokeWell_B1F_Movement_PlayerUnlockFacing:
 	unlock_facing_direction
 	step_end
 
+SlowpokeWell_B1F_Movement_Barry_RunIn_North:
+	walk_faster_up
+	walk_faster_up
+	walk_faster_up
+	walk_faster_up
+	walk_faster_up
+	walk_faster_up
+	walk_faster_up
+	walk_faster_up
+	walk_faster_up
+	walk_faster_left
+	walk_faster_left
+	walk_faster_left
+	walk_faster_left
+	walk_faster_left
+	walk_faster_left
+	walk_faster_down
+	walk_faster_down
+	step_end
+
+SlowpokeWell_B1F_Movement_Barry_RunIn_West:
+	walk_faster_up
+	walk_faster_up
+	walk_faster_up
+	walk_faster_up
+	walk_faster_up
+	walk_faster_up
+	walk_faster_up
+	walk_faster_up
+	walk_faster_up
+	walk_faster_left
+	walk_faster_left
+	walk_faster_left
+	walk_faster_left
+	walk_faster_left
+	walk_faster_left
+	walk_faster_left
+	walk_faster_down
+	walk_faster_down
+	walk_faster_down
+	step_end
+
+SlowpokeWell_B1F_Movement_Barry_RunIn_South:
+	walk_faster_up
+	walk_faster_up
+	walk_faster_up
+	walk_faster_up
+	walk_faster_up
+	walk_faster_up
+	walk_faster_up
+	walk_faster_up
+	walk_faster_up
+	walk_faster_left
+	walk_faster_left
+	walk_faster_left
+	walk_faster_left
+	walk_faster_left
+	walk_faster_left
+	walk_faster_left
+	walk_faster_down
+	walk_faster_down
+	walk_faster_down
+	walk_faster_down
+	walk_faster_right
+	step_end
+
+SlowpokeWell_B1F_Movement_Barry_RunOff_North:
+	walk_faster_up
+	walk_faster_up
+	walk_faster_right
+	walk_faster_right
+	walk_faster_right
+	walk_faster_right
+	walk_faster_right
+	walk_faster_right
+	walk_faster_down
+	walk_faster_down
+	walk_faster_down
+	walk_faster_down
+	walk_faster_down
+	walk_faster_down
+	walk_faster_down
+	walk_faster_down
+	walk_faster_down
+	walk_faster_right
+	walk_faster_right
+	step_end
+
+SlowpokeWell_B1F_Movement_Barry_RunOff_West:
+	walk_faster_up
+	walk_faster_up
+	walk_faster_up
+	walk_faster_right
+	walk_faster_right
+	walk_faster_right
+	walk_faster_right
+	walk_faster_right
+	walk_faster_right
+	walk_faster_right
+	walk_faster_down
+	walk_faster_down
+	walk_faster_down
+	walk_faster_down
+	walk_faster_down
+	walk_faster_down
+	walk_faster_down
+	walk_faster_down
+	walk_faster_down
+	walk_faster_right
+	walk_faster_right
+	step_end
+
+SlowpokeWell_B1F_Movement_Barry_RunOff_South:
+	walk_faster_left
+	walk_faster_up
+	walk_faster_up
+	walk_faster_up
+	walk_faster_up
+	walk_faster_right
+	walk_faster_right
+	walk_faster_right
+	walk_faster_right
+	walk_faster_right
+	walk_faster_right
+	walk_faster_right
+	walk_faster_down
+	walk_faster_down
+	walk_faster_down
+	walk_faster_down
+	walk_faster_down
+	walk_faster_down
+	walk_faster_down
+	walk_faster_down
+	walk_faster_down
+	walk_faster_down
+	walk_faster_right
+	walk_faster_right
+	walk_faster_right
+	walk_faster_right
+	step_end
+
+SlowpokeWell_B1F_Movement_BumpReact:
+	emote_exclamation_mark
+	jump_in_place_down
+	step_end
+
+SlowpokeWell_B1F_Movement_Player_BumpReact_Right:
+	emote_exclamation_mark
+	jump_in_place_right
+	step_end
+
+SlowpokeWell_B1F_Movement_Player_BumpReact_Left:
+	emote_exclamation_mark
+	jump_in_place_left
+	step_end
+
+SlowpokeWell_B1F_Movement_Barry_BumpReact_Left:
+	emote_exclamation_mark
+	jump_in_place_left
+	step_end
+
+SlowpokeWell_B1F_Movement_Barry_BumpReact_Right:
+	emote_exclamation_mark
+	jump_in_place_right
+	step_end
+
+SlowpokeWell_B1F_Movement_Player_BumpShift_North:
+	walk_left
+	step_end
+
+SlowpokeWell_B1F_Movement_Player_BumpShift_West:
+	walk_left
+	step_end
+
+SlowpokeWell_B1F_Movement_Player_BumpShift_South:
+	walk_right
+	step_end
+
+SlowpokeWell_B1F_Movement_BarryBall_ToSlowpoke_Down:
+	walk_fast_down
+	step_end
+
+SlowpokeWell_B1F_Movement_BarryBall_ToSlowpoke_Right:
+	walk_fast_right
+	step_end
+
+SlowpokeWell_B1F_Movement_BarryBall_ToSlowpoke_Up:
+	walk_fast_up
+	step_end
+
+SlowpokeWell_B1F_EventScript_BarryScene::
+	lockall
+	setvar VAR_TEMP_1, 0
+	call SlowpokeWell_B1F_EventScript_BarryScene_Core
+	releaseall
+	end
+
+SlowpokeWell_B1F_EventScript_BarryTrigger_North::
+	goto_if_unset FLAG_ETHAN_CALL_AFTER_BRYONY, SlowpokeWell_B1F_EventScript_BarryTrigger_End
+	goto_if_set FLAG_HIDE_SLOWPOKE_WELL_SLOWPOKE, SlowpokeWell_B1F_EventScript_BarryTrigger_End
+	lockall
+	setvar VAR_TEMP_1, 0
+	call SlowpokeWell_B1F_EventScript_BarryScene_Core
+	releaseall
+	end
+
+SlowpokeWell_B1F_EventScript_BarryTrigger_West::
+	goto_if_unset FLAG_ETHAN_CALL_AFTER_BRYONY, SlowpokeWell_B1F_EventScript_BarryTrigger_End
+	goto_if_set FLAG_HIDE_SLOWPOKE_WELL_SLOWPOKE, SlowpokeWell_B1F_EventScript_BarryTrigger_End
+	lockall
+	setvar VAR_TEMP_1, 1
+	call SlowpokeWell_B1F_EventScript_BarryScene_Core
+	releaseall
+	end
+
+SlowpokeWell_B1F_EventScript_BarryTrigger_South::
+	goto_if_unset FLAG_ETHAN_CALL_AFTER_BRYONY, SlowpokeWell_B1F_EventScript_BarryTrigger_End
+	goto_if_set FLAG_HIDE_SLOWPOKE_WELL_SLOWPOKE, SlowpokeWell_B1F_EventScript_BarryTrigger_End
+	lockall
+	setvar VAR_TEMP_1, 2
+	call SlowpokeWell_B1F_EventScript_BarryScene_Core
+	releaseall
+	end
+
+SlowpokeWell_B1F_EventScript_BarryTrigger_End::
+	end
+
+SlowpokeWell_B1F_EventScript_BarryScene_Core::
+	goto_if_set FLAG_HIDE_SLOWPOKE_WELL_SLOWPOKE, SlowpokeWell_B1F_EventScript_BarryScene_Core_Done
+	removeobject 0xF8
+	removeobject 0xF9
+	removeobject 0xFA
+	clearflag FLAG_HIDE_SLOWPOKE_WELL_BARRY
+	addobject LOCALID_SLOWPOKE_WELL_BARRY
+	setobjectxy LOCALID_SLOWPOKE_WELL_BARRY, 26, 11
+	showobjectat LOCALID_SLOWPOKE_WELL_BARRY, MAP_SLOWPOKE_WELL_B1F
+	goto_if_eq VAR_TEMP_1, 0, SlowpokeWell_B1F_EventScript_BarryScene_RunIn_North
+	goto_if_eq VAR_TEMP_1, 1, SlowpokeWell_B1F_EventScript_BarryScene_RunIn_West
+	goto SlowpokeWell_B1F_EventScript_BarryScene_RunIn_South
+
+SlowpokeWell_B1F_EventScript_BarryScene_RunIn_North::
+	applymovement LOCALID_SLOWPOKE_WELL_BARRY, SlowpokeWell_B1F_Movement_Barry_RunIn_North
+	waitmovement 0
+	applymovement LOCALID_SLOWPOKE_WELL_BARRY, Common_Movement_FaceDown
+	goto SlowpokeWell_B1F_EventScript_BarryScene_Bump
+
+SlowpokeWell_B1F_EventScript_BarryScene_RunIn_West::
+	applymovement LOCALID_SLOWPOKE_WELL_BARRY, SlowpokeWell_B1F_Movement_Barry_RunIn_West
+	waitmovement 0
+	applymovement LOCALID_SLOWPOKE_WELL_BARRY, Common_Movement_FaceRight
+	goto SlowpokeWell_B1F_EventScript_BarryScene_Bump
+
+SlowpokeWell_B1F_EventScript_BarryScene_RunIn_South::
+	applymovement LOCALID_SLOWPOKE_WELL_BARRY, SlowpokeWell_B1F_Movement_Barry_RunIn_South
+	waitmovement 0
+	applymovement LOCALID_SLOWPOKE_WELL_BARRY, Common_Movement_FaceUp
+	goto SlowpokeWell_B1F_EventScript_BarryScene_Bump
+
+SlowpokeWell_B1F_EventScript_BarryScene_Bump::
+	waitmovement 0
+	playse SE_PIN
+	goto_if_eq VAR_TEMP_1, 2, SlowpokeWell_B1F_EventScript_BarryScene_Bump_South
+	applymovement LOCALID_PLAYER, SlowpokeWell_B1F_Movement_Player_BumpReact_Right
+	applymovement LOCALID_SLOWPOKE_WELL_BARRY, SlowpokeWell_B1F_Movement_Barry_BumpReact_Left
+	goto SlowpokeWell_B1F_EventScript_BarryScene_Bump_Wait
+
+SlowpokeWell_B1F_EventScript_BarryScene_Bump_South::
+	applymovement LOCALID_PLAYER, SlowpokeWell_B1F_Movement_Player_BumpReact_Left
+	applymovement LOCALID_SLOWPOKE_WELL_BARRY, SlowpokeWell_B1F_Movement_Barry_BumpReact_Right
+	goto SlowpokeWell_B1F_EventScript_BarryScene_Bump_Wait
+
+SlowpokeWell_B1F_EventScript_BarryScene_Bump_Wait::
+	waitmovement 0
+	goto_if_eq VAR_TEMP_1, 0, SlowpokeWell_B1F_EventScript_BarryScene_Shift_North
+	goto_if_eq VAR_TEMP_1, 1, SlowpokeWell_B1F_EventScript_BarryScene_Shift_West
+	goto SlowpokeWell_B1F_EventScript_BarryScene_Shift_South
+
+SlowpokeWell_B1F_EventScript_BarryScene_Shift_North::
+	applymovement LOCALID_PLAYER, SlowpokeWell_B1F_Movement_Player_BumpShift_North
+	waitmovement 0
+	applymovement LOCALID_SLOWPOKE_WELL_BARRY, Common_Movement_FaceLeft
+	goto SlowpokeWell_B1F_EventScript_BarryScene_AfterShift
+
+SlowpokeWell_B1F_EventScript_BarryScene_Shift_West::
+	applymovement LOCALID_PLAYER, SlowpokeWell_B1F_Movement_Player_BumpShift_West
+	waitmovement 0
+	applymovement LOCALID_SLOWPOKE_WELL_BARRY, Common_Movement_FaceLeft
+	goto SlowpokeWell_B1F_EventScript_BarryScene_AfterShift
+
+SlowpokeWell_B1F_EventScript_BarryScene_Shift_South::
+	applymovement LOCALID_PLAYER, SlowpokeWell_B1F_Movement_Player_BumpShift_South
+	waitmovement 0
+	applymovement LOCALID_SLOWPOKE_WELL_BARRY, Common_Movement_FaceRight
+	goto SlowpokeWell_B1F_EventScript_BarryScene_AfterShift
+
+SlowpokeWell_B1F_EventScript_BarryScene_AfterShift::
+	waitmovement 0
+	goto_if_eq VAR_TEMP_1, 0, SlowpokeWell_B1F_EventScript_BarryScene_Face_North
+	goto_if_eq VAR_TEMP_1, 1, SlowpokeWell_B1F_EventScript_BarryScene_Face_West
+	goto SlowpokeWell_B1F_EventScript_BarryScene_Face_South
+
+SlowpokeWell_B1F_EventScript_BarryScene_Face_North::
+	applymovement LOCALID_SLOWPOKE_WELL_BARRY, Common_Movement_FaceLeft
+	goto SlowpokeWell_B1F_EventScript_BarryScene_Face_Wait
+
+SlowpokeWell_B1F_EventScript_BarryScene_Face_West::
+	applymovement LOCALID_SLOWPOKE_WELL_BARRY, Common_Movement_FaceLeft
+	goto SlowpokeWell_B1F_EventScript_BarryScene_Face_Wait
+
+SlowpokeWell_B1F_EventScript_BarryScene_Face_South::
+	applymovement LOCALID_SLOWPOKE_WELL_BARRY, Common_Movement_FaceRight
+	goto SlowpokeWell_B1F_EventScript_BarryScene_Face_Wait
+
+SlowpokeWell_B1F_EventScript_BarryScene_Face_Wait::
+	waitmovement 0
+	setspeaker SlowpokeWell_B1F_Speaker_Barry
+	msgbox SlowpokeWell_B1F_Text_Barry_Intro, MSGBOX_NPC
+	closemessage
+	goto_if_eq VAR_TEMP_1, 0, SlowpokeWell_B1F_EventScript_BarryScene_ToSlowpoke_North
+	goto_if_eq VAR_TEMP_1, 1, SlowpokeWell_B1F_EventScript_BarryScene_ToSlowpoke_West
+	goto SlowpokeWell_B1F_EventScript_BarryScene_ToSlowpoke_South
+
+SlowpokeWell_B1F_EventScript_BarryScene_ToSlowpoke_North::
+	applymovement LOCALID_SLOWPOKE_WELL_BARRY, Common_Movement_FaceDown
+	goto SlowpokeWell_B1F_EventScript_BarryScene_Throw
+
+SlowpokeWell_B1F_EventScript_BarryScene_ToSlowpoke_West::
+	applymovement LOCALID_SLOWPOKE_WELL_BARRY, Common_Movement_FaceRight
+	goto SlowpokeWell_B1F_EventScript_BarryScene_Throw
+
+SlowpokeWell_B1F_EventScript_BarryScene_ToSlowpoke_South::
+	applymovement LOCALID_SLOWPOKE_WELL_BARRY, Common_Movement_FaceUp
+	goto SlowpokeWell_B1F_EventScript_BarryScene_Throw
+
+SlowpokeWell_B1F_EventScript_BarryScene_Throw::
+	waitmovement 0
+	clearflag FLAG_HIDE_SLOWPOKE_WELL_BARRY_POKEBALL
+	addobject LOCALID_SLOWPOKE_WELL_BARRY_BALL
+	goto_if_eq VAR_TEMP_1, 0, SlowpokeWell_B1F_EventScript_BarryScene_Throw_North
+	goto_if_eq VAR_TEMP_1, 1, SlowpokeWell_B1F_EventScript_BarryScene_Throw_West
+	goto SlowpokeWell_B1F_EventScript_BarryScene_Throw_South
+
+SlowpokeWell_B1F_EventScript_BarryScene_Throw_North::
+	setobjectxy LOCALID_SLOWPOKE_WELL_BARRY_BALL, 20, 4
+	showobjectat LOCALID_SLOWPOKE_WELL_BARRY_BALL, MAP_SLOWPOKE_WELL_B1F
+	applymovement LOCALID_SLOWPOKE_WELL_BARRY_BALL, SlowpokeWell_B1F_Movement_BarryBall_ToSlowpoke_Down
+	goto SlowpokeWell_B1F_EventScript_BarryScene_Throw_Wait
+
+SlowpokeWell_B1F_EventScript_BarryScene_Throw_West::
+	setobjectxy LOCALID_SLOWPOKE_WELL_BARRY_BALL, 19, 5
+	showobjectat LOCALID_SLOWPOKE_WELL_BARRY_BALL, MAP_SLOWPOKE_WELL_B1F
+	applymovement LOCALID_SLOWPOKE_WELL_BARRY_BALL, SlowpokeWell_B1F_Movement_BarryBall_ToSlowpoke_Right
+	goto SlowpokeWell_B1F_EventScript_BarryScene_Throw_Wait
+
+SlowpokeWell_B1F_EventScript_BarryScene_Throw_South::
+	setobjectxy LOCALID_SLOWPOKE_WELL_BARRY_BALL, 20, 6
+	showobjectat LOCALID_SLOWPOKE_WELL_BARRY_BALL, MAP_SLOWPOKE_WELL_B1F
+	applymovement LOCALID_SLOWPOKE_WELL_BARRY_BALL, SlowpokeWell_B1F_Movement_BarryBall_ToSlowpoke_Up
+	goto SlowpokeWell_B1F_EventScript_BarryScene_Throw_Wait
+
+SlowpokeWell_B1F_EventScript_BarryScene_Throw_Wait::
+	waitmovement 0
+	delay 16
+	hideobjectat LOCALID_SLOWPOKE_WELL_GALAR_SLOWPOKE, MAP_SLOWPOKE_WELL_B1F
+	removeobject LOCALID_SLOWPOKE_WELL_GALAR_SLOWPOKE
+	setflag FLAG_HIDE_SLOWPOKE_WELL_SLOWPOKE
+	delay 16
+	hideobjectat LOCALID_SLOWPOKE_WELL_BARRY_BALL, MAP_SLOWPOKE_WELL_B1F
+	removeobject LOCALID_SLOWPOKE_WELL_BARRY_BALL
+	setflag FLAG_HIDE_SLOWPOKE_WELL_BARRY_POKEBALL
+	delay 16
+	setspeaker SlowpokeWell_B1F_Speaker_Barry
+	msgbox SlowpokeWell_B1F_Text_Barry_Exit, MSGBOX_NPC
+	closemessage
+	goto_if_eq VAR_TEMP_1, 0, SlowpokeWell_B1F_EventScript_BarryScene_RunOff_North
+	goto_if_eq VAR_TEMP_1, 1, SlowpokeWell_B1F_EventScript_BarryScene_RunOff_West
+	goto SlowpokeWell_B1F_EventScript_BarryScene_RunOff_South
+
+SlowpokeWell_B1F_EventScript_BarryScene_RunOff_North::
+	applymovement LOCALID_SLOWPOKE_WELL_BARRY, SlowpokeWell_B1F_Movement_Barry_RunOff_North
+	goto SlowpokeWell_B1F_EventScript_BarryScene_RunOff_Wait
+
+SlowpokeWell_B1F_EventScript_BarryScene_RunOff_West::
+	applymovement LOCALID_SLOWPOKE_WELL_BARRY, SlowpokeWell_B1F_Movement_Barry_RunOff_West
+	goto SlowpokeWell_B1F_EventScript_BarryScene_RunOff_Wait
+
+SlowpokeWell_B1F_EventScript_BarryScene_RunOff_South::
+	applymovement LOCALID_SLOWPOKE_WELL_BARRY, SlowpokeWell_B1F_Movement_Barry_RunOff_South
+	goto SlowpokeWell_B1F_EventScript_BarryScene_RunOff_Wait
+
+SlowpokeWell_B1F_EventScript_BarryScene_RunOff_Wait::
+	waitmovement 0
+	hideobjectat LOCALID_SLOWPOKE_WELL_BARRY, MAP_SLOWPOKE_WELL_B1F
+	removeobject LOCALID_SLOWPOKE_WELL_BARRY
+	setflag FLAG_HIDE_SLOWPOKE_WELL_BARRY
+	applymovement LOCALID_PLAYER, SlowpokeWell_B1F_Movement_PlayerUnlockFacing
+	waitmovement 0
+	special Special_OverworldWildEncounters_OnReturnToField
+SlowpokeWell_B1F_EventScript_BarryScene_Core_Done::
+	return
+
 SlowpokeWell_B1F_EventScript_Bryony_After::
 	special Special_ClearPlayerFacingOverride
 	applymovement LOCALID_PLAYER, SlowpokeWell_B1F_Movement_PlayerUnlockFacing
@@ -311,3 +724,22 @@ SlowpokeWell_B1F_Text_Ethan_Call:
 	.string "she is okay, its been a while\l"
 	.string "since I visited.\p"
 	.string "Thanks!$"
+
+SlowpokeWell_B1F_Text_Barry_Intro:
+	.string "Ouch! Bump into me again and im\n"
+	.string "fining you 1 million Pokedollars!\p"
+	.string "Oh, are you {PLAYER} by chance?\n"
+	.string "Nice! good to meet you, I'm Barry.\p"
+	.string "Sorry but i'm in a big rush, I was\n"
+	.string "supposed to come by the well and\l"
+	.string "bring a few Galarian Slowpoke back\l"
+	.string "to old man ROWAN.\p"
+	.string "I ended up stopping at an old friends.\n"
+	.string "Turns out we both no different\l"
+	.string "versions of each other. Insane!!\p"
+	.string "Anyway, is this the only Galarian\n"
+	.string "Slowpoke here?? Makes my life easier.$"
+
+SlowpokeWell_B1F_Text_Barry_Exit:
+	.string "Easy peasy! I'm off {PLAYER},\n"
+	.string "catch you later!$"

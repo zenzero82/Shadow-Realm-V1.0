@@ -67,3 +67,27 @@ Route31_Text_SignRoute31:
 
 Route31_Text_SignDarkCave:
 	.string "DARK CAVE AHEAD.$"
+
+Route31_EventScript_DarkCaveSign::
+	lock
+	msgbox Route31_Text_DarkCaveSign, MSGBOX_SIGN
+	closemessage
+	release
+	end
+
+
+Route31_EventScript_Sign::
+	lock
+	msgbox Route31_Text_Sign, MSGBOX_SIGN
+	closemessage
+	release
+	end
+
+
+Route31_Text_Sign:
+	.string "ROUTE 31\p"
+	.string "VIOLET CITY - CHERRYGROVE CITY$"
+
+
+Route31_Text_DarkCaveSign:
+	.string "DARK CAVE$"

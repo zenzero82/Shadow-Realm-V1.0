@@ -9,6 +9,7 @@
 #include "diploma.h"
 #include "event_data.h"
 #include "event_object_movement.h"
+#include "gimmighoul_signpost.h"
 #include "fieldmap.h"
 #include "field_camera.h"
 #include "field_effect.h"
@@ -29,6 +30,7 @@
 #include "menu.h"
 #include "money.h"
 #include "overworld.h"
+#include "overworld_wild_encounters.h"
 #include "party_menu.h"
 #include "pokeblock.h"
 #include "pokedex.h"
@@ -186,6 +188,24 @@ static const u8 sText_99TimesPlus[] = _("99 times +");
 static const u8 sText_1MinutePlus[] = _("1 minute +");
 static const u8 sText_SpaceSeconds[] = _(" seconds");
 static const u8 sText_SpaceTimes[] = _(" time(s)");
+
+u16 SuppressGimmighoulSignpost(void)
+{
+    gSuppressGimmighoulSignpost = TRUE;
+    return 0;
+}
+
+u16 TryClaimGimmighoulSignpost(void)
+{
+    u16 index;
+
+    if (!GimmighoulSignpost_ShouldTrigger(gLastSignpost.mapGroup, gLastSignpost.mapNum,
+                                          gLastSignpost.x, gLastSignpost.y, &index))
+        return FALSE;
+
+    GimmighoulSignpost_MarkUsed(index);
+    return TRUE;
+}
 
 void Special_ShowDiploma(void)
 {
@@ -991,6 +1011,14 @@ void CableCarWarp(void)
 void SetHiddenItemFlag(void)
 {
     FlagSet(gSpecialVar_0x8004);
+}
+
+void SetLastTalkedObjectFlag(void)
+{
+    u16 flagId = GetObjectEventFlagIdByLocalIdAndMap(gSpecialVar_LastTalked, gSaveBlock1Ptr->location.mapNum, gSaveBlock1Ptr->location.mapGroup);
+
+    if (flagId != 0)
+        FlagSet(flagId);
 }
 
 u16 GetWeekCount(void)
@@ -2911,6 +2939,16 @@ void ShowScrollableMultichoice(void)
         task->tKeepOpenAfterSelect = FALSE;
         task->tTaskId = taskId;
         break;
+    case SCROLL_MULTI_ROUTE2_GUIDE:
+        task->tMaxItemsOnScreen = 3;
+        task->tNumItems = 3;
+        task->tLeft = 1;
+        task->tTop = 1;
+        task->tWidth = 12;
+        task->tHeight = 6;
+        task->tKeepOpenAfterSelect = FALSE;
+        task->tTaskId = taskId;
+        break;
     default:
         gSpecialVar_Result = MULTI_B_PRESSED;
         DestroyTask(taskId);
@@ -3071,6 +3109,12 @@ static const u8 *const sScrollableMultichoiceOptions[][MAX_SCROLL_MULTI_LENGTH] 
         gText_Underpowered,
         gText_WhenInDanger,
         gText_Exit
+    },
+    [SCROLL_MULTI_ROUTE2_GUIDE] =
+    {
+        COMPOUND_STRING("Dexnav"),
+        COMPOUND_STRING("EV/IV"),
+        COMPOUND_STRING("Pokeball Swap")
     }
 };
 
@@ -4888,6 +4932,12 @@ void Special_Kukui_ReturnShadowMeowth(void)
     ZeroMonData(&gSaveBlock1Ptr->kukuiShadowMon);
     gSaveBlock1Ptr->kukuiShadowMonActive = FALSE;
     gSpecialVar_Result = result;
+}
+
+u16 Special_OverworldWildEncounters_OnReturnToField(void)
+{
+    OverworldWildEncounters_OnReturnToField();
+    return 0;
 }
 
 void UseBlankMessageToCancelPokemonPic(void)

@@ -1,6 +1,7 @@
 AzaleaTown_KurtsHouse_MapScripts::
 	map_script MAP_SCRIPT_ON_LOAD, AzaleaTown_KurtsHouse_OnLoad
 	map_script MAP_SCRIPT_ON_TRANSITION, AzaleaTown_KurtsHouse_OnTransition
+	map_script MAP_SCRIPT_ON_RESUME, AzaleaTown_KurtsHouse_OnResume
 	.byte 0
 
 .set LOCALID_KURT, 1
@@ -18,6 +19,10 @@ AzaleaTown_KurtsHouse_OnTransition::
 AzaleaTown_KurtsHouse_OnTransition_HideSkarmory:
 	hideobjectat LOCALID_SKARMORY, MAP_AZALEA_TOWN_KURTS_HOUSE
 	removeobject LOCALID_SKARMORY
+	end
+
+AzaleaTown_KurtsHouse_OnResume:
+	call_if_set FLAG_SYS_CTRL_OBJ_DELETE, AzaleaTown_KurtsHouse_EventScript_TryRemoveSkarmory
 	end
 
 AzaleaTown_KurtsHouse_OnTransition_MarauderDone:
@@ -110,6 +115,7 @@ AzaleaTown_KurtsHouse_EventScript_MarauderScene::
 	waitmovement 0
 	playbgm MUS_HG_ENCOUNTER_ROCKET, FALSE
 	setspeaker AzaleaTown_KurtsHouse_Speaker_IronMask
+	setflag FLAG_SYS_CTRL_OBJ_DELETE
 	trainerbattle_single TRAINER_KURTS_HOUSE_IRONMASK, AzaleaTown_KurtsHouse_Text_IronMask_Intro, AzaleaTown_KurtsHouse_Text_IronMask_Defeat, AzaleaTown_KurtsHouse_EventScript_Marauder_After
 	end
 
@@ -118,6 +124,7 @@ AzaleaTown_KurtsHouse_EventScript_MarauderScene_Done::
 
 AzaleaTown_KurtsHouse_EventScript_Marauder_After::
 	specialvar VAR_RESULT, GetBattleOutcome
+	clearflag FLAG_SYS_CTRL_OBJ_DELETE
 	goto_if_ne VAR_RESULT, B_OUTCOME_WON, AzaleaTown_KurtsHouse_EventScript_MarauderScene_Done
 	setflag FLAG_HIDE_KURTS_HOUSE_SKARMORY
 	hideobjectat LOCALID_SKARMORY, MAP_AZALEA_TOWN_KURTS_HOUSE
@@ -174,6 +181,12 @@ AzaleaTown_KurtsHouse_EventScript_Marauder_BugsyQuestDone:
 	clearflag FLAG_HIDE_AZALEA_ILEX_OFFICER
 	releaseall
 	end
+
+AzaleaTown_KurtsHouse_EventScript_TryRemoveSkarmory::
+	specialvar VAR_RESULT, GetBattleOutcome
+	goto_if_ne VAR_RESULT, B_OUTCOME_WON, Common_EventScript_NopReturn
+	removeobject LOCALID_SKARMORY
+	return
 
 AzaleaTown_KurtsHouse_Text_IronMask_Intro:
 	.string "Who are you?\p"

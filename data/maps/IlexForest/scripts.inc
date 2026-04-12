@@ -2,6 +2,7 @@ IlexForest_MapScripts::
 	map_script MAP_SCRIPT_ON_TRANSITION, RoamingHunter_OnMapLoad
 	map_script MAP_SCRIPT_ON_TRANSITION, IlexForest_OnTransition
 	map_script MAP_SCRIPT_ON_LOAD, IlexForest_OnLoad
+	map_script MAP_SCRIPT_ON_RESUME, IlexForest_OnResume
 	map_script MAP_SCRIPT_ON_FRAME_TABLE, IlexForest_OnFrame
 	.byte 0
 
@@ -24,6 +25,10 @@ IlexForest_OnLoad:
 IlexForest_OnLoad_SceneDone:
 	setvar VAR_TEMP_0, 1
 	setvar VAR_TEMP_1, 0
+	end
+
+IlexForest_OnResume:
+	call_if_set FLAG_SYS_CTRL_OBJ_DELETE, IlexForest_EventScript_TryRemoveShadowMeowth
 	end
 
 IlexForest_OnFrame::
@@ -52,20 +57,26 @@ IlexForest_Speaker_Jessie:
 IlexForest_Speaker_James:
 	.string "JAMES$"
 
+IlexForest_Speaker_Birch:
+	.string "BIRCH$"
+
 @ =========================================================
 @ TRAINERS
 @ =========================================================
 
 IlexForest_EventScript_JJ_Talk::
 	setspeaker IlexForest_Speaker_JJ
+	setflag FLAG_SYS_CTRL_OBJ_DELETE
 	trainerbattle_single TRAINER_JJ_ILEX, IlexForest_Text_JJ_Intro, IlexForest_Text_JJ_Defeat, IlexForest_EventScript_JJ_After
 	end
 
 IlexForest_EventScript_JJ_After::
+	clearflag FLAG_SYS_CTRL_OBJ_DELETE
 	setspeaker IlexForest_Speaker_JJ
 	msgbox IlexForest_Text_JJ_After, MSGBOX_NPC
 	closemessage
 	fadescreenswapbuffers FADE_TO_BLACK
+	setflag FLAG_HIDE_AZALEA_ILEX_OFFICER
 	setflag FLAG_HIDE_ILEX_JJ_GROUP
 	removeobject LOCALID_ILEX_JESSIE
 	removeobject LOCALID_ILEX_JAMES
@@ -77,7 +88,70 @@ IlexForest_EventScript_JJ_After::
 	removeobject LOCALID_ILEX_ROCKET_M3
 	removeobject LOCALID_ILEX_ROCKET_F3
 	fadescreenswapbuffers FADE_FROM_BLACK
+	call IlexForest_EventScript_TryBirchCall
 	release
+	end
+
+IlexForest_EventScript_TryRemoveShadowMeowth::
+	specialvar VAR_RESULT, GetBattleOutcome
+	goto_if_ne VAR_RESULT, B_OUTCOME_WON, Common_EventScript_NopReturn
+	removeobject LOCALID_ILEX_SHADOW_MEOWTH
+	return
+
+IlexForest_EventScript_BirchCallAfterJJ::
+	goto_if_set FLAG_ILEX_BIRCH_CALL_DONE, IlexForest_EventScript_BirchCallAfterJJ_Done
+	goto_if_unset FLAG_HIDE_ILEX_JJ_GROUP, IlexForest_EventScript_BirchCallAfterJJ_KeepChecking
+	special StorePlayerCoordsInVars
+	compare VAR_TEMP_5, 0
+	goto_if_eq IlexForest_EventScript_BirchCallAfterJJ_InitCoords
+	compare VAR_0x8004, VAR_TEMP_3
+	goto_if_eq IlexForest_EventScript_BirchCallAfterJJ_CheckY
+	goto IlexForest_EventScript_BirchCallAfterJJ_Start
+IlexForest_EventScript_BirchCallAfterJJ_CheckY::
+	compare VAR_0x8005, VAR_TEMP_4
+	goto_if_eq IlexForest_EventScript_BirchCallAfterJJ_KeepChecking
+	goto IlexForest_EventScript_BirchCallAfterJJ_Start
+IlexForest_EventScript_BirchCallAfterJJ_InitCoords::
+	copyvar VAR_TEMP_3, VAR_0x8004
+	copyvar VAR_TEMP_4, VAR_0x8005
+	setvar VAR_TEMP_5, 1
+	end
+IlexForest_EventScript_BirchCallAfterJJ_KeepChecking::
+	setvar VAR_TEMP_2, 0
+	end
+IlexForest_EventScript_BirchCallAfterJJ_Start::
+	lockall
+	call IlexForest_EventScript_TryBirchCall
+	releaseall
+IlexForest_EventScript_BirchCallAfterJJ_Done::
+	setvar VAR_TEMP_2, 1
+	end
+
+IlexForest_EventScript_TryBirchCall::
+	goto_if_set FLAG_ILEX_BIRCH_CALL_DONE, IlexForest_EventScript_TryBirchCall_Done
+	setflag FLAG_ILEX_BIRCH_CALL_DONE
+	setspeaker IlexForest_Speaker_Birch
+	pokenavcall IlexForest_Text_Birch_Call
+	waitmessage
+	closemessage
+	setflag FLAG_QUEST_BACK_TO_HQ_STARTED
+	call QuestJournal_EventScript_NewQuestAlert
+IlexForest_EventScript_TryBirchCall_Done::
+	end
+
+IlexForest_EventScript_ShrineSign::
+	msgbox IlexForest_Text_ShrineSign, MSGBOX_SIGN
+	goto_if_set FLAG_ITEM_ILEX_FOREST_RELIC_TABLET, IlexForest_EventScript_ShrineSign_Done
+	msgbox IlexForest_Text_ShrinePrompt, MSGBOX_YESNO
+	goto_if_eq VAR_RESULT, NO, IlexForest_EventScript_ShrineSign_No
+	giveitem ITEM_RELIC_TABLET
+	goto_if_eq VAR_RESULT, 0, Common_EventScript_ShowBagIsFull
+	setflag FLAG_ITEM_ILEX_FOREST_RELIC_TABLET
+	closemessage
+	goto IlexForest_EventScript_ShrineSign_Done
+IlexForest_EventScript_ShrineSign_No::
+	closemessage
+IlexForest_EventScript_ShrineSign_Done::
 	end
 
 IlexForest_EventScript_RocketGrunt_F1::
@@ -204,6 +278,7 @@ IlexForest_EventScript_CharonScene::
 	setspeaker IlexForest_Speaker_Jessie
 	msgbox IlexForest_Text_Jessie_Challenge, MSGBOX_DEFAULT
 	closemessage
+	setflag FLAG_SYS_CTRL_OBJ_DELETE
 	trainerbattle_single TRAINER_JJ_ILEX, gText_EmptyString2, IlexForest_Text_JJ_Defeat, IlexForest_EventScript_JJ_After
 	end
 
@@ -298,3 +373,74 @@ IlexForest_Text_Jessie_Challenge:
 	.string "For what we had to do to MEOWTH,\n"
 	.string "we will make sure happens to all of\l"
 	.string "your POKéMON!$"
+
+IlexForest_Text_Birch_Call:
+	.string "Hey did you find CELEBI?\p"
+	.string "... ...\p"
+	.string "WHAT?! you're saying CIPHER has\n"
+	.string "captured it??\p"
+	.string "This is not good. Not good at all.\n"
+	.string "We need to strategize. I'm going to\l"
+	.string "pull you back to the lab.\p"
+	.string "... ...\p"
+	.string "Uh the machine is not working!\n"
+	.string "Could it be that CELEBI has been\l"
+	.string "somehow lending its power even when\l"
+	.string "it wasn't here??\p"
+	.string "This is so bad, {PLAYER} can you\n"
+	.string "please try to find another way\l"
+	.string "back to the lab?\p"
+	.string "I hate to send you back to New Bark\n"
+	.string "but perhaps you could take the long\l"
+	.string "road back. Or if you have a POKéMON\l"
+	.string "that can fly maybe the trip won't\l"
+	.string "be so bad...\p"
+	.string "I don't know I'm scrambling right now.\p"
+	.string "Please try to find a way back\n"
+	.string "as fast as you can.$"
+
+IlexForest_Text_ShrineSign:
+	.string "ILEX FOREST SHRINE...\p"
+	.string "It's in honor of the forest's\n"
+	.string "protector...$"
+
+IlexForest_Text_ShrinePrompt:
+	.string "It seems like there is something\n"
+	.string "inside of the shrine.\p"
+	.string "Do you want to reach in and\n"
+	.string "grab it?$"
+
+IlexForest_EventScript_Shrine::
+	lock
+	goto_if_eq VAR_AZALEA_TOWN_STATE, 9, IlexForest_EventScript_Celebi_Event
+	msgbox IlexForest_Text_Shrine, MSGBOX_DEFAULT
+	closemessage
+	release
+	end
+
+IlexForest_EventScript_Celebi_Event::
+	msgbox IlexForest_Text_Shrine, MSGBOX_DEFAULT
+	closemessage
+	release
+	end
+
+
+IlexForest_EventScript_Sign::
+	lock
+	msgbox IlexForest_Text_Signpost MSGBOX_SIGN
+	closemessage
+	release
+	goto EventScript_GimmighoulSignpost
+
+
+IlexForest_Text_Signpost:
+	.string "ILEX FOREST is so overgrown with\n"
+	.string "trees that you can't see the sky.\p"
+	.string "Please watch out for items that may\n"
+	.string "have been dropped.$"
+
+
+IlexForest_Text_Shrine:
+	.string "ILEX FOREST SHRINE…\p"
+	.string "It's in honor of the forest's\n"
+	.string "protector…$"

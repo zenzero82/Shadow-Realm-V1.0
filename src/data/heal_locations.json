@@ -269,6 +269,30 @@
       "map": "MAP_ROUTE32",
       "x": 25,
       "y": 85
+    },
+    {
+      "id": "HEAL_LOCATION_ROUTE26_NORTH",
+      "map": "MAP_ROUTE26_NORTH",
+      "x": 12,
+      "y": 6
+    },
+    {
+      "id": "HEAL_LOCATION_CIANWOOD_CITY",
+      "map": "MAP_CIANWOOD_CITY",
+      "x": 31,
+      "y": 45
+    },
+    {
+      "id": "HEAL_LOCATION_INDIGO_PLATEAU",
+      "map": "MAP_INDIGO_PLATEAU",
+      "x": 11,
+      "y": 6
+    },
+    {
+      "id": "HEAL_LOCATION_LAKE_OF_RAGE",
+      "map": "MAP_LAKE_OF_RAGE",
+      "x": 39,
+      "y": 41
     }
   ]
 }

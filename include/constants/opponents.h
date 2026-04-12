@@ -158,13 +158,24 @@
 #define TRAINER_ILEX_ROCKET_GRUNT_M3     151
 #define TRAINER_ILEX_ROCKET_GRUNT_F3     152
 #define TRAINER_ILEX_BUG_CATCHER         153
+#define TRAINER_POWERPLANT_PLASMA_1     154
+#define TRAINER_POWERPLANT_PLASMA_2     155
+#define TRAINER_POWERPLANT_PLASMA_3     156
+#define TRAINER_ZINZOLIN_POWER_PLANT    157
+#define TRAINER_CELADON_SHAUNA          158
+#define TRAINER_CELADON_TREVOR          159
+#define TRAINER_CELADON_TIERNO          160
+#define TRAINER_CELADON_SERENA          161
+#define TRAINER_CELADON_CALEM           162
+#define TRAINER_CELADON_AETHER_GRUNT_1  163
+#define TRAINER_CELADON_AETHER_GRUNT_2  164
 
 
 
 // NOTE: Because each Trainer uses a flag to determine when they are defeated, there is only space for 9 additional trainers before trainer flag space overflows
 //       More space can be made by shifting flags around in constants/flags.h or changing how trainer flags are handled
 //       MAX_TRAINERS_COUNT can be increased but will take up additional saveblock space
-#define TRAINERS_COUNT                      154
+#define TRAINERS_COUNT                      165
 #define MAX_TRAINERS_COUNT                  1000
 #define TRAINER_PARTNER(partner)           (MAX_TRAINERS_COUNT + partner)
 

@@ -9,5 +9,6 @@ extern const u32 gPokeballSelection_Gfx[];
 
 u16 GetStarterPokemon(u16 chosenStarterId);
 void CB2_ChooseStarter(void);
+bool8 StarterChoose_GetPreviewInfo(u8 selection, u32 *personality, bool8 *isShiny);
 
 #endif // GUARD_STARTER_CHOOSE_H

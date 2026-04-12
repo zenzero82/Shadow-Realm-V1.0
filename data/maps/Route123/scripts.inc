@@ -36,7 +36,7 @@ Route123_EventScript_RouteSign::
 
 Route123_EventScript_RouteSignMtPyre::
 	msgbox Route123_Text_RouteSignMtPyre, MSGBOX_SIGN
-	end
+	goto EventScript_GimmighoulSignpost
 
 Route123_EventScript_BerryMastersHouseSign::
 	msgbox Route123_Text_BerryMastersHouse, MSGBOX_SIGN
@@ -195,5 +195,4 @@ Route123_Text_RouteSignMtPyre:
 
 Route123_Text_BerryMastersHouse:
 	.string "BERRY MASTER'S HOUSE$"
-
 

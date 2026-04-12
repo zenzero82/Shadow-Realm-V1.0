@@ -1,2 +1,7 @@
 SafariZoneGate_SafariZoneEntrance_MapScripts::
+	map_script MAP_SCRIPT_ON_TRANSITION, SafariZoneGate_SafariZoneEntrance_OnTransition
 	.byte 0
+
+SafariZoneGate_SafariZoneEntrance_OnTransition::
+	setflag FLAG_VISITED_SAFARI_ZONE_GATE_JOHTO
+	end

@@ -1150,6 +1150,12 @@ void ItemUseOutOfBattle_TimeFlute(u8 taskId)
     SetUpItemUseCallback(taskId);
 }
 
+void ItemUseOutOfBattle_RelicTablet(u8 taskId)
+{
+    gItemUseCB = ItemUseCB_RelicTablet;
+    SetUpItemUseCallback(taskId);
+}
+
 static u32 GetBallThrowableState(void)
 {
     if (IsBattlerAlive(GetBattlerAtPosition(B_POSITION_OPPONENT_LEFT))

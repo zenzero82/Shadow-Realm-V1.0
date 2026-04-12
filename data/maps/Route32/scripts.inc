@@ -1,5 +1,13 @@
 Route32_MapScripts::
+	map_script MAP_SCRIPT_ON_TRANSITION, Route32_OnTransition
 	.byte 0
+
+Route32_OnTransition:
+	checkflag FLAG_ILEX_BIRCH_CALL_DONE
+	goto_if_eq VAR_RESULT, FALSE, Route32_OnTransition_Done
+	setflag FLAG_HIDE_ROUTE32_AQUA_GRUNT
+Route32_OnTransition_Done:
+	end
 
 @ =========================================================
 @ SPEAKER DEFINITIONS (Namebox)
@@ -256,3 +264,41 @@ Route32_Text_SignRoute32:
 
 Route32_Text_SignUnionCave:
 	.string "UNION CAVE AHEAD.$"
+
+Route32_EventScript_Sign1::
+	lock
+	msgbox Route32_Text_Sign1, MSGBOX_SIGN
+	closemessage
+	release
+	end
+
+
+Route32_EventScript_Sign2::
+	lock
+	msgbox Route32_Text_Sign2, MSGBOX_SIGN
+	closemessage
+	release
+	end
+
+
+Route32_EventScript_Sign3::
+	lock
+	msgbox Route32_Text_Sign3, MSGBOX_SIGN
+	closemessage
+	release
+	end
+
+
+Route32_Text_Sign1:
+	.string "ROUTE 32\p"
+	.string "VIOLET CITY - AZALEA TOWN$"
+
+
+Route32_Text_Sign2:
+	.string "RUINS OF ALPH\n"
+	.string "EAST ENTRANCE$"
+
+
+Route32_Text_Sign3:
+	.string "UNION CAVE\n"
+	.string "AHEAD$"

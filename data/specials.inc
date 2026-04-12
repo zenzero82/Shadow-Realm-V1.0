@@ -170,6 +170,7 @@ gSpecials::
 	def_special GetPlayerBigGuyGirlString
 	def_special GetRivalSonDaughterString
 	def_special SetHiddenItemFlag
+	def_special SetLastTalkedObjectFlag
 	def_special CableCarWarp
 	def_special CableCar
 	def_special Overworld_PlaySpecialMapMusic
@@ -272,6 +273,8 @@ gSpecials::
 	def_special BedroomPC
 	def_special PlayerPC
 	def_special FieldShowRegionMap
+	def_special SuppressGimmighoulSignpost
+	def_special TryClaimGimmighoulSignpost
 	def_special GetInGameTradeSpeciesInfo
 	def_special CreateInGameTradePokemon
 	def_special DoInGameTradeScene
@@ -304,6 +307,7 @@ gSpecials::
 	def_special Special_HoopaRingShrinkDespawn
 	def_special Special_LockPlayerFacingDown
 	def_special Special_ClearPlayerFacingOverride
+	def_special Special_OverworldWildEncounters_OnReturnToField
 	def_special Special_ObjectEventAbsorb
 	def_special Special_ObjectEventEmerge
 	def_special SetObjectEventPortalAffineAnims

@@ -1,7 +1,7 @@
 BellchimeTrail_MapScripts::
 	.byte 0
 
-Route7_EventScript_Door::
+BellchimeTrail_EventScript_Door::
 	msgbox BellchimeTrail_Text_Door, MSGBOX_SIGN
 	end
 

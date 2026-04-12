@@ -6395,6 +6395,15 @@ const struct SpeciesInfo gSpeciesInfoGen9[] =
         .pokemonJumpType = PKMN_JUMP_TYPE_FAST,
         SHADOW(-1, -4, SHADOW_SIZE_S)
         FOOTPRINT(GimmighoulRoaming)
+        OVERWORLD(
+            sPicTable_GimmighoulRoaming,
+            SIZE_32x32,
+            SHADOW_SIZE_S,
+            TRACKS_NONE,
+            sAnimTable_Following,
+            gOverworldPalette_GimmighoulRoaming,
+            gShinyOverworldPalette_GimmighoulRoaming
+        )
         .levelUpLearnset = sGimmighoulLevelUpLearnset,
         .teachableLearnset = sGimmighoulTeachableLearnset,
         .formSpeciesIdTable = sGimmighoulFormSpeciesIdTable,

@@ -62,3 +62,40 @@ Route30_Text_SignTrainerTips:
 
 Route30_Text_SignMrPokemon:
 	.string "MR. POKEMON'S HOUSE$"
+
+Route30_EventScript_Sign::
+	lock
+	msgbox Route30_Text_Sign, MSGBOX_SIGN
+	closemessage
+	release
+	end
+
+
+Route30_EventScript_TrainerTips::
+	lock
+	msgbox Route30_Text_TrainerTips, MSGBOX_SIGN
+	closemessage
+	release
+	end	
+
+
+Route30_EventScript_Mailbox::
+	msgbox Route30_Text_Mailbox, MSGBOX_SIGN
+	end
+
+
+Route30_Text_Mailbox:
+	.string "MR.POKéMON's House$"
+
+
+Route30_Text_Sign:
+	.string "ROUTE 30\p"
+	.string "VIOLET CITY - CHERRYGROVE CITY$"
+
+
+Route30_Text_TrainerTips:
+	.string "TRAINER TIPS\p"
+	.string "No stealing other people's\n"
+	.string "POKéMON!\p"
+	.string "POKé BALLS are to be thrown\n"
+	.string "only at wild POKéMON!$"

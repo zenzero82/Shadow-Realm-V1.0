@@ -1,2 +1,110 @@
 route10_powerplantback_MapScripts::
 	.byte 0
+
+route10_powerplantback_EventScript_PlasmaGrunt3::
+	setspeaker route10_powerplantback_Speaker_PlasmaGrunt
+	trainerbattle_single TRAINER_POWERPLANT_PLASMA_3, route10_powerplantback_Text_PlasmaGrunt3_Intro, route10_powerplantback_Text_PlasmaGrunt3_Defeat, route10_powerplantback_EventScript_PlasmaGrunt3_After
+	goto route10_powerplantback_EventScript_PlasmaGrunt3_After
+	end
+
+route10_powerplantback_EventScript_PlasmaGrunt3_After::
+	settrainerflag TRAINER_POWERPLANT_PLASMA_3
+	setspeaker route10_powerplantback_Speaker_PlasmaGrunt
+	msgbox route10_powerplantback_Text_PlasmaGrunt3_After, MSGBOX_DEFAULT
+	releaseall
+	end
+
+route10_powerplantback_EventScript_Voltorb1::
+	lock
+	faceplayer
+	setwildbattle SPECIES_VOLTORB, 30
+	waitse
+	playmoncry SPECIES_VOLTORB, CRY_MODE_NORMAL
+	delay 40
+	waitmoncry
+	setflag FLAG_SYS_CTRL_OBJ_DELETE
+	dowildbattle
+	clearflag FLAG_SYS_CTRL_OBJ_DELETE
+	specialvar VAR_RESULT, GetBattleOutcome
+	goto_if_eq VAR_RESULT, B_OUTCOME_WON, route10_powerplantback_EventScript_Voltorb1_Done
+	goto_if_eq VAR_RESULT, B_OUTCOME_RAN, route10_powerplantback_EventScript_Voltorb1_Done
+	goto_if_eq VAR_RESULT, B_OUTCOME_PLAYER_TELEPORTED, route10_powerplantback_EventScript_Voltorb1_Done
+route10_powerplantback_EventScript_Voltorb1_Done::
+	setflag FLAG_HIDE_POWERPLANTBACK_VOLTORB_1
+	goto Common_EventScript_RemoveStaticPokemon
+	end
+
+route10_powerplantback_EventScript_Voltorb2::
+	lock
+	faceplayer
+	setwildbattle SPECIES_VOLTORB, 30
+	waitse
+	playmoncry SPECIES_VOLTORB, CRY_MODE_NORMAL
+	delay 40
+	waitmoncry
+	setflag FLAG_SYS_CTRL_OBJ_DELETE
+	dowildbattle
+	clearflag FLAG_SYS_CTRL_OBJ_DELETE
+	specialvar VAR_RESULT, GetBattleOutcome
+	goto_if_eq VAR_RESULT, B_OUTCOME_WON, route10_powerplantback_EventScript_Voltorb2_Done
+	goto_if_eq VAR_RESULT, B_OUTCOME_RAN, route10_powerplantback_EventScript_Voltorb2_Done
+	goto_if_eq VAR_RESULT, B_OUTCOME_PLAYER_TELEPORTED, route10_powerplantback_EventScript_Voltorb2_Done
+route10_powerplantback_EventScript_Voltorb2_Done::
+	setflag FLAG_HIDE_POWERPLANTBACK_VOLTORB_2
+	goto Common_EventScript_RemoveStaticPokemon
+	end
+
+route10_powerplantback_EventScript_Voltorb3::
+	lock
+	faceplayer
+	setwildbattle SPECIES_VOLTORB, 30
+	waitse
+	playmoncry SPECIES_VOLTORB, CRY_MODE_NORMAL
+	delay 40
+	waitmoncry
+	setflag FLAG_SYS_CTRL_OBJ_DELETE
+	dowildbattle
+	clearflag FLAG_SYS_CTRL_OBJ_DELETE
+	specialvar VAR_RESULT, GetBattleOutcome
+	goto_if_eq VAR_RESULT, B_OUTCOME_WON, route10_powerplantback_EventScript_Voltorb3_Done
+	goto_if_eq VAR_RESULT, B_OUTCOME_RAN, route10_powerplantback_EventScript_Voltorb3_Done
+	goto_if_eq VAR_RESULT, B_OUTCOME_PLAYER_TELEPORTED, route10_powerplantback_EventScript_Voltorb3_Done
+route10_powerplantback_EventScript_Voltorb3_Done::
+	setflag FLAG_HIDE_POWERPLANTBACK_VOLTORB_3
+	goto Common_EventScript_RemoveStaticPokemon
+	end
+
+route10_powerplantback_EventScript_Voltorb4::
+	lock
+	faceplayer
+	setwildbattle SPECIES_VOLTORB, 30
+	waitse
+	playmoncry SPECIES_VOLTORB, CRY_MODE_NORMAL
+	delay 40
+	waitmoncry
+	setflag FLAG_SYS_CTRL_OBJ_DELETE
+	dowildbattle
+	clearflag FLAG_SYS_CTRL_OBJ_DELETE
+	specialvar VAR_RESULT, GetBattleOutcome
+	goto_if_eq VAR_RESULT, B_OUTCOME_WON, route10_powerplantback_EventScript_Voltorb4_Done
+	goto_if_eq VAR_RESULT, B_OUTCOME_RAN, route10_powerplantback_EventScript_Voltorb4_Done
+	goto_if_eq VAR_RESULT, B_OUTCOME_PLAYER_TELEPORTED, route10_powerplantback_EventScript_Voltorb4_Done
+route10_powerplantback_EventScript_Voltorb4_Done::
+	setflag FLAG_HIDE_POWERPLANTBACK_VOLTORB_4
+	goto Common_EventScript_RemoveStaticPokemon
+	end
+
+route10_powerplantback_Text_PlasmaGrunt3_Intro:
+	.string "The generator room is secure.\l"
+	.string "ZINZOLIN's plan will succeed.$"
+
+route10_powerplantback_Text_PlasmaGrunt3_Defeat:
+	.string "No... the takeover isn't\l"
+	.string "complete!$"
+
+route10_powerplantback_Text_PlasmaGrunt3_After:
+	.string "Even without me, TEAM PLASMA\l"
+	.string "holds this plant.$"
+
+route10_powerplantback_Speaker_PlasmaGrunt:
+	.string "PLASMA GRUNT$"

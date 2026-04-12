@@ -67,3 +67,15 @@ Route29_Text_SignRoute29:
 
 Route29_Text_SignCherrygrove:
 	.string "CHERRYGROVE CITY AHEAD.$"
+
+Route29_EventScript_Sign::
+	lock
+	msgbox Route29_Text_Sign1, MSGBOX_SIGN
+	closemessage
+	release
+	end
+
+
+Route29_Text_Sign1:
+	.string "ROUTE 29\p"
+	.string "CHERRYGROVE CITY - NEW BARK TOWN$"

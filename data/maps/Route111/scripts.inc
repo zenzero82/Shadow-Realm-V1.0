@@ -370,7 +370,7 @@ Route111_EventScript_WinstrateHouseSign::
 
 Route111_EventScript_RouteSign112::
 	msgbox Route111_Text_RouteSign112, MSGBOX_SIGN
-	end
+	goto EventScript_GimmighoulSignpost
 
 Route111_EventScript_RouteSign113::
 	msgbox Route111_Text_RouteSign113, MSGBOX_SIGN
@@ -718,5 +718,4 @@ Route111_Text_TrainerHillSign:
 	.string "{RIGHT_ARROW} TRAINER HILL ENTRANCE\p"
 	.string "“Scale the heights, you hot-blooded\n"
 	.string "TRAINERS!”$"
-
 

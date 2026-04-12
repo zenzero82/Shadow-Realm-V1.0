@@ -1284,6 +1284,7 @@ static void LoadMonIcon(u8 anim)
     u32 personality;
     u16 species;
     bool8 isShadow;
+    bool8 isShiny;
 
     LoadMonIconPalettes();
     for (i = 0; i < gPlayerPartyCount; i++)
@@ -1291,10 +1292,11 @@ static void LoadMonIcon(u8 anim)
         species = GetMonData(&gPlayerParty[i], MON_DATA_SPECIES, NULL);
         personality = GetMonData(&gPlayerParty[i], MON_DATA_PERSONALITY, NULL);
         isShadow = GetMonData(&gPlayerParty[i], MON_DATA_IS_SHADOW, NULL);
+        isShiny = GetMonData(&gPlayerParty[i], MON_DATA_IS_SHINY, NULL);
         if (anim == 0)
-            spriteId = CreateMonIcon(species, SpriteCallbackDummy, 32 * i + 40, 88, 0, personality, isShadow);
+            spriteId = CreateMonIcon(species, SpriteCallbackDummy, 32 * i + 40, 88, 0, personality, isShiny, isShadow);
         else
-            spriteId = CreateMonIcon(species, SpriteCB_MonIcon, 32 * i + 40, 88, 0, personality, isShadow);
+            spriteId = CreateMonIcon(species, SpriteCB_MonIcon, 32 * i + 40, 88, 0, personality, isShiny, isShadow);
         StartSpriteAnim(&gSprites[spriteId], 0);
     }
 }

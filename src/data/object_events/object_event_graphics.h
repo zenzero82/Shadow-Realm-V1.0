@@ -404,6 +404,10 @@ const u32 gObjectEventPic_Noland[] = INCBIN_U32("graphics/object_events/pics/peo
 const u32 gObjectEventPic_Lucy[] = INCBIN_U32("graphics/object_events/pics/people/frontier_brains/lucy.4bpp");
 const u32 gObjectEventPic_Brandon[] = INCBIN_U32("graphics/object_events/pics/people/frontier_brains/brandon.4bpp");
 const u32 gObjectEventPic_PokeBall[] = INCBIN_U32("graphics/object_events/pics/misc/ball_poke.4bpp");
+const u32 gObjectEventPic_BallTm[] = INCBIN_U32("graphics/object_events/pics/misc/ball_tm.4bpp");
+const u32 gObjectEventPic_ZygardeCube[] = INCBIN_U32("graphics/object_events/pics/misc/zygarde_cube.4bpp");
+const u32 gObjectEventPic_LaprasSurf[] = INCBIN_U32("graphics/object_events/pics/misc/lapras_surf.4bpp");
+const u32 gObjectEventPic_TowerBeam[] = INCBIN_U32("graphics/object_events/pics/misc/tower_beam.4bpp");
 
 
 
@@ -416,6 +420,10 @@ const u16 gObjectEventPaletteLight2[] = INCBIN_U16("graphics/object_events/palet
 const u16 gObjectEventPaletteEmotes[] = INCBIN_U16("graphics/misc/emotes.gbapal");
 const u16 gObjectEventPaletteEmoteIcons[] = INCBIN_U16("graphics/field_effects/palettes/emotion_icons.gbapal");
 const u16 gObjectEventPaletteNeonLight[] = INCBIN_U16("graphics/object_events/palettes/neon_light.gbapal");
+const u16 gObjectEventPal_BallTm[] = INCBIN_U16("graphics/object_events/pics/misc/ball_tm.gbapal");
+const u16 gObjectEventPal_ZygardeCube[] = INCBIN_U16("graphics/object_events/pics/misc/zygarde_cube.gbapal");
+const u16 gObjectEventPal_LaprasSurf[] = INCBIN_U16("graphics/object_events/pics/misc/lapras_surf.gbapal");
+const u16 gObjectEventPal_TowerBeam[] = INCBIN_U16("graphics/object_events/pics/misc/tower_beam.gbapal");
 
 #if OW_FOLLOWERS_POKEBALLS
 const u32 gObjectEventPic_MasterBall[] = INCBIN_U32("graphics/object_events/pics/misc/ball_master.4bpp");
@@ -1001,6 +1009,15 @@ const u16 gObjectEventPal_SkullGruntMGen7[] = INCBIN_U16("graphics/object_events
 
 const u32 gObjectEventPic_SkullGruntFGen7[] = INCBIN_U32("graphics/object_events/pics/gen7/skull_grunt_f_gen7.4bpp");
 const u16 gObjectEventPal_SkullGruntFGen7[] = INCBIN_U16("graphics/object_events/pics/gen7/skull_grunt_f_gen7.gbapal");
+
+const u32 gObjectEventPic_AetherGruntMGen7[] = INCBIN_U32("graphics/object_events/pics/gen7/aethergruntm.4bpp");
+const u16 gObjectEventPal_AetherGruntMGen7[] = INCBIN_U16("graphics/object_events/pics/gen7/aethergruntm.gbapal");
+
+const u32 gObjectEventPic_AetherGruntFGen7[] = INCBIN_U32("graphics/object_events/pics/gen7/aethergruntf.4bpp");
+const u16 gObjectEventPal_AetherGruntFGen7[] = INCBIN_U16("graphics/object_events/pics/gen7/aethergruntf.gbapal");
+
+const u32 gObjectEventPic_FabaGen7[] = INCBIN_U32("graphics/object_events/pics/gen7/faba.4bpp");
+const u16 gObjectEventPal_FabaGen7[] = INCBIN_U16("graphics/object_events/pics/gen7/faba.gbapal");
 
 
 //Galar

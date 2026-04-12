@@ -961,6 +961,15 @@ const u16 gItemIconPalette_Audinite[] = INCBIN_U16("graphics/items/icon_palettes
 const u32 gItemIcon_Diancite[] = INCBIN_U32("graphics/items/icons/diancite.4bpp.lz");
 const u16 gItemIconPalette_Diancite[] = INCBIN_U16("graphics/items/icon_palettes/diancite.gbapal");
 
+const u32 gItemIcon_Chesnaughtite[] = INCBIN_U32("graphics/items/icons/chesnaughtite.4bpp.lz");
+const u16 gItemIconPalette_Chesnaughtite[] = INCBIN_U16("graphics/items/icon_palettes/chesnaughtite.gbapal");
+
+const u32 gItemIcon_Delphoxite[] = INCBIN_U32("graphics/items/icons/delphoxite.4bpp.lz");
+const u16 gItemIconPalette_Delphoxite[] = INCBIN_U16("graphics/items/icon_palettes/delphoxite.gbapal");
+
+const u32 gItemIcon_Greninjite[] = INCBIN_U32("graphics/items/icons/greninjite.4bpp.lz");
+const u16 gItemIconPalette_Greninjite[] = INCBIN_U16("graphics/items/icon_palettes/greninjite.gbapal");
+
 // Gems
 
 const u32 gItemIcon_NormalGem[] = INCBIN_U32("graphics/items/icons/normal_gem.4bpp.lz");
@@ -1878,6 +1887,8 @@ const u16 gItemIconPalette_PokeFlute[] = INCBIN_U16("graphics/items/icon_palette
 
 const u32 gItemIcon_TimeFlute[] = INCBIN_U32("graphics/items/icons/time_flute.4bpp.lz");
 const u16 gItemIconPalette_TimeFlute[] = INCBIN_U16("graphics/items/icon_palettes/time_flute.gbapal");
+const u32 gItemIcon_RelicTablet[] = INCBIN_U32("graphics/items/icons/relic_tablet.4bpp.lz");
+const u16 gItemIconPalette_RelicTablet[] = INCBIN_U16("graphics/items/icon_palettes/relic_tablet.gbapal");
 
 const u32 gItemIcon_FameChecker[] = INCBIN_U32("graphics/items/icons/fame_checker.4bpp.lz");
 const u16 gItemIconPalette_FameChecker[] = INCBIN_U16("graphics/items/icon_palettes/fame_checker.gbapal");

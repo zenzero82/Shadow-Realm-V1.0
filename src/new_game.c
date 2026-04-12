@@ -107,6 +107,8 @@ static void SetDefaultOptions(void)
     gSaveBlock2Ptr->optionsLevelCap = OPTIONS_LEVEL_CAP_NORMAL;
     gSaveBlock2Ptr->optionsOverworldWildEncounters = OPTIONS_OVERWORLD_WILD_OFF;
     gSaveBlock2Ptr->optionsAutoSave = OPTIONS_AUTOSAVE_OFF;
+    gSaveBlock2Ptr->optionsEvIvEditor = OPTIONS_EV_IV_EDITOR_OFF;
+    gSaveBlock2Ptr->optionsAutoRun = OPTIONS_AUTO_RUN_ON;
 }
 
 static void ClearPokedexFlags(void)

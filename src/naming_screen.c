@@ -1008,7 +1008,7 @@ static void NamingScreen_CreateMonIcon(void)
     u8 spriteId;
 
     LoadMonIconPalettes();
-    spriteId = CreateMonIcon(sNamingScreenData->monSpeciesOrPlayerGender, SpriteCallbackDummy, 0x28, 0x1A, 0, sNamingScreenData->monPersonality, sNamingScreenData->monIsShadow);
+    spriteId = CreateMonIcon(sNamingScreenData->monSpeciesOrPlayerGender, SpriteCallbackDummy, 0x28, 0x1A, 0, sNamingScreenData->monPersonality, FALSE, sNamingScreenData->monIsShadow);
     gSprites[spriteId].oam.priority = 3;
 }
 

@@ -16,7 +16,7 @@ EverGrandeCity_EventScript_CitySign::
 
 EverGrandeCity_EventScript_PokemonLeagueSign::
 	msgbox EverGrandeCity_Text_EnteringPokemonLeague, MSGBOX_SIGN
-	end
+	goto EventScript_GimmighoulSignpost
 
 EverGrandeCity_EventScript_SetVisitedEverGrande::
 	setflag FLAG_VISITED_EVER_GRANDE_CITY
@@ -34,4 +34,3 @@ EverGrandeCity_Text_CitySign:
 	.string "EVER GRANDE CITY\p"
 	.string "“The paradise of flowers, the sea,\n"
 	.string "and POKéMON.”$"
-

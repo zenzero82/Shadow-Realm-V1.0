@@ -190,3 +190,9 @@ QuestJournal_EventScript_CheckCherrygroveNPCs_Done:
 	call QuestJournal_EventScript_QuestCompleteAlert
 QuestJournal_EventScript_CheckCherrygroveNPCs_End:
 	return
+
+CherrygroveCity_Text_CitySign:
+	.string "CHERRYGROVE CITY\p"
+	.string "The City of Cute, Fragrant\n"
+	.string "Flowers$"
+

@@ -123,6 +123,7 @@ static const u8 sTileBitAttributes[NUM_METATILE_BEHAVIORS] =
     [MB_ISOLATED_HORIZONTAL_RAIL]           = TILE_FLAG_UNUSED,
     [MB_VERTICAL_RAIL]                      = TILE_FLAG_UNUSED,
     [MB_HORIZONTAL_RAIL]                    = TILE_FLAG_UNUSED,
+    [MB_CYCLING_ROAD_PULL_DOWN_GRASS]       = TILE_FLAG_UNUSED | TILE_FLAG_HAS_ENCOUNTERS,
     [MB_SIGNPOST]                           = TILE_FLAG_UNUSED,
     [MB_POKEMON_CENTER_SIGN]                = TILE_FLAG_UNUSED,
     [MB_POKEMART_SIGN]                      = TILE_FLAG_UNUSED,
@@ -182,7 +183,9 @@ bool8 MetatileBehavior_IsJumpSouth(u8 metatileBehavior)
 
 bool8 MetatileBehavior_IsPokeGrass(u8 metatileBehavior)
 {
-    if (metatileBehavior == MB_TALL_GRASS || metatileBehavior == MB_LONG_GRASS)
+    if (metatileBehavior == MB_TALL_GRASS
+     || metatileBehavior == MB_LONG_GRASS
+     || metatileBehavior == MB_CYCLING_ROAD_PULL_DOWN_GRASS)
         return TRUE;
     else
         return FALSE;
@@ -1229,6 +1232,20 @@ bool8 MetatileBehavior_IsCrackedFloor(u8 metatileBehavior)
         return TRUE;
     else
         return FALSE;
+}
+
+bool32 MetatileBehavior_IsCyclingRoadPullDownTile(u8 metatileBehavior)
+{
+    if (metatileBehavior >= MB_CYCLING_ROAD_PULL_DOWN
+     && metatileBehavior <= MB_CYCLING_ROAD_PULL_DOWN_GRASS)
+        return TRUE;
+    else
+        return FALSE;
+}
+
+bool8 MetatileBehavior_IsCyclingRoadPullDownTileGrass(u8 metatileBehavior)
+{
+    return metatileBehavior == MB_CYCLING_ROAD_PULL_DOWN_GRASS;
 }
 
 bool8 MetatileBehavior_IsMuddySlope(u8 metatileBehavior)

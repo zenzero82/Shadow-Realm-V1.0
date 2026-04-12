@@ -16,8 +16,14 @@ extern const u8 gMonIcon_PikachuFShadow[];
 #endif
 extern const u8 gMonIcon_PikachuShadow[];
 
+#define MON_ICON_BASE_PALETTE_COUNT (POKE_ICON_SHADOW_PAL_TAG - POKE_ICON_BASE_PAL_TAG)
+#define SHINY_ICON_TONE_R 450
+#define SHINY_ICON_TONE_G 390
+#define SHINY_ICON_TONE_B 120
+
 static u16 sShadowIconPaletteBuffer[16];
-static bool8 LoadShadowMonIconPalette(u16 species);
+static u16 sShinyIconPaletteBuffers[MON_ICON_BASE_PALETTE_COUNT][16];
+bool8 TryLoadShadowMonIconPalette(u16 species);
 
 struct MonIconSpriteTemplate
 {
@@ -50,14 +56,38 @@ const u8 gMonIconShadowPaletteIndex = MON_ICON_SHADOW_PALETTE_INDEX;
 // Ensure the table’s section is kept by referencing it from read-only data.
 const struct SpritePalette *const gMonIconPaletteTableRef __attribute__((used)) = gMonIconPaletteTable;
 
-static bool8 LoadShadowMonIconPalette(u16 species)
+bool8 TryLoadShadowMonIconPalette(u16 species)
 {
     const u16 *palette = GetShadowMonPalette(species);
-    if (palette == NULL)
-        return FALSE;
+    if (palette != NULL)
+    {
+        memcpy(sShadowIconPaletteBuffer, palette, sizeof(sShadowIconPaletteBuffer));
+        return TRUE;
+    }
 
-    memcpy(sShadowIconPaletteBuffer, palette, sizeof(sShadowIconPaletteBuffer));
-    return TRUE;
+    memcpy(sShadowIconPaletteBuffer, gMonIconPalette_Shadow, sizeof(sShadowIconPaletteBuffer));
+    return FALSE;
+}
+
+void LoadMonIconPaletteShinyByIndex(u8 palIndex)
+{
+    struct SpritePalette palette;
+    u8 slot;
+
+    if (palIndex >= MON_ICON_BASE_PALETTE_COUNT)
+        palIndex = 0;
+
+    memcpy(sShinyIconPaletteBuffers[palIndex], gMonIconPalettes[palIndex], sizeof(sShinyIconPaletteBuffers[palIndex]));
+    TintPalette_CustomTone(sShinyIconPaletteBuffers[palIndex], 16, SHINY_ICON_TONE_R, SHINY_ICON_TONE_G, SHINY_ICON_TONE_B);
+
+    palette.data = sShinyIconPaletteBuffers[palIndex];
+    palette.tag = POKE_ICON_SHINY_PAL_TAG + palIndex;
+
+    slot = IndexOfSpritePaletteTag(palette.tag);
+    if (slot == 0xFF)
+        LoadSpritePalette(&palette);
+    else
+        LoadSpritePaletteInSlot(&palette, slot);
 }
 
 static const struct OamData sMonIconOamData =
@@ -163,7 +193,7 @@ static const u16 sSpriteImageSizes[3][4] =
     },
 };
 
-u8 CreateMonIcon(u16 species, void (*callback)(struct Sprite *), s16 x, s16 y, u8 subpriority, u32 personality, bool8 isShadow)
+u8 CreateMonIcon(u16 species, void (*callback)(struct Sprite *), s16 x, s16 y, u8 subpriority, u32 personality, bool8 isShiny, bool8 isShadow)
 {
     u8 spriteId;
     u16 sanitizedSpecies = SanitizeSpeciesId(species);
@@ -181,12 +211,10 @@ u8 CreateMonIcon(u16 species, void (*callback)(struct Sprite *), s16 x, s16 y, u
     };
 
     if (isShadow)
-        hasShadowPalette = LoadShadowMonIconPalette(iconSpecies);
+        hasShadowPalette = TryLoadShadowMonIconPalette(iconSpecies);
 
     if (useShadowIcon || hasShadowPalette)
     {
-        if (!hasShadowPalette)
-            memcpy(sShadowIconPaletteBuffer, gMonIconPalette_Shadow, sizeof(sShadowIconPaletteBuffer));
         u8 palIndex = IndexOfSpritePaletteTag(POKE_ICON_SHADOW_PAL_TAG);
         if (palIndex == 0xFF)
             LoadSpritePalette(&gMonIconPaletteTable[gMonIconShadowPaletteIndex]);
@@ -196,14 +224,24 @@ u8 CreateMonIcon(u16 species, void (*callback)(struct Sprite *), s16 x, s16 y, u
     }
     else
     {
-        iconTemplate.paletteTag = POKE_ICON_BASE_PAL_TAG + gSpeciesInfo[sanitizedSpecies].iconPalIndex;
+        u8 palIndex = gSpeciesInfo[sanitizedSpecies].iconPalIndex;
 
         if (sanitizedSpecies > NUM_SPECIES)
-            iconTemplate.paletteTag = POKE_ICON_BASE_PAL_TAG;
+            palIndex = 0;
 #if P_GENDER_DIFFERENCES
         else if (gSpeciesInfo[sanitizedSpecies].iconSpriteFemale != NULL && IsPersonalityFemale(sanitizedSpecies, personality))
-            iconTemplate.paletteTag = POKE_ICON_BASE_PAL_TAG + gSpeciesInfo[sanitizedSpecies].iconPalIndexFemale;
+            palIndex = gSpeciesInfo[sanitizedSpecies].iconPalIndexFemale;
 #endif
+
+        if (isShiny)
+        {
+            LoadMonIconPaletteShinyByIndex(palIndex);
+            iconTemplate.paletteTag = POKE_ICON_SHINY_PAL_TAG + palIndex;
+        }
+        else
+        {
+            iconTemplate.paletteTag = POKE_ICON_BASE_PAL_TAG + palIndex;
+        }
     }
 
     spriteId = CreateMonIconSprite(&iconTemplate, x, y, subpriority);
@@ -312,6 +350,8 @@ void FreeMonIconPalettes(void)
     u8 i;
     for (i = 0; i < ARRAY_COUNT(gMonIconPaletteTable); i++)
         FreeSpritePaletteByTag(gMonIconPaletteTable[i].tag);
+    for (i = 0; i < MON_ICON_BASE_PALETTE_COUNT; i++)
+        FreeSpritePaletteByTag(POKE_ICON_SHINY_PAL_TAG + i);
 }
 
 // unused
@@ -320,6 +360,7 @@ void SafeFreeMonIconPalette(u16 species)
     u8 palIndex;
     palIndex = gSpeciesInfo[SanitizeSpeciesId(species)].iconPalIndex;
     FreeSpritePaletteByTag(gMonIconPaletteTable[palIndex].tag);
+    FreeSpritePaletteByTag(POKE_ICON_SHINY_PAL_TAG + palIndex);
 }
 
 void FreeMonIconPalette(u16 species)
@@ -327,6 +368,7 @@ void FreeMonIconPalette(u16 species)
     u8 palIndex;
     palIndex = gSpeciesInfo[SanitizeSpeciesId(species)].iconPalIndex;
     FreeSpritePaletteByTag(gMonIconPaletteTable[palIndex].tag);
+    FreeSpritePaletteByTag(POKE_ICON_SHINY_PAL_TAG + palIndex);
 }
 
 void SpriteCB_MonIcon(struct Sprite *sprite)

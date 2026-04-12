@@ -75,7 +75,7 @@
       "y": 8,
       "elevation": 0,
       "player_facing_dir": "BG_EVENT_PLAYER_FACING_ANY",
-      "script": "NULL"
+      "script": "MahoganyTown_EventScript_Sign"
     },
     {
       "type": "sign",
@@ -83,7 +83,7 @@
       "y": 10,
       "elevation": 0,
       "player_facing_dir": "BG_EVENT_PLAYER_FACING_ANY",
-      "script": "NULL"
+      "script": "MahoganyTown_EventScript_CandybarSign"
     },
     {
       "type": "sign",
@@ -91,7 +91,7 @@
       "y": 19,
       "elevation": 0,
       "player_facing_dir": "BG_EVENT_PLAYER_FACING_ANY",
-      "script": "NULL"
+      "script": "MahoganyTown_EventScript_GymSign"
     }
   ]
 }

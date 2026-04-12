@@ -570,6 +570,7 @@ static void CB2_CreateTradeMenu(void)
                                                          (sTradeMonSpriteCoords[i][1] * 8) - 12,
                                                          1,
                                                          GetMonData(mon, MON_DATA_PERSONALITY),
+                                                         GetMonData(mon, MON_DATA_IS_SHINY),
                                                          FALSE);
         }
 
@@ -582,6 +583,7 @@ static void CB2_CreateTradeMenu(void)
                                                          (sTradeMonSpriteCoords[i + PARTY_SIZE][1] * 8) - 12,
                                                          1,
                                                          GetMonData(mon, MON_DATA_PERSONALITY),
+                                                         GetMonData(mon, MON_DATA_IS_SHINY),
                                                          FALSE);
         }
         gMain.state++;
@@ -761,6 +763,7 @@ static void CB2_ReturnToTradeMenu(void)
                                                          (sTradeMonSpriteCoords[i][1] * 8) - 12,
                                                          1,
                                                          GetMonData(mon, MON_DATA_PERSONALITY),
+                                                         GetMonData(mon, MON_DATA_IS_SHINY),
                                                          FALSE);
         }
 
@@ -773,6 +776,7 @@ static void CB2_ReturnToTradeMenu(void)
                                                          (sTradeMonSpriteCoords[i + PARTY_SIZE][1] * 8) - 12,
                                                          1,
                                                          GetMonData(mon, MON_DATA_PERSONALITY),
+                                                         GetMonData(mon, MON_DATA_IS_SHINY),
                                                          FALSE);
         }
         gMain.state++;

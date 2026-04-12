@@ -12,7 +12,7 @@ mapscripts Route1_MapScripts {
 text T_R1_Spy1   { "A strange figure is standing ahead..." }
 text T_R1_Agent1 { "Heh... perfect timing. Watch closely, rookie." }
 text T_R1_Agent2 { "The trainer injects a dark aura into Pikachu." }
-text T_R1_Agent3 { "Now... let us test my new Shadow Pokemon." }
+text T_R1_Agent3 { "Now... let us test my new {COLOR PURPLE}Shadow Pokemon{COLOR DARK_GRAY}." }
 text T_R1_After1 { "Stay away from Pewter City if you know what is good for you." }
 text T_R1_Drop   { "He drops something and vanishes..." }
 text T_R1_GetDex { "You obtained a Pokedex." }

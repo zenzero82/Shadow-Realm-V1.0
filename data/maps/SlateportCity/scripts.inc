@@ -286,7 +286,7 @@ SlateportCity_EventScript_OceanicMuseumSign::
 
 SlateportCity_EventScript_CitySign::
 	msgbox SlateportCity_Text_CitySign, MSGBOX_SIGN
-	end
+	goto EventScript_GimmighoulSignpost
 
 SlateportCity_EventScript_MarketSign::
 	msgbox SlateportCity_Text_MarketSign, MSGBOX_SIGN

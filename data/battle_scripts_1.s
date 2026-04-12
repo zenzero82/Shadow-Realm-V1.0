@@ -4987,6 +4987,19 @@ BattleScript_BrickBreakDoHit::
 	tryfaintmon BS_TARGET
 	goto BattleScript_MoveEnd
 
+BattleScript_EffectShadowShed::
+	attackcanceler
+	trydefog FALSE, BattleScript_FailedFromAtkString
+	accuracycheck BattleScript_PrintMoveMissed, ACC_CURR_MOVE
+	attackstring
+	ppreduce
+	attackanimation
+	waitanimation
+	copybyte gEffectBattler, gBattlerAttacker
+	trydefog TRUE, NULL
+	copybyte gBattlerAttacker, gEffectBattler
+	goto BattleScript_MoveEnd
+
 BattleScript_EffectYawn::
 	attackcanceler
 	attackstring
@@ -6791,6 +6804,17 @@ BattleScript_WishMegaEvolution::
 	trytrainerslidemegaevolutionmsg
 	printstring STRINGID_FERVENTWISHREACHED
 	goto BattleScript_MegaEvolutionAfterString
+
+BattleScript_MegaReversion::
+	flushtextbox
+	callnative BS_HandleMegaReversionStart
+	playanimation BS_SCRIPTING, B_ANIM_MEGA_EVOLUTION
+	waitanimation
+	callnative BS_HandleMegaReversionEnd
+	printstring STRINGID_PKMNREVERTEDTONORMAL
+	waitmessage B_WAIT_TIME_LONG
+	switchinabilities BS_SCRIPTING
+	end3
 
 BattleScript_PrimalReversion::
 	flushtextbox

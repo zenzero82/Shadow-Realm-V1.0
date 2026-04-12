@@ -3551,6 +3551,126 @@ void SetBoxMonData(struct BoxPokemon *boxMon, s32 field, const void *dataArg)
     }
 }
 
+bool8 RepairBoxMonChecksum(struct BoxPokemon *boxMon)
+{
+    u16 checksum;
+    struct PokemonSubstruct0 *substruct0;
+    struct PokemonSubstruct3 *substruct3;
+    struct BoxPokemon temp;
+    struct BoxPokemon temp2;
+
+    if (!boxMon->hasSpecies && !boxMon->isEgg && !boxMon->isBadEgg)
+        return FALSE;
+
+    // Handle mons saved in a decrypted state.
+    temp = *boxMon;
+    checksum = CalculateBoxMonChecksum(&temp);
+    if (checksum == temp.checksum)
+    {
+        temp2 = *boxMon;
+        DecryptBoxMon(&temp2);
+        if (CalculateBoxMonChecksum(&temp2) != temp2.checksum)
+        {
+            substruct0 = &(GetSubstruct(boxMon, boxMon->personality, 0)->type0);
+            substruct3 = &(GetSubstruct(boxMon, boxMon->personality, 3)->type3);
+            boxMon->checksum = checksum;
+            boxMon->isBadEgg = FALSE;
+            boxMon->isEgg = substruct3->isEgg;
+            boxMon->hasSpecies = (substruct0->species != 0);
+            EncryptBoxMon(boxMon);
+            return TRUE;
+        }
+    }
+
+    substruct0 = &(GetSubstruct(boxMon, boxMon->personality, 0)->type0);
+    substruct3 = &(GetSubstruct(boxMon, boxMon->personality, 3)->type3);
+
+    DecryptBoxMon(boxMon);
+    checksum = CalculateBoxMonChecksum(boxMon);
+    if (checksum == boxMon->checksum)
+    {
+        if (boxMon->isBadEgg)
+        {
+            boxMon->isBadEgg = FALSE;
+            boxMon->isEgg = substruct3->isEgg;
+            boxMon->hasSpecies = (substruct0->species != 0);
+            EncryptBoxMon(boxMon);
+            return TRUE;
+        }
+
+        EncryptBoxMon(boxMon);
+        return FALSE;
+    }
+
+    boxMon->checksum = checksum;
+    boxMon->isBadEgg = FALSE;
+    boxMon->isEgg = substruct3->isEgg;
+    boxMon->hasSpecies = (substruct0->species != 0);
+    EncryptBoxMon(boxMon);
+    return TRUE;
+}
+
+bool8 RevertBadEgg(struct BoxPokemon *boxMon)
+{
+    struct PokemonSubstruct0 *substruct0;
+    struct PokemonSubstruct3 *substruct3;
+    struct BoxPokemon plain;
+    struct BoxPokemon verify;
+    u32 playerOtId;
+    u16 species;
+    u16 checksum;
+
+    if (!boxMon->isBadEgg)
+        return FALSE;
+
+    plain = *boxMon;
+    checksum = CalculateBoxMonChecksum(&plain);
+    if (checksum == plain.checksum)
+    {
+        verify = plain;
+        DecryptBoxMon(&verify);
+        if (CalculateBoxMonChecksum(&verify) == verify.checksum)
+            plain = verify;
+    }
+    else
+    {
+        plain = *boxMon;
+        DecryptBoxMon(&plain);
+        if (CalculateBoxMonChecksum(&plain) != plain.checksum)
+            return FALSE;
+    }
+
+    substruct0 = &(GetSubstruct(&plain, plain.personality, 0)->type0);
+    substruct3 = &(GetSubstruct(&plain, plain.personality, 3)->type3);
+
+    species = SanitizeSpeciesId(substruct0->species);
+    if (species == SPECIES_NONE || species == SPECIES_EGG)
+        return FALSE;
+
+    if (substruct3->metLevel == 0)
+        return FALSE;
+
+    playerOtId = gSaveBlock2Ptr->playerTrainerId[0]
+        | (gSaveBlock2Ptr->playerTrainerId[1] << 8)
+        | (gSaveBlock2Ptr->playerTrainerId[2] << 16)
+        | (gSaveBlock2Ptr->playerTrainerId[3] << 24);
+
+    if (plain.otId != playerOtId)
+        return FALSE;
+
+    if (StringCompareN(plain.otName, gSaveBlock2Ptr->playerName, PLAYER_NAME_LENGTH) != 0)
+        return FALSE;
+
+    substruct3->isEgg = FALSE;
+    plain.isBadEgg = FALSE;
+    plain.isEgg = FALSE;
+    plain.hasSpecies = (substruct0->species != 0);
+    plain.checksum = CalculateBoxMonChecksum(&plain);
+    EncryptBoxMon(&plain);
+    *boxMon = plain;
+    return TRUE;
+}
+
 void CopyMon(void *dest, void *src, size_t size)
 {
     memcpy(dest, src, size);

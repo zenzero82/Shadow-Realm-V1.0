@@ -908,6 +908,7 @@ u8 LoadGameSave(u8 saveType)
         status = TryLoadSaveSlot(FULL_SAVE_SLOT, gRamSaveSectorLocations);
         CopyPartyAndObjectsFromSave();
         InitBoxStorageCache();
+        RepairBoxStorageChecksums();
         gSaveFileStatus = status;
         gGameContinueCallback = 0;
         break;

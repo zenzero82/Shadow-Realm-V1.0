@@ -2224,4 +2224,10 @@ const struct BattleMoveEffect gBattleMoveEffects[NUM_BATTLE_MOVE_EFFECTS] =
         .battleScript = BattleScript_EffectShadowSky,
         .battleTvScore = 0, // TODO: Assign points
     },
+
+    [EFFECT_SHADOW_SHED] =
+    {
+        .battleScript = BattleScript_EffectShadowShed,
+        .battleTvScore = 0, // TODO: Assign points
+    },
 };

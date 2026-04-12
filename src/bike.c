@@ -44,6 +44,7 @@ static u8 AcroBike_GetJumpDirection(void);
 static void Bike_UpdateDirTimerHistory(u8);
 static void Bike_UpdateABStartSelectHistory(u8);
 static u8 Bike_DPadToDirection(u16);
+static bool8 ShouldForceCyclingRoadDownward(void);
 static u8 GetBikeCollision(u8);
 static u8 GetBikeCollisionAt(struct ObjectEvent *, s16, s16, u8, u8);
 static bool8 IsRunningDisallowedByMetatile(u8);
@@ -124,8 +125,35 @@ static const struct BikeHistoryInputInfo sAcroBikeTricksList[] =
 };
 
 // code
+static bool8 ShouldForceCyclingRoadDownward(void)
+{
+    s16 x, y;
+    u8 metatileBehavior;
+
+    PlayerGetDestCoords(&x, &y);
+    metatileBehavior = MapGridGetMetatileBehaviorAt(x, y);
+
+    return MetatileBehavior_IsCyclingRoadPullDownTile(metatileBehavior);
+}
+
 void MovePlayerOnBike(u8 direction, u16 newKeys, u16 heldKeys)
 {
+    if (ShouldForceCyclingRoadDownward() && heldKeys == 0)
+    {
+        // If B is held, disable slope forcing
+        if (!(heldKeys & B_BUTTON))
+        {
+            u8 collision = GetBikeCollision(DIR_SOUTH);
+
+            if (collision == COLLISION_NONE)
+                PlayerWalkFaster(DIR_SOUTH);
+            else if (collision == COLLISION_LEDGE_JUMP)
+                PlayerJumpLedge(DIR_SOUTH);
+
+            gPlayerAvatar.runningState = MOVING;
+            return;
+        }
+    }
     if (gPlayerAvatar.flags & PLAYER_AVATAR_FLAG_MACH_BIKE)
         MovePlayerOnMachBike(direction, newKeys, heldKeys);
     else

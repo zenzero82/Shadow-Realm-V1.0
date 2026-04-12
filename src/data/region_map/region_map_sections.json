@@ -1345,7 +1345,7 @@
     },
     {
       "id": "MAPSEC_SAFARIZONEGATE_JOHTO",
-      "name": "SAFARIZONEGATE JOHTO",
+      "name": "SAFARI ZONE",
       "x": 0,
       "y": 0,
       "width": 1,
@@ -1714,6 +1714,10 @@
     {
       "id": "MAPSEC_DISTORTION_WORLD",
       "name": "Distortion_World"
+    },
+    {
+      "id": "MAPSEC_SAFARI_ZONE_GATE",
+      "name": "Safari Zone Johto"
     }
   ]
 }

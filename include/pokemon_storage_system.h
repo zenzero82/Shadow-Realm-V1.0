@@ -38,6 +38,7 @@ void ShowPokemonStorageSystemPC(void);
 void ShowPokemonStorageSystemMoveMonsFromParty(void);
 void ResetPokemonStorageSystem(void);
 void InitBoxStorageCache(void);
+bool8 RepairBoxStorageChecksums(void);
 bool8 SaveBoxStorageToFlash(void);
 void ClearBoxStorageData(void);
 void MarkBoxStorageDirty(u8 boxId);

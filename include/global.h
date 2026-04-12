@@ -14,6 +14,7 @@
 #include "constants/species.h"
 #include "constants/pokedex.h"
 #include "constants/berry.h"
+#include "constants/gimmighoul_signpost.h"
 #include "constants/maps.h"
 #include "constants/pokemon.h"
 #include "constants/easy_chat.h"
@@ -253,6 +254,8 @@ struct SaveBlock3
     u8 dexNavSearchLevels[DEXNAV_SEARCH_LEVELS_SIZE];
 #endif
     u8 dexNavChain;
+    u8 gimmighoulSignpostFlags[GIMMIGHOUL_SIGNPOST_FLAGS_BYTES];
+    u8 gimmighoulSignpostInit;
 }; /* max size 1624 bytes */
 
 extern struct SaveBlock3 *gSaveBlock3Ptr;
@@ -590,7 +593,9 @@ struct SaveBlock2
     /*0x91*/ u8 optionsLevelCap;
     /*0x92*/ u8 optionsOverworldWildEncounters;
     /*0x93*/ u8 optionsAutoSave;
-    /*0x94*/ u8 filler_94[0x4];
+    /*0x94*/ u8 optionsEvIvEditor;
+    /*0x95*/ u8 optionsAutoRun;
+    /*0x96*/ u8 filler_96[0x2];
     /*0x98*/ struct Time localTimeOffset;
     /*0xA0*/ struct Time lastBerryTreeUpdate;
     /*0xA8*/ u32 gcnLinkFlags; // Read by Pokémon Colosseum/XD
@@ -1094,7 +1099,7 @@ struct SaveBlock1
     /*0xAE0*/ u8 bagPocketSortModes[POCKETS_COUNT];
     /*0xAE8*/ struct Pokeblock pokeblocks[POKEBLOCKS_COUNT];
 #if FREE_EXTRA_SEEN_FLAGS_SAVEBLOCK1 == FALSE
-    /*0x988*/ u8 filler1[0x34]; // Previously Dex Flags, feel free to remove.
+    /*0x988*/ u8 gimmighoulSignpostFlags[GIMMIGHOUL_SIGNPOST_FLAGS_BYTES];
 #endif //FREE_EXTRA_SEEN_FLAGS_SAVEBLOCK1
     /*0x9BC*/ u16 berryBlenderRecords[3];
     /*0x9C2*/ u16 autosaveStepCounter;

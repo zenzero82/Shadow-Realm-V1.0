@@ -112,6 +112,7 @@ enum {
     MENU_CHANGE_FORM,
     MENU_CHANGE_ABILITY,
     MENU_AUTO_HEAL,
+    MENU_PURIFY,
     MENU_MAKE_LEAD,
     MENU_FIELD_MOVES
 };
@@ -305,6 +306,12 @@ static void DisplayPartyPokemonDescriptionText(u8, struct PartyMenuBox *, u8);
 static bool8 IsMonAllowedInMinigame(u8);
 static void DisplayPartyPokemonDataToTeachMove(u8, u16);
 static u8 CanTeachMove(struct Pokemon *, u16);
+static bool8 SpeciesCanLearnMoveByLevel(u16 species, u16 move);
+static bool8 CanMonUseFlyAction(struct Pokemon *mon);
+static bool8 CanMonUseFlashAction(struct Pokemon *mon);
+static void DisplayLearnMoveMessage(const u8 *str);
+static void Task_ShowZygardeCubeActionsAfterText(u8 taskId);
+static void FormatZygardeCubeCounts(void);
 static void DisplayPartyPokemonBarDetail(u8, const u8 *, u8, const u8 *);
 static void DisplayPartyPokemonLevel(u8, struct PartyMenuBox *);
 static void DisplayPartyPokemonGender(u8, u16, u8 *, struct PartyMenuBox *);
@@ -316,7 +323,7 @@ static void GetPartyReverseIndicatorCoords(struct PartyMenuBox *, s16 *, s16 *);
 static void CreatePartyMonReverseIndicatorSprite(struct PartyMenuBox *, bool8);
 static void UpdatePartyMonReverseIndicatorSprite(struct PartyMenuBox *, bool8);
 static void SetPartyReverseIndicatorVisibility(bool8);
-static void CreatePartyMonIconSpriteParameterized(u16, u32, struct PartyMenuBox *, u8, bool8);
+static void CreatePartyMonIconSpriteParameterized(u16, u32, struct PartyMenuBox *, u8, bool8, bool8);
 static void CreatePartyMonHeldItemSpriteParameterized(u16, u16, struct PartyMenuBox *);
 static void CreatePartyMonPokeballSpriteParameterized(u16, struct PartyMenuBox *);
 static void CreatePartyMonStatusSpriteParameterized(u16, u8, struct PartyMenuBox *);
@@ -533,6 +540,7 @@ static void CursorCb_CatalogMower(u8);
 static void CursorCb_ChangeForm(u8);
 static void CursorCb_ChangeAbility(u8);
 static void CursorCb_AutoHeal(u8);
+static void CursorCb_Purify(u8);
 static void CursorCb_MakeLead(u8);
 void TryItemHoldFormChange(struct Pokemon *mon, s8 slotId);
 static void ShowMoveSelectWindow(u8 slot);
@@ -1326,7 +1334,7 @@ static void CreatePartyMonSprites(u8 slot)
 
         if (gMultiPartnerParty[actualSlot].species != SPECIES_NONE)
         {
-            CreatePartyMonIconSpriteParameterized(gMultiPartnerParty[actualSlot].species, gMultiPartnerParty[actualSlot].personality, &sPartyMenuBoxes[slot], 0, FALSE);
+            CreatePartyMonIconSpriteParameterized(gMultiPartnerParty[actualSlot].species, gMultiPartnerParty[actualSlot].personality, &sPartyMenuBoxes[slot], 0, FALSE, FALSE);
             CreatePartyMonHeldItemSpriteParameterized(gMultiPartnerParty[actualSlot].species, gMultiPartnerParty[actualSlot].heldItem, &sPartyMenuBoxes[slot]);
             CreatePartyMonPokeballSpriteParameterized(gMultiPartnerParty[actualSlot].species, &sPartyMenuBoxes[slot]);
             if (gMultiPartnerParty[actualSlot].hp == 0)
@@ -3162,6 +3170,8 @@ static void SetPartyMonSelectionActions(struct Pokemon *mons, u8 slotId, u8 acti
 static void SetPartyMonFieldSelectionActions(struct Pokemon *mons, u8 slotId)
 {
     u8 i, j;
+    bool8 hasFlyAction = FALSE;
+    bool8 hasFlashAction = FALSE;
 
     sPartyMenuInternal->numActions = 0;
     AppendToList(sPartyMenuInternal->actions, &sPartyMenuInternal->numActions, MENU_SUMMARY);
@@ -3173,11 +3183,21 @@ static void SetPartyMonFieldSelectionActions(struct Pokemon *mons, u8 slotId)
         {
             if (GetMonData(&mons[slotId], i + MON_DATA_MOVE1) == FieldMove_GetMoveId(j))
             {
+                if (!IsFieldMoveUnlocked(j))
+                    break;
                 AppendToList(sPartyMenuInternal->actions, &sPartyMenuInternal->numActions, j + MENU_FIELD_MOVES);
+                if (j == FIELD_MOVE_FLY)
+                    hasFlyAction = TRUE;
+                else if (j == FIELD_MOVE_FLASH)
+                    hasFlashAction = TRUE;
                 break;
             }
         }
     }
+    if (!hasFlyAction && CanMonUseFlyAction(&mons[slotId]))
+        AppendToList(sPartyMenuInternal->actions, &sPartyMenuInternal->numActions, FIELD_MOVE_FLY + MENU_FIELD_MOVES);
+    if (!hasFlashAction && CanMonUseFlashAction(&mons[slotId]))
+        AppendToList(sPartyMenuInternal->actions, &sPartyMenuInternal->numActions, FIELD_MOVE_FLASH + MENU_FIELD_MOVES);
 
     if (!InBattlePike())
     {
@@ -3188,10 +3208,55 @@ static void SetPartyMonFieldSelectionActions(struct Pokemon *mons, u8 slotId)
         else
             AppendToList(sPartyMenuInternal->actions, &sPartyMenuInternal->numActions, MENU_ITEM);
         AppendToList(sPartyMenuInternal->actions, &sPartyMenuInternal->numActions, MENU_AUTO_HEAL);
+        if (CheckBagHasItem(ITEM_RELIC_TABLET, 1) && Shdw_IsPurificationReady(&mons[slotId]))
+            AppendToList(sPartyMenuInternal->actions, &sPartyMenuInternal->numActions, MENU_PURIFY);
         if (slotId != 0 && GetMonData(&mons[0], MON_DATA_SPECIES) != SPECIES_NONE)
             AppendToList(sPartyMenuInternal->actions, &sPartyMenuInternal->numActions, MENU_MAKE_LEAD);
     }
     AppendToList(sPartyMenuInternal->actions, &sPartyMenuInternal->numActions, MENU_CANCEL1);
+}
+
+static bool8 SpeciesCanLearnMoveByLevel(u16 species, u16 move)
+{
+    u32 i;
+    const struct LevelUpMove *learnset = GetSpeciesLevelUpLearnset(species);
+
+    for (i = 0; i < MAX_LEVEL_UP_MOVES && learnset[i].move != LEVEL_UP_MOVE_END; i++)
+    {
+        if (learnset[i].move == move)
+            return TRUE;
+    }
+    return FALSE;
+}
+
+static bool8 CanMonUseFlyAction(struct Pokemon *mon)
+{
+    u16 species = GetMonData(mon, MON_DATA_SPECIES_OR_EGG);
+
+    if (!IsFieldMoveUnlocked(FIELD_MOVE_FLY))
+        return FALSE;
+    if (species == SPECIES_EGG)
+        return FALSE;
+    if (GetMonData(mon, MON_DATA_IS_SHADOW))
+        return FALSE;
+    if (CanLearnTeachableMove(species, MOVE_FLY))
+        return TRUE;
+
+    return SpeciesCanLearnMoveByLevel(species, MOVE_FLY);
+}
+
+static bool8 CanMonUseFlashAction(struct Pokemon *mon)
+{
+    u16 species = GetMonData(mon, MON_DATA_SPECIES_OR_EGG);
+
+    if (species == SPECIES_EGG)
+        return FALSE;
+    if (GetMonData(mon, MON_DATA_IS_SHADOW))
+        return FALSE;
+    if (CanLearnTeachableMove(species, MOVE_FLASH))
+        return TRUE;
+
+    return SpeciesCanLearnMoveByLevel(species, MOVE_FLASH);
 }
 
 static u8 GetPartyMenuActionsType(struct Pokemon *mon)
@@ -4567,17 +4632,21 @@ bool32 SetUpFieldMove_Dive(void)
 static void CreatePartyMonIconSprite(struct Pokemon *mon, struct PartyMenuBox *menuBox, u32 slot)
 {
     u16 species2;
+    bool8 isShiny;
+    bool8 isShadow;
 
     species2 = GetMonData(mon, MON_DATA_SPECIES_OR_EGG);
-        CreatePartyMonIconSpriteParameterized(species2, GetMonData(mon, MON_DATA_PERSONALITY), menuBox, 1, GetMonData(mon, MON_DATA_IS_SHADOW));
+    isShiny = GetMonData(mon, MON_DATA_IS_SHINY);
+    isShadow = GetMonData(mon, MON_DATA_IS_SHADOW);
+    CreatePartyMonIconSpriteParameterized(species2, GetMonData(mon, MON_DATA_PERSONALITY), menuBox, 1, isShiny, isShadow);
     UpdatePartyMonHPBar(menuBox->monSpriteId, mon);
 }
 
-static void CreatePartyMonIconSpriteParameterized(u16 species, u32 pid, struct PartyMenuBox *menuBox, u8 priority, bool8 isShadow)
+static void CreatePartyMonIconSpriteParameterized(u16 species, u32 pid, struct PartyMenuBox *menuBox, u8 priority, bool8 isShiny, bool8 isShadow)
 {
     if (species != SPECIES_NONE)
     {
-        menuBox->monSpriteId = CreateMonIcon(species, SpriteCB_MonIcon, menuBox->spriteCoords[0], menuBox->spriteCoords[1], 4, pid, isShadow);
+        menuBox->monSpriteId = CreateMonIcon(species, SpriteCB_MonIcon, menuBox->spriteCoords[0], menuBox->spriteCoords[1], 4, pid, isShiny, isShadow);
         gSprites[menuBox->monSpriteId].oam.priority = priority;
     }
 }
@@ -6724,6 +6793,44 @@ void ItemUseCB_TimeFlute(u8 taskId, TaskFunc task)
     BeginPurificationScene(mon, gPartyMenu.slotId);
 }
 
+void ItemUseCB_RelicTablet(u8 taskId, TaskFunc task)
+{
+    struct Pokemon *mon = &gPlayerParty[gPartyMenu.slotId];
+    u16 itemId = gSpecialVar_ItemId;
+
+    PlaySE(SE_SELECT);
+    if (!GetMonData(mon, MON_DATA_IS_SHADOW, NULL))
+    {
+        gPartyMenuUseExitCallback = FALSE;
+        DisplayPartyMenuMessage(gText_RelicTabletShadowOnly, TRUE);
+        ScheduleBgCopyTilemapToVram(2);
+        gTasks[taskId].func = task;
+        return;
+    }
+
+    if (!Shdw_IsPurificationReady(mon))
+    {
+        gPartyMenuUseExitCallback = FALSE;
+        DisplayPartyMenuMessage(gText_RelicTabletNotReady, TRUE);
+        ScheduleBgCopyTilemapToVram(2);
+        gTasks[taskId].func = task;
+        return;
+    }
+
+    gCB2_AfterEvolution = CB2_TimeFluteReturn;
+    sTimeFluteReturnCallback = gPartyMenu.exitCallback;
+    sTimeFluteSlotId = gPartyMenu.slotId;
+    SetMonHeartValue(mon, 0);
+    SetMonHeartMax(mon, 0);
+    GetMonData(mon, MON_DATA_NICKNAME, sTimeFluteSavedNickname);
+    gSkipEvolutionRenameForShadowPurification = TRUE;
+
+    if (GetItemPocket(itemId) != POCKET_KEY_ITEMS)
+        RemoveBagItem(itemId, 1);
+    FreePartyPointers();
+    BeginPurificationScene(mon, gPartyMenu.slotId);
+}
+
 static bool8 IsShadowDefaultNickname(u16 shadowId, const u8 *nickname)
 {
     static const u8 sText_XD[] = _("XD");
@@ -7208,7 +7315,7 @@ static void Task_TryItemUseFormChange(u8 taskId)
         if (gTasks[taskId].tAnimWait == 0)
         {
             FreeAndDestroyMonIconSprite(icon);
-            CreatePartyMonIconSpriteParameterized(targetSpecies, GetMonData(mon, MON_DATA_PERSONALITY, NULL), &sPartyMenuBoxes[gPartyMenu.slotId], 1, GetMonData(mon, MON_DATA_IS_SHADOW, NULL));
+            CreatePartyMonIconSpriteParameterized(targetSpecies, GetMonData(mon, MON_DATA_PERSONALITY, NULL), &sPartyMenuBoxes[gPartyMenu.slotId], 1, GetMonData(mon, MON_DATA_IS_SHINY, NULL), GetMonData(mon, MON_DATA_IS_SHADOW, NULL));
             icon->oam.mosaic = TRUE;
             icon->data[0] = 10;
             icon->data[1] = 1;
@@ -7317,10 +7424,31 @@ bool32 TryMultichoiceFormChange(u8 taskId)
 {
     struct Pokemon *mon = &gPlayerParty[gPartyMenu.slotId];
     u32 currentSpecies = GetMonData(mon, MON_DATA_SPECIES);
-    u32 targetSpecies = GetFormChangeTargetSpecies(mon, FORM_CHANGE_ITEM_USE_MULTICHOICE, gSpecialVar_ItemId);
+    u32 targetSpecies;
 
     PartyMenuRemoveWindow(&sPartyMenuInternal->windowId[0]);
     PartyMenuRemoveWindow(&sPartyMenuInternal->windowId[1]);
+
+    if (gSpecialVar_ItemId == ITEM_ZYGARDE_CUBE && gSpecialVar_Result == 0)
+    {
+        u16 cells = VarGet(VAR_ZYGARDE_CELL_COUNT);
+        u16 cores = VarGet(VAR_ZYGARDE_CORE_COUNT);
+
+        if (cells < 50)
+        {
+            gPartyMenuUseExitCallback = FALSE;
+            PlaySE(SE_SELECT);
+            DisplayPartyMenuMessage(gText_ZygardeCubeNeedCells, TRUE);
+            ScheduleBgCopyTilemapToVram(2);
+            gTasks[taskId].func = Task_ClosePartyMenuAfterText;
+            return FALSE;
+        }
+
+        if (cells >= 95 && cores >= 5)
+            gSpecialVar_Result = 2;
+    }
+
+    targetSpecies = GetFormChangeTargetSpecies(mon, FORM_CHANGE_ITEM_USE_MULTICHOICE, gSpecialVar_ItemId);
 
     if (targetSpecies != currentSpecies)
     {
@@ -7390,9 +7518,29 @@ void ItemUseCB_ZygardeCube(u8 taskId, TaskFunc task)
     PartyMenuRemoveWindow(&sPartyMenuInternal->windowId[0]);
     PartyMenuRemoveWindow(&sPartyMenuInternal->windowId[1]);
     SetPartyMonSelectionActions(gPlayerParty, gPartyMenu.slotId, ACTIONS_ZYGARDE_CUBE);
-    DisplaySelectionWindow(SELECTWINDOW_ZYGARDECUBE);
-    gTasks[taskId].data[0] = 0xFF;
-    gTasks[taskId].func = Task_HandleSelectionMenuInput;
+    FormatZygardeCubeCounts();
+    DisplayPartyMenuMessage(gStringVar4, TRUE);
+    ScheduleBgCopyTilemapToVram(2);
+    gTasks[taskId].func = Task_ShowZygardeCubeActionsAfterText;
+}
+
+static void Task_ShowZygardeCubeActionsAfterText(u8 taskId)
+{
+    if (IsPartyMenuTextPrinterActive() != TRUE)
+    {
+        ClearStdWindowAndFrameToTransparent(WIN_MSG, FALSE);
+        ClearWindowTilemap(WIN_MSG);
+        DisplaySelectionWindow(SELECTWINDOW_ZYGARDECUBE);
+        gTasks[taskId].data[0] = 0xFF;
+        gTasks[taskId].func = Task_HandleSelectionMenuInput;
+    }
+}
+
+static void FormatZygardeCubeCounts(void)
+{
+    ConvertIntToDecimalStringN(gStringVar1, VarGet(VAR_ZYGARDE_CELL_COUNT), STR_CONV_MODE_LEFT_ALIGN, 2);
+    ConvertIntToDecimalStringN(gStringVar2, VarGet(VAR_ZYGARDE_CORE_COUNT), STR_CONV_MODE_LEFT_ALIGN, 1);
+    StringExpandPlaceholders(gStringVar4, gText_ZygardeCubeCounts);
 }
 
 static void CursorCb_ChangeForm(u8 taskId)
@@ -7432,6 +7580,15 @@ static void CursorCb_AutoHeal(u8 taskId)
     UpdatePartyMenuAfterAutoHeal();
     DisplayPartyMenuStdMessage(PARTY_MSG_CHOOSE_MON);
     gTasks[taskId].func = Task_HandleChooseMonInput;
+}
+
+static void CursorCb_Purify(u8 taskId)
+{
+    PlaySE(SE_SELECT);
+    PartyMenuRemoveWindow(&sPartyMenuInternal->windowId[0]);
+    PartyMenuRemoveWindow(&sPartyMenuInternal->windowId[1]);
+    gSpecialVar_ItemId = ITEM_RELIC_TABLET;
+    ItemUseCB_RelicTablet(taskId, Task_HandleChooseMonInput);
 }
 
 static void CursorCb_MakeLead(u8 taskId)
@@ -7480,7 +7637,7 @@ void TryItemHoldFormChange(struct Pokemon *mon, s8 slotId)
         PlayCry_NormalNoDucking(targetSpecies, 0, CRY_VOLUME_RS, CRY_VOLUME_RS);
         SetMonData(mon, MON_DATA_SPECIES, &targetSpecies);
         FreeAndDestroyMonIconSprite(&gSprites[sPartyMenuBoxes[slotId].monSpriteId]);
-        CreatePartyMonIconSpriteParameterized(targetSpecies, GetMonData(mon, MON_DATA_PERSONALITY, NULL), &sPartyMenuBoxes[slotId], 1, GetMonData(mon, MON_DATA_IS_SHADOW, NULL));
+        CreatePartyMonIconSpriteParameterized(targetSpecies, GetMonData(mon, MON_DATA_PERSONALITY, NULL), &sPartyMenuBoxes[slotId], 1, GetMonData(mon, MON_DATA_IS_SHINY, NULL), GetMonData(mon, MON_DATA_IS_SHADOW, NULL));
         CalculateMonStats(mon);
         UpdatePartyMonHeldItemSprite(mon, &sPartyMenuBoxes[slotId]);
     }

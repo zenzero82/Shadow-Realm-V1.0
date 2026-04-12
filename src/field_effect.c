@@ -1312,7 +1312,14 @@ static void PokeballGlowEffect_WaitForSound(struct Sprite *sprite)
     if (sprite->sPlayHealSe == FALSE || IsFanfareTaskInactive())
     {
         sprite->sState++;
+        return;
     }
+
+    if (sprite->sTimer == 0)
+        sprite->sTimer = 120;
+
+    if ((--sprite->sTimer) == 0)
+        sprite->sState++;
 }
 
 static void PokeballGlowEffect_Idle(struct Sprite *sprite)

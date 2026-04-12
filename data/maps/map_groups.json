@@ -63,7 +63,8 @@
     "gMapGroup_IndoorBlackthorn",
     "gMapGroup_IndoorJohtoRoutes",
     "gMapGroup_JohtoDungeons",
-    "gMapGroup_ShadowRealm"
+    "gMapGroup_ShadowRealm",
+    "gMapGroup_SafariZones"
   ],
   "gMapGroup_TownsAndRoutes": [
     "PetalburgCity",
@@ -1081,7 +1082,17 @@
     "TinTower_RoofDay",
     "TinTower_RoofNight",
     "TohjoFalls_Cavern",
-    "TohjoFalls_GiovanniRoom"
+    "TohjoFalls_GiovanniRoom",
+    "MtSilver_Outside",
+    "MtSilver_1F_ItemRoom",
+    "MtSilver_1F_Waterfall",
+    "MtSilver_1F_MoltresRoom",
+    "MtSilver_MountainSide",
+    "MtSilver_2F",
+    "MtSilver_3F",
+    "MtSilver_Snow",
+    "MtSilver_SummitDay",
+    "MtSilver_SummitNight"
   ],
   "gMapGroup_ShadowRealm": [
     "Shadow_Realm",
@@ -1103,5 +1114,14 @@
     "Evice_Lair",
     "Cyrus_Lair",
     "Nightmare_Realm"
+  ],
+  "gMapGroup_SafariZones": [
+    "SafariZone_Entrance",
+    "SafariZone_Low_Mid",
+    "SafariZone_Top_Left",
+    "SafariZone_Top_Mid",
+    "SafariZone_Top_Right",
+    "SafariZone_Low_Left",
+    "SafariZone_Low_Right"
   ]
 }

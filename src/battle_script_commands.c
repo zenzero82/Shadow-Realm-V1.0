@@ -9909,6 +9909,7 @@ static bool32 TryDefogClear(u32 battlerAtk, bool32 clear)
 {
     s32 i;
     u8 saveBattler = gBattlerAttacker;
+    bool32 shadowShed = (gCurrentMove == MOVE_SHADOW_SHED);
 
     for (i = 0; i < NUM_BATTLE_SIDES; i++)
     {
@@ -9920,11 +9921,12 @@ static bool32 TryDefogClear(u32 battlerAtk, bool32 clear)
             gBattlerAttacker = i; // For correct battle string. Ally's / Foe's
             DEFOG_CLEAR(SIDE_STATUS_REFLECT, reflectTimer, BattleScript_SideStatusWoreOffReturn, MOVE_REFLECT);
             DEFOG_CLEAR(SIDE_STATUS_LIGHTSCREEN, lightscreenTimer, BattleScript_SideStatusWoreOffReturn, MOVE_LIGHT_SCREEN);
-            DEFOG_CLEAR(SIDE_STATUS_MIST, mistTimer, BattleScript_SideStatusWoreOffReturn, MOVE_MIST);
+            if (!shadowShed)
+                DEFOG_CLEAR(SIDE_STATUS_MIST, mistTimer, BattleScript_SideStatusWoreOffReturn, MOVE_MIST);
             DEFOG_CLEAR(SIDE_STATUS_AURORA_VEIL, auroraVeilTimer, BattleScript_SideStatusWoreOffReturn, MOVE_AURORA_VEIL);
             DEFOG_CLEAR(SIDE_STATUS_SAFEGUARD, safeguardTimer, BattleScript_SideStatusWoreOffReturn, MOVE_SAFEGUARD);
         }
-        if (B_DEFOG_EFFECT_CLEARING >= GEN_6)
+        if (!shadowShed && B_DEFOG_EFFECT_CLEARING >= GEN_6)
         {
             gBattlerAttacker = i; // For correct battle string. Ally's / Foe's
             DEFOG_CLEAR(SIDE_STATUS_SPIKES, spikesAmount, BattleScript_SpikesDefog, 0);
@@ -9933,13 +9935,13 @@ static bool32 TryDefogClear(u32 battlerAtk, bool32 clear)
             DEFOG_CLEAR(SIDE_STATUS_STICKY_WEB, stickyWebAmount, BattleScript_StickyWebDefog, 0);
             DEFOG_CLEAR(SIDE_STATUS_STEELSURGE, steelsurgeAmount, BattleScript_SteelsurgeDefog, 0);
         }
-        if (gBattleWeather & B_WEATHER_FOG)
+        if (!shadowShed && gBattleWeather & B_WEATHER_FOG)
         {
             gBattleWeather &= ~B_WEATHER_FOG;
             BattleScriptCall(BattleScript_FogEnded_Ret);
             return TRUE;
         }
-        if (B_DEFOG_EFFECT_CLEARING >= GEN_8 && (gFieldStatuses & STATUS_FIELD_TERRAIN_ANY))
+        if (!shadowShed && B_DEFOG_EFFECT_CLEARING >= GEN_8 && (gFieldStatuses & STATUS_FIELD_TERRAIN_ANY))
         {
             RemoveAllTerrains();
             BattleScriptCall(BattleScript_TerrainEnds_Ret);
@@ -10173,6 +10175,43 @@ static void HandleScriptMegaPrimalBurst(u32 caseId, u32 battler, u32 type)
             SetGimmickAsActivated(battler, GIMMICK_MEGA);
         if (type == HANDLE_TYPE_ULTRA_BURST)
             SetGimmickAsActivated(battler, GIMMICK_ULTRA_BURST);
+    }
+}
+
+static void HandleScriptMegaReversion(u32 caseId, u32 battler)
+{
+    struct Pokemon *mon = GetBattlerMon(battler);
+    u32 side = GetBattlerSide(battler);
+    u32 monId = gBattlerPartyIndexes[battler];
+    u16 baseSpecies = gBattleStruct->changedSpecies[side][monId];
+
+    if (baseSpecies == SPECIES_NONE)
+        baseSpecies = GET_BASE_SPECIES_ID(gBattleMons[battler].species);
+
+    if (caseId == 0)
+    {
+        if (baseSpecies != gBattleMons[battler].species)
+        {
+            SetMonData(mon, MON_DATA_SPECIES, &baseSpecies);
+            gBattleMons[battler].species = baseSpecies;
+            RecalcBattlerStats(battler, mon, FALSE);
+        }
+
+        PREPARE_SPECIES_BUFFER(gBattleTextBuff1, gBattleMons[battler].species);
+
+        BtlController_EmitSetMonData(battler, B_COMM_TO_CONTROLLER, REQUEST_SPECIES_BATTLE,
+                                     1u << gBattlerPartyIndexes[battler], sizeof(gBattleMons[battler].species),
+                                     &gBattleMons[battler].species);
+        MarkBattlerForControllerExec(battler);
+    }
+    else
+    {
+        UpdateHealthboxAttribute(gHealthboxSpriteIds[battler], mon, HEALTHBOX_ALL);
+        if (!IsOnPlayerSide(battler))
+            SetBattlerShadowSpriteCallback(battler, gBattleMons[battler].species);
+        gBattleStruct->changedSpecies[side][monId] = SPECIES_NONE;
+        gBattleStruct->gimmick.activeGimmick[side][monId] = GIMMICK_NONE;
+        UpdateIndicatorVisibilityAndType(gHealthboxSpriteIds[battler], FALSE);
     }
 }
 
@@ -17602,6 +17641,20 @@ void BS_HandleMegaEvolution(void)
 
     u8 battler = GetBattlerForBattleScript(cmd->battler);
     HandleScriptMegaPrimalBurst(cmd->caseId, battler, HANDLE_TYPE_MEGA_EVOLUTION);
+    gBattlescriptCurrInstr = cmd->nextInstr;
+}
+
+void BS_HandleMegaReversionStart(void)
+{
+    NATIVE_ARGS();
+    HandleScriptMegaReversion(0, gBattleScripting.battler);
+    gBattlescriptCurrInstr = cmd->nextInstr;
+}
+
+void BS_HandleMegaReversionEnd(void)
+{
+    NATIVE_ARGS();
+    HandleScriptMegaReversion(1, gBattleScripting.battler);
     gBattlescriptCurrInstr = cmd->nextInstr;
 }
 

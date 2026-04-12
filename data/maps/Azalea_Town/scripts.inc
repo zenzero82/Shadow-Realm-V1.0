@@ -29,10 +29,16 @@ AzaleaTown_EventScript_CityEnter::
 	goto_if_eq AzaleaTown_EventScript_CityEnter_AfterMarauder
 	clearflag FLAG_HIDE_AZALEA_AQUA_GRUNTS
 	setflag FLAG_HIDE_AZALEA_ILEX_OFFICER
-	goto AzaleaTown_EventScript_CityEnter_QuestStart
+	goto AzaleaTown_EventScript_CityEnter_CheckOfficer
 AzaleaTown_EventScript_CityEnter_AfterMarauder:
 	setflag FLAG_HIDE_AZALEA_AQUA_GRUNTS
 	clearflag FLAG_HIDE_AZALEA_ILEX_OFFICER
+AzaleaTown_EventScript_CityEnter_CheckOfficer:
+	checkflag FLAG_HIDE_ILEX_JJ_GROUP
+	goto_if_eq AzaleaTown_EventScript_CityEnter_OfficerHidden
+	goto AzaleaTown_EventScript_CityEnter_QuestStart
+AzaleaTown_EventScript_CityEnter_OfficerHidden:
+	setflag FLAG_HIDE_AZALEA_ILEX_OFFICER
 AzaleaTown_EventScript_CityEnter_QuestStart:
 	checkflag FLAG_QUEST_AZALEA_NPCS_STARTED
 	goto_if_eq AzaleaTown_EventScript_CityEnter_QuestSkip
@@ -84,7 +90,7 @@ AzaleaTown_EventScript_KilnSign_Text:
 
 AzaleaTown_EventScript_WellSign::
 	msgbox AzaleaTown_EventScript_WellSign_Text, MSGBOX_SIGN
-	end
+	goto EventScript_GimmighoulSignpost
 
 AzaleaTown_EventScript_WellSign_Text:
 	.string "SLOWPOKE WELL.$"
@@ -204,3 +210,39 @@ AzaleaTown_Text_IlexOfficer:
 	.string "A little late but I managed to\n"
 	.string "drive those grunts out of town\l"
 	.string "with the help of Bugsy!$"
+
+AzaleaTown_Text_Sign:
+	.string "AZALEA TOWN\n"
+	.string "Where People and POKéMON Live in\l"
+	.string "Happy Harmony.$"
+
+
+AzaleaTown_Text_KurtsHouseSign:
+	.string "KURT'S HOUSE$"
+
+
+AzaleaTown_Text_GymSign:
+	.string "AZALEA TOWN\n"
+	.string "POKéMON GYM\p"
+	.string "LEADER: BUGSY\p"
+	.string "The Walking Bug POKéMON\n"
+	.string "Encyclopedia$"
+
+
+AzaleaTown_Text_SlowpokeWellSign:
+	.string "SLOWPOKE WELL\p"
+	.string "Also known as the RAINMAKER WELL.\p"
+	.string "Locals believe that a SLOWPOKE's\n"
+	.string "yawn summons rain.\p"
+	.string "Records show that a SLOWPOKE's\n"
+	.string "yawn ended a drought 400 years ago.$"
+
+
+AzaleaTown_Text_CharcoalKilnSign:
+	.string "CHARCOAL KILN$"
+
+
+AzaleaTown_Text_IlexForestSign:
+	.string "ILEX FOREST\p"
+	.string "Enter through the gate.$"
+

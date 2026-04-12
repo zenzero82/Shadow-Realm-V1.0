@@ -77,6 +77,7 @@ void ResetDexNavSearch(void);
 bool8 TryFindHiddenPokemon(void);
 u32 CalculateDexNavShinyRolls(void);
 void IncrementDexNavChain(void);
+void CreateDexNavWildMon(u16 species, u8 potential, u8 level, u8 abilityNum, u16 item, u16 *moves);
 
 extern u16 gDexNavSpecies;
 

@@ -1,7 +1,22 @@
 WesHideout_Entrance_MapScripts::
+	map_script MAP_SCRIPT_ON_LOAD, WesHideout_Entrance_OnLoad
 	.byte 0
 
 #define LOCALID_WES 1
+#define LOCALID_UMBREON 2
+#define LOCALID_ESPEON 3
+
+WesHideout_Entrance_OnLoad::
+	checkflag FLAG_QUEST_BACK_TO_HQ_STARTED
+	goto_if_eq WesHideout_Entrance_OnLoad_HideWes
+	end
+
+WesHideout_Entrance_OnLoad_HideWes::
+	setvar VAR_TEMP_0, 1
+	hideobjectat LOCALID_WES, MAP_WES_HIDEOUT_ENTRANCE
+	hideobjectat LOCALID_UMBREON, MAP_WES_HIDEOUT_ENTRANCE
+	hideobjectat LOCALID_ESPEON, MAP_WES_HIDEOUT_ENTRANCE
+	end
 
 @ =========================================================
 @ SPEAKER DEFINITIONS (Namebox)
@@ -228,13 +243,13 @@ WesHideout_Entrance_Text_Wes_Gift_Part2:
 	.string "been a trainer spotted near the water\l"
 	.string "just before the POWER PLANT on\l"
 	.string "ROUTE 10. Find him and see if he has\l"
-	.string "a Shadow POKéMON. Our reports say he\l"
+	.string "a {COLOR PURPLE}Shadow POKéMON{COLOR DARK_GRAY}. Our reports say he\l"
 	.string "does.$"
 
 WesHideout_Entrance_Text_Wes_AfterGift:
 	.string "Head to ROUTE 10 and find that\n"
 	.string "trainer. Be ready to snag if you\l"
-	.string "see a Shadow POKéMON.$"
+	.string "see a {COLOR PURPLE}Shadow POKéMON{COLOR DARK_GRAY}.$"
 
 WesHideout_Entrance_Text_Wes_Zander_Report:
 	.string "Right on! Looks like you were able to\n"

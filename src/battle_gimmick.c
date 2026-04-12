@@ -31,7 +31,7 @@ static void EnsureIndicatorPaletteLoaded(u16 palTag)
     if (palTag == TAG_NONE)
         return;
 
-    if (IndexOfSpritePaletteTag(palTag) != 0xFFFFFFFF)
+    if (IndexOfSpritePaletteTag(palTag) != 0xFF)
         return;
 
     switch (palTag)

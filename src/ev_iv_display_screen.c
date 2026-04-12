@@ -517,7 +517,8 @@ static void Task_EvIvInit(u8 taskId)
 
         FillWindowPixelBuffer(WIN_TOP_BOX, 0);
         AddTextPrinterParameterized3(WIN_TOP_BOX, 2, titleX, 2, sWhiteTextColor, 0, gText_eviv_Tittle);
-        AddTextPrinterParameterized3(WIN_TOP_BOX, 2, editX, 2, sWhiteTextColor, 0, gText_eviv_Edit);
+        if (gSaveBlock2Ptr->optionsEvIvEditor == OPTIONS_EV_IV_EDITOR_ON)
+            AddTextPrinterParameterized3(WIN_TOP_BOX, 2, editX, 2, sWhiteTextColor, 0, gText_eviv_Edit);
         AddTextPrinterParameterized3(WIN_TOP_BOX, 0, buttonsX, 1, sWhiteTextColor, 0, gText_eviv_Buttons);
         break;
     }
@@ -671,7 +672,7 @@ static void Task_WaitForExit(u8 taskId)
             }
         }
 
-        if (JOY_NEW(A_BUTTON))
+        if (JOY_NEW(A_BUTTON) && gSaveBlock2Ptr->optionsEvIvEditor == OPTIONS_EV_IV_EDITOR_ON)
         {
             if (!GetMonData(&gEvIv->currentMon, MON_DATA_IS_EGG, NULL))
             {

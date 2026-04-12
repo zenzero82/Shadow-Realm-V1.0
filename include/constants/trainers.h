@@ -219,8 +219,48 @@
 #define TRAINER_PIC_CASSIDY_BUTCH        182
 #define TRAINER_PIC_BRYONY               183
 #define TRAINER_PIC_IRON_MASKED_MARAUDER 184
+#define TRAINER_PIC_MAGMA_COURTNEY       185
+#define TRAINER_PIC_CALEM               186
+#define TRAINER_PIC_SERENA              187
+#define TRAINER_PIC_DIANTHA             188
+#define TRAINER_PIC_LYSANDER            189
+#define TRAINER_PIC_LILLIE              190
+#define TRAINER_PIC_GLADION             191
+#define TRAINER_PIC_ELIO                192
+#define TRAINER_PIC_SELENE              193
+#define TRAINER_PIC_FLARE_FFP           194
+#define TRAINER_PIC_JULIANA             195
+#define TRAINER_PIC_AETHER_F            196
+#define TRAINER_PIC_AETHER_M            197
+#define TRAINER_PIC_ALIANA              198
+#define TRAINER_PIC_ARVEN               199
+#define TRAINER_PIC_CELOSIA             200
+#define TRAINER_PIC_CHARON              201
+#define TRAINER_PIC_FABA                202
+#define TRAINER_PIC_FLORIAN             203
+#define TRAINER_PIC_GLORIA              204
+#define TRAINER_PIC_GUZMA               205
+#define TRAINER_PIC_HAU                 206
+#define TRAINER_PIC_HOP                 207
+#define TRAINER_PIC_LEON                208
+#define TRAINER_PIC_MABLE               209
+#define TRAINER_PIC_NEMONA              210
+#define TRAINER_PIC_PENNY_64X64          211
+#define TRAINER_PIC_PLUMERIA            212
+#define TRAINER_PIC_SADA                213
+#define TRAINER_PIC_SHAUNA              214
+#define TRAINER_PIC_SKULL_GRUNT_FFP     215
+#define TRAINER_PIC_TIERNO              216
+#define TRAINER_PIC_TREVOR              217
+#define TRAINER_PIC_TURO                218
+#define TRAINER_PIC_XEROSIC             219
+#define TRAINER_PIC_BRONIUS             220
+#define TRAINER_PIC_GIALLO              221
+#define TRAINER_PIC_GORM                222
+#define TRAINER_PIC_ROOD                223
+#define TRAINER_PIC_RYOKU               224
 
-#define TRAINER_PIC_COUNT                185
+#define TRAINER_PIC_COUNT                225
 
 // The player back pics are assumed to alternate according to the gender values (MALE/FEMALE)
 #define TRAINER_BACK_PIC_BRENDAN                0
@@ -493,8 +533,9 @@
 #define TRAINER_CLASS_TEAM_FLARE_ADMIN 0x5B
 #define TRAINER_CLASS_TEAM_GALACTIC_ADMIN 0x5C
 #define TRAINER_CLASS_JOHTO_LEADER   0x5D
+#define TRAINER_CLASS_AETHER         0x5E
 
-#define TRAINER_CLASS_COUNT          0x5E
+#define TRAINER_CLASS_COUNT          0x5F
 
 #define TRAINER_ENCOUNTER_MUSIC_MALE         0 // standard male encounter music
 #define TRAINER_ENCOUNTER_MUSIC_FEMALE       1 // standard female encounter music

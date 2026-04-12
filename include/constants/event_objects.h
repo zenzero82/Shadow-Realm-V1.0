@@ -407,6 +407,9 @@
 #define OBJ_EVENT_GFX_PLUMERIA_GEN7            394
 #define OBJ_EVENT_GFX_SKULL_GRUNT_M_GEN7       395
 #define OBJ_EVENT_GFX_SKULL_GRUNT_F_GEN7       396
+#define OBJ_EVENT_GFX_AETHER_GRUNT_M_GEN7      462
+#define OBJ_EVENT_GFX_AETHER_GRUNT_F_GEN7      463
+#define OBJ_EVENT_GFX_FABA_GEN7                464
 
 //Galar (Gen 8)
 #define OBJ_EVENT_GFX_VICTOR_GEN8              397
@@ -475,10 +478,14 @@
 #define OBJ_EVENT_GFX_HOOPA_RING_TIME_AMULET 458
 #define OBJ_EVENT_GFX_SADA_GEN9              459
 #define OBJ_EVENT_GFX_TURO_GEN9              460
+#define OBJ_EVENT_GFX_BALL_TM                461
+#define OBJ_EVENT_GFX_ZYGARDE_CUBE           465
+#define OBJ_EVENT_GFX_LAPRAS_SURF            466
+#define OBJ_EVENT_GFX_TOWER_BEAM             467
 // NOTE: The maximum amount of object events has been expanded from 255 to 65535.
 // Since dynamic graphics ids still require at least 16 free values, the actual limit
 // is 65519, but even considering follower Pokémon, this should be more than enough :)
-#define NUM_OBJ_EVENT_GFX                                               461
+#define NUM_OBJ_EVENT_GFX                                               468
 
 
 // These are dynamic object gfx ids.
@@ -804,6 +811,9 @@
 #define OBJ_EVENT_PAL_TAG_PLUMERIA_GEN7            0x1918
 #define OBJ_EVENT_PAL_TAG_SKULL_GRUNT_M_GEN7       0x1919
 #define OBJ_EVENT_PAL_TAG_SKULL_GRUNT_F_GEN7       0x191A
+#define OBJ_EVENT_PAL_TAG_AETHER_GRUNT_M_GEN7      0x193C
+#define OBJ_EVENT_PAL_TAG_AETHER_GRUNT_F_GEN7      0x193D
+#define OBJ_EVENT_PAL_TAG_FABA_GEN7               0x193E
 
 //Galar (Gen 8)
 #define OBJ_EVENT_PAL_TAG_VICTOR_GEN8              0x191B
@@ -896,6 +906,10 @@
 #define OBJ_EVENT_PAL_TAG_BALL_STRANGE            0x116A
 // Custom
 #define OBJ_EVENT_PAL_TAG_BALL_DARK               0x116B
+#define OBJ_EVENT_PAL_TAG_BALL_TM                 0x116C
+#define OBJ_EVENT_PAL_TAG_ZYGARDE_CUBE            0x116D
+#define OBJ_EVENT_PAL_TAG_LAPRAS_SURF             0x116E
+#define OBJ_EVENT_PAL_TAG_TOWER_BEAM              0x116F
 #endif //OW_FOLLOWERS_POKEBALLS
 // Used as a placeholder follower graphic
 #define OBJ_EVENT_PAL_TAG_SUBSTITUTE              0x7611

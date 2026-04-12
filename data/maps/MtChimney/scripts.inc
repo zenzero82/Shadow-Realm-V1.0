@@ -122,11 +122,6 @@ MtChimney_EventScript_BagIsFull::
 	goto_if_eq VAR_RESULT, FALSE, MtChimney_EventScript_BagIsFull
 	release
 	end
-
-MtChimney_EventScript_BagIsFull::
-	msgbox gText_TooBadBagIsFull, MSGBOX_DEFAULT
-	release
-	end
 .endif @ OW_SHOW_ITEM_DESCRIPTIONS
 
 
@@ -851,4 +846,3 @@ MtChimney_Text_SawyerRematchDefeat:
 MtChimney_Text_SawyerPostRematch:
 	.string "Actually, it really is hot here.\n"
 	.string "I'm overdressed for these parts.$"
-

@@ -424,6 +424,15 @@ $(OBJEVENTGFXDIR)/people/youngster.4bpp: %.4bpp: %.png
 $(OBJEVENTGFXDIR)/misc/ball_poke.4bpp: %.4bpp: %.png
 	$(GFX) $< $@ -mwidth 2 -mheight 4
 
+$(OBJEVENTGFXDIR)/misc/zygarde_cube.4bpp: %.4bpp: %.png
+	$(GFX) $< $@ -mwidth 2 -mheight 4
+
+$(OBJEVENTGFXDIR)/misc/lapras_surf.4bpp: %.4bpp: %.png
+	$(GFX) $< $@ -mwidth 4 -mheight 4
+
+$(OBJEVENTGFXDIR)/misc/tower_beam.4bpp: %.4bpp: %.png
+	$(GFX) $< $@ -mwidth 8 -mheight 8
+
 $(OBJEVENTGFXDIR)/berry_trees/aguav.4bpp: %.4bpp: %.png
 	$(GFX) $< $@ -mwidth 2 -mheight 4
 
@@ -4814,6 +4823,9 @@ $(POKEMONGFXDIR)/baxcalibur/overworld.4bpp: %.4bpp: %.png
 $(POKEMONGFXDIR)/gimmighoul/overworld.4bpp: %.4bpp: %.png
 	$(GFX) $< $@ -mwidth 4 -mheight 4
 
+$(POKEMONGFXDIR)/gimmighoul/roaming/overworld.4bpp: %.4bpp: %.png
+	$(GFX) $< $@ -mwidth 4 -mheight 4
+
 $(POKEMONGFXDIR)/gholdengo/overworld.4bpp: %.4bpp: %.png
 	$(GFX) $< $@ -mwidth 4 -mheight 4
 
@@ -5498,6 +5510,15 @@ $(OBJEVENTGFXDIR)/gen7/skull_grunt_f_gen7.4bpp: graphics/object_events/pics/gen7
 	$(GFX) $< $@ -mwidth 2 -mheight 4
 
 $(OBJEVENTGFXDIR)/gen7/skull_grunt_m_gen7.4bpp: graphics/object_events/pics/gen7/skull_grunt_m_gen7.png
+	$(GFX) $< $@ -mwidth 2 -mheight 4
+
+$(OBJEVENTGFXDIR)/gen7/aethergruntf.4bpp: graphics/object_events/pics/gen7/aethergruntf.png
+	$(GFX) $< $@ -mwidth 2 -mheight 4
+
+$(OBJEVENTGFXDIR)/gen7/aethergruntm.4bpp: graphics/object_events/pics/gen7/aethergruntm.png
+	$(GFX) $< $@ -mwidth 2 -mheight 4
+
+$(OBJEVENTGFXDIR)/gen7/faba.4bpp: graphics/object_events/pics/gen7/faba.png
 	$(GFX) $< $@ -mwidth 2 -mheight 4
 
 $(OBJEVENTGFXDIR)/gen7/sophocles_gen7.4bpp: graphics/object_events/pics/gen7/sophocles_gen7.png

@@ -56,6 +56,13 @@ Viridian_Speaker_Grunt8:
 
 ViridianCity_EventScript_CityEnter::
     setflag FLAG_VISITED_VIRIDIAN_CITY
+    checkflag FLAG_ILEX_BIRCH_CALL_DONE
+    goto_if_eq VAR_RESULT, FALSE, ViridianCity_EventScript_GymDoorUnlocked
+    setvar VAR_TEMP_1, 0
+    goto ViridianCity_EventScript_GymDoorLockStateDone
+ViridianCity_EventScript_GymDoorUnlocked:
+    setvar VAR_TEMP_1, 1
+ViridianCity_EventScript_GymDoorLockStateDone:
     @ Do NOT touch Gonzap here – his visibility is controlled
     @ by FLAG_HIDE_VIRIDIAN_GONZAP and the gym scene.
     end
@@ -105,6 +112,14 @@ ViridianCity_EventScript_GymSign::
     msgbox ViridianCity_Text_GymSign, MSGBOX_SIGN
     end
 
+ViridianCity_EventScript_GymDoorLocked::
+    lockall
+    msgbox ViridianCity_Text_GymDoorLocked, MSGBOX_SIGN
+    applymovement OBJ_EVENT_ID_PLAYER, Common_Movement_WalkDown
+    waitmovement 0
+    releaseall
+    end
+
 @ ==============================
 @ NEW NPC: Old Man driven out
 @ (Assign this script to your new NPC object in Porymap)
@@ -127,6 +142,9 @@ ViridianCity_Text_ExileOldMan:
     .string "My neighbors? Hiding behind locked doors.\p"
     .string "If you're strong enough...\n"
     .string "please bring Viridian back.$"
+
+ViridianCity_Text_GymDoorLocked::
+    .string "The Gym doors are locked.$"
 
 @ ==============================
 @ JESSIE & JAMES + MEOWTH
@@ -678,7 +696,7 @@ ViridianCity_Text_Gonzap_Intro:
 
 ViridianCity_Text_Gonzap_Threat:
     .string "Remember this face.\p"
-    .string "When Shadow Pokemon start showing up in\n"
+    .string "When {COLOR PURPLE}Shadow Pokemon{COLOR DARK_GRAY} start showing up in\n"
     .string "your League matches, you'll know who\l"
     .string "gave the order.\p"
     .string "Enjoy the calm while it lasts.$"
@@ -726,3 +744,4 @@ ViridianCity_Text_Grunt8:
     .string "You look confused.\n"
     .string "Like you just dropped in from nowhere.\p"
     .string "Bad time to get lost in Kanto, kid.$"
+

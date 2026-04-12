@@ -3140,12 +3140,6 @@ static void PSS_ShowInfoPokemon(void)
 		else	
 			AddTextPrinterParameterized3(sMonSummaryScreen->window[3], 2, 80 + sUnknown_203B144->unk00, 3 + yOffset, sPSSTextColours[DARK], TEXT_SPEED_FF, sMonSummaryScreen->summary.dexNum);
 		{
-			s16 levelY = (3 + yOffset) - 24;
-			if (levelY < 0)
-				levelY = 0;
-			AddTextPrinterParameterized3(sMonSummaryScreen->window[3], 2, 80 + sUnknown_203B144->unk00, levelY, sPSSTextColours[DARK], TEXT_SPEED_FF, sMonSummaryScreen->summary.level);
-		}
-		{
 			bool8 isShadow = GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_IS_SHADOW);
 
 			if (isShadow)
@@ -3468,6 +3462,15 @@ static void PSS_ShowTrainerMemo(void)
 
     PSS_BufferMonTrainerMemo();
     AddTextPrinterParameterized3(sMonSummaryScreen->window[4], 2, 6, 0, sPSSTextColours[WHITE], TEXT_SPEED_FF, gText_PSS_TrainerMemo);
+    {
+        u8 windowId = sMonSummaryScreen->window[4];
+        s16 levelW = GetStringWidth(2, sMonSummaryScreen->summary.level, 0);
+        s16 maxX = GetWindowAttribute(windowId, WINDOW_WIDTH) * 8;
+        s16 levelX = maxX - levelW - 62;
+        if (levelX < 0)
+            levelX = 0;
+        AddTextPrinterParameterized3(windowId, 2, levelX, 0, sPSSTextColours[DARK], TEXT_SPEED_FF, sMonSummaryScreen->summary.level);
+    }
 
     StringCopy(memoText, gStringVar4);
     lines[lineCount++] = memoText;
@@ -4773,17 +4776,19 @@ static void PSS_LoadMonIcon(void)
 {
     u16 species;
     u32 personality;
+    bool8 isShiny;
     bool8 isShadow;
 
     species = GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_SPECIES);
     personality = GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_PERSONALITY);
+    isShiny = GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_IS_SHINY);
     isShadow = GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_IS_SHADOW);
 
     if (ShouldIgnoreDeoxysForm(3, gLastViewedMonIndex))
         species = SPECIES_DEOXYS;
 
     LoadMonIconPalette(species);
-    sMonSummaryScreen->spriteId_2 = CreateMonIcon(species, SpriteCallbackDummy, 140, 28, 0, personality, isShadow);
+    sMonSummaryScreen->spriteId_2 = CreateMonIcon(species, SpriteCallbackDummy, 140, 28, 0, personality, isShiny, isShadow);
 
     if (!IsMonSpriteNotFlipped(species))
         gSprites[sMonSummaryScreen->spriteId_2].hFlip = FALSE;

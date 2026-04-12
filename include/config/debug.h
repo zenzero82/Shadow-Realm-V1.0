@@ -2,7 +2,7 @@
 #define GUARD_CONFIG_DEBUG_H
 
 // Debug Menus
-#define DEBUG_MENUS_ENABLED             FALSE               // Master toggle for overworld/battle debug menus.
+#define DEBUG_MENUS_ENABLED             TRUE                // Master toggle for overworld/battle debug menus.
 
 // Overworld Debug
 #define DEBUG_OVERWORLD_MENU            (DEBUG_MENUS_ENABLED && TRUE) // Enables an overworld debug menu to change flags, variables, giving pokemon and more, accessed by holding R and pressing START while in the overworld by default.

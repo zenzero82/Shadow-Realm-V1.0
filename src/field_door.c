@@ -413,6 +413,7 @@ static const struct DoorGraphics sDoorAnimGraphicsTable[] =
     {METATILE_fuchsia_city_Fuchsia, DOOR_SOUND_NORMAL, DOOR_SIZE_1x1, sDoorAnimTiles_Fuchsia, sDoorAnimPalettes_Fuchsia},
     {METATILE_fuchsia_city_Red_Door, DOOR_SOUND_SLIDING, DOOR_SIZE_1x1, sDoorAnimTiles_Fuchsia_Red_Door, sDoorAnimPalettes_Fuchsia_Red_Door},
     {METATILE_viridian_Viridian_Door, DOOR_SOUND_NORMAL, DOOR_SIZE_1x1, sDoorAnimTiles_Viridian, sDoorAnimPalettes_Viridian},
+    {0x246, DOOR_SOUND_SLIDING, DOOR_SIZE_1x1, sDoorAnimTiles_Viridian, sDoorAnimPalettes_Viridian},
     {0x26B, DOOR_SOUND_NORMAL, DOOR_SIZE_1x1, sDoorAnimTiles_Pewter, sDoorAnimPalettes_Pewter},
     {},
 };

@@ -47,3 +47,9 @@ Route108_EventScript_CoryRematch::
 	msgbox Route108_Text_CoryRematchPostBattle, MSGBOX_AUTOCLOSE
 	end
 
+Route108_EventScript_AbandonedShipSign::
+	msgbox Route108_Text_AbandonedShipSign, MSGBOX_SIGN
+	goto EventScript_GimmighoulSignpost
+
+Route108_Text_AbandonedShipSign:
+	.string "ABANDONED SHIP$"
