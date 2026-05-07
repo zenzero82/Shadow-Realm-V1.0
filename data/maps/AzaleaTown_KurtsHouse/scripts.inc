@@ -2,16 +2,72 @@ AzaleaTown_KurtsHouse_MapScripts::
 	map_script MAP_SCRIPT_ON_LOAD, AzaleaTown_KurtsHouse_OnLoad
 	map_script MAP_SCRIPT_ON_TRANSITION, AzaleaTown_KurtsHouse_OnTransition
 	map_script MAP_SCRIPT_ON_RESUME, AzaleaTown_KurtsHouse_OnResume
+	map_script MAP_SCRIPT_ON_WARP_INTO_MAP_TABLE, AzaleaTown_KurtsHouse_OnWarp
+	map_script MAP_SCRIPT_ON_FRAME_TABLE, AzaleaTown_KurtsHouse_OnFrame
 	.byte 0
 
 .set LOCALID_KURT, 1
 .set LOCALID_MARAUDER, 2
 .set LOCALID_SKARMORY, 3
+.set LOCALID_HOOPA_RING, 4
+.set LOCALID_GOLD, 5
 
 AzaleaTown_KurtsHouse_OnLoad::
-	goto AzaleaTown_KurtsHouse_OnTransition
+	setvar VAR_TEMP_1, 1
+	setvar VAR_TEMP_2, 1
+	setflag FLAG_HIDE_KURTS_HOUSE_HOOPA_RING
+	setflag FLAG_HIDE_KURTS_HOUSE_GOLD
+	goto_if_unset FLAG_KURTS_HOUSE_HOOPA_EMERGE, AzaleaTown_KurtsHouse_OnLoad_PostEmergence
+	setvar VAR_TEMP_1, 0
+	setvar VAR_TEMP_2, 0
+	hideobjectat LOCALID_PLAYER, MAP_AZALEA_TOWN_KURTS_HOUSE
+	hideobjectat LOCALID_HOOPA_RING, MAP_AZALEA_TOWN_KURTS_HOUSE
+	removeobject LOCALID_HOOPA_RING
+	end
+AzaleaTown_KurtsHouse_OnLoad_PostEmergence:
+	goto_if_set FLAG_KURTS_HOUSE_GOLD_SCENE_DONE, AzaleaTown_KurtsHouse_OnLoad_ShowGoldByKurt
+	showobjectat LOCALID_PLAYER, MAP_AZALEA_TOWN_KURTS_HOUSE
+	resetobjectsubpriority LOCALID_PLAYER, MAP_AZALEA_TOWN_KURTS_HOUSE
+	goto_if_set FLAG_KURTS_HOUSE_MARAUDER_SCENE_DONE, AzaleaTown_KurtsHouse_OnTransition_MarauderDone
+	goto_if_set FLAG_HIDE_KURTS_HOUSE_SKARMORY, AzaleaTown_KurtsHouse_OnTransition_HideSkarmory
+	end
+
+AzaleaTown_KurtsHouse_OnLoad_ShowGoldByKurt:
+	clearflag FLAG_HIDE_KURTS_HOUSE_GOLD
+	setobjectxy LOCALID_GOLD, 15, 4
+	setobjectxyperm LOCALID_GOLD, 15, 4
+	setobjectmovementtype LOCALID_GOLD, MOVEMENT_TYPE_FACE_UP
+	showobjectat LOCALID_GOLD, MAP_AZALEA_TOWN_KURTS_HOUSE
+	showobjectat LOCALID_PLAYER, MAP_AZALEA_TOWN_KURTS_HOUSE
+	resetobjectsubpriority LOCALID_PLAYER, MAP_AZALEA_TOWN_KURTS_HOUSE
+	goto_if_set FLAG_KURTS_HOUSE_MARAUDER_SCENE_DONE, AzaleaTown_KurtsHouse_OnTransition_MarauderDone
+	goto_if_set FLAG_HIDE_KURTS_HOUSE_SKARMORY, AzaleaTown_KurtsHouse_OnTransition_HideSkarmory
+	end
 
 AzaleaTown_KurtsHouse_OnTransition::
+	setflag FLAG_HIDE_KURTS_HOUSE_HOOPA_RING
+	setflag FLAG_HIDE_KURTS_HOUSE_GOLD
+	goto_if_set FLAG_KURTS_HOUSE_HOOPA_EMERGE, AzaleaTown_KurtsHouse_OnTransition_HidePlayer
+	goto_if_set FLAG_KURTS_HOUSE_GOLD_SCENE_DONE, AzaleaTown_KurtsHouse_OnTransition_ShowGoldByKurt
+	showobjectat LOCALID_PLAYER, MAP_AZALEA_TOWN_KURTS_HOUSE
+	resetobjectsubpriority LOCALID_PLAYER, MAP_AZALEA_TOWN_KURTS_HOUSE
+	goto_if_set FLAG_KURTS_HOUSE_MARAUDER_SCENE_DONE, AzaleaTown_KurtsHouse_OnTransition_MarauderDone
+	goto_if_set FLAG_HIDE_KURTS_HOUSE_SKARMORY, AzaleaTown_KurtsHouse_OnTransition_HideSkarmory
+	end
+AzaleaTown_KurtsHouse_OnTransition_HidePlayer:
+	hideobjectat LOCALID_PLAYER, MAP_AZALEA_TOWN_KURTS_HOUSE
+	hideobjectat LOCALID_HOOPA_RING, MAP_AZALEA_TOWN_KURTS_HOUSE
+	removeobject LOCALID_HOOPA_RING
+	end
+
+AzaleaTown_KurtsHouse_OnTransition_ShowGoldByKurt:
+	clearflag FLAG_HIDE_KURTS_HOUSE_GOLD
+	setobjectxy LOCALID_GOLD, 15, 4
+	setobjectxyperm LOCALID_GOLD, 15, 4
+	setobjectmovementtype LOCALID_GOLD, MOVEMENT_TYPE_FACE_UP
+	showobjectat LOCALID_GOLD, MAP_AZALEA_TOWN_KURTS_HOUSE
+	showobjectat LOCALID_PLAYER, MAP_AZALEA_TOWN_KURTS_HOUSE
+	resetobjectsubpriority LOCALID_PLAYER, MAP_AZALEA_TOWN_KURTS_HOUSE
 	goto_if_set FLAG_KURTS_HOUSE_MARAUDER_SCENE_DONE, AzaleaTown_KurtsHouse_OnTransition_MarauderDone
 	goto_if_set FLAG_HIDE_KURTS_HOUSE_SKARMORY, AzaleaTown_KurtsHouse_OnTransition_HideSkarmory
 	end
@@ -24,6 +80,14 @@ AzaleaTown_KurtsHouse_OnTransition_HideSkarmory:
 AzaleaTown_KurtsHouse_OnResume:
 	call_if_set FLAG_SYS_CTRL_OBJ_DELETE, AzaleaTown_KurtsHouse_EventScript_TryRemoveSkarmory
 	end
+
+AzaleaTown_KurtsHouse_OnWarp::
+	map_script_2 VAR_TEMP_2, 0, AzaleaTown_KurtsHouse_EventScript_HidePlayerOnWarp
+	.2byte 0
+
+AzaleaTown_KurtsHouse_OnFrame:
+	map_script_2 VAR_TEMP_1, 0, AzaleaTown_KurtsHouse_EventScript_PlayerEmerges
+	.2byte 0
 
 AzaleaTown_KurtsHouse_OnTransition_MarauderDone:
 	hideobjectat LOCALID_SKARMORY, MAP_AZALEA_TOWN_KURTS_HOUSE
@@ -40,6 +104,9 @@ AzaleaTown_KurtsHouse_OnTransition_SetOrderReady:
 
 AzaleaTown_KurtsHouse_Speaker_Kurt:
 	.string "KURT$"
+
+AzaleaTown_KurtsHouse_Speaker_Gold:
+	.string "ETHAN$"
 
 AzaleaTown_KurtsHouse_EventScript_Kurt::
 	faceplayer
@@ -83,6 +150,12 @@ AzaleaTown_KurtsHouse_EventScript_Kurt_OrderPending:
 AzaleaTown_KurtsHouse_EventScript_Kurt_ApricornEnd:
 	setflag FLAG_QUEST_AZALEA_NPC_KURTS_HOUSE_KURT
 	call AzaleaTown_EventScript_CheckAzaleaQuest
+	end
+
+AzaleaTown_KurtsHouse_EventScript_Gold::
+	faceplayer
+	setspeaker AzaleaTown_KurtsHouse_Speaker_Gold
+	msgbox AzaleaTown_KurtsHouse_Text_Gold_After, MSGBOX_NPC
 	end
 
 AzaleaTown_KurtsHouse_Speaker_IronMask:
@@ -188,6 +261,130 @@ AzaleaTown_KurtsHouse_EventScript_TryRemoveSkarmory::
 	removeobject LOCALID_SKARMORY
 	return
 
+AzaleaTown_KurtsHouse_EventScript_HidePlayerOnWarp::
+	goto_if_unset FLAG_KURTS_HOUSE_HOOPA_EMERGE, AzaleaTown_KurtsHouse_EventScript_HidePlayerOnWarp_Done
+	hideobjectat LOCALID_PLAYER, MAP_AZALEA_TOWN_KURTS_HOUSE
+AzaleaTown_KurtsHouse_EventScript_HidePlayerOnWarp_Done:
+	end
+
+AzaleaTown_KurtsHouse_EventScript_PlayerEmerges::
+	lockall
+	setvar VAR_TEMP_1, 1
+	clearflag FLAG_KURTS_HOUSE_HOOPA_EMERGE
+	hideobjectat LOCALID_PLAYER, MAP_AZALEA_TOWN_KURTS_HOUSE
+	clearflag FLAG_KURTS_HOUSE_GOLD_SCENE_DONE
+	call AzaleaTown_KurtsHouse_EventScript_ShowGoldForEntrance
+	setobjectxy LOCALID_PLAYER, 4, 5
+	setobjectxyperm LOCALID_PLAYER, 4, 5
+	clearflag FLAG_HIDE_KURTS_HOUSE_HOOPA_RING
+	addobject LOCALID_HOOPA_RING
+	hideobjectat LOCALID_HOOPA_RING, MAP_AZALEA_TOWN_KURTS_HOUSE
+	setobjectxy LOCALID_HOOPA_RING, 4, 5
+	setobjectxyperm LOCALID_HOOPA_RING, 4, 5
+	showobjectat LOCALID_HOOPA_RING, MAP_AZALEA_TOWN_KURTS_HOUSE
+	setobjectsubpriority LOCALID_HOOPA_RING, MAP_AZALEA_TOWN_KURTS_HOUSE, 1
+	setvar VAR_0x8004, LOCALID_HOOPA_RING
+	setvar VAR_0x8001, 4
+	setvar VAR_0x8002, 5
+	special Special_HoopaRingSpawnGrow
+	waitstate
+	playse SE_LAVARIDGE_FALL_WARP
+	setobjectsubpriority LOCALID_PLAYER, MAP_AZALEA_TOWN_KURTS_HOUSE, 0
+	showobjectat LOCALID_PLAYER, MAP_AZALEA_TOWN_KURTS_HOUSE
+	setvar VAR_0x8000, LOCALID_PLAYER
+	special Special_ObjectEventEmerge
+	applymovement LOCALID_PLAYER, AzaleaTown_KurtsHouse_Movement_StepFromPortal_First
+	waitmovement 0
+	applymovement LOCALID_PLAYER, AzaleaTown_KurtsHouse_Movement_StepFromPortal_Second
+	waitmovement 0
+	setvar VAR_0x8004, LOCALID_HOOPA_RING
+	special Special_HoopaRingShrinkDespawn
+	waitstate
+	hideobjectat LOCALID_HOOPA_RING, MAP_AZALEA_TOWN_KURTS_HOUSE
+	setflag FLAG_HIDE_KURTS_HOUSE_HOOPA_RING
+	removeobject LOCALID_HOOPA_RING
+	resetobjectsubpriority LOCALID_PLAYER, MAP_AZALEA_TOWN_KURTS_HOUSE
+	showobjectat LOCALID_PLAYER, MAP_AZALEA_TOWN_KURTS_HOUSE
+	call AzaleaTown_KurtsHouse_EventScript_GoldEntrance
+	releaseall
+	end
+
+AzaleaTown_KurtsHouse_EventScript_ShowGoldForEntrance::
+	clearflag FLAG_HIDE_KURTS_HOUSE_GOLD
+	setobjectxy LOCALID_GOLD, 4, 8
+	setobjectxyperm LOCALID_GOLD, 4, 8
+	showobjectat LOCALID_GOLD, MAP_AZALEA_TOWN_KURTS_HOUSE
+	return
+
+AzaleaTown_KurtsHouse_EventScript_GoldEntrance::
+	applymovement LOCALID_GOLD, AzaleaTown_KurtsHouse_Movement_GoldEnterHouse
+	waitmovement 0
+	applymovement LOCALID_GOLD, Common_Movement_FaceUp
+	waitmovement 0
+	playse SE_PIN
+	applymovement LOCALID_GOLD, Common_Movement_ExclamationMark
+	waitmovement 0
+	applymovement LOCALID_PLAYER, Common_Movement_FaceDown
+	waitmovement 0
+	setspeaker AzaleaTown_KurtsHouse_Speaker_Gold
+	msgbox AzaleaTown_KurtsHouse_Text_Gold_Intro, MSGBOX_DEFAULT
+	setspeaker AzaleaTown_KurtsHouse_Speaker_Gold
+	msgbox AzaleaTown_KurtsHouse_Text_Gold_DarkBalls, MSGBOX_DEFAULT
+	setspeaker AzaleaTown_KurtsHouse_Speaker_Gold
+	msgbox AzaleaTown_KurtsHouse_Text_Gold_AquaOlivine, MSGBOX_DEFAULT
+	setspeaker AzaleaTown_KurtsHouse_Speaker_Gold
+	msgbox AzaleaTown_KurtsHouse_Text_Gold_RadioTower, MSGBOX_DEFAULT
+	setspeaker AzaleaTown_KurtsHouse_Speaker_Gold
+	msgbox AzaleaTown_KurtsHouse_Text_Gold_Whitney, MSGBOX_DEFAULT
+	setflag FLAG_QUEST_WHITNEY_STARTED
+	setflag FLAG_QUEST_CIPHER_TAKEOVER_STARTED
+	call QuestJournal_EventScript_NewQuestsAlert
+	setflag FLAG_KURTS_HOUSE_GOLD_SCENE_DONE
+	applymovement LOCALID_GOLD, AzaleaTown_KurtsHouse_Movement_GoldWalkToKurt
+	waitmovement 0
+	setobjectxyperm LOCALID_GOLD, 15, 4
+	setobjectmovementtype LOCALID_GOLD, MOVEMENT_TYPE_FACE_UP
+	turnobject LOCALID_GOLD, DIR_NORTH
+	turnobject LOCALID_KURT, DIR_SOUTH
+	return
+
+AzaleaTown_KurtsHouse_Text_Gold_Intro:
+	.string "Hey! You're {PLAYER}, right?\p"
+	.string "I'm Ethan. Some people call me\n"
+	.string "Gold.\p"
+	.string "Thanks for checking on my mom.\n"
+	.string "That means a lot.$"
+
+AzaleaTown_KurtsHouse_Text_Gold_DarkBalls:
+	.string "I'm here to pick up some DARK\n"
+	.string "BALLS from Kurt.\p"
+	.string "We had an intense battle with\n"
+	.string "TEAM AQUA in ECRUTEAK.$"
+
+AzaleaTown_KurtsHouse_Text_Gold_AquaOlivine:
+	.string "Michael and Victor chased TEAM\n"
+	.string "AQUA toward OLIVINE CITY.\p"
+	.string "They can handle that side of\n"
+	.string "things for now.$"
+
+AzaleaTown_KurtsHouse_Text_Gold_RadioTower:
+	.string "But something shady is going on\n"
+	.string "at GOLDENROD's RADIO TOWER.\p"
+	.string "CIPHER has been broadcasting on\n"
+	.string "the airwaves. You should go\l"
+	.string "investigate.$"
+
+AzaleaTown_KurtsHouse_Text_Gold_Whitney:
+	.string "You should challenge WHITNEY at\n"
+	.string "GOLDENROD GYM first.\p"
+	.string "Taking on CIPHER won't be easy.$"
+
+AzaleaTown_KurtsHouse_Text_Gold_After:
+	.string "Head to GOLDENROD when you're\n"
+	.string "ready.\p"
+	.string "I'd challenge WHITNEY before\n"
+	.string "checking the RADIO TOWER.$"
+
 AzaleaTown_KurtsHouse_Text_IronMask_Intro:
 	.string "Who are you?\p"
 	.string "Get out of my way, kid.$"
@@ -217,9 +414,9 @@ AzaleaTown_KurtsHouse_Text_Kurt:
 	.string "around KANTO, JOHTO, and HOENN soon.\p"
 	.string "I can also make more for you but they\n"
 	.string "require APRICORNs to create them.\p"
-	.string "There are many trees around Johto which\n"
-	.string "can't be found anywhere else that have\l"
-	.string "them.\p"
+	.string "There are many trees around Johto\n"
+	.string "which can't be found anywhere else\l"
+	.string "that have them.\p"
 	.string "Be sure to come back here if you find\n"
 	.string "APRICORNs along your journey.$"
 
@@ -250,7 +447,8 @@ AzaleaTown_KurtsHouse_Text_Kurt_DarkBalls:
 AzaleaTown_KurtsHouse_Text_Kurt_ApricornIntro:
 	.string "I can make POKéBALLS from APRICORNs.\p"
 	.string "If you want me to make a DARK BALL,\n"
-	.string "You'll need at least 1 of each APRICORN.\p"
+	.string "You'll need at least 1 of each.\l"
+	.string "APRICORN.\p"
 	.string "Which BALL should I make?$"
 
 AzaleaTown_KurtsHouse_Text_Kurt_OrderPlaced:
@@ -330,4 +528,34 @@ AzaleaTown_KurtsHouse_Movement_MarauderExitLeft:
 	walk_left
 	walk_left
 	walk_left
+	step_end
+
+AzaleaTown_KurtsHouse_Movement_StepFromPortal_First:
+	walk_down
+	step_end
+
+AzaleaTown_KurtsHouse_Movement_StepFromPortal_Second:
+	walk_down
+	step_end
+
+AzaleaTown_KurtsHouse_Movement_GoldEnterHouse:
+	walk_up
+	face_up
+	step_end
+
+AzaleaTown_KurtsHouse_Movement_GoldWalkToKurt:
+	walk_right
+	walk_right
+	walk_right
+	walk_right
+	walk_right
+	walk_right
+	walk_right
+	walk_right
+	walk_right
+	walk_right
+	walk_right
+	walk_up
+	walk_up
+	walk_up
 	step_end

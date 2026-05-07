@@ -209,6 +209,7 @@ gSpecials::
 	def_special GetSelectedMonNicknameAndSpecies
 	def_special StoreSelectedPokemonInDaycare
 	def_special ChooseSendDaycareMon
+	def_special IsSelectedMonShadowForDaycare
 	def_special ShowDaycareLevelMenu
 	def_special GetNumLevelsGainedFromDaycare
 	def_special GetDaycareCost
@@ -307,9 +308,13 @@ gSpecials::
 	def_special Special_HoopaRingShrinkDespawn
 	def_special Special_LockPlayerFacingDown
 	def_special Special_ClearPlayerFacingOverride
+	def_special Special_ApplyCipherDisguise
+	def_special Special_RestorePlayerAvatarGraphics
 	def_special Special_OverworldWildEncounters_OnReturnToField
+	def_special Special_OverworldWildEncounters_OnMapLoad
 	def_special Special_ObjectEventAbsorb
 	def_special Special_ObjectEventEmerge
+	def_special Special_SetObjectPriorityHigh
 	def_special SetObjectEventPortalAffineAnims
 	def_special SetObjectEventPortalAbsorbAffineAnims
 	def_special ResetObjectEventAffineAnims
@@ -369,6 +374,12 @@ gSpecials::
 	def_special GetContestMultiplayerId
 	def_special ScriptGetPartyMonSpecies
 	def_special IsSelectedMonEgg
+	def_special RuinsOfAlph_PlaceHoOhGuardianMon
+	def_special RuinsOfAlph_ClearHoOhGuardianMons
+	def_special RuinsOfAlph_ReloadHoOhGuardianMons
+	def_special RuinsOfAlph_HasAnyHoOhGuardianMons
+	def_special RuinsOfAlph_HasThreeHoOhGuardianMons
+	def_special RuinsOfAlph_CheckHoOhGuardianMons
 	def_special TryInitBattleTowerAwardManObjectEvent
 	def_special MoveOutOfSecretBaseFromOutside
 	def_special LoadPlayerBag
@@ -601,3 +612,13 @@ gSpecials::
 	def_special Special_KurtApricornMenu
 	def_special Special_HeadbuttTree
 	def_special Special_HeadbuttTree_StartBattle
+	def_special EnterBugContestMode
+	def_special ExitBugContestMode
+	def_special PreparePartyForBugContest
+	def_special TransferBugContestMon
+	def_special JudgeBugContestMon
+	def_special RemoveSafariBalls
+	def_special ShowBugContestChosenMon
+	def_special SetVermilionTrashCans
+	def_special Special_RestoreNebbyFollower
+	def_special IsHoldingAButton

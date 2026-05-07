@@ -334,7 +334,28 @@ OaksLab_EventScript_Leo_GiveQuestJournal::
     msgbox OaksLab_Text_Leo_QuestJournal, MSGBOX_DEFAULT
     giveitem ITEM_QUEST_JOURNAL
     setflag FLAG_QUEST_PALLET_TOWN_STARTED
+    setvar VAR_TEMP_0, 0
+    call QuestJournal_EventScript_CheckPalletTownNPCs
+    checkflag FLAG_QUEST_PALLET_TOWN_COMPLETED
+    goto_if_eq OaksLab_EventScript_Leo_GiveQuestJournal_CheckViridian
+    addvar VAR_TEMP_0, 1
+OaksLab_EventScript_Leo_GiveQuestJournal_CheckViridian:
+    checkflag FLAG_QUEST_PALLET_TOWN_NPC_DAISY
+    goto_if_eq OaksLab_EventScript_Leo_GiveQuestJournal_Alerts
+    checkflag FLAG_QUEST_VIRIDIAN_GYM_STARTED
+    goto_if_eq OaksLab_EventScript_Leo_GiveQuestJournal_Alerts
+    setflag FLAG_QUEST_VIRIDIAN_GYM_STARTED
+    addvar VAR_TEMP_0, 1
+OaksLab_EventScript_Leo_GiveQuestJournal_Alerts:
+    compare VAR_TEMP_0, 0
+    goto_if_eq OaksLab_EventScript_Leo_GiveQuestJournal_End
+    compare VAR_TEMP_0, 1
+    goto_if_eq OaksLab_EventScript_Leo_GiveQuestJournal_NewQuest
+    call QuestJournal_EventScript_NewQuestsAlert
+    goto OaksLab_EventScript_Leo_GiveQuestJournal_End
+OaksLab_EventScript_Leo_GiveQuestJournal_NewQuest:
     call QuestJournal_EventScript_NewQuestAlert
+    goto OaksLab_EventScript_Leo_GiveQuestJournal_End
 OaksLab_EventScript_Leo_GiveQuestJournal_End:
     return
 
@@ -763,12 +784,12 @@ OaksLab_Text_FindCoworker:
     .string "Can you please find my partner LEO?\n"
     .string "He went out to look for clues and has\l"
     .string "been gone for quite some time.\p"
-    .string "I'm trying to see if the Professor left\n"
-    .string "any hints on his PC.$"
+    .string "I'm trying to see whether the\n"
+    .string "Professor left any hints on his PC.$"
 OaksLab_Text_Leo_EnterLab:
-    .string "Nia! It seems that issue the Professor\n"
-    .string "has been researching has made its way\l"
-    .string "to Pallet Town!\p"
+    .string "Nia! It seems the issue the\n"
+    .string "Professor studied reached\l"
+    .string "Pallet Town!\p"
     .string "One of those people just captured a\n"
     .string "POKéMON and transformed it!$"
 
@@ -776,8 +797,8 @@ OaksLab_Text_OakEmailIntro:
     .string "Oh no! This is not good.\p"
     .string "We may not be out of luck, though.\p"
     .string "The Professor got an email from\n"
-    .string "a colleague. It says:\p"
-    .string "A trainer arrived through a portal.\n"
+    .string "a colleague. It says:\l"
+    .string "A trainer arrived through a portal.\l"
     .string "Give them one of the POKéMON that\l"
     .string "Oak was studying...$"
 
@@ -786,10 +807,10 @@ OaksLab_Text_Leo_ToPlayer:
     .string "...Ah, I see. You don't know how you\n"
     .string "got here, and you came through a\l"
     .string "strange portal.\p"
-    .string "...You're the one! Please, you have to\n"
-    .string "help us!\p"
-    .string "The POKéMON the Professor was studying\n"
-    .string "are on the table.$"
+    .string "...You're the one!\n"
+    .string "Please, you have to help us!\p"
+    .string "The POKeMON Professor Oak\n"
+    .string "studied are on the table.$"
 OaksLab_Text_Aide_PointToStarters:
     .string "Leo, you should also give him a\n"
     .string "POKEDEX.\p"
@@ -797,41 +818,44 @@ OaksLab_Text_Aide_PointToStarters:
     .string "with giving it to this trainer if he\l"
     .string "trusts him with a partner.$"
 OaksLab_Text_Leo_AfterNia:
-    .string "Now please, help us find the Professor\n"
-    .string "and stop these evil people!$"
+    .string "Now please, help us find\n"
+    .string "the Professor.\p"
+    .string "And stop these evil people!$"
 OaksLab_Text_Leo_BlockExit:
     .string "Hey! Route 1 is dangerous.\p"
     .string "Please pick a partner before you go!$"
 OaksLab_Text_Leo_PostStarter:
     .string "I hope the Professor was right to\n"
     .string "entrust a POKéMON to you.\p"
-    .string "There has been so much strange activity\n"
-    .string "lately. I have trust issues...$"
+    .string "There has been a lot of strange\n"
+    .string "activity lately. I'm cautious...$"
 OaksLab_Text_Leo_GrantNationalDex:
     .string "Ah, yes. Good point.\p"
     .string "Like she said, take this and use it\n"
     .string "on your journey.\p"
-    .string "It can really help document the strange\n"
-    .string "appearance of POKéMON in this region.$"
+    .string "It can help document the odd\n"
+    .string "POKeMON appearing in this region.$"
 OaksLab_Text_Leo_Dexnav:
     .string "Here, take the DEXNAV too.\p"
-    .string "It helps you search for POKéMON nearby.\p"
-    .string "When searching, hold A to slow-walk so\n"
-    .string "they don't run away.$"
+    .string "It helps you search for\n"
+    .string "POKeMON nearby.\p"
+    .string "When searching, hold A to walk\n"
+    .string "slowly so they don't run away.$"
 OaksLab_Text_Leo_QuestJournal:
-    .string "You should also take this Quest Journal\n"
-    .string "to keep track of the crazy things\l"
+    .string "You should also take this\n"
+    .string "Quest Journal.\p"
+    .string "Use it to track the crazy things\l"
     .string "happening.\p"
-    .string "Maybe your first entry can be speaking\n"
-    .string "with everyone in Pallet Town.$"
+    .string "Maybe your first entry can be\n"
+    .string "talking with Pallet Town folk.$"
 OaksLab_Text_Nia_PostStarter:
     .string "We don't know much about what is\n"
     .string "happening.\p"
     .string "We do know that Professor OAK was\n"
     .string "studying this odd transformation and\l"
-    .string "said he was close to solving the case.\p"
-    .string "Next thing we know, he just disappeared\n"
-    .string "from the lab!$"
+    .string "said he was close to solving it.\p"
+    .string "Next thing we knew, he just\n"
+    .string "vanished from the lab!$"
 OaksLab_Text_Ball_Ralts_Inspect:
     .string "Do you want to select IMPIDIMP\nas your starter?$"
 
@@ -839,10 +863,12 @@ OaksLab_Text_Ball_Honedge_Inspect:
     .string "Do you want to select HONEDGE\nas your starter?$"
 
 OaksLab_Text_Ball_Zorua_Inspect:
-    .string "Do you want to select GALARIAN SLOWPOKE\nas your starter?$"
+    .string "Select GALARIAN SLOWPOKE\n"
+    .string "as your starter?$"
 
 OaksLab_Text_StarterBall_NotYet:
-    .string "It seems like there is a Pokemon inside.\p"
+    .string "It seems there is a POKeMON\n"
+    .string "inside.\p"
     .string "Better not touch it.$"
 
 OaksLab_Text_StarterBall_AlreadyHavePokemon:
@@ -884,7 +910,8 @@ OaksLab_Text_Bookshelf_Studies:
 
 OaksLab_Text_Bookshelf_XD:
     .string "A draft titled XD catches your eye.\p"
-    .string "It mentions a strange new POKéMON form.$"
+    .string "It mentions a strange new\n"
+    .string "POKeMON form.$"
 
 OaksLab_Text_Oak_Concern:
     .string "What is it that is different with\n"
@@ -899,7 +926,8 @@ OaksLab_Text_Oak_Intro:
     .string "schedule a meeting.$"
 
 OaksLab_Text_Nia_FindOak:
-    .string "Professor? Huh, wonder where he went.$"
+    .string "Professor?\p"
+    .string "Huh, wonder where he went.$"
 
 OaksLab_Text_SixMonthsLater:
     .string "Six months later...$"

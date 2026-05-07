@@ -259,8 +259,20 @@
 #define TRAINER_PIC_GORM                222
 #define TRAINER_PIC_ROOD                223
 #define TRAINER_PIC_RYOKU               224
+#define TRAINER_PIC_CIPHER_PEON_F       225
+#define TRAINER_PIC_MR_STONE            226
+#define TRAINER_PIC_GEETA               227
+#define TRAINER_PIC_HIKER_GEN3          228
+#define TRAINER_PIC_MARNIE              229
+#define TRAINER_PIC_MICHAELFP           230
+#define TRAINER_PIC_OLEANA              231
+#define TRAINER_PIC_ROCKER              232
+#define TRAINER_PIC_BLACK_BELT_GEN2     233
+#define TRAINER_PIC_PICNICKER_GEN2      234
+#define TRAINER_PIC_DELINQUENT_F        235
+#define TRAINER_PIC_FISHERMAN_GEN2      236
 
-#define TRAINER_PIC_COUNT                225
+#define TRAINER_PIC_COUNT                237
 
 // The player back pics are assumed to alternate according to the gender values (MALE/FEMALE)
 #define TRAINER_BACK_PIC_BRENDAN                0
@@ -534,8 +546,9 @@
 #define TRAINER_CLASS_TEAM_GALACTIC_ADMIN 0x5C
 #define TRAINER_CLASS_JOHTO_LEADER   0x5D
 #define TRAINER_CLASS_AETHER         0x5E
+#define TRAINER_CLASS_KALOS_TRAINER  0x5F
 
-#define TRAINER_CLASS_COUNT          0x5F
+#define TRAINER_CLASS_COUNT          0x60
 
 #define TRAINER_ENCOUNTER_MUSIC_MALE         0 // standard male encounter music
 #define TRAINER_ENCOUNTER_MUSIC_FEMALE       1 // standard female encounter music

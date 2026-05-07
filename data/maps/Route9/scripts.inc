@@ -144,7 +144,8 @@ Route9_Text_Picnicker2_After:
 	.string "CERULEAN is close, right?$"
 
 Route9_Text_Hiker1_Intro:
-	.string "These rocks are perfect for training!$"
+	.string "These rocks are perfect\n"
+	.string "for training!$"
 
 Route9_Text_Hiker1_Defeat:
 	.string "You broke through!$"

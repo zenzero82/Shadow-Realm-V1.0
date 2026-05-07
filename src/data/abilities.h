@@ -2408,4 +2408,11 @@ const struct Ability gAbilitiesInfo[ABILITIES_COUNT] =
         .cantBeSwapped = TRUE,
         .cantBeTraced = TRUE,
     },
+
+    [ABILITY_DNA_SHIFT] =
+    {
+        .name = _("DNA Shift"),
+        .description = COMPOUND_STRING("Change forms based on battle conditions."),
+        .aiRating = 8,
+    },
 };

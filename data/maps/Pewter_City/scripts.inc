@@ -34,6 +34,8 @@ PewterCity_Speaker_Nina:
 PewterCity_Speaker_Tess:
     .string "Tess$"
 
+.set LOCALID_TWIN, 8
+
 
 
 @ --------------------
@@ -60,7 +62,36 @@ PewterCity_EventScript_CityEnter_QuestSkip:
 
 PewterCity_EventScript_CitySign::
     msgbox PewterCity_Text_Sign, MSGBOX_SIGN
-    goto EventScript_GimmighoulSignpost
+    specialvar VAR_RESULT, TryClaimGimmighoulSignpost
+    goto_if_eq VAR_RESULT, FALSE, PewterCity_EventScript_CitySign_Done
+    lockall
+    msgbox gText_GimmighoulSignpost, MSGBOX_DEFAULT
+    showmonpic SPECIES_GIMMIGHOUL_ROAMING, 10, 3
+    playmoncry SPECIES_GIMMIGHOUL, CRY_MODE_NORMAL
+    waitmoncry
+    waitbuttonpress
+    hidemonpic
+    setvar VAR_0x8000, 25
+    additem ITEM_GIMMIGHOUL_COIN, 25
+    buffernumberstring STR_VAR_1, VAR_0x8000
+    playfanfare MUS_OBTAIN_ITEM
+    msgbox gText_GimmighoulCoinsObtained, MSGBOX_DEFAULT
+    waitfanfare
+    checkflag FLAG_QUEST_GIMMI_MY_MONEY_STARTED
+    goto_if_eq PewterCity_EventScript_CitySign_Release
+    applymovement LOCALID_TWIN, PewterCity_Movement_TwinApproachGimmighoulSign
+    waitmovement 0
+    setflag FLAG_QUEST_GIMMI_MY_MONEY_STARTED
+    setflag FLAG_QUEST_PEWTER_NPC_TWIN
+    call QuestJournal_EventScript_CheckPewterCityNPCs
+    setspeaker PewterCity_Speaker_Tess
+    msgbox PewterCity_Text_Twin_GimmighoulIntro, MSGBOX_DEFAULT
+    closemessage
+    call QuestJournal_EventScript_NewQuestAlert
+PewterCity_EventScript_CitySign_Release:
+    releaseall
+PewterCity_EventScript_CitySign_Done:
+    end
 
 PewterCity_EventScript_GymSign::
     msgbox PewterCity_Text_GymSign, MSGBOX_NPC
@@ -178,11 +209,20 @@ PewterCity_EventScript_Lass::
 PewterCity_EventScript_Twin::
     lock
     faceplayer
-    setspeaker PewterCity_Speaker_Tess
-    msgbox PewterCity_Text_Twin, MSGBOX_DEFAULT
-    closemessage
     setflag FLAG_QUEST_PEWTER_NPC_TWIN
     call QuestJournal_EventScript_CheckPewterCityNPCs
+    checkflag FLAG_QUEST_GIMMI_MY_MONEY_STARTED
+    goto_if_eq PewterCity_EventScript_Twin_GiveClue
+    setspeaker PewterCity_Speaker_Tess
+    msgbox PewterCity_Text_Twin_PreGimmighoul, MSGBOX_DEFAULT
+    closemessage
+    release
+    end
+
+PewterCity_EventScript_Twin_GiveClue::
+    setspeaker PewterCity_Speaker_Tess
+    msgbox PewterCity_Text_Twin_GimmighoulClue, MSGBOX_DEFAULT
+    closemessage
     release
     end
 
@@ -322,27 +362,32 @@ PewterCity_Text_WelcomeSign:
 
 PewterCity_Text_Woman:
     .string "The city feels tense lately.\p"
-    .string "People whisper about TEAM ROCKET again...\p"
-    .string "If they're really back, I hope the GYM\n"
-    .string "LEADER can keep PEWTER safe.$"
+    .string "People whisper about TEAM\n"
+    .string "ROCKET again...\p"
+    .string "If they're really back, I hope\n"
+    .string "the GYM LEADER keeps\l"
+    .string "PEWTER safe.$"
 
 PewterCity_Text_Fatman:
-    .string "I heard the road toward MT. MOON has had\n"
+    .string "I heard the road toward\n"
+    .string "MT. MOON has had\n"
     .string "strange sightings at night...\p"
-    .string "Not just wild Pokemon - something else.$"
+    .string "Not just wild Pokemon.\n"
+    .string "Something else too.$"
 
 PewterCity_Text_Kid:
     .string "My dad says the TV glitches like it's\n"
     .string "showing a different world.\p"
-    .string "That sounds scary... but kinda cool too.$"
+    .string "That sounds scary...\n"
+    .string "but kinda cool too.$"
 
 PewterCity_Text_BrockTalk_Unknown:
     .string "...We should make sure the city is\n"
     .string "calm before the next challenge.$"
 
 PewterCity_Text_BrockTalk_Known:
-    .string "I'll be at the GYM if you want to test\n"
-    .string "your strength.$"
+    .string "I'll be at the GYM if you want\n"
+    .string "to test your strength.$"
 
 PewterCity_Text_WesTalk_Unknown:
     .string "Hold on. I need to be sure you're not\n"
@@ -355,7 +400,8 @@ PewterCity_Text_WesTalk_Known:
 PewterCity_Text_OldMan:
     .string "Pewter's stones are steady, but the\n"
     .string "world feels shaken.\p"
-    .string "Stock up before you head for MT. MOON.$"
+    .string "Stock up before you head for\n"
+    .string "MT. MOON.$"
 
 PewterCity_Text_Lass:
     .string "The MUSEUM is my favorite spot.\p"
@@ -365,6 +411,38 @@ PewterCity_Text_Lass:
 PewterCity_Text_Twin:
     .string "I count the rocks by the GYM for fun!\n"
     .string "There are sooo many!$"
+
+PewterCity_Text_Twin_PreGimmighoul:
+    .string "Hey! You should check out that sign\n"
+    .string "over there.\p"
+    .string "I think there is a POKeMON\n"
+    .string "behind it.$"
+
+PewterCity_Text_Twin_GimmighoulIntro:
+    .string "Hey! That was a Gimmighoul!\p"
+    .string "They like to hang out around sign\n"
+    .string "posts and they often drop coins.\p"
+    .string "My daddy told me that if you get 999\n"
+    .string "coins they will evolve!\p"
+    .string "He also told me that sometimes they\n"
+    .string "will be in a chest and hanging around.\p"
+    .string "Those ones normally keep more coins\n"
+    .string "in their chests!\p"
+    .string "You know stranger, you should try to\n"
+    .string "find them all, seems like it will be fun!$"
+
+PewterCity_Text_Twin_GimmighoulClue:
+    .string "If you're still looking, I heard\n"
+    .string "another one likes signs near MT. MOON.\p"
+    .string "Maybe check the road east of town or\n"
+    .string "the area outside the mountain!$"
+
+PewterCity_Movement_TwinApproachGimmighoulSign:
+    walk_right
+    walk_right
+    walk_right
+    walk_right
+    step_end
 
 
 
@@ -553,11 +631,11 @@ PewterCity_Text_Brock_SeePlayer:
     .string "You there!$"
 
 PewterCity_Text_Wes_Interrogate:
-    .string "I haven't seen you around PEWTER.\p"
+    .string "I haven't seen you around PEWTER.\n"
     .string "You with TEAM ROCKET... or CIPHER?$"
 
 PewterCity_Text_Brock_TrustsPlayer:
-    .string "Answer carefully.\p"
+    .string "Answer carefully.\n"
     .string "Pokemon are already in enough danger.\p"
     .string "...\p"
     .string "I see.\p"
@@ -569,22 +647,28 @@ PewterCity_Text_Wes_IntroName:
     .string "Used to run with TEAM SNAGEM.$"
 
 PewterCity_Text_Wes_Backstory:
-    .string "We helped steal Pokemon so CIPHER could\n"
-    .string "twist their hearts.\p"
+    .string "We helped steal Pokemon so\n"
+    .string "CIPHER could twist their\l"
+    .string "hearts.\p"
     .string "I wanted out from all that.\p"
     .string "Then one day, everything shifted.\p"
-    .string "One battle, one explosion... and when I\n"
-    .string "came to, I was here in KANTO.\p"
+    .string "One battle, one explosion...\n"
+    .string "And when I came to,\l"
+    .string "I was here in KANTO.\p"
     .string "RED and a kid named MICHAEL helped me\n"
     .string "get my bearings.\p"
-    .string "We set up a base near CERULEAN CITY to\n"
-    .string "watch what CIPHER and ROCKET are doing.$"
+    .string "We set up a base near\n"
+    .string "CERULEAN CITY to watch\l"
+    .string "what CIPHER and ROCKET are doing.$"
 
 PewterCity_Text_Wes_Challenge:
-    .string "If you really want to help stop CIPHER,\n"
-    .string "I need to know you can handle yourself.\p"
+    .string "If you really want to help\n"
+    .string "stop CIPHER,\p"
+    .string "I need to know you can\n"
+    .string "handle yourself.\p"
     .string "PEWTER's GYM LEADER is strong.\n"
-    .string "Beat him, and I'll take you seriously.\p"
+    .string "Beat him, and I'll take you\l"
+    .string "seriously.\p"
     .string "Once you've earned his BADGE, find me\n"
     .string "at the hideout near CERULEAN.\p"
     .string "We'll talk about what comes next.$"
@@ -610,4 +694,3 @@ PewterCity_Text_Wes_HeadOut:
 @ -------------------------------
 @ EXTRA PEWTER NPCS CAN GO BELOW
 @ -------------------------------
-

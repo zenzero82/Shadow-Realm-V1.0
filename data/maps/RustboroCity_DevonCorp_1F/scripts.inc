@@ -14,6 +14,7 @@ RustboroCity_DevonCorp_1F_EventScript_BlockStairs::
 RustboroCity_DevonCorp_1F_EventScript_Employee::
 	lock
 	faceplayer
+	setspeaker RustboroCity_DevonCorp_1F_Speaker_Arden
 	goto_if_set FLAG_RETURNED_DEVON_GOODS, RustboroCity_DevonCorp_1F_EventScript_GoodsRecovered
 	goto_if_set FLAG_DEVON_GOODS_STOLEN, RustboroCity_DevonCorp_1F_EventScript_RobberWasntBright
 	msgbox RustboroCity_DevonCorp_1F_Text_ThoseShoesAreOurProduct, MSGBOX_DEFAULT
@@ -33,6 +34,7 @@ RustboroCity_DevonCorp_1F_EventScript_GoodsRecovered::
 RustboroCity_DevonCorp_1F_EventScript_StairGuard::
 	lock
 	faceplayer
+	setspeaker RustboroCity_DevonCorp_1F_Speaker_Pierce
 	goto_if_set FLAG_RETURNED_DEVON_GOODS, RustboroCity_DevonCorp_1F_EventScript_AlwaysWelcome
 	goto_if_set FLAG_RECOVERED_DEVON_GOODS, RustboroCity_DevonCorp_1F_EventScript_GotRobbed
 	goto_if_set FLAG_DEVON_GOODS_STOLEN, RustboroCity_DevonCorp_1F_EventScript_GotRobbed
@@ -53,6 +55,7 @@ RustboroCity_DevonCorp_1F_EventScript_GotRobbed::
 RustboroCity_DevonCorp_1F_EventScript_Greeter::
 	lock
 	faceplayer
+	setspeaker RustboroCity_DevonCorp_1F_Speaker_Selene
 	goto_if_set FLAG_RETURNED_DEVON_GOODS, RustboroCity_DevonCorp_1F_EventScript_WelcomeToDevonCorp
 	goto_if_set FLAG_RECOVERED_DEVON_GOODS, RustboroCity_DevonCorp_1F_EventScript_StaffGotRobbed
 	goto_if_set FLAG_DEVON_GOODS_STOLEN, RustboroCity_DevonCorp_1F_EventScript_StaffGotRobbed
@@ -77,6 +80,15 @@ RustboroCity_DevonCorp_1F_EventScript_RocksMetalDisplay::
 RustboroCity_DevonCorp_1F_EventScript_ProductsDisplay::
 	msgbox RustboroCity_DevonCorp_1F_Text_ProductDisplay, MSGBOX_SIGN
 	end
+
+RustboroCity_DevonCorp_1F_Speaker_Arden:
+	.string "Arden$"
+
+RustboroCity_DevonCorp_1F_Speaker_Pierce:
+	.string "Pierce$"
+
+RustboroCity_DevonCorp_1F_Speaker_Selene:
+	.string "Selene$"
 
 RustboroCity_DevonCorp_1F_Text_WelcomeToDevonCorp:
 	.string "Hello and welcome to the DEVON\n"
@@ -141,4 +153,3 @@ RustboroCity_DevonCorp_1F_Text_ProductDisplay:
 	.string "“Recently, DEVON has begun marketing\n"
 	.string "tools for POKéMON TRAINERS, including\l"
 	.string "POKé BALLS and POKéNAV systems.”$"
-

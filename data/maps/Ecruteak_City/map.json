@@ -314,20 +314,6 @@
       "elevation": 0,
       "dest_map": "MAP_GATE_ECRUTEAK_CITY_ROUTE38",
       "dest_warp_id": "1"
-    },
-    {
-      "x": 33,
-      "y": 55,
-      "elevation": 0,
-      "dest_map": "MAP_ROUTE37",
-      "dest_warp_id": "0"
-    },
-    {
-      "x": 34,
-      "y": 55,
-      "elevation": 0,
-      "dest_map": "MAP_ROUTE37",
-      "dest_warp_id": "1"
     }
   ],
   "coord_events": [],

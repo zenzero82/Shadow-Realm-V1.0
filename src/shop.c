@@ -368,7 +368,7 @@ static u8 CreateShopMenu(u8 martType)
     PrintMenuTable(sMartInfo.windowId, numMenuItems, sMartInfo.menuActions);
     InitMenuInUpperLeftCornerNormal(sMartInfo.windowId, numMenuItems, 0);
     PutWindowTilemap(sMartInfo.windowId);
-    CopyWindowToVram(sMartInfo.windowId, COPYWIN_MAP);
+    CopyWindowToVram(sMartInfo.windowId, COPYWIN_FULL);
 
     return CreateTask(Task_ShopMenu, 8);
 }
@@ -442,7 +442,7 @@ void CB2_ExitSellMenu(void)
 
 static void Task_HandleShopMenuQuit(u8 taskId)
 {
-    ClearStdWindowAndFrameToTransparent(sMartInfo.windowId, 2); // Incorrect use, making it not copy it to vram.
+    ClearStdWindowAndFrameToTransparent(sMartInfo.windowId, TRUE);
     RemoveWindow(sMartInfo.windowId);
     TryPutSmartShopperOnAir();
     UnlockPlayerFieldControls();
@@ -777,6 +777,7 @@ static void BuyMenuDisplayMessage(u8 taskId, const u8 *text, TaskFunc callback)
 
 static void BuyMenuDrawGraphics(void)
 {
+    FillWindowPixelBuffer(WIN_MONEY, PIXEL_FILL(0));
     AddMoneyLabelObject(19, 11);
     PrintMoneyAmountInMoneyBoxWithBorder(WIN_MONEY, 1, 13, GetMoney(&gSaveBlock1Ptr->money));
     ScheduleBgCopyTilemapToVram(0);

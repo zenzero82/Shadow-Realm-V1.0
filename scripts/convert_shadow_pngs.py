@@ -15,6 +15,7 @@ SPECIAL_SPRITESHEET_OPTIONS = {
     "graphics/pokemon/enamorus": ["-mwidth", "8", "-mheight", "8"],
     "graphics/pokemon/entei": ["-mwidth", "4", "-mheight", "4"],
     "graphics/pokemon/giratina": ["-mwidth", "8", "-mheight", "8"],
+    "graphics/pokemon/goodra/shadow": ["-mwidth", "4", "-mheight", "4"],
     "graphics/pokemon/groudon": ["-mwidth", "8", "-mheight", "8"],
     "graphics/pokemon/ho_oh": ["-mwidth", "8", "-mheight", "8"],
     "graphics/pokemon/hoopa/unbound": ["-mwidth", "8", "-mheight", "8"],
@@ -29,6 +30,7 @@ SPECIAL_SPRITESHEET_OPTIONS = {
     "graphics/pokemon/meowth/shadow": ["-mwidth", "4", "-mheight", "4"],
     "graphics/pokemon/miraidon/shadow": ["-mwidth", "8", "-mheight", "8"],
     "graphics/pokemon/moltres": ["-mwidth", "4", "-mheight", "4"],
+    "graphics/pokemon/metagross/shadow": ["-mwidth", "4", "-mheight", "4"],
     "graphics/pokemon/naganadel": ["-mwidth", "4", "-mheight", "4"],
     "graphics/pokemon/palkia/shadow": ["-mwidth", "8", "-mheight", "8"],
     "graphics/pokemon/rayquaza/shadow": ["-mwidth", "8", "-mheight", "8"],
@@ -46,9 +48,11 @@ SPECIAL_SPRITESHEET_OPTIONS = {
     "graphics/pokemon/zygarde": ["-mwidth", "8", "-mheight", "8"],
     "graphics/pokemon/mimikyu": ["-mwidth", "4", "-mheight", "4"],
     "graphics/pokemon/pikachu/shadow": ["-mwidth", "4", "-mheight", "4"],
+    "graphics/pokemon/inteleon/shadow": ["-mwidth", "4", "-mheight", "4"],
     "graphics/pokemon/pangoro/shadow": ["-mwidth", "4", "-mheight", "4"],
     "graphics/pokemon/skarmory/shadow": ["-mwidth", "4", "-mheight", "4"],
     "graphics/pokemon/weavile/shadow": ["-mwidth", "4", "-mheight", "4"],
+    "graphics/pokemon/venusaur/shadow": ["-mwidth", "4", "-mheight", "4"],
 
 }
 

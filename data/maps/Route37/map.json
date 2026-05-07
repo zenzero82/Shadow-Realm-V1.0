@@ -24,11 +24,6 @@
       "direction": "down"
     },
     {
-      "map": "MAP_GOLDENROD_CITY",
-      "offset": -7,
-      "direction": "up"
-    },
-    {
       "map": "MAP_ECRUTEAK_CITY",
       "offset": -16,
       "direction": "up"
@@ -106,22 +101,7 @@
       "flag": "0"
     }
   ],
-  "warp_events": [
-    {
-      "x": 17,
-      "y": 10,
-      "elevation": 0,
-      "dest_map": "MAP_ECRUTEAK_CITY",
-      "dest_warp_id": "11"
-    },
-    {
-      "x": 18,
-      "y": 10,
-      "elevation": 0,
-      "dest_map": "MAP_ECRUTEAK_CITY",
-      "dest_warp_id": "12"
-    }
-  ],
+  "warp_events": [],
   "coord_events": [],
   "bg_events": [
     {

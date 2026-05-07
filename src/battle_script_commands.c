@@ -34,6 +34,7 @@
 #include "task.h"
 #include "naming_screen.h"
 #include "battle_setup.h"
+#include "bug_contest.h"
 #include "overworld.h"
 #include "wild_encounter.h"
 #include "rtc.h"
@@ -5041,6 +5042,9 @@ static void Cmd_getexp(void)
     u32 currLvl;
 
     gBattlerFainted = GetBattlerForBattleScript(cmd->battler);
+
+    if (FlagGet(FLAG_SYS_BUG_CONTEST_MODE) && gBattleScripting.getexpState < 6)
+        gBattleScripting.getexpState = 6;
 
     switch (gBattleScripting.getexpState)
     {
@@ -10161,13 +10165,12 @@ static void HandleScriptMegaPrimalBurst(u32 caseId, u32 battler, u32 type)
             TryBattleFormChange(battler, FORM_CHANGE_BATTLE_ULTRA_BURST);
 
         PREPARE_SPECIES_BUFFER(gBattleTextBuff1, gBattleMons[battler].species);
-
-        BtlController_EmitSetMonData(battler, B_COMM_TO_CONTROLLER, REQUEST_SPECIES_BATTLE, 1u << gBattlerPartyIndexes[battler], sizeof(gBattleMons[battler].species), &gBattleMons[battler].species);
-        MarkBattlerForControllerExec(battler);
     }
     // Update healthbox and elevation and play cry.
     else
     {
+        BtlController_EmitSetMonData(battler, B_COMM_TO_CONTROLLER, REQUEST_SPECIES_BATTLE, 1u << gBattlerPartyIndexes[battler], sizeof(gBattleMons[battler].species), &gBattleMons[battler].species);
+        MarkBattlerForControllerExec(battler);
         UpdateHealthboxAttribute(gHealthboxSpriteIds[battler], mon, HEALTHBOX_ALL);
         if (!IsOnPlayerSide(battler))
             SetBattlerShadowSpriteCallback(battler, gBattleMons[battler].species);
@@ -10198,14 +10201,13 @@ static void HandleScriptMegaReversion(u32 caseId, u32 battler)
         }
 
         PREPARE_SPECIES_BUFFER(gBattleTextBuff1, gBattleMons[battler].species);
-
+    }
+    else
+    {
         BtlController_EmitSetMonData(battler, B_COMM_TO_CONTROLLER, REQUEST_SPECIES_BATTLE,
                                      1u << gBattlerPartyIndexes[battler], sizeof(gBattleMons[battler].species),
                                      &gBattleMons[battler].species);
         MarkBattlerForControllerExec(battler);
-    }
-    else
-    {
         UpdateHealthboxAttribute(gHealthboxSpriteIds[battler], mon, HEALTHBOX_ALL);
         if (!IsOnPlayerSide(battler))
             SetBattlerShadowSpriteCallback(battler, gBattleMons[battler].species);
@@ -16711,7 +16713,7 @@ void BattleCreateYesNoCursorAt(u8 cursorPosition)
     src[0] = 1;
     src[1] = 2;
 
-    CopyToBgTilemapBufferRect_ChangePalette(0, src, 0x19, 9 + (2 * cursorPosition), 1, 2, 0);
+    CopyToBgTilemapBufferRect_ChangePalette(0, src, 0x19, 9 + (2 * cursorPosition), 1, 2, 0x11);
     CopyBgTilemapBufferToVram(0);
 }
 

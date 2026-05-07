@@ -31,9 +31,11 @@
 #include "constants/event_object_movement.h"
 #include "constants/field_effects.h"
 #include "constants/frontier_util.h"
+#include "constants/maps.h"
 #include "constants/map_types.h"
 #include "constants/metatile_behaviors.h"
 #include "constants/songs.h"
+#include "constants/flags.h"
 
 /*
  * Known Issues:
@@ -65,6 +67,8 @@ static void Task_FollowerNPCHandleEscalator(u8 taskId);
 static void Task_FollowerNPCHandleEscalatorFinish(u8 taskId);
 static void CalculateFollowerNPCEscalatorTrajectoryUp(struct Task *task);
 static void CalculateFollowerNPCEscalatorTrajectoryDown(struct Task *task);
+
+extern const u8 EventScript_Follower_Nebby[];
 
 void SetFollowerNPCData(enum FollowerNPCDataTypes type, u32 value)
 {
@@ -1220,6 +1224,13 @@ bool32 CheckFollowerNPCFlag(u32 flag)
     if (!PlayerHasFollowerNPC())
         return TRUE;
 
+    if (GetFollowerNPCData(FNPC_DATA_EVENT_FLAG) == FLAG_CELADON_LILLIE_JOINED)
+    {
+        if (flag == FOLLOWER_NPC_FLAG_CAN_SURF
+         || flag == FOLLOWER_NPC_FLAG_CAN_LEAVE_ROUTE)
+            return FALSE;
+    }
+
     if (GetFollowerNPCData(FNPC_DATA_FOLLOWER_FLAGS) & flag)
         return TRUE;
 
@@ -1542,6 +1553,70 @@ void FollowerNPC_TryRemoveFollowerOnWhiteOut(void)
         else
             FollowerNPC_WarpSetEnd();
     }
+}
+
+void RestoreNebbyFollower(void)
+{
+    const struct ObjectEventTemplate *template;
+    struct ObjectEvent *player;
+    struct ObjectEvent *follower;
+    s16 followerX;
+    s16 followerY;
+
+    if (PlayerHasFollowerNPC())
+        return;
+
+    template = GetObjectEventTemplateByLocalIdAndMap(7,
+                                                     MAP_NUM(MAP_VERMILION_PORTINSIDE),
+                                                     MAP_GROUP(MAP_VERMILION_PORTINSIDE));
+    if (template == NULL)
+        return;
+
+    SetFollowerNPCData(FNPC_DATA_IN_PROGRESS, TRUE);
+    SetFollowerNPCData(FNPC_DATA_WARP_END, FNPC_WARP_NONE);
+    SetFollowerNPCData(FNPC_DATA_SURF_BLOB, FNPC_SURF_BLOB_NONE);
+    SetFollowerNPCData(FNPC_DATA_COME_OUT_DOOR, FNPC_DOOR_NONE);
+    SetFollowerNPCData(FNPC_DATA_OBJ_ID, OBJECT_EVENTS_COUNT);
+    SetFollowerNPCData(FNPC_DATA_CURRENT_SPRITE, FOLLOWER_NPC_SPRITE_INDEX_NORMAL);
+    SetFollowerNPCData(FNPC_DATA_DELAYED_STATE, 0);
+    SetFollowerNPCData(FNPC_DATA_MAP_ID, 7);
+    SetFollowerNPCData(FNPC_DATA_MAP_NUM, MAP_NUM(MAP_VERMILION_PORTINSIDE));
+    SetFollowerNPCData(FNPC_DATA_MAP_GROUP, MAP_GROUP(MAP_VERMILION_PORTINSIDE));
+    SetFollowerNPCData(FNPC_DATA_EVENT_FLAG, FLAG_VERMILION_PORTINSIDE_BURNET_SCENE_DONE);
+    SetFollowerNPCData(FNPC_DATA_GFX_ID, template->graphicsId);
+    SetFollowerNPCData(FNPC_DATA_FOLLOWER_FLAGS, FNPC_BIKE);
+    SetFollowerNPCData(FNPC_DATA_BATTLE_PARTNER, 0);
+    SetFollowerNPCScriptPointer(EventScript_Follower_Nebby);
+    CreateFollowerNPCAvatar();
+
+    if (!PlayerHasFollowerNPC())
+        return;
+
+    player = &gObjectEvents[gPlayerAvatar.objectEventId];
+    follower = &gObjectEvents[GetFollowerNPCObjectId()];
+    followerX = player->currentCoords.x;
+    followerY = player->currentCoords.y;
+
+    switch (GetPlayerFacingDirection())
+    {
+    case DIR_NORTH:
+        followerY++;
+        break;
+    case DIR_SOUTH:
+        followerY--;
+        break;
+    case DIR_WEST:
+        followerX++;
+        break;
+    case DIR_EAST:
+        followerX--;
+        break;
+    }
+
+    MoveObjectEventToMapCoords(follower, followerX, followerY);
+    ObjectEventTurn(follower, GetPlayerFacingDirection());
+    follower->invisible = FALSE;
+    gSprites[follower->spriteId].invisible = FALSE;
 }
 
 #undef tDoorX

@@ -2,7 +2,7 @@
   "id": "MAP_AZALEA_TOWN_KURTS_HOUSE",
   "name": "AzaleaTown_KurtsHouse",
   "layout": "LAYOUT_AZALEA_TOWN_KURTS_HOUSE",
-  "music": "MUS_DUMMY",
+  "music": "MUS_HG_AZALEA",
   "region_map_section": "MAPSEC_AZALEA_TOWN",
   "requires_flash": false,
   "weather": "WEATHER_NONE",
@@ -52,6 +52,32 @@
       "trainer_sight_or_berry_tree_id": "0",
       "script": "NULL",
       "flag": "FLAG_HIDE_KURTS_HOUSE_SKARMORY"
+    },
+    {
+      "graphics_id": "OBJ_EVENT_GFX_HOOPA_RING_TIME_AMULET",
+      "x": 4,
+      "y": 5,
+      "elevation": 0,
+      "movement_type": "MOVEMENT_TYPE_NONE",
+      "movement_range_x": 0,
+      "movement_range_y": 0,
+      "trainer_type": "TRAINER_TYPE_NONE",
+      "trainer_sight_or_berry_tree_id": "0",
+      "script": "NULL",
+      "flag": "FLAG_HIDE_KURTS_HOUSE_HOOPA_RING"
+    },
+    {
+      "graphics_id": "OBJ_EVENT_GFX_GOLD_GEN2",
+      "x": 4,
+      "y": 7,
+      "elevation": 0,
+      "movement_type": "MOVEMENT_TYPE_FACE_UP",
+      "movement_range_x": 0,
+      "movement_range_y": 0,
+      "trainer_type": "TRAINER_TYPE_NONE",
+      "trainer_sight_or_berry_tree_id": "0",
+      "script": "AzaleaTown_KurtsHouse_EventScript_Gold",
+      "flag": "FLAG_HIDE_KURTS_HOUSE_GOLD"
     }
   ],
   "warp_events": [

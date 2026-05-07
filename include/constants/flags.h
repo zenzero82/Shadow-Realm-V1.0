@@ -790,6 +790,7 @@
 #define FLAG_UNUSED_0x299  0x299 // Unused Flag
 #define FLAG_HIDE_UNION_CAVE_B2F_LAPRAS      FLAG_UNUSED_0x299
 #define FLAG_UNUSED_0x29A  0x29A // Unused Flag
+#define FLAG_RUINS_OF_ALPH_KABUTO_HINT_READ        FLAG_UNUSED_0x29A
 #define FLAG_UNUSED_0x29B  0x29B // Unused Flag
 #define FLAG_QUEST_CERULEAN_NPC_POLICEMAN1      FLAG_UNUSED_0x29B
 #define FLAG_UNUSED_0x29C  0x29C // Unused Flag
@@ -1581,6 +1582,7 @@
 #define FLAG_HIDE_ROUTE32_CUTTREE_1                                 0x53C
 #define FLAG_HIDE_ROUTE32_CUTTREE_2                                 0x53D
 #define FLAG_HIDE_VIOLET_CITY_CUTTREE_1                             0x53E
+#define FLAG_HIDE_ROUTE2_DIGLETTS_CAVE_HIKER                        FLAG_UNUSED_0x53F
 #define FLAG_UNUSED_0x53F                                           0x53F // Unused Flag
 #define FLAG_QUEST_BACK_TO_HQ_STARTED                               FLAG_UNUSED_0x53F
 #define FLAG_UNUSED_0x540                                           0x540 // Unused Flag
@@ -1608,6 +1610,7 @@
 #define FLAG_UNUSED_0x54B                                           0x54B // Unused Flag
 #define FLAG_QUEST_SHINING_BEAST_COMPLETED                          FLAG_UNUSED_0x54B
 #define FLAG_UNUSED_0x54C                                           0x54C // Unused Flag
+#define FLAG_RECEPTION_GATE_LUCAS_INTRO_DONE                        FLAG_UNUSED_0x54C
 #define FLAG_SUMMONED_MTMOON_JIRACHI                                FLAG_UNUSED_0x54C
 #define FLAG_UNUSED_0x54D                                           0x54D // Unused Flag
 #define FLAG_NIGHT_POKEMON                                          FLAG_UNUSED_0x54D
@@ -1627,6 +1630,200 @@
 #define FLAG_CELADON_HOUSE1_TREVOR_DONE                             FLAG_UNUSED_0x554
 #define FLAG_UNUSED_0x555                                           0x555 // Unused Flag
 #define FLAG_CELADON_HOUSE1_SERENA_DONE                             FLAG_UNUSED_0x555
+#define FLAG_UNUSED_0x556                                           0x556 // Unused Flag
+#define FLAG_CELADON_GLADION_SCENE_DONE                             FLAG_UNUSED_0x556
+#define FLAG_UNUSED_0x557                                           0x557 // Unused Flag
+#define FLAG_CELADON_LILLIE_JOINED                                  FLAG_UNUSED_0x557
+#define FLAG_UNUSED_0x558                                           0x558 // Unused Flag
+#define FLAG_CELADON_GLADION_EXITED                                 FLAG_UNUSED_0x558
+#define FLAG_UNUSED_0x559                                           0x559 // Unused Flag
+#define FLAG_FOUND_BOTH_VERMILION_GYM_SWITCHES                      FLAG_UNUSED_0x559
+#define FLAG_UNUSED_0x55A                                           0x55A // Unused Flag
+#define FLAG_VERMILION_PORTINSIDE_BURNET_SCENE_DONE                 FLAG_UNUSED_0x55A
+#define FLAG_UNUSED_0x55B                                           0x55B // Unused Flag
+#define FLAG_HIDE_WES_HIDEOUT_NEBBY                                 FLAG_UNUSED_0x55B
+#define FLAG_UNUSED_0x55C                                           0x55C // Unused Flag
+#define FLAG_HIDE_BUG_CONTEST_BUGS                                  FLAG_UNUSED_0x55C
+#define FLAG_UNUSED_0x55D                                           0x55D // Unused Flag
+#define FLAG_HIDE_BUG_CONTEST_ATTENDANT_SIDE                        FLAG_UNUSED_0x55D
+#define FLAG_UNUSED_0x55C                                           0x55C // Unused Flag
+#define FLAG_WES_HIDEOUT_NEBBY_SCENE_DONE                           FLAG_UNUSED_0x55C
+#define FLAG_UNUSED_0x55D                                           0x55D // Unused Flag
+#define FLAG_NEBBY_FOLLOWER_ACTIVE                                  FLAG_UNUSED_0x55D
+#define FLAG_UNUSED_0x55E                                           0x55E // Unused Flag
+#define FLAG_HIDE_KURTS_HOUSE_HOOPA_RING                            FLAG_UNUSED_0x55E
+#define FLAG_UNUSED_0x55F                                           0x55F // Unused Flag
+#define FLAG_KURTS_HOUSE_HOOPA_EMERGE                               FLAG_UNUSED_0x55F
+#define FLAG_UNUSED_0x560                                           0x560 // Unused Flag
+#define FLAG_QUEST_GIMMI_MY_MONEY_STARTED                           FLAG_UNUSED_0x560
+#define FLAG_UNUSED_0x561                                           0x561 // Unused Flag
+#define FLAG_QUEST_GIMMI_MY_MONEY_COMPLETED                         FLAG_UNUSED_0x561
+#define FLAG_UNUSED_0x562                                           0x562 // Unused Flag
+#define FLAG_HIDE_WES_HIDEOUT_WES                                  FLAG_UNUSED_0x562
+#define FLAG_UNUSED_0x563                                           0x563 // Unused Flag
+#define FLAG_HIDE_WES_HIDEOUT_UMBREON                              FLAG_UNUSED_0x563
+#define FLAG_UNUSED_0x564                                           0x564 // Unused Flag
+#define FLAG_HIDE_WES_HIDEOUT_ESPEON                               FLAG_UNUSED_0x564
+#define FLAG_UNUSED_0x565                                           0x565 // Unused Flag
+#define FLAG_QUEST_LAVENDER_NPCS_STARTED                           FLAG_UNUSED_0x565
+#define FLAG_UNUSED_0x566                                           0x566 // Unused Flag
+#define FLAG_QUEST_LAVENDER_NPCS_COMPLETED                         FLAG_UNUSED_0x566
+#define FLAG_UNUSED_0x567                                           0x567 // Unused Flag
+#define FLAG_QUEST_CELADON_NPCS_STARTED                            FLAG_UNUSED_0x567
+#define FLAG_UNUSED_0x568                                           0x568 // Unused Flag
+#define FLAG_QUEST_CELADON_NPCS_COMPLETED                          FLAG_UNUSED_0x568
+#define FLAG_UNUSED_0x569                                           0x569 // Unused Flag
+#define FLAG_QUEST_SAFFRON_NPCS_STARTED                            FLAG_UNUSED_0x569
+#define FLAG_UNUSED_0x56A                                           0x56A // Unused Flag
+#define FLAG_QUEST_SAFFRON_NPCS_COMPLETED                          FLAG_UNUSED_0x56A
+#define FLAG_UNUSED_0x56B                                           0x56B // Unused Flag
+#define FLAG_QUEST_VERMILION_NPCS_STARTED                          FLAG_UNUSED_0x56B
+#define FLAG_UNUSED_0x56C                                           0x56C // Unused Flag
+#define FLAG_QUEST_VERMILION_NPCS_COMPLETED                        FLAG_UNUSED_0x56C
+#define FLAG_UNUSED_0x56D                                           0x56D // Unused Flag
+#define FLAG_QUEST_GOLDENROD_NPCS_STARTED                          FLAG_UNUSED_0x56D
+#define FLAG_UNUSED_0x56E                                           0x56E // Unused Flag
+#define FLAG_QUEST_GOLDENROD_NPCS_COMPLETED                        FLAG_UNUSED_0x56E
+#define FLAG_UNUSED_0x56F                                           0x56F // Unused Flag
+#define FLAG_QUEST_RUSTBORO_NPCS_STARTED                           FLAG_UNUSED_0x56F
+#define FLAG_UNUSED_0x570                                           0x570 // Unused Flag
+#define FLAG_QUEST_RUSTBORO_NPCS_COMPLETED                         FLAG_UNUSED_0x570
+#define FLAG_UNUSED_0x571                                           0x571 // Unused Flag
+#define FLAG_QUEST_ODD_KEYSTONE_STARTED                            FLAG_UNUSED_0x571
+#define FLAG_UNUSED_0x572                                           0x572 // Unused Flag
+#define FLAG_QUEST_ODD_KEYSTONE_COMPLETED                          FLAG_UNUSED_0x572
+#define FLAG_UNUSED_0x573                                           0x573 // Unused Flag
+#define FLAG_HIDE_CELADON_CITY_ZYGARDE_CELL                        FLAG_UNUSED_0x573
+#define FLAG_UNUSED_0x574                                           0x574 // Unused Flag
+#define FLAG_HIDE_CERULEAN_CAVE_B1F_ZYGARDE_CELL                   FLAG_UNUSED_0x574
+#define FLAG_UNUSED_0x575                                           0x575 // Unused Flag
+#define FLAG_HIDE_CINNABAR_ISLAND_ZYGARDE_CELL                     FLAG_UNUSED_0x575
+#define FLAG_UNUSED_0x576                                           0x576 // Unused Flag
+#define FLAG_HIDE_DIGLETTS_CAVE_TUNNEL_ZYGARDE_CELL                FLAG_UNUSED_0x576
+#define FLAG_UNUSED_0x577                                           0x577 // Unused Flag
+#define FLAG_HIDE_FUCHSIA_CITY_ZYGARDE_CELL                        FLAG_UNUSED_0x577
+#define FLAG_UNUSED_0x578                                           0x578 // Unused Flag
+#define FLAG_HIDE_MT_MOON_CAVE_ZYGARDE_CELL                        FLAG_UNUSED_0x578
+#define FLAG_UNUSED_0x579                                           0x579 // Unused Flag
+#define FLAG_HIDE_PALLET_TOWN_WESTERN_FOREST_ZYGARDE_CELL          FLAG_UNUSED_0x579
+#define FLAG_UNUSED_0x57A                                           0x57A // Unused Flag
+#define FLAG_HIDE_PEWTER_CITY_ZYGARDE_CELL                         FLAG_UNUSED_0x57A
+#define FLAG_UNUSED_0x57B                                           0x57B // Unused Flag
+#define FLAG_HIDE_ROUTE11_ZYGARDE_CELL                             FLAG_UNUSED_0x57B
+#define FLAG_UNUSED_0x57C                                           0x57C // Unused Flag
+#define FLAG_HIDE_ROUTE12_ZYGARDE_CELL                             FLAG_UNUSED_0x57C
+#define FLAG_UNUSED_0x57D                                           0x57D // Unused Flag
+#define FLAG_HIDE_ROUTE13_ZYGARDE_CELL                             FLAG_UNUSED_0x57D
+#define FLAG_UNUSED_0x57E                                           0x57E // Unused Flag
+#define FLAG_HIDE_ROUTE17_ZYGARDE_CELL                             FLAG_UNUSED_0x57E
+#define FLAG_UNUSED_0x57F                                           0x57F // Unused Flag
+#define FLAG_HIDE_ROUTE2_ZYGARDE_CELL                              FLAG_UNUSED_0x57F
+#define FLAG_UNUSED_0x580                                           0x580 // Unused Flag
+#define FLAG_HIDE_ROUTE20_ZYGARDE_CELL                             FLAG_UNUSED_0x580
+#define FLAG_UNUSED_0x581                                           0x581 // Unused Flag
+#define FLAG_HIDE_ROUTE21_NORTH_ZYGARDE_CELL                       FLAG_UNUSED_0x581
+#define FLAG_UNUSED_0x582                                           0x582 // Unused Flag
+#define FLAG_HIDE_ROUTE8_ZYGARDE_CELL                              FLAG_UNUSED_0x582
+#define FLAG_UNUSED_0x583                                           0x583 // Unused Flag
+#define FLAG_HIDE_SAFFRON_CITY_ZYGARDE_CELL                        FLAG_UNUSED_0x583
+#define FLAG_UNUSED_0x584                                           0x584 // Unused Flag
+#define FLAG_HIDE_VERMILION_CITY_ZYGARDE_CELL                      FLAG_UNUSED_0x584
+#define FLAG_UNUSED_0x585                                           0x585 // Unused Flag
+#define FLAG_HIDE_ROUTE10_POWERPLANTBACK_ZYGARDE_CELL              FLAG_UNUSED_0x585
+#define FLAG_UNUSED_0x586                                           0x586 // Unused Flag
+#define FLAG_HIDE_SAFFRON_TUNNEL_ZYGARDE_CELL                      FLAG_UNUSED_0x586
+#define FLAG_UNUSED_0x587                                           0x587 // Unused Flag
+#define FLAG_HIDE_SAFFRON_TUNNEL_SW_ZYGARDE_CELL                   FLAG_UNUSED_0x587
+#define FLAG_UNUSED_0x588                                           0x588 // Unused Flag
+#define FLAG_HIDE_VIRIDIAN_FOREST_ZYGARDE_CELL                     FLAG_UNUSED_0x588
+#define FLAG_UNUSED_0x589                                           0x589 // Unused Flag
+#define FLAG_HIDE_ROUTE10_ZINZOLIN                                 FLAG_UNUSED_0x589
+#define FLAG_UNUSED_0x58A                                           0x58A // Unused Flag
+#define FLAG_HIDE_ROUTE10_HOOPA_RING                               FLAG_UNUSED_0x58A
+#define FLAG_UNUSED_0x58B                                           0x58B // Unused Flag
+#define FLAG_HIDE_ROUTE10_POWERPLANT_PLASMA_1                      FLAG_UNUSED_0x58B
+#define FLAG_UNUSED_0x58C                                           0x58C // Unused Flag
+#define FLAG_HIDE_ROUTE10_POWERPLANT_PLASMA_2                      FLAG_UNUSED_0x58C
+#define FLAG_UNUSED_0x58D                                           0x58D // Unused Flag
+#define FLAG_HIDE_ROUTE10_POWERPLANT_PLASMA_3                      FLAG_UNUSED_0x58D
+#define FLAG_UNUSED_0x58E                                           0x58E // Unused Flag
+#define FLAG_QUEST_ERICA_STARTED                                    FLAG_UNUSED_0x58E
+#define FLAG_UNUSED_0x58F                                           0x58F // Unused Flag
+#define FLAG_QUEST_ERICA_COMPLETED                                  FLAG_UNUSED_0x58F
+#define FLAG_UNUSED_0x590                                           0x590 // Unused Flag
+#define FLAG_QUEST_MEGA_MOMENTS_STARTED                             FLAG_UNUSED_0x590
+#define FLAG_UNUSED_0x591                                           0x591 // Unused Flag
+#define FLAG_QUEST_MEGA_MOMENTS_COMPLETED                           FLAG_UNUSED_0x591
+#define FLAG_UNUSED_0x592                                           0x592 // Unused Flag
+#define FLAG_QUEST_MACHINE_PART_STARTED                             FLAG_UNUSED_0x592
+#define FLAG_UNUSED_0x593                                           0x593 // Unused Flag
+#define FLAG_QUEST_MACHINE_PART_COMPLETED                           FLAG_UNUSED_0x593
+#define FLAG_UNUSED_0x594                                           0x594 // Unused Flag
+#define FLAG_QUEST_ALOLA_LILLIE_STARTED                             FLAG_UNUSED_0x594
+#define FLAG_UNUSED_0x595                                           0x595 // Unused Flag
+#define FLAG_QUEST_ALOLA_LILLIE_COMPLETED                           FLAG_UNUSED_0x595
+#define FLAG_UNUSED_0x596                                           0x596 // Unused Flag
+#define FLAG_QUEST_NEBBY_POWERHOUSE_STARTED                         FLAG_UNUSED_0x596
+#define FLAG_UNUSED_0x597                                           0x597 // Unused Flag
+#define FLAG_QUEST_NEBBY_POWERHOUSE_COMPLETED                       FLAG_UNUSED_0x597
+#define FLAG_UNUSED_0x598                                           0x598 // Unused Flag
+#define FLAG_HIDE_KURTS_HOUSE_GOLD                                  FLAG_UNUSED_0x598
+#define FLAG_UNUSED_0x599                                           0x599 // Unused Flag
+#define FLAG_KURTS_HOUSE_GOLD_SCENE_DONE                            FLAG_UNUSED_0x599
+#define FLAG_UNUSED_0x59A                                           0x59A // Unused Flag
+#define FLAG_QUEST_WHITNEY_STARTED                                  FLAG_UNUSED_0x59A
+#define FLAG_UNUSED_0x59B                                           0x59B // Unused Flag
+#define FLAG_QUEST_WHITNEY_COMPLETED                                FLAG_UNUSED_0x59B
+#define FLAG_UNUSED_0x59C                                           0x59C // Unused Flag
+#define FLAG_QUEST_CIPHER_TAKEOVER_STARTED                          FLAG_UNUSED_0x59C
+#define FLAG_UNUSED_0x59D                                           0x59D // Unused Flag
+#define FLAG_QUEST_CIPHER_TAKEOVER_COMPLETED                        FLAG_UNUSED_0x59D
+#define FLAG_UNUSED_0x59E                                           0x59E // Unused Flag
+#define FLAG_HIDE_SAFFRON_CITY_EIN                                  FLAG_UNUSED_0x59E
+#define FLAG_UNUSED_0x59F                                           0x59F // Unused Flag
+#define FLAG_HIDE_SAFFRON_CITY_BONSLY                               FLAG_UNUSED_0x59F
+#define FLAG_UNUSED_0x5A0                                           0x5A0 // Unused Flag
+#define FLAG_SAFFRON_CITY_LOOKER_SCENE_DONE                         FLAG_UNUSED_0x5A0
+#define FLAG_UNUSED_0x5A1                                           0x5A1 // Unused Flag
+#define FLAG_HIDE_CERULEAN_ROUTE5_BLOCKADE                          FLAG_UNUSED_0x5A1
+#define FLAG_UNUSED_0x5A2                                           0x5A2 // Unused Flag
+#define FLAG_QUEST_100_POWER_STARTED                                FLAG_UNUSED_0x5A2
+#define FLAG_UNUSED_0x5A3                                           0x5A3 // Unused Flag
+#define FLAG_QUEST_100_POWER_COMPLETED                              FLAG_UNUSED_0x5A3
+#define FLAG_UNUSED_0x5A4                                           0x5A4 // Unused Flag
+#define FLAG_ROUTE24_WIMPOD_DEFEATED                                FLAG_UNUSED_0x5A4
+#define FLAG_UNUSED_0x5A5                                           0x5A5 // Unused Flag
+#define FLAG_HIDE_VIRIDIAN_POST_ROCKET_NPCS                         FLAG_UNUSED_0x5A5
+#define FLAG_UNUSED_0x5A6                                           0x5A6 // Unused Flag
+#define FLAG_HIDE_SAFFRON_ROUTE7_INTERCEPT_GRUNT                    FLAG_UNUSED_0x5A6
+#define FLAG_UNUSED_0x5A6                                           0x5A6 // Unused Flag
+#define FLAG_HIDE_ROUTE24_WIMPOD                                    FLAG_UNUSED_0x5A6
+#define FLAG_UNUSED_0x5A7                                           0x5A7 // Unused Flag
+#define FLAG_HIDE_SAFFRON_ROUTE7_INTERCEPT_BONSLY                   FLAG_UNUSED_0x5A7
+#define FLAG_UNUSED_0x5A8                                           0x5A8 // Unused Flag
+#define FLAG_HIDE_CELADON_CITY_CUTTREE_1                            FLAG_UNUSED_0x5A8
+#define FLAG_UNUSED_0x5A9                                           0x5A9 // Unused Flag
+#define FLAG_HIDE_CELADON_CITY_CUTTREE_2                            FLAG_UNUSED_0x5A9
+#define FLAG_UNUSED_0x5AA                                           0x5AA // Unused Flag
+#define FLAG_HIDE_CELADON_GYM_CUTTREE_1                             FLAG_UNUSED_0x5AA
+#define FLAG_UNUSED_0x5AB                                           0x5AB // Unused Flag
+#define FLAG_HIDE_CELADON_GYM_CUTTREE_2                             FLAG_UNUSED_0x5AB
+#define FLAG_UNUSED_0x5AC                                           0x5AC // Unused Flag
+#define FLAG_HIDE_CELADON_GYM_CUTTREE_3                             FLAG_UNUSED_0x5AC
+#define FLAG_UNUSED_0x5AD                                           0x5AD // Unused Flag
+#define FLAG_QUEST_LT_SURGE_STARTED                                 FLAG_UNUSED_0x5AD
+#define FLAG_UNUSED_0x5AE                                           0x5AE // Unused Flag
+#define FLAG_QUEST_LT_SURGE_COMPLETED                               FLAG_UNUSED_0x5AE
+#define FLAG_UNUSED_0x5AF                                           0x5AF // Unused Flag
+#define FLAG_HIDE_VERMILION_CITY_SURGE                              FLAG_UNUSED_0x5AF
+#define FLAG_UNUSED_0x5B0                                           0x5B0 // Unused Flag
+#define FLAG_HIDE_VERMILION_CITY_AQUA_GRUNT                         FLAG_UNUSED_0x5B0
+#define FLAG_UNUSED_0x5B1                                           0x5B1 // Unused Flag
+#define FLAG_HIDE_VERMILION_CITY_RAICHU                             FLAG_UNUSED_0x5B1
+#define FLAG_UNUSED_0x5B2                                           0x5B2 // Unused Flag
+#define FLAG_HIDE_VERMILION_CITY_CARVANHA                           FLAG_UNUSED_0x5B2
+#define FLAG_UNUSED_0x5B3                                           0x5B3 // Unused Flag
+#define FLAG_AZALEA_BIRCH_CALL_AFTER_GOLD_DONE                      FLAG_UNUSED_0x5B3
 
 #define FLAG_DEFEATED_RUSTBORO_GYM                                  0x4F0
 #define FLAG_DEFEATED_DEWFORD_GYM                                   0x4F1
@@ -1754,6 +1951,7 @@
 
 #define FLAG_SYS_NOT_SOMEONES_PC                   (SYSTEM_FLAGS + 0x2E)
 #define FLAG_UNUSED_0x88F                           (SYSTEM_FLAGS + 0x2F) // Unused Flag
+#define FLAG_SYS_BUG_CONTEST_MODE                  FLAG_UNUSED_0x88F
 
 #define FLAG_SYS_TV_HOME                            (SYSTEM_FLAGS + 0x30)
 #define FLAG_SYS_TV_WATCH                           (SYSTEM_FLAGS + 0x31)
@@ -1867,6 +2065,8 @@
 #define FLAG_UNUSED_0x8FD                           (SYSTEM_FLAGS + 0x9D) // Unused Flag
 #define FLAG_UNUSED_0x8FE                           (SYSTEM_FLAGS + 0x9E) // Unused Flag
 #define FLAG_UNUSED_0x8FF                           (SYSTEM_FLAGS + 0x9F) // Unused Flag
+#define FLAG_HIDE_GOLDENROD_RADIO_1F_CIPHER_F1      FLAG_UNUSED_0x8FC
+#define FLAG_HIDE_GOLDENROD_RADIO_1F_CIPHER_F5      FLAG_UNUSED_0x8FD
 
 
 #define FLAG_UNUSED_0x90C                           (SYSTEM_FLAGS + 0xAC) // Unused Flag
@@ -1907,6 +2107,14 @@
 #define FLAG_UNUSED_0x927                           (DAILY_FLAGS_START + 0x7)  // Unused Flag
 #define FLAG_UNUSED_0x928                           (DAILY_FLAGS_START + 0x8)  // Unused Flag
 #define FLAG_UNUSED_0x929                           (DAILY_FLAGS_START + 0x9)  // Unused Flag
+#define FLAG_HIDE_GOLDENROD_RADIO_2F_CIPHER_F1      FLAG_UNUSED_0x920
+#define FLAG_HIDE_GOLDENROD_RADIO_2F_CIPHER_F2      FLAG_UNUSED_0x923
+#define FLAG_HIDE_GOLDENROD_RADIO_2F_CIPHER_F3      FLAG_UNUSED_0x924
+#define FLAG_HIDE_GOLDENROD_RADIO_3F_CIPHER_F4      FLAG_UNUSED_0x925
+#define FLAG_HIDE_GOLDENROD_RADIO_3F_CIPHER_F5      FLAG_UNUSED_0x926
+#define FLAG_HIDE_GOLDENROD_RADIO_3F_CIPHER_M1      FLAG_UNUSED_0x927
+#define FLAG_HIDE_GOLDENROD_RADIO_4F_CIPHER_F6      FLAG_UNUSED_0x928
+#define FLAG_HIDE_GOLDENROD_RADIO_4F_CIPHER_F7      FLAG_UNUSED_0x929
 #define FLAG_DAILY_PICKED_LOTO_TICKET               (DAILY_FLAGS_START + 0xA)
 #define FLAG_DAILY_ROUTE_114_RECEIVED_BERRY         (DAILY_FLAGS_START + 0xB)
 #define FLAG_DAILY_ROUTE_111_RECEIVED_BERRY         (DAILY_FLAGS_START + 0xC)
@@ -1923,14 +2131,23 @@
 #define FLAG_UNUSED_0x936                           (DAILY_FLAGS_START + 0x16) // Unused Flag
 #define FLAG_UNUSED_0x937                           (DAILY_FLAGS_START + 0x17) // Unused Flag
 #define FLAG_UNUSED_0x938                           (DAILY_FLAGS_START + 0x18) // Unused Flag
+#define FLAG_DAILY_BUG_CONTEST_COMPLETED           FLAG_UNUSED_0x938
 #define FLAG_UNUSED_0x939                           (DAILY_FLAGS_START + 0x19) // Unused Flag
+#define FLAG_DAILY_ROUTE24_WIMPOD_FLED             FLAG_UNUSED_0x939
 #define FLAG_UNUSED_0x93A                           (DAILY_FLAGS_START + 0x1A) // Unused Flag
+#define FLAG_GOLDENROD_CIPHER_DISGUISE_ACTIVE      FLAG_UNUSED_0x93A
 #define FLAG_UNUSED_0x93B                           (DAILY_FLAGS_START + 0x1B) // Unused Flag
+#define FLAG_HIDE_GOLDENROD_UNDERGROUND_TUNNEL_CIPHER_PEON FLAG_UNUSED_0x93B
 #define FLAG_UNUSED_0x93C                           (DAILY_FLAGS_START + 0x1C) // Unused Flag
+#define FLAG_HIDE_GOLDENROD_UNDERGROUND_TUNNEL_BOY FLAG_UNUSED_0x93C
 #define FLAG_UNUSED_0x93D                           (DAILY_FLAGS_START + 0x1D) // Unused Flag
+#define FLAG_HIDE_GOLDENROD_CITY_RADIO_GUARD       FLAG_UNUSED_0x93D
 #define FLAG_UNUSED_0x93E                           (DAILY_FLAGS_START + 0x1E) // Unused Flag
+#define FLAG_HIDE_GOLDENROD_CITY_CIPHER_PEON_M_2   FLAG_UNUSED_0x93E
 #define FLAG_UNUSED_0x93F                           (DAILY_FLAGS_START + 0x1F) // Unused Flag
+#define FLAG_GOLDENROD_CITY_RADIO_SHIFT_DONE       FLAG_UNUSED_0x93F
 #define FLAG_UNUSED_0x940                           (DAILY_FLAGS_START + 0x20) // Unused Flag
+#define FLAG_GOLDENROD_BASEMENT_KEY_GIVEN         FLAG_UNUSED_0x940
 #define FLAG_UNUSED_0x941                           (DAILY_FLAGS_START + 0x21) // Unused Flag
 #define FLAG_UNUSED_0x942                           (DAILY_FLAGS_START + 0x22) // Unused Flag
 #define FLAG_UNUSED_0x943                           (DAILY_FLAGS_START + 0x23) // Unused Flag

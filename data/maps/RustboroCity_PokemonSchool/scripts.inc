@@ -51,22 +51,32 @@ RustboroCity_PokemonSchool_EventScript_ExitTopicSelect::
 	end
 
 RustboroCity_PokemonSchool_EventScript_GameboyKid1::
+	faceplayer
+	setspeaker RustboroCity_PokemonSchool_Speaker_Axel
 	msgbox RustboroCity_PokemonSchool_Text_TradingRightNow, MSGBOX_NPC
 	end
 
 RustboroCity_PokemonSchool_EventScript_GameboyKid2::
+	faceplayer
+	setspeaker RustboroCity_PokemonSchool_Speaker_Brynn
 	msgbox RustboroCity_PokemonSchool_Text_AlwaysWantedSeedot, MSGBOX_NPC
 	end
 
 RustboroCity_PokemonSchool_EventScript_RichBoy::
+	faceplayer
+	setspeaker RustboroCity_PokemonSchool_Speaker_Cecil
 	msgbox RustboroCity_PokemonSchool_Text_PokemontCantUseManMadeItems, MSGBOX_NPC
 	end
 
 RustboroCity_PokemonSchool_EventScript_Lass::
+	faceplayer
+	setspeaker RustboroCity_PokemonSchool_Speaker_Dana
 	msgbox RustboroCity_PokemonSchool_Text_ConfusedPokemonAttacksItself, MSGBOX_NPC
 	end
 
 RustboroCity_PokemonSchool_EventScript_SchoolKidM::
+	faceplayer
+	setspeaker RustboroCity_PokemonSchool_Speaker_Ethan
 	msgbox RustboroCity_PokemonSchool_Text_PokemonHealItselfWithBerry, MSGBOX_NPC
 	end
 
@@ -77,6 +87,7 @@ RustboroCity_PokemonSchool_EventScript_StudentNotebook::
 RustboroCity_PokemonSchool_EventScript_Teacher::
 	lock
 	faceplayer
+	setspeaker RustboroCity_PokemonSchool_Speaker_MsLaurel
 	goto_if_set FLAG_RECEIVED_QUICK_CLAW, RustboroCity_PokemonSchool_EventScript_GaveQuickClaw
 	call_if_eq VAR_FACING, DIR_EAST, RustboroCity_PokemonSchool_EventScript_TeacherCheckOnStudentsEast
 	call_if_eq VAR_FACING, DIR_WEST, RustboroCity_PokemonSchool_EventScript_TeacherCheckOnStudentsWest
@@ -163,6 +174,7 @@ RustboroCity_PokemonSchool_Movement_TeacherCheckOnStudentsEast:
 RustboroCity_PokemonSchool_EventScript_Scott::
 	lock
 	faceplayer
+	setspeaker RustboroCity_PokemonSchool_Speaker_Scott
 	goto_if_set FLAG_MET_SCOTT_AFTER_OBTAINING_STONE_BADGE, RustboroCity_PokemonSchool_EventScript_ScottWatchStudents
 	goto_if_set FLAG_MET_SCOTT_RUSTBORO, RustboroCity_PokemonSchool_EventScript_ScottSpokeAlready
 	goto_if_set FLAG_BADGE01_GET, RustboroCity_PokemonSchool_EventScript_ScottGreetHasBadge
@@ -202,6 +214,27 @@ RustboroCity_PokemonSchool_EventScript_ScottWatchStudents::
 RustboroCity_PokemonSchool_Text_BlackboardListsStatusChanges:
 	.string "The blackboard lists status changes\n"
 	.string "that may affect POKéMON in battle.$"
+
+RustboroCity_PokemonSchool_Speaker_Axel:
+	.string "Axel$"
+
+RustboroCity_PokemonSchool_Speaker_Brynn:
+	.string "Brynn$"
+
+RustboroCity_PokemonSchool_Speaker_Cecil:
+	.string "Cecil$"
+
+RustboroCity_PokemonSchool_Speaker_Dana:
+	.string "Dana$"
+
+RustboroCity_PokemonSchool_Speaker_Ethan:
+	.string "Ethan$"
+
+RustboroCity_PokemonSchool_Speaker_MsLaurel:
+	.string "Ms. Laurel$"
+
+RustboroCity_PokemonSchool_Speaker_Scott:
+	.string "Scott$"
 
 RustboroCity_PokemonSchool_Text_ReadWhichTopic:
 	.string "Which topic do you want to read?$"
@@ -348,4 +381,3 @@ RustboroCity_PokemonSchool_Text_ScottMetAlreadyStoneBadge:
 	.string "you in battle.\p"
 	.string "It's hard to tell what you're like as\n"
 	.string "a TRAINER from a LEAGUE BADGE.$"
-

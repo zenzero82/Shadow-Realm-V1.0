@@ -12,11 +12,16 @@ Cerulean_City_MapScripts::
     .byte 0
 
 CeruleanCity_EventScript_CityEnter::
+    call_if_set FLAG_SAFFRON_CITY_LOOKER_SCENE_DONE, CeruleanCity_EventScript_SetRoute5BlockadeCleared
     setvar VAR_TEMP_1, 0
     setflag FLAG_VISITED_CERULEAN_CITY
     call_if_set FLAG_CERULEAN_POLICE_MOVED_26, CeruleanCity_EventScript_SetPolice26Moved
     call_if_set FLAG_CERULEAN_POLICE_MOVED_27, CeruleanCity_EventScript_SetPolice27Moved
     end
+
+CeruleanCity_EventScript_SetRoute5BlockadeCleared::
+    setflag FLAG_HIDE_CERULEAN_ROUTE5_BLOCKADE
+    return
 
 CeruleanCity_OnFrame:
     map_script_2 VAR_TEMP_1, 0, CeruleanCity_EventScript_CityEnterQuest
@@ -41,9 +46,9 @@ CeruleanCity_EventScript_CityEnterQuest_End:
 
 #define LOCALID_MISTY 1
 #define LOCALID_MICHAEL 2
-#define LOCALID_CERULEAN_POLICEMAN_1 18
-#define LOCALID_CERULEAN_POLICEMAN_2 19
-#define LOCALID_CERULEAN_GATE_OFFICER 21
+#define LOCALID_CERULEAN_POLICEMAN_1 14
+#define LOCALID_CERULEAN_POLICEMAN_2 15
+#define LOCALID_CERULEAN_GATE_OFFICER 17
 
 @ =================================================
 @ SPEAKER DEFINITIONS
@@ -796,8 +801,10 @@ CeruleanCity_Text_CooltrainerM1:
     .string "Not regular ROCKETS either.$"
 
 CeruleanCity_Text_CooltrainerM2:
-    .string "People keep vanishing toward the CAPE.\p"
-    .string "And whenever MISTY goes to investigate,\n"
+    .string "People keep vanishing toward\n"
+    .string "the CAPE.\p"
+    .string "And whenever MISTY goes to\n"
+    .string "investigate,\n"
     .string "someone calls her back to the GYM.\p"
     .string "It feels like somebody is steering\n"
     .string "everything from afar.$"
@@ -828,7 +835,8 @@ CeruleanCity_Text_Fisher:
 
 CeruleanCity_Text_Fisher_RocketTip:
     .string "If you're looking for trouble...\p"
-    .string "I saw a shady guy head toward the CAPE.\p"
+    .string "I saw a shady guy head toward\n"
+    .string "the CAPE.\p"
     .string "Not just ROCKET.\n"
     .string "Different vibe. Quiet. Cold.\p"
     .string "Like he was scouting something.$"
@@ -975,4 +983,3 @@ CeruleanCity_Text_PoliceGate_Allowed:
 CeruleanCity_Text_Light:
     .string "Portable lights. Someone set\n"
     .string "up camp nearby.$"
-

@@ -381,7 +381,7 @@ Minccino
 Level: 10
 
 === TRAINER_RT3_LASS ===
-Name: LASS
+Name: MAYA
 Class: TRAINER_CLASS_LASS
 Pic: LASS_GEN2  
 Gender: Female
@@ -411,8 +411,41 @@ Pic: MIRROR_B
 Gender: Male
 Music: TRAINER_ENCOUNTER_MUSIC_MIRRORB
 
-Rattata
-Level: 1
+SPECIES_TORNADUS
+Level: 100
+Shadow: Yes
+Shadow ID: 115
+Heart Gauge: 10000
+
+SPECIES_ENAMORUS
+Level: 100
+Shadow: Yes
+Shadow ID: 116
+Heart Gauge: 10000
+
+SPECIES_THUNDURUS
+Level: 100
+Shadow: Yes
+Shadow ID: 117
+Heart Gauge: 10000
+
+SPECIES_TAPU_LELE
+Level: 100
+Shadow: Yes
+Shadow ID: 118
+Heart Gauge: 10000
+
+SPECIES_MELOETTA
+Level: 100
+Shadow: Yes
+Shadow ID: 119
+Heart Gauge: 10000
+
+SPECIES_BLACEPHALON
+Level: 100
+Shadow: Yes
+Shadow ID: 120
+Heart Gauge: 10000
 
 === TRAINER_RT4_BLACK_BELT ===
 Name: RYU
@@ -464,7 +497,7 @@ Level: 15
 
 === TRAINER_RT4_BRENDAN1 ===
 Name: BRENDAN
-Class: TRAINER_CLASS_RIVAL
+Class: TRAINER_CLASS_PKMN_TRAINER_2
 Pic: BRENDAN
 Gender: Male
 
@@ -476,7 +509,7 @@ Level: 15
 
 === TRAINER_RT4_BRENDAN2 ===
 Name: BRENDAN
-Class: TRAINER_CLASS_RIVAL
+Class: TRAINER_CLASS_AETHER
 Pic: BRENDAN
 Gender: Male
 
@@ -1020,11 +1053,11 @@ Class: TRAINER_CLASS_TEAM_FLARE_ADMIN
 Pic: BRYONY
 Music: TRAINER_ENCOUNTER_MUSIC_SUSPICIOUS
 
-Houndour
-Level: 26
+Houndoom
+Level: 28
 
-Litleo
-Level: 26
+Pyroar
+Level: 29
 
 Pangoro
 Level: 29
@@ -1246,70 +1279,150 @@ Music: TRAINER_ENCOUNTER_MUSIC_INTENSE
 Rattata
 Level: 30
 
+=== TRAINER_POWERPLANT_PLASMA_1 ===
+Name: RUDO
+Class: TRAINER_CLASS_TEAM_PLASMA
+Pic: PLASMA_GRUNT_M_GEN5
+Gender: Male
+Music: TRAINER_ENCOUNTER_MUSIC_PLASMA
+
+Krokorok
+Level: 34
+
+Golbat
+Level: 35
+
+=== TRAINER_POWERPLANT_PLASMA_2 ===
+Name: VOSS
+Class: TRAINER_CLASS_TEAM_PLASMA
+Pic: PLASMA_GRUNT_M_GEN5
+Gender: Male
+Music: TRAINER_ENCOUNTER_MUSIC_PLASMA
+
+Mightyena
+Level: 34
+
+Watchog
+Level: 35
+
+=== TRAINER_POWERPLANT_PLASMA_3 ===
+Name: NERO
+Class: TRAINER_CLASS_TEAM_PLASMA
+Pic: PLASMA_GRUNT_M_GEN5
+Gender: Male
+Music: TRAINER_ENCOUNTER_MUSIC_PLASMA
+
+Liepard
+Level: 35
+
+Garbodor
+Level: 36
+- Sludge Bomb
+- Body Slam
+- Clear Smog
+- Toxic Spikes
+
+=== TRAINER_ZINZOLIN_POWER_PLANT ===
+Name: ZINZOLIN
+Class: TRAINER_CLASS_TEAM_PLASMA
+Pic: ZINZOLIN_GEN5
+Gender: Male
+Music: TRAINER_ENCOUNTER_MUSIC_PLASMA
+
+Cryogonal
+Level: 36
+
+Weavile
+Level: 36
+Shadow: Yes
+Shadow ID: 25
+Heart Gauge: 10000
+
+Drifblim
+Level: 36
+
+Abomasnow
+Level: 38
+
 === TRAINER_CELADON_SHAUNA ===
 Name: SHAUNA
-Class: TRAINER_CLASS_LASS
+Class: TRAINER_CLASS_KALOS_TRAINER
 Pic: SHAUNA
 Gender: Female
 
-Quilladin
+Klefki
 Level: 30
+
+Sliggoo
+Level: 31
+
+Ivysaur
+Level: 32
+
+=== TRAINER_CELADON_TREVOR ===
+Name: TREVOR
+Class: TRAINER_CLASS_KALOS_TRAINER
+Pic: TREVOR
+Gender: Male
 
 Floette
 Level: 30
 
-=== TRAINER_CELADON_TREVOR ===
-Name: TREVOR
-Class: TRAINER_CLASS_SCHOOL_KID
-Pic: TREVOR
-Gender: Male
+Aerodactyl
+Level: 31
 
-Frogadier
-Level: 30
-
-Lucario
-Level: 30
+Charmeleon
+Level: 32
 
 === TRAINER_CELADON_TIERNO ===
 Name: TIERNO
-Class: TRAINER_CLASS_CAMPER
+Class: TRAINER_CLASS_KALOS_TRAINER
 Pic: TIERNO
 Gender: Male
 
-Braixen
+Hawlucha
 Level: 30
 
-Gogoat
-Level: 30
+Hitmontop
+Level: 31
+
+Wartortle
+Level: 32
 
 === TRAINER_CELADON_SERENA ===
 Name: SERENA
-Class: TRAINER_CLASS_RIVAL
+Class: TRAINER_CLASS_KALOS_TRAINER
 Pic: SERENA
 Gender: Female
 
-Meowstic
-Level: 31
+Absol
+Level: 30
 
 Sylveon
 Level: 31
 
-Talonflame
-Level: 31
+Pangoro
+Level: 32
+
+Delphox @ Delphoxite
+Level: 32
 
 === TRAINER_CELADON_CALEM ===
 Name: CALEM
-Class: TRAINER_CLASS_RIVAL
+Class: TRAINER_CLASS_KALOS_TRAINER
 Pic: CALEM
 Gender: Male
 
-Greninja
-Level: 32
+Meowstic
+Level: 30
 
-Lucario
-Level: 32
+Barbaracle
+Level: 31
 
 Noivern
+Level: 32
+
+Chesnaught @ Chesnaughtite
 Level: 32
 
 === TRAINER_CELADON_AETHER_GRUNT_1 ===
@@ -1337,3 +1450,1026 @@ Level: 30
 
 Raticate
 Level: 30
+
+=== TRAINER_CELADON_GYM_MICHELLE ===
+Name: MICHELLE
+Class: TRAINER_CLASS_LASS
+Pic: LASS
+Gender: Female
+
+Gloom
+Level: 30
+
+Weepinbell
+Level: 30
+
+=== TRAINER_CELADON_GYM_TANYA ===
+Name: TANYA
+Class: TRAINER_CLASS_PICNICKER
+Pic: PICNICKER
+Gender: Female
+
+Ivysaur
+Level: 31
+
+Skiploom
+Level: 31
+
+=== TRAINER_CELADON_GYM_JULIA ===
+Name: JULIA
+Class: TRAINER_CLASS_BEAUTY
+Pic: BEAUTY
+Gender: Female
+
+Roselia
+Level: 31
+
+Parasect
+Level: 32
+
+=== TRAINER_CELADON_GYM_JO_AND_ZOE ===
+Name: JO&ZOE
+Class: TRAINER_CLASS_TWINS
+Pic: TWINS
+Gender: Female
+Double Battle: Yes
+
+Oddish
+Level: 29
+
+Bellsprout
+Level: 29
+
+=== TRAINER_ERIKA ===
+Name: ERIKA
+Class: Kanto Leader
+Music: Gym Leader
+Pic: ERIKA
+Gender: Female
+
+Tangela
+Level: 33
+
+Victreebel
+Level: 34
+
+Vileplume
+Level: 34
+
+Bellossom
+Level: 34
+
+=== TRAINER_CELADON_GLADION ===
+Name: GLADION
+Class: TRAINER_CLASS_AETHER
+Pic: GLADION
+Gender: Male
+Music: TRAINER_ENCOUNTER_MUSIC_INTENSE
+
+SPECIES_TYPE_NULL
+Level: 32
+
+Zoroark
+Level: 32
+
+Lucario
+Level: 33
+
+=== TRAINER_SURGE ===
+Name: LT. SURGE
+Class: Kanto Leader
+Music: Gym Leader
+Pic: SURGE
+Gender: Male
+
+Magneton
+Level: 25
+
+Electabuzz
+Level: 25
+
+Raichu @ Raichunite X
+Level: 26
+
+=== TRAINER_VERMILION_GYM_JUGGLER ===
+Name: LEO
+Class: TRAINER_CLASS_JUGGLER
+Pic: JUGGLER
+Gender: Male
+
+Voltorb
+Level: 33
+
+Magnemite
+Level: 33
+
+=== TRAINER_VERMILION_GYM_GENTLEMAN ===
+Name: EDGAR
+Class: TRAINER_CLASS_GENTLEMAN
+Pic: GENTLEMAN
+Gender: Male
+
+Pikachu
+Level: 34
+
+Flaaffy
+Level: 34
+
+=== TRAINER_VERMILION_GYM_ROCKER ===
+Name: AXEL
+Class: TRAINER_CLASS_GUITARIST
+Pic: GUITARIST
+Gender: Male
+
+Electrike
+Level: 35
+
+Magneton
+Level: 35
+
+=== TRAINER_GOLDENROD_GYM_CARRIE ===
+Name: CARRIE
+Class: TRAINER_CLASS_LASS
+Pic: LASS_GEN2
+Gender: Female
+
+Snubbull
+Level: 36
+
+Jigglypuff
+Level: 36
+
+=== TRAINER_GOLDENROD_GYM_LEAH ===
+Name: LEAH
+Class: TRAINER_CLASS_LASS
+Pic: LASS_GEN2
+Gender: Female
+
+Clefairy
+Level: 37
+
+Teddiursa
+Level: 37
+
+=== TRAINER_GOLDENROD_GYM_BROOKE ===
+Name: BROOKE
+Class: TRAINER_CLASS_BEAUTY
+Pic: BEAUTY
+Gender: Female
+
+Granbull
+Level: 38
+
+Kirlia
+Level: 38
+
+=== TRAINER_GOLDENROD_GYM_MARA ===
+Name: MARA
+Class: TRAINER_CLASS_BATTLE_GIRL
+Pic: BATTLE_GIRL
+Gender: Female
+
+Lickitung
+Level: 39
+
+Wigglytuff
+Level: 39
+
+=== TRAINER_LEADER_WHITNEY ===
+Name: WHITNEY
+Class: JOHTO_LEADER
+Music: Gym Leader
+Pic: LEADER_WHITNEY
+Gender: Female
+
+Clefairy
+Level: 38
+
+Snubbull
+Level: 39
+
+Miltank
+Level: 41
+
+=== TRAINER_VENUS ===
+Name: VENUS
+Class: TRAINER_CLASS_CIPHER_ADMIN
+Pic: VENUS
+Gender: Female
+Music: TRAINER_ENCOUNTER_MUSIC_CIPHER_PEON
+Double Battle: Yes
+
+SPECIES_HATTERENE
+Level: 46
+
+SPECIES_AMOONGUSS
+Level: 46
+
+SPECIES_ROSERADE
+Level: 47
+
+SPECIES_MILOTIC
+Level: 47
+
+SPECIES_VENUSAUR
+Level: 48
+Shadow: Yes
+Shadow ID: 71
+Heart Gauge: 10000
+
+SPECIES_GOODRA
+Level: 48
+Shadow: Yes
+Shadow ID: 104
+Heart Gauge: 10000
+
+=== TRAINER_GIOVANNI_SHADOW_REALM ===
+Name: GIOVANNI
+Class: TRAINER_CLASS_TEAM_ROCKET
+Pic: GIOVANNI
+Gender: Male
+Music: TRAINER_ENCOUNTER_MUSIC_TEAM_ROCKET
+
+SPECIES_REGIROCK
+Level: 100
+Shadow: Yes
+Shadow ID: 109
+Heart Gauge: 10000
+
+SPECIES_TERRAKION
+Level: 100
+Shadow: Yes
+Shadow ID: 110
+Heart Gauge: 10000
+
+SPECIES_IRON_TREADS
+Level: 100
+Shadow: Yes
+Shadow ID: 111
+Heart Gauge: 10000
+
+SPECIES_GREAT_TUSK
+Level: 100
+Shadow: Yes
+Shadow ID: 112
+Heart Gauge: 10000
+
+SPECIES_REGIGIGAS
+Level: 100
+Shadow: Yes
+Shadow ID: 113
+Heart Gauge: 10000
+
+SPECIES_MEWTWO
+Level: 100
+Shadow: Yes
+Shadow ID: 114
+Heart Gauge: 10000
+
+=== TRAINER_NASCOUR_SHADOW_REALM ===
+Name: NASCOUR
+Class: TRAINER_CLASS_CIPHER_ADMIN
+Pic: MIRROR_B
+Gender: Male
+Music: TRAINER_ENCOUNTER_MUSIC_CIPHER_PEON
+
+SPECIES_IRON_BUNDLE
+Level: 100
+Shadow: Yes
+Shadow ID: 121
+Heart Gauge: 10000
+
+SPECIES_IRON_CROWN
+Level: 100
+Shadow: Yes
+Shadow ID: 122
+Heart Gauge: 10000
+
+SPECIES_CHIEN_PAO
+Level: 100
+Shadow: Yes
+Shadow ID: 123
+Heart Gauge: 10000
+
+SPECIES_CALYREX_ICE
+Level: 100
+Shadow: Yes
+Shadow ID: 124
+Heart Gauge: 10000
+
+SPECIES_REGICE
+Level: 100
+Shadow: Yes
+Shadow ID: 125
+Heart Gauge: 10000
+
+SPECIES_ARTICUNO
+Level: 100
+Shadow: Yes
+Shadow ID: 126
+Heart Gauge: 10000
+
+=== TRAINER_GUZMA_SHADOW_REALM ===
+Name: GUZMA
+Class: TRAINER_CLASS_TEAM_SKULL
+Pic: GUZMA
+Gender: Male
+Music: TRAINER_ENCOUNTER_MUSIC_SUSPICIOUS
+
+SPECIES_KARTANA
+Level: 100
+Shadow: Yes
+Shadow ID: 127
+Heart Gauge: 10000
+
+SPECIES_NAGANADEL
+Level: 100
+Shadow: Yes
+Shadow ID: 128
+Heart Gauge: 10000
+
+SPECIES_TAPU_BULU
+Level: 100
+Shadow: Yes
+Shadow ID: 129
+Heart Gauge: 10000
+
+SPECIES_ZERAORA
+Level: 100
+Shadow: Yes
+Shadow ID: 130
+Heart Gauge: 10000
+
+SPECIES_GUZZLORD
+Level: 100
+Shadow: Yes
+Shadow ID: 131
+Heart Gauge: 10000
+
+SPECIES_BUZZWOLE
+Level: 100
+Shadow: Yes
+Shadow ID: 132
+Heart Gauge: 10000
+
+=== TRAINER_LUSAMINE_SHADOW_REALM ===
+Name: LUSAMINE
+Class: TRAINER_CLASS_AETHER
+Pic: AETHER_F
+Gender: Female
+Music: TRAINER_ENCOUNTER_MUSIC_INTENSE
+
+SPECIES_XURKITREE
+Level: 100
+Shadow: Yes
+Shadow ID: 133
+Heart Gauge: 10000
+
+SPECIES_CELESTEELA
+Level: 100
+Shadow: Yes
+Shadow ID: 134
+Heart Gauge: 10000
+
+SPECIES_PHEROMOSA
+Level: 100
+Shadow: Yes
+Shadow ID: 135
+Heart Gauge: 10000
+
+SPECIES_NIHILEGO
+Level: 100
+Shadow: Yes
+Shadow ID: 136
+Heart Gauge: 10000
+
+SPECIES_LUNALA
+Level: 100
+Shadow: Yes
+Shadow ID: 137
+Heart Gauge: 10000
+
+SPECIES_SOLGALEO
+Level: 100
+Shadow: Yes
+Shadow ID: 138
+Heart Gauge: 10000
+
+=== TRAINER_COLRESS_SHADOW_REALM ===
+Name: COLRESS
+Class: TRAINER_CLASS_TEAM_PLASMA
+Pic: COLRESS_GEN5
+Gender: Male
+Music: TRAINER_ENCOUNTER_MUSIC_PLASMA
+
+SPECIES_REGIELEKI
+Level: 100
+Shadow: Yes
+Shadow ID: 139
+Heart Gauge: 10000
+
+SPECIES_JIRACHI
+Level: 100
+Shadow: Yes
+Shadow ID: 140
+Heart Gauge: 10000
+
+SPECIES_MELMETAL
+Level: 100
+Shadow: Yes
+Shadow ID: 141
+Heart Gauge: 10000
+
+SPECIES_MAGEARNA
+Level: 100
+Shadow: Yes
+Shadow ID: 142
+Heart Gauge: 10000
+
+SPECIES_GENESECT
+Level: 100
+Shadow: Yes
+Shadow ID: 143
+Heart Gauge: 10000
+
+=== TRAINER_GHETSIS_SHADOW_REALM ===
+Name: GHETSIS
+Class: TRAINER_CLASS_TEAM_PLASMA
+Pic: GHETSIS_GEN5
+Gender: Male
+Music: TRAINER_ENCOUNTER_MUSIC_PLASMA
+
+SPECIES_MARSHADOW
+Level: 100
+Shadow: Yes
+Shadow ID: 145
+Heart Gauge: 10000
+
+SPECIES_ZARUDE
+Level: 100
+Shadow: Yes
+Shadow ID: 146
+Heart Gauge: 10000
+
+SPECIES_REGIDRAGO
+Level: 100
+Shadow: Yes
+Shadow ID: 147
+Heart Gauge: 10000
+
+SPECIES_ZEKROM
+Level: 100
+Shadow: Yes
+Shadow ID: 148
+Heart Gauge: 10000
+
+SPECIES_RESHIRAM
+Level: 100
+Shadow: Yes
+Shadow ID: 149
+Heart Gauge: 10000
+
+SPECIES_KYUREM
+Level: 100
+Shadow: Yes
+Shadow ID: 150
+Heart Gauge: 10000
+
+=== TRAINER_MAXIE_SHADOW_REALM ===
+Name: MAXIE
+Class: TRAINER_CLASS_MAGMA_LEADER
+Pic: MAGMA_LEADER_MAXIE
+Gender: Male
+Music: TRAINER_ENCOUNTER_MUSIC_MAGMA
+
+SPECIES_TING_LU
+Level: 100
+Shadow: Yes
+Shadow ID: 151
+Heart Gauge: 10000
+
+SPECIES_CHI_YU
+Level: 100
+Shadow: Yes
+Shadow ID: 152
+Heart Gauge: 10000
+
+SPECIES_LANDORUS
+Level: 100
+Shadow: Yes
+Shadow ID: 153
+Heart Gauge: 10000
+
+SPECIES_HEATRAN
+Level: 100
+Shadow: Yes
+Shadow ID: 154
+Heart Gauge: 10000
+
+SPECIES_ENTEI
+Level: 100
+Shadow: Yes
+Shadow ID: 155
+Heart Gauge: 10000
+
+SPECIES_GROUDON
+Level: 100
+Shadow: Yes
+Shadow ID: 156
+Heart Gauge: 10000
+
+=== TRAINER_ARCHIE_SHADOW_REALM ===
+Name: ARCHIE
+Class: TRAINER_CLASS_AQUA_LEADER
+Pic: AQUA_LEADER_ARCHIE
+Gender: Male
+Music: TRAINER_ENCOUNTER_MUSIC_AQUA
+
+SPECIES_MANAPHY
+Level: 100
+Shadow: Yes
+Shadow ID: 157
+Heart Gauge: 10000
+
+SPECIES_TAPU_FINI
+Level: 100
+Shadow: Yes
+Shadow ID: 158
+Heart Gauge: 10000
+
+SPECIES_TERAPAGOS
+Level: 100
+Shadow: Yes
+Shadow ID: 159
+Heart Gauge: 10000
+
+SPECIES_KELDEO
+Level: 100
+Shadow: Yes
+Shadow ID: 160
+Heart Gauge: 10000
+
+SPECIES_SUICUNE
+Level: 100
+Shadow: Yes
+Shadow ID: 161
+Heart Gauge: 10000
+
+SPECIES_KYOGRE
+Level: 100
+Shadow: Yes
+Shadow ID: 162
+Heart Gauge: 10000
+
+=== TRAINER_LYSANDRE_SHADOW_REALM ===
+Name: LYSANDRE
+Class: TRAINER_CLASS_TEAM_FLARE
+Pic: LYSANDER
+Gender: Male
+Music: TRAINER_ENCOUNTER_MUSIC_INTENSE
+
+SPECIES_VICTINI
+Level: 100
+Shadow: Yes
+Shadow ID: 163
+Heart Gauge: 10000
+
+SPECIES_DIANCIE
+Level: 100
+Shadow: Yes
+Shadow ID: 164
+Heart Gauge: 10000
+
+SPECIES_WO_CHIEN
+Level: 100
+Shadow: Yes
+Shadow ID: 165
+Heart Gauge: 10000
+
+SPECIES_VOLCANION
+Level: 100
+Shadow: Yes
+Shadow ID: 166
+Heart Gauge: 10000
+
+SPECIES_XERNEAS
+Level: 100
+Shadow: Yes
+Shadow ID: 167
+Heart Gauge: 10000
+
+SPECIES_YVELTAL
+Level: 100
+Shadow: Yes
+Shadow ID: 168
+Heart Gauge: 10000
+
+=== TRAINER_ROSE_SHADOW_REALM ===
+Name: ROSE
+Class: TRAINER_CLASS_GENTLEMAN
+Pic: GENTLEMAN
+Gender: Male
+Music: TRAINER_ENCOUNTER_MUSIC_RICH
+
+SPECIES_LATIAS
+Level: 100
+Shadow: Yes
+Shadow ID: 169
+Heart Gauge: 10000
+
+SPECIES_LATIOS
+Level: 100
+Shadow: Yes
+Shadow ID: 170
+Heart Gauge: 10000
+
+SPECIES_REGISTEEL
+Level: 100
+Shadow: Yes
+Shadow ID: 171
+Heart Gauge: 10000
+
+SPECIES_ZACIAN
+Level: 100
+Shadow: Yes
+Shadow ID: 172
+Heart Gauge: 10000
+
+SPECIES_ZAMAZENTA
+Level: 100
+Shadow: Yes
+Shadow ID: 173
+Heart Gauge: 10000
+
+SPECIES_ETERNATUS
+Level: 100
+Shadow: Yes
+Shadow ID: 174
+Heart Gauge: 10000
+
+=== TRAINER_SADA_TURO_SHADOW_REALM ===
+Name: SADA&TURO
+Class: TRAINER_CLASS_WANDERER
+Pic: TURO
+Music: TRAINER_ENCOUNTER_MUSIC_INTENSE
+
+SPECIES_RAIKOU
+Level: 100
+Shadow: Yes
+Shadow ID: 175
+Heart Gauge: 10000
+
+SPECIES_TAPU_KOKO
+Level: 100
+Shadow: Yes
+Shadow ID: 176
+Heart Gauge: 10000
+
+SPECIES_ZAPDOS
+Level: 100
+Shadow: Yes
+Shadow ID: 177
+Heart Gauge: 10000
+
+SPECIES_PECHARUNT
+Level: 100
+Shadow: Yes
+Shadow ID: 178
+Heart Gauge: 10000
+
+SPECIES_MIRAIDON
+Level: 100
+Shadow: Yes
+Shadow ID: 179
+Heart Gauge: 10000
+
+SPECIES_KORAIDON
+Level: 100
+Shadow: Yes
+Shadow ID: 180
+Heart Gauge: 10000
+
+=== TRAINER_GREEVIL_SHADOW_REALM ===
+Name: GREEVIL
+Class: TRAINER_CLASS_CIPHER_ADMIN
+Pic: GREEVIL
+Gender: Male
+Music: TRAINER_ENCOUNTER_MUSIC_CIPHER_PEON
+
+SPECIES_CELEBI
+Level: 100
+Shadow: Yes
+Shadow ID: 181
+Heart Gauge: 10000
+
+SPECIES_DEOXYS
+Level: 100
+Shadow: Yes
+Shadow ID: 182
+Heart Gauge: 10000
+
+SPECIES_NECROZMA
+Level: 100
+Shadow: Yes
+Shadow ID: 183
+Heart Gauge: 10000
+
+SPECIES_ZYGARDE_COMPLETE
+Level: 100
+Shadow: Yes
+Shadow ID: 184
+Heart Gauge: 10000
+
+SPECIES_RAYQUAZA
+Level: 100
+Shadow: Yes
+Shadow ID: 185
+Heart Gauge: 10000
+
+SPECIES_LUGIA
+Level: 100
+Shadow: Yes
+Shadow ID: 186
+Heart Gauge: 10000
+
+=== TRAINER_EVICE_SHADOW_REALM ===
+Name: EVICE
+Class: TRAINER_CLASS_CIPHER_ADMIN
+Pic: EVICE
+Gender: Male
+Music: TRAINER_ENCOUNTER_MUSIC_CIPHER_PEON
+
+SPECIES_VIRIZION
+Level: 100
+Shadow: Yes
+Shadow ID: 187
+Heart Gauge: 10000
+
+SPECIES_COBALION
+Level: 100
+Shadow: Yes
+Shadow ID: 188
+Heart Gauge: 10000
+
+SPECIES_MEW
+Level: 100
+Shadow: Yes
+Shadow ID: 189
+Heart Gauge: 10000
+
+SPECIES_CRESSELIA
+Level: 100
+Shadow: Yes
+Shadow ID: 190
+Heart Gauge: 10000
+
+SPECIES_MOLTRES
+Level: 100
+Shadow: Yes
+Shadow ID: 191
+Heart Gauge: 10000
+
+SPECIES_HO_OH
+Level: 100
+Shadow: Yes
+Shadow ID: 192
+Heart Gauge: 10000
+
+=== TRAINER_CYRUS_SHADOW_REALM ===
+Name: CYRUS
+Class: TRAINER_CLASS_TEAM_GALACTIC
+Pic: CYRUS_GEN4
+Gender: Male
+Music: TRAINER_ENCOUNTER_MUSIC_GALACTIC
+
+SPECIES_AZELF
+Level: 100
+Shadow: Yes
+Shadow ID: 193
+Heart Gauge: 10000
+
+SPECIES_UXIE
+Level: 100
+Shadow: Yes
+Shadow ID: 194
+Heart Gauge: 10000
+
+SPECIES_MESPRIT
+Level: 100
+Shadow: Yes
+Shadow ID: 195
+Heart Gauge: 10000
+
+SPECIES_DIALGA
+Level: 100
+Shadow: Yes
+Shadow ID: 196
+Heart Gauge: 10000
+
+SPECIES_PALKIA
+Level: 100
+Shadow: Yes
+Shadow ID: 197
+Heart Gauge: 10000
+
+SPECIES_GIRATINA
+Level: 100
+Shadow: Yes
+Shadow ID: 198
+Heart Gauge: 10000
+
+=== TRAINER_GOLDENROD_RADIO_CIPHER_F1 ===
+Name: VEXA
+Class: TRAINER_CLASS_CIPHER_PEON
+Pic: CIPHER_PEON_F
+Gender: Female
+Music: TRAINER_ENCOUNTER_MUSIC_CIPHER_PEON
+
+SPECIES_KOFFING
+Level: 39
+
+SPECIES_GLOOM
+Level: 40
+
+SPECIES_BEEDRILL
+Level: 41
+Shadow: Yes
+Shadow ID: 4
+Heart Gauge: 10000
+- Shadow Rush
+
+=== TRAINER_GOLDENROD_RADIO_CIPHER_F2 ===
+Name: NYRA
+Class: TRAINER_CLASS_CIPHER_PEON
+Pic: CIPHER_PEON_F
+Gender: Female
+Music: TRAINER_ENCOUNTER_MUSIC_CIPHER_PEON
+
+SPECIES_HOUNDOUR
+Level: 39
+
+SPECIES_MURKROW
+Level: 40
+
+SPECIES_HONCHKROW
+Level: 41
+Shadow: Yes
+Shadow ID: 30
+Heart Gauge: 7500
+- Shadow Rush
+
+=== TRAINER_GOLDENROD_RADIO_CIPHER_F3 ===
+Name: MIRA
+Class: TRAINER_CLASS_CIPHER_PEON
+Pic: CIPHER_PEON_F
+Gender: Female
+Music: TRAINER_ENCOUNTER_MUSIC_CIPHER_PEON
+
+SPECIES_GOLBAT
+Level: 39
+
+SPECIES_CUBCHOO
+Level: 40
+
+SPECIES_BEARTIC
+Level: 41
+Shadow: Yes
+Shadow ID: 35
+Heart Gauge: 7500
+- Shadow Rush
+
+=== TRAINER_GOLDENROD_RADIO_CIPHER_F4 ===
+Name: SERA
+Class: TRAINER_CLASS_CIPHER_PEON
+Pic: CIPHER_PEON_F
+Gender: Female
+Music: TRAINER_ENCOUNTER_MUSIC_CIPHER_PEON
+
+SPECIES_AMAURA
+Level: 39
+
+SPECIES_SNORUNT
+Level: 40
+
+SPECIES_AURORUS
+Level: 41
+Shadow: Yes
+Shadow ID: 44
+Heart Gauge: 7500
+- Shadow Rush
+
+=== TRAINER_GOLDENROD_RADIO_CIPHER_F5 ===
+Name: ZIA
+Class: TRAINER_CLASS_CIPHER_PEON
+Pic: CIPHER_PEON_F
+Gender: Female
+Music: TRAINER_ENCOUNTER_MUSIC_CIPHER_PEON
+
+SPECIES_SALANDIT
+Level: 39
+
+SPECIES_WEEZING
+Level: 40
+
+SPECIES_SALAZZLE
+Level: 41
+Shadow: Yes
+Shadow ID: 47
+Heart Gauge: 7500
+- Shadow Rush
+
+=== TRAINER_GOLDENROD_RADIO_CIPHER_F6 ===
+Name: VERA
+Class: TRAINER_CLASS_CIPHER_PEON
+Pic: CIPHER_PEON_F
+Gender: Female
+Music: TRAINER_ENCOUNTER_MUSIC_CIPHER_PEON
+
+SPECIES_TENTACOOL
+Level: 40
+
+SPECIES_MAREANIE
+Level: 41
+
+SPECIES_TOXAPEX
+Level: 42
+Shadow: Yes
+Shadow ID: 51
+Heart Gauge: 7500
+- Shadow Rush
+
+=== TRAINER_GOLDENROD_RADIO_CIPHER_F7 ===
+Name: LYNX
+Class: TRAINER_CLASS_CIPHER_PEON
+Pic: CIPHER_PEON_F
+Gender: Female
+Music: TRAINER_ENCOUNTER_MUSIC_CIPHER_PEON
+
+SPECIES_DEWPIDER
+Level: 40
+
+SPECIES_MASQUERAIN
+Level: 41
+
+SPECIES_ARAQUANID
+Level: 42
+Shadow: Yes
+Shadow ID: 53
+Heart Gauge: 7500
+- Shadow Rush
+
+=== TRAINER_GOLDENROD_RADIO_CIPHER_M1 ===
+Name: DREX
+Class: TRAINER_CLASS_CIPHER_PEON
+Pic: CIPHER_PEON_M
+Gender: Male
+Music: TRAINER_ENCOUNTER_MUSIC_CIPHER_PEON
+
+SPECIES_ELECTRIKE
+Level: 40
+
+SPECIES_MAGNETON
+Level: 41
+
+SPECIES_MANECTRIC
+Level: 42
+Shadow: Yes
+Shadow ID: 22
+Heart Gauge: 7500
+- Shadow Rush
+
+=== TRAINER_UNION_CAVE_FIREBREATHER_WALT ===
+Name: WALT
+Class: TRAINER_CLASS_FIREBREATHER
+Pic: FIREBREATHER
+Gender: Male
+
+Growlithe
+Level: 21
+
+Koffing
+Level: 22
+
+=== TRAINER_ROUTE32_YOUNGSTER_2 ===
+Name: OLLIE
+Class: TRAINER_CLASS_YOUNGSTER
+Pic: YOUNGSTER
+Gender: Male
+
+Rattata
+Level: 19
+
+Spearow
+Level: 20
+
+=== TRAINER_ROUTE32_COOLTRAINER ===
+Name: DAREN
+Class: TRAINER_CLASS_COOLTRAINER
+Pic: COOLTRAINER_M
+Gender: Male
+
+Mareep
+Level: 21
+
+Bellsprout
+Level: 21

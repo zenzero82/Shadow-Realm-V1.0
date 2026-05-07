@@ -246,7 +246,7 @@ celadon_house1_Text_Calem_Intro2:
 celadon_house1_Text_Calem_Challenge:
 	.string "I have a challenge for you. If\n"
 	.string "you win, I'll give you a MEGA\l"
-	.string "BRACELET.\p"
+	.string "RING.\p"
 	.string "You'll face Tierno, Shauna, and\n"
 	.string "Trevor back to back, then Serena,\l"
 	.string "then me. Want to try?$"
@@ -280,7 +280,7 @@ celadon_house1_Text_Calem_Defeat:
 
 celadon_house1_Text_Calem_Reward:
 	.string "You earned this. Take my\n"
-	.string "MEGA BRACELET.$"
+	.string "MEGA RING.$"
 
 celadon_house1_Text_Calem_RewardExplain:
 	.string "And take this CHESNAUGHTITE.\n"

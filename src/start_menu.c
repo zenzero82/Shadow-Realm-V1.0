@@ -2,6 +2,7 @@
 #include "battle_pike.h"
 #include "battle_pyramid.h"
 #include "battle_pyramid_bag.h"
+#include "bug_contest.h"
 #include "bg.h"
 #include "debug.h"
 #include "event_data.h"
@@ -68,6 +69,7 @@ enum
     MENU_ACTION_OPTION,
     MENU_ACTION_EXIT,
     MENU_ACTION_RETIRE_SAFARI,
+    MENU_ACTION_RETIRE_BUG_CONTEST,
     MENU_ACTION_PLAYER_LINK,
     MENU_ACTION_REST_FRONTIER,
     MENU_ACTION_RETIRE_FRONTIER,
@@ -161,6 +163,7 @@ static bool8 StartMenuSaveCallback(void);
 static bool8 StartMenuOptionCallback(void);
 static bool8 StartMenuExitCallback(void);
 static bool8 StartMenuSafariZoneRetireCallback(void);
+static bool8 StartMenuBugContestRetireCallback(void);
 static bool8 StartMenuLinkModePlayerNameCallback(void);
 static bool8 StartMenuBattlePyramidRetireCallback(void);
 static bool8 StartMenuBattlePyramidBagCallback(void);
@@ -260,6 +263,7 @@ static const struct MenuAction sStartMenuItems[] =
     [MENU_ACTION_OPTION]          = {gText_MenuOption,  {.u8_void = StartMenuOptionCallback}},
     [MENU_ACTION_EXIT]            = {gText_MenuExit,    {.u8_void = StartMenuExitCallback}},
     [MENU_ACTION_RETIRE_SAFARI]   = {gText_MenuRetire,  {.u8_void = StartMenuSafariZoneRetireCallback}},
+    [MENU_ACTION_RETIRE_BUG_CONTEST] = {gText_MenuRetire, {.u8_void = StartMenuBugContestRetireCallback}},
     [MENU_ACTION_PLAYER_LINK]     = {gText_MenuPlayer,  {.u8_void = StartMenuLinkModePlayerNameCallback}},
     [MENU_ACTION_REST_FRONTIER]   = {gText_MenuRest,    {.u8_void = StartMenuSaveCallback}},
     [MENU_ACTION_RETIRE_FRONTIER] = {gText_MenuRetire,  {.u8_void = StartMenuBattlePyramidRetireCallback}},
@@ -678,6 +682,7 @@ static const u8 sStartMenuActionIcons[] =
     [MENU_ACTION_OPTION] = START_MENU_ICON_OPTIONS,
     [MENU_ACTION_EXIT] = START_MENU_ICON_EXIT_OPTION,
     [MENU_ACTION_RETIRE_SAFARI] = START_MENU_ICON_RETIRE,
+    [MENU_ACTION_RETIRE_BUG_CONTEST] = START_MENU_ICON_RETIRE,
     [MENU_ACTION_PLAYER_LINK] = START_MENU_ICON_PLAYER,
     [MENU_ACTION_REST_FRONTIER] = START_MENU_ICON_SAVE,
     [MENU_ACTION_RETIRE_FRONTIER] = START_MENU_ICON_RETIRE,
@@ -692,6 +697,7 @@ static void AddStartMenuAction(u8 action);
 static void BuildNormalStartMenu(void);
 static void BuildDebugStartMenu(void);
 static void BuildSafariZoneStartMenu(void);
+static void BuildBugContestStartMenu(void);
 static void BuildLinkModeStartMenu(void);
 static void BuildUnionRoomStartMenu(void);
 static void BuildBattlePikeStartMenu(void);
@@ -738,6 +744,10 @@ static void BuildStartMenuActions(void)
     else if (GetSafariZoneFlag() == TRUE)
     {
         BuildSafariZoneStartMenu();
+    }
+    else if (GetBugContestFlag() == TRUE)
+    {
+        BuildBugContestStartMenu();
     }
     else if (InBattlePike())
     {
@@ -808,6 +818,17 @@ static void BuildDebugStartMenu(void)
 static void BuildSafariZoneStartMenu(void)
 {
     AddStartMenuAction(MENU_ACTION_RETIRE_SAFARI);
+    AddStartMenuAction(MENU_ACTION_POKEDEX);
+    AddStartMenuAction(MENU_ACTION_POKEMON);
+    AddStartMenuAction(MENU_ACTION_BAG);
+    AddStartMenuAction(MENU_ACTION_PLAYER);
+    AddStartMenuAction(MENU_ACTION_OPTION);
+    AddStartMenuAction(MENU_ACTION_EXIT);
+}
+
+static void BuildBugContestStartMenu(void)
+{
+    AddStartMenuAction(MENU_ACTION_RETIRE_BUG_CONTEST);
     AddStartMenuAction(MENU_ACTION_POKEDEX);
     AddStartMenuAction(MENU_ACTION_POKEMON);
     AddStartMenuAction(MENU_ACTION_BAG);
@@ -1838,6 +1859,14 @@ static bool8 StartMenuDebugCallback(void)
 static bool8 StartMenuSafariZoneRetireCallback(void)
 {
     SafariZoneRetirePrompt();
+    StartMenuBW_RequestExit();
+
+    return FALSE;
+}
+
+static bool8 StartMenuBugContestRetireCallback(void)
+{
+    BugContestRetirePrompt();
     StartMenuBW_RequestExit();
 
     return FALSE;

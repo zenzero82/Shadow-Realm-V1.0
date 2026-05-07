@@ -162,7 +162,8 @@ ViridianForest_Speaker_Plasma:
 
 ViridianForest_Text_Zinzolin_1:
     .string "Indeed. We should be cautious what we\n"
-    .string "discuss here. It may not be as private\l"
+    .string "discuss here.\p"
+    .string "It may not be as private\n"
     .string "as we think.$"
 
 ViridianForest_Text_Proton_1:
@@ -182,23 +183,22 @@ ViridianForest_Text_Zinzolin_2:
 ViridianForest_Text_Proton_2:
     .string "No matter. We know that SNAGEM is a\n"
     .string "bunch of good for nothings.\p"
-    .string "We need them only to help dispatch the\n"
-    .string "corrupted ones.\p"
+    .string "We need them only to help\n"
+    .string "dispatch the corrupted ones.\p"
     .string "Then we are free to do as we\n"
     .string "please.$"
 
 ViridianForest_Text_Proton_3:
-    .string "Very good. Let us be on our way then.$"
+    .string "Very good.\p"
+    .string "Let us be on our way then.$"
 @ ============================================================
 @ Bug Catchers (Trainers) - ALL use setspeaker
 @ ============================================================
 ViridianForest_EventScript_BugCatcher5::
     setspeaker ViridianForest_Speaker_Neil
     trainerbattle_single TRAINER_VF_BUGCATCHER1, ViridianForest_Text_BugCatcher5_Intro, ViridianForest_Text_BugCatcher5_Defeat, ViridianForest_EventScript_BugCatcher5_After
-    goto ViridianForest_EventScript_BugCatcher5_After
     end
 ViridianForest_EventScript_BugCatcher5_After::
-    settrainerflag TRAINER_VF_BUGCATCHER1
     setspeaker ViridianForest_Speaker_Neil
     msgbox ViridianForest_Text_BugCatcher5_After, MSGBOX_NPC
     closemessage
@@ -208,18 +208,18 @@ ViridianForest_Text_BugCatcher5_Intro:
     .string "Something's off in this forest.\p"
     .string "I saw men in strange uniforms, and\n"
     .string "they weren't Rangers.\p"
-    .string "They were whispering like it was a deal.$"
+    .string "They were whispering like\n"
+    .string "it was a deal.$"
 ViridianForest_Text_BugCatcher5_Defeat:
     .string "Whoa! My bugs got swatted!$"
 ViridianForest_Text_BugCatcher5_After:
-    .string "Even the bugs can feel it in the air.$"
+    .string "Even the bugs can feel it\n"
+    .string "in the air.$"
 ViridianForest_EventScript_BugCatcher6::
     setspeaker ViridianForest_Speaker_Rick
     trainerbattle_single TRAINER_VF_BUGCATCHER2, ViridianForest_Text_BugCatcher6_Intro, ViridianForest_Text_BugCatcher6_Defeat, ViridianForest_EventScript_BugCatcher6_After
-    goto ViridianForest_EventScript_BugCatcher6_After
     end
 ViridianForest_EventScript_BugCatcher6_After::
-    settrainerflag TRAINER_VF_BUGCATCHER2
     setspeaker ViridianForest_Speaker_Rick
     msgbox ViridianForest_Text_BugCatcher6_After, MSGBOX_NPC
     closemessage
@@ -237,10 +237,8 @@ ViridianForest_Text_BugCatcher6_After:
 ViridianForest_EventScript_BugCatcher7::
     setspeaker ViridianForest_Speaker_Jamal
     trainerbattle_single TRAINER_VF_BUGCATCHER3, ViridianForest_Text_BugCatcher7_Intro, ViridianForest_Text_BugCatcher7_Defeat, ViridianForest_EventScript_BugCatcher7_After
-    goto ViridianForest_EventScript_BugCatcher7_After
     end
 ViridianForest_EventScript_BugCatcher7_After::
-    settrainerflag TRAINER_VF_BUGCATCHER3
     setspeaker ViridianForest_Speaker_Jamal
     msgbox ViridianForest_Text_BugCatcher7_After, MSGBOX_NPC
     closemessage
@@ -254,18 +252,17 @@ ViridianForest_Text_BugCatcher7_Intro:
 ViridianForest_Text_BugCatcher7_Defeat:
     .string "Okay, okay! You can pass.$"
 ViridianForest_Text_BugCatcher7_After:
-    .string "Those names... I've got a bad feeling.$"
+    .string "Those names...\p"
+    .string "I've got a bad feeling.$"
 @ ============================================================
 @ TRAVIS (SINGLE TRAINER)
 @ ============================================================
 ViridianForest_EventScript_RocketGrunt_Trainer::
     setspeaker ViridianForest_Speaker_GruntRocket
     trainerbattle_single TRAINER_VF_ROCKET, ViridianForest_Text_RocketGrunt_Intro, ViridianForest_Text_RocketGrunt_Defeat, ViridianForest_EventScript_RocketGrunt_After
-    goto ViridianForest_EventScript_RocketGrunt_After
     end
 
 ViridianForest_EventScript_RocketGrunt_After::
-    settrainerflag TRAINER_VF_ROCKET
     setflag FLAG_HIDE_VIRIDIAN_FOREST_ROCKET_GRUNT
     setspeaker ViridianForest_Speaker_GruntRocket
     msgbox ViridianForest_Text_RocketGrunt_After, MSGBOX_DEFAULT
@@ -337,7 +334,7 @@ ViridianForest_EventScript_Item_Time_Flute::
     end
 
 ViridianForest_EventScript_Item_ExpShare::
-    finditem ITEM_EXP_SHARE
+    finditem ITEM_ESCAPE_ROPE
     goto_if_eq VAR_0x8007, FALSE, ViridianForest_EventScript_Item_Done
     removeobject LOCALID_ITEMBALL_EXP_SHARE
     end

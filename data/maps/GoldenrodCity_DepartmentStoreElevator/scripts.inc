@@ -1,2 +1,149 @@
 GoldenrodCity_DepartmentStoreElevator_MapScripts::
 	.byte 0
+
+GoldenrodDeptElevator_EventScript_Elevator::
+	lock
+	setvar VAR_0x8004, 0
+	special SetDeptStoreFloor
+	copyvar VAR_0x8005, VAR_DEPT_STORE_FLOOR
+	special ShowDeptStoreElevatorFloorSelect
+	message gText_WhichFloorWouldYouLike
+	waitmessage
+	setvar VAR_0x8004, 0
+	specialvar VAR_RESULT, GetDeptStoreDefaultFloorChoice
+	switch VAR_RESULT
+	case 0, GoldenrodDeptElevator_EventScript_ChooseFloorFrom6th
+	case 1, GoldenrodDeptElevator_EventScript_ChooseFloorFrom5th
+	case 2, GoldenrodDeptElevator_EventScript_ChooseFloorFrom4th
+	case 3, GoldenrodDeptElevator_EventScript_ChooseFloorFrom3rd
+	case 4, GoldenrodDeptElevator_EventScript_ChooseFloorFrom2nd
+	case 5, GoldenrodDeptElevator_EventScript_ChooseFloorFrom1st
+	case 6, GoldenrodDeptElevator_EventScript_ChooseFloorFromB1F
+	end
+
+GoldenrodDeptElevator_EventScript_ChooseFloorFrom6th::
+	multichoicedefault 0, 0, MULTI_7FLOORS, 0, FALSE
+	goto GoldenrodDeptElevator_EventScript_ChooseFloor
+	end
+
+GoldenrodDeptElevator_EventScript_ChooseFloorFrom5th::
+	multichoicedefault 0, 0, MULTI_7FLOORS, 1, FALSE
+	goto GoldenrodDeptElevator_EventScript_ChooseFloor
+	end
+
+GoldenrodDeptElevator_EventScript_ChooseFloorFrom4th::
+	multichoicedefault 0, 0, MULTI_7FLOORS, 2, FALSE
+	goto GoldenrodDeptElevator_EventScript_ChooseFloor
+	end
+
+GoldenrodDeptElevator_EventScript_ChooseFloorFrom3rd::
+	multichoicedefault 0, 0, MULTI_7FLOORS, 3, FALSE
+	goto GoldenrodDeptElevator_EventScript_ChooseFloor
+	end
+
+GoldenrodDeptElevator_EventScript_ChooseFloorFrom2nd::
+	multichoicedefault 0, 0, MULTI_7FLOORS, 4, FALSE
+	goto GoldenrodDeptElevator_EventScript_ChooseFloor
+	end
+
+GoldenrodDeptElevator_EventScript_ChooseFloorFrom1st::
+	multichoicedefault 0, 0, MULTI_7FLOORS, 5, FALSE
+	goto GoldenrodDeptElevator_EventScript_ChooseFloor
+	end
+
+GoldenrodDeptElevator_EventScript_ChooseFloorFromB1F::
+	multichoicedefault 0, 0, MULTI_7FLOORS, 6, FALSE
+	goto GoldenrodDeptElevator_EventScript_ChooseFloor
+	end
+
+GoldenrodDeptElevator_EventScript_ChooseFloor::
+	switch VAR_RESULT
+	case 0, GoldenrodDeptElevator_EventScript_F6
+	case 1, GoldenrodDeptElevator_EventScript_F5
+	case 2, GoldenrodDeptElevator_EventScript_F4
+	case 3, GoldenrodDeptElevator_EventScript_F3
+	case 4, GoldenrodDeptElevator_EventScript_F2
+	case 5, GoldenrodDeptElevator_EventScript_F1
+	case 6, GoldenrodDeptElevator_EventScript_F0
+	case 7, GoldenrodDeptElevator_EventScript_ExitFloorSelect
+	case MULTI_B_PRESSED, GoldenrodDeptElevator_EventScript_ExitFloorSelect
+	release
+	end
+
+GoldenrodDeptElevator_EventScript_F0::
+	setvar VAR_0x8006, DEPT_STORE_FLOORNUM_B1F
+	setdynamicwarp MAP_GOLDENROD_CITY_DEPARTMENT_STORE_BASEMENT, 10, 5
+	goto_if_eq VAR_DEPT_STORE_FLOOR, DEPT_STORE_FLOORNUM_B1F, GoldenrodDeptElevator_EventScript_ExitFloorSelect
+	call GoldenrodDeptElevator_EventScript_MoveElevator
+	setvar VAR_DEPT_STORE_FLOOR, DEPT_STORE_FLOORNUM_B1F
+	goto GoldenrodDeptElevator_EventScript_ExitFloorSelect
+	end
+
+GoldenrodDeptElevator_EventScript_F1::
+	setvar VAR_0x8006, DEPT_STORE_FLOORNUM_1F
+	setdynamicwarp MAP_GOLDENROD_CITY_DEPARTMENT_STORE_1F, 9, 3
+	goto_if_eq VAR_DEPT_STORE_FLOOR, DEPT_STORE_FLOORNUM_1F, GoldenrodDeptElevator_EventScript_ExitFloorSelect
+	call GoldenrodDeptElevator_EventScript_MoveElevator
+	setvar VAR_DEPT_STORE_FLOOR, DEPT_STORE_FLOORNUM_1F
+	goto GoldenrodDeptElevator_EventScript_ExitFloorSelect
+	end
+
+GoldenrodDeptElevator_EventScript_F2::
+	setvar VAR_0x8006, DEPT_STORE_FLOORNUM_2F
+	setdynamicwarp MAP_GOLDENROD_CITY_DEPARTMENT_STORE_2F, 9, 3
+	goto_if_eq VAR_DEPT_STORE_FLOOR, DEPT_STORE_FLOORNUM_2F, GoldenrodDeptElevator_EventScript_ExitFloorSelect
+	call GoldenrodDeptElevator_EventScript_MoveElevator
+	setvar VAR_DEPT_STORE_FLOOR, DEPT_STORE_FLOORNUM_2F
+	goto GoldenrodDeptElevator_EventScript_ExitFloorSelect
+	end
+
+GoldenrodDeptElevator_EventScript_F3::
+	setvar VAR_0x8006, DEPT_STORE_FLOORNUM_3F
+	setdynamicwarp MAP_GOLDENROD_CITY_DEPARTMENT_STORE_3F, 23, 3
+	goto_if_eq VAR_DEPT_STORE_FLOOR, DEPT_STORE_FLOORNUM_3F, GoldenrodDeptElevator_EventScript_ExitFloorSelect
+	call GoldenrodDeptElevator_EventScript_MoveElevator
+	setvar VAR_DEPT_STORE_FLOOR, DEPT_STORE_FLOORNUM_3F
+	goto GoldenrodDeptElevator_EventScript_ExitFloorSelect
+	end
+
+GoldenrodDeptElevator_EventScript_F4::
+	setvar VAR_0x8006, DEPT_STORE_FLOORNUM_4F
+	setdynamicwarp MAP_GOLDENROD_CITY_DEPARTMENT_STORE_4F, 9, 3
+	goto_if_eq VAR_DEPT_STORE_FLOOR, DEPT_STORE_FLOORNUM_4F, GoldenrodDeptElevator_EventScript_ExitFloorSelect
+	call GoldenrodDeptElevator_EventScript_MoveElevator
+	setvar VAR_DEPT_STORE_FLOOR, DEPT_STORE_FLOORNUM_4F
+	goto GoldenrodDeptElevator_EventScript_ExitFloorSelect
+	end
+
+GoldenrodDeptElevator_EventScript_F5::
+	setvar VAR_0x8006, DEPT_STORE_FLOORNUM_5F
+	setdynamicwarp MAP_GOLDENROD_CITY_DEPARTMENT_STORE_5F, 23, 3
+	goto_if_eq VAR_DEPT_STORE_FLOOR, DEPT_STORE_FLOORNUM_5F, GoldenrodDeptElevator_EventScript_ExitFloorSelect
+	call GoldenrodDeptElevator_EventScript_MoveElevator
+	setvar VAR_DEPT_STORE_FLOOR, DEPT_STORE_FLOORNUM_5F
+	goto GoldenrodDeptElevator_EventScript_ExitFloorSelect
+	end
+
+GoldenrodDeptElevator_EventScript_F6::
+	setvar VAR_0x8006, DEPT_STORE_FLOORNUM_6F
+	setdynamicwarp MAP_GOLDENROD_CITY_DEPARTMENT_STORE_6F, 9, 3
+	goto_if_eq VAR_DEPT_STORE_FLOOR, DEPT_STORE_FLOORNUM_6F, GoldenrodDeptElevator_EventScript_ExitFloorSelect
+	call GoldenrodDeptElevator_EventScript_MoveElevator
+	setvar VAR_DEPT_STORE_FLOOR, DEPT_STORE_FLOORNUM_6F
+	goto GoldenrodDeptElevator_EventScript_ExitFloorSelect
+	end
+
+GoldenrodDeptElevator_EventScript_ExitFloorSelect::
+	special CloseDeptStoreElevatorWindow
+	release
+	end
+
+GoldenrodDeptElevator_EventScript_MoveElevator::
+	special CloseDeptStoreElevatorWindow
+	closemessage
+	applymovement VAR_LAST_TALKED, Common_Movement_WalkInPlaceFasterDown
+	waitmovement 0
+	waitse
+	special MoveElevator
+	waitstate
+	return

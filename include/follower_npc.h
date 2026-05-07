@@ -123,6 +123,7 @@ bool32 IsNPCFollowerWildBattle(void);
 void PrepareForFollowerNPCBattle(void);
 void RestorePartyAfterFollowerNPCBattle(void);
 void FollowerNPC_TryRemoveFollowerOnWhiteOut(void);
+void RestoreNebbyFollower(void);
 
 void Task_MoveNPCFollowerAfterForcedMovement(u8 taskId);
 void Task_HideNPCFollowerAfterMovementFinish(u8 taskId);

@@ -27,6 +27,7 @@
 #include "util.h"
 #include "pokeball.h"
 #include "text.h"
+#include "reshow_battle_screen.h"
 #include "constants/abilities.h"
 #include "constants/songs.h"
 #include "pokemon_animation.h"
@@ -2480,6 +2481,32 @@ static void Controller_FaintOpponentMon(u32 battler)
     }
 }
 
+static void NormalizeBattlerSpritesAfterMoveAnim(void)
+{
+    s32 battler;
+
+    for (battler = 0; battler < gBattlersCount; battler++)
+    {
+        u8 spriteId;
+
+        if (!IsBattlerSpritePresent(battler))
+            continue;
+
+        spriteId = gBattlerSpriteIds[battler];
+        gSprites[spriteId].callback = SpriteCallbackDummy;
+        gSprites[spriteId].x = GetBattlerSpriteCoord(battler, BATTLER_COORD_X_2);
+        gSprites[spriteId].y = GetBattlerSpriteDefault_Y(battler);
+        gSprites[spriteId].x2 = 0;
+        gSprites[spriteId].y2 = 0;
+        gSprites[spriteId].coordOffsetEnabled = TRUE;
+        gSprites[spriteId].oam.objMode = ST_OAM_OBJ_NORMAL;
+        gSprites[spriteId].oam.affineMode = ST_OAM_AFFINE_NORMAL;
+        gSprites[spriteId].oam.matrixNum = gBattleSpritesDataPtr->healthBoxesData[battler].matrixNum;
+        gSprites[spriteId].affineAnimPaused = FALSE;
+        gSprites[spriteId].invisible = gBattleSpritesDataPtr->battlerData[battler].invisible;
+    }
+}
+
 static void Controller_DoMoveAnimation(u32 battler)
 {
     u16 move = gBattleResources->bufferA[battler][1] | (gBattleResources->bufferA[battler][2] << 8);
@@ -2510,6 +2537,8 @@ static void Controller_DoMoveAnimation(u32 battler)
             u8 multihit = gBattleResources->bufferA[battler][11];
 
             SetBattlerSpriteAffineMode(ST_OAM_AFFINE_NORMAL);
+            NormalizeBattlerSpritesAfterMoveAnim();
+            HardRefreshBattleSpriteLayer();
             if (gBattleSpritesDataPtr->battlerData[battler].behindSubstitute && multihit < 2)
             {
                 InitAndLaunchSpecialAnimation(battler, battler, battler, B_ANIM_MON_TO_SUBSTITUTE);

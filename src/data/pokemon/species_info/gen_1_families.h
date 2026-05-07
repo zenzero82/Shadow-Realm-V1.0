@@ -1774,10 +1774,10 @@ const struct SpeciesInfo gSpeciesInfoGen1[] =
         .height = 3,
         .weight = 18,
         .description = COMPOUND_STRING(
-            "It has an extremely sharp sense of\n"
-            "direction. It can unerringly return home to\n"
-            "its nest, however far it may be removed\n"
-            "from its familiar surroundings."),
+            "It has an extremely sharp sense\n"
+            "of direction. It can return home\n"
+            "to its nest, however far it may\n"
+            "be from familiar surroundings."),
         .pokemonScale = 508,
         .pokemonOffset = -3,
         .trainerScale = 256,
@@ -3953,6 +3953,7 @@ const struct SpeciesInfo gSpeciesInfoGen1[] =
         .levelUpLearnset = sRaichuLevelUpLearnset,
         .teachableLearnset = sRaichuTeachableLearnset,
         .formSpeciesIdTable = sRaichuFormSpeciesIdTable,
+        .formChangeTable = sRaichuFormChangeTable,
     },
 
 #if P_ALOLAN_FORMS
@@ -4020,8 +4021,121 @@ const struct SpeciesInfo gSpeciesInfoGen1[] =
         .levelUpLearnset = sRaichuAlolaLevelUpLearnset,
         .teachableLearnset = sRaichuAlolaTeachableLearnset,
         .formSpeciesIdTable = sRaichuFormSpeciesIdTable,
+        .formChangeTable = sRaichuFormChangeTable,
     },
 #endif //P_ALOLAN_FORMS
+
+#if P_MEGA_EVOLUTIONS
+    [SPECIES_RAICHU_MEGA_X] =
+    {
+        .baseHP        = 60,
+        .baseAttack    = 135,
+        .baseDefense   = 95,
+        .baseSpeed     = 110,
+        .baseSpAttack  = 90,
+        .baseSpDefense = 95,
+        .types = MON_TYPES(TYPE_ELECTRIC),
+        .catchRate = 75,
+        .expYield = RAICHU_EXP_YIELD,
+        .evYield_Speed = 3,
+        .genderRatio = PERCENT_FEMALE(50),
+        .eggCycles = 10,
+        .friendship = STANDARD_FRIENDSHIP,
+        .growthRate = GROWTH_MEDIUM_FAST,
+        .eggGroups = MON_EGG_GROUPS(EGG_GROUP_FIELD, EGG_GROUP_FAIRY),
+        .abilities = { ABILITY_STATIC, ABILITY_NONE, ABILITY_LIGHTNING_ROD },
+        .bodyColor = BODY_COLOR_YELLOW,
+        .speciesName = _("Raichu"),
+        .cryId = CRY_RAICHU,
+        .natDexNum = NATIONAL_DEX_RAICHU,
+        .categoryName = _("Mouse"),
+        .height = 12,
+        .weight = 380,
+        .description = COMPOUND_STRING(
+            "It resembles an X as it flies through\n"
+            "the air with 50 million volts of\n"
+            "electricity sparking from its ears and\n"
+            "forked tail."),
+        .pokemonScale = 320,
+        .pokemonOffset = 7,
+        .trainerScale = 256,
+        .trainerOffset = 0,
+        .frontPic = gMonFrontPic_RaichuMegaX,
+        .frontPicSize = MON_COORDS_SIZE(64, 64),
+        .frontPicYOffset = 4,
+        .frontAnimFrames = sAnims_TwoFramePlaceHolder,
+        .backPic = gMonBackPic_RaichuMegaX,
+        .backPicSize = MON_COORDS_SIZE(64, 64),
+        .backPicYOffset = 0,
+        .palette = gMonPalette_RaichuMegaX,
+        .shinyPalette = gMonShinyPalette_RaichuMegaX,
+        .iconSprite = gMonIcon_RaichuMegaX,
+        .iconPalIndex = 0,
+        .pokemonJumpType = PKMN_JUMP_TYPE_NONE,
+        FOOTPRINT(Raichu)
+        SHADOW(6, 6, SHADOW_SIZE_M)
+        .isMegaEvolution = TRUE,
+        .levelUpLearnset = sRaichuLevelUpLearnset,
+        .teachableLearnset = sRaichuTeachableLearnset,
+        .formSpeciesIdTable = sRaichuFormSpeciesIdTable,
+        .formChangeTable = sRaichuFormChangeTable,
+    },
+
+    [SPECIES_RAICHU_MEGA_Y] =
+    {
+        .baseHP        = 60,
+        .baseAttack    = 100,
+        .baseDefense   = 55,
+        .baseSpeed     = 130,
+        .baseSpAttack  = 160,
+        .baseSpDefense = 80,
+        .types = MON_TYPES(TYPE_ELECTRIC),
+        .catchRate = 75,
+        .expYield = RAICHU_EXP_YIELD,
+        .evYield_Speed = 3,
+        .genderRatio = PERCENT_FEMALE(50),
+        .eggCycles = 10,
+        .friendship = STANDARD_FRIENDSHIP,
+        .growthRate = GROWTH_MEDIUM_FAST,
+        .eggGroups = MON_EGG_GROUPS(EGG_GROUP_FIELD, EGG_GROUP_FAIRY),
+        .abilities = { ABILITY_STATIC, ABILITY_NONE, ABILITY_LIGHTNING_ROD },
+        .bodyColor = BODY_COLOR_YELLOW,
+        .speciesName = _("Raichu"),
+        .cryId = CRY_RAICHU,
+        .natDexNum = NATIONAL_DEX_RAICHU,
+        .categoryName = _("Mouse"),
+        .height = 10,
+        .weight = 260,
+        .description = COMPOUND_STRING(
+            "It fires bolts of electricity from the\n"
+            "tip of its tail and from the spiky tufts\n"
+            "of fur growing out of its temples. This\n"
+            "electricity forms the letter Y."),
+        .pokemonScale = 320,
+        .pokemonOffset = 7,
+        .trainerScale = 256,
+        .trainerOffset = 0,
+        .frontPic = gMonFrontPic_RaichuMegaY,
+        .frontPicSize = MON_COORDS_SIZE(64, 64),
+        .frontPicYOffset = 0,
+        .frontAnimFrames = sAnims_SingleFramePlaceHolder,
+        .backPic = gMonBackPic_RaichuMegaY,
+        .backPicSize = MON_COORDS_SIZE(64, 64),
+        .backPicYOffset = 0,
+        .palette = gMonPalette_RaichuMegaY,
+        .shinyPalette = gMonShinyPalette_RaichuMegaY,
+        .iconSprite = gMonIcon_RaichuMegaY,
+        .iconPalIndex = 0,
+        .pokemonJumpType = PKMN_JUMP_TYPE_NONE,
+        FOOTPRINT(Raichu)
+        SHADOW(3, 15, SHADOW_SIZE_M)
+        .isMegaEvolution = TRUE,
+        .levelUpLearnset = sRaichuLevelUpLearnset,
+        .teachableLearnset = sRaichuTeachableLearnset,
+        .formSpeciesIdTable = sRaichuFormSpeciesIdTable,
+        .formChangeTable = sRaichuFormChangeTable,
+    },
+#endif //P_MEGA_EVOLUTIONS
 #endif //P_FAMILY_PIKACHU
 
 #if P_FAMILY_SANDSHREW

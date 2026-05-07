@@ -723,7 +723,9 @@ EventScript_GimmighoulSignpost::
 	setvar VAR_0x8000, 25
 	additem ITEM_GIMMIGHOUL_COIN, 25
 	buffernumberstring STR_VAR_1, VAR_0x8000
+	playfanfare MUS_OBTAIN_ITEM
 	msgbox gText_GimmighoulCoinsObtained, MSGBOX_DEFAULT
+	waitfanfare
 	releaseall
 EventScript_GimmighoulSignpost_Done:
 	end
@@ -1220,6 +1222,7 @@ gText_ShadowPurifyMultipleReady::
 	.include "data/text/trainers.inc"
 	.include "data/scripts/repel.inc"
 	.include "data/scripts/safari_zone.inc"
+	.include "data/scripts/bug_contest.inc"
 	.include "data/scripts/roulette.inc"
 	.include "data/text/pokedex_rating.inc"
 	.include "data/text/lottery_corner.inc"
@@ -2061,3 +2064,33 @@ EventScript_OverworldWildMon::
 	.include "data/maps/SafariZone_Top_Mid/scripts.inc"
 
 	.include "data/maps/SafariZone_Low_Right/scripts.inc"
+
+	.include "data/maps/Silphco_5f/scripts.inc"
+
+	.include "data/maps/Silphco_2f/scripts.inc"
+
+	.include "data/maps/Silphco_3f/scripts.inc"
+
+	.include "data/maps/Silphco_4f/scripts.inc"
+
+	.include "data/maps/Silphco_6f/scripts.inc"
+
+	.include "data/maps/Silphco_10f/scripts.inc"
+
+	.include "data/maps/Silphco_9f/scripts.inc"
+
+	.include "data/maps/Silphco_11f/scripts.inc"
+
+	.include "data/maps/Silphco_8f/scripts.inc"
+
+	.include "data/maps/Silphco_7f/scripts.inc"
+
+	.include "data/maps/RuinsOfAlph_WordsRoom1/scripts.inc"
+
+	.include "data/maps/RuinsOfAlph_WordsRoom2/scripts.inc"
+
+	.include "data/maps/RuinsOfAlph_WordsRoom3/scripts.inc"
+
+	.include "data/maps/RuinsOfAlph_WordsRoom4/scripts.inc"
+
+	.include "data/maps/celadon_department_elevator/scripts.inc"

@@ -289,6 +289,7 @@ static void IncrementTrainerPicState(s16);
 static s16 IsTrainerPicSlideDone(s16);
 static bool8 TransitionIntro_FadeToGray(struct Task *);
 static bool8 TransitionIntro_FadeFromGray(struct Task *);
+static u16 GetTransitionIntroBlendColor(void);
 static bool8 IsIntroTaskDone(void);
 static bool16 UpdateRectangularSpiralLine(const s16 *const *, struct RectangularSpiralLine *);
 static void SpriteCB_FldEffPokeballTrail(struct Sprite *);
@@ -974,6 +975,8 @@ static const u16 *const sPlayerMugshotsPals[GENDER_COUNT] =
     [FEMALE] = sMugshotPal_May
 };
 
+static u8 sCurrentTransitionId;
+
 static const u16 sUnusedTrainerPalette[] = INCBIN_U16("graphics/battle_transitions/unused_trainer.gbapal");
 static const struct SpritePalette sSpritePalette_UnusedTrainer = {sUnusedTrainerPalette, PALTAG_UNUSED_MUGSHOT};
 
@@ -1122,6 +1125,7 @@ static void LaunchBattleTransitionTask(u8 transitionId)
 {
     u8 taskId = CreateTask(Task_BattleTransition, 2);
     gTasks[taskId].tTransitionId = transitionId;
+    sCurrentTransitionId = transitionId;
     sTransitionData = AllocZeroed(sizeof(*sTransitionData));
 }
 
@@ -4317,6 +4321,22 @@ static void CreateIntroTask(s16 fadeToGrayDelay, s16 fadeFromGrayDelay, s16 numF
     gTasks[taskId].tDelayTimer = fadeToGrayDelay;
 }
 
+static u16 GetTransitionIntroBlendColor(void)
+{
+    if (sCurrentTransitionId == B_TRANSITION_MUGSHOT)
+    {
+        u8 mugshotColor = GetTrainerMugshotColorFromId(TRAINER_BATTLE_PARAM.opponentA);
+
+        if (mugshotColor >= ARRAY_COUNT(sOpponentMugshotsPals))
+            mugshotColor = MUGSHOT_COLOR_PURPLE;
+
+        // Match the intro tint to the same palette family the mugshot banner uses.
+        return sOpponentMugshotsPals[mugshotColor][1];
+    }
+
+    return RGB(11, 11, 11);
+}
+
 static bool8 IsIntroTaskDone(void)
 {
     if (FindTaskIdByFunc(Task_BattleTransition_Intro) == TASK_NONE)
@@ -4334,6 +4354,7 @@ static bool8 TransitionIntro_FadeToGray(struct Task *task)
 {
     u8 paletteNum = IndexOfSpritePaletteTag(TAG_WEATHER_START);
     u16 index = OBJ_PLTT_ID(paletteNum) + SHADOW_COLOR_INDEX;
+    u16 blendColor = GetTransitionIntroBlendColor();
     if (task->tDelayTimer == 0 || --task->tDelayTimer == 0)
     {
         task->tDelayTimer = task->tFadeToGrayDelay;
@@ -4342,7 +4363,7 @@ static bool8 TransitionIntro_FadeToGray(struct Task *task)
             task->tBlend = 16;
         if (paletteNum < 16)
             task->tShadowColor = gPlttBufferFaded[index];
-        BlendPalettes(PALETTES_ALL, task->tBlend, RGB(11, 11, 11));
+        BlendPalettes(PALETTES_ALL, task->tBlend, blendColor);
         if (paletteNum < 16)
             gPlttBufferFaded[index] = task->tShadowColor;
     }
@@ -4353,7 +4374,7 @@ static bool8 TransitionIntro_FadeToGray(struct Task *task)
         task->tBldCntSaved = GetGpuReg(REG_OFFSET_BLDCNT);
         SetGpuReg(REG_OFFSET_BLDCNT, task->tBldCntSaved & ~BLDCNT_TGT2_BG_ALL);
         if (paletteNum < 16)
-            gPlttBufferFaded[index] = RGB(11, 11, 11);
+            gPlttBufferFaded[index] = blendColor;
         task->tState++;
         task->tDelayTimer = task->tFadeFromGrayDelay;
     }
@@ -4365,11 +4386,12 @@ static bool8 TransitionIntro_FadeFromGray(struct Task *task)
     if (task->tDelayTimer == 0 || --task->tDelayTimer == 0)
     {
         u8 paletteNum = IndexOfSpritePaletteTag(TAG_WEATHER_START);
+        u16 blendColor = GetTransitionIntroBlendColor();
         task->tDelayTimer = task->tFadeFromGrayDelay;
         task->tBlend -= task->tFadeFromGrayIncrement;
         if (task->tBlend < 0)
             task->tBlend = 0;
-        BlendPalettes(PALETTES_ALL, task->tBlend, RGB(11, 11, 11));
+        BlendPalettes(PALETTES_ALL, task->tBlend, blendColor);
         // Restore BLDCNT
         SetGpuReg(REG_OFFSET_BLDCNT, task->tBldCntSaved);
         if (paletteNum < 16)

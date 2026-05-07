@@ -33,6 +33,8 @@ extern struct ToneData gCryTable_Reverse[];
 static void Task_Fanfare(u8 taskId);
 static void CreateFanfareTask(void);
 static void RestoreBGMVolumeAfterPokemonCry(void);
+static bool8 IsAnyCryPlaying(void);
+static void StopAllCryPlayers(void);
 
 static const struct Fanfare sFanfares[] = {
     [FANFARE_LEVEL_UP]            = { MUS_LEVEL_UP,             80 },
@@ -308,6 +310,7 @@ bool8 IsBGMStopped(void)
 
 void PlayCry_Normal(u16 species, s8 pan)
 {
+    StopAllCryPlayers();
     m4aMPlayVolumeControl(&gMPlayInfo_BGM, TRACKS_ALL, 85);
     PlayCryInternal(species, pan, CRY_VOLUME, CRY_PRIORITY_NORMAL, CRY_MODE_NORMAL);
     gPokemonCryBGMDuckingCounter = 2;
@@ -316,12 +319,14 @@ void PlayCry_Normal(u16 species, s8 pan)
 
 void PlayCry_NormalNoDucking(u16 species, s8 pan, s8 volume, u8 priority)
 {
+    StopAllCryPlayers();
     PlayCryInternal(species, pan, volume, priority, CRY_MODE_NORMAL);
 }
 
 // Assuming it's not CRY_MODE_DOUBLES, this is equivalent to PlayCry_Normal except it allows other modes.
 void PlayCry_ByMode(u16 species, s8 pan, u8 mode)
 {
+    StopAllCryPlayers();
     if (mode == CRY_MODE_DOUBLES)
     {
         PlayCryInternal(species, pan, CRY_VOLUME, CRY_PRIORITY_NORMAL, mode);
@@ -353,6 +358,7 @@ void PlayCry_ReleaseDouble(u16 species, s8 pan, u8 mode)
 // Duck the BGM but don't restore it. Not present in R/S
 void PlayCry_DuckNoRestore(u16 species, s8 pan, u8 mode)
 {
+    StopAllCryPlayers();
     if (mode == CRY_MODE_DOUBLES)
     {
         PlayCryInternal(species, pan, CRY_VOLUME, CRY_PRIORITY_NORMAL, mode);
@@ -367,6 +373,7 @@ void PlayCry_DuckNoRestore(u16 species, s8 pan, u8 mode)
 
 void PlayCry_Script(u16 species, u8 mode)
 {
+    StopAllCryPlayers();
     m4aMPlayVolumeControl(&gMPlayInfo_BGM, TRACKS_ALL, 85);
     PlayCryInternal(species, 0, CRY_VOLUME, CRY_PRIORITY_NORMAL, mode);
     gPokemonCryBGMDuckingCounter = 2;
@@ -480,7 +487,7 @@ void PlayCryInternal(u16 species, s8 pan, s8 volume, u8 priority, u8 mode)
 
 bool8 IsCryFinished(void)
 {
-    if (FuncIsActiveTask(Task_DuckBGMForPokemonCry) == TRUE)
+    if (FuncIsActiveTask(Task_DuckBGMForPokemonCry) == TRUE || IsAnyCryPlaying())
     {
         return FALSE;
     }
@@ -493,18 +500,18 @@ bool8 IsCryFinished(void)
 
 void StopCryAndClearCrySongs(void)
 {
-    m4aMPlayStop(gMPlay_PokemonCry);
+    StopAllCryPlayers();
     ClearPokemonCrySongs();
 }
 
 void StopCry(void)
 {
-    m4aMPlayStop(gMPlay_PokemonCry);
+    StopAllCryPlayers();
 }
 
 bool8 IsCryPlayingOrClearCrySongs(void)
 {
-    if (IsPokemonCryPlaying(gMPlay_PokemonCry))
+    if (IsAnyCryPlaying())
     {
         return TRUE;
     }
@@ -517,10 +524,7 @@ bool8 IsCryPlayingOrClearCrySongs(void)
 
 bool8 IsCryPlaying(void)
 {
-    if (IsPokemonCryPlaying(gMPlay_PokemonCry))
-        return TRUE;
-    else
-        return FALSE;
+    return IsAnyCryPlaying();
 }
 
 void Task_DuckBGMForPokemonCry(u8 taskId)
@@ -531,7 +535,7 @@ void Task_DuckBGMForPokemonCry(u8 taskId)
         return;
     }
 
-    if (!IsPokemonCryPlaying(gMPlay_PokemonCry))
+    if (!IsAnyCryPlaying())
     {
         m4aMPlayVolumeControl(&gMPlayInfo_BGM, TRACKS_ALL, 256);
         DestroyTask(taskId);
@@ -542,6 +546,27 @@ static void RestoreBGMVolumeAfterPokemonCry(void)
 {
     if (FuncIsActiveTask(Task_DuckBGMForPokemonCry) != TRUE)
         CreateTask(Task_DuckBGMForPokemonCry, 80);
+}
+
+static bool8 IsAnyCryPlaying(void)
+{
+    s32 i;
+
+    for (i = 0; i < MAX_POKEMON_CRIES; i++)
+    {
+        if (IsPokemonCryPlaying(&gPokemonCryMusicPlayers[i]))
+            return TRUE;
+    }
+
+    return FALSE;
+}
+
+static void StopAllCryPlayers(void)
+{
+    s32 i;
+
+    for (i = 0; i < MAX_POKEMON_CRIES; i++)
+        m4aMPlayStop(&gPokemonCryMusicPlayers[i]);
 }
 
 void PlayBGM(u16 songNum)

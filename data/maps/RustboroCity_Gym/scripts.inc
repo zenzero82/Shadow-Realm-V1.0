@@ -2,6 +2,8 @@ RustboroCity_Gym_MapScripts::
 	.byte 0
 
 RustboroCity_Gym_EventScript_Roxanne::
+	faceplayer
+	setspeaker RustboroCity_Gym_Speaker_Roxanne
 ; 	@ trainerbattle_single TRAINER_ROXANNE_1, RustboroCity_Gym_Text_RoxanneIntro, RustboroCity_Gym_Text_RoxanneDefeat, RustboroCity_Gym_EventScript_RoxanneDefeated, NO_MUSIC
 	specialvar VAR_RESULT, ShouldTryRematchBattle
 	goto_if_eq VAR_RESULT, TRUE, RustboroCity_Gym_EventScript_RoxanneRematch
@@ -39,16 +41,22 @@ RustboroCity_Gym_EventScript_RoxanneRematch::
 	end
 
 RustboroCity_Gym_EventScript_Josh::
+	faceplayer
+	setspeaker RustboroCity_Gym_Speaker_Josh
 ; 	@ trainerbattle_single TRAINER_JOSH, RustboroCity_Gym_Text_JoshIntro, RustboroCity_Gym_Text_JoshDefeat
 	msgbox RustboroCity_Gym_Text_JoshPostBattle, MSGBOX_AUTOCLOSE
 	end
 
 RustboroCity_Gym_EventScript_Tommy::
+	faceplayer
+	setspeaker RustboroCity_Gym_Speaker_Tommy
 ; 	@ trainerbattle_single TRAINER_TOMMY, RustboroCity_Gym_Text_TommyIntro, RustboroCity_Gym_Text_TommyDefeat
 	msgbox RustboroCity_Gym_Text_TommyPostBattle, MSGBOX_AUTOCLOSE
 	end
 
 RustboroCity_Gym_EventScript_Marc::
+	faceplayer
+	setspeaker RustboroCity_Gym_Speaker_Marc
 ; 	@ trainerbattle_single TRAINER_MARC, RustboroCity_Gym_Text_MarcIntro, RustboroCity_Gym_Text_MarcDefeat
 	msgbox RustboroCity_Gym_Text_MarcPostBattle, MSGBOX_AUTOCLOSE
 	end
@@ -56,6 +64,7 @@ RustboroCity_Gym_EventScript_Marc::
 RustboroCity_Gym_EventScript_GymGuide::
 	lock
 	faceplayer
+	setspeaker RustboroCity_Gym_Speaker_Orson
 	goto_if_set FLAG_DEFEATED_RUSTBORO_GYM, RustboroCity_Gym_EventScript_GymGuidePostVictory
 	msgbox RustboroCity_Gym_Text_GymGuideAdvice, MSGBOX_DEFAULT
 	release
@@ -102,6 +111,21 @@ RustboroCity_Gym_EventScript_RegisterRoxanne::
 	clearflag FLAG_ENABLE_ROXANNE_FIRST_CALL
 	releaseall
 	end
+
+RustboroCity_Gym_Speaker_Roxanne:
+	.string "Roxanne$"
+
+RustboroCity_Gym_Speaker_Josh:
+	.string "Josh$"
+
+RustboroCity_Gym_Speaker_Tommy:
+	.string "Tommy$"
+
+RustboroCity_Gym_Speaker_Marc:
+	.string "Marc$"
+
+RustboroCity_Gym_Speaker_Orson:
+	.string "Orson$"
 
 RustboroCity_Gym_Text_GymGuideAdvice:
 	.string "Yo, how's it going?\p"
@@ -281,4 +305,3 @@ RustboroCity_Gym_Text_RoxanneRematchNeedTwoMons:
 	.string "You only have one POKéMON with you?\p"
 	.string "Please return with at least one more\n"
 	.string "POKéMON.$"
-

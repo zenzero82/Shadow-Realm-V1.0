@@ -14,8 +14,17 @@ UnionCave_1F_Speaker_Hiker:
 UnionCave_1F_Speaker_SuperNerd:
 	.string "TREV$"
 
-UnionCave_1F_Speaker_Firebreather:
+UnionCave_1F_Speaker_FirebreatherBo:
 	.string "BO$"
+
+UnionCave_1F_Speaker_FirebreatherWalt:
+	.string "WALT$"
+
+UnionCave_1F_Speaker_Unknown:
+	.string "???$"
+
+UnionCave_1F_Speaker_Matt:
+	.string "MATT$"
 
 @ =========================================================
 @ TRAINERS
@@ -45,14 +54,26 @@ UnionCave_1F_EventScript_SuperNerd_After::
 	release
 	end
 
-UnionCave_1F_EventScript_FirebreatherTrainer::
-	setspeaker UnionCave_1F_Speaker_Firebreather
-	trainerbattle_single TRAINER_UNION_CAVE_FIREBREATHER, UnionCave_1F_Text_Firebreather_Intro, UnionCave_1F_Text_Firebreather_Defeat, UnionCave_1F_EventScript_Firebreather_After
+UnionCave_1F_EventScript_FirebreatherTrainerBo::
+	setspeaker UnionCave_1F_Speaker_FirebreatherBo
+	trainerbattle_single TRAINER_UNION_CAVE_FIREBREATHER, UnionCave_1F_Text_FirebreatherBo_Intro, UnionCave_1F_Text_FirebreatherBo_Defeat, UnionCave_1F_EventScript_FirebreatherBo_After
 	end
 
-UnionCave_1F_EventScript_Firebreather_After::
-	setspeaker UnionCave_1F_Speaker_Firebreather
-	msgbox UnionCave_1F_Text_Firebreather_After, MSGBOX_NPC
+UnionCave_1F_EventScript_FirebreatherBo_After::
+	setspeaker UnionCave_1F_Speaker_FirebreatherBo
+	msgbox UnionCave_1F_Text_FirebreatherBo_After, MSGBOX_NPC
+	closemessage
+	release
+	end
+
+UnionCave_1F_EventScript_FirebreatherTrainerWalt::
+	setspeaker UnionCave_1F_Speaker_FirebreatherWalt
+	trainerbattle_single TRAINER_UNION_CAVE_FIREBREATHER_WALT, UnionCave_1F_Text_FirebreatherWalt_Intro, UnionCave_1F_Text_FirebreatherWalt_Defeat, UnionCave_1F_EventScript_FirebreatherWalt_After
+	end
+
+UnionCave_1F_EventScript_FirebreatherWalt_After::
+	setspeaker UnionCave_1F_Speaker_FirebreatherWalt
+	msgbox UnionCave_1F_Text_FirebreatherWalt_After, MSGBOX_NPC
 	closemessage
 	release
 	end
@@ -63,11 +84,13 @@ UnionCave_1F_EventScript_Firebreather_After::
 
 UnionCave_1F_EventScript_FirebreatherNPC::
 	faceplayer
+	setspeaker UnionCave_1F_Speaker_FirebreatherBo
 	msgbox UnionCave_1F_Text_FirebreatherNPC, MSGBOX_NPC
 	end
 
 UnionCave_1F_EventScript_Matt::
 	faceplayer
+	setspeaker UnionCave_1F_Speaker_Matt
 	msgbox UnionCave_1F_Text_Matt, MSGBOX_NPC
 	end
 
@@ -93,9 +116,12 @@ UnionCave_1F_EventScript_MattCallTrigger_FromLeft::
 	goto UnionCave_1F_EventScript_MattCallTrigger_Call
 
 UnionCave_1F_EventScript_MattCallTrigger_Call::
-	pokenavcall MatchCall_Text_MattUnionCave
-	waitmessage
-	closemessage
+	setspeaker UnionCave_1F_Speaker_Unknown
+	msgbox UnionCave_1F_Text_MattCall_Intro, MSGBOX_POKENAV
+	setspeaker UnionCave_1F_Speaker_Matt
+	msgbox UnionCave_1F_Text_MattCall_Response, MSGBOX_POKENAV
+	setspeaker UnionCave_1F_Speaker_Unknown
+	msgbox UnionCave_1F_Text_MattCall_End, MSGBOX_POKENAV
 	applymovement LOCALID_UNION_CAVE_1F_MATT, UnionCave_1F_Movement_MattExit
 	waitmovement 0
 	setflag FLAG_HIDE_UNION_CAVE_MATT
@@ -178,20 +204,48 @@ UnionCave_1F_Text_SuperNerd_Defeat:
 UnionCave_1F_Text_SuperNerd_After:
 	.string "I'll keep studying these tunnels.$"
 
-UnionCave_1F_Text_Firebreather_Intro:
+UnionCave_1F_Text_FirebreatherBo_Intro:
 	.string "My flames light the way.\p"
 	.string "Let's go!$"
 
-UnionCave_1F_Text_Firebreather_Defeat:
+UnionCave_1F_Text_FirebreatherBo_Defeat:
 	.string "Burned out...$"
 
-UnionCave_1F_Text_Firebreather_After:
+UnionCave_1F_Text_FirebreatherBo_After:
 	.string "The heat keeps ZUBAT away.\n"
 	.string "Mostly.$"
+
+UnionCave_1F_Text_FirebreatherWalt_Intro:
+	.string "A cave needs more than one fire.\p"
+	.string "Let's see your spark!$"
+
+UnionCave_1F_Text_FirebreatherWalt_Defeat:
+	.string "Snuffed out...$"
+
+UnionCave_1F_Text_FirebreatherWalt_After:
+	.string "Even with fire, these tunnels stay\n"
+	.string "cold and damp.$"
 
 UnionCave_1F_Text_FirebreatherNPC:
 	.string "I rest between flame tricks.\n"
 	.string "This cave never sleeps.$"
 
 UnionCave_1F_Text_Matt:
-	.string "MATT: Stay out of this.$"
+	.string "Stay out of this.$"
+
+UnionCave_1F_Text_MattCall_Intro:
+	.string "… … … … … …\n"
+	.string "… … … … … Beep!\p"
+	.string "We were able to lure MICHAEL out\n"
+	.string "of VIOLET. The MARAUDER should be\l"
+	.string "finishing up getting the\l"
+	.string "blueprints from that old man.\p"
+	.string "Make your way over to OLIVINE CITY.\n"
+	.string "We got somethings to take care of.$"
+
+UnionCave_1F_Text_MattCall_Response:
+	.string "Aye aye, Cap.$"
+
+UnionCave_1F_Text_MattCall_End:
+	.string "… … … … … …\n"
+	.string "… … … … … Click!$"

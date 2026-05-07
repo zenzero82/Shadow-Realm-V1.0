@@ -1,12 +1,18 @@
 lavender_pokecenter_MapScripts::
 	map_script MAP_SCRIPT_ON_TRANSITION, lavender_pokecenter_OnTransition
 	.byte 0
+
+lavender_pokecenter_Speaker_Chansey:
+	.string "CHANSEY$"
+
 lavender_pokecenter_EventScript_Chansey::
 	lock
 	faceplayer
+	setspeaker lavender_pokecenter_Speaker_Chansey
 	waitse
 	playmoncry SPECIES_CHANSEY, CRY_MODE_NORMAL
 	waitmoncry
+	msgbox lavender_pokecenter_Text_Chansey, MSGBOX_NPC
 	release
 	end
 
@@ -30,3 +36,8 @@ lavender_pokecenter_Text_Bookshelf1:
 
 lavender_pokecenter_Text_Bookshelf2:
 	.string "Notes from the SOUL HOUSE.$"
+
+lavender_pokecenter_Text_Chansey:
+	.string "CHANSEY gently pats the counter.\p"
+	.string "It looks used to comforting worried\n"
+	.string "TRAINERS.$"

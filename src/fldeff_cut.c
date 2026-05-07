@@ -2,6 +2,7 @@
 #include "event_object_lock.h"
 #include "event_object_movement.h"
 #include "event_scripts.h"
+#include "event_data.h"
 #include "faraway_island.h"
 #include "field_camera.h"
 #include "field_effect.h"
@@ -19,6 +20,7 @@
 #include "trig.h"
 #include "constants/abilities.h"
 #include "constants/event_objects.h"
+#include "constants/flags.h"
 #include "constants/field_effects.h"
 #include "constants/songs.h"
 #include "constants/metatile_labels.h"
@@ -136,6 +138,9 @@ static const struct SpriteTemplate sSpriteTemplate_CutGrass =
 // code
 bool32 SetUpFieldMove_Cut(void)
 {
+    if (!FlagGet(FLAG_BADGE09_GET))
+        return FALSE;
+
     s16 x, y;
     u8 i, j;
     u8 tileBehavior;

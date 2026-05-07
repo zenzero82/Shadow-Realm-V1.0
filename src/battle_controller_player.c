@@ -7,6 +7,7 @@
 #include "battle_interface.h"
 #include "battle_message.h"
 #include "battle_setup.h"
+#include "bug_contest.h"
 #include "battle_tv.h"
 #include "battle_z_move.h"
 #include "battle_gimmick.h"
@@ -65,6 +66,8 @@ static u8 sLoadedMoveTypeIcon;
 static u8 sMoveTypePaletteRefreshBattler;
 static u8 sMoveTypePaletteRefreshFrames;
 
+static void SpriteCB_ShowMoveMenuIconNextFrame(struct Sprite *sprite);
+
 static const struct SpritePalette sMoveTypeIconSpritePal =
 {
     .data = gMoveTypes_Pal,
@@ -113,6 +116,19 @@ static const struct SpriteTemplate sSpriteTemplate_MoveTypeIcon =
     .affineAnims = gDummySpriteAffineAnimTable,
     .callback = SpriteCallbackDummy,
 };
+
+static void SpriteCB_ShowMoveMenuIconNextFrame(struct Sprite *sprite)
+{
+    if (sprite->data[0] == 0)
+    {
+        sprite->data[0] = 1;
+        return;
+    }
+
+    sprite->invisible = FALSE;
+    sprite->data[0] = 0;
+    sprite->callback = SpriteCallbackDummy;
+}
 
 static u8 GetMoveTypeIconPaletteNum(u32 type)
 {
@@ -404,6 +420,9 @@ static void CompleteOnBattlerSpritePosX_0(u32 battler)
 
 static u16 GetPrevBall(u16 ballId)
 {
+    if (GetBugContestFlag())
+        return ITEM_SPORT_BALL;
+
     u16 ballPrev;
     s32 i, j;
     CompactItemsInBagPocket(&gBagPockets[BALLS_POCKET]);
@@ -429,6 +448,9 @@ static u16 GetPrevBall(u16 ballId)
 
 static u32 GetNextBall(u32 ballId)
 {
+    if (GetBugContestFlag())
+        return ITEM_SPORT_BALL;
+
     u32 ballNext = ITEM_NONE;
     s32 i;
     CompactItemsInBagPocket(&gBagPockets[BALLS_POCKET]);
@@ -2164,12 +2186,16 @@ static void MoveSelectionDisplayMoveType(u32 battler)
         {
             if (gMoveTypeIconSpriteId == 0xFF)
             {
-                gMoveTypeIconSpriteId = CreateSprite(&sSpriteTemplate_MoveTypeIcon, 0, 0, 1);
+                gMoveTypeIconSpriteId = CreateSprite(&sSpriteTemplate_MoveTypeIcon, typeBaseX + 16, typeBaseY + 8, 1);
                 if (gMoveTypeIconSpriteId == MAX_SPRITES)
                 {
                     gMoveTypeIconSpriteId = 0xFF;
                     return;
                 }
+
+                gSprites[gMoveTypeIconSpriteId].invisible = TRUE;
+                gSprites[gMoveTypeIconSpriteId].data[0] = 0;
+                gSprites[gMoveTypeIconSpriteId].callback = SpriteCB_ShowMoveMenuIconNextFrame;
             }
 
             StartSpriteAnim(&gSprites[gMoveTypeIconSpriteId], 0);
@@ -2181,7 +2207,8 @@ static void MoveSelectionDisplayMoveType(u32 battler)
             gSprites[gMoveTypeIconSpriteId].oam.priority = 0;
             gSprites[gMoveTypeIconSpriteId].x = typeBaseX + 16;
             gSprites[gMoveTypeIconSpriteId].y = typeBaseY + 8;
-            gSprites[gMoveTypeIconSpriteId].invisible = FALSE;
+            if (gSprites[gMoveTypeIconSpriteId].callback == SpriteCallbackDummy)
+                gSprites[gMoveTypeIconSpriteId].invisible = FALSE;
         }
         else if (gMoveTypeIconSpriteId != 0xFF)
         {
@@ -2191,7 +2218,13 @@ static void MoveSelectionDisplayMoveType(u32 battler)
         if (gCategoryIconSpriteId == 0xFF)
         {
             CategoryIcons_LoadSpritesGfx();
-            gCategoryIconSpriteId = CreateSprite(&gSpriteTemplate_CategoryIcons, 0, 0, 1);
+            gCategoryIconSpriteId = CreateSprite(&gSpriteTemplate_CategoryIcons, catBaseX + 8, catBaseY + 8, 1);
+            if (gCategoryIconSpriteId != MAX_SPRITES)
+            {
+                gSprites[gCategoryIconSpriteId].invisible = TRUE;
+                gSprites[gCategoryIconSpriteId].data[0] = 0;
+                gSprites[gCategoryIconSpriteId].callback = SpriteCB_ShowMoveMenuIconNextFrame;
+            }
         }
         if (IsDoubleBattle())
         {
@@ -2212,7 +2245,8 @@ static void MoveSelectionDisplayMoveType(u32 battler)
         gSprites[gCategoryIconSpriteId].oam.priority = 0;
         gSprites[gCategoryIconSpriteId].x = catBaseX + 8;
         gSprites[gCategoryIconSpriteId].y = catBaseY + 8;
-        gSprites[gCategoryIconSpriteId].invisible = FALSE;
+        if (gSprites[gCategoryIconSpriteId].callback == SpriteCallbackDummy)
+            gSprites[gCategoryIconSpriteId].invisible = FALSE;
     }
 }
 
@@ -2265,6 +2299,12 @@ static void MoveSelectionDisplayMoveDescription(u32 battler)
     {
         CategoryIcons_LoadSpritesGfx();
         gCategoryIconSpriteId = CreateSprite(&gSpriteTemplate_CategoryIcons, 38, 64, 1);
+        if (gCategoryIconSpriteId != MAX_SPRITES)
+        {
+            gSprites[gCategoryIconSpriteId].invisible = TRUE;
+            gSprites[gCategoryIconSpriteId].data[0] = 0;
+            gSprites[gCategoryIconSpriteId].callback = SpriteCB_ShowMoveMenuIconNextFrame;
+        }
     }
     if (IsDoubleBattle())
     {
@@ -2285,7 +2325,8 @@ static void MoveSelectionDisplayMoveDescription(u32 battler)
     gSprites[gCategoryIconSpriteId].oam.priority = 0;
     gSprites[gCategoryIconSpriteId].x = 38;
     gSprites[gCategoryIconSpriteId].y = 64;
-    gSprites[gCategoryIconSpriteId].invisible = FALSE;
+    if (gSprites[gCategoryIconSpriteId].callback == SpriteCallbackDummy)
+        gSprites[gCategoryIconSpriteId].invisible = FALSE;
 
     CopyWindowToVram(B_WIN_MOVE_DESCRIPTION, COPYWIN_FULL);
 }
@@ -3064,8 +3105,8 @@ static u32 CheckTargetTypeEffectiveness(u32 battler)
 static void MoveSelectionDisplayMoveEffectiveness(u32 foeEffectiveness, u32 battler)
 {
     static const u8 noIcon[] =  _("");
-    static const u8 superEffective2xText[] =  _("{COLOR GREEN}{SHADOW 13}2x{COLOR 14}{SHADOW 13}");
-    static const u8 superEffective4xText[] =  _("{COLOR GREEN}{SHADOW 13}{UP_ARROW_2}4x{COLOR 14}{SHADOW 13}");
+    static const u8 superEffective2xText[] =  _("{COLOR LIGHT_GREEN}{SHADOW 13}2x{COLOR 14}{SHADOW 13}");
+    static const u8 superEffective4xText[] =  _("{COLOR LIGHT_GREEN}{SHADOW 13}{UP_ARROW_2}4x{COLOR 14}{SHADOW 13}");
     static const u8 notVeryEffectiveText[] =  _("{COLOR 1}{SHADOW 13}{DOWN_ARROW}.5x{COLOR 14}{SHADOW 13}");
     static const u8 normalEffectiveText[] =  _("1x");
     static const u8 immuneIcon[] =  _("{COLOR RED}{SHADOW LIGHT_RED}X{COLOR DARK_GRAY}{SHADOW LIGHT_GRAY}");

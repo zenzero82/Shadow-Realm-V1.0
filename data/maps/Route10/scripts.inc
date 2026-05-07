@@ -17,6 +17,7 @@ Route10_EventScript_PPSign::
 
 Route10_EventScript_SetZanderVisibility::
 	setvar VAR_TEMP_0, 0
+	call Route10_EventScript_SetZinzolinVisibility
 	checkflag FLAG_ROUTE_24_ZANDER_DEFEATED
 	goto_if_eq Route10_EventScript_SetZanderVisibility_Done
 	checkflag FLAG_HAS_SNAG_MACHINE
@@ -34,6 +35,19 @@ Route10_EventScript_SetZanderVisibility_Done::
 	setflag FLAG_HIDE_ROUTE_24_ZANDER
 	call Route10_EventScript_TryPlasmaExit
 	end
+
+Route10_EventScript_SetZinzolinVisibility::
+	checktrainerflag TRAINER_ZINZOLIN_POWER_PLANT
+	goto_if_eq VAR_RESULT, FALSE, Route10_EventScript_SetZinzolinVisibility_Show
+	setflag FLAG_HIDE_ROUTE10_ZINZOLIN
+	hideobjectat LOCALID_ROUTE10_ZINZOLIN, MAP_ROUTE10
+	removeobject LOCALID_ROUTE10_ZINZOLIN
+Route10_EventScript_SetZinzolinVisibility_Done::
+	return
+
+Route10_EventScript_SetZinzolinVisibility_Show::
+	clearflag FLAG_HIDE_ROUTE10_ZINZOLIN
+	return
 
 Route10_EventScript_TryPlasmaExit::
 	checkflag FLAG_HIDE_ROCK_TUNNEL_PLASMA
@@ -94,10 +108,58 @@ Route10_EventScript_Zinzolin::
 	goto Route10_EventScript_Zinzolin_After
 	end
 
+Route10_EventScript_HoopaRing::
+	end
+
 Route10_EventScript_Zinzolin_After::
 	settrainerflag TRAINER_ZINZOLIN_POWER_PLANT
 	setspeaker Route10_Speaker_Zinzolin
 	msgbox Route10_Text_Zinzolin_After, MSGBOX_DEFAULT
+	closemessage
+	clearflag FLAG_HIDE_ROUTE10_HOOPA_RING
+	addobject LOCALID_ROUTE10_HOOPA_RING
+	hideobjectat LOCALID_ROUTE10_HOOPA_RING, MAP_ROUTE10
+	setobjectsubpriority LOCALID_ROUTE10_ZINZOLIN, MAP_ROUTE10, 0
+	setobjectsubpriority LOCALID_ROUTE10_HOOPA_RING, MAP_ROUTE10, 1
+	showobjectat LOCALID_ROUTE10_HOOPA_RING, MAP_ROUTE10
+	setvar VAR_0x8004, LOCALID_ROUTE10_HOOPA_RING
+	setvar VAR_0x8001, 4
+	setvar VAR_0x8002, 35
+	special Special_HoopaRingSpawnGrow
+	waitstate
+	setvar VAR_0x8000, LOCALID_ROUTE10_ZINZOLIN
+	special Special_ObjectEventAbsorb
+	waitstate
+	hideobjectat LOCALID_ROUTE10_ZINZOLIN, MAP_ROUTE10
+	setflag FLAG_HIDE_ROUTE10_ZINZOLIN
+	removeobject LOCALID_ROUTE10_ZINZOLIN
+	setflag FLAG_HIDE_ROCK_TUNNEL_PLASMA
+	hideobjectat LOCALID_ROUTE10_PLASMA_GRUNT, MAP_ROUTE10
+	removeobject LOCALID_ROUTE10_PLASMA_GRUNT
+	setflag FLAG_HIDE_ROUTE10_POWERPLANT_PLASMA_1
+	setflag FLAG_HIDE_ROUTE10_POWERPLANT_PLASMA_2
+	setflag FLAG_HIDE_ROUTE10_POWERPLANT_PLASMA_3
+	setvar VAR_0x8004, LOCALID_ROUTE10_HOOPA_RING
+	special Special_HoopaRingShrinkDespawn
+	waitstate
+	hideobjectat LOCALID_ROUTE10_HOOPA_RING, MAP_ROUTE10
+	setflag FLAG_HIDE_ROUTE10_HOOPA_RING
+	removeobject LOCALID_ROUTE10_HOOPA_RING
+	checkflag FLAG_QUEST_THUNDERBIRD_COMPLETED
+	goto_if_eq Route10_EventScript_Zinzolin_QuestDone
+	setflag FLAG_QUEST_THUNDERBIRD_COMPLETED
+	call QuestJournal_EventScript_QuestCompleteAlert
+	checkflag FLAG_QUEST_ERICA_STARTED
+	goto_if_eq Route10_EventScript_Zinzolin_QuestDone
+	playfanfare MUS_REGISTER_MATCH_CALL
+	setspeaker Route10_Speaker_Sycamore
+	pokenavcall Route10_Text_Sycamore_Call
+	waitmessage
+	closemessage
+	setflag FLAG_QUEST_ERICA_STARTED
+	setflag FLAG_QUEST_MEGA_MOMENTS_STARTED
+	call QuestJournal_EventScript_NewQuestsAlert
+Route10_EventScript_Zinzolin_QuestDone:
 	releaseall
 	end
 
@@ -119,6 +181,7 @@ Route10_EventScript_Zander::
 	goto Route10_EventScript_Zander_AfterBattle
 
 Route10_EventScript_Zander_AfterBattle::
+	setspeaker Route10_Speaker_Zander
 	msgbox Route10_Text_Zander_PostBattle, MSGBOX_DEFAULT
 	closemessage
 	checkflag FLAG_QUEST_PLASMA_TUNNEL_STARTED
@@ -162,6 +225,9 @@ Route10_Speaker_PlasmaGrunt:
 Route10_Speaker_Zinzolin:
 	.string "ZINZOLIN$"
 
+Route10_Speaker_Sycamore:
+	.string "Prof. Sycamore$"
+
 Route10_Text_PlasmaGrunt_Exit:
 	.string "Out of my way! I need to let the\n"
 	.string "others know a really strong trainer\l"
@@ -180,14 +246,16 @@ Route10_Text_Zander_Intro:
 	.string "myself about stomping a twerp haha.$"
 
 Route10_Text_Zander_Defeated:
-	.string "You beat me, but {COLOR PURPLE}Shadow POKéMON{COLOR DARK_GRAY}\n"
+	.string "You beat me, but {COLOR PURPLE}Shadow POKéMON{COLOR WHITE}\n"
 	.string "won't leave our side yet.\p"
-	.string "You're stepping into deep water, kid.$"
+	.string "You're stepping into\n"
+	.string "deep water, kid.$"
 
 Route10_Text_Zander_PostBattle:
 	.string "Our associates have taken over\n"
 	.string "Rock Tunnel. You're going to have a\l"
-	.string "real tough time getting through there.$"
+	.string "real tough time getting\n"
+	.string "through there.$"
 
 Route10_Text_Zinzolin_Intro:
 	.string "You're too late. The THUNDERBIRD\n"
@@ -202,6 +270,18 @@ Route10_Text_Zinzolin_Defeat:
 Route10_Text_Zinzolin_After:
 	.string "Enjoy your fleeting victory.\n"
 	.string "TEAM PLASMA's plans are inevitable.$"
+
+Route10_Text_Sycamore_Call:
+	.string "Hey {PLAYER}, I know you're busy\n"
+	.string "hunting down the Legendaries right\l"
+	.string "now but I just heard from\l"
+	.string "Calem and Serena and it sounds\l"
+	.string "like they'll be around Celadon City\l"
+	.string "soon.\p"
+	.string "Maybe you should drop by. Heck,\n"
+	.string "you can even challenge Erica to a\l"
+	.string "battle to see if you got what\l"
+	.string "it takes!$"
 
 Route10_Text_PowerPlant:
 	.string "POWER PLANT$"

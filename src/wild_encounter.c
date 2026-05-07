@@ -764,7 +764,8 @@ bool8 StandardWildEncounter(u16 curMetatileBehavior, u16 prevMetatileBehavior)
         return FALSE;
 
     if (gSaveBlock2Ptr->optionsOverworldWildEncounters == OPTIONS_OVERWORLD_WILD_ON
-     && MetatileBehavior_IsLandWildEncounter(curMetatileBehavior) == TRUE)
+     && (MetatileBehavior_IsLandWildEncounter(curMetatileBehavior) == TRUE
+      || MetatileBehavior_IsSurfableAndNotWaterfall(curMetatileBehavior) == TRUE))
     {
         OverworldWildEncounters_TrySpawn();
         return FALSE;

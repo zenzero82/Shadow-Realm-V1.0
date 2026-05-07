@@ -18,6 +18,9 @@ Azalea_Town_Speaker_Rocket:
 Azalea_Town_Speaker_Officer:
 	.string "OFFICER$"
 
+Azalea_Town_Speaker_Birch:
+	.string "BIRCH$"
+
 AzaleaTown_OnFrame:
 	map_script_2 VAR_TEMP_1, 0, AzaleaTown_EventScript_CityEnter
 	.2byte 0
@@ -49,6 +52,16 @@ AzaleaTown_EventScript_CityEnter_QuestStart:
 	call QuestJournal_EventScript_NewQuestAlert
 	releaseall
 AzaleaTown_EventScript_CityEnter_QuestSkip:
+	checkflag FLAG_KURTS_HOUSE_GOLD_SCENE_DONE
+	goto_if_ne AzaleaTown_EventScript_CityEnter_End
+	checkflag FLAG_AZALEA_BIRCH_CALL_AFTER_GOLD_DONE
+	goto_if_eq AzaleaTown_EventScript_CityEnter_End
+	setflag FLAG_AZALEA_BIRCH_CALL_AFTER_GOLD_DONE
+	setspeaker Azalea_Town_Speaker_Birch
+	pokenavcall AzaleaTown_Text_Birch_CallAfterGold
+	waitmessage
+	closemessage
+AzaleaTown_EventScript_CityEnter_End:
 	end
 
 
@@ -100,7 +113,9 @@ AzaleaTown_EventScript_AzaleaSign::
 	end
 
 AzaleaTown_EventScript_AzaleaSign_Text:
-	.string "It's a sign.$"
+	.string "AZALEA TOWN\n"
+	.string "Where People and POKéMON Live in\l"
+	.string "Happy Harmony.$"
 
 AzaleaTown_EventScript_Youngster::
 	faceplayer
@@ -211,6 +226,28 @@ AzaleaTown_Text_IlexOfficer:
 	.string "drive those grunts out of town\l"
 	.string "with the help of Bugsy!$"
 
+AzaleaTown_Text_Birch_CallAfterGold:
+	.string "Hey.. uh, so the TIME MACHINE\n"
+	.string "works.\p"
+	.string "However, COSMOG or NEBBY rather,\n"
+	.string "fell asleep...\p"
+	.string "Seems like this thing puts a lot\n"
+	.string "of strain on it.\p"
+	.string "Might be a little bit before the\n"
+	.string "machine works but I think we have\l"
+	.string "a plan.\p"
+	.string "Professor KUKUI says this thing\n"
+	.string "can evolve!\p"
+	.string "I think we will have you train it\n"
+	.string "and get it to evolve so we can\l"
+	.string "see if it would be willing to\l"
+	.string "still help us out.\p"
+	.string "I'm hearing GOLDENROD is dealing\n"
+	.string "with some trouble though, take\l"
+	.string "care of that first and maybe we\l"
+	.string "can revisit this situation.\p"
+	.string "Be safe, {PLAYER}!$"
+
 AzaleaTown_Text_Sign:
 	.string "AZALEA TOWN\n"
 	.string "Where People and POKéMON Live in\l"
@@ -245,4 +282,3 @@ AzaleaTown_Text_CharcoalKilnSign:
 AzaleaTown_Text_IlexForestSign:
 	.string "ILEX FOREST\p"
 	.string "Enter through the gate.$"
-

@@ -520,8 +520,10 @@
 #define MUS_HG_GAME_CORNER              632  // mus_hg_game_corner.mid
 #define MUS_HG_DANCE_THEATER            633  // mus_hg_dance_theater.mid
 #define MUS_HG_POKEMON_LEAGUE           634  // mus_hg_pokemon_league.mid
+#define MUS_HG_NATIONAL_PARK            635  // mus_hg_national_park.mid
+#define MUS_HG_GYM                      636  // mus_hg_gym.mid
 
-#define END_MUS                     MUS_HG_POKEMON_LEAGUE
+#define END_MUS                     MUS_HG_GYM
 
 // These PH_* constants are phoneme sounds used by the "bard" NPC (see src/bard_music.c and src/mauville_old_man.c).
 // Each comes in a triplet of PH_*_BLEND, PH_*_HELD, and PH_*_SOLO, and the name of each triplet incorporates the English phonetic sound it represents.

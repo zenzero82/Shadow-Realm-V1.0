@@ -23,51 +23,28 @@ WesHideout_Underground_MapScripts::
 #define LOCALID_WES 11
 #define LOCALID_UMBREON 12
 #define LOCALID_ESPEON 13
+#define LOCALID_NEBBY 14
 
 WesHideout_Underground_OnTransition::
 	setflag FLAG_HIDE_WES_HIDEOUT_HOOPA_RING
 	hideobjectat LOCALID_HOOPA_RING, MAP_WES_HIDEOUT_UNDERGROUND
 	removeobject LOCALID_HOOPA_RING
-	setvar VAR_TEMP_3, 0
-	setvar VAR_TEMP_6, 0
-	checkflag FLAG_QUEST_BACK_TO_HQ_STARTED
-	goto_if_eq WesHideout_Underground_OnTransition_PostBirch
-	call WesHideout_Underground_EventScript_HidePostBirchObjects
-	goto WesHideout_Underground_OnTransition_CheckScene
-WesHideout_Underground_OnTransition_PostBirch::
-	call WesHideout_Underground_EventScript_SetPostBirchLayout
-WesHideout_Underground_OnTransition_CheckScene:
-	goto_if_set FLAG_WES_HIDEOUT_LYRA_SCENE, WesHideout_Underground_OnTransition_Scene
-	setflag FLAG_HIDE_WES_HIDEOUT_LYRA
-	setflag FLAG_HIDE_WES_HIDEOUT_MEGANIUM
-	hideobjectat LOCALID_LYRA, MAP_WES_HIDEOUT_UNDERGROUND
-	hideobjectat LOCALID_MEGANIUM, MAP_WES_HIDEOUT_UNDERGROUND
-	setvar VAR_TEMP_2, 1
+	call WesHideout_Underground_EventScript_InitMapState
 	end
 
 WesHideout_Underground_OnTransition_Scene::
 	clearflag FLAG_HIDE_WES_HIDEOUT_LYRA
 	clearflag FLAG_HIDE_WES_HIDEOUT_MEGANIUM
-	hideobjectat LOCALID_PLAYER, MAP_WES_HIDEOUT_UNDERGROUND
 	hideobjectat LOCALID_LYRA, MAP_WES_HIDEOUT_UNDERGROUND
 	hideobjectat LOCALID_MEGANIUM, MAP_WES_HIDEOUT_UNDERGROUND
-	turnobject LOCALID_PLAYER, DIR_NORTH
 	setvar VAR_TEMP_2, 0
 	end
 
 WesHideout_Underground_OnLoad::
-	checkflag FLAG_QUEST_BACK_TO_HQ_STARTED
-	goto_if_eq WesHideout_Underground_OnLoad_PostBirch
-	call WesHideout_Underground_EventScript_HidePostBirchObjects
-	goto WesHideout_Underground_OnLoad_CheckScene
-WesHideout_Underground_OnLoad_PostBirch::
-	call WesHideout_Underground_EventScript_SetPostBirchLayout
-WesHideout_Underground_OnLoad_CheckScene:
-	goto_if_set FLAG_WES_HIDEOUT_LYRA_SCENE, WesHideout_Underground_OnLoad_Scene
+	call WesHideout_Underground_EventScript_InitMapState
 	end
 
 WesHideout_Underground_OnLoad_Scene::
-	hideobjectat LOCALID_PLAYER, MAP_WES_HIDEOUT_UNDERGROUND
 	hideobjectat LOCALID_LYRA, MAP_WES_HIDEOUT_UNDERGROUND
 	hideobjectat LOCALID_MEGANIUM, MAP_WES_HIDEOUT_UNDERGROUND
 	hideobjectat LOCALID_HOOPA_RING, MAP_WES_HIDEOUT_UNDERGROUND
@@ -75,8 +52,65 @@ WesHideout_Underground_OnLoad_Scene::
 	removeobject LOCALID_HOOPA_RING
 	end
 
+WesHideout_Underground_EventScript_InitMapState::
+	setvar VAR_TEMP_0, 1
+	setvar VAR_TEMP_1, 1
+	setvar VAR_TEMP_2, 1
+	setvar VAR_TEMP_3, 1
+	setvar VAR_TEMP_6, 0
+	setvar VAR_TEMP_7, 1
+
+	checkflag FLAG_WES_HIDEOUT_NEBBY_SCENE_DONE
+	goto_if_eq WesHideout_Underground_EventScript_InitMapState_NebbyDone
+	setflag FLAG_HIDE_WES_HIDEOUT_NEBBY
+	hideobjectat LOCALID_NEBBY, MAP_WES_HIDEOUT_UNDERGROUND
+WesHideout_Underground_EventScript_InitMapState_NebbyDone:
+	checkflag FLAG_WES_HIDEOUT_LYRA_SCENE
+	goto_if_eq WesHideout_Underground_EventScript_InitMapState_Lyra
+	checkflag FLAG_ILEX_BIRCH_CALL_DONE
+	goto_if_ne WesHideout_Underground_EventScript_InitMapState_Normal
+	checkflag FLAG_QUEST_BACK_TO_HQ_STARTED
+	goto_if_eq WesHideout_Underground_EventScript_InitMapState_PostBirch
+	goto WesHideout_Underground_EventScript_InitMapState_Normal
+
+WesHideout_Underground_EventScript_InitMapState_Lyra:
+	call WesHideout_Underground_EventScript_HidePostBirchObjects
+	goto WesHideout_Underground_OnTransition_Scene
+
+WesHideout_Underground_EventScript_InitMapState_PostBirch:
+	call WesHideout_Underground_EventScript_SetPostBirchLayout
+	setflag FLAG_HIDE_WES_HIDEOUT_LYRA
+	setflag FLAG_HIDE_WES_HIDEOUT_MEGANIUM
+	hideobjectat LOCALID_LYRA, MAP_WES_HIDEOUT_UNDERGROUND
+	hideobjectat LOCALID_MEGANIUM, MAP_WES_HIDEOUT_UNDERGROUND
+	checkflag FLAG_QUEST_BACK_TO_HQ_COMPLETED
+	goto_if_eq WesHideout_Underground_EventScript_InitMapState_Done
+	setvar VAR_TEMP_3, 0
+	setvar VAR_TEMP_7, 0
+	goto WesHideout_Underground_EventScript_InitMapState_Done
+
+WesHideout_Underground_EventScript_InitMapState_Normal:
+	call WesHideout_Underground_EventScript_HidePostBirchObjects
+	setflag FLAG_HIDE_WES_HIDEOUT_LYRA
+	setflag FLAG_HIDE_WES_HIDEOUT_MEGANIUM
+	hideobjectat LOCALID_LYRA, MAP_WES_HIDEOUT_UNDERGROUND
+	hideobjectat LOCALID_MEGANIUM, MAP_WES_HIDEOUT_UNDERGROUND
+	checkflag FLAG_WES_HIDEOUT_TALKED_ROWAN
+	goto_if_eq WesHideout_Underground_EventScript_InitMapState_NormalRowanDone
+	setvar VAR_TEMP_0, 0
+WesHideout_Underground_EventScript_InitMapState_NormalRowanDone:
+	checkflag FLAG_WES_HIDEOUT_TEAM_BRIEFED
+	goto_if_eq WesHideout_Underground_EventScript_InitMapState_Done
+	setvar VAR_TEMP_1, 0
+
+WesHideout_Underground_EventScript_InitMapState_Done:
+	return
+
 WesHideout_Underground_EventScript_SetPostBirchLayout::
 	setvar VAR_TEMP_1, 1
+	clearflag FLAG_HIDE_WES_HIDEOUT_WES
+	clearflag FLAG_HIDE_WES_HIDEOUT_UMBREON
+	clearflag FLAG_HIDE_WES_HIDEOUT_ESPEON
 	setobjectxy LOCALID_WES, 26, 12
 	setobjectxyperm LOCALID_WES, 26, 12
 	setobjectmovementtype LOCALID_WES, MOVEMENT_TYPE_FACE_UP
@@ -116,9 +150,33 @@ WesHideout_Underground_EventScript_SetPostBirchLayout::
 	setobjectxyperm LOCALID_JUNIPER, 22, 12
 	setobjectmovementtype LOCALID_JUNIPER, MOVEMENT_TYPE_FACE_RIGHT
 	turnobject LOCALID_JUNIPER, DIR_EAST
+	checkflag FLAG_QUEST_THUNDERBIRD_STARTED
+	goto_if_eq WesHideout_Underground_EventScript_SetPostBirchLegendaryLayout
+	return
+
+WesHideout_Underground_EventScript_SetPostBirchLegendaryLayout:
+	setobjectxy LOCALID_JUNIPER, 4, 6
+	setobjectxyperm LOCALID_JUNIPER, 4, 6
+	setobjectmovementtype LOCALID_JUNIPER, MOVEMENT_TYPE_FACE_RIGHT
+	turnobject LOCALID_JUNIPER, DIR_EAST
+	setobjectxy LOCALID_ELM, 6, 15
+	setobjectxyperm LOCALID_ELM, 6, 15
+	setobjectmovementtype LOCALID_ELM, MOVEMENT_TYPE_FACE_UP
+	turnobject LOCALID_ELM, DIR_NORTH
+	setobjectxy LOCALID_SYCAMORE, 25, 18
+	setobjectxyperm LOCALID_SYCAMORE, 25, 18
+	setobjectmovementtype LOCALID_SYCAMORE, MOVEMENT_TYPE_FACE_RIGHT
+	turnobject LOCALID_SYCAMORE, DIR_EAST
+	setobjectxy LOCALID_MAGNOLIA, 22, 20
+	setobjectxyperm LOCALID_MAGNOLIA, 22, 20
+	setobjectmovementtype LOCALID_MAGNOLIA, MOVEMENT_TYPE_FACE_LEFT
+	turnobject LOCALID_MAGNOLIA, DIR_WEST
 	return
 
 WesHideout_Underground_EventScript_HidePostBirchObjects::
+	setflag FLAG_HIDE_WES_HIDEOUT_WES
+	setflag FLAG_HIDE_WES_HIDEOUT_UMBREON
+	setflag FLAG_HIDE_WES_HIDEOUT_ESPEON
 	hideobjectat LOCALID_WES, MAP_WES_HIDEOUT_UNDERGROUND
 	hideobjectat LOCALID_UMBREON, MAP_WES_HIDEOUT_UNDERGROUND
 	hideobjectat LOCALID_ESPEON, MAP_WES_HIDEOUT_UNDERGROUND
@@ -212,19 +270,18 @@ WesHideout_Underground_EventScript_LyraScene::
 
 	clearflag FLAG_HIDE_WES_HIDEOUT_HOOPA_RING
 	addobject LOCALID_HOOPA_RING
-	setobjectxy LOCALID_HOOPA_RING, 25, 11
-	setobjectxyperm LOCALID_HOOPA_RING, 25, 11
+	setobjectxy LOCALID_HOOPA_RING, 25, 12
+	setobjectxyperm LOCALID_HOOPA_RING, 25, 12
 	showobjectat LOCALID_HOOPA_RING, MAP_WES_HIDEOUT_UNDERGROUND
-	setobjectsubpriority LOCALID_HOOPA_RING, MAP_WES_HIDEOUT_UNDERGROUND, 0
+	setobjectsubpriority LOCALID_HOOPA_RING, MAP_WES_HIDEOUT_UNDERGROUND, 1
+	setobjectsubpriority LOCALID_PLAYER, MAP_WES_HIDEOUT_UNDERGROUND, 0
 
 	setvar VAR_0x8004, LOCALID_HOOPA_RING
 	setvar VAR_0x8001, 25
-	setvar VAR_0x8002, 11
+	setvar VAR_0x8002, 12
 	special Special_HoopaRingSpawnGrow
 	waitstate
 
-	applymovement LOCALID_PLAYER, WesHideout_Underground_Movement_PlayerIntoRing
-	waitmovement 0
 	setvar VAR_0x8000, LOCALID_PLAYER
 	special Special_ObjectEventAbsorb
 	waitstate
@@ -237,6 +294,7 @@ WesHideout_Underground_EventScript_LyraScene::
 	hideobjectat LOCALID_HOOPA_RING, MAP_WES_HIDEOUT_UNDERGROUND
 	setflag FLAG_HIDE_WES_HIDEOUT_HOOPA_RING
 	removeobject LOCALID_HOOPA_RING
+	resetobjectsubpriority LOCALID_PLAYER, MAP_WES_HIDEOUT_UNDERGROUND
 
 	setflag FLAG_VIOLET_HOOPA_SCENE
 	releaseall
@@ -252,6 +310,17 @@ WesHideout_Underground_EventScript_Birch::
 	lock
 	faceplayer
 	setspeaker WesHideout_Underground_Speaker_Birch
+	checkflag FLAG_WES_HIDEOUT_NEBBY_SCENE_DONE
+	goto_if_eq WesHideout_Underground_EventScript_Birch_SkipNebby
+	checkflag FLAG_QUEST_THUNDERBIRD_STARTED
+	goto_if_eq WesHideout_Underground_EventScript_Birch_NebbyCheckFollower
+	goto WesHideout_Underground_EventScript_Birch_SkipNebby
+WesHideout_Underground_EventScript_Birch_NebbyCheckFollower:
+	checkflag FLAG_NEBBY_FOLLOWER_ACTIVE
+	goto_if_eq WesHideout_Underground_EventScript_Birch_NebbyScene
+	checkflag FLAG_VERMILION_PORTINSIDE_BURNET_SCENE_DONE
+	goto_if_eq WesHideout_Underground_EventScript_Birch_NebbyScene
+WesHideout_Underground_EventScript_Birch_SkipNebby:
 	checkflag FLAG_WES_HIDEOUT_TALKED_BIRCH
 	goto_if_eq WesHideout_Underground_EventScript_Birch_After
 	msgbox WesHideout_Underground_Text_Birch_Intro, MSGBOX_NPC
@@ -266,6 +335,8 @@ WesHideout_Underground_EventScript_Birch::
 	end
 
 WesHideout_Underground_EventScript_Birch_After::
+	checkflag FLAG_ILEX_BIRCH_CALL_DONE
+	goto_if_ne WesHideout_Underground_EventScript_Birch_After_PreCall
 	checkflag FLAG_QUEST_BACK_TO_HQ_STARTED
 	goto_if_eq WesHideout_Underground_EventScript_Birch_After_PostBirch
 	goto WesHideout_Underground_EventScript_Birch_After_PreCall
@@ -309,6 +380,7 @@ WesHideout_Underground_EventScript_Birch_PostBirch_GiveLegendaries:
 	setflag FLAG_QUEST_FIREBIRD_STARTED
 	setflag FLAG_QUEST_PHOENIX_STARTED
 	setflag FLAG_QUEST_SHINING_BEAST_STARTED
+	call WesHideout_Underground_EventScript_CompleteBackToHQQuest
 	call QuestJournal_EventScript_NewQuestsAlert
 	setspeaker WesHideout_Underground_Speaker_Birch
 	msgbox WesHideout_Underground_Text_Birch_Legendaries_Part2, MSGBOX_NPC
@@ -316,9 +388,22 @@ WesHideout_Underground_EventScript_Birch_PostBirch_GiveLegendaries:
 	return
 
 WesHideout_Underground_EventScript_Birch_PostBirch_LegendaryGiven::
+	call WesHideout_Underground_EventScript_CompleteBackToHQQuest
 	setspeaker WesHideout_Underground_Speaker_Birch
 	msgbox WesHideout_Underground_Text_Birch_Legendaries_After, MSGBOX_NPC
 	closemessage
+	return
+
+WesHideout_Underground_EventScript_CompleteBackToHQQuest::
+	checkflag FLAG_QUEST_BACK_TO_HQ_STARTED
+	goto_if_eq WesHideout_Underground_EventScript_CompleteBackToHQQuest_CheckDone
+	return
+WesHideout_Underground_EventScript_CompleteBackToHQQuest_CheckDone:
+	checkflag FLAG_QUEST_BACK_TO_HQ_COMPLETED
+	goto_if_eq WesHideout_Underground_EventScript_CompleteBackToHQQuest_End
+	setflag FLAG_QUEST_BACK_TO_HQ_COMPLETED
+	call QuestJournal_EventScript_QuestCompleteAlert
+WesHideout_Underground_EventScript_CompleteBackToHQQuest_End:
 	return
 
 WesHideout_Underground_EventScript_Birch_After_PreCall::
@@ -326,6 +411,93 @@ WesHideout_Underground_EventScript_Birch_After_PreCall::
 	msgbox WesHideout_Underground_Text_Birch_After, MSGBOX_NPC
 	closemessage
 	release
+	end
+
+WesHideout_Underground_EventScript_Birch_NebbyScene::
+	lockall
+	setflag FLAG_SAFE_FOLLOWER_MOVEMENT
+	setspeaker WesHideout_Underground_Speaker_Birch
+	msgbox WesHideout_Underground_Text_Birch_Nebby_Intro, MSGBOX_DEFAULT
+	closemessage
+	applymovement OBJ_EVENT_ID_PLAYER, Common_Movement_FaceLeft
+	applymovement OBJ_EVENT_ID_NPC_FOLLOWER, Common_Movement_FaceLeft
+	waitmovement 0
+	setspeaker WesHideout_Underground_Speaker_Kukui
+	msgbox WesHideout_Underground_Text_Kukui_Nebby, MSGBOX_DEFAULT
+	closemessage
+	applymovement OBJ_EVENT_ID_PLAYER, Common_Movement_FaceRight
+	applymovement OBJ_EVENT_ID_NPC_FOLLOWER, Common_Movement_FaceRight
+	waitmovement 0
+	setspeaker WesHideout_Underground_Speaker_Birch
+	msgbox WesHideout_Underground_Text_Birch_Nebby_Test, MSGBOX_DEFAULT
+	closemessage
+	applymovement OBJ_EVENT_ID_NPC_FOLLOWER, WesHideout_Underground_Movement_Nebby_ToMachine
+	waitmovement 0
+	clearflag FLAG_SAFE_FOLLOWER_MOVEMENT
+	clearflag FLAG_HIDE_WES_HIDEOUT_NEBBY
+	addobject LOCALID_NEBBY
+	hideobjectat LOCALID_NEBBY, MAP_WES_HIDEOUT_UNDERGROUND
+	setobjectxy LOCALID_NEBBY, 26, 8
+	setobjectxyperm LOCALID_NEBBY, 26, 8
+	setobjectmovementtype LOCALID_NEBBY, MOVEMENT_TYPE_WALK_SLOWLY_IN_PLACE_DOWN
+	turnobject LOCALID_NEBBY, DIR_SOUTH
+	showobjectat LOCALID_NEBBY, MAP_WES_HIDEOUT_UNDERGROUND
+	setvar VAR_0x8004, LOCALID_NEBBY
+	special Special_SetObjectPriorityHigh
+	destroyfollowernpc
+	clearflag FLAG_NEBBY_FOLLOWER_ACTIVE
+	turnobject LOCALID_BIRCH, DIR_NORTH
+	setspeaker WesHideout_Underground_Speaker_Birch
+	msgbox WesHideout_Underground_Text_Birch_Nebby_Powering, MSGBOX_DEFAULT
+	closemessage
+	fadescreenswapbuffers FADE_TO_WHITE
+	fadescreenswapbuffers FADE_FROM_WHITE
+	delay 8
+	fadescreenswapbuffers FADE_TO_WHITE
+	fadescreenswapbuffers FADE_FROM_WHITE
+	delay 8
+	fadescreenswapbuffers FADE_TO_WHITE
+	fadescreenswapbuffers FADE_FROM_WHITE
+	delay 8
+	setspeaker WesHideout_Underground_Speaker_Birch
+	msgbox WesHideout_Underground_Text_Birch_Nebby_Success, MSGBOX_DEFAULT
+	closemessage
+	setspeaker WesHideout_Underground_Speaker_Birch
+	msgbox WesHideout_Underground_Text_Birch_Nebby_OffYouGo, MSGBOX_DEFAULT
+	closemessage
+	setflag FLAG_WES_HIDEOUT_NEBBY_SCENE_DONE
+	setflag FLAG_QUEST_NEBBY_POWERHOUSE_STARTED
+	setflag FLAG_QUEST_NEBBY_POWERHOUSE_COMPLETED
+	call QuestJournal_EventScript_QuestCompleteAlert
+
+	clearflag FLAG_NEBBY_FOLLOWER_ACTIVE
+	clearflag FLAG_HIDE_WES_HIDEOUT_HOOPA_RING
+	addobject LOCALID_HOOPA_RING
+	getplayerxy VAR_0x8001, VAR_0x8002
+	setobjectxy LOCALID_HOOPA_RING, VAR_0x8001, VAR_0x8002
+	setobjectxyperm LOCALID_HOOPA_RING, VAR_0x8001, VAR_0x8002
+	showobjectat LOCALID_HOOPA_RING, MAP_WES_HIDEOUT_UNDERGROUND
+	setobjectsubpriority LOCALID_HOOPA_RING, MAP_WES_HIDEOUT_UNDERGROUND, 1
+	setobjectsubpriority LOCALID_PLAYER, MAP_WES_HIDEOUT_UNDERGROUND, 0
+	setvar VAR_0x8004, LOCALID_HOOPA_RING
+	special Special_HoopaRingSpawnGrow
+	waitstate
+	setvar VAR_0x8000, LOCALID_PLAYER
+	special Special_ObjectEventAbsorb
+	waitstate
+	playse SE_LAVARIDGE_FALL_WARP
+	hideobjectat LOCALID_PLAYER, MAP_WES_HIDEOUT_UNDERGROUND
+	setvar VAR_0x8004, LOCALID_HOOPA_RING
+	special Special_HoopaRingShrinkDespawn
+	waitstate
+	hideobjectat LOCALID_HOOPA_RING, MAP_WES_HIDEOUT_UNDERGROUND
+	setflag FLAG_HIDE_WES_HIDEOUT_HOOPA_RING
+	removeobject LOCALID_HOOPA_RING
+	resetobjectsubpriority LOCALID_PLAYER, MAP_WES_HIDEOUT_UNDERGROUND
+	setflag FLAG_KURTS_HOUSE_HOOPA_EMERGE
+	releaseall
+	warp MAP_AZALEA_TOWN_KURTS_HOUSE, 4, 5
+	waitstate
 	end
 
 WesHideout_Underground_EventScript_Birch_GivePokenav::
@@ -482,6 +654,7 @@ WesHideout_Underground_EventScript_Kukui_Quest_CheckMeowth:
 	end
 
 WesHideout_Underground_EventScript_Kukui_Quest_Meowth:
+	setspeaker WesHideout_Underground_Speaker_Kukui
 	msgbox WesHideout_Underground_Text_Kukui_Meowth_Request, MSGBOX_YESNO
 	compare VAR_RESULT, YES
 	goto_if_eq WesHideout_Underground_EventScript_Kukui_Quest_TakeMeowth
@@ -504,9 +677,15 @@ WesHideout_Underground_EventScript_Kukui_Quest_TakeMeowth_End:
 	end
 
 WesHideout_Underground_EventScript_Kukui_Quest_Completed:
+	checkflag FLAG_KUKUI_SHADOW_MEOWTH_RETURNED
+	goto_if_eq WesHideout_Underground_EventScript_Kukui_Quest_Returned
 	checkflag FLAG_KUKUI_SHADOW_MEOWTH_TAKEN
 	goto_if_eq WesHideout_Underground_EventScript_Kukui_Quest_Testing
-	msgbox WesHideout_Underground_Text_Kukui_After, MSGBOX_NPC
+	goto WesHideout_Underground_EventScript_Kukui_Quest_Testing
+
+WesHideout_Underground_EventScript_Kukui_Quest_Returned:
+	setspeaker WesHideout_Underground_Speaker_Kukui
+	msgbox WesHideout_Underground_Text_Kukui_Meowth_Returned, MSGBOX_NPC
 	closemessage
 	release
 	end
@@ -514,6 +693,7 @@ WesHideout_Underground_EventScript_Kukui_Quest_Completed:
 WesHideout_Underground_EventScript_Kukui_Quest_Testing:
 	checkflag FLAG_BADGE08_GET
 	goto_if_eq WesHideout_Underground_EventScript_Kukui_Quest_Return
+	setspeaker WesHideout_Underground_Speaker_Kukui
 	msgbox WesHideout_Underground_Text_Kukui_Meowth_Testing, MSGBOX_NPC
 	closemessage
 	release
@@ -523,6 +703,7 @@ WesHideout_Underground_EventScript_Kukui_Quest_Return:
 	special Special_Kukui_ReturnShadowMeowth
 	setflag FLAG_KUKUI_SHADOW_MEOWTH_RETURNED
 	clearflag FLAG_KUKUI_SHADOW_MEOWTH_TAKEN
+	setspeaker WesHideout_Underground_Speaker_Kukui
 	msgbox WesHideout_Underground_Text_Kukui_Meowth_Returned, MSGBOX_NPC
 	closemessage
 	release
@@ -1084,6 +1265,19 @@ WesHideout_Underground_Movement_PlayerIntoRing:
 	walk_up
 	step_end
 
+WesHideout_Underground_Movement_Nebby_ToMachine:
+	walk_left
+	walk_up
+	walk_up
+	walk_up
+	walk_up
+	walk_right
+	walk_right
+	walk_right
+	jump_down
+	face_down
+	step_end
+
 WesHideout_Underground_Movement_PlayerToBirch_0:
 	walk_down
 	walk_down
@@ -1237,7 +1431,7 @@ WesHideout_Underground_Text_Birch_TimeMachine:
 	.string "and HOENN.\p"
 	.string "As you know, MICHAEL went to see\n"
 	.string "KURT some time ago, but something\l"
-	.string "came up with TEAM AQUA in VIOLET\n"
+	.string "came up with TEAM AQUA in VIOLET\l"
 	.string "CITY.\p"
 	.string "Before he left, I gave MICHAEL a\n"
 	.string "TIME AMULET which allows us to warp\l"
@@ -1257,8 +1451,8 @@ WesHideout_Underground_Text_Birch_Legendaries_Part1:
 	.string "Oh geez, we're doomed if they get\n"
 	.string "their filthy hands on them all!\p"
 	.string "We don't know the locations of every\n"
-	.string "LEGENDARY POKéMON, especially\n"
-	.string "since we have had so many regions\n"
+	.string "LEGENDARY POKéMON, especially\l"
+	.string "since we have had so many regions\l"
 	.string "colliding, but we do know some.\p"
 	.string "I need you to visit these locations\n"
 	.string "and see what we can find.$"
@@ -1310,7 +1504,8 @@ WesHideout_Underground_Text_Elm_Intro:
 	.string "ETHAN and LYRA are hunting trainers\n"
 	.string "as we speak.\p"
 	.string "They're sending over data they find\n"
-	.string "so we can add them to the SHADOW MONITOR.\p"
+	.string "so we can add them to the\l"
+	.string "SHADOW MONITOR.\p"
 	.string "So far it seems there is 70 types of\n"
 	.string "SHADOW POKéMON that are not identified.\p"
 	.string "Prof. SYCAMORE should have the device\n"
@@ -1559,7 +1754,7 @@ WesHideout_Underground_Text_MagSycamore_Player5:
 	.string "It hasn't seen DYNAMAX either.\p"
 	.string "Luckily we arrived prepared.\p"
 	.string "We can stop CIPHER.\p"
-	.string "ELIO and SERENA have MEGA BRACELETS.\p"
+	.string "CALEM and SERENA have MEGA RINGS.\p"
 	.string "They'll provide them to GYM LEADERS\n"
 	.string "and ELITE FOUR to strengthen them.$"
 
@@ -1593,3 +1788,41 @@ WesHideout_Underground_Text_MagSycamore_Player9:
 	.string "Go see WES upstairs.\p"
 	.string "I believe he has something special\n"
 	.string "for you.$"
+
+WesHideout_Underground_Text_Birch_Nebby_Intro:
+	.string "Hey {PLAYER} any good news on your\n"
+	.string "quest so far? Whoa what is that\l"
+	.string "POKéMON?$"
+
+WesHideout_Underground_Text_Kukui_Nebby:
+	.string "Ah that must be Nebby, my wife just\n"
+	.string "called and said you would be bringing\l"
+	.string "it to see if it can help with the\l"
+	.string "TIME MACHINE.$"
+
+WesHideout_Underground_Text_Birch_Nebby_Test:
+	.string "Seriously?? That's awesome news!\n"
+	.string "Although... I'm not really sure how\l"
+	.string "this is going to work.\p"
+	.string "Hmm, {PLAYER} can you have Nebby\n"
+	.string "jump onto the machine? I want to see\l"
+	.string "if it can power this thing back up.$"
+
+WesHideout_Underground_Text_Birch_Nebby_Powering:
+	.string "Okay it seems like I'm getting some\n"
+	.string "juice, lets try this... and this...\l"
+	.string "nice and one more thing.$"
+
+WesHideout_Underground_Text_Birch_Nebby_Success:
+	.string "I think we got it! Wow I can't\n"
+	.string "believe that worked! What kind of\l"
+	.string "POKéMON is this?\p"
+	.string "Haha okay {PLAYER}, let's test this\n"
+	.string "thing out and send you back over to\l"
+	.string "KURT.\p"
+	.string "we finally got that guy a\n"
+	.string "a TIME AMULET, next we have to get\l"
+	.string "you one.$"
+
+WesHideout_Underground_Text_Birch_Nebby_OffYouGo:
+	.string "All right, off you go!$"

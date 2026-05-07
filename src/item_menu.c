@@ -2176,7 +2176,7 @@ static void OpenContextMenu(u8 taskId)
                 memcpy(&gBagMenu->contextMenuItemsBuffer, &sContextMenuItems_KeyItemsPocket, sizeof(sContextMenuItems_KeyItemsPocket));
                 if (gSaveBlock1Ptr->registeredItem == gSpecialVar_ItemId)
                     gBagMenu->contextMenuItemsBuffer[1] = ACTION_DESELECT;
-                if (gSpecialVar_ItemId == ITEM_MACH_BIKE || gSpecialVar_ItemId == ITEM_ACRO_BIKE)
+                if (gSpecialVar_ItemId == ITEM_BICYCLE || gSpecialVar_ItemId == ITEM_MACH_BIKE || gSpecialVar_ItemId == ITEM_ACRO_BIKE)
                 {
                     if (TestPlayerAvatarFlags(PLAYER_AVATAR_FLAG_MACH_BIKE | PLAYER_AVATAR_FLAG_ACRO_BIKE))
                         gBagMenu->contextMenuItemsBuffer[0] = ACTION_WALK;
@@ -2571,11 +2571,14 @@ static void ItemMenu_UseInBattle(u8 taskId)
 {
     // Safety check
     u16 type = GetItemType(gSpecialVar_ItemId);
-    if (!GetItemBattleUsage(gSpecialVar_ItemId))
+    u16 battleUsage = GetItemBattleUsage(gSpecialVar_ItemId);
+    if (!battleUsage)
         return;
 
     RemoveContextWindow();
-    if (type == ITEM_USE_BAG_MENU)
+    if (battleUsage == EFFECT_ITEM_THROW_BALL)
+        ItemUseInBattle_PokeBall(taskId);
+    else if (type == ITEM_USE_BAG_MENU)
         ItemUseInBattle_BagMenu(taskId);
     else if (type == ITEM_USE_PARTY_MENU)
         ItemUseInBattle_PartyMenu(taskId);

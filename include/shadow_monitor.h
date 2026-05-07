@@ -48,5 +48,6 @@ void ShadowMonitor_CreateMonSpriteForSelected(u16 selectedMon);
 void ShadowMonitor_RefreshMonSprite(void);
 void ShadowMonitor_DrawListEntries(u16 selectedMon, u16 ignored);
 u8 ShadowMonitor_GetListHeaderOffsetRows(void);
+void ShadowMonitor_ResetTrackerTabWindow(void);
 
 #endif // GUARD_SHADOW_MONITOR_H

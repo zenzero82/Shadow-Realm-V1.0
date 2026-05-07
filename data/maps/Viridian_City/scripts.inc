@@ -1,4 +1,5 @@
 Viridian_City_MapScripts::
+    map_script MAP_SCRIPT_ON_LOAD, ViridianCity_OnLoad
     map_script MAP_SCRIPT_ON_TRANSITION, ViridianCity_EventScript_CityEnter
     .byte 0
 
@@ -54,18 +55,27 @@ Viridian_Speaker_Grunt8:
 @ MAP ENTER
 @ ==============================
 
+ViridianCity_OnLoad::
+    call ViridianCity_EventScript_UpdateCivilianState
+    end
+
 ViridianCity_EventScript_CityEnter::
+    call ViridianCity_EventScript_UpdateCivilianState
     setflag FLAG_VISITED_VIRIDIAN_CITY
-    checkflag FLAG_ILEX_BIRCH_CALL_DONE
-    goto_if_eq VAR_RESULT, FALSE, ViridianCity_EventScript_GymDoorUnlocked
     setvar VAR_TEMP_1, 0
-    goto ViridianCity_EventScript_GymDoorLockStateDone
-ViridianCity_EventScript_GymDoorUnlocked:
-    setvar VAR_TEMP_1, 1
-ViridianCity_EventScript_GymDoorLockStateDone:
     @ Do NOT touch Gonzap here – his visibility is controlled
     @ by FLAG_HIDE_VIRIDIAN_GONZAP and the gym scene.
     end
+
+ViridianCity_EventScript_UpdateCivilianState::
+    checkflag FLAG_QUEST_BACK_TO_HQ_STARTED
+    goto_if_eq VAR_RESULT, FALSE, ViridianCity_EventScript_HideCivilians
+    clearflag FLAG_HIDE_VIRIDIAN_POST_ROCKET_NPCS
+    return
+
+ViridianCity_EventScript_HideCivilians:
+    setflag FLAG_HIDE_VIRIDIAN_POST_ROCKET_NPCS
+    return
 
 @ ==============================
 @ ORIGINAL NPCS / SIGNS
@@ -115,8 +125,6 @@ ViridianCity_EventScript_GymSign::
 ViridianCity_EventScript_GymDoorLocked::
     lockall
     msgbox ViridianCity_Text_GymDoorLocked, MSGBOX_SIGN
-    applymovement OBJ_EVENT_ID_PLAYER, Common_Movement_WalkDown
-    waitmovement 0
     releaseall
     end
 
@@ -135,16 +143,44 @@ ViridianCity_EventScript_ExileOldMan::
     end
 
 ViridianCity_Text_ExileOldMan:
-    .string "I lived here my whole life...\p"
-    .string "Then Team Rocket rolled in and started\n"
-    .string "kicking folks out like we were trash.\p"
-    .string "My home? Gone.\n"
-    .string "My neighbors? Hiding behind locked doors.\p"
-    .string "If you're strong enough...\n"
-    .string "please bring Viridian back.$"
+    .string "Team Rocket vanished as fast as\n"
+    .string "they came.\p"
+    .string "But the VIRIDIAN GYM is still\n"
+    .string "sealed shut.\p"
+    .string "That kind of silence makes an old\n"
+    .string "man uneasy.$"
+
+ViridianCity_EventScript_PostRocketTwinLeft::
+    lock
+    faceplayer
+    msgbox ViridianCity_Text_PostRocketTwinLeft, MSGBOX_DEFAULT
+    release
+    end
+
+ViridianCity_EventScript_PostRocketTwinRight::
+    lock
+    faceplayer
+    msgbox ViridianCity_Text_PostRocketTwinRight, MSGBOX_DEFAULT
+    release
+    end
+
+ViridianCity_Text_PostRocketTwinLeft:
+    .string "The grunts are gone, but nobody's\n"
+    .string "opening the Gym yet.\p"
+    .string "It feels like the whole city is\n"
+    .string "still holding its breath.$"
+
+ViridianCity_Text_PostRocketTwinRight:
+    .string "I thought things would go back to\n"
+    .string "normal once Team Rocket left.\p"
+    .string "Nope. The Gym doors are still\n"
+    .string "locked tight.$"
 
 ViridianCity_Text_GymDoorLocked::
-    .string "The Gym doors are locked.$"
+    .string "The VIRIDIAN GYM doors are locked\n"
+    .string "tight.\p"
+    .string "Nobody is being allowed inside\n"
+    .string "right now.$"
 
 @ ==============================
 @ JESSIE & JAMES + MEOWTH
@@ -696,8 +732,8 @@ ViridianCity_Text_Gonzap_Intro:
 
 ViridianCity_Text_Gonzap_Threat:
     .string "Remember this face.\p"
-    .string "When {COLOR PURPLE}Shadow Pokemon{COLOR DARK_GRAY} start showing up in\n"
-    .string "your League matches, you'll know who\l"
+    .string "When {COLOR PURPLE}Shadow Pokemon{COLOR DARK_GRAY}show up\n"
+    .string "in your League matches, you'll know who\l"
     .string "gave the order.\p"
     .string "Enjoy the calm while it lasts.$"
 
@@ -744,4 +780,3 @@ ViridianCity_Text_Grunt8:
     .string "You look confused.\n"
     .string "Like you just dropped in from nowhere.\p"
     .string "Bad time to get lost in Kanto, kid.$"
-

@@ -24,6 +24,7 @@ extern const struct GimmighoulSignpost gGimmighoulSignposts[];
 
 bool8 GimmighoulSignpost_IsTracked(u8 mapGroup, u8 mapNum, u16 x, u16 y);
 bool8 GimmighoulSignpost_ShouldTrigger(u8 mapGroup, u8 mapNum, u16 x, u16 y, u16 *outIndex);
+bool8 GimmighoulSignpost_HasAnyUsedOnMap(u8 mapGroup, u8 mapNum);
 void GimmighoulSignpost_MarkUsed(u16 index);
 
 #endif // GUARD_GIMMIGHOUL_SIGNPOST_H

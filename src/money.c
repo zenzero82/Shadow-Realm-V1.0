@@ -208,13 +208,14 @@ void PrintMoneyAmount(u8 windowId, u8 x, u8 y, int amount, u8 speed)
 
 void PrintMoneyAmountInMoneyBoxWithBorder(u8 windowId, u16 tileStart, u8 pallete, int amount)
 {
+    FillWindowPixelBuffer(windowId, PIXEL_FILL(0));
     DrawStdFrameWithCustomTileAndPalette(windowId, FALSE, tileStart, pallete);
     PrintMoneyAmountInMoneyBox(windowId, amount, 0);
 }
 
 void ChangeAmountInMoneyBox(int amount)
 {
-    PrintMoneyAmountInMoneyBox(sMoneyBoxWindowId, amount, 0);
+    PrintMoneyAmountInMoneyBoxWithBorder(sMoneyBoxWindowId, 0x214, 14, amount);
 }
 
 u32 CalculateMoneyTextHorizontalPosition(u32 amount)

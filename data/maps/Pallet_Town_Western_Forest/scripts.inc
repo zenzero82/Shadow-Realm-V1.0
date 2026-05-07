@@ -176,8 +176,8 @@ Pallet_Town_Western_Forest_Text_Player_IntroThought2:
 
 Pallet_Town_Western_Forest_Text_Player_IntroThought2_Gone:
     .string "WHAT?! It's gone?!\p"
-    .string "Well... I guess I can go ask around\n"
-    .string "to see if anyone knows anything.$"
+    .string "Well... I guess I should ask\n"
+    .string "around for answers.$"
 
 
 
@@ -253,24 +253,24 @@ WestForest_EventScript_BadgeTester_After::
 WestForest_Text_BadgeTester_Intro:
     .string "Hey there.\p"
     .string "I'm helping the LEAGUE test how\n"
-    .string "BADGES show up on TRAINER CARDS.\p"
-    .string "I'll also register your POKENAV so\n"
-    .string "you can check things easier.\p"
+    .string "BADGES show on TRAINER CARDS.\p"
+    .string "I'll also register your POKENAV\n"
+    .string "to make things easier.\p"
     .string "Ready?$"
 
 WestForest_Text_BadgeTester_Given:
     .string "Done.\p"
-    .string "Your TRAINER CARD should now show one\n"
-    .string "badge from HOENN and one from KANTO.\p"
+    .string "Your TRAINER CARD should now\n"
+    .string "show a HOENN and KANTO badge.\p"
     .string "And your POKENAV is now active.\p"
-    .string "Try flipping between regions to test\n"
-    .string "the badge display.$"
+    .string "Try flipping between regions\n"
+    .string "to test the badge display.$"
 
 WestForest_Text_BadgeTester_After:
-    .string "Your BADGE data and POKENAV are already\n"
+    .string "Your BADGE data and POKENAV\n"
     .string "registered.\p"
-    .string "Check your TRAINER CARD to see how the\n"
-    .string "regions rotate.$"
+    .string "Check your TRAINER CARD to see\n"
+    .string "how the regions rotate.$"
 
 
 @ ================================
@@ -366,13 +366,20 @@ TestText:
     .string "Yo wassup!$"
 
 ShadowMonitor_Text_Given:
-    .string "Here's the {COLOR PURPLE}Shadow Monitor{COLOR DARK_GRAY} I found.\pIt keeps track of every {COLOR PURPLE}Shadow\nPokemon{COLOR DARK_GRAY} you snag.$"
+    .string "Here's the {COLOR PURPLE}Shadow Monitor{COLOR DARK_GRAY}\n"
+    .string "I found.\p"
+    .string "It keeps track of every\n"
+    .string "{COLOR PURPLE}Shadow Pokemon{COLOR DARK_GRAY} you snag.$"
 
 ShadowMonitor_Text_AlreadyHave:
-    .string "You already grabbed the {COLOR PURPLE}Shadow\nMonitor{COLOR DARK_GRAY}, but thanks for checking!$"
+    .string "You already grabbed the\n"
+    .string "{COLOR PURPLE}Shadow Monitor{COLOR DARK_GRAY}.\p"
+    .string "Thanks for checking!$"
 
 SnagMachine_Text_Given:
-    .string "The Snag Machine is yours now.\pIt logs every {COLOR PURPLE}Shadow\nPokemon{COLOR DARK_GRAY} you capture.$"
+    .string "The Snag Machine is yours now.\p"
+    .string "It logs every {COLOR PURPLE}Shadow\n"
+    .string "Pokemon{COLOR DARK_GRAY} you capture.$"
 
 SnagMachine_Text_AlreadyHave:
     .string "You already have the Snag\nMachine, so I can't give it again!$"

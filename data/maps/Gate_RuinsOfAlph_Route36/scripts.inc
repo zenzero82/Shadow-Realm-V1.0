@@ -1,9 +1,19 @@
 Gate_RuinsOfAlph_Route36_MapScripts::
 	.byte 0
 
+Gate_RuinsOfAlph_Route36_Speaker_Officer:
+	.string "OFFICER$"
+
+Gate_RuinsOfAlph_Route36_Speaker_PokefanM:
+	.string "POKeFAN$"
+
+Gate_RuinsOfAlph_Route36_Speaker_Youngster:
+	.string "YOUNGSTER$"
+
 Gate_RuinsOfAlph_Route36_EventScript_Officer::
 	lock
 	faceplayer
+	setspeaker Gate_RuinsOfAlph_Route36_Speaker_Officer
 	msgbox Gate_RuinsOfAlph_Route36_Text_Officer, MSGBOX_DEFAULT
 	closemessage
 	release
@@ -12,6 +22,7 @@ Gate_RuinsOfAlph_Route36_EventScript_Officer::
 Gate_RuinsOfAlph_Route36_EventScript_PokefanM::
 	lock
 	faceplayer
+	setspeaker Gate_RuinsOfAlph_Route36_Speaker_PokefanM
 	msgbox Gate_RuinsOfAlph_Route36_Text_PokefanM, MSGBOX_DEFAULT
 	closemessage
 	release
@@ -20,6 +31,7 @@ Gate_RuinsOfAlph_Route36_EventScript_PokefanM::
 Gate_RuinsOfAlph_Route36_EventScript_Youngster::
 	lock
 	faceplayer
+	setspeaker Gate_RuinsOfAlph_Route36_Speaker_Youngster
 	msgbox Gate_RuinsOfAlph_Route36_Text_Youngster, MSGBOX_DEFAULT
 	closemessage
 	release
@@ -39,4 +51,3 @@ Gate_RuinsOfAlph_Route36_Text_Youngster:
 	.string "panels.\p"
 	.string "I tried moving them.\n"
 	.string "I wonder what they are.$"
-

@@ -179,7 +179,6 @@ void NewGameInitData(void)
     PlayTimeCounter_Reset();
     ClearPokedexFlags();
     InitEventData();
-    FlagSet(I_EXP_SHARE_FLAG);
     SetLastHealLocationWarp(HEAL_LOCATION_PALLET_TOWN);
     ClearTVShowData();
     ResetGabbyAndTy();

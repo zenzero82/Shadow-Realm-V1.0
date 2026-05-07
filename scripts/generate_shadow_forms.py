@@ -116,6 +116,7 @@ Marshadow
 Meganium
 Melmetal
 Meloetta
+Metagross
 Mesprit
 Meowth
 Meowscarada

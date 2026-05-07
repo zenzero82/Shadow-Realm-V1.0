@@ -1,9 +1,23 @@
 vermilion_pokecenter_MapScripts::
 	map_script MAP_SCRIPT_ON_TRANSITION, vermilion_pokecenter_OnTransition
 	.byte 0
+
+vermilion_pokecenter_Speaker_Chansey:
+	.string "CHANSEY$"
+
+vermilion_pokecenter_Speaker_Fisherman:
+	.string "GUS$"
+
+vermilion_pokecenter_Speaker_Cook:
+	.string "MARCO$"
+
+vermilion_pokecenter_Speaker_BugCatcher:
+	.string "LEO$"
+
 vermilion_pokecenter_EventScript_Chansey::
 	lock
 	faceplayer
+	setspeaker vermilion_pokecenter_Speaker_Chansey
 	waitse
 	playmoncry SPECIES_CHANSEY, CRY_MODE_NORMAL
 	waitmoncry
@@ -12,6 +26,30 @@ vermilion_pokecenter_EventScript_Chansey::
 
 vermilion_pokecenter_OnTransition:
 	setrespawn HEAL_LOCATION_VERMILION_CITY
+	end
+
+vermilion_pokecenter_EventScript_Fisherman::
+	lock
+	faceplayer
+	setspeaker vermilion_pokecenter_Speaker_Fisherman
+	msgbox vermilion_pokecenter_Text_Fisherman, MSGBOX_NPC
+	release
+	end
+
+vermilion_pokecenter_EventScript_Cook::
+	lock
+	faceplayer
+	setspeaker vermilion_pokecenter_Speaker_Cook
+	msgbox vermilion_pokecenter_Text_Cook, MSGBOX_NPC
+	release
+	end
+
+vermilion_pokecenter_EventScript_BugCatcher::
+	lock
+	faceplayer
+	setspeaker vermilion_pokecenter_Speaker_BugCatcher
+	msgbox vermilion_pokecenter_Text_BugCatcher, MSGBOX_NPC
+	release
 	end
 
 vermilion_pokecenter_EventScript_Bookshelf1::
@@ -30,3 +68,18 @@ vermilion_pokecenter_Text_Bookshelf1:
 
 vermilion_pokecenter_Text_Bookshelf2:
 	.string "VERMILION PORT schedules.$"
+
+vermilion_pokecenter_Text_Fisherman:
+	.string "I was hoping to head through the cave,\n"
+	.string "but everything around that route feels\l"
+	.string "blocked lately.$"
+
+vermilion_pokecenter_Text_Cook:
+	.string "The nurses hear every rumor in town.\p"
+	.string "Today it's the harbor. Tomorrow it\n"
+	.string "will be LT. SURGE again.$"
+
+vermilion_pokecenter_Text_BugCatcher:
+	.string "I wanted to visit DIGLETT'S CAVE,\n"
+	.string "but between the SNORLAX and the port\l"
+	.string "commotion, I'm staying put.$"

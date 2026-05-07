@@ -970,6 +970,12 @@ const u16 gItemIconPalette_Delphoxite[] = INCBIN_U16("graphics/items/icon_palett
 const u32 gItemIcon_Greninjite[] = INCBIN_U32("graphics/items/icons/greninjite.4bpp.lz");
 const u16 gItemIconPalette_Greninjite[] = INCBIN_U16("graphics/items/icon_palettes/greninjite.gbapal");
 
+const u32 gItemIcon_RaichuniteX[] = INCBIN_U32("graphics/items/icons/raichunite_x.4bpp.lz");
+const u16 gItemIconPalette_RaichuniteX[] = INCBIN_U16("graphics/items/icon_palettes/raichunite_x.gbapal");
+
+const u32 gItemIcon_RaichuniteY[] = INCBIN_U32("graphics/items/icons/raichunite_y.4bpp.lz");
+const u16 gItemIconPalette_RaichuniteY[] = INCBIN_U16("graphics/items/icon_palettes/raichunite_y.gbapal");
+
 // Gems
 
 const u32 gItemIcon_NormalGem[] = INCBIN_U32("graphics/items/icons/normal_gem.4bpp.lz");

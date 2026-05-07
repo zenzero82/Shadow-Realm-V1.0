@@ -4,6 +4,7 @@ RustboroCity_House1_MapScripts::
 RustboroCity_House1_EventScript_Trader::
 	lock
 	faceplayer
+	setspeaker RustboroCity_House1_Speaker_Tess
 	goto_if_set FLAG_RUSTBORO_NPC_TRADE_COMPLETED, RustboroCity_House1_EventScript_TradeCompleted
 	setvar VAR_0x8008, INGAME_TRADE_SEEDOT
 	copyvar VAR_0x8004, VAR_0x8008
@@ -46,8 +47,16 @@ RustboroCity_House1_EventScript_TradeCompleted::
 	end
 
 RustboroCity_House1_EventScript_Hiker::
+	faceplayer
+	setspeaker RustboroCity_House1_Speaker_Hobbes
 	msgbox RustboroCity_House1_Text_AllSortsOfPlaces, MSGBOX_NPC
 	end
+
+RustboroCity_House1_Speaker_Tess:
+	.string "Tess$"
+
+RustboroCity_House1_Speaker_Hobbes:
+	.string "Hobbes$"
 
 RustboroCity_House1_Text_IllTradeIfYouWant:
 	.string "Huh? My POKéMON is cute?\n"
@@ -78,4 +87,3 @@ RustboroCity_House1_Text_AllSortsOfPlaces:
 	.string "sorts of POKéMON and people.\p"
 	.string "I find that fascinating, so I go to all\n"
 	.string "sorts of places.$"
-

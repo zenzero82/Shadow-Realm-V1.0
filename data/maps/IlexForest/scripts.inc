@@ -40,13 +40,28 @@ IlexForest_OnFrame::
 @ =========================================================
 
 IlexForest_Speaker_JJ:
-	.string "Jessie&James$"
+	.string "JESS&JAMES$"
 
-IlexForest_Speaker_Rocket:
-	.string "ROCKET$"
+IlexForest_Speaker_RocketF1:
+	.string "SABRINA$"
+
+IlexForest_Speaker_RocketM1:
+	.string "RORY$"
+
+IlexForest_Speaker_RocketF2:
+	.string "LANA$"
+
+IlexForest_Speaker_RocketM2:
+	.string "MARK$"
+
+IlexForest_Speaker_RocketM3:
+	.string "TODD$"
+
+IlexForest_Speaker_RocketF3:
+	.string "RINA$"
 
 IlexForest_Speaker_BugCatcher:
-	.string "BUG CATCHER$"
+	.string "BEN$"
 
 IlexForest_Speaker_Charon:
 	.string "CHARON$"
@@ -65,6 +80,7 @@ IlexForest_Speaker_Birch:
 @ =========================================================
 
 IlexForest_EventScript_JJ_Talk::
+	special Special_OverworldWildEncounters_OnMapLoad
 	setspeaker IlexForest_Speaker_JJ
 	setflag FLAG_SYS_CTRL_OBJ_DELETE
 	trainerbattle_single TRAINER_JJ_ILEX, IlexForest_Text_JJ_Intro, IlexForest_Text_JJ_Defeat, IlexForest_EventScript_JJ_After
@@ -89,6 +105,7 @@ IlexForest_EventScript_JJ_After::
 	removeobject LOCALID_ILEX_ROCKET_F3
 	fadescreenswapbuffers FADE_FROM_BLACK
 	call IlexForest_EventScript_TryBirchCall
+	special Special_OverworldWildEncounters_OnReturnToField
 	release
 	end
 
@@ -155,37 +172,74 @@ IlexForest_EventScript_ShrineSign_Done::
 	end
 
 IlexForest_EventScript_RocketGrunt_F1::
-	setspeaker IlexForest_Speaker_Rocket
-	trainerbattle_single TRAINER_ILEX_ROCKET_GRUNT_F1, IlexForest_Text_Rocket_Intro, IlexForest_Text_Rocket_Defeat, IlexForest_EventScript_Rocket_After
+	setspeaker IlexForest_Speaker_RocketF1
+	trainerbattle_single TRAINER_ILEX_ROCKET_GRUNT_F1, IlexForest_Text_Rocket_Intro, IlexForest_Text_Rocket_Defeat, IlexForest_EventScript_RocketF1_After
 	end
 
 IlexForest_EventScript_RocketGrunt_M1::
-	setspeaker IlexForest_Speaker_Rocket
-	trainerbattle_single TRAINER_ILEX_ROCKET_GRUNT_M1, IlexForest_Text_Rocket_Intro, IlexForest_Text_Rocket_Defeat, IlexForest_EventScript_Rocket_After
+	setspeaker IlexForest_Speaker_RocketM1
+	trainerbattle_single TRAINER_ILEX_ROCKET_GRUNT_M1, IlexForest_Text_Rocket_Intro, IlexForest_Text_Rocket_Defeat, IlexForest_EventScript_RocketM1_After
 	end
 
 IlexForest_EventScript_RocketGrunt_F2::
-	setspeaker IlexForest_Speaker_Rocket
-	trainerbattle_single TRAINER_ILEX_ROCKET_GRUNT_F2, IlexForest_Text_Rocket_Intro, IlexForest_Text_Rocket_Defeat, IlexForest_EventScript_Rocket_After
+	setspeaker IlexForest_Speaker_RocketF2
+	trainerbattle_single TRAINER_ILEX_ROCKET_GRUNT_F2, IlexForest_Text_Rocket_Intro, IlexForest_Text_Rocket_Defeat, IlexForest_EventScript_RocketF2_After
 	end
 
 IlexForest_EventScript_RocketGrunt_M2::
-	setspeaker IlexForest_Speaker_Rocket
-	trainerbattle_single TRAINER_ILEX_ROCKET_GRUNT_M2, IlexForest_Text_Rocket_Intro, IlexForest_Text_Rocket_Defeat, IlexForest_EventScript_Rocket_After
+	setspeaker IlexForest_Speaker_RocketM2
+	trainerbattle_single TRAINER_ILEX_ROCKET_GRUNT_M2, IlexForest_Text_Rocket_Intro, IlexForest_Text_Rocket_Defeat, IlexForest_EventScript_RocketM2_After
 	end
 
 IlexForest_EventScript_RocketGrunt_M3::
-	setspeaker IlexForest_Speaker_Rocket
-	trainerbattle_single TRAINER_ILEX_ROCKET_GRUNT_M3, IlexForest_Text_Rocket_Intro, IlexForest_Text_Rocket_Defeat, IlexForest_EventScript_Rocket_After
+	setspeaker IlexForest_Speaker_RocketM3
+	trainerbattle_single TRAINER_ILEX_ROCKET_GRUNT_M3, IlexForest_Text_Rocket_Intro, IlexForest_Text_Rocket_Defeat, IlexForest_EventScript_RocketM3_After
 	end
 
 IlexForest_EventScript_RocketGrunt_F3::
-	setspeaker IlexForest_Speaker_Rocket
-	trainerbattle_single TRAINER_ILEX_ROCKET_GRUNT_F3, IlexForest_Text_Rocket_Intro, IlexForest_Text_Rocket_Defeat, IlexForest_EventScript_Rocket_After
+	lock
+	faceplayer
+	setspeaker IlexForest_Speaker_RocketF3
+	trainerbattle_single TRAINER_ILEX_ROCKET_GRUNT_F3, IlexForest_Text_Rocket_Intro, IlexForest_Text_Rocket_Defeat, IlexForest_EventScript_RocketF3_After
 	end
 
-IlexForest_EventScript_Rocket_After::
-	setspeaker IlexForest_Speaker_Rocket
+IlexForest_EventScript_RocketF1_After::
+	setspeaker IlexForest_Speaker_RocketF1
+	msgbox IlexForest_Text_Rocket_After, MSGBOX_NPC
+	closemessage
+	release
+	end
+
+IlexForest_EventScript_RocketM1_After::
+	setspeaker IlexForest_Speaker_RocketM1
+	msgbox IlexForest_Text_Rocket_After, MSGBOX_NPC
+	closemessage
+	release
+	end
+
+IlexForest_EventScript_RocketF2_After::
+	setspeaker IlexForest_Speaker_RocketF2
+	msgbox IlexForest_Text_Rocket_After, MSGBOX_NPC
+	closemessage
+	release
+	end
+
+IlexForest_EventScript_RocketM2_After::
+	setspeaker IlexForest_Speaker_RocketM2
+	msgbox IlexForest_Text_Rocket_After, MSGBOX_NPC
+	closemessage
+	release
+	end
+
+IlexForest_EventScript_RocketM3_After::
+	setspeaker IlexForest_Speaker_RocketM3
+	msgbox IlexForest_Text_Rocket_After, MSGBOX_NPC
+	closemessage
+	release
+	end
+
+IlexForest_EventScript_RocketF3_After::
+	setspeaker IlexForest_Speaker_RocketF3
 	msgbox IlexForest_Text_Rocket_After, MSGBOX_NPC
 	closemessage
 	release
@@ -217,6 +271,7 @@ IlexForest_EventScript_KeepHoopaRingHidden_Done::
 IlexForest_EventScript_CharonScene::
 	goto_if_set FLAG_HIDE_ILEX_JJ_GROUP, IlexForest_EventScript_CharonScene_Done
 	lockall
+	special Special_OverworldWildEncounters_OnMapLoad
 	setvar VAR_TEMP_0, 1
 	playbgm MUS_CIPHER_ENCOUNTER, FALSE
 	special SpawnCameraObject
@@ -279,8 +334,8 @@ IlexForest_EventScript_CharonScene::
 	msgbox IlexForest_Text_Jessie_Challenge, MSGBOX_DEFAULT
 	closemessage
 	setflag FLAG_SYS_CTRL_OBJ_DELETE
-	trainerbattle_single TRAINER_JJ_ILEX, gText_EmptyString2, IlexForest_Text_JJ_Defeat, IlexForest_EventScript_JJ_After
-	end
+	trainerbattle_no_intro TRAINER_JJ_ILEX, IlexForest_Text_JJ_Defeat
+	goto IlexForest_EventScript_JJ_After
 
 IlexForest_EventScript_CharonScene_Done::
 	end
@@ -412,6 +467,14 @@ IlexForest_Text_ShrinePrompt:
 
 IlexForest_EventScript_Shrine::
 	lock
+	goto_if_set FLAG_ITEM_ILEX_FOREST_RELIC_TABLET, IlexForest_EventScript_Shrine_CheckCelebi
+	msgbox IlexForest_Text_ShrinePrompt, MSGBOX_YESNO
+	goto_if_eq VAR_RESULT, NO, IlexForest_EventScript_Shrine_CheckCelebi
+	giveitem ITEM_RELIC_TABLET
+	goto_if_eq VAR_RESULT, 0, Common_EventScript_ShowBagIsFull
+	setflag FLAG_ITEM_ILEX_FOREST_RELIC_TABLET
+	closemessage
+IlexForest_EventScript_Shrine_CheckCelebi::
 	goto_if_eq VAR_AZALEA_TOWN_STATE, 9, IlexForest_EventScript_Celebi_Event
 	msgbox IlexForest_Text_Shrine, MSGBOX_DEFAULT
 	closemessage

@@ -39,8 +39,12 @@ MtPyre_2F_EventScript_Leah::
 
 MtPyre_2F_EventScript_Zander::
 ; 	@ trainerbattle_single TRAINER_ZANDER, MtPyre_2F_Text_ZanderIntro, MtPyre_2F_Text_ZanderDefeat
+	setspeaker MtPyre_2F_Speaker_Zander
 	msgbox MtPyre_2F_Text_ZanderPostBattle, MSGBOX_AUTOCLOSE
 	end
+
+MtPyre_2F_Speaker_Zander:
+	.string "Zander$"
 
 MtPyre_2F_Text_MemoriesOfSkitty:
 	.string "Memories of my darling SKITTY…\n"
@@ -132,5 +136,4 @@ MtPyre_2F_Text_ZanderPostBattle:
 	.string "I get freaked out every time I see\n"
 	.string "anything move…\p"
 	.string "I shouldn't have come here to train…$"
-
 

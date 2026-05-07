@@ -9,6 +9,7 @@
 #include "diploma.h"
 #include "event_data.h"
 #include "event_object_movement.h"
+#include "follower_npc.h"
 #include "gimmighoul_signpost.h"
 #include "fieldmap.h"
 #include "field_camera.h"
@@ -218,6 +219,11 @@ void Special_ViewWallClock(void)
     gMain.savedCallback = CB2_ReturnToField;
     SetMainCallback2(CB2_ViewWallClock);
     LockPlayerFieldControls();
+}
+
+u16 IsHoldingAButton(void)
+{
+    return JOY_HELD(A_BUTTON) ? TRUE : FALSE;
 }
 
 void ResetCyclingRoadChallengeData(void)
@@ -956,6 +962,108 @@ void PetalburgGymUnlockRoomDoors(void)
     PetalburgGymSetDoorMetatiles(gSpecialVar_0x8004, sPetalburgGymSlidingDoorMetatiles[4]);
 }
 
+void SetVermilionTrashCans(void)
+{
+    u16 idx = (Random() % 15) + 1;
+
+    gSpecialVar_0x8004 = idx;
+    gSpecialVar_0x8005 = idx;
+    switch (gSpecialVar_0x8004)
+    {
+    case 1:
+        idx = Random() % 2;
+        if (idx == 0)
+            gSpecialVar_0x8005 += 1;
+        else
+            gSpecialVar_0x8005 += 5;
+        break;
+    case 2:
+    case 3:
+    case 4:
+        idx = Random() % 3;
+        if (idx == 0)
+            gSpecialVar_0x8005 += 1;
+        else if (idx == 1)
+            gSpecialVar_0x8005 += 5;
+        else
+            gSpecialVar_0x8005 -= 1;
+        break;
+    case 5:
+        idx = Random() % 2;
+        if (idx == 0)
+            gSpecialVar_0x8005 += 5;
+        else
+            gSpecialVar_0x8005 -= 1;
+        break;
+    case 6:
+        idx = Random() % 3;
+        if (idx == 0)
+            gSpecialVar_0x8005 -= 5;
+        else if (idx == 1)
+            gSpecialVar_0x8005 += 1;
+        else
+            gSpecialVar_0x8005 += 5;
+        break;
+    case 7:
+    case 8:
+    case 9:
+        idx = Random() % 4;
+        if (idx == 0)
+            gSpecialVar_0x8005 -= 5;
+        else if (idx == 1)
+            gSpecialVar_0x8005 += 1;
+        else if (idx == 2)
+            gSpecialVar_0x8005 += 5;
+        else
+            gSpecialVar_0x8005 -= 1;
+        break;
+    case 10:
+        idx = Random() % 3;
+        if (idx == 0)
+            gSpecialVar_0x8005 -= 5;
+        else if (idx == 1)
+            gSpecialVar_0x8005 += 5;
+        else
+            gSpecialVar_0x8005 -= 1;
+        break;
+    case 11:
+        idx = Random() % 2;
+        if (idx == 0)
+            gSpecialVar_0x8005 -= 5;
+        else
+            gSpecialVar_0x8005 += 1;
+        break;
+    case 12:
+    case 13:
+    case 14:
+        idx = Random() % 3;
+        if (idx == 0)
+            gSpecialVar_0x8005 -= 5;
+        else if (idx == 1)
+            gSpecialVar_0x8005 += 1;
+        else
+            gSpecialVar_0x8005 -= 1;
+        break;
+    case 15:
+        idx = Random() % 2;
+        if (idx == 0)
+            gSpecialVar_0x8005 -= 5;
+        else
+            gSpecialVar_0x8005 -= 1;
+        break;
+    }
+
+    if (gSpecialVar_0x8005 > 15)
+    {
+        if (gSpecialVar_0x8004 % 5 == 1)
+            gSpecialVar_0x8005 = gSpecialVar_0x8004 + 1;
+        else if (gSpecialVar_0x8004 % 5 == 0)
+            gSpecialVar_0x8005 = gSpecialVar_0x8004 - 1;
+        else
+            gSpecialVar_0x8005 = gSpecialVar_0x8004 + 1;
+    }
+}
+
 void ShowFieldMessageStringVar4(void)
 {
     ShowFieldMessage(gStringVar4);
@@ -1661,6 +1769,16 @@ void Special_ClearPlayerFacingOverride(void)
     ClearPlayerFacingDirectionOverride();
 }
 
+void Special_ApplyCipherDisguise(void)
+{
+    SetPlayerAvatarTransitionFlags(PLAYER_AVATAR_FLAG_ON_FOOT);
+}
+
+void Special_RestorePlayerAvatarGraphics(void)
+{
+    SetPlayerAvatarTransitionFlags(PLAYER_AVATAR_FLAG_ON_FOOT);
+}
+
 void Special_ObjectEventAbsorb(void)
 {
     u8 objectEventId = GetObjectEventIdFromSpecialTargetLocalId();
@@ -1762,6 +1880,32 @@ void Special_ObjectEventEmerge(void)
     gTasks[taskId].data[9] = TRUE;
     gTasks[taskId].data[10] = oldFixedPriority;
     gTasks[taskId].data[11] = TRUE;
+}
+
+void Special_SetObjectPriorityHigh(void)
+{
+    u8 objectEventId = GetObjectEventIdFromSpecialLocalId();
+
+    if (objectEventId == OBJECT_EVENTS_COUNT)
+        return;
+
+    struct ObjectEvent *objectEvent = &gObjectEvents[objectEventId];
+
+    if (objectEvent->spriteId == SPRITE_NONE)
+        return;
+
+    struct Sprite *sprite = &gSprites[objectEvent->spriteId];
+
+    objectEvent->fixedPriority = TRUE;
+    objectEvent->invisible = FALSE;
+    sprite->invisible = FALSE;
+    sprite->oam.priority = 0;
+    SetObjectSubpriorityByElevation(objectEvent->currentElevation, sprite, 0);
+}
+
+void Special_RestoreNebbyFollower(void)
+{
+    RestoreNebbyFollower();
 }
 
 void SetObjectEventPortalAffineAnims(void)
@@ -2304,8 +2448,10 @@ static const u16 sElevatorWindowTiles_Descending[ELEVATOR_WINDOW_HEIGHT][ELEVATO
 void SetDeptStoreFloor(void)
 {
     u8 deptStoreFloor;
-    switch (gSaveBlock1Ptr->dynamicWarp.mapNum)
+    if (gSaveBlock1Ptr->dynamicWarp.mapGroup == MAP_GROUP(MAP_LILYCOVE_CITY_DEPARTMENT_STORE_1F))
     {
+        switch (gSaveBlock1Ptr->dynamicWarp.mapNum)
+        {
     case MAP_NUM(MAP_LILYCOVE_CITY_DEPARTMENT_STORE_1F):
         deptStoreFloor = DEPT_STORE_FLOORNUM_1F;
         break;
@@ -2327,6 +2473,65 @@ void SetDeptStoreFloor(void)
     default:
         deptStoreFloor = DEPT_STORE_FLOORNUM_1F;
         break;
+        }
+    }
+    else if (gSaveBlock1Ptr->dynamicWarp.mapGroup == MAP_GROUP(MAP_GOLDENROD_CITY_DEPARTMENT_STORE_BASEMENT))
+    {
+        switch (gSaveBlock1Ptr->dynamicWarp.mapNum)
+        {
+    case MAP_NUM(MAP_GOLDENROD_CITY_DEPARTMENT_STORE_BASEMENT):
+        deptStoreFloor = DEPT_STORE_FLOORNUM_B1F;
+        break;
+    case MAP_NUM(MAP_GOLDENROD_CITY_DEPARTMENT_STORE_1F):
+        deptStoreFloor = DEPT_STORE_FLOORNUM_1F;
+        break;
+    case MAP_NUM(MAP_GOLDENROD_CITY_DEPARTMENT_STORE_2F):
+        deptStoreFloor = DEPT_STORE_FLOORNUM_2F;
+        break;
+    case MAP_NUM(MAP_GOLDENROD_CITY_DEPARTMENT_STORE_3F):
+        deptStoreFloor = DEPT_STORE_FLOORNUM_3F;
+        break;
+    case MAP_NUM(MAP_GOLDENROD_CITY_DEPARTMENT_STORE_4F):
+        deptStoreFloor = DEPT_STORE_FLOORNUM_4F;
+        break;
+    case MAP_NUM(MAP_GOLDENROD_CITY_DEPARTMENT_STORE_5F):
+        deptStoreFloor = DEPT_STORE_FLOORNUM_5F;
+        break;
+    case MAP_NUM(MAP_GOLDENROD_CITY_DEPARTMENT_STORE_6F):
+        deptStoreFloor = DEPT_STORE_FLOORNUM_6F;
+        break;
+    default:
+        deptStoreFloor = DEPT_STORE_FLOORNUM_1F;
+        break;
+    }
+    }
+    else if (gSaveBlock1Ptr->dynamicWarp.mapGroup == MAP_GROUP(MAP_CELADON_DEPARTMENT1F))
+    {
+        switch (gSaveBlock1Ptr->dynamicWarp.mapNum)
+        {
+    case MAP_NUM(MAP_CELADON_DEPARTMENT1F):
+        deptStoreFloor = DEPT_STORE_FLOORNUM_1F;
+        break;
+    case MAP_NUM(MAP_CELADON_DEPARTMENT2F):
+        deptStoreFloor = DEPT_STORE_FLOORNUM_2F;
+        break;
+    case MAP_NUM(MAP_CELADON_DEPARTMENT3F):
+        deptStoreFloor = DEPT_STORE_FLOORNUM_3F;
+        break;
+    case MAP_NUM(MAP_CELADON_DEPARTMENT4F):
+        deptStoreFloor = DEPT_STORE_FLOORNUM_4F;
+        break;
+    case MAP_NUM(MAP_CELADON_DEPARTMENT5F):
+        deptStoreFloor = DEPT_STORE_FLOORNUM_5F;
+        break;
+    default:
+        deptStoreFloor = DEPT_STORE_FLOORNUM_1F;
+        break;
+    }
+    }
+    else
+    {
+        deptStoreFloor = DEPT_STORE_FLOORNUM_1F;
     }
     VarSet(VAR_DEPT_STORE_FLOOR, deptStoreFloor);
 }
@@ -2358,6 +2563,54 @@ u16 GetDeptStoreDefaultFloorChoice(void)
             break;
         case MAP_NUM(MAP_LILYCOVE_CITY_DEPARTMENT_STORE_1F):
             sLilycoveDeptStore_NeverRead = 0;
+            sLilycoveDeptStore_DefaultFloorChoice = 4;
+            break;
+        }
+    }
+    else if (gSaveBlock1Ptr->dynamicWarp.mapGroup == MAP_GROUP(MAP_GOLDENROD_CITY_DEPARTMENT_STORE_BASEMENT))
+    {
+        switch (gSaveBlock1Ptr->dynamicWarp.mapNum)
+        {
+        case MAP_NUM(MAP_GOLDENROD_CITY_DEPARTMENT_STORE_6F):
+            sLilycoveDeptStore_DefaultFloorChoice = 0;
+            break;
+        case MAP_NUM(MAP_GOLDENROD_CITY_DEPARTMENT_STORE_5F):
+            sLilycoveDeptStore_DefaultFloorChoice = 1;
+            break;
+        case MAP_NUM(MAP_GOLDENROD_CITY_DEPARTMENT_STORE_4F):
+            sLilycoveDeptStore_DefaultFloorChoice = 2;
+            break;
+        case MAP_NUM(MAP_GOLDENROD_CITY_DEPARTMENT_STORE_3F):
+            sLilycoveDeptStore_DefaultFloorChoice = 3;
+            break;
+        case MAP_NUM(MAP_GOLDENROD_CITY_DEPARTMENT_STORE_2F):
+            sLilycoveDeptStore_DefaultFloorChoice = 4;
+            break;
+        case MAP_NUM(MAP_GOLDENROD_CITY_DEPARTMENT_STORE_1F):
+            sLilycoveDeptStore_DefaultFloorChoice = 5;
+            break;
+        case MAP_NUM(MAP_GOLDENROD_CITY_DEPARTMENT_STORE_BASEMENT):
+            sLilycoveDeptStore_DefaultFloorChoice = 6;
+            break;
+        }
+    }
+    else if (gSaveBlock1Ptr->dynamicWarp.mapGroup == MAP_GROUP(MAP_CELADON_DEPARTMENT1F))
+    {
+        switch (gSaveBlock1Ptr->dynamicWarp.mapNum)
+        {
+        case MAP_NUM(MAP_CELADON_DEPARTMENT5F):
+            sLilycoveDeptStore_DefaultFloorChoice = 0;
+            break;
+        case MAP_NUM(MAP_CELADON_DEPARTMENT4F):
+            sLilycoveDeptStore_DefaultFloorChoice = 1;
+            break;
+        case MAP_NUM(MAP_CELADON_DEPARTMENT3F):
+            sLilycoveDeptStore_DefaultFloorChoice = 2;
+            break;
+        case MAP_NUM(MAP_CELADON_DEPARTMENT2F):
+            sLilycoveDeptStore_DefaultFloorChoice = 3;
+            break;
+        case MAP_NUM(MAP_CELADON_DEPARTMENT1F):
             sLilycoveDeptStore_DefaultFloorChoice = 4;
             break;
         }
@@ -4940,6 +5193,12 @@ u16 Special_OverworldWildEncounters_OnReturnToField(void)
     return 0;
 }
 
+u16 Special_OverworldWildEncounters_OnMapLoad(void)
+{
+    OverworldWildEncounters_OnMapLoad();
+    return 0;
+}
+
 void UseBlankMessageToCancelPokemonPic(void)
 {
     u8 t = EOS;
@@ -4959,4 +5218,200 @@ void GetCodeFeedback(void)
         gSpecialVar_Result = 1;
     else
         gSpecialVar_Result = 0;
+}
+
+static const u8 sRuinsOfAlphGuardianLocalIds[] =
+{
+    LOCALID_PHOTO_CAMERA_MON_1,
+    LOCALID_PHOTO_CAMERA_MON_2,
+    LOCALID_PHOTO_CAMERA_MON_3,
+};
+
+static const u16 sRuinsOfAlphGuardianSlotVars[] =
+{
+    VAR_RUINSOFALPH_GUARDIAN_SLOT_1_SPECIES,
+    VAR_RUINSOFALPH_GUARDIAN_SLOT_2_SPECIES,
+    VAR_RUINSOFALPH_GUARDIAN_SLOT_3_SPECIES,
+};
+
+static const u16 sRuinsOfAlphGuardianGraphicsVars[] =
+{
+    VAR_RUINSOFALPH_GUARDIAN_SLOT_1_GFX,
+    VAR_RUINSOFALPH_GUARDIAN_SLOT_2_GFX,
+    VAR_RUINSOFALPH_GUARDIAN_SLOT_3_GFX,
+};
+
+static const s16 sRuinsOfAlphGuardianCoords[][2] =
+{
+    {2, 8},
+    {4, 7},
+    {6, 8},
+};
+
+static u16 RuinsOfAlph_GetGuardianGraphicsId(struct Pokemon *mon)
+{
+    u16 species = GetMonData(mon, MON_DATA_SPECIES);
+    bool8 isShiny = IsMonShiny(mon);
+    u8 gender = GetMonGender(mon);
+    bool8 isShadow = GetMonData(mon, MON_DATA_IS_SHADOW);
+    u16 graphicsId = species + OBJ_EVENT_MON;
+
+    if (isShiny)
+        graphicsId |= OBJ_EVENT_MON_SHINY;
+    if (gender == MON_FEMALE)
+        graphicsId |= OBJ_EVENT_MON_FEMALE;
+    if (isShadow)
+        graphicsId |= OBJ_EVENT_MON_SHADOW;
+
+    return graphicsId;
+}
+
+static void RuinsOfAlph_ClearGuardianSlot(u8 slot)
+{
+    RemoveObjectEventByLocalIdAndMap(sRuinsOfAlphGuardianLocalIds[slot], gSaveBlock1Ptr->location.mapNum, gSaveBlock1Ptr->location.mapGroup);
+    VarSet(sRuinsOfAlphGuardianSlotVars[slot], SPECIES_NONE);
+    VarSet(sRuinsOfAlphGuardianGraphicsVars[slot], 0);
+}
+
+static bool8 RuinsOfAlph_SpawnGuardianSlotByGraphics(u8 slot, u16 species, u16 graphicsId)
+{
+    u8 objectEventId;
+
+    RemoveObjectEventByLocalIdAndMap(sRuinsOfAlphGuardianLocalIds[slot], gSaveBlock1Ptr->location.mapNum, gSaveBlock1Ptr->location.mapGroup);
+    objectEventId = SpawnSpecialObjectEventParameterized(
+        graphicsId,
+        MOVEMENT_TYPE_WALK_SLOWLY_IN_PLACE_DOWN,
+        sRuinsOfAlphGuardianLocalIds[slot],
+        sRuinsOfAlphGuardianCoords[slot][0] + MAP_OFFSET,
+        sRuinsOfAlphGuardianCoords[slot][1] + MAP_OFFSET,
+        0);
+
+    if (objectEventId == OBJECT_EVENTS_COUNT)
+        return FALSE;
+
+    ObjectEventTurn(&gObjectEvents[objectEventId], DIR_SOUTH);
+    VarSet(sRuinsOfAlphGuardianSlotVars[slot], species);
+    VarSet(sRuinsOfAlphGuardianGraphicsVars[slot], graphicsId);
+    return TRUE;
+}
+
+static bool8 RuinsOfAlph_SpawnGuardianSlot(u8 slot, u8 partyIndex)
+{
+    struct Pokemon *mon = &gPlayerParty[partyIndex];
+    u16 species = GetMonData(mon, MON_DATA_SPECIES);
+    u16 graphicsId = RuinsOfAlph_GetGuardianGraphicsId(mon);
+
+    return RuinsOfAlph_SpawnGuardianSlotByGraphics(slot, species, graphicsId);
+}
+
+u16 RuinsOfAlph_PlaceHoOhGuardianMon(void)
+{
+    u8 i;
+    u8 slot = gSpecialVar_0x8005;
+    u8 partyIndex = gSpecialVar_0x8004;
+    u16 species;
+
+    if (slot >= ARRAY_COUNT(sRuinsOfAlphGuardianSlotVars) || partyIndex >= PARTY_SIZE)
+        return FALSE;
+
+    species = GetMonData(&gPlayerParty[partyIndex], MON_DATA_SPECIES);
+    if (species == SPECIES_NONE || GetMonData(&gPlayerParty[partyIndex], MON_DATA_IS_EGG))
+        return FALSE;
+
+    for (i = 0; i < ARRAY_COUNT(sRuinsOfAlphGuardianSlotVars); i++)
+    {
+        if (i == slot)
+            continue;
+        if (VarGet(sRuinsOfAlphGuardianSlotVars[i]) == species)
+            return 2;
+    }
+
+    return RuinsOfAlph_SpawnGuardianSlot(slot, partyIndex);
+}
+
+u16 RuinsOfAlph_ClearHoOhGuardianMons(void)
+{
+    u8 i;
+
+    for (i = 0; i < ARRAY_COUNT(sRuinsOfAlphGuardianSlotVars); i++)
+        RuinsOfAlph_ClearGuardianSlot(i);
+
+    return TRUE;
+}
+
+u16 RuinsOfAlph_HasAnyHoOhGuardianMons(void)
+{
+    u8 i;
+
+    for (i = 0; i < ARRAY_COUNT(sRuinsOfAlphGuardianSlotVars); i++)
+    {
+        if (VarGet(sRuinsOfAlphGuardianSlotVars[i]) != SPECIES_NONE)
+            return TRUE;
+    }
+
+    return FALSE;
+}
+
+u16 RuinsOfAlph_HasThreeHoOhGuardianMons(void)
+{
+    u8 i;
+
+    for (i = 0; i < ARRAY_COUNT(sRuinsOfAlphGuardianSlotVars); i++)
+    {
+        if (VarGet(sRuinsOfAlphGuardianSlotVars[i]) == SPECIES_NONE)
+            return FALSE;
+    }
+
+    return TRUE;
+}
+
+u16 RuinsOfAlph_CheckHoOhGuardianMons(void)
+{
+    u8 i;
+    bool8 hasVaporeon = FALSE;
+    bool8 hasJolteon = FALSE;
+    bool8 hasFlareon = FALSE;
+
+    for (i = 0; i < ARRAY_COUNT(sRuinsOfAlphGuardianSlotVars); i++)
+    {
+        u16 species = VarGet(sRuinsOfAlphGuardianSlotVars[i]);
+        switch (species)
+        {
+        case SPECIES_VAPOREON:
+            hasVaporeon = TRUE;
+            break;
+        case SPECIES_JOLTEON:
+            hasJolteon = TRUE;
+            break;
+        case SPECIES_FLAREON:
+            hasFlareon = TRUE;
+            break;
+        }
+    }
+
+    return hasVaporeon && hasJolteon && hasFlareon;
+}
+
+u16 RuinsOfAlph_ReloadHoOhGuardianMons(void)
+{
+    u8 i;
+
+    for (i = 0; i < ARRAY_COUNT(sRuinsOfAlphGuardianSlotVars); i++)
+    {
+        u16 species = VarGet(sRuinsOfAlphGuardianSlotVars[i]);
+        u16 graphicsId = VarGet(sRuinsOfAlphGuardianGraphicsVars[i]);
+
+        if (species == SPECIES_NONE)
+        {
+            RemoveObjectEventByLocalIdAndMap(sRuinsOfAlphGuardianLocalIds[i], gSaveBlock1Ptr->location.mapNum, gSaveBlock1Ptr->location.mapGroup);
+            continue;
+        }
+
+        if (graphicsId == 0)
+            continue;
+
+        RuinsOfAlph_SpawnGuardianSlotByGraphics(i, species, graphicsId);
+    }
+
+    return TRUE;
 }

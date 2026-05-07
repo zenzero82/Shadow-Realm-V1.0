@@ -1,9 +1,13 @@
 Gate_RuinsOfAlph_Route32_MapScripts::
 	.byte 0
 
+Gate_RuinsOfAlph_Route32_Speaker_Youngster:
+	.string "YOUNGSTER$"
+
 Gate_RuinsOfAlph_Route32_EventScript_Youngster::
 	lock
 	faceplayer
+	setspeaker Gate_RuinsOfAlph_Route32_Speaker_Youngster
 	msgbox Gate_RuinsOfAlph_Route32_Text_Youngster, MSGBOX_DEFAULT
 	closemessage
 	release
@@ -14,4 +18,3 @@ Gate_RuinsOfAlph_Route32_Text_Youngster:
 	.string "panels.\p"
 	.string "I tried moving them.\n"
 	.string "I wonder what they are.$"
-

@@ -1313,11 +1313,15 @@ static void BagAction_UseInBattle(u8 taskId)
 {
     // Safety check
     u16 type = GetItemType(gSpecialVar_ItemId);
-    if (!GetItemBattleUsage(gSpecialVar_ItemId))
+    u16 battleUsage = GetItemBattleUsage(gSpecialVar_ItemId);
+
+    if (!battleUsage)
         return;
 
     CloseMenuActionWindow();
-    if (type == ITEM_USE_BAG_MENU)
+    if (battleUsage == EFFECT_ITEM_THROW_BALL)
+        ItemUseInBattle_PokeBall(taskId);
+    else if (type == ITEM_USE_BAG_MENU)
         ItemUseInBattle_BagMenu(taskId);
     else if (type == ITEM_USE_PARTY_MENU)
         ItemUseInBattle_PartyMenu(taskId);

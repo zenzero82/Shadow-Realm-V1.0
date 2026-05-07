@@ -82,6 +82,12 @@
 #define PSS_MOVE_DESC_WINDOW_WIDTH_PX (PSS_MOVE_DESC_WINDOW_WIDTH_TILES * 8)
 #define PSS_MOVE_DESC_MAX_WIDTH_PX (PSS_MOVE_DESC_WINDOW_WIDTH_PX - PSS_MOVE_DESC_TEXT_X - 1)
 #define PSS_MOVE_DESC_WORD_BUF_SIZE 256
+#define PSS_ABILITY_NAME_TEXT_X 60
+#define PSS_ABILITY_NAME_RIGHT_PADDING 6
+#define PSS_RIBBON_LABEL_TEXT_X 13
+#define PSS_RIBBON_NAME_TEXT_X 57
+#define PSS_RIBBON_DESC_TEXT_X 26
+#define PSS_RIBBON_NAME_RIGHT_PADDING 6
 
 // Internal summary screen modes (separate from SUMMARY_MODE_* in the public header)
 enum
@@ -163,6 +169,7 @@ static const u8 gText_FameChecker_Cancel[] = _("Cancel");
 static const u8 gText_8419C1D[] = _("Info");
 static const u8 gText_8419C2A[] = _("Skills");
 static const u8 gText_8419C39[] = _("Moves");
+static const u8 gText_PSS_Ribbons[] = _("Ribbons");
 static const u8 gText_8419C45[] = _("");
 static const u8 gText_8419C62[] = _("Switch");
 static const u8 gText_8419C72[] = _("Cancel");
@@ -174,6 +181,8 @@ static const u8 gText_8419CA9[] = _("Forget");
 static const u8 gText_PSS_RenameA[] = _("{A_BUTTON} RENAME");
 static const u8 gText_PSS_RelearnL[] = _("{L_BUTTON} RELEARN");
 static const u8 gText_PSS_EvIv[] = _("{A_BUTTON} EV-IV");
+static const u8 gText_PSS_NextRibbon[] = _("{A_BUTTON} NEXT");
+static const u8 gText_PSS_NoRibbons[] = _("No Ribbons");
 static const u8 gText_8419C4D[] = _("Exp. Points");
 static const u8 gText_8419C59[] = _("To Next Lv.");
 
@@ -208,7 +217,10 @@ extern const u32 gMapSummaryScreenMoves[];
 extern const u32 gMapSummaryScreenMoves2[];
 extern const u32 gMapSummaryScreenPokemonInfo[];
 extern const u32 gMapSummaryScreenPokemonSkills[];
- 
+extern const u16 gMapSummaryScreenRibbons[];
+extern const u8 *const gRibbonDescriptionPointers[][2];
+extern const u8 *const gGiftRibbonDescriptionPointers[MAX_GIFT_RIBBON][2];
+
 static s16 SeekToNextMonInBox(struct BoxPokemon * boxMons, u8 curIndex, u8 maxIndex, u8 flags);
 
 static void sub_8138B8C(struct Pokemon * mon);
@@ -217,6 +229,7 @@ static void PSS_PlayMonCry(void);
 static void PSS_RemoveAllWindows(u8 curPageIndex);
 static void sub_8134BAC(u8 taskId);
 static void sub_8134E84(u8 taskId);
+static void sub_81351A0(u8 taskId);
 static void sub_8134840(u8 taskId);
 static void sub_813B3F0(u8 taskId);
 static void sub_813B120(u8, s8);
@@ -256,6 +269,25 @@ static void CB2_ReturnToSummaryFromRename(void);
 static bool8 PSS_CanUseMoveRelearner(void);
 static void PSS_BeginMoveRelearnerFromSummary(void);
 static void CB2_StartMoveRelearnerFromSummary(void);
+static void PSS_LoadMonRibbons(void);
+static bool8 PSS_HasAnyRibbons(void);
+static u32 PSS_GetRibbonIdByListIndex(u8 index);
+static u32 PSS_GetSelectedRibbonId(void);
+static const u8 *PSS_GetRibbonTextLineByIndex(u8 index, u8 lineIndex);
+static const u8 *PSS_GetSelectedRibbonTextLine(u8 lineIndex);
+static void PSS_AddRibbonTextToWin3(void);
+static void PSS_AddRibbonTextToWin4(void);
+static void PSS_AddRibbonTextToWin5(void);
+static void PSS_UpdateRibbonSprite(void);
+static void PSS_SetInvisibleRibbonSprite(bool8 invisible);
+static void PSS_LoadRibbonSprite(void);
+static void PSS_UnloadRibbonSprite(void);
+static void PSS_RebuildRibbonPageTilemap(void);
+static void PSS_DrawRibbonGridToTilemap(u16 *tilemap);
+static void PSS_CopyPageTilemapRectToVram(u8 pageIndex, u8 x, u8 y, u8 width, u8 height);
+static void PSS_DrawRibbonGridToLiveBg(void);
+static u8 PSS_GetAdjacentVisiblePage(u8 curPageIndex, s8 direction);
+static void PSS_RebuildCurrentPageAndSetTask(void (*nextTask)(u8));
 static void PSS_InitTilemapCache(void);
 static void PSS_FreeTilemapCache(void);
 static void sub_813ACF8(u8 invisible);
@@ -373,7 +405,7 @@ struct PokemonSummaryScreenData
         u8 unk31A4[9];
         u8 unk31B0[9];
 
-        u8 abilityName[13];
+        u8 abilityName[ABILITY_NAME_LENGTH + 1];
         u8 abilityDescription[52];
     } summary;
 
@@ -550,10 +582,129 @@ static bool8 sSummaryTilemapCacheReady = FALSE;
 static bool8 sSummaryScreenOverridePageActive = FALSE;
 static u8 sSummaryScreenOverridePage;
 static MainCallback sSummaryScreenExitCallbackOverride = NULL;
+static u32 sSummaryRibbonIds[FIRST_GIFT_RIBBON];
+static u32 sSummaryGiftRibbonIds[NUM_GIFT_RIBBONS];
+static u8 sSummaryRibbonCount;
+static u8 sSummaryGiftRibbonCount;
+static u8 sSummaryRibbonIndex;
+static struct Sprite *sSummaryRibbonSprite;
+
+enum
+{
+    SUMMARY_RIBBONGFX_CHAMPION,
+    SUMMARY_RIBBONGFX_CONTEST_NORMAL,
+    SUMMARY_RIBBONGFX_CONTEST_SUPER,
+    SUMMARY_RIBBONGFX_CONTEST_HYPER,
+    SUMMARY_RIBBONGFX_CONTEST_MASTER,
+    SUMMARY_RIBBONGFX_WINNING,
+    SUMMARY_RIBBONGFX_VICTORY,
+    SUMMARY_RIBBONGFX_ARTIST,
+    SUMMARY_RIBBONGFX_EFFORT,
+    SUMMARY_RIBBONGFX_GIFT_1,
+    SUMMARY_RIBBONGFX_GIFT_2,
+    SUMMARY_RIBBONGFX_GIFT_3,
+};
+
+#define SUMMARY_RIBBON_GFX_TAG 0xA600
+#define SUMMARY_RIBBON_SMALL_GFX_TAG 0xA601
+#define SUMMARY_RIBBON_PALTAG_1 0xA610
+#define SUMMARY_RIBBON_PALTAG_2 0xA611
+#define SUMMARY_RIBBON_PALTAG_3 0xA612
+#define SUMMARY_RIBBON_PALTAG_4 0xA613
+#define SUMMARY_RIBBON_PALTAG_5 0xA614
+#define SUMMARY_RIBBON_SMALL_BG_TILE_OFFSET 0x300
+#define SUMMARY_RIBBON_SMALL_BG_PAL_1 8
+#define SUMMARY_RIBBON_SMALL_BG_PAL_2 9
+#define SUMMARY_RIBBON_SMALL_BG_PAL_3 10
+#define SUMMARY_RIBBON_SMALL_BG_PAL_4 11
+#define SUMMARY_RIBBON_SMALL_BG_PAL_5 12
+#define SUMMARY_RIBBON_GRID_START_X 1
+#define SUMMARY_RIBBON_GRID_START_Y 3
+#define SUMMARY_RIBBON_GRID_COLUMNS 8
+#define SUMMARY_RIBBON_GRID_ROWS 6
+#define SUMMARY_RIBBON_GRID_TILE_SPACING 2
+#define SUMMARY_RIBBON_GRID_CAPACITY (SUMMARY_RIBBON_GRID_COLUMNS * SUMMARY_RIBBON_GRID_ROWS)
+#define SUMMARY_TO_PAL_OFFSET(palNum) ((palNum) - SUMMARY_RIBBON_PALTAG_1)
+
+static const struct
+{
+    u8 numBits;
+    u8 numRibbons;
+    u8 ribbonId;
+    bool8 isGiftRibbon;
+} sSummaryRibbonData[] =
+{
+    {1, 1, CHAMPION_RIBBON,      FALSE},
+    {3, 4, COOL_RIBBON_NORMAL,   FALSE},
+    {3, 4, BEAUTY_RIBBON_NORMAL, FALSE},
+    {3, 4, CUTE_RIBBON_NORMAL,   FALSE},
+    {3, 4, SMART_RIBBON_NORMAL,  FALSE},
+    {3, 4, TOUGH_RIBBON_NORMAL,  FALSE},
+    {1, 1, WINNING_RIBBON,       FALSE},
+    {1, 1, VICTORY_RIBBON,       FALSE},
+    {1, 1, ARTIST_RIBBON,        FALSE},
+    {1, 1, EFFORT_RIBBON,        FALSE},
+    {1, 1, MARINE_RIBBON,        TRUE},
+    {1, 1, LAND_RIBBON,          TRUE},
+    {1, 1, SKY_RIBBON,           TRUE},
+    {1, 1, COUNTRY_RIBBON,       TRUE},
+    {1, 1, NATIONAL_RIBBON,      TRUE},
+    {1, 1, EARTH_RIBBON,         TRUE},
+    {1, 1, WORLD_RIBBON,         TRUE},
+};
+
+static const struct
+{
+    u16 tileNumOffset;
+    u16 palNumOffset;
+} sSummaryRibbonGfxData[] =
+{
+    [CHAMPION_RIBBON]      = { SUMMARY_RIBBONGFX_CHAMPION,       SUMMARY_TO_PAL_OFFSET(SUMMARY_RIBBON_PALTAG_1)},
+    [COOL_RIBBON_NORMAL]   = { SUMMARY_RIBBONGFX_CONTEST_NORMAL, SUMMARY_TO_PAL_OFFSET(SUMMARY_RIBBON_PALTAG_1)},
+    [COOL_RIBBON_SUPER]    = { SUMMARY_RIBBONGFX_CONTEST_SUPER,  SUMMARY_TO_PAL_OFFSET(SUMMARY_RIBBON_PALTAG_1)},
+    [COOL_RIBBON_HYPER]    = { SUMMARY_RIBBONGFX_CONTEST_HYPER,  SUMMARY_TO_PAL_OFFSET(SUMMARY_RIBBON_PALTAG_1)},
+    [COOL_RIBBON_MASTER]   = { SUMMARY_RIBBONGFX_CONTEST_MASTER, SUMMARY_TO_PAL_OFFSET(SUMMARY_RIBBON_PALTAG_1)},
+    [BEAUTY_RIBBON_NORMAL] = { SUMMARY_RIBBONGFX_CONTEST_NORMAL, SUMMARY_TO_PAL_OFFSET(SUMMARY_RIBBON_PALTAG_2)},
+    [BEAUTY_RIBBON_SUPER]  = { SUMMARY_RIBBONGFX_CONTEST_SUPER,  SUMMARY_TO_PAL_OFFSET(SUMMARY_RIBBON_PALTAG_2)},
+    [BEAUTY_RIBBON_HYPER]  = { SUMMARY_RIBBONGFX_CONTEST_HYPER,  SUMMARY_TO_PAL_OFFSET(SUMMARY_RIBBON_PALTAG_2)},
+    [BEAUTY_RIBBON_MASTER] = { SUMMARY_RIBBONGFX_CONTEST_MASTER, SUMMARY_TO_PAL_OFFSET(SUMMARY_RIBBON_PALTAG_2)},
+    [CUTE_RIBBON_NORMAL]   = { SUMMARY_RIBBONGFX_CONTEST_NORMAL, SUMMARY_TO_PAL_OFFSET(SUMMARY_RIBBON_PALTAG_3)},
+    [CUTE_RIBBON_SUPER]    = { SUMMARY_RIBBONGFX_CONTEST_SUPER,  SUMMARY_TO_PAL_OFFSET(SUMMARY_RIBBON_PALTAG_3)},
+    [CUTE_RIBBON_HYPER]    = { SUMMARY_RIBBONGFX_CONTEST_HYPER,  SUMMARY_TO_PAL_OFFSET(SUMMARY_RIBBON_PALTAG_3)},
+    [CUTE_RIBBON_MASTER]   = { SUMMARY_RIBBONGFX_CONTEST_MASTER, SUMMARY_TO_PAL_OFFSET(SUMMARY_RIBBON_PALTAG_3)},
+    [SMART_RIBBON_NORMAL]  = { SUMMARY_RIBBONGFX_CONTEST_NORMAL, SUMMARY_TO_PAL_OFFSET(SUMMARY_RIBBON_PALTAG_4)},
+    [SMART_RIBBON_SUPER]   = { SUMMARY_RIBBONGFX_CONTEST_SUPER,  SUMMARY_TO_PAL_OFFSET(SUMMARY_RIBBON_PALTAG_4)},
+    [SMART_RIBBON_HYPER]   = { SUMMARY_RIBBONGFX_CONTEST_HYPER,  SUMMARY_TO_PAL_OFFSET(SUMMARY_RIBBON_PALTAG_4)},
+    [SMART_RIBBON_MASTER]  = { SUMMARY_RIBBONGFX_CONTEST_MASTER, SUMMARY_TO_PAL_OFFSET(SUMMARY_RIBBON_PALTAG_4)},
+    [TOUGH_RIBBON_NORMAL]  = { SUMMARY_RIBBONGFX_CONTEST_NORMAL, SUMMARY_TO_PAL_OFFSET(SUMMARY_RIBBON_PALTAG_5)},
+    [TOUGH_RIBBON_SUPER]   = { SUMMARY_RIBBONGFX_CONTEST_SUPER,  SUMMARY_TO_PAL_OFFSET(SUMMARY_RIBBON_PALTAG_5)},
+    [TOUGH_RIBBON_HYPER]   = { SUMMARY_RIBBONGFX_CONTEST_HYPER,  SUMMARY_TO_PAL_OFFSET(SUMMARY_RIBBON_PALTAG_5)},
+    [TOUGH_RIBBON_MASTER]  = { SUMMARY_RIBBONGFX_CONTEST_MASTER, SUMMARY_TO_PAL_OFFSET(SUMMARY_RIBBON_PALTAG_5)},
+    [WINNING_RIBBON]       = { SUMMARY_RIBBONGFX_WINNING,        SUMMARY_TO_PAL_OFFSET(SUMMARY_RIBBON_PALTAG_1)},
+    [VICTORY_RIBBON]       = { SUMMARY_RIBBONGFX_VICTORY,        SUMMARY_TO_PAL_OFFSET(SUMMARY_RIBBON_PALTAG_1)},
+    [ARTIST_RIBBON]        = { SUMMARY_RIBBONGFX_ARTIST,         SUMMARY_TO_PAL_OFFSET(SUMMARY_RIBBON_PALTAG_2)},
+    [EFFORT_RIBBON]        = { SUMMARY_RIBBONGFX_EFFORT,         SUMMARY_TO_PAL_OFFSET(SUMMARY_RIBBON_PALTAG_3)},
+    [MARINE_RIBBON]        = { SUMMARY_RIBBONGFX_GIFT_1,         SUMMARY_TO_PAL_OFFSET(SUMMARY_RIBBON_PALTAG_2)},
+    [LAND_RIBBON]          = { SUMMARY_RIBBONGFX_GIFT_1,         SUMMARY_TO_PAL_OFFSET(SUMMARY_RIBBON_PALTAG_4)},
+    [SKY_RIBBON]           = { SUMMARY_RIBBONGFX_GIFT_1,         SUMMARY_TO_PAL_OFFSET(SUMMARY_RIBBON_PALTAG_5)},
+    [COUNTRY_RIBBON]       = { SUMMARY_RIBBONGFX_GIFT_2,         SUMMARY_TO_PAL_OFFSET(SUMMARY_RIBBON_PALTAG_4)},
+    [NATIONAL_RIBBON]      = { SUMMARY_RIBBONGFX_GIFT_2,         SUMMARY_TO_PAL_OFFSET(SUMMARY_RIBBON_PALTAG_5)},
+    [EARTH_RIBBON]         = { SUMMARY_RIBBONGFX_GIFT_3,         SUMMARY_TO_PAL_OFFSET(SUMMARY_RIBBON_PALTAG_1)},
+    [WORLD_RIBBON]         = { SUMMARY_RIBBONGFX_GIFT_3,         SUMMARY_TO_PAL_OFFSET(SUMMARY_RIBBON_PALTAG_2)},
+};
+
+#undef SUMMARY_TO_PAL_OFFSET
 
 static const u32 sUnknown_84636C0[] = INCBIN_U32("graphics/summary_screen_bw/pokesummary_unk_84636C0.gbapal");
 static const u16 sUnknown_84636E0[] = INCBIN_U16("graphics/summary_screen_bw/pokesummary_unk_84636E0.gbapal");
 static const u32 sUnknown_8463700[] = INCBIN_U32("graphics/summary_screen_bw/pokesummary_unk_8463700.gbapal");
+static const u16 sSummaryRibbonIcons1_Pal[] = INCBIN_U16("graphics/pokenav/ribbons/icons1.gbapal");
+static const u16 sSummaryRibbonIcons2_Pal[] = INCBIN_U16("graphics/pokenav/ribbons/icons2.gbapal");
+static const u16 sSummaryRibbonIcons3_Pal[] = INCBIN_U16("graphics/pokenav/ribbons/icons3.gbapal");
+static const u16 sSummaryRibbonIcons4_Pal[] = INCBIN_U16("graphics/pokenav/ribbons/icons4.gbapal");
+static const u16 sSummaryRibbonIcons5_Pal[] = INCBIN_U16("graphics/pokenav/ribbons/icons5.gbapal");
+static const u32 sSummaryRibbonIconsSmall_Gfx[] = INCBIN_U32("graphics/pokenav/ribbons/icons.4bpp.lz");
+static const u32 sSummaryRibbonIconsBig_Gfx[] = INCBIN_U32("graphics/pokenav/ribbons/icons_big.4bpp.lz");
 
 static const struct OamData sUnknown_846398C =
 {
@@ -614,6 +765,92 @@ static const union AnimCmd sUnknown_84639BC[] =
 {
     ANIMCMD_FRAME(4, 20),
     ANIMCMD_JUMP(0),
+};
+
+static const struct CompressedSpriteSheet sSpriteSheet_SummaryRibbonIconsBig =
+{
+    sSummaryRibbonIconsBig_Gfx, 0x1800, SUMMARY_RIBBON_GFX_TAG
+};
+
+static const struct CompressedSpriteSheet sSpriteSheet_SummaryRibbonIconsSmall =
+{
+    sSummaryRibbonIconsSmall_Gfx, 0x300, SUMMARY_RIBBON_SMALL_GFX_TAG
+};
+
+static const struct SpritePalette sSpritePalettes_SummaryRibbonIcons[] =
+{
+    {sSummaryRibbonIcons1_Pal, SUMMARY_RIBBON_PALTAG_1},
+    {sSummaryRibbonIcons2_Pal, SUMMARY_RIBBON_PALTAG_2},
+    {sSummaryRibbonIcons3_Pal, SUMMARY_RIBBON_PALTAG_3},
+    {sSummaryRibbonIcons4_Pal, SUMMARY_RIBBON_PALTAG_4},
+    {sSummaryRibbonIcons5_Pal, SUMMARY_RIBBON_PALTAG_5},
+    {},
+};
+
+static const struct OamData sOamData_SummaryRibbonIconBig =
+{
+    .y = 0,
+    .affineMode = ST_OAM_AFFINE_NORMAL,
+    .objMode = ST_OAM_OBJ_NORMAL,
+    .mosaic = FALSE,
+    .bpp = ST_OAM_4BPP,
+    .shape = SPRITE_SHAPE(32x32),
+    .x = 0,
+    .matrixNum = 0,
+    .size = SPRITE_SIZE(32x32),
+    .tileNum = 0,
+    .priority = 1,
+    .paletteNum = 0,
+    .affineParam = 0
+};
+
+static const union AffineAnimCmd sAffineAnim_SummaryRibbonIconBig[] =
+{
+    AFFINEANIMCMD_FRAME(128, 128, 0, 0),
+    AFFINEANIMCMD_END
+};
+
+static const union AffineAnimCmd *const sAffineAnims_SummaryRibbonIconBig[] =
+{
+    sAffineAnim_SummaryRibbonIconBig
+};
+
+static const struct SpriteTemplate sSpriteTemplate_SummaryRibbonIconBig =
+{
+    .tileTag = SUMMARY_RIBBON_GFX_TAG,
+    .paletteTag = SUMMARY_RIBBON_PALTAG_1,
+    .oam = &sOamData_SummaryRibbonIconBig,
+    .anims = gDummySpriteAnimTable,
+    .images = NULL,
+    .affineAnims = sAffineAnims_SummaryRibbonIconBig,
+    .callback = SpriteCallbackDummy,
+};
+
+static const struct OamData sOamData_SummaryRibbonIconSmall =
+{
+    .y = 0,
+    .affineMode = ST_OAM_AFFINE_OFF,
+    .objMode = ST_OAM_OBJ_NORMAL,
+    .mosaic = FALSE,
+    .bpp = ST_OAM_4BPP,
+    .shape = SPRITE_SHAPE(8x8),
+    .x = 0,
+    .matrixNum = 0,
+    .size = SPRITE_SIZE(8x8),
+    .tileNum = 0,
+    .priority = 1,
+    .paletteNum = 0,
+};
+
+static const struct SpriteTemplate sSpriteTemplate_SummaryRibbonIconSmall =
+{
+    .tileTag = SUMMARY_RIBBON_SMALL_GFX_TAG,
+    .paletteTag = SUMMARY_RIBBON_PALTAG_1,
+    .oam = &sOamData_SummaryRibbonIconSmall,
+    .anims = gDummySpriteAnimTable,
+    .images = NULL,
+    .affineAnims = gDummySpriteAffineAnimTable,
+    .callback = SpriteCallbackDummy,
 };
 
 static const union AnimCmd sUnknown_84639C4[] = 
@@ -1665,6 +1902,8 @@ static void PSS_InitTilemapCache(void)
     LZ77UnCompWram(gMapSummaryScreenEgg, sSummaryPageTilemapEgg);
     LZ77UnCompWram(gMapSummaryScreenPokemonSkills, sSummaryPageTilemaps[PSS_PAGE_SKILLS]);
     LZ77UnCompWram(gMapSummaryScreenKnownMoves, sSummaryPageTilemaps[PSS_PAGE_MOVES]);
+    CpuFill16(0, sSummaryPageTilemaps[PSS_PAGE_RIBBONS], SUMMARY_PAGE_TILEMAP_SIZE);
+    CpuCopy16(gMapSummaryScreenRibbons, sSummaryPageTilemaps[PSS_PAGE_RIBBONS], 1280);
     LZ77UnCompWram(gMapSummaryScreenMovesInfo, sSummaryPageTilemaps[PSS_PAGE_MOVES_INFO]);
     LZ77UnCompWram(gMapSummaryScreenMoves2, sSummaryMovesTilemap);
     LZ77UnCompWram(gMapSummaryScreenMoves, sSummaryMovesInfoTilemap);
@@ -1858,6 +2097,58 @@ u32 sub_81347A4(u8 a0)
     return FALSE;
 }
 
+static u8 PSS_GetAdjacentVisiblePage(u8 curPageIndex, s8 direction)
+{
+    if (curPageIndex == PSS_PAGE_MOVES_INFO)
+        return PSS_PAGE_MOVES;
+
+    if (direction > 0)
+    {
+        if (curPageIndex == PSS_PAGE_MOVES)
+            return PSS_PAGE_RIBBONS;
+        return curPageIndex + 1;
+    }
+    else
+    {
+        if (curPageIndex == PSS_PAGE_RIBBONS)
+            return PSS_PAGE_MOVES;
+        return curPageIndex - 1;
+    }
+}
+
+static bool8 PSS_IsReturningFromMovesInfoToMoves(void)
+{
+    return sMonSummaryScreen->curPageIndex == PSS_PAGE_MOVES
+        && gTasks[sMonSummaryScreen->task].func == sub_81351A0;
+}
+
+static void PSS_RebuildCurrentPageAndSetTask(void (*nextTask)(u8))
+{
+    u8 i;
+
+    sub_8138280(sMonSummaryScreen->curPageIndex);
+    sub_8138538();
+    sub_8137D28(sMonSummaryScreen->curPageIndex);
+    PSS_AddTextToWin3();
+    PSS_AddTextToWin4();
+    PSS_AddTextToWin5();
+
+    for (i = 0; i < 7; i++)
+        CopyWindowToVram(sMonSummaryScreen->window[i], 2);
+
+    HideBg(0);
+    CopyBgTilemapBufferToVram(0);
+    ShowBg(0);
+
+    if (sMonSummaryScreen->curPageIndex == PSS_PAGE_MOVES_INFO)
+        sub_813A0E8(0);
+    else
+        sub_813A0E8(1);
+
+    PSS_SetHelpContext();
+    gTasks[sMonSummaryScreen->task].func = nextTask;
+}
+
 static void sub_8134840(u8 taskId)
 {
     switch (sMonSummaryScreen->state3270) {
@@ -1892,16 +2183,19 @@ static void sub_8134840(u8 taskId)
                     sMonSummaryScreen->unk3300[0] = 1;
                     return;
                 }
-                else if (sMonSummaryScreen->curPageIndex < PSS_PAGE_MOVES)
+                else if (sMonSummaryScreen->curPageIndex < PSS_PAGE_RIBBONS)
                 {
                     PlaySE(SE_SELECT);
                     sMonSummaryScreen->unk3224 = 1;
                     PSS_RemoveAllWindows(sMonSummaryScreen->curPageIndex);
-                    sMonSummaryScreen->curPageIndex++;
+                    sMonSummaryScreen->curPageIndex = PSS_GetAdjacentVisiblePage(sMonSummaryScreen->curPageIndex, 1);
                     PSS_ClearWindow2Tilemap();
                     PSS_SetMonSpritePositionForPage();
                     PSS_SetMonIconPositionForPage();
-                    sMonSummaryScreen->state3270 = PSS_STATE3270_3;
+                    if (sMonSummaryScreen->curPageIndex == PSS_PAGE_RIBBONS)
+                        PSS_RebuildCurrentPageAndSetTask(sub_8134840);
+                    else
+                        sMonSummaryScreen->state3270 = PSS_STATE3270_3;
                 }
                 return;
             }
@@ -1917,11 +2211,14 @@ static void sub_8134840(u8 taskId)
                     PlaySE(SE_SELECT);
                     sMonSummaryScreen->unk3224 = 0;
                     PSS_RemoveAllWindows(sMonSummaryScreen->curPageIndex);
-                    sMonSummaryScreen->curPageIndex--;
+                    sMonSummaryScreen->curPageIndex = PSS_GetAdjacentVisiblePage(sMonSummaryScreen->curPageIndex, -1);
                     PSS_ClearWindow2Tilemap();
                     PSS_SetMonSpritePositionForPage();
                     PSS_SetMonIconPositionForPage();
-                    sMonSummaryScreen->state3270 = PSS_STATE3270_3;
+                    if (sMonSummaryScreen->curPageIndex == PSS_PAGE_RIBBONS || sMonSummaryScreen->curPageIndex == PSS_PAGE_MOVES)
+                        PSS_RebuildCurrentPageAndSetTask(sub_8134840);
+                    else
+                        sMonSummaryScreen->state3270 = PSS_STATE3270_3;
                 }
                 return;
             }
@@ -1974,11 +2271,29 @@ static void sub_8134840(u8 taskId)
                     PlaySE(SE_SELECT);
                     sMonSummaryScreen->unk3224 = 1;
                     PSS_RemoveAllWindows(sMonSummaryScreen->curPageIndex);
-                    sMonSummaryScreen->curPageIndex++;
+                    sMonSummaryScreen->curPageIndex = PSS_PAGE_MOVES_INFO;
                     PSS_ClearWindow2Tilemap();
                     PSS_SetMonSpritePositionForPage();
                     PSS_SetMonIconPositionForPage();
-                    sMonSummaryScreen->state3270 = PSS_STATE3270_3;
+                    PSS_RebuildCurrentPageAndSetTask(sub_8138CD8);
+                }
+                else if (sMonSummaryScreen->curPageIndex == PSS_PAGE_RIBBONS)
+                {
+                    PSS_LoadMonRibbons();
+                    if (PSS_HasAnyRibbons())
+                    {
+                        PlaySE(SE_SELECT);
+                        sSummaryRibbonIndex++;
+                        if (sSummaryRibbonIndex >= sSummaryRibbonCount + sSummaryGiftRibbonCount)
+                            sSummaryRibbonIndex = 0;
+                        PSS_AddTextToWin3();
+                        PSS_AddTextToWin4();
+                        PSS_AddTextToWin5();
+                        PSS_UpdateRibbonSprite();
+                        CopyWindowToVram(sMonSummaryScreen->window[3], 2);
+                        CopyWindowToVram(sMonSummaryScreen->window[4], 2);
+                        CopyWindowToVram(sMonSummaryScreen->window[5], 2);
+                    }
                 }
                 return;
             }
@@ -2295,9 +2610,16 @@ static void sub_81351A0(u8 taskId)
 static void sub_8135514(void)
 {
     s8 pageDelta = 1;
+    u8 adjacentPage;
 
     if (sMonSummaryScreen->unk3224 == 1)
         pageDelta = -1;
+
+    adjacentPage = PSS_IsReturningFromMovesInfoToMoves()
+        ? PSS_PAGE_MOVES_INFO
+        : (sMonSummaryScreen->curPageIndex == PSS_PAGE_MOVES_INFO)
+        ? PSS_PAGE_MOVES
+        : PSS_GetAdjacentVisiblePage(sMonSummaryScreen->curPageIndex, pageDelta);
 
     if (sMonSummaryScreen->curPageIndex == PSS_PAGE_MOVES_INFO)
     {
@@ -2305,7 +2627,7 @@ static void sub_8135514(void)
         return;
     }
 
-    if ((sMonSummaryScreen->curPageIndex + pageDelta) == PSS_PAGE_MOVES_INFO)
+    if (adjacentPage == PSS_PAGE_MOVES_INFO)
     {
         sMonSummaryScreen->unk324C = 0;
         return;
@@ -2328,10 +2650,11 @@ static void sub_8135638(void)
 {
     u8 newPage;
 
-    if (sMonSummaryScreen->unk3224 == 1)
-        newPage = sMonSummaryScreen->curPageIndex - 1;
+    if (PSS_IsReturningFromMovesInfoToMoves())
+        newPage = PSS_PAGE_MOVES_INFO;
     else
-        newPage = sMonSummaryScreen->curPageIndex + 1;
+        newPage = PSS_GetAdjacentVisiblePage(sMonSummaryScreen->curPageIndex,
+                                             sMonSummaryScreen->unk3224 == 1 ? -1 : 1);
 
     switch (newPage)
     {
@@ -2342,6 +2665,10 @@ static void sub_8135638(void)
     case PSS_PAGE_SKILLS:
         PSS_SetInvisibleHpBar(0);
         PSS_SetInvisibleExpBar(0);
+        break;
+    case PSS_PAGE_RIBBONS:
+        PSS_SetInvisibleHpBar(1);
+        PSS_SetInvisibleExpBar(1);
         break;
     case PSS_PAGE_MOVES:
         if (sMonSummaryScreen->unk3224 == 1)
@@ -2373,10 +2700,11 @@ static void sub_81356EC(void)
 {
     u8 newPage;
 
-    if (sMonSummaryScreen->unk3224 == 1)
-        newPage = sMonSummaryScreen->curPageIndex - 1;
+    if (PSS_IsReturningFromMovesInfoToMoves())
+        newPage = PSS_PAGE_MOVES_INFO;
     else
-        newPage = sMonSummaryScreen->curPageIndex + 1;
+        newPage = PSS_GetAdjacentVisiblePage(sMonSummaryScreen->curPageIndex,
+                                             sMonSummaryScreen->unk3224 == 1 ? -1 : 1);
 
     switch (newPage)
     {
@@ -2385,6 +2713,8 @@ static void sub_81356EC(void)
         PSS_SetInvisibleExpBar(1);
         break;
     case PSS_PAGE_SKILLS:
+        break;
+    case PSS_PAGE_RIBBONS:
         break;
     case PSS_PAGE_MOVES:
         if (sMonSummaryScreen->unk3224 != 0)
@@ -2409,9 +2739,16 @@ static void sub_81356EC(void)
 static u8 sub_81357A0(u8 a0)
 {
     s8 pageDelta = 1;
+    u8 adjacentPage;
 
     if (sMonSummaryScreen->unk3224 == 1)
         pageDelta = -1;
+
+    adjacentPage = PSS_IsReturningFromMovesInfoToMoves()
+        ? PSS_PAGE_MOVES_INFO
+        : (sMonSummaryScreen->curPageIndex == PSS_PAGE_MOVES_INFO)
+        ? PSS_PAGE_MOVES
+        : PSS_GetAdjacentVisiblePage(sMonSummaryScreen->curPageIndex, pageDelta);
 
     if (sMonSummaryScreen->curPageIndex == PSS_PAGE_MOVES_INFO)
         if (sMonSummaryScreen->unk324C <= 0)
@@ -2422,7 +2759,7 @@ static u8 sub_81357A0(u8 a0)
             return TRUE;
         }
 
-    if ((sMonSummaryScreen->curPageIndex + pageDelta) == PSS_PAGE_MOVES_INFO)
+    if (adjacentPage == PSS_PAGE_MOVES_INFO)
         if (sMonSummaryScreen->unk324C >= 240)
         {
             sMonSummaryScreen->unk324C = 240;
@@ -2456,16 +2793,19 @@ static void sub_8135AA4(void)
 {
     u8 newPage;
 
-    if (sMonSummaryScreen->unk3224 == 1)
-        newPage = sMonSummaryScreen->curPageIndex - 1;
+    if (PSS_IsReturningFromMovesInfoToMoves())
+        newPage = PSS_PAGE_MOVES_INFO;
     else
-        newPage = sMonSummaryScreen->curPageIndex + 1;
+        newPage = PSS_GetAdjacentVisiblePage(sMonSummaryScreen->curPageIndex,
+                                             sMonSummaryScreen->unk3224 == 1 ? -1 : 1);
 
     switch (newPage)
     {
     case PSS_PAGE_INFO:
         break;
     case PSS_PAGE_SKILLS:
+        break;
+    case PSS_PAGE_RIBBONS:
         break;
     case PSS_PAGE_MOVES:
         break;
@@ -2478,16 +2818,19 @@ static void sub_8135B90(void)
 {
     u8 newPage;
 
-    if (sMonSummaryScreen->unk3224 == 1)
-        newPage = sMonSummaryScreen->curPageIndex - 1;
+    if (PSS_IsReturningFromMovesInfoToMoves())
+        newPage = PSS_PAGE_MOVES_INFO;
     else
-        newPage = sMonSummaryScreen->curPageIndex + 1;
+        newPage = PSS_GetAdjacentVisiblePage(sMonSummaryScreen->curPageIndex,
+                                             sMonSummaryScreen->unk3224 == 1 ? -1 : 1);
 
     switch (newPage)
     {
     case PSS_PAGE_INFO:
         break;
     case PSS_PAGE_SKILLS:
+        break;
+    case PSS_PAGE_RIBBONS:
         break;
     case PSS_PAGE_MOVES:
         break;
@@ -2997,8 +3340,29 @@ static void sub_8136D54(void)
 
 static void PSS_AddTextToWin0(const u8 * str)
 {
+    s32 width;
+    s16 x;
+    bool8 isRibbonPage;
+    const u8 *titleColours;
+
     FillWindowPixelBuffer(sMonSummaryScreen->window[0], 0);
-    AddTextPrinterParameterized3(sMonSummaryScreen->window[0], 2, 4, 1, sPSSTextColours[WHITE_TITLE], 0, str);
+    isRibbonPage = (sMonSummaryScreen->curPageIndex == PSS_PAGE_RIBBONS);
+    SetWindowAttribute(sMonSummaryScreen->window[0], WINDOW_PALETTE_NUM, isRibbonPage ? 6 : 7);
+    titleColours = isRibbonPage
+        ? sPSSTextColours[DARK]
+        : sPSSTextColours[WHITE_TITLE];
+    AddTextPrinterParameterized3(sMonSummaryScreen->window[0], 2, 4, 1, titleColours, 0, str);
+
+    if (isRibbonPage)
+    {
+        ConvertIntToDecimalStringN(gStringVar1, sSummaryRibbonCount + sSummaryGiftRibbonCount, STR_CONV_MODE_LEFT_ALIGN, 2);
+        width = GetStringWidth(2, gStringVar1, 0);
+        x = WindowWidthPx(sMonSummaryScreen->window[0]) - width - 4;
+        if (x < 0)
+            x = 0;
+        AddTextPrinterParameterized3(sMonSummaryScreen->window[0], 2, x, 1, titleColours, 0, gStringVar1);
+    }
+
     PutWindowTilemap(sMonSummaryScreen->window[0]);
 }
 
@@ -3111,13 +3475,24 @@ static void PSS_AddTextToWin3(void)
     case PSS_PAGE_SKILLS:
         PSS_ShowMonStats();
         break;
+    case PSS_PAGE_RIBBONS:
+        PSS_LoadMonRibbons();
+        PSS_AddRibbonTextToWin3();
+        break;
     case PSS_PAGE_MOVES:
     case PSS_PAGE_MOVES_INFO:
         PSS_PrintMoveNamesOrCancel();
         break;
     }
-
-    PutWindowTilemap(sMonSummaryScreen->window[3]);
+    if (sMonSummaryScreen->curPageIndex == PSS_PAGE_RIBBONS)
+    {
+        ClearWindowTilemap(sMonSummaryScreen->window[3]);
+        ScheduleBgCopyTilemapToVram(0);
+    }
+    else
+    {
+        PutWindowTilemap(sMonSummaryScreen->window[3]);
+    }
 }
 
 static void PSS_ShowInfoPokemon(void)
@@ -3288,8 +3663,214 @@ static void PSS_PrintMoveNamesAndPP(u8 i)
 		// Add Slash
         AddTextPrinterParameterized3(sMonSummaryScreen->window[3], 2, 52, MACRO_81372E4(i) + movesPageYOffset, sPSSTextColours[color], TEXT_SPEED_FF, gText_Slash);
         // Add PP Max
-		AddTextPrinterParameterized3(sMonSummaryScreen->window[3], 2, 58 + sUnknown_203B144->unk1C[i], MACRO_81372E4(i) + movesPageYOffset, sPSSTextColours[color], TEXT_SPEED_FF, sMonSummaryScreen->summary.unk30F0[i]);
+        AddTextPrinterParameterized3(sMonSummaryScreen->window[3], 2, 58 + sUnknown_203B144->unk1C[i], MACRO_81372E4(i) + movesPageYOffset, sPSSTextColours[color], TEXT_SPEED_FF, sMonSummaryScreen->summary.unk30F0[i]);
     }
+}
+
+static void PSS_LoadMonRibbons(void)
+{
+    u32 ribbonFlags = GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_RIBBONS);
+    s32 i, j;
+
+    sSummaryRibbonCount = 0;
+    sSummaryGiftRibbonCount = 0;
+
+    for (i = 0; i < ARRAY_COUNT(sSummaryRibbonData); i++)
+    {
+        s32 numRibbons = ((1 << sSummaryRibbonData[i].numBits) - 1) & ribbonFlags;
+
+        if (!sSummaryRibbonData[i].isGiftRibbon)
+        {
+            for (j = 0; j < numRibbons; j++)
+                sSummaryRibbonIds[sSummaryRibbonCount++] = sSummaryRibbonData[i].ribbonId + j;
+        }
+        else
+        {
+            for (j = 0; j < numRibbons; j++)
+                sSummaryGiftRibbonIds[sSummaryGiftRibbonCount++] = sSummaryRibbonData[i].ribbonId + j;
+        }
+
+        ribbonFlags >>= sSummaryRibbonData[i].numBits;
+    }
+
+    if (sSummaryRibbonCount + sSummaryGiftRibbonCount == 0)
+        sSummaryRibbonIndex = 0;
+    else if (sSummaryRibbonIndex >= sSummaryRibbonCount + sSummaryGiftRibbonCount)
+        sSummaryRibbonIndex = 0;
+
+    PSS_RebuildRibbonPageTilemap();
+
+    if (sMonSummaryScreen->curPageIndex == PSS_PAGE_RIBBONS)
+        PSS_CopyPageTilemapRectToVram(PSS_PAGE_RIBBONS,
+                                      SUMMARY_RIBBON_GRID_START_X,
+                                      SUMMARY_RIBBON_GRID_START_Y,
+                                      SUMMARY_RIBBON_GRID_COLUMNS * SUMMARY_RIBBON_GRID_TILE_SPACING,
+                                      SUMMARY_RIBBON_GRID_ROWS * SUMMARY_RIBBON_GRID_TILE_SPACING);
+}
+
+static bool8 PSS_HasAnyRibbons(void)
+{
+    return (sSummaryRibbonCount + sSummaryGiftRibbonCount) != 0;
+}
+
+static u32 PSS_GetRibbonIdByListIndex(u8 index)
+{
+    if (index < sSummaryRibbonCount)
+        return sSummaryRibbonIds[index];
+    return sSummaryGiftRibbonIds[index - sSummaryRibbonCount];
+}
+
+static u32 PSS_GetSelectedRibbonId(void)
+{
+    return PSS_GetRibbonIdByListIndex(sSummaryRibbonIndex);
+}
+
+static const u8 *PSS_GetRibbonTextLineByIndex(u8 index, u8 lineIndex)
+{
+    u32 ribbonId;
+
+    if (!PSS_HasAnyRibbons())
+        return gText_PSS_NoRibbons;
+
+    ribbonId = PSS_GetRibbonIdByListIndex(index);
+    if (ribbonId < FIRST_GIFT_RIBBON)
+        return gRibbonDescriptionPointers[ribbonId][lineIndex];
+
+    ribbonId = gSaveBlock1Ptr->giftRibbons[ribbonId - FIRST_GIFT_RIBBON];
+    if (ribbonId == 0)
+        return gText_PSS_NoRibbons;
+
+    ribbonId--;
+    return gGiftRibbonDescriptionPointers[ribbonId][lineIndex];
+}
+
+static const u8 *PSS_GetSelectedRibbonTextLine(u8 lineIndex)
+{
+    return PSS_GetRibbonTextLineByIndex(sSummaryRibbonIndex, lineIndex);
+}
+
+static void PSS_AddRibbonTextToWin3(void)
+{
+}
+
+static void PSS_RebuildRibbonPageTilemap(void)
+{
+    if (sSummaryPageTilemaps[PSS_PAGE_RIBBONS] == NULL)
+        return;
+
+    CpuFill16(0, sSummaryPageTilemaps[PSS_PAGE_RIBBONS], SUMMARY_PAGE_TILEMAP_SIZE);
+    CpuCopy16(gMapSummaryScreenRibbons, sSummaryPageTilemaps[PSS_PAGE_RIBBONS], 1280);
+    PSS_DrawRibbonGridToTilemap(sSummaryPageTilemaps[PSS_PAGE_RIBBONS]);
+}
+
+static void PSS_DrawRibbonGridToLiveBg(void)
+{
+    u16 tileData[4];
+    u8 totalRibbons;
+    u8 i;
+
+    if (sMonSummaryScreen->curPageIndex != PSS_PAGE_RIBBONS)
+        return;
+
+    totalRibbons = sSummaryRibbonCount + sSummaryGiftRibbonCount;
+    if (totalRibbons > SUMMARY_RIBBON_GRID_CAPACITY)
+        totalRibbons = SUMMARY_RIBBON_GRID_CAPACITY;
+
+    for (i = 0; i < totalRibbons; i++)
+    {
+        u32 ribbonId = PSS_GetRibbonIdByListIndex(i);
+        u16 palNum = sSummaryRibbonGfxData[ribbonId].palNumOffset + SUMMARY_RIBBON_SMALL_BG_PAL_1;
+        u16 tileNum = SUMMARY_RIBBON_SMALL_BG_TILE_OFFSET + (sSummaryRibbonGfxData[ribbonId].tileNumOffset * 2) + 1;
+        u8 destX = SUMMARY_RIBBON_GRID_START_X + ((i % SUMMARY_RIBBON_GRID_COLUMNS) * SUMMARY_RIBBON_GRID_TILE_SPACING);
+        u8 destY = SUMMARY_RIBBON_GRID_START_Y + ((i / SUMMARY_RIBBON_GRID_COLUMNS) * SUMMARY_RIBBON_GRID_TILE_SPACING);
+
+        tileData[0] = (tileNum + 1) | (palNum << 12);
+        tileData[1] = (tileNum + 1) | (palNum << 12) | 0x400;
+        tileData[2] = tileNum | (palNum << 12);
+        tileData[3] = tileNum | (palNum << 12) | 0x400;
+
+        CopyToBgTilemapBufferRect(0, tileData, destX, destY, 2, 2);
+    }
+
+    CopyBgTilemapBufferToVram(0);
+}
+
+static void PSS_DrawRibbonGridToTilemap(u16 *tilemap)
+{
+    u16 tileData[4];
+    u8 totalRibbons;
+    u8 i;
+
+    if (tilemap == NULL)
+        return;
+
+    totalRibbons = sSummaryRibbonCount + sSummaryGiftRibbonCount;
+    if (totalRibbons > SUMMARY_RIBBON_GRID_CAPACITY)
+        totalRibbons = SUMMARY_RIBBON_GRID_CAPACITY;
+
+    for (i = 0; i < totalRibbons; i++)
+    {
+        u32 ribbonId = PSS_GetRibbonIdByListIndex(i);
+        u16 palNum = sSummaryRibbonGfxData[ribbonId].palNumOffset + SUMMARY_RIBBON_SMALL_BG_PAL_1;
+        u16 tileNum = SUMMARY_RIBBON_SMALL_BG_TILE_OFFSET + (sSummaryRibbonGfxData[ribbonId].tileNumOffset * 2) + 1;
+        u8 destX = SUMMARY_RIBBON_GRID_START_X + ((i % SUMMARY_RIBBON_GRID_COLUMNS) * SUMMARY_RIBBON_GRID_TILE_SPACING);
+        u8 destY = SUMMARY_RIBBON_GRID_START_Y + ((i / SUMMARY_RIBBON_GRID_COLUMNS) * SUMMARY_RIBBON_GRID_TILE_SPACING);
+        u32 destIndex = destY * 32 + destX;
+
+        tileData[0] = (tileNum + 1) | (palNum << 12);
+        tileData[1] = (tileNum + 1) | (palNum << 12) | 0x400;
+        tileData[2] = tileNum | (palNum << 12);
+        tileData[3] = tileNum | (palNum << 12) | 0x400;
+
+        tilemap[destIndex] = tileData[0];
+        tilemap[destIndex + 1] = tileData[1];
+        tilemap[destIndex + 32] = tileData[2];
+        tilemap[destIndex + 33] = tileData[3];
+    }
+}
+
+static void PSS_CopyPageTilemapRectToVram(u8 pageIndex, u8 x, u8 y, u8 width, u8 height)
+{
+    u16 *src;
+    u16 *dst;
+    u8 row;
+
+    if (sSummaryPageTilemaps[pageIndex] == NULL)
+        return;
+
+    src = sSummaryPageTilemaps[pageIndex];
+    dst = (u16 *)(VRAM + 0xF000);
+
+    for (row = 0; row < height; row++)
+        CpuCopy16(&src[(y + row) * 32 + x], &dst[(y + row) * 32 + x], width * sizeof(u16));
+}
+
+static void PSS_AddRibbonTextToWin4(void)
+{
+    u32 nameFont;
+    const u8 nameY = 28;
+    const u8 descY = 47;
+
+    FillWindowPixelBuffer(sMonSummaryScreen->window[4], 0);
+
+    if (!PSS_HasAnyRibbons())
+    {
+        AddTextPrinterParameterized3(sMonSummaryScreen->window[4], 2, PSS_RIBBON_NAME_TEXT_X, nameY, sPSSTextColours[DARK], TEXT_SPEED_FF, gText_PSS_NoRibbons);
+        return;
+    }
+
+    StringCopy(gStringVar4, gText_PSS_Ribbons);
+    StringAppend(gStringVar4, gText_Colon2);
+    AddTextPrinterParameterized3(sMonSummaryScreen->window[4], 2, PSS_RIBBON_LABEL_TEXT_X, nameY, sPSSTextColours[DARK], TEXT_SPEED_FF, gStringVar4);
+
+    nameFont = GetFontIdToFit(PSS_GetSelectedRibbonTextLine(0), 2, 0, WindowWidthPx(sMonSummaryScreen->window[4]) - PSS_RIBBON_NAME_TEXT_X - PSS_RIBBON_NAME_RIGHT_PADDING);
+    AddTextPrinterParameterized3(sMonSummaryScreen->window[4], nameFont, PSS_RIBBON_NAME_TEXT_X, nameY, sPSSTextColours[DARK], TEXT_SPEED_FF, PSS_GetSelectedRibbonTextLine(0));
+    AddTextPrinterParameterized3(sMonSummaryScreen->window[4], 2, PSS_RIBBON_DESC_TEXT_X, descY, sPSSTextColours[DARK], TEXT_SPEED_FF, PSS_GetSelectedRibbonTextLine(1));
+}
+
+static void PSS_AddRibbonTextToWin5(void)
+{
+    FillWindowPixelBuffer(sMonSummaryScreen->window[5], 0);
 }
 
 static void PSS_AddTextToWin4(void)
@@ -3303,6 +3884,11 @@ static void PSS_AddTextToWin4(void)
         break;
     case PSS_PAGE_SKILLS:
         PSS_PrintExpPointAndNextLvTexts();
+        break;
+    case PSS_PAGE_RIBBONS:
+        PSS_LoadMonRibbons();
+        PSS_AddRibbonTextToWin4();
+        PSS_DrawRibbonGridToLiveBg();
         break;
     case PSS_PAGE_MOVES_INFO:
         PSS_SetMovesInfoWindow4Position();
@@ -3628,9 +4214,13 @@ static void PSS_AddTextToWin5(void)
     switch (sMonSummaryScreen->curPageIndex)
     {
     case PSS_PAGE_INFO:
+        FillWindowPixelBuffer(sMonSummaryScreen->window[5], 0);
         break;
     case PSS_PAGE_SKILLS:
         PSS_PrintAbilityNameAndDescription();
+        break;
+    case PSS_PAGE_RIBBONS:
+        FillWindowPixelBuffer(sMonSummaryScreen->window[5], 0);
         break;
     case PSS_PAGE_MOVES:
     case PSS_PAGE_MOVES_INFO:
@@ -3643,9 +4233,15 @@ static void PSS_AddTextToWin5(void)
 
 static void PSS_PrintAbilityNameAndDescription(void)
 {
+    u32 abilityNameFont;
+
     FillWindowPixelBuffer(sMonSummaryScreen->window[5], 0);
 	AddTextPrinterParameterized3(sMonSummaryScreen->window[5], 2, 11,  4, sPSSTextColours[WHITE], TEXT_SPEED_FF, gText_PSS_Ability);
-    AddTextPrinterParameterized3(sMonSummaryScreen->window[5], 2, 60,  4, sPSSTextColours[DARK], TEXT_SPEED_FF, sMonSummaryScreen->summary.abilityName);
+    abilityNameFont = GetFontIdToFit(sMonSummaryScreen->summary.abilityName,
+                                     2,
+                                     0,
+                                     WindowWidthPx(sMonSummaryScreen->window[5]) - PSS_ABILITY_NAME_TEXT_X - PSS_ABILITY_NAME_RIGHT_PADDING);
+    AddTextPrinterParameterized3(sMonSummaryScreen->window[5], abilityNameFont, PSS_ABILITY_NAME_TEXT_X,  4, sPSSTextColours[DARK], TEXT_SPEED_FF, sMonSummaryScreen->summary.abilityName);
     AddTextPrinterParameterized3(sMonSummaryScreen->window[5], 2, 20, 23, sPSSTextColours[DARK], TEXT_SPEED_FF, sMonSummaryScreen->summary.abilityDescription);
 }
 
@@ -3720,6 +4316,15 @@ static void sub_8137D28(u8 curPageIndex)
         PSS_AddTextToWin1(gText_8419C45);
         PSS_AddTextToWin2(actionText);
         }
+        break;
+    case PSS_PAGE_RIBBONS:
+        PSS_LoadMonRibbons();
+        PSS_AddTextToWin0(gText_PSS_Ribbons);
+        PSS_AddTextToWin1(gText_8419C45);
+        if (PSS_HasAnyRibbons())
+            PSS_AddTextToWin2(gText_PSS_NextRibbon);
+        else
+            PSS_AddTextToWin2(gText_8419C45);
         break;
     case PSS_PAGE_MOVES_INFO:
         {
@@ -3862,6 +4467,9 @@ static void PSS_InitWindows(void)
         case PSS_PAGE_SKILLS:
             sMonSummaryScreen->window[i + 3] = AddWindow(&sMonStatsAndAbilityWindowTemplate[i]);
             break;
+        case PSS_PAGE_RIBBONS:
+            sMonSummaryScreen->window[i + 3] = AddWindow(&sDataMonAndNatureWindowTemplate[i]);
+            break;
         case PSS_PAGE_MOVES:
         case PSS_PAGE_MOVES_INFO:
             sMonSummaryScreen->window[i + 3] = AddWindow(&sMovesInfoWindowTemplate[i]);
@@ -3885,6 +4493,9 @@ static void sub_8138280(u8 curPageIndex)
         case PSS_PAGE_SKILLS:
         default:
             sMonSummaryScreen->window[i + 3] = AddWindow(&sMonStatsAndAbilityWindowTemplate[i]);
+            break;
+        case PSS_PAGE_RIBBONS:
+            sMonSummaryScreen->window[i + 3] = AddWindow(&sDataMonAndNatureWindowTemplate[i]);
             break;
         case PSS_PAGE_MOVES:
         case PSS_PAGE_MOVES_INFO:
@@ -3927,6 +4538,16 @@ static void sub_8138538(void)
         }
 		PSS_SetInvisibleHpBar(1);
 		PSS_SetInvisibleExpBar(1);
+        PSS_SetInvisibleMonSprite(0);
+        PSS_SetInvisibleMarkings(0);
+        PSS_SetInvisiblePokeball(0);
+        PSS_SetInvisibleIconStatus(0);
+        sub_813ACF8(0);
+        sub_813AEB0(0);
+        sub_8139EE4(1);
+        PSS_SetInvisibleRibbonSprite(TRUE);
+        if (!sMonSummaryScreen->isEgg)
+            PSS_CopyPageTilemapRectToVram(PSS_PAGE_INFO, 0, 2, 5, 18);
         break;
     case PSS_PAGE_SKILLS:
         if (sSummaryTilemapCacheReady && sSummaryPageTilemaps[PSS_PAGE_SKILLS] != NULL)
@@ -3935,7 +4556,37 @@ static void sub_8138538(void)
             LZ77UnCompVram(gMapSummaryScreenPokemonSkills, (void *)(VRAM + 0xF000));
 		PSS_SetInvisibleHpBar(0);
 		PSS_SetInvisibleExpBar(0);
+        PSS_SetInvisibleMonSprite(0);
+        PSS_SetInvisibleMarkings(0);
+        PSS_SetInvisiblePokeball(0);
+        PSS_SetInvisibleIconStatus(0);
+        sub_813ACF8(0);
+        sub_813AEB0(0);
+        sub_8139EE4(1);
 		HideBg(3);
+        PSS_SetInvisibleRibbonSprite(TRUE);
+        PSS_CopyPageTilemapRectToVram(PSS_PAGE_SKILLS, 0, 2, 5, 18);
+        break;
+    case PSS_PAGE_RIBBONS:
+        if (sSummaryTilemapCacheReady && sSummaryPageTilemaps[PSS_PAGE_RIBBONS] != NULL)
+            CpuCopy16(sSummaryPageTilemaps[PSS_PAGE_RIBBONS], (void *)(VRAM + 0xF000), SUMMARY_PAGE_TILEMAP_SIZE);
+        else
+        {
+            CpuFill16(0, (void *)(VRAM + 0xF000), SUMMARY_PAGE_TILEMAP_SIZE);
+            CpuCopy16(gMapSummaryScreenRibbons, (void *)(VRAM + 0xF000), 1280);
+        }
+        PSS_SetInvisibleHpBar(1);
+        PSS_SetInvisibleExpBar(1);
+        PSS_SetInvisibleMonSprite(0);
+        PSS_SetInvisibleMarkings(0);
+        PSS_SetInvisiblePokeball(0);
+        PSS_SetInvisibleIconStatus(0);
+        sub_813ACF8(0);
+        sub_813AEB0(0);
+        sub_8139EE4(1);
+        PSS_UpdateRibbonSprite();
+        HideBg(3);
+        PSS_CopyPageTilemapRectToVram(PSS_PAGE_RIBBONS, 0, 2, 5, 18);
         break;
     case PSS_PAGE_MOVES:
         if (sSummaryTilemapCacheReady && sSummaryPageTilemaps[PSS_PAGE_MOVES] != NULL)
@@ -3948,6 +4599,14 @@ static void sub_8138538(void)
             LZ77UnCompVram(gMapSummaryScreenMoves2, (void *)(VRAM + 0xE000));
 		PSS_SetInvisibleHpBar(1);
 		PSS_SetInvisibleExpBar(1);
+        PSS_SetInvisibleMonSprite(0);
+        PSS_SetInvisibleMarkings(0);
+        PSS_SetInvisiblePokeball(0);
+        PSS_SetInvisibleIconStatus(0);
+        sub_813ACF8(0);
+        sub_813AEB0(0);
+        sub_8139EE4(1);
+        PSS_SetInvisibleRibbonSprite(TRUE);
 		ShowBg(3);
         break;
     case PSS_PAGE_MOVES_INFO:
@@ -3961,6 +4620,14 @@ static void sub_8138538(void)
             LZ77UnCompVram(gMapSummaryScreenMoves, (void *)(VRAM + 0xE000));
 		PSS_SetInvisibleHpBar(1);
 		PSS_SetInvisibleExpBar(1);
+        PSS_SetInvisibleMonSprite(1);
+        PSS_SetInvisibleMarkings(1);
+        PSS_SetInvisiblePokeball(1);
+        PSS_SetInvisibleIconStatus(0);
+        sub_813ACF8(1);
+        sub_813AEB0(1);
+        sub_8139EE4(0);
+        PSS_SetInvisibleRibbonSprite(TRUE);
 		ShowBg(3);
         break;
     }
@@ -3980,6 +4647,8 @@ static void PSS_DrawMonMoveIcon(void)
         }
         break;
     case PSS_PAGE_SKILLS:
+        break;
+    case PSS_PAGE_RIBBONS:
         break;
     case PSS_PAGE_MOVES:
         break;
@@ -4200,15 +4869,16 @@ static void sub_8138CD8(u8 id)
                 sUnknown_203B16D = 0;
                 sUnknown_203B16E = 0;
                 sMonSummaryScreen->unk3268 = FALSE;
-            sub_813A0E8(1);
-            sMonSummaryScreen->unk3224 = 0;
-            PSS_RemoveAllWindows(sMonSummaryScreen->curPageIndex);
-            sMonSummaryScreen->curPageIndex--;
-            PSS_ClearWindow2Tilemap();
-            PSS_SetMonSpritePositionForPage();
-            PSS_SetMonIconPositionForPage();
-            sMonSummaryScreen->unk3288 = 1;
-            return;
+                sub_813A0E8(1);
+                sMonSummaryScreen->unk3224 = 0;
+                PSS_RemoveAllWindows(sMonSummaryScreen->curPageIndex);
+                sMonSummaryScreen->curPageIndex = PSS_PAGE_MOVES;
+                PSS_ClearWindow2Tilemap();
+                PSS_SetMonSpritePositionForPage();
+                PSS_SetMonIconPositionForPage();
+                PSS_RebuildCurrentPageAndSetTask(sub_8134840);
+                sMonSummaryScreen->unk3288 = 0;
+                return;
             }
 
             if (sMonSummaryScreen->unk3268 != TRUE)
@@ -4258,11 +4928,12 @@ static void sub_8138CD8(u8 id)
             sub_813A0E8(1);
             sMonSummaryScreen->unk3224 = 0;
             PSS_RemoveAllWindows(sMonSummaryScreen->curPageIndex);
-            sMonSummaryScreen->curPageIndex--;
+            sMonSummaryScreen->curPageIndex = PSS_PAGE_MOVES;
             PSS_ClearWindow2Tilemap();
             PSS_SetMonSpritePositionForPage();
             PSS_SetMonIconPositionForPage();
-            sMonSummaryScreen->unk3288 = 1;
+            PSS_RebuildCurrentPageAndSetTask(sub_8134840);
+            sMonSummaryScreen->unk3288 = 0;
         }
         break;
     case 1:
@@ -4696,10 +5367,61 @@ static void PSS_SetInvisibleMonSprite(u8 invisible)
     gSprites[sMonSummaryScreen->spriteId_1].invisible = invisible;
 }
 
+static void PSS_LoadRibbonSprite(void)
+{
+    u8 spriteId;
+
+    LoadCompressedSpriteSheet(&sSpriteSheet_SummaryRibbonIconsBig);
+    DecompressAndCopyTileDataToVram(0, sSummaryRibbonIconsSmall_Gfx, 0, SUMMARY_RIBBON_SMALL_BG_TILE_OFFSET, 0);
+    LoadPalette(sSummaryRibbonIcons1_Pal, BG_PLTT_ID(SUMMARY_RIBBON_SMALL_BG_PAL_1), PLTT_SIZE_4BPP);
+    LoadPalette(sSummaryRibbonIcons2_Pal, BG_PLTT_ID(SUMMARY_RIBBON_SMALL_BG_PAL_2), PLTT_SIZE_4BPP);
+    LoadPalette(sSummaryRibbonIcons3_Pal, BG_PLTT_ID(SUMMARY_RIBBON_SMALL_BG_PAL_3), PLTT_SIZE_4BPP);
+    LoadPalette(sSummaryRibbonIcons4_Pal, BG_PLTT_ID(SUMMARY_RIBBON_SMALL_BG_PAL_4), PLTT_SIZE_4BPP);
+    LoadPalette(sSummaryRibbonIcons5_Pal, BG_PLTT_ID(SUMMARY_RIBBON_SMALL_BG_PAL_5), PLTT_SIZE_4BPP);
+    LoadSpritePalette(&(struct SpritePalette){sSummaryRibbonIcons1_Pal, SUMMARY_RIBBON_PALTAG_1});
+    LoadSpritePalette(&(struct SpritePalette){sSummaryRibbonIcons2_Pal, SUMMARY_RIBBON_PALTAG_2});
+    LoadSpritePalette(&(struct SpritePalette){sSummaryRibbonIcons3_Pal, SUMMARY_RIBBON_PALTAG_3});
+    LoadSpritePalette(&(struct SpritePalette){sSummaryRibbonIcons4_Pal, SUMMARY_RIBBON_PALTAG_4});
+    LoadSpritePalette(&(struct SpritePalette){sSummaryRibbonIcons5_Pal, SUMMARY_RIBBON_PALTAG_5});
+
+    spriteId = CreateSprite(&sSpriteTemplate_SummaryRibbonIconBig, 180, 76, 0);
+    sSummaryRibbonSprite = &gSprites[spriteId];
+    sSummaryRibbonSprite->invisible = TRUE;
+}
+
+static void PSS_SetInvisibleRibbonSprite(bool8 invisible)
+{
+    if (sSummaryRibbonSprite != NULL)
+        sSummaryRibbonSprite->invisible = invisible;
+}
+
+static void PSS_UpdateRibbonSprite(void)
+{
+    if (sSummaryRibbonSprite == NULL)
+        return;
+    PSS_SetInvisibleRibbonSprite(TRUE);
+}
+
 static void PSS_UnloadMonSprite(void)
 {
     FreeAndDestroyMonPicSprite(sMonSummaryScreen->spriteId_1);
     FREE_AND_SET_NULL(sUnknown_203B170);
+}
+
+static void PSS_UnloadRibbonSprite(void)
+{
+    if (sSummaryRibbonSprite != NULL)
+    {
+        DestroySpriteAndFreeResources(sSummaryRibbonSprite);
+        sSummaryRibbonSprite = NULL;
+    }
+
+    FreeSpriteTilesByTag(SUMMARY_RIBBON_GFX_TAG);
+    FreeSpritePaletteByTag(SUMMARY_RIBBON_PALTAG_1);
+    FreeSpritePaletteByTag(SUMMARY_RIBBON_PALTAG_2);
+    FreeSpritePaletteByTag(SUMMARY_RIBBON_PALTAG_3);
+    FreeSpritePaletteByTag(SUMMARY_RIBBON_PALTAG_4);
+    FreeSpritePaletteByTag(SUMMARY_RIBBON_PALTAG_5);
 }
 
 static void PSS_LoadPokeball(void)
@@ -4787,7 +5509,7 @@ static void PSS_LoadMonIcon(void)
     if (ShouldIgnoreDeoxysForm(3, gLastViewedMonIndex))
         species = SPECIES_DEOXYS;
 
-    LoadMonIconPalette(species);
+    LoadMonIconPalettePersonality(species, personality);
     sMonSummaryScreen->spriteId_2 = CreateMonIcon(species, SpriteCallbackDummy, 140, 28, 0, personality, isShiny, isShadow);
 
     if (!IsMonSpriteNotFlipped(species))
@@ -5508,6 +6230,7 @@ static void sub_813AF90(void)
     sub_813A21C();
     PSS_UnloadHpBar();
     sub_813AB38();
+    PSS_UnloadRibbonSprite();
     PSS_UnloadMonSprite();
     sub_8139F20();
     sub_8139D90();
@@ -5524,6 +6247,7 @@ static void sub_813AFC4(void)
     PSS_SetInvisiblePokeball(0);
     PSS_LoadMonIcon();
     PSS_LoadMonSprite();
+    PSS_LoadRibbonSprite();
     PSS_SetMonSpritePositionForPage();
     PSS_SetMonIconPositionForPage();
     PSS_SetInvisibleMonSprite(0);
@@ -5533,6 +6257,7 @@ static void sub_813AFC4(void)
     PSS_ShowIconStatus();
     sub_813ACB4();
     sub_813AF50();
+    PSS_UpdateRibbonSprite();
 }
 
 static void PSS_LoadMarkings(void)

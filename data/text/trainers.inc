@@ -4800,7 +4800,8 @@ Route1_Text_TorkinIntro:
     .string "out my new companion!$"
 
 Route1_Text_TorkinDefeated:
-    .string "Even with its heart sealed, I still lost…$"
+    .string "Even with its heart sealed,\n"
+    .string "I still lost…$"
 
 Route1_Text_TorkinPostBattle:
     .string "Don't get excited, kid.\p"
@@ -4811,5 +4812,5 @@ Route1_Text_TorkinPostBattle:
     .string "anything at all.\p"
     .string "Keep chasing me if you want.\n"
 	.string "By the time you understand what's\l"
-    .string "happening, the timelines will already be\l"
-    .string "beyond repair.$"
+    .string "happening, the timelines will already\l"
+    .string "be beyond repair.$"

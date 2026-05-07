@@ -166,8 +166,8 @@ static const u8 sText_BerrySuffix[] = _(" BERRY"); //no decapitalize until it is
 const u8 gText_EmptyString3[] = _("");
 
 static const u8 sText_TwoInGameTrainersDefeated[] = _("You defeated\n{B_TRAINER1_NAME_WITH_CLASS} and {B_TRAINER2_NAME_WITH_CLASS}!\p");
-static const u8 sText_ShadowPokemonFledTrainer[] = _("The {COLOR PURPLE}Shadow Pokemon{COLOR WHITE} has fled from\n{B_TRAINER1_NAME}.\p");
-static const u8 sText_ShadowPokemonFledGeneric[] = _("The {COLOR PURPLE}Shadow Pokemon{COLOR WHITE} appears to have fled.\p");
+static const u8 sText_ShadowPokemonFledTrainer[] = COMPOUND_STRING("The {COLOR PURPLE}Shadow POKéMON{COLOR WHITE} has fled from\n{B_TRAINER1_NAME}.\p");
+static const u8 sText_ShadowPokemonFledGeneric[] = COMPOUND_STRING("The {COLOR PURPLE}Shadow POKéMON{COLOR WHITE} appears to have fled.\p");
 
 // New battle strings.
 const u8 gText_drastically[] = _("drastically ");
@@ -910,7 +910,7 @@ const u8 *const gBattleStringsTable[STRINGID_COUNT] =
     [STRINGID_FORFEITBATTLEGAVEMONEY]               = COMPOUND_STRING("You gave ¥{B_BUFF1} to the winner…{PAUSE_UNTIL_PRESS}"),
     [STRINGID_POWERCONSTRUCTPRESENCEOFMANY]         = COMPOUND_STRING("You sense the presence of many!"),
     [STRINGID_POWERCONSTRUCTTRANSFORM]              = COMPOUND_STRING("{B_ATK_NAME_WITH_PREFIX} transformed into its Complete Forme!"),
-    [STRINGID_SHADOWPKMNNOTICE]                     = COMPOUND_STRING("Oh! A {COLOR PURPLE}Shadow Pokémon{COLOR WHITE}!\p"),
+    [STRINGID_SHADOWPKMNNOTICE]                     = COMPOUND_STRING("Oh! A {COLOR PURPLE}Shadow Pokémon{COLOR DARK_GRAY}!\p"),
     [STRINGID_TRAINERCALLTOMON]                     = COMPOUND_STRING("{B_ATK_TRAINER_NAME} called out to {B_ATK_NAME_WITH_PREFIX}!"),
     [STRINGID_PKMNSTOREDEXP]                        = COMPOUND_STRING("{B_BUFF1} stored{B_BUFF2} {B_BUFF3} EXP. Points!\p"),
     [STRINGID_PKMNHEARTGAUGEUPDATE]                 = COMPOUND_STRING("The door to {B_BUFF1}'s heart opened a little!\p"),
@@ -923,7 +923,7 @@ const u8 *const gBattleStringsTable[STRINGID_COUNT] =
     [STRINGID_REVERSEMODE_CALLED]                   = COMPOUND_STRING("{B_ATK_NAME_WITH_PREFIX} came to its senses!"),
     [STRINGID_GOTCHAPKMNCAUGHTTRAINER]              = COMPOUND_STRING("Gotcha! {B_DEF_NAME} was caught!{WAIT_SE}\p"),
     [STRINGID_TRAINERCALLEDTOMON]                   = COMPOUND_STRING("{B_PLAYER_NAME} called to {B_ATK_NAME_WITH_PREFIX}!\p"),
-    [STRINGID_SHADOWCALMEDSLIGHTLY]                 = COMPOUND_STRING("The {COLOR PURPLE}Shadow Pokémon{COLOR WHITE} calmed down a little!\p"),
+    [STRINGID_SHADOWCALMEDSLIGHTLY]                 = COMPOUND_STRING("The {COLOR PURPLE}Shadow Pokémon{COLOR DARK_GRAY} calmed down a little!\p"),
     [STRINGID_SHADOWCAMETOSENSES]                   = COMPOUND_STRING("{B_ATK_NAME_WITH_PREFIX} came to its senses!\p"),
     [STRINGID_TRAINERENCOURAGEDMON]                 = COMPOUND_STRING("{B_ATK_NAME_WITH_PREFIX} was encouraged!\p"),
 
@@ -1466,6 +1466,7 @@ const u8 gText_BattleSwitchWhich3[] = _("{UP_ARROW}");
 const u8 gText_BattleSwitchWhich4[] = _("{ESCAPE 4}");
 const u8 gText_BattleSwitchWhich5[] = _("-");
 const u8 gText_SafariBalls[] = _("{HIGHLIGHT DARK_GRAY}Safari Balls");
+const u8 gText_SportBalls[] = _("{HIGHLIGHT DARK_GRAY}Sport Balls");
 const u8 gText_SafariBallLeft[] = _("{HIGHLIGHT DARK_GRAY}Left: $" "{HIGHLIGHT DARK_GRAY}");
 const u8 gText_Sleep[] = _("sleep");
 const u8 gText_Poison[] = _("poison");

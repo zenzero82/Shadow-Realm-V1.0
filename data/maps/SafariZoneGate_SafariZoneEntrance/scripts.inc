@@ -1,7 +1,125 @@
 SafariZoneGate_SafariZoneEntrance_MapScripts::
+	map_script MAP_SCRIPT_ON_FRAME_TABLE, SafariZoneGate_SafariZoneEntrance_OnFrame
 	map_script MAP_SCRIPT_ON_TRANSITION, SafariZoneGate_SafariZoneEntrance_OnTransition
 	.byte 0
+
+SafariZoneGate_SafariZoneEntrance_OnFrame:
+	map_script_2 VAR_SAFARI_ZONE_STATE, 1, SafariZoneGate_SafariZoneEntrance_EventScript_ExitSafariZone
+	.2byte 0
 
 SafariZoneGate_SafariZoneEntrance_OnTransition::
 	setflag FLAG_VISITED_SAFARI_ZONE_GATE_JOHTO
 	end
+
+SafariZoneGate_SafariZoneEntrance_EventScript_ExitSafariZone::
+	lockall
+	applymovement LOCALID_PLAYER, SafariZoneGate_SafariZoneEntrance_Movement_ExitSafariZone
+	waitmovement 0
+	setvar VAR_SAFARI_ZONE_STATE, 0
+	releaseall
+	end
+
+SafariZoneGate_SafariZoneEntrance_Movement_ExitSafariZone:
+	walk_down
+	walk_down
+	walk_down
+	walk_down
+	walk_down
+	walk_down
+	walk_down
+	step_end
+
+SafariZoneGate_SafariZoneEntrance_EventScript_WelcomeAttendant::
+	msgbox Route121_SafariZoneEntrance_Text_WelcomeToSafariZone, MSGBOX_NPC
+	end
+
+SafariZoneGate_SafariZoneEntrance_EventScript_InfoAttendant::
+	lock
+	faceplayer
+	msgbox Route121_SafariZoneEntrance_Text_WelcomeFirstTime, MSGBOX_YESNO
+	goto_if_eq VAR_RESULT, YES, SafariZoneGate_SafariZoneEntrance_EventScript_FirstTimeInfo
+	msgbox Route121_SafariZoneEntrance_Text_ComeInAndEnjoy, MSGBOX_DEFAULT
+	release
+	end
+
+SafariZoneGate_SafariZoneEntrance_EventScript_FirstTimeInfo::
+	msgbox Route121_SafariZoneEntrance_Text_FirstTimeInfo, MSGBOX_DEFAULT
+	release
+	end
+
+SafariZoneGate_SafariZoneEntrance_EventScript_EntranceCounterTrigger::
+	lockall
+	applymovement LOCALID_PLAYER, Common_Movement_WalkInPlaceFasterUp
+	waitmovement 0
+	showmoneybox 0, 0
+	msgbox Route121_SafariZoneEntrance_Text_WouldYouLikeToPlay, MSGBOX_YESNO
+	goto_if_eq VAR_RESULT, YES, SafariZoneGate_SafariZoneEntrance_EventScript_TryEnterSafariZone
+	msgbox Route121_SafariZoneEntrance_Text_PlayAnotherTime, MSGBOX_DEFAULT
+	goto SafariZoneGate_SafariZoneEntrance_EventScript_MovePlayerBackFromCounter
+	end
+
+SafariZoneGate_SafariZoneEntrance_EventScript_TryEnterSafariZone::
+	checkitem ITEM_POKEBLOCK_CASE
+	goto_if_eq VAR_RESULT, 0, SafariZoneGate_SafariZoneEntrance_EventScript_NoPokeblockCase
+	call SafariZoneGate_SafariZoneEntrance_EventScript_CheckHasRoomForPokemon
+	checkmoney 500
+	goto_if_eq VAR_RESULT, 0, SafariZoneGate_SafariZoneEntrance_EventScript_NotEnoughMoney
+	playse SE_SHOP
+	msgbox Route121_SafariZoneEntrance_Text_ThatWillBe500Please, MSGBOX_DEFAULT
+	removemoney 500
+	updatemoneybox
+	msgbox Route121_SafariZoneEntrance_Text_HereAreYourSafariBalls, MSGBOX_DEFAULT
+	playfanfare MUS_OBTAIN_ITEM
+	message Route121_SafariZoneEntrance_Text_Received30SafariBalls
+	waitfanfare
+	msgbox Route121_SafariZoneEntrance_Text_PleaseEnjoyYourself, MSGBOX_DEFAULT
+	closemessage
+	hidemoneybox
+	applymovement LOCALID_PLAYER, SafariZoneGate_SafariZoneEntrance_Movement_EnterSafariZone
+	waitmovement 0
+	special EnterSafariMode
+	setvar VAR_SAFARI_ZONE_STATE, 2
+	clearflag FLAG_GOOD_LUCK_SAFARI_ZONE
+	warp MAP_SAFARI_ZONE_ENTRANCE, 14, 8
+	waitstate
+	end
+
+SafariZoneGate_SafariZoneEntrance_EventScript_CheckHasRoomForPokemon::
+	getpartysize
+	goto_if_ne VAR_RESULT, PARTY_SIZE, SafariZoneGate_SafariZoneEntrance_EventScript_HasRoomForPokemon
+	specialvar VAR_RESULT, ScriptCheckFreePokemonStorageSpace
+	goto_if_eq VAR_RESULT, 1, SafariZoneGate_SafariZoneEntrance_EventScript_HasRoomForPokemon
+	msgbox Route121_SafariZoneEntrance_Text_PCIsFull, MSGBOX_DEFAULT
+	goto SafariZoneGate_SafariZoneEntrance_EventScript_MovePlayerBackFromCounter
+	end
+
+SafariZoneGate_SafariZoneEntrance_EventScript_HasRoomForPokemon::
+	return
+
+SafariZoneGate_SafariZoneEntrance_EventScript_NoPokeblockCase::
+	msgbox Route121_SafariZoneEntrance_Text_YouNeedPokeblockCase, MSGBOX_DEFAULT
+	goto SafariZoneGate_SafariZoneEntrance_EventScript_MovePlayerBackFromCounter
+	end
+
+SafariZoneGate_SafariZoneEntrance_EventScript_NotEnoughMoney::
+	msgbox Route121_SafariZoneEntrance_Text_NotEnoughMoney, MSGBOX_DEFAULT
+	goto SafariZoneGate_SafariZoneEntrance_EventScript_MovePlayerBackFromCounter
+	end
+
+SafariZoneGate_SafariZoneEntrance_EventScript_MovePlayerBackFromCounter::
+	closemessage
+	hidemoneybox
+	applymovement LOCALID_PLAYER, SafariZoneGate_SafariZoneEntrance_Movement_BackAwayFromCounter
+	waitmovement 0
+	releaseall
+	end
+
+SafariZoneGate_SafariZoneEntrance_Movement_BackAwayFromCounter:
+	walk_down
+	step_end
+
+SafariZoneGate_SafariZoneEntrance_Movement_EnterSafariZone:
+	walk_up
+	walk_up
+	walk_up
+	step_end

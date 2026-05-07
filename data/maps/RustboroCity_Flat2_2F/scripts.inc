@@ -2,12 +2,15 @@ RustboroCity_Flat2_2F_MapScripts::
 	.byte 0
 
 RustboroCity_Flat2_2F_EventScript_OldMan::
+	faceplayer
+	setspeaker RustboroCity_Flat2_2F_Speaker_Horace
 	msgbox RustboroCity_Flat2_2F_Text_DevonWasTinyInOldDays, MSGBOX_NPC
 	end
 
 RustboroCity_Flat2_2F_EventScript_NinjaBoy::
 	lock
 	faceplayer
+	setspeaker RustboroCity_Flat2_2F_Speaker_Kenta
 	goto_if_set FLAG_RECEIVED_PREMIER_BALL_RUSTBORO, RustboroCity_Flat2_2F_EventScript_GavePremierBall
 	msgbox RustboroCity_Flat2_2F_Text_MyDaddyMadeThisYouCanHaveIt, MSGBOX_DEFAULT
 	giveitem ITEM_PREMIER_BALL
@@ -25,6 +28,12 @@ RustboroCity_Flat2_2F_Text_DevonWasTinyInOldDays:
 	.string "Way back in the old days, DEVON was just\n"
 	.string "a teeny, tiny company.$"
 
+RustboroCity_Flat2_2F_Speaker_Horace:
+	.string "Horace$"
+
+RustboroCity_Flat2_2F_Speaker_Kenta:
+	.string "Kenta$"
+
 RustboroCity_Flat2_2F_Text_MyDaddyMadeThisYouCanHaveIt:
 	.string "My daddy's working at the CORPORATION.\p"
 	.string "My daddy made this!\n"
@@ -34,4 +43,3 @@ RustboroCity_Flat2_2F_Text_GoingToWorkAtDevonToo:
 	.string "My daddy's working at the CORPORATION.\p"
 	.string "When I grow up, I'm going to work for\n"
 	.string "DEVON, too.$"
-

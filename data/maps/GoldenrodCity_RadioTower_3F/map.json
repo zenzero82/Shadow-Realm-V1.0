@@ -13,7 +13,47 @@
   "show_map_name": false,
   "battle_scene": "MAP_BATTLE_SCENE_NORMAL",
   "connections": null,
-  "object_events": [],
+  "object_events": [
+    {
+      "graphics_id": "OBJ_EVENT_GFX_CIPHER_PEON_F",
+      "x": 24,
+      "y": 10,
+      "elevation": 0,
+      "movement_type": "MOVEMENT_TYPE_FACE_LEFT",
+      "movement_range_x": 0,
+      "movement_range_y": 0,
+      "trainer_type": "TRAINER_TYPE_NONE",
+      "trainer_sight_or_berry_tree_id": "0",
+      "script": "GoldenrodCity_RadioTower_3F_EventScript_CipherF4",
+      "flag": "FLAG_HIDE_GOLDENROD_RADIO_3F_CIPHER_F4"
+    },
+    {
+      "graphics_id": "OBJ_EVENT_GFX_CIPHER_PEON_F",
+      "x": 17,
+      "y": 5,
+      "elevation": 0,
+      "movement_type": "MOVEMENT_TYPE_FACE_DOWN",
+      "movement_range_x": 0,
+      "movement_range_y": 0,
+      "trainer_type": "TRAINER_TYPE_NONE",
+      "trainer_sight_or_berry_tree_id": "0",
+      "script": "GoldenrodCity_RadioTower_3F_EventScript_CipherF5",
+      "flag": "FLAG_HIDE_GOLDENROD_RADIO_3F_CIPHER_F5"
+    },
+    {
+      "graphics_id": "OBJ_EVENT_GFX_CIPHER_PEON_M",
+      "x": 27,
+      "y": 5,
+      "elevation": 0,
+      "movement_type": "MOVEMENT_TYPE_FACE_DOWN",
+      "movement_range_x": 0,
+      "movement_range_y": 0,
+      "trainer_type": "TRAINER_TYPE_NONE",
+      "trainer_sight_or_berry_tree_id": "0",
+      "script": "GoldenrodCity_RadioTower_3F_EventScript_CipherM1",
+      "flag": "FLAG_HIDE_GOLDENROD_RADIO_3F_CIPHER_M1"
+    }
+  ],
   "warp_events": [
     {
       "x": 9,
@@ -27,17 +67,99 @@
       "y": 5,
       "elevation": 0,
       "dest_map": "MAP_GOLDENROD_CITY_RADIO_TOWER_4F",
-      "dest_warp_id": "1"
+      "dest_warp_id": "0"
     },
     {
       "x": 29,
       "y": 5,
       "elevation": 0,
       "dest_map": "MAP_GOLDENROD_CITY_RADIO_TOWER_4F",
-      "dest_warp_id": "2"
+      "dest_warp_id": "1"
     }
   ],
-  "coord_events": [],
+  "coord_events": [
+    {
+      "type": "trigger",
+      "x": 23,
+      "y": 10,
+      "elevation": 0,
+      "var": "VAR_TEMP_0",
+      "var_value": "0",
+      "script": "GoldenrodCity_RadioTower_3F_EventScript_CipherF4Trigger1"
+    },
+    {
+      "type": "trigger",
+      "x": 23,
+      "y": 11,
+      "elevation": 0,
+      "var": "VAR_TEMP_0",
+      "var_value": "0",
+      "script": "GoldenrodCity_RadioTower_3F_EventScript_CipherF4Trigger2"
+    },
+    {
+      "type": "trigger",
+      "x": 23,
+      "y": 12,
+      "elevation": 0,
+      "var": "VAR_TEMP_0",
+      "var_value": "0",
+      "script": "GoldenrodCity_RadioTower_3F_EventScript_CipherF4Trigger3"
+    },
+    {
+      "type": "trigger",
+      "x": 18,
+      "y": 5,
+      "elevation": 0,
+      "var": "VAR_TEMP_0",
+      "var_value": "0",
+      "script": "GoldenrodCity_RadioTower_3F_EventScript_CipherF5Trigger1"
+    },
+    {
+      "type": "trigger",
+      "x": 18,
+      "y": 6,
+      "elevation": 0,
+      "var": "VAR_TEMP_0",
+      "var_value": "0",
+      "script": "GoldenrodCity_RadioTower_3F_EventScript_CipherF5Trigger2"
+    },
+    {
+      "type": "trigger",
+      "x": 19,
+      "y": 7,
+      "elevation": 0,
+      "var": "VAR_TEMP_0",
+      "var_value": "0",
+      "script": "GoldenrodCity_RadioTower_3F_EventScript_CipherF5Trigger3"
+    },
+    {
+      "type": "trigger",
+      "x": 28,
+      "y": 5,
+      "elevation": 0,
+      "var": "VAR_TEMP_0",
+      "var_value": "0",
+      "script": "GoldenrodCity_RadioTower_3F_EventScript_CipherM1Trigger1"
+    },
+    {
+      "type": "trigger",
+      "x": 28,
+      "y": 6,
+      "elevation": 0,
+      "var": "VAR_TEMP_0",
+      "var_value": "0",
+      "script": "GoldenrodCity_RadioTower_3F_EventScript_CipherM1Trigger2"
+    },
+    {
+      "type": "trigger",
+      "x": 29,
+      "y": 7,
+      "elevation": 0,
+      "var": "VAR_TEMP_0",
+      "var_value": "0",
+      "script": "GoldenrodCity_RadioTower_3F_EventScript_CipherM1Trigger3"
+    }
+  ],
   "bg_events": [
     {
       "type": "sign",

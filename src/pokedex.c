@@ -137,6 +137,9 @@ static EWRAM_DATA struct PokedexListItem *sPokedexListItem = NULL;
 static EWRAM_DATA struct SpriteTemplate sShadowHeartBarTemplate;
 static EWRAM_DATA u8 sShadowHeartBarSpriteIds[SHADOW_HEART_BAR_SPRITES];
 static EWRAM_DATA bool8 sShadowHeartBarSpritesActive;
+static EWRAM_DATA struct Pokemon sPokedexPartyBackup[PARTY_SIZE];
+static EWRAM_DATA u8 sPokedexPartyBackupCount;
+static EWRAM_DATA bool8 sPokedexPartyBackupValid;
 
 // This is written to, but never read.
 COMMON_DATA u8 gUnusedPokedexU8 = 0;
@@ -253,6 +256,8 @@ static void HighlightScreenSelectBarItem(u8, u16);
 static void HighlightSubmenuScreenSelectBarItem(u8, u16);
 static void ShadowMonitor_ClearScreenSelectBar(u16 *tilemap, u16 size);
 static void ShadowMonitor_PrintTrackerTab(void);
+static void SavePartyBeforeOpeningPokedex(void);
+static void RestorePartyIfPokedexInitChangedIt(void);
 
 static EWRAM_DATA u8 sShadowMonitorTrackerWindowId;
 static void Task_DisplayCaughtMonDexPage(u8);
@@ -852,11 +857,15 @@ static const struct WindowTemplate sShadowMonitorTabWindowTemplate =
     .bg = 1,
     .tilemapLeft = 1,
     .tilemapTop = 0,
-    .width = 7,
+    .width = 11,
     .height = 3,
     .paletteNum = 0,
     .baseBlock = 0x2A0,
 };
+
+#define SHADOW_MONITOR_TAB_BLANK_TILE_ID 255
+static const u8 sShadowMonitorTabBlankTile[32] = { [0 ... 31] = 0xFF };
+static const u32 sShadowMonitorClearSelectBar_Tilemap[] = INCBIN_U32("graphics/pokedex/hgss/SelectBar_clear.bin.lz");
 
 static const u8 sText_No0000[] UNUSED = _("{NO}0000");
 static const u8 sText_No000[] UNUSED = _("{NO}000");
@@ -1603,6 +1612,28 @@ static void VBlankCB_Pokedex(void)
     TransferPlttBuffer();
 }
 
+static void SavePartyBeforeOpeningPokedex(void)
+{
+    memcpy(sPokedexPartyBackup, gPlayerParty, sizeof(sPokedexPartyBackup));
+    sPokedexPartyBackupCount = gPlayerPartyCount;
+    sPokedexPartyBackupValid = TRUE;
+}
+
+static void RestorePartyIfPokedexInitChangedIt(void)
+{
+    if (!sPokedexPartyBackupValid)
+        return;
+
+    if (memcmp(sPokedexPartyBackup, gPlayerParty, sizeof(sPokedexPartyBackup)) != 0
+     || sPokedexPartyBackupCount != gPlayerPartyCount)
+    {
+        memcpy(gPlayerParty, sPokedexPartyBackup, sizeof(sPokedexPartyBackup));
+        gPlayerPartyCount = sPokedexPartyBackupCount;
+    }
+
+    sPokedexPartyBackupValid = FALSE;
+}
+
 static void ResetPokedexView(struct PokedexView *pokedexView)
 {
     u16 i;
@@ -1660,6 +1691,7 @@ static void CB2_OpenPokedexInternal(void)
     {
     case 0:
     default:
+        SavePartyBeforeOpeningPokedex();
         SetVBlankCallback(NULL);
         ResetOtherVideoRegisters(0);
         DmaFillLarge16(3, 0, (u8 *)VRAM, VRAM_SIZE, 0x1000);
@@ -1694,6 +1726,7 @@ static void CB2_OpenPokedexInternal(void)
         gMain.state++;
         break;
     case 3:
+        RestorePartyIfPokedexInitChangedIt();
         EnableInterrupts(1);
         SetVBlankCallback(VBlankCB_Pokedex);
         SetMainCallback2(CB2_Pokedex);
@@ -3866,12 +3899,8 @@ static void LoadScreenSelectBarMain(u16 unused)
 {
     if (gIsShadowMonitorOpen)
     {
-        u16 tilemap[96];
-
-        FillBgTilemapBufferRect_Palette0(1, 0, 0, 0, 32, 32);
-        DecompressDataWithHeaderWram((const u32 *)gPokedexScreenSelectBarMain_Tilemap, tilemap);
-        ShadowMonitor_ClearScreenSelectBar(tilemap, ARRAY_COUNT(tilemap));
-        CopyToBgTilemapBuffer(1, tilemap, sizeof(tilemap), 0);
+        CopyToBgTilemapBuffer(1, sShadowMonitorClearSelectBar_Tilemap, 0, 0);
+        CopyBgTilemapBufferToVram(1);
     }
     else
     {
@@ -3883,12 +3912,8 @@ static void LoadScreenSelectBarSubmenu(u16 unused)
 {
     if (gIsShadowMonitorOpen)
     {
-        u16 tilemap[96];
-
-        FillBgTilemapBufferRect_Palette0(1, 0, 0, 0, 32, 32);
-        DecompressDataWithHeaderWram((const u32 *)gPokedexScreenSelectBarSubmenu_Tilemap, tilemap);
-        ShadowMonitor_ClearScreenSelectBar(tilemap, ARRAY_COUNT(tilemap));
-        CopyToBgTilemapBuffer(1, tilemap, sizeof(tilemap), 0);
+        CopyToBgTilemapBuffer(1, sShadowMonitorClearSelectBar_Tilemap, 0, 0);
+        CopyBgTilemapBufferToVram(1);
     }
     else
     {
@@ -3967,8 +3992,6 @@ static void ShadowMonitor_ClearScreenSelectBar(u16 *tilemap, u16 size)
 {
     u16 x;
     u16 y;
-    const u16 trackerStart = 1;
-    const u16 trackerEnd = 7;
 
     if (tilemap == NULL || size < 32 * 3)
         return;
@@ -3976,18 +3999,15 @@ static void ShadowMonitor_ClearScreenSelectBar(u16 *tilemap, u16 size)
     for (y = 0; y < 3; y++)
     {
         for (x = 0; x < 32; x++)
-        {
-            if (x < trackerStart || x > trackerEnd)
-                tilemap[y * 32 + x] = 0;
-        }
+            tilemap[y * 32 + x] = SHADOW_MONITOR_TAB_BLANK_TILE_ID;
     }
 }
 
 static void ShadowMonitor_PrintTrackerTab(void)
 {
-    static const u8 sText_Tracker[] = _("TRACKER");
-    static const u8 sTextColor[3] = { TEXT_COLOR_TRANSPARENT, TEXT_DYNAMIC_COLOR_6, TEXT_COLOR_LIGHT_GRAY };
-    const u8 tabWidth = 7 * 8;
+    static const u8 sText_Tracker[] = _("{A_BUTTON} TRACKER");
+    static const u8 sTextColor[3] = { TEXT_COLOR_TRANSPARENT, TEXT_COLOR_WHITE, 5 };
+    const u8 tabWidth = 11 * 8;
     const u8 tabY = 1;
     u8 x;
 
@@ -4003,7 +4023,12 @@ static void ShadowMonitor_PrintTrackerTab(void)
     PutWindowTilemap(sShadowMonitorTrackerWindowId);
     x = GetStringCenterAlignXOffset(FONT_NORMAL, sText_Tracker, tabWidth);
     AddTextPrinterParameterized4(sShadowMonitorTrackerWindowId, FONT_NORMAL, x, tabY, 0, 0, sTextColor, TEXT_SKIP_DRAW, sText_Tracker);
-    CopyWindowToVram(sShadowMonitorTrackerWindowId, COPYWIN_GFX);
+    CopyWindowToVram(sShadowMonitorTrackerWindowId, COPYWIN_FULL);
+}
+
+void ShadowMonitor_ResetTrackerTabWindow(void)
+{
+    sShadowMonitorTrackerWindowId = WINDOW_NONE;
 }
 
 #define tState         data[0]

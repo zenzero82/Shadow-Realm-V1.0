@@ -11,17 +11,31 @@ Route34_MapScripts::
 
 Route34_OnTransition:
 	setflag FLAG_HIDE_ROUTE34_HOOPA_RING
+	checkflag FLAG_WES_HIDEOUT_NEBBY_SCENE_DONE
+	goto_if_eq Route34_OnTransition_HideOfficer
 	goto_if_unset FLAG_ROUTE34_HOOPA_SCENE, Route34_OnTransition_Done
 	hideobjectat LOCALID_PLAYER, MAP_ROUTE34
 	hideobjectat ROUTE34_LOCALID_HOOPA_RING, MAP_ROUTE34
 	removeobject ROUTE34_LOCALID_HOOPA_RING
 Route34_OnTransition_Done:
 	end
+Route34_OnTransition_HideOfficer:
+	setvar VAR_TEMP_0, 1
+	hideobjectat ROUTE34_LOCALID_OFFICER, MAP_ROUTE34
+	removeobject ROUTE34_LOCALID_OFFICER
+	goto_if_unset FLAG_ROUTE34_HOOPA_SCENE, Route34_OnTransition_Done
+	hideobjectat LOCALID_PLAYER, MAP_ROUTE34
+	hideobjectat ROUTE34_LOCALID_HOOPA_RING, MAP_ROUTE34
+	removeobject ROUTE34_LOCALID_HOOPA_RING
+	goto Route34_OnTransition_Done
 
 Route34_OnLoad:
+	setvar VAR_TEMP_0, 0
 	setvar VAR_TEMP_1, 1
 	setvar VAR_TEMP_2, 1
 	setflag FLAG_HIDE_ROUTE34_HOOPA_RING
+	checkflag FLAG_WES_HIDEOUT_NEBBY_SCENE_DONE
+	goto_if_eq Route34_OnLoad_HideOfficer
 	goto_if_unset FLAG_ROUTE34_HOOPA_SCENE, Route34_OnLoad_Done
 	setvar VAR_TEMP_1, 0
 	setvar VAR_TEMP_2, 0
@@ -30,6 +44,17 @@ Route34_OnLoad:
 	removeobject ROUTE34_LOCALID_HOOPA_RING
 Route34_OnLoad_Done:
 	end
+Route34_OnLoad_HideOfficer:
+	setvar VAR_TEMP_0, 1
+	hideobjectat ROUTE34_LOCALID_OFFICER, MAP_ROUTE34
+	removeobject ROUTE34_LOCALID_OFFICER
+	goto_if_unset FLAG_ROUTE34_HOOPA_SCENE, Route34_OnLoad_Done
+	setvar VAR_TEMP_1, 0
+	setvar VAR_TEMP_2, 0
+	hideobjectat LOCALID_PLAYER, MAP_ROUTE34
+	hideobjectat ROUTE34_LOCALID_HOOPA_RING, MAP_ROUTE34
+	removeobject ROUTE34_LOCALID_HOOPA_RING
+	goto Route34_OnLoad_Done
 
 Route34_OnWarp::
 	map_script_2 VAR_TEMP_2, 0, Route34_EventScript_HidePlayerOnWarp
@@ -105,7 +130,7 @@ Route34_EventScript_Sign2::
 
 Route34_EventScript_Sign3::
 	lock
-	msgbox Route34_Text_DoorLocked, MSGBOX_SIGN
+	msgbox Route34_Text_TrainerTips, MSGBOX_SIGN
 	closemessage
 	release
 	end
@@ -151,6 +176,8 @@ Route34_EventScript_Victor_ToPlayer_Done:
 	return
 
 Route34_EventScript_OfficerBlock_0::
+	checkflag FLAG_WES_HIDEOUT_NEBBY_SCENE_DONE
+	goto_if_eq Route34_EventScript_OfficerBlock_Done
 	lockall
 	applymovement ROUTE34_LOCALID_OFFICER, Route34_Movement_Officer_Approach0
 	waitmovement 0
@@ -165,6 +192,8 @@ Route34_EventScript_OfficerBlock_0::
 	end
 
 Route34_EventScript_OfficerBlock_1::
+	checkflag FLAG_WES_HIDEOUT_NEBBY_SCENE_DONE
+	goto_if_eq Route34_EventScript_OfficerBlock_Done
 	lockall
 	applymovement ROUTE34_LOCALID_OFFICER, Route34_Movement_Officer_Approach1
 	waitmovement 0
@@ -179,6 +208,8 @@ Route34_EventScript_OfficerBlock_1::
 	end
 
 Route34_EventScript_OfficerBlock_2::
+	checkflag FLAG_WES_HIDEOUT_NEBBY_SCENE_DONE
+	goto_if_eq Route34_EventScript_OfficerBlock_Done
 	lockall
 	applymovement ROUTE34_LOCALID_OFFICER, Route34_Movement_Officer_Approach2
 	waitmovement 0
@@ -193,6 +224,8 @@ Route34_EventScript_OfficerBlock_2::
 	end
 
 Route34_EventScript_OfficerBlock_3::
+	checkflag FLAG_WES_HIDEOUT_NEBBY_SCENE_DONE
+	goto_if_eq Route34_EventScript_OfficerBlock_Done
 	lockall
 	applymovement ROUTE34_LOCALID_OFFICER, Route34_Movement_Officer_Approach3
 	waitmovement 0
@@ -207,6 +240,8 @@ Route34_EventScript_OfficerBlock_3::
 	end
 
 Route34_EventScript_OfficerBlock_4::
+	checkflag FLAG_WES_HIDEOUT_NEBBY_SCENE_DONE
+	goto_if_eq Route34_EventScript_OfficerBlock_Done
 	lockall
 	applymovement ROUTE34_LOCALID_OFFICER, Route34_Movement_Officer_Approach4
 	waitmovement 0
@@ -218,6 +253,9 @@ Route34_EventScript_OfficerBlock_4::
 	applymovement LOCALID_PLAYER, Route34_Movement_Player_StepDown
 	waitmovement 0
 	releaseall
+	end
+
+Route34_EventScript_OfficerBlock_Done:
 	end
 
 Route34_Movement_StepFromPortal_First:
@@ -469,4 +507,3 @@ Route34_Text_Youngster_Defeat:
 
 Route34_Text_Youngster_After:
 	.string "Okay, I need more training.$"
-

@@ -526,35 +526,63 @@ AzaleaTown_Gym_EventScript_GymGuy2::
 
 AzaleaTown_Gym_EventScript_Al::
 	setspeaker AzaleaTown_Gym_Speaker_BugCatcherAl
-	trainerbattle_single TRAINER_AZALEA_AL AzaleaTown_Gym_Text_BugCatcherAlSeen, AzaleaTown_Gym_Text_BugCatcherAlBeaten
-	msgbox AzaleaTown_Gym_Text_BugCatcherAlAfter, MSGBOX_AUTOCLOSE
+	trainerbattle_single TRAINER_AZALEA_AL, AzaleaTown_Gym_Text_BugCatcherAlSeen, AzaleaTown_Gym_Text_BugCatcherAlBeaten, AzaleaTown_Gym_EventScript_Al_After
+	end
+
+AzaleaTown_Gym_EventScript_Al_After::
+	setspeaker AzaleaTown_Gym_Speaker_BugCatcherAl
+	msgbox AzaleaTown_Gym_Text_BugCatcherAlAfter, MSGBOX_NPC
+	closemessage
+	release
 	end
 
 AzaleaTown_Gym_EventScript_Josh::
 	setspeaker AzaleaTown_Gym_Speaker_BugCatcherJosh
-	trainerbattle_single TRAINER_AZALEA_JOSH AzaleaTown_Gym_Text_BugCatcherJoshSeen, AzaleaTown_Gym_Text_BugCatcherJoshBeaten
-	msgbox AzaleaTown_Gym_Text_BugCatcherJoshAfter, MSGBOX_AUTOCLOSE
+	trainerbattle_single TRAINER_AZALEA_JOSH, AzaleaTown_Gym_Text_BugCatcherJoshSeen, AzaleaTown_Gym_Text_BugCatcherJoshBeaten, AzaleaTown_Gym_EventScript_Josh_After
+	end
+
+AzaleaTown_Gym_EventScript_Josh_After::
+	setspeaker AzaleaTown_Gym_Speaker_BugCatcherJosh
+	msgbox AzaleaTown_Gym_Text_BugCatcherJoshAfter, MSGBOX_NPC
+	closemessage
+	release
 	end
 
 AzaleaTown_Gym_EventScript_Benny::
 	setspeaker AzaleaTown_Gym_Speaker_BugCatcherBenny
-	trainerbattle_single TRAINER_AZALEA_BENNY AzaleaTown_Gym_Text_BugCatcherBennySeen, AzaleaTown_Gym_Text_BugCatcherBennyBeaten
-	msgbox AzaleaTown_Gym_Text_BugCatcherBennyAfter, MSGBOX_AUTOCLOSE
+	trainerbattle_single TRAINER_AZALEA_BENNY, AzaleaTown_Gym_Text_BugCatcherBennySeen, AzaleaTown_Gym_Text_BugCatcherBennyBeaten, AzaleaTown_Gym_EventScript_Benny_After
+	end
+
+AzaleaTown_Gym_EventScript_Benny_After::
+	setspeaker AzaleaTown_Gym_Speaker_BugCatcherBenny
+	msgbox AzaleaTown_Gym_Text_BugCatcherBennyAfter, MSGBOX_NPC
+	closemessage
+	release
 	end
 
 AzaleaTown_Gym_EventScript_Amy::
 	setspeaker AzaleaTown_Gym_Speaker_TwinAmy
-	trainerbattle_double TRAINER_AZALEA_AMY_AND_MAY, AzaleaTown_Gym_Text_TwinsAmyMay1Seen, AzaleaTown_Gym_Text_TwinsAmyMay1Beaten, AzaleaTown_Gym_Text_TwinsNotEnoughMons
+	trainerbattle_double TRAINER_AZALEA_AMY_AND_MAY, AzaleaTown_Gym_Text_TwinsAmyMay1Seen, AzaleaTown_Gym_Text_TwinsAmyMay1Beaten, AzaleaTown_Gym_Text_TwinsNotEnoughMons, AzaleaTown_Gym_EventScript_Amy_After
+	end
+
+AzaleaTown_Gym_EventScript_Amy_After::
+	setspeaker AzaleaTown_Gym_Speaker_TwinAmy
 	special GetPlayerBigGuyGirlString
-	msgbox AzaleaTown_Gym_Text_TwinsAmyMay1After, MSGBOX_DEFAULT
+	msgbox AzaleaTown_Gym_Text_TwinsAmyMay1After, MSGBOX_NPC
+	closemessage
 	release
 	end
-	
+
 AzaleaTown_Gym_EventScript_May::
 	setspeaker AzaleaTown_Gym_Speaker_TwinMay
-	trainerbattle_double TRAINER_AZALEA_AMY_AND_MAY, AzaleaTown_Gym_Text_TwinsAmyMay2Seen, AzaleaTown_Gym_Text_TwinsAmyMay2Beaten, AzaleaTown_Gym_Text_TwinsNotEnoughMons
+	trainerbattle_double TRAINER_AZALEA_AMY_AND_MAY, AzaleaTown_Gym_Text_TwinsAmyMay2Seen, AzaleaTown_Gym_Text_TwinsAmyMay2Beaten, AzaleaTown_Gym_Text_TwinsNotEnoughMons, AzaleaTown_Gym_EventScript_May_After
+	end
+
+AzaleaTown_Gym_EventScript_May_After::
+	setspeaker AzaleaTown_Gym_Speaker_TwinMay
 	special GetPlayerBigGuyGirlString
-	msgbox AzaleaTown_Gym_Text_TwinsAmyMay2After, MSGBOX_DEFAULT
+	msgbox AzaleaTown_Gym_Text_TwinsAmyMay2After, MSGBOX_NPC
+	closemessage
 	release
 	end
 
@@ -757,9 +785,10 @@ AzaleaTown_Gym_Text_FuryCutterSpeech:
 	.string "Isn't that great?\n"
 	.string "I discovered it!\p"
 	.string "One more thing before you go.\n"
-	.string "Can you check out Slopoke Well\l"
+	.string "Can you check out Slowpoke Well\l"
 	.string "for me?\p"
-	.string "Seems like some troublemakers are there.$"
+	.string "Seems like some troublemakers are\n"
+	.string "there.$"
 
 AzaleaTown_Gym_Text_BugsyAdvice:
 	.string "Bug POKéMON are tough. Training\n"

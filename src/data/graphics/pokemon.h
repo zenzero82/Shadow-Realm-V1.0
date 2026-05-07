@@ -1145,6 +1145,20 @@ const u32 gObjectEventPic_Substitute[] = INCBIN_COMP("graphics/pokemon/question_
 #endif //OW_PKMN_OBJECTS_SHARE_PALETTES
 #endif //OW_POKEMON_OBJECT_EVENTS
 #endif //P_ALOLAN_FORMS
+
+#if P_MEGA_EVOLUTIONS
+    const u32 gMonFrontPic_RaichuMegaX[] = INCBIN_U32("graphics/pokemon/raichu/mega_x/front.4bpp.lz");
+    const u16 gMonPalette_RaichuMegaX[] = INCBIN_U16("graphics/pokemon/raichu/mega_x/normal.gbapal");
+    const u32 gMonBackPic_RaichuMegaX[] = INCBIN_U32("graphics/pokemon/raichu/mega_x/back.4bpp.lz");
+    const u16 gMonShinyPalette_RaichuMegaX[] = INCBIN_U16("graphics/pokemon/raichu/mega_x/shiny.gbapal");
+    const u8 gMonIcon_RaichuMegaX[] = INCBIN_U8("graphics/pokemon/raichu/mega_x/icon.4bpp");
+
+    const u32 gMonFrontPic_RaichuMegaY[] = INCBIN_U32("graphics/pokemon/raichu/mega_y/front.4bpp.lz");
+    const u16 gMonPalette_RaichuMegaY[] = INCBIN_U16("graphics/pokemon/raichu/mega_y/normal.gbapal");
+    const u32 gMonBackPic_RaichuMegaY[] = INCBIN_U32("graphics/pokemon/raichu/mega_y/back.4bpp.lz");
+    const u16 gMonShinyPalette_RaichuMegaY[] = INCBIN_U16("graphics/pokemon/raichu/mega_y/shiny.gbapal");
+    const u8 gMonIcon_RaichuMegaY[] = INCBIN_U8("graphics/pokemon/raichu/mega_y/icon.4bpp");
+#endif //P_MEGA_EVOLUTIONS
 #endif //P_FAMILY_PIKACHU
 
 #if P_FAMILY_SANDSHREW

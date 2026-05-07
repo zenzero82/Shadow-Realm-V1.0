@@ -98,6 +98,21 @@ bool8 GimmighoulSignpost_ShouldTrigger(u8 mapGroup, u8 mapNum, u16 x, u16 y, u16
     return TRUE;
 }
 
+bool8 GimmighoulSignpost_HasAnyUsedOnMap(u8 mapGroup, u8 mapNum)
+{
+    u16 i;
+
+    for (i = 0; i < ARRAY_COUNT(gGimmighoulSignposts); i++)
+    {
+        if (gGimmighoulSignposts[i].mapGroup == mapGroup
+         && gGimmighoulSignposts[i].mapNum == mapNum
+         && GimmighoulSignpost_HasUsed(i))
+            return TRUE;
+    }
+
+    return FALSE;
+}
+
 void GimmighoulSignpost_MarkUsed(u16 index)
 {
     u16 byte = index / 8;

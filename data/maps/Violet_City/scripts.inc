@@ -176,9 +176,6 @@ Violet_City_Speaker_Sage:
 Violet_City_Speaker_Policeman:
 	.string "OFFICER ROSS$"
 
-Violet_City_Speaker_PolicemanGate:
-	.string "OFFICER$"
-
 Violet_City_Speaker_Woman:
 	.string "MARA$"
 
@@ -245,15 +242,6 @@ Violet_City_EventScript_Policeman::
 	call Violet_City_EventScript_CheckVioletQuest
 	end
 
-Violet_City_EventScript_PolicemanGate::
-	faceplayer
-	setspeaker Violet_City_Speaker_PolicemanGate
-	msgbox Violet_City_Text_PolicemanGate, MSGBOX_NPC
-	closemessage
-	setflag FLAG_QUEST_VIOLET_NPC_POLICEMAN_GATE
-	call Violet_City_EventScript_CheckVioletQuest
-	end
-
 Violet_City_EventScript_Woman::
 	faceplayer
 	setspeaker Violet_City_Speaker_Woman
@@ -302,10 +290,6 @@ Violet_City_EventScript_CheckVioletQuest_CheckCompleted:
 	goto Violet_City_EventScript_CheckVioletQuest_Done
 Violet_City_EventScript_CheckVioletQuest_CheckPoliceman:
 	checkflag FLAG_QUEST_VIOLET_NPC_POLICEMAN
-	goto_if_eq Violet_City_EventScript_CheckVioletQuest_CheckPolicemanGate
-	goto Violet_City_EventScript_CheckVioletQuest_Done
-Violet_City_EventScript_CheckVioletQuest_CheckPolicemanGate:
-	checkflag FLAG_QUEST_VIOLET_NPC_POLICEMAN_GATE
 	goto_if_eq Violet_City_EventScript_CheckVioletQuest_CheckWoman
 	goto Violet_City_EventScript_CheckVioletQuest_Done
 Violet_City_EventScript_CheckVioletQuest_CheckWoman:
@@ -408,10 +392,6 @@ Violet_City_Text_Policeman:
 	.string "Traffic's light today. Enjoy the\n"
 	.string "walk, but stay aware.$"
 
-Violet_City_Text_PolicemanGate:
-	.string "Nobody can pass until the game is\n"
-	.string "finished.$"
-
 Violet_City_Text_Woman:
 	.string "VIOLET is small, but travelers keep\n"
 	.string "it lively.$"
@@ -436,4 +416,3 @@ VioletCity_Text_GymSign:
 	.string "VIOLET CITY POKéMON GYM\p"
 	.string "LEADER: FALKNER, The Elegant\n"
 	.string "Master of Flying POKéMON$"
-

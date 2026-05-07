@@ -128,6 +128,10 @@ static const u16 sRaichuFormSpeciesIdTable[] = {
 #if P_ALOLAN_FORMS
     SPECIES_RAICHU_ALOLA,
 #endif
+#if P_MEGA_EVOLUTIONS
+    SPECIES_RAICHU_MEGA_X,
+    SPECIES_RAICHU_MEGA_Y,
+#endif
     FORM_SPECIES_END,
 };
 #endif //P_FAMILY_PIKACHU

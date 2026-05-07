@@ -376,7 +376,7 @@ void UpdateIndicatorVisibilityAndType(u32 healthboxId, bool32 invisible)
     {
         EnsureIndicatorPaletteLoaded(palTag);
         palNum = IndexOfSpritePaletteTag(palTag);
-        if (palNum == 0xFFFFFFFF)
+        if (palNum == 0xFF)
         {
             sprite->invisible = TRUE;
             return;

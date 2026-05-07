@@ -40,6 +40,22 @@ const u32 gBattleEnvironmentTiles_RockGym[] = INCBIN_U32("graphics/battle_enviro
 const u16 gBattleEnvironmentPalette_RockGym[] = INCBIN_U16("graphics/battle_environment/rock_gym/palette.gbapal");
 const u32 gBattleEnvironmentTilemap_RockGym[] = INCBIN_U32("graphics/battle_environment/rock_gym/map.bin.lz");
 
+const u32 gBattleEnvironmentTiles_BrockGym[] = INCBIN_U32("graphics/battle_environment/brock_gym/tiles.4bpp.lz");
+const u16 gBattleEnvironmentPalette_BrockGym[] = INCBIN_U16("graphics/battle_environment/brock_gym/palette.gbapal");
+const u32 gBattleEnvironmentTilemap_BrockGym[] = INCBIN_U32("graphics/battle_environment/brock_gym/map.bin.lz");
+
+const u32 gBattleEnvironmentTiles_GymNeutralBg[] = INCBIN_U32("graphics/battle_environment/gym_neutralbg/tiles.4bpp.lz");
+const u16 gBattleEnvironmentPalette_GymNeutralBg[] = INCBIN_U16("graphics/battle_environment/gym_neutralbg/palette.gbapal");
+const u16 gBattleEnvironmentPalette_GymNeutralBg_Rock[] = INCBIN_U16("graphics/battle_environment/gym_neutralbg/gym_rock.gbapal");
+const u16 gBattleEnvironmentPalette_GymNeutralBg_Water[] = INCBIN_U16("graphics/battle_environment/gym_neutralbg/gym_water.gbapal");
+const u16 gBattleEnvironmentPalette_GymNeutralBg_Flying[] = INCBIN_U16("graphics/battle_environment/gym_neutralbg/gym_flying.gbapal");
+const u16 gBattleEnvironmentPalette_GymNeutralBg_Bug[] = INCBIN_U16("graphics/battle_environment/gym_neutralbg/gym_bug.gbapal");
+const u16 gBattleEnvironmentPalette_GymNeutralBg_Grass[] = INCBIN_U16("graphics/battle_environment/gym_neutralbg/gym_grass.gbapal");
+const u16 gBattleEnvironmentPalette_GymNeutralBg_Electric[] = INCBIN_U16("graphics/battle_environment/gym_neutralbg/gym_electric.gbapal");
+const u16 gBattleEnvironmentPalette_GymNeutralBg_Normal[] = INCBIN_U16("graphics/battle_environment/gym_neutralbg/gym_normal.gbapal");
+const u16 gBattleEnvironmentPalette_GymNeutralBg_Ground[] = INCBIN_U16("graphics/battle_environment/gym_neutralbg/gym_ground.gbapal");
+const u32 gBattleEnvironmentTilemap_GymNeutralBg[] = INCBIN_U32("graphics/battle_environment/gym_neutralbg/map.bin.lz");
+
 const u32 gBattleEnvironmentTiles_Stadium[] = INCBIN_U32("graphics/battle_environment/stadium/tiles.4bpp.lz");
 const u32 gBattleEnvironmentTilemap_Stadium[] = INCBIN_U32("graphics/battle_environment/stadium/map.bin.lz");
 

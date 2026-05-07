@@ -449,6 +449,10 @@ static const struct SpriteFrameImage sPicTable_MeloettaShadow[] = {
     overworld_ascending_frames(gObjectEventPic_MeloettaShadow, 4, 4),
 };
 
+static const struct SpriteFrameImage sPicTable_MetagrossShadow[] = {
+    overworld_ascending_frames(gObjectEventPic_MetagrossShadow, 4, 4),
+};
+
 static const struct SpriteFrameImage sPicTable_MespritShadow[] = {
     overworld_ascending_frames(gObjectEventPic_MespritShadow, 4, 4),
 };
@@ -901,6 +905,7 @@ static const struct SpriteFrameImage *const sShadowOverworldPicTables[NUM_SPECIE
     [SPECIES_MEGANIUM] = sPicTable_MeganiumShadow,
     [SPECIES_MELMETAL] = sPicTable_MelmetalShadow,
     [SPECIES_MELOETTA] = sPicTable_MeloettaShadow,
+    [SPECIES_METAGROSS] = sPicTable_MetagrossShadow,
     [SPECIES_MESPRIT] = sPicTable_MespritShadow,
     [SPECIES_MEOWTH] = sPicTable_MeowthShadow,
     [SPECIES_MEOWSCARADA] = sPicTable_MeowscaradaShadow,
@@ -1106,6 +1111,7 @@ static const u16 *const sShadowOverworldPalettes[NUM_SPECIES] = {
     [SPECIES_MEGANIUM] = gMonPalette_MeganiumShadow,
     [SPECIES_MELMETAL] = gMonPalette_MelmetalShadow,
     [SPECIES_MELOETTA] = gMonPalette_MeloettaShadow,
+    [SPECIES_METAGROSS] = gMonPalette_MetagrossShadow,
     [SPECIES_MESPRIT] = gMonPalette_MespritShadow,
     [SPECIES_MEOWTH] = gMonPalette_MeowthShadow,
     [SPECIES_MEOWSCARADA] = gMonPalette_MeowscaradaShadow,

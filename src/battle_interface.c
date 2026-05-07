@@ -30,6 +30,7 @@
 #include "item_use.h"
 #include "party_menu.h"
 #include "event_data.h"
+#include "bug_contest.h"
 #include "constants/flags.h"
 #include "test_runner.h"
 #include "constants/battle_anim.h"
@@ -37,6 +38,8 @@
 #include "constants/songs.h"
 #include "constants/items.h"
 #include "caps.h"
+
+extern const u8 gText_SportBalls[];
 
 EWRAM_DATA u8 gStatusSummaryBarPalSlot = 0;
 EWRAM_DATA u8 gStatusSummaryBallsPalSlot = 0;
@@ -1701,8 +1704,8 @@ static void UpdateHpTextInHealthboxInDoubles(u32 healthboxSpriteId, u32 maxOrCur
                 u8 targetSpriteId = (frameSpriteId < MAX_SPRITES) ? frameSpriteId : healthboxSpriteId;
 
                 CpuCopy32(GetHealthboxElementGfxPtr(HEALTHBOX_GFX_FRAME_END),
-                              (void *)(OBJ_VRAM0 + 0x680) + (gSprites[targetSpriteId].oam.tileNum * TILE_SIZE_4BPP),
-                               0x20);
+                          (void *)(OBJ_VRAM0 + 0x680) + (gSprites[targetSpriteId].oam.tileNum * TILE_SIZE_4BPP),
+                          0x20);
             }
             // Erases HP bar leftover.
             FillHealthboxObject((void *)(OBJ_VRAM0) + (gSprites[barSpriteId].oam.tileNum * TILE_SIZE_4BPP), 0, 2);
@@ -2419,14 +2422,13 @@ static void TryAddPokeballIconToHealthbox(u8 healthboxSpriteId, bool8 noStatus)
 static void UpdateStatusIconInHealthbox(u8 healthboxSpriteId)
 {
     s32 i;
-    u8 battler, healthBarSpriteId;
+    u8 battler;
     u32 status, status2, pltAdder;
     const u8 *statusGfxPtr;
     s16 tileNumAdder;
     u8 statusPalId;
 
     battler = gSprites[healthboxSpriteId].hMain_Battler;
-    healthBarSpriteId = gSprites[healthboxSpriteId].hMain_HealthBarSpriteId;
     status = GetMonData(GetBattlerMon(battler), MON_DATA_STATUS);
     status2 = gBattleMons[battler].status2;
     if (IsOnPlayerSide(battler))
@@ -2483,9 +2485,6 @@ static void UpdateStatusIconInHealthbox(u8 healthboxSpriteId)
         for (i = 0; i < 2; i++)
             CpuCopy32(statusGfxPtr, (void *)(OBJ_VRAM0 + (gSprites[healthboxSpriteId].oam.tileNum + tileNumAdder + i) * TILE_SIZE_4BPP), 32);
 
-        if (!gBattleSpritesDataPtr->battlerData[battler].hpNumbersNoBars)
-            CpuCopy32(GetHealthboxElementGfxPtr(HEALTHBOX_GFX_1), (void *)(OBJ_VRAM0 + gSprites[healthBarSpriteId].oam.tileNum * TILE_SIZE_4BPP), 64);
-
         TryAddPokeballIconToHealthbox(healthboxSpriteId, TRUE);
         return;
     }
@@ -2496,13 +2495,6 @@ static void UpdateStatusIconInHealthbox(u8 healthboxSpriteId)
     FillPalette(sStatusIconColors[statusPalId], OBJ_PLTT_OFFSET + pltAdder, PLTT_SIZEOF(1));
     CpuCopy16(&gPlttBufferUnfaded[OBJ_PLTT_OFFSET + pltAdder], (u16 *)OBJ_PLTT + pltAdder, PLTT_SIZEOF(1));
     CpuCopy32(statusGfxPtr, (void *)(OBJ_VRAM0 + (gSprites[healthboxSpriteId].oam.tileNum + tileNumAdder) * TILE_SIZE_4BPP), 64);
-    if (GetBattlerCoordsIndex(battler) == BATTLE_COORDS_DOUBLES || !IsOnPlayerSide(battler))
-    {
-        if (!gBattleSpritesDataPtr->battlerData[battler].hpNumbersNoBars)
-        {
-            CpuCopy32(GetHealthboxElementGfxPtr(HEALTHBOX_GFX_1), (void *)(OBJ_VRAM0 + gSprites[healthBarSpriteId].oam.tileNum * TILE_SIZE_4BPP), 64);
-        }
-    }
     TryAddPokeballIconToHealthbox(healthboxSpriteId, FALSE);
 }
 
@@ -2580,8 +2572,9 @@ static void UpdateSafariBallsTextOnHealthbox(u8 healthboxSpriteId)
 {
     u32 windowId, spriteTileNum;
     u8 *windowTileData;
+    const u8 *ballText = GetBugContestFlag() ? gText_SportBalls : gText_SafariBalls;
 
-    windowTileData = AddTextPrinterAndCreateWindowOnHealthbox(gText_SafariBalls, 0, 3, 2, &windowId);
+    windowTileData = AddTextPrinterAndCreateWindowOnHealthbox(ballText, 0, 3, 2, &windowId);
     spriteTileNum = gSprites[healthboxSpriteId].oam.tileNum * TILE_SIZE_4BPP;
     TextIntoHealthboxObject((void *)(OBJ_VRAM0 + 0x40) + spriteTileNum, windowTileData, 6);
     TextIntoHealthboxObject((void *)(OBJ_VRAM0 + 0x800) + spriteTileNum, windowTileData + 0xC0, 2);
@@ -3840,6 +3833,8 @@ bool32 CanThrowLastUsedBall(void)
 {
     if (B_LAST_USED_BALL == FALSE)
         return FALSE;
+    if (GetBugContestFlag() && gBallToDisplay != ITEM_SPORT_BALL)
+        return FALSE;
     if (!CanThrowBall())
         return FALSE;
     if (!CheckBagHasItem(gBallToDisplay, 1))
@@ -3892,6 +3887,8 @@ void TryAddLastUsedBallItemSprites(void)
 {
     if (B_LAST_USED_BALL == FALSE)
         return;
+    if (GetBugContestFlag())
+        gBallToDisplay = ITEM_SPORT_BALL;
 #if B_LAST_USED_BALL_BUTTON == R_BUTTON
     TryAddCallWindowSprite();
 #endif

@@ -450,6 +450,11 @@ struct ItemIcon
 };
 
 #define STORAGE_HEART_BAR_SPRITE_COUNT 9
+#define STORAGE_DISPLAY_ITEM_Y_NORMAL 48
+#define STORAGE_HEART_BAR_LABEL_Y_DEFAULT 142
+#define STORAGE_HEART_BAR_BAR_Y_DEFAULT 150
+#define STORAGE_HEART_BAR_LABEL_Y_SHADOW 138
+#define STORAGE_HEART_BAR_BAR_Y_SHADOW 146
 
 struct StorageHeartBar
 {
@@ -969,6 +974,7 @@ static void LoadDisplayMonGfx(u16, u32);
 static void SpriteCB_DisplayMonMosaic(struct Sprite *);
 static void SetPartySlotTilemapAt(u8 left, u8 top, bool8 hasMon, u8 palNum);
 static u8 GetPartySlotPaletteNum(u8 partyId);
+static void SetHeartBarPosition(u16 labelY, u16 barY);
 static void LoadStoragePartyMenuPalettes(void);
 
 // Tilemap utility
@@ -4794,8 +4800,8 @@ static void CreateHeartBarSprites(void)
     struct SpritePalette palette;
     const u16 barCenterX = 43;
     const u16 barBaseX = barCenterX - (STORAGE_HEART_BAR_SPRITE_COUNT * 8) / 2;
-    const u16 barBaseY = 150;
-    const u16 labelY = barBaseY - 8;
+    const u16 barBaseY = STORAGE_HEART_BAR_BAR_Y_DEFAULT;
+    const u16 labelY = STORAGE_HEART_BAR_LABEL_Y_DEFAULT;
     const u16 labelX = barBaseX + 10;
 
     sStorageHeartBar = AllocZeroed(sizeof(*sStorageHeartBar));
@@ -4975,7 +4981,7 @@ static void PrintDisplayMonInfo(void)
         AddTextPrinterParameterized(WIN_DISPLAY_INFO, GetFontIdToFit(sStorage->displayMonNameText, FONT_NORMAL, 0, WindowWidthPx(WIN_DISPLAY_INFO) - 6), sStorage->displayMonNameText, 6, 0, TEXT_SKIP_DRAW, NULL);
         AddTextPrinterParameterized(WIN_DISPLAY_INFO, GetFontIdToFit(sStorage->displayMonNameText, FONT_SHORT, 0, WindowWidthPx(WIN_DISPLAY_INFO) - 12), sStorage->displayMonSpeciesName, 6, 15, TEXT_SKIP_DRAW, NULL);
         AddTextPrinterParameterized(WIN_DISPLAY_INFO, FONT_SHORT, sStorage->displayMonGenderLvlText, 10, 29, TEXT_SKIP_DRAW, NULL);
-        AddTextPrinterParameterized(WIN_DISPLAY_INFO, GetFontIdToFit(sStorage->displayMonItemName, FONT_SMALL, 0, WindowWidthPx(WIN_DISPLAY_INFO) - 6), sStorage->displayMonItemName, 6, 43, TEXT_SKIP_DRAW, NULL);
+        AddTextPrinterParameterized(WIN_DISPLAY_INFO, GetFontIdToFit(sStorage->displayMonItemName, FONT_SMALL, 0, WindowWidthPx(WIN_DISPLAY_INFO) - 6), sStorage->displayMonItemName, 6, STORAGE_DISPLAY_ITEM_Y_NORMAL, TEXT_SKIP_DRAW, NULL);
     }
     else
     {
@@ -4990,12 +4996,14 @@ static void PrintDisplayMonInfo(void)
     {
         if (sStorage->displayMonIsShadow && !sStorage->displayMonIsEgg)
         {
+            SetHeartBarPosition(STORAGE_HEART_BAR_LABEL_Y_SHADOW, STORAGE_HEART_BAR_BAR_Y_SHADOW);
             UpdateHeartBar();
             SetHeartBarVisible(FALSE);
             sStorage->markingComboSprite->invisible = TRUE;
         }
         else
         {
+            SetHeartBarPosition(STORAGE_HEART_BAR_LABEL_Y_DEFAULT, STORAGE_HEART_BAR_BAR_Y_DEFAULT);
             SetHeartBarVisible(TRUE);
             UpdateMonMarkingTiles(sStorage->displayMonMarkings, sStorage->markingComboTilesPtr);
             sStorage->markingComboSprite->invisible = FALSE;
@@ -5004,6 +5012,7 @@ static void PrintDisplayMonInfo(void)
     else
     {
         sStorage->markingComboSprite->invisible = TRUE;
+        SetHeartBarPosition(STORAGE_HEART_BAR_LABEL_Y_DEFAULT, STORAGE_HEART_BAR_BAR_Y_DEFAULT);
         SetHeartBarVisible(TRUE);
     }
 }
@@ -5051,6 +5060,32 @@ static void UpdateHeartBar(void)
             StartSpriteAnim(sStorageHeartBar->sprites[i], animNum);
         else
             StartSpriteAnim(sStorageHeartBar->sprites[i], 0);
+    }
+}
+
+static void SetHeartBarPosition(u16 labelY, u16 barY)
+{
+    u8 i;
+    const u16 barCenterX = 43;
+    const u16 barBaseX = barCenterX - (STORAGE_HEART_BAR_SPRITE_COUNT * 8) / 2;
+    const u16 labelX = barBaseX + 10;
+
+    if (sStorageHeartBar == NULL)
+        return;
+
+    if (sStorageHeartBar->labelSprite != NULL)
+    {
+        sStorageHeartBar->labelSprite->x = labelX;
+        sStorageHeartBar->labelSprite->y = labelY;
+    }
+
+    for (i = 0; i < STORAGE_HEART_BAR_SPRITE_COUNT; i++)
+    {
+        if (sStorageHeartBar->sprites[i] != NULL)
+        {
+            sStorageHeartBar->sprites[i]->x = barBaseX + i * 8;
+            sStorageHeartBar->sprites[i]->y = barY;
+        }
     }
 }
 
@@ -5126,7 +5161,7 @@ static void LoadStoragePartyMenuPalettes(void)
 {
     u16 shadowPal[16];
     u16 reversePal[16];
-    const u16 *basePal = &gPlttBufferUnfaded[BG_PLTT_ID(PARTY_MENU_PAL_NORMAL)];
+    const u16 *basePal = gStorageSystemPartyMenu_Pal;
 
     CpuCopy16(basePal, shadowPal, PLTT_SIZEOF(1));
     CpuCopy16(basePal, reversePal, PLTT_SIZEOF(1));

@@ -903,6 +903,14 @@ extern const u8 gMonIcon_MeloettaShadow[];
 extern const u32 gObjectEventPic_MeloettaShadow[];
 #endif
 
+extern const u32 gMonFrontPic_MetagrossShadow[];
+extern const u32 gMonBackPic_MetagrossShadow[];
+extern const u16 gMonPalette_MetagrossShadow[];
+extern const u8 gMonIcon_MetagrossShadow[];
+#if OW_POKEMON_OBJECT_EVENTS
+extern const u32 gObjectEventPic_MetagrossShadow[];
+#endif
+
 extern const u32 gMonFrontPic_MespritShadow[];
 extern const u32 gMonBackPic_MespritShadow[];
 extern const u16 gMonPalette_MespritShadow[];

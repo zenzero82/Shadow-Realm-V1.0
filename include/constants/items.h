@@ -1003,8 +1003,10 @@
 #define ITEM_CHESNAUGHTITE 836
 #define ITEM_DELPHOXITE 837
 #define ITEM_GRENINJITE 838
+#define ITEM_RAICHUNITE_X 839
+#define ITEM_RAICHUNITE_Y 840
 
-#define ITEMS_COUNT 839
+#define ITEMS_COUNT 841
 #define ITEM_FIELD_ARROW ITEMS_COUNT
 
 // A special item id associated with "Cancel"/"Exit" etc. in a list of items or decorations

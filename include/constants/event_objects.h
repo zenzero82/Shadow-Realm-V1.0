@@ -13,23 +13,23 @@
 #define OBJ_EVENT_GFX_NINJA_BOY                    5
 #define OBJ_EVENT_GFX_TWIN                         6
 #define OBJ_EVENT_GFX_BOY_1                        7
-#define OBJ_EVENT_GFX_GIRL_1                       8
-#define OBJ_EVENT_GFX_BOY_2                        9
-#define OBJ_EVENT_GFX_GIRL_2                      10
+#define OBJ_EVENT_GFX_BREEDER_F                       8
+#define OBJ_EVENT_GFX_BREEDER_M                        9
+#define OBJ_EVENT_GFX_AROMA_GIRL                      10
 #define OBJ_EVENT_GFX_LITTLE_BOY                  11
 #define OBJ_EVENT_GFX_LITTLE_GIRL                 12
-#define OBJ_EVENT_GFX_BOY_3                       13
-#define OBJ_EVENT_GFX_GIRL_3                      14
+#define OBJ_EVENT_GFX_POKEMON_RANGER_M                       13
+#define OBJ_EVENT_GFX_POKEMON_RANGER_F                      14
 #define OBJ_EVENT_GFX_RICH_BOY                    15
-#define OBJ_EVENT_GFX_WOMAN_1                     16
+#define OBJ_EVENT_GFX_DELINQUENT_F                     16
 #define OBJ_EVENT_GFX_FAT_MAN                     17
 #define OBJ_EVENT_GFX_POKEFAN_F                   18
 #define OBJ_EVENT_GFX_MAN_1                       19
-#define OBJ_EVENT_GFX_WOMAN_2                     20
+#define OBJ_EVENT_GFX_LADY                     20
 #define OBJ_EVENT_GFX_EXPERT_M                    21
 #define OBJ_EVENT_GFX_EXPERT_F                    22
-#define OBJ_EVENT_GFX_MAN_2                       23
-#define OBJ_EVENT_GFX_WOMAN_3                     24
+#define OBJ_EVENT_GFX_PSYCHIC                       23
+#define OBJ_EVENT_GFX_PARASOL_LADY                     24
 #define OBJ_EVENT_GFX_POKEFAN_M                   25
 #define OBJ_EVENT_GFX_WOMAN_4                     26
 #define OBJ_EVENT_GFX_COOK                        27
@@ -38,11 +38,11 @@
 #define OBJ_EVENT_GFX_OLD_WOMAN                   30
 #define OBJ_EVENT_GFX_CAMPER                      31
 #define OBJ_EVENT_GFX_PICNICKER                   32
-#define OBJ_EVENT_GFX_MAN_3                       33
-#define OBJ_EVENT_GFX_WOMAN_5                     34
+#define OBJ_EVENT_GFX_COOLTRAINER_M                       33
+#define OBJ_EVENT_GFX_COOLTRAINER_F                     34
 #define OBJ_EVENT_GFX_YOUNGSTER                   35
 #define OBJ_EVENT_GFX_BUG_CATCHER                 36
-#define OBJ_EVENT_GFX_PSYCHIC_M                   37
+#define OBJ_EVENT_GFX_KINDLER                   37
 #define OBJ_EVENT_GFX_SCHOOL_KID_M                38
 #define OBJ_EVENT_GFX_MANIAC                      39
 #define OBJ_EVENT_GFX_HEX_MANIAC                  40
@@ -70,8 +70,8 @@
 #define OBJ_EVENT_GFX_BERRY_TREE_LATE_STAGES      62
 #define OBJ_EVENT_GFX_BRENDAN_ACRO_BIKE           63
 #define OBJ_EVENT_GFX_PROF_BIRCH                  64
-#define OBJ_EVENT_GFX_MAN_4                       65
-#define OBJ_EVENT_GFX_MAN_5                       66
+#define OBJ_EVENT_GFX_DRAGON_TAMER                       65
+#define OBJ_EVENT_GFX_ROCKER                       66
 #define OBJ_EVENT_GFX_REPORTER_M                  67
 #define OBJ_EVENT_GFX_REPORTER_F                  68
 #define OBJ_EVENT_GFX_BARD                        69
@@ -121,7 +121,7 @@
 #define OBJ_EVENT_GFX_MOVING_BOX                 113
 #define OBJ_EVENT_GFX_CABLE_CAR                  114
 #define OBJ_EVENT_GFX_SCIENTIST_2                115
-#define OBJ_EVENT_GFX_DEVON_EMPLOYEE             116
+#define OBJ_EVENT_GFX_RUIN_MANIAC             116
 #define OBJ_EVENT_GFX_AQUA_MEMBER_M              117
 #define OBJ_EVENT_GFX_AQUA_MEMBER_F              118
 #define OBJ_EVENT_GFX_MAGMA_MEMBER_M             119
@@ -482,10 +482,14 @@
 #define OBJ_EVENT_GFX_ZYGARDE_CUBE           465
 #define OBJ_EVENT_GFX_LAPRAS_SURF            466
 #define OBJ_EVENT_GFX_TOWER_BEAM             467
+#define OBJ_EVENT_GFX_CIPHER_PEON_F          468
+#define OBJ_EVENT_GFX_MR_STONE               469
+#define OBJ_EVENT_GFX_FAIRY_GIRL             470
+#define OBJ_EVENT_GFX_DEVON_EMPLOYEE         471
 // NOTE: The maximum amount of object events has been expanded from 255 to 65535.
 // Since dynamic graphics ids still require at least 16 free values, the actual limit
 // is 65519, but even considering follower Pokémon, this should be more than enough :)
-#define NUM_OBJ_EVENT_GFX                                               468
+#define NUM_OBJ_EVENT_GFX                                               472
 
 
 // These are dynamic object gfx ids.
@@ -760,6 +764,63 @@
 #define OBJ_EVENT_PAL_TAG_SATURN_GEN4           0x130B
 #define OBJ_EVENT_PAL_TAG_CHARON_GEN4           0x130C
 #define OBJ_EVENT_PAL_TAG_ROWAN_GEN4            0x1940
+#define OBJ_EVENT_PAL_TAG_MR_STONE              0x1941
+#define OBJ_EVENT_PAL_TAG_FAIRY_GIRL            0x1942
+#define OBJ_EVENT_PAL_TAG_BREEDER_F             0x1943
+#define OBJ_EVENT_PAL_TAG_BREEDER_M             0x1944
+#define OBJ_EVENT_PAL_TAG_COOLTRAINER_M         0x1945
+#define OBJ_EVENT_PAL_TAG_COOLTRAINER_F         0x1946
+#define OBJ_EVENT_PAL_TAG_DRAGON_TAMER          0x1947
+#define OBJ_EVENT_PAL_TAG_RUIN_MANIAC           0x1948
+#define OBJ_EVENT_PAL_TAG_AROMA_GIRL            0x1949
+#define OBJ_EVENT_PAL_TAG_POKEMON_RANGER_M      0x194A
+#define OBJ_EVENT_PAL_TAG_POKEMON_RANGER_F      0x194B
+#define OBJ_EVENT_PAL_TAG_DELINQUENT_F          0x194C
+#define OBJ_EVENT_PAL_TAG_LADY                  0x194D
+#define OBJ_EVENT_PAL_TAG_PARASOL_LADY          0x194E
+#define OBJ_EVENT_PAL_TAG_PSYCHIC               0x194F
+#define OBJ_EVENT_PAL_TAG_KINDLER               0x1950
+#define OBJ_EVENT_PAL_TAG_ROCKER                0x1951
+#define OBJ_EVENT_PAL_TAG_HIKER                 0x1952
+#define OBJ_EVENT_PAL_TAG_TWIN                  0x1953
+#define OBJ_EVENT_PAL_TAG_SCIENTIST_1           0x1954
+#define OBJ_EVENT_PAL_TAG_SCIENTIST_2           0x1955
+#define OBJ_EVENT_PAL_TAG_ROXANNE               0x1956
+#define OBJ_EVENT_PAL_TAG_BRAWLY                0x1957
+#define OBJ_EVENT_PAL_TAG_WATTSON               0x1958
+#define OBJ_EVENT_PAL_TAG_FLANNERY              0x1959
+#define OBJ_EVENT_PAL_TAG_NORMAN                0x195A
+#define OBJ_EVENT_PAL_TAG_WINONA                0x195B
+#define OBJ_EVENT_PAL_TAG_LIZA                  0x195C
+#define OBJ_EVENT_PAL_TAG_TATE                  0x195D
+#define OBJ_EVENT_PAL_TAG_WALLACE               0x195E
+#define OBJ_EVENT_PAL_TAG_SIDNEY                0x195F
+#define OBJ_EVENT_PAL_TAG_PHOEBE                0x1960
+#define OBJ_EVENT_PAL_TAG_GLACIA                0x1961
+#define OBJ_EVENT_PAL_TAG_DRAKE                 0x1962
+#define OBJ_EVENT_PAL_TAG_BRENDAN_MACH_BIKE     0x1963
+#define OBJ_EVENT_PAL_TAG_BRENDAN_ACRO_BIKE     0x1964
+#define OBJ_EVENT_PAL_TAG_MANIAC                0x1965
+#define OBJ_EVENT_PAL_TAG_WALLY                 0x1966
+#define OBJ_EVENT_PAL_TAG_POKEFAN_M             0x1967
+#define OBJ_EVENT_PAL_TAG_POKEFAN_F             0x1968
+#define OBJ_EVENT_PAL_TAG_RICH_BOY              0x1969
+#define OBJ_EVENT_PAL_TAG_YOUNGSTER             0x196A
+#define OBJ_EVENT_PAL_TAG_CAMPER                0x196B
+#define OBJ_EVENT_PAL_TAG_STEVEN                0x196C
+#define OBJ_EVENT_PAL_TAG_DEVON_EMPLOYEE        0x196D
+#define OBJ_EVENT_PAL_TAG_BOY1                  0x196E
+#define OBJ_EVENT_PAL_TAG_BEAUTY                0x196F
+#define OBJ_EVENT_PAL_TAG_LASS                  0x1970
+#define OBJ_EVENT_PAL_TAG_RUNNING_TRIATHLETE_M  0x1971
+#define OBJ_EVENT_PAL_TAG_RUNNING_TRIATHLETE_F  0x1972
+#define OBJ_EVENT_PAL_TAG_CYCLING_TRIATHLETE_M  0x1973
+#define OBJ_EVENT_PAL_TAG_CYCLING_TRIATHLETE_F  0x1974
+#define OBJ_EVENT_PAL_TAG_BUG_CATCHER           0x1975
+#define OBJ_EVENT_PAL_TAG_SCHOOL_KID_M          0x1976
+#define OBJ_EVENT_PAL_TAG_LITTLE_BOY            0x1977
+#define OBJ_EVENT_PAL_TAG_TUBER_F               0x1978
+#define OBJ_EVENT_PAL_TAG_TUBER_M               0x1979
 //Unova (Gen 5)
 #define OBJ_EVENT_PAL_TAG_BRONIUS_GEN5         0x124C
 #define OBJ_EVENT_PAL_TAG_COLRESS_GEN5         0x124D
@@ -838,6 +899,7 @@
 //XD(Orre)
 #define OBJ_EVENT_PAL_TAG_WES                     0x1A00
 #define OBJ_EVENT_PAL_TAG_CIPHER_PEON_M           0x1A01
+#define OBJ_EVENT_PAL_TAG_CIPHER_PEON_F           0x1A21
 #define OBJ_EVENT_PAL_TAG_ARDOS                   0x1A02
 #define OBJ_EVENT_PAL_TAG_DAKIM                   0x1A03
 #define OBJ_EVENT_PAL_TAG_EIN                     0x1A04
@@ -910,6 +972,7 @@
 #define OBJ_EVENT_PAL_TAG_ZYGARDE_CUBE            0x116D
 #define OBJ_EVENT_PAL_TAG_LAPRAS_SURF             0x116E
 #define OBJ_EVENT_PAL_TAG_TOWER_BEAM              0x116F
+#define OBJ_EVENT_PAL_TAG_SNORLAX_DOLL            0x1170
 #endif //OW_FOLLOWERS_POKEBALLS
 // Used as a placeholder follower graphic
 #define OBJ_EVENT_PAL_TAG_SUBSTITUTE              0x7611

@@ -36,6 +36,56 @@ void ReshowBattleScreenDummy(void)
 
 }
 
+void HardRefreshBattleSpriteLayer(void)
+{
+    u8 battler;
+    u8 state;
+
+    ResetSpriteData();
+    FreeAllSpritePalettes();
+    gReservedSpritePaletteCount = MAX_BATTLERS_COUNT;
+    gStatusSummaryBarPalSlot = 0xFF;
+    gStatusSummaryBallsPalSlot = 0xFF;
+    if (!IsDoubleBattle())
+        ReserveOpponentBallThrowPaletteSlot();
+    ReserveLastUsedBallPaletteSlot();
+    ReserveAbilityPopupPaletteSlot();
+
+    ClearSpritesHealthboxAnimData();
+
+    state = 0;
+    while (!BattleLoadAllHealthBoxesGfx(state))
+        state++;
+
+    for (battler = 0; battler < gBattlersCount; battler++)
+        LoadBattlerSpriteGfx(battler);
+
+    for (battler = 0; battler < gBattlersCount; battler++)
+        CreateBattlerSprite(battler);
+
+    for (battler = 0; battler < gBattlersCount; battler++)
+        CreateHealthboxSprite(battler);
+
+    LoadAndCreateEnemyShadowSprites();
+
+    for (battler = 0; battler < gBattlersCount; battler++)
+        ShadowHud_SyncForBattler(battler);
+
+    if (gBattlersCount > 0)
+    {
+        battler = GetBattlerAtPosition(B_POSITION_OPPONENT_LEFT);
+        if (battler < gBattlersCount)
+            SetBattlerShadowSpriteCallback(battler, gBattleMons[battler].species);
+
+        if (IsDoubleBattle())
+        {
+            battler = GetBattlerAtPosition(B_POSITION_OPPONENT_RIGHT);
+            if (battler < gBattlersCount)
+                SetBattlerShadowSpriteCallback(battler, gBattleMons[battler].species);
+        }
+    }
+}
+
 void ReshowBattleScreenAfterMenu(void)
 {
     gPaletteFade.bufferTransferDisabled = 1;

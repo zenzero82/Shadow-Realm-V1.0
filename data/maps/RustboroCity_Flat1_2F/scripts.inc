@@ -4,6 +4,7 @@ RustboroCity_Flat1_2F_MapScripts::
 RustboroCity_Flat1_2F_EventScript_WaldasDad::
 	lock
 	faceplayer
+	setspeaker RustboroCity_Flat1_2F_Speaker_Pepper
 	specialvar VAR_RESULT, TryBufferWaldaPhrase
 	goto_if_eq VAR_RESULT, FALSE, RustboroCity_Flat1_2F_EventScript_WaldasDadFirstPhrase
 	goto_if_eq VAR_RESULT, TRUE, RustboroCity_Flat1_2F_EventScript_WaldasDadNewPhrase
@@ -69,8 +70,16 @@ RustboroCity_Flat1_2F_EventScript_WaldasDadFaceWalda::
 	return
 
 RustboroCity_Flat1_2F_EventScript_WaldasMom::
+	faceplayer
+	setspeaker RustboroCity_Flat1_2F_Speaker_Holly
 	msgbox RustboroCity_Flat1_2F_Text_ComingUpWithMealsIsHard, MSGBOX_NPC
 	end
+
+RustboroCity_Flat1_2F_Speaker_Pepper:
+	.string "Pepper$"
+
+RustboroCity_Flat1_2F_Speaker_Holly:
+	.string "Holly$"
 
 RustboroCity_Flat1_2F_EventScript_PokeDoll::
 	msgbox RustboroCity_Flat1_2F_Text_ItsAPokemonPlushDoll, MSGBOX_SIGN
@@ -173,4 +182,3 @@ RustboroCity_Flat1_2F_Text_ThankYouIllGiveYouWallpaper:
 
 RustboroCity_Flat1_2F_Text_ItsAPokemonPlushDoll:
 	.string "It's a POKéMON plush DOLL!$"
-

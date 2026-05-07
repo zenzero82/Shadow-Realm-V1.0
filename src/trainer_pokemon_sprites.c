@@ -52,7 +52,18 @@ bool16 ResetAllPicSprites(void)
     int i;
 
     for (i = 0; i < PICS_COUNT; i ++)
+    {
+        if (!sSpritePics[i].active)
+            continue;
+
+        if (sSpritePics[i].spriteId < MAX_SPRITES && gSprites[sSpritePics[i].spriteId].inUse)
+            DestroySprite(&gSprites[sSpritePics[i].spriteId]);
+        if (sSpritePics[i].paletteTag != TAG_NONE)
+            FreeSpritePaletteByTag(sSpritePics[i].paletteTag);
+        Free(sSpritePics[i].frames);
+        Free(sSpritePics[i].images);
         sSpritePics[i] = sDummyPicData;
+    }
 
     return FALSE;
 }
@@ -210,6 +221,14 @@ static u16 CreatePicSprite(u16 species, bool8 isShiny, u32 personality, bool8 is
     sCreatingSpriteTemplate.callback = DummyPicSpriteCallback;
     LoadPicPaletteByTagOrSlot(species, isShiny, personality, paletteSlot, paletteTag, isTrainer);
     spriteId = CreateSprite(&sCreatingSpriteTemplate, x, y, 0);
+    if (spriteId >= MAX_SPRITES)
+    {
+        if (paletteTag != TAG_NONE)
+            FreeSpritePaletteByTag(sCreatingSpriteTemplate.paletteTag);
+        Free(framePics);
+        Free(images);
+        return 0xFFFF;
+    }
     if (paletteTag == TAG_NONE)
         gSprites[spriteId].oam.paletteNum = paletteSlot;
     sSpritePics[i].frames = framePics;
@@ -264,6 +283,14 @@ static u16 CreatePicSprite_ShadowAware(u16 species, bool8 isShiny, u32 personali
     sCreatingSpriteTemplate.callback = DummyPicSpriteCallback;
     LoadPicPaletteByTagOrSlot_ShadowAware(species, isShiny, personality, paletteSlot, paletteTag, isTrainer, isShadow);
     spriteId = CreateSprite(&sCreatingSpriteTemplate, x, y, 0);
+    if (spriteId >= MAX_SPRITES)
+    {
+        if (paletteTag != TAG_NONE)
+            FreeSpritePaletteByTag(sCreatingSpriteTemplate.paletteTag);
+        Free(framePics);
+        Free(images);
+        return 0xFFFF;
+    }
     if (paletteTag == TAG_NONE)
         gSprites[spriteId].oam.paletteNum = paletteSlot;
     sSpritePics[i].frames = framePics;
@@ -342,6 +369,14 @@ u16 CreateMonPicSprite_Affine(u16 species, bool8 isShiny, u32 personality, u8 fl
     sCreatingSpriteTemplate.callback = DummyPicSpriteCallback;
     LoadPicPaletteByTagOrSlot(species, isShiny, personality, paletteSlot, paletteTag, FALSE);
     spriteId = CreateSprite(&sCreatingSpriteTemplate, x, y, 0);
+    if (spriteId >= MAX_SPRITES)
+    {
+        if (paletteTag != TAG_NONE)
+            FreeSpritePaletteByTag(sCreatingSpriteTemplate.paletteTag);
+        Free(framePics);
+        Free(images);
+        return 0xFFFF;
+    }
     if (paletteTag == TAG_NONE)
         gSprites[spriteId].oam.paletteNum = paletteSlot;
     sSpritePics[i].frames = framePics;

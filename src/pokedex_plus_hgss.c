@@ -41,6 +41,7 @@
 #include "text_window.h"
 #include "trainer_pokemon_sprites.h"
 #include "trig.h"
+#include "wild_encounter.h"
 #include "window.h"
 #include "constants/abilities.h"
 #include "constants/form_change_types.h"
@@ -48,6 +49,7 @@
 #include "constants/moves.h"
 #include "constants/party_menu.h"
 #include "constants/rgb.h"
+#include "constants/regions.h"
 #include "constants/songs.h"
 #include "config/pokedex_plus_hgss.h"
 
@@ -133,6 +135,10 @@ static const u16 sSizeScreenSilhouette_Pal[] = INCBIN_U16("graphics/pokedex/size
 
 static const u8 sText_Stats_Buttons[] = _("{A_BUTTON}TOGGLE   {DPAD_UPDOWN}MOVES");
 static const u8 sText_Stats_Buttons_Decapped[] = _("{A_BUTTON}Toggle   {DPAD_UPDOWN}Moves");
+static const u8 sText_DexKantoTitle[] = _("KANTO DEX");
+static const u8 sText_DexKantoDescription[] = _("View Pokemon in the Kanto Pokedex.");
+static const u8 sText_DexJohtoTitle[] = _("JOHTO DEX");
+static const u8 sText_DexJohtoDescription[] = _("View Pokemon in the Johto Pokedex.");
 static const u8 sText_Stats_HP[] = _("HP");
 static const u8 sText_Stats_Attack[] = _("ATK");
 static const u8 sText_Stats_Defense[] = _("DEF");
@@ -242,6 +248,8 @@ static const u16 sPokedexPlusHGSS_SearchResults_dark_Pal[] = INCBIN_U16("graphic
 static const u32 sPokedexPlusHGSS_MenuList_Gfx[] = INCBIN_U32("graphics/pokedex/hgss/tileset_menu_list.4bpp.lz");
 static const u32 sPokedexPlusHGSS_MenuList_DECA_Gfx[] = INCBIN_U32("graphics/pokedex/hgss/tileset_menu_list_DECA.4bpp.lz");
 static const u32 sPokedexPlusHGSS_Interface_Gfx[] = INCBIN_U32("graphics/pokedex/hgss/tileset_interface.4bpp.lz");
+static const u32 sPokedexPlusHGSS_Interface_Kanto_Gfx[] = INCBIN_U32("graphics/pokedex/hgss/tileset_interface_kanto.4bpp.lz");
+static const u32 sPokedexPlusHGSS_Interface_Johto_Gfx[] = INCBIN_U32("graphics/pokedex/hgss/tileset_interface_johto.4bpp.lz");
 static const u32 sPokedexPlusHGSS_Interface_DECA_Gfx[] = INCBIN_U32("graphics/pokedex/hgss/tileset_interface_DECA.4bpp.lz");
 static const u32 sPokedexPlusHGSS_Menu_1_Gfx[] = INCBIN_U32("graphics/pokedex/hgss/tileset_menu1.4bpp.lz");
 static const u32 sPokedexPlusHGSS_Menu_2_Gfx[] = INCBIN_U32("graphics/pokedex/hgss/tileset_menu2.4bpp.lz");
@@ -289,6 +297,12 @@ static EWRAM_DATA struct PokedexView *sPokedexView = NULL;
 static EWRAM_DATA u16 sLastSelectedPokemon = 0;
 static EWRAM_DATA u8 sPokeBallRotation = 0;
 static EWRAM_DATA struct PokedexListItem *sPokedexListItem = NULL;
+static EWRAM_DATA struct Pokemon sPokedexPartyBackup[PARTY_SIZE];
+static EWRAM_DATA u8 sPokedexPartyBackupCount;
+static EWRAM_DATA bool8 sPokedexPartyBackupValid;
+static EWRAM_DATA bool8 sRegionalDexSpeciesBuilt[REGIONS_COUNT] = {FALSE};
+static EWRAM_DATA bool8 sRegionalDexSpeciesAllBuilt = FALSE;
+static EWRAM_DATA bool8 sRegionalDexSpecies[REGIONS_COUNT][NUM_SPECIES] = {FALSE};
 //Pokedex Plus HGSS_Ui
 #define MOVES_COUNT_TOTAL (EGG_MOVES_ARRAY_COUNT + MAX_LEVEL_UP_MOVES + NUM_TECHNICAL_MACHINES + NUM_HIDDEN_MACHINES)
 EWRAM_DATA static u16 sStatsMoves[MOVES_COUNT_TOTAL] = {0};
@@ -431,6 +445,7 @@ struct PokedexView
     u16 unkArr1[4]; // Cleared, never read
     u16 originalSearchSelectionNum;
     u8 filler[6];
+    u8 regionalDexRegion;
     u8 currentPage;
     u8 currentPageBackup;
     bool8 isSearchResults:1;
@@ -506,6 +521,8 @@ static void LoadPlayArrowPalette(bool8);
 static void Task_LoadSizeScreen(u8);
 static void Task_HandleSizeScreenInput(u8);
 static void Task_SwitchScreensFromSizeScreen(u8);
+static void SavePartyBeforeOpeningPokedex(void);
+static void RestorePartyIfPokedexInitChangedIt(void);
 static void LoadScreenSelectBarMain(u16);
 static void HighlightScreenSelectBarItem(u8, u16);
 static void Task_HandleCaughtMonPageInput(u8);
@@ -538,6 +555,12 @@ static void DrawOrEraseSearchParameterBox(bool8);
 static void PrintSearchParameterText(u8);
 static u8 GetSearchModeSelection(u8 taskId, u8 option);
 static void SetDefaultSearchModeAndOrder(u8);
+static void PrintInfoScreenText(const u8 *str, u8 left, u8 top);
+static u8 GetPokedexRegionalDexRegion(void);
+static void BuildRegionalEncounterSpecies(u8 region);
+static void GetRegionalEncounterPokedexCounts(u8 region, u16 *seenCount, u16 *caughtCount);
+static const struct CompressedSpriteSheet *GetCurrentInterfaceSpriteSheet(void);
+static bool8 IsDexNumInMode(u16 dexNum, u8 dexMode);
 static void CreateSearchParameterScrollArrows(u8);
 static void EraseAndPrintSearchTextBox(const u8 *);
 static void EraseSelectorArrow(u32);
@@ -1834,6 +1857,8 @@ static const struct SearchOptionText sDexModeOptions[] =
 {
     [DEX_MODE_HOENN]    = {gText_DexHoennDescription, gText_DexHoennTitle},
     [DEX_MODE_NATIONAL] = {gText_DexNatDescription,   gText_DexNatTitle},
+    [DEX_MODE_KANTO]    = {sText_DexKantoDescription, sText_DexKantoTitle},
+    [DEX_MODE_JOHTO]    = {sText_DexJohtoDescription, sText_DexJohtoTitle},
     {},
 };
 
@@ -1903,7 +1928,7 @@ static const struct SearchOptionText sDexSearchTypeOptions[] =
     {},
 };
 
-static const u8 sPokedexModes[] = {DEX_MODE_HOENN, DEX_MODE_NATIONAL};
+static const u8 sPokedexModes[] = {DEX_MODE_KANTO, DEX_MODE_JOHTO, DEX_MODE_HOENN, DEX_MODE_NATIONAL};
 static const u8 sOrderOptions[] =
 {
     ORDER_NUMERICAL,
@@ -2017,6 +2042,7 @@ void CB2_OpenPokedexPlusHGSS(void)
     {
     case 0:
     default:
+        SavePartyBeforeOpeningPokedex();
         SetVBlankCallback(NULL);
         ResetOtherVideoRegisters(0);
         DmaFillLarge16(3, 0, (u8 *)VRAM, VRAM_SIZE, 0x1000);
@@ -2045,20 +2071,13 @@ void CB2_OpenPokedexPlusHGSS(void)
         sPokedexView->selectedPokemon = sLastSelectedPokemon;
         sPokedexView->pokeBallRotation = sPokeBallRotation;
         sPokedexView->selectedScreen = AREA_SCREEN;
-        if (!IsNationalPokedexEnabled())
-        {
-            sPokedexView->seenCount = GetHoennPokedexCount(FLAG_GET_SEEN);
-            sPokedexView->ownCount = GetHoennPokedexCount(FLAG_GET_CAUGHT);
-        }
-        else
-        {
-            sPokedexView->seenCount = GetNationalPokedexCount(FLAG_GET_SEEN);
-            sPokedexView->ownCount = GetNationalPokedexCount(FLAG_GET_CAUGHT);
-        }
+        sPokedexView->regionalDexRegion = GetPokedexRegionalDexRegion();
+        GetRegionalEncounterPokedexCounts(sPokedexView->regionalDexRegion, &sPokedexView->seenCount, &sPokedexView->ownCount);
         sPokedexView->initialVOffset = 8;
         gMain.state++;
         break;
     case 3:
+        RestorePartyIfPokedexInitChangedIt();
         EnableInterrupts(1);
         SetVBlankCallback(VBlankCB_Pokedex);
         SetMainCallback2(CB2_Pokedex);
@@ -2066,6 +2085,28 @@ void CB2_OpenPokedexPlusHGSS(void)
         m4aMPlayVolumeControl(&gMPlayInfo_BGM, TRACKS_ALL, 0x80);
         break;
     }
+}
+
+static void SavePartyBeforeOpeningPokedex(void)
+{
+    memcpy(sPokedexPartyBackup, gPlayerParty, sizeof(sPokedexPartyBackup));
+    sPokedexPartyBackupCount = gPlayerPartyCount;
+    sPokedexPartyBackupValid = TRUE;
+}
+
+static void RestorePartyIfPokedexInitChangedIt(void)
+{
+    if (!sPokedexPartyBackupValid)
+        return;
+
+    if (memcmp(sPokedexPartyBackup, gPlayerParty, sizeof(sPokedexPartyBackup)) != 0
+     || sPokedexPartyBackupCount != gPlayerPartyCount)
+    {
+        memcpy(gPlayerParty, sPokedexPartyBackup, sizeof(sPokedexPartyBackup));
+        gPlayerPartyCount = sPokedexPartyBackupCount;
+    }
+
+    sPokedexPartyBackupValid = FALSE;
 }
 
 static void ResetPokedexView(struct PokedexView *pokedexView)
@@ -2118,6 +2159,127 @@ static void ResetPokedexView(struct PokedexView *pokedexView)
     for (i = 0; i < ARRAY_COUNT(pokedexView->unkArr3); i++)
         pokedexView->unkArr3[i] = 0;
     pokedexView->originalSearchSelectionNum = 0;
+}
+
+static void MarkWildInfoSpeciesSeen(const struct WildPokemonInfo *wildInfo, bool8 *speciesAvailable, u16 count)
+{
+    u16 i;
+
+    if (wildInfo == NULL || wildInfo->wildPokemon == NULL)
+        return;
+
+    for (i = 0; i < count; i++)
+    {
+        u16 species = wildInfo->wildPokemon[i].species;
+
+        if (species > SPECIES_NONE && species < NUM_SPECIES)
+            speciesAvailable[species] = TRUE;
+    }
+}
+
+static u8 GetPokedexRegionalDexRegion(void)
+{
+    if (gMapHeader.regionMapSectionId != MAPSEC_NONE && gMapHeader.regionMapSectionId != MAPSEC_DYNAMIC)
+        return RegionMap_GetRegionFromMapSecId(gMapHeader.regionMapSectionId);
+
+    return RegionMap_GetRegionFromMapGroup(gSaveBlock1Ptr->location.mapGroup);
+}
+
+static void BuildRegionalEncounterSpecies(u8 region)
+{
+    u32 i;
+    u32 timeOfDay;
+
+    if (region >= REGIONS_COUNT)
+        return;
+
+    if (sRegionalDexSpeciesAllBuilt || sRegionalDexSpeciesBuilt[region])
+        return;
+
+    for (i = 0; gWildMonHeaders[i].mapGroup != MAP_GROUP(MAP_UNDEFINED); i++)
+    {
+        const struct MapHeader *mapHeader = Overworld_GetMapHeaderByGroupAndId(gWildMonHeaders[i].mapGroup, gWildMonHeaders[i].mapNum);
+        u8 mapRegion;
+
+        if (mapHeader == NULL)
+            continue;
+
+        if (mapHeader->regionMapSectionId != MAPSEC_NONE && mapHeader->regionMapSectionId != MAPSEC_DYNAMIC)
+            mapRegion = RegionMap_GetRegionFromMapSecId(mapHeader->regionMapSectionId);
+        else
+            mapRegion = RegionMap_GetRegionFromMapGroup(gWildMonHeaders[i].mapGroup);
+
+        if (mapRegion >= REGIONS_COUNT)
+            continue;
+
+        for (timeOfDay = 0; timeOfDay < TIMES_OF_DAY_COUNT; timeOfDay++)
+        {
+            const struct WildEncounterTypes *encounterTypes = &gWildMonHeaders[i].encounterTypes[timeOfDay];
+
+            MarkWildInfoSpeciesSeen(encounterTypes->landMonsInfo, sRegionalDexSpecies[mapRegion], LAND_WILD_COUNT);
+            MarkWildInfoSpeciesSeen(encounterTypes->waterMonsInfo, sRegionalDexSpecies[mapRegion], WATER_WILD_COUNT);
+            MarkWildInfoSpeciesSeen(encounterTypes->rockSmashMonsInfo, sRegionalDexSpecies[mapRegion], ROCK_WILD_COUNT);
+            MarkWildInfoSpeciesSeen(encounterTypes->fishingMonsInfo, sRegionalDexSpecies[mapRegion], FISH_WILD_COUNT);
+            MarkWildInfoSpeciesSeen(encounterTypes->hiddenMonsInfo, sRegionalDexSpecies[mapRegion], HIDDEN_WILD_COUNT);
+        }
+    }
+
+    for (i = 0; i < REGIONS_COUNT; i++)
+        sRegionalDexSpeciesBuilt[i] = TRUE;
+    sRegionalDexSpeciesAllBuilt = TRUE;
+}
+
+static void GetRegionalEncounterPokedexCounts(u8 region, u16 *seenCount, u16 *caughtCount)
+{
+    u16 species;
+
+    *seenCount = 0;
+    *caughtCount = 0;
+
+    if (region >= REGIONS_COUNT)
+        return;
+
+    BuildRegionalEncounterSpecies(region);
+
+    for (species = SPECIES_NONE + 1; species < NUM_SPECIES; species++)
+    {
+        u16 dexNum;
+
+        if (!sRegionalDexSpecies[region][species])
+            continue;
+
+        dexNum = SpeciesToNationalPokedexNum(species);
+        if (dexNum == 0)
+            continue;
+
+        if (GetSetPokedexFlag(dexNum, FLAG_GET_SEEN))
+            (*seenCount)++;
+        if (GetSetPokedexFlag(dexNum, FLAG_GET_CAUGHT))
+            (*caughtCount)++;
+    }
+}
+
+static const struct CompressedSpriteSheet *GetCurrentInterfaceSpriteSheet(void)
+{
+    if (HGSS_DECAPPED)
+        return &sInterfaceSpriteSheet[1];
+    return &sInterfaceSpriteSheet[0];
+}
+
+static bool8 IsDexNumInMode(u16 dexNum, u8 dexMode)
+{
+    switch (dexMode)
+    {
+    case DEX_MODE_KANTO:
+        return dexNum >= NATIONAL_DEX_BULBASAUR && dexNum <= KANTO_DEX_COUNT;
+    case DEX_MODE_JOHTO:
+        return dexNum > KANTO_DEX_COUNT && dexNum <= JOHTO_DEX_COUNT;
+    case DEX_MODE_HOENN:
+        return NationalToHoennOrder(dexNum) != 0;
+    case DEX_MODE_NATIONAL:
+    default:
+        return TRUE;
+    }
 }
 
 static void VBlankCB_Pokedex(void)
@@ -2409,7 +2571,9 @@ static bool8 LoadPokedexListPage(u8 page)
         ResetSpriteData();
         FreeAllSpritePalettes();
         gReservedSpritePaletteCount = 8;
-        LoadCompressedSpriteSheet(&sInterfaceSpriteSheet[HGSS_DECAPPED]);
+        FreeSpriteTilesByTag(TAG_DEX_INTERFACE);
+        FreeSpritePaletteByTag(TAG_DEX_INTERFACE);
+        LoadCompressedSpriteSheet(GetCurrentInterfaceSpriteSheet());
         LoadSpritePalettes(sInterfaceSpritePalette);
         LoadSpritePalettes(sStatBarSpritePal);
         CreateInterfaceSprites(page);
@@ -2476,10 +2640,11 @@ static bool8 LoadPokedexListPage(u8 page)
 
 static void CreatePokedexList(u8 dexMode, u8 order)
 {
-    u16 vars[3]; //I have no idea why three regular variables are stored in an array, but whatever.
+    u16 vars[4]; //I have no idea why regular variables are stored in an array, but whatever.
 #define temp_dexCount   vars[0]
 #define temp_isHoennDex vars[1]
 #define temp_dexNum     vars[2]
+    #define temp_dexStart vars[3]
     s16 i;
 
     sPokedexView->pokemonListCount = 0;
@@ -2490,18 +2655,31 @@ static void CreatePokedexList(u8 dexMode, u8 order)
     case DEX_MODE_HOENN:
         temp_dexCount = HOENN_DEX_COUNT;
         temp_isHoennDex = TRUE;
+        temp_dexStart = 1;
         break;
     case DEX_MODE_NATIONAL:
         if (IsNationalPokedexEnabled())
         {
             temp_dexCount = NATIONAL_DEX_COUNT;
             temp_isHoennDex = FALSE;
+            temp_dexStart = 1;
         }
         else
         {
             temp_dexCount = HOENN_DEX_COUNT;
             temp_isHoennDex = TRUE;
+            temp_dexStart = 1;
         }
+        break;
+    case DEX_MODE_KANTO:
+        temp_dexCount = KANTO_DEX_COUNT;
+        temp_isHoennDex = FALSE;
+        temp_dexStart = 1;
+        break;
+    case DEX_MODE_JOHTO:
+        temp_dexCount = JOHTO_DEX_COUNT - KANTO_DEX_COUNT;
+        temp_isHoennDex = FALSE;
+        temp_dexStart = KANTO_DEX_COUNT + 1;
         break;
     }
 
@@ -2525,7 +2703,7 @@ static void CreatePokedexList(u8 dexMode, u8 order)
             s16 r5, r10;
             for (i = 0, r5 = 0, r10 = 0; i < temp_dexCount; i++)
             {
-                temp_dexNum = i + 1;
+                temp_dexNum = temp_dexStart + i;
                 if (GetSetPokedexFlag(temp_dexNum, FLAG_GET_SEEN))
                     r10 = 1;
                 if (r10)
@@ -2545,7 +2723,7 @@ static void CreatePokedexList(u8 dexMode, u8 order)
         {
             temp_dexNum = gPokedexOrder_Alphabetical[i];
 
-            if ((!temp_isHoennDex || NationalToHoennOrder(temp_dexNum) != 0) && GetSetPokedexFlag(temp_dexNum, FLAG_GET_SEEN))
+            if (IsDexNumInMode(temp_dexNum, dexMode) && GetSetPokedexFlag(temp_dexNum, FLAG_GET_SEEN))
             {
                 sPokedexView->pokedexList[sPokedexView->pokemonListCount].dexNum = temp_dexNum;
                 sPokedexView->pokedexList[sPokedexView->pokemonListCount].seen = TRUE;
@@ -2559,7 +2737,7 @@ static void CreatePokedexList(u8 dexMode, u8 order)
         {
             temp_dexNum = gPokedexOrder_Weight[i];
 
-            if ((!temp_isHoennDex || NationalToHoennOrder(temp_dexNum) != 0) && GetSetPokedexFlag(temp_dexNum, FLAG_GET_CAUGHT))
+            if (IsDexNumInMode(temp_dexNum, dexMode) && GetSetPokedexFlag(temp_dexNum, FLAG_GET_CAUGHT))
             {
                 sPokedexView->pokedexList[sPokedexView->pokemonListCount].dexNum = temp_dexNum;
                 sPokedexView->pokedexList[sPokedexView->pokemonListCount].seen = TRUE;
@@ -2573,7 +2751,7 @@ static void CreatePokedexList(u8 dexMode, u8 order)
         {
             temp_dexNum = gPokedexOrder_Weight[i];
 
-            if ((!temp_isHoennDex || NationalToHoennOrder(temp_dexNum) != 0) && GetSetPokedexFlag(temp_dexNum, FLAG_GET_CAUGHT))
+            if (IsDexNumInMode(temp_dexNum, dexMode) && GetSetPokedexFlag(temp_dexNum, FLAG_GET_CAUGHT))
             {
                 sPokedexView->pokedexList[sPokedexView->pokemonListCount].dexNum = temp_dexNum;
                 sPokedexView->pokedexList[sPokedexView->pokemonListCount].seen = TRUE;
@@ -2587,7 +2765,7 @@ static void CreatePokedexList(u8 dexMode, u8 order)
         {
             temp_dexNum = gPokedexOrder_Height[i];
 
-            if ((!temp_isHoennDex || NationalToHoennOrder(temp_dexNum) != 0) && GetSetPokedexFlag(temp_dexNum, FLAG_GET_CAUGHT))
+            if (IsDexNumInMode(temp_dexNum, dexMode) && GetSetPokedexFlag(temp_dexNum, FLAG_GET_CAUGHT))
             {
                 sPokedexView->pokedexList[sPokedexView->pokemonListCount].dexNum = temp_dexNum;
                 sPokedexView->pokedexList[sPokedexView->pokemonListCount].seen = TRUE;
@@ -2601,7 +2779,7 @@ static void CreatePokedexList(u8 dexMode, u8 order)
         {
             temp_dexNum = gPokedexOrder_Height[i];
 
-            if ((!temp_isHoennDex || NationalToHoennOrder(temp_dexNum) != 0) && GetSetPokedexFlag(temp_dexNum, FLAG_GET_CAUGHT))
+            if (IsDexNumInMode(temp_dexNum, dexMode) && GetSetPokedexFlag(temp_dexNum, FLAG_GET_CAUGHT))
             {
                 sPokedexView->pokedexList[sPokedexView->pokemonListCount].dexNum = temp_dexNum;
                 sPokedexView->pokedexList[sPokedexView->pokemonListCount].seen = TRUE;
@@ -3111,11 +3289,9 @@ static void CreateInterfaceSprites(u8 page)
 
     if (!IsNationalPokedexEnabled() && page == PAGE_MAIN)
     {
-        // Hoenn text
-        CreateSprite(&sHoennNationalTextSpriteTemplate, LIST_RIGHT_SIDE_TEXT_X, 40 - LIST_RIGHT_SIDE_TEXT_Y_OFFSET - 6, 1);
-        // Hoenn seen
+        // Seen
         CreateSprite(&sSeenOwnTextSpriteTemplate, LIST_RIGHT_SIDE_TEXT_X, 45 - LIST_RIGHT_SIDE_TEXT_Y_OFFSET + 6, 1);
-        // Hoenn own
+        // Own
         spriteId = CreateSprite(&sSeenOwnTextSpriteTemplate, LIST_RIGHT_SIDE_TEXT_X, 55 - LIST_RIGHT_SIDE_TEXT_Y_OFFSET + 7, 1);
         StartSpriteAnim(&gSprites[spriteId], 1);
 
@@ -3175,11 +3351,9 @@ static void CreateInterfaceSprites(u8 page)
         u8 counterX100s  = counterX10s - counterXDist;
         u8 counterX1000s = counterX100s - counterXDist;
 
-        // Hoenn text
-        CreateSprite(&sHoennNationalTextSpriteTemplate, LIST_RIGHT_SIDE_TEXT_X, 40 - LIST_RIGHT_SIDE_TEXT_Y_OFFSET - 6, 1);
-        // Hoenn seen
+        // Seen
         CreateSprite(&sSeenOwnTextSpriteTemplate, LIST_RIGHT_SIDE_TEXT_X, 45 - LIST_RIGHT_SIDE_TEXT_Y_OFFSET + 6, 1);
-        // Hoenn own
+        // Own
         spriteId = CreateSprite(&sSeenOwnTextSpriteTemplate, LIST_RIGHT_SIDE_TEXT_X, 55 - LIST_RIGHT_SIDE_TEXT_Y_OFFSET + 7, 1);
         StartSpriteAnim(&gSprites[spriteId], 1);
 
@@ -3193,7 +3367,7 @@ static void CreateInterfaceSprites(u8 page)
         StartSpriteAnim(&gSprites[spriteId], 1);
 
         // Hoenn seen value - 100s
-        seenOwnedCount = GetHoennPokedexCount(FLAG_GET_SEEN);
+        seenOwnedCount = sPokedexView->seenCount;
         drawNextDigit = FALSE;
         spriteId = CreateSprite(&sNationalDexSeenOwnNumberSpriteTemplate, counterX100s, 45 - LIST_RIGHT_SIDE_TEXT_Y_OFFSET, 1);
         digitNum = seenOwnedCount / 100;
@@ -3216,7 +3390,7 @@ static void CreateInterfaceSprites(u8 page)
         digitNum = (seenOwnedCount % 100) % 10;
         StartSpriteAnim(&gSprites[spriteId], digitNum);
 
-        seenOwnedCount = GetHoennPokedexCount(FLAG_GET_CAUGHT);
+        seenOwnedCount = sPokedexView->ownCount;
         // Hoenn owned value - 100s
         drawNextDigit = FALSE;
         spriteId = CreateSprite(&sNationalDexSeenOwnNumberSpriteTemplate, counterX100s, 55 - LIST_RIGHT_SIDE_TEXT_Y_OFFSET, 1);
@@ -7941,7 +8115,9 @@ static void Task_LoadSearchMenu(u8 taskId)
         }
         break;
     case 1:
-        LoadCompressedSpriteSheet(&sInterfaceSpriteSheet[HGSS_DECAPPED]);
+        FreeSpriteTilesByTag(TAG_DEX_INTERFACE);
+        FreeSpritePaletteByTag(TAG_DEX_INTERFACE);
+        LoadCompressedSpriteSheet(GetCurrentInterfaceSpriteSheet());
         LoadSpritePalettes(sInterfaceSpritePalette);
         LoadSpritePalettes(sStatBarSpritePal);
         CreateSearchParameterScrollArrows(taskId);
@@ -8608,12 +8784,18 @@ static void SetDefaultSearchModeAndOrder(u8 taskId)
 
     switch (sPokedexView->dexModeBackup)
     {
+    case DEX_MODE_KANTO:
+        selected = 0;
+        break;
+    case DEX_MODE_JOHTO:
+        selected = 1;
+        break;
     default:
     case DEX_MODE_HOENN:
-        selected = DEX_MODE_HOENN;
+        selected = 2;
         break;
     case DEX_MODE_NATIONAL:
-        selected = DEX_MODE_NATIONAL;
+        selected = 3;
         break;
     }
     gTasks[taskId].tCursorPos_Mode = selected;

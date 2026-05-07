@@ -1,6 +1,7 @@
 #include "global.h"
 #include "overworld_wild_encounters.h"
 #include "battle_setup.h"
+#include "bug_contest.h"
 #include "event_data.h"
 #include "event_object_movement.h"
 #include "event_scripts.h"
@@ -39,6 +40,7 @@ EWRAM_DATA static u16 sOverworldWildMoves[OBJ_EVENT_ID_OVERWORLD_WILD_COUNT][MAX
 static void OverworldWildEncounters_ClearSlot(u8 slot);
 static bool8 OverworldWildEncounters_FindAvailableSlot(u8 *slotOut);
 static u8 OverworldWildEncounters_GetMaxSpawns(void);
+static bool8 OverworldWildEncounters_IsOpenWaterTile(s16 x, s16 y);
 
 static bool8 OverworldWildEncounters_Enabled(void)
 {
@@ -62,11 +64,72 @@ static bool8 OverworldWildEncounters_GetLandWildMon(u16 *species, u8 *level)
     return TryGetRandomWildMonForArea(landMonsInfo, WILD_AREA_LAND, WILD_MON_CHECK_REPEL | WILD_MON_CHECK_KEEN_EYE, species, level);
 }
 
-static bool8 OverworldWildEncounters_IsSpawnTileValid(s16 x, s16 y, u8 elevation)
+static bool8 OverworldWildEncounters_GetWaterWildMon(u16 *species, u8 *level)
+{
+    u16 headerId = GetCurrentMapWildMonHeaderId();
+    enum TimeOfDay timeOfDay;
+    const struct WildPokemonInfo *waterMonsInfo;
+
+    if (headerId == HEADER_NONE)
+        return FALSE;
+
+    timeOfDay = GetTimeOfDayForEncounters(headerId, WILD_AREA_WATER);
+    waterMonsInfo = gWildMonHeaders[headerId].encounterTypes[timeOfDay].waterMonsInfo;
+    if (waterMonsInfo == NULL || waterMonsInfo->encounterRate == 0)
+        return FALSE;
+
+    return TryGetRandomWildMonForArea(waterMonsInfo, WILD_AREA_WATER, WILD_MON_CHECK_REPEL | WILD_MON_CHECK_KEEN_EYE, species, level);
+}
+
+static bool8 OverworldWildEncounters_HasLandMons(void)
+{
+    u16 headerId = GetCurrentMapWildMonHeaderId();
+    enum TimeOfDay timeOfDay;
+    const struct WildPokemonInfo *landMonsInfo;
+
+    if (headerId == HEADER_NONE)
+        return FALSE;
+
+    timeOfDay = GetTimeOfDayForEncounters(headerId, WILD_AREA_LAND);
+    landMonsInfo = gWildMonHeaders[headerId].encounterTypes[timeOfDay].landMonsInfo;
+    return landMonsInfo != NULL && landMonsInfo->encounterRate != 0;
+}
+
+static bool8 OverworldWildEncounters_HasWaterMons(void)
+{
+    u16 headerId = GetCurrentMapWildMonHeaderId();
+    enum TimeOfDay timeOfDay;
+    const struct WildPokemonInfo *waterMonsInfo;
+
+    if (headerId == HEADER_NONE)
+        return FALSE;
+
+    timeOfDay = GetTimeOfDayForEncounters(headerId, WILD_AREA_WATER);
+    waterMonsInfo = gWildMonHeaders[headerId].encounterTypes[timeOfDay].waterMonsInfo;
+    return waterMonsInfo != NULL && waterMonsInfo->encounterRate != 0;
+}
+
+static bool8 OverworldWildEncounters_IsOpenWaterTile(s16 x, s16 y)
+{
+    for (s16 yOffset = -1; yOffset <= 1; yOffset++)
+    {
+        for (s16 xOffset = -1; xOffset <= 1; xOffset++)
+        {
+            if (!MetatileBehavior_IsSurfableAndNotWaterfall(MapGridGetMetatileBehaviorAt(x + xOffset, y + yOffset)))
+                return FALSE;
+        }
+    }
+
+    return TRUE;
+}
+
+static bool8 OverworldWildEncounters_IsSpawnTileValid(s16 x, s16 y, u8 elevation, bool8 allowLand, bool8 allowWater, bool8 *isWaterTile)
 {
     u8 behavior = MapGridGetMetatileBehaviorAt(x, y);
+    bool8 validLandTile = allowLand && MetatileBehavior_IsLandWildEncounter(behavior);
+    bool8 validWaterTile = allowWater && OverworldWildEncounters_IsOpenWaterTile(x, y);
 
-    if (!MetatileBehavior_IsLandWildEncounter(behavior))
+    if (!validLandTile && !validWaterTile)
         return FALSE;
     if (MapGridGetCollisionAt(x, y))
         return FALSE;
@@ -74,6 +137,9 @@ static bool8 OverworldWildEncounters_IsSpawnTileValid(s16 x, s16 y, u8 elevation
         return FALSE;
     if (IsElevationMismatchAt(elevation, x, y))
         return FALSE;
+
+    if (isWaterTile != NULL)
+        *isWaterTile = validWaterTile;
 
     return TRUE;
 }
@@ -88,6 +154,8 @@ static u16 OverworldWildEncounters_CountSpawnableTiles(s16 playerX, s16 playerY,
     s16 mapMinY = MAP_OFFSET;
     s16 mapMaxX = MAP_OFFSET + gMapHeader.mapLayout->width - 1;
     s16 mapMaxY = MAP_OFFSET + gMapHeader.mapLayout->height - 1;
+    bool8 allowLand = OverworldWildEncounters_HasLandMons();
+    bool8 allowWater = OverworldWildEncounters_HasWaterMons();
     u16 count = 0;
 
     if (minX < mapMinX)
@@ -105,7 +173,8 @@ static u16 OverworldWildEncounters_CountSpawnableTiles(s16 playerX, s16 playerY,
         {
             u8 behavior = MapGridGetMetatileBehaviorAt(x, y);
 
-            if (!MetatileBehavior_IsLandWildEncounter(behavior))
+            if ((!allowLand || !MetatileBehavior_IsLandWildEncounter(behavior))
+             && (!allowWater || !OverworldWildEncounters_IsOpenWaterTile(x, y)))
                 continue;
             if (MapGridGetCollisionAt(x, y))
                 continue;
@@ -171,7 +240,7 @@ static bool8 OverworldWildEncounters_IsFarFromOtherWilds(s16 x, s16 y, u8 elevat
     return TRUE;
 }
 
-static bool8 OverworldWildEncounters_FindSpawnCoords(s16 *xOut, s16 *yOut, u8 *elevationOut)
+static bool8 OverworldWildEncounters_FindSpawnCoords(s16 *xOut, s16 *yOut, u8 *elevationOut, bool8 *isWaterTileOut)
 {
     s16 playerX = gSaveBlock1Ptr->pos.x;
     s16 playerY = gSaveBlock1Ptr->pos.y;
@@ -183,6 +252,8 @@ static bool8 OverworldWildEncounters_FindSpawnCoords(s16 *xOut, s16 *yOut, u8 *e
     s16 mapMinY = MAP_OFFSET;
     s16 mapMaxX = MAP_OFFSET + gMapHeader.mapLayout->width - 1;
     s16 mapMaxY = MAP_OFFSET + gMapHeader.mapLayout->height - 1;
+    bool8 allowLand = OverworldWildEncounters_HasLandMons();
+    bool8 allowWater = OverworldWildEncounters_HasWaterMons();
     u8 elevation = PlayerGetElevation();
     u8 tries;
 
@@ -227,7 +298,7 @@ static bool8 OverworldWildEncounters_FindSpawnCoords(s16 *xOut, s16 *yOut, u8 *e
         if (dx + dy < OVERWORLD_WILD_MIN_PLAYER_DISTANCE || dx + dy > OVERWORLD_WILD_MAX_PLAYER_DISTANCE)
             continue;
 
-        if (!OverworldWildEncounters_IsSpawnTileValid(x, y, elevation))
+        if (!OverworldWildEncounters_IsSpawnTileValid(x, y, elevation, allowLand, allowWater, isWaterTileOut))
             continue;
         if (!OverworldWildEncounters_IsFarFromOtherWilds(x, y, elevation))
             continue;
@@ -323,6 +394,7 @@ void OverworldWildEncounters_TrySpawn(void)
     s16 x;
     s16 y;
     u8 elevation;
+    bool8 isWaterTile;
     u16 species;
     u8 level;
     u8 maxSpawns;
@@ -330,8 +402,6 @@ void OverworldWildEncounters_TrySpawn(void)
     if (!OverworldWildEncounters_Enabled())
         return;
     if (FlagGet(OW_FLAG_NO_ENCOUNTER))
-        return;
-    if (TestPlayerAvatarFlags(PLAYER_AVATAR_FLAG_SURFING))
         return;
     if (MapHasNoEncounterData())
         return;
@@ -362,10 +432,18 @@ void OverworldWildEncounters_TrySpawn(void)
             OverworldWildEncounters_ClearSlot(slot);
         }
 
-        if (!OverworldWildEncounters_GetLandWildMon(&species, &level))
+        if (!OverworldWildEncounters_FindSpawnCoords(&x, &y, &elevation, &isWaterTile))
             return;
-        if (!OverworldWildEncounters_FindSpawnCoords(&x, &y, &elevation))
-            return;
+        if (isWaterTile)
+        {
+            if (!OverworldWildEncounters_GetWaterWildMon(&species, &level))
+                return;
+        }
+        else
+        {
+            if (!OverworldWildEncounters_GetLandWildMon(&species, &level))
+                return;
+        }
 
         OverworldWildEncounters_Spawn(slot, species, level, x, y, elevation);
     }
@@ -386,14 +464,18 @@ void OverworldWildEncounters_OnMapLoad(void)
             sOverworldWildMoves[slot][i] = MOVE_NONE;
         RemoveObjectEventByLocalIdAndMap(OBJ_EVENT_ID_OVERWORLD_WILD_BASE + slot, gSaveBlock1Ptr->location.mapNum, gSaveBlock1Ptr->location.mapGroup);
     }
+
+    if (GetBugContestFlag())
+        return;
+
     OverworldWildEncounters_TrySpawn();
 }
 
 void OverworldWildEncounters_OnReturnToField(void)
 {
-    if (!OverworldWildEncounters_Enabled()
+    if (GetBugContestFlag()
+     || !OverworldWildEncounters_Enabled()
      || FlagGet(OW_FLAG_NO_ENCOUNTER)
-     || TestPlayerAvatarFlags(PLAYER_AVATAR_FLAG_SURFING)
      || MapHasNoEncounterData())
     {
         for (u8 slot = 0; slot < OBJ_EVENT_ID_OVERWORLD_WILD_COUNT; slot++)
@@ -410,9 +492,10 @@ void OverworldWildEncounters_OnReturnToField(void)
 bool8 OverworldWildEncounters_SpawnDexNavMon(u16 species, u8 level, u8 potential, u8 abilityNum, u16 item, const u16 *moves,
                                              s16 x, s16 y, u8 elevation, u8 *outLocalId)
 {
+    bool8 unusedIsWaterTile;
     u8 slot;
 
-    if (!OverworldWildEncounters_IsSpawnTileValid(x, y, elevation))
+    if (!OverworldWildEncounters_IsSpawnTileValid(x, y, elevation, TRUE, TRUE, &unusedIsWaterTile))
         return FALSE;
 
     if (!OverworldWildEncounters_FindAvailableSlot(&slot))

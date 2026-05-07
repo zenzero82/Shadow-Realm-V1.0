@@ -1,6 +1,7 @@
 #include "global.h"
 #include "battle_setup.h"
 #include "bike.h"
+#include "bug_contest.h"
 #include "coord_event_weather.h"
 #include "daycare.h"
 #include "debug.h"
@@ -872,6 +873,8 @@ static bool8 TryStartStepCountScript(u16 metatileBehavior)
 
     if (SafariZoneTakeStep() == TRUE)
         return TRUE;
+    if (BugContestCheckTimeLimit() == TRUE)
+        return TRUE;
     if (CountSSTidalStep(1) == TRUE)
     {
         ScriptContext_SetupScript(SSTidalCorridor_EventScript_ReachedStepCount);
@@ -1081,7 +1084,8 @@ static bool8 CheckStandardWildEncounter(u16 metatileBehavior)
 
     if (gSaveBlock2Ptr->optionsOverworldWildEncounters == OPTIONS_OVERWORLD_WILD_ON)
     {
-        if (MetatileBehavior_IsLandWildEncounter(metatileBehavior))
+        if (MetatileBehavior_IsLandWildEncounter(metatileBehavior)
+         || MetatileBehavior_IsSurfableAndNotWaterfall(metatileBehavior))
             OverworldWildEncounters_TrySpawn();
         sPrevMetatileBehavior = metatileBehavior;
         return FALSE;

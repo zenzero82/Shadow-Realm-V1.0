@@ -150,6 +150,7 @@ static void TryEnableObjectEventAnim(struct ObjectEvent *, struct Sprite *);
 static void ObjectEventExecHeldMovementAction(struct ObjectEvent *, struct Sprite *);
 static void UpdateObjectEventSpriteAnimPause(struct ObjectEvent *, struct Sprite *);
 static bool8 IsCoordOutsideObjectEventMovementRange(struct ObjectEvent *, s16, s16);
+static bool8 IsOpenWaterOverworldWildTile(s16, s16);
 static bool8 IsMetatileDirectionallyImpassable(struct ObjectEvent *, s16, s16, u8);
 static bool8 DoesObjectCollideWithObjectAt(struct ObjectEvent *, s16, s16);
 static void UpdateObjectEventOffscreen(struct ObjectEvent *, struct Sprite *);
@@ -201,6 +202,7 @@ static void RemoveObjectEventIfOutsideView(struct ObjectEvent *);
 static void SpawnObjectEventOnReturnToField(u8, s16, s16);
 static void SetPlayerAvatarObjectEventIdAndObjectId(u8, u8);
 static void ForcePlayerFacingDirectionInternal(u8 direction);
+extern const u8 Common_EventScript_NopReturn[];
 
 static EWRAM_DATA u8 sPlayerFacingOverride = DIR_NONE;
 static u8 UpdateSpritePalette(const struct SpritePalette *spritePalette, struct Sprite *sprite);
@@ -539,6 +541,7 @@ static const struct SpritePalette sObjectEventSpritePalettes[] = {
     {gObjectEventPal_Npc2,                  OBJ_EVENT_PAL_TAG_NPC_2},
     {gObjectEventPal_Npc3,                  OBJ_EVENT_PAL_TAG_NPC_3},
     {gObjectEventPal_Npc4,                  OBJ_EVENT_PAL_TAG_NPC_4},
+    {gObjectEventPal_SnorlaxDoll,           OBJ_EVENT_PAL_TAG_SNORLAX_DOLL},
     {gObjectEventPal_BallTm,                OBJ_EVENT_PAL_TAG_BALL_TM},
     {gObjectEventPal_ZygardeCube,           OBJ_EVENT_PAL_TAG_ZYGARDE_CUBE},
     {gObjectEventPal_LaprasSurf,            OBJ_EVENT_PAL_TAG_LAPRAS_SURF},
@@ -569,6 +572,61 @@ static const struct SpritePalette sObjectEventSpritePalettes[] = {
     {gObjectEventPal_Poochyena,             OBJ_EVENT_PAL_TAG_POOCHYENA},
     {gObjectEventPal_RedLeaf,               OBJ_EVENT_PAL_TAG_RED_LEAF},
     {gObjectEventPal_Lyra,                  OBJ_EVENT_PAL_TAG_LYRA},
+    {gObjectEventPal_BrendanMachBike,      OBJ_EVENT_PAL_TAG_BRENDAN_MACH_BIKE},
+    {gObjectEventPal_BrendanAcroBike,      OBJ_EVENT_PAL_TAG_BRENDAN_ACRO_BIKE},
+    {gObjectEventPal_BreederF,             OBJ_EVENT_PAL_TAG_BREEDER_F},
+    {gObjectEventPal_BreederM,             OBJ_EVENT_PAL_TAG_BREEDER_M},
+    {gObjectEventPal_AromaGirl,            OBJ_EVENT_PAL_TAG_AROMA_GIRL},
+    {gObjectEventPal_Boy1,                 OBJ_EVENT_PAL_TAG_BOY1},
+    {gObjectEventPal_PokemonRangerM,       OBJ_EVENT_PAL_TAG_POKEMON_RANGER_M},
+    {gObjectEventPal_PokemonRangerF,       OBJ_EVENT_PAL_TAG_POKEMON_RANGER_F},
+    {gObjectEventPal_DelinquentF,          OBJ_EVENT_PAL_TAG_DELINQUENT_F},
+    {gObjectEventPal_Lady,                 OBJ_EVENT_PAL_TAG_LADY},
+    {gObjectEventPal_ParasolLady,          OBJ_EVENT_PAL_TAG_PARASOL_LADY},
+    {gObjectEventPal_Psychic,              OBJ_EVENT_PAL_TAG_PSYCHIC},
+    {gObjectEventPal_Kindler,              OBJ_EVENT_PAL_TAG_KINDLER},
+    {gObjectEventPal_Rocker,               OBJ_EVENT_PAL_TAG_ROCKER},
+    {gObjectEventPal_Hiker,                OBJ_EVENT_PAL_TAG_HIKER},
+    {gObjectEventPal_Twin,                 OBJ_EVENT_PAL_TAG_TWIN},
+    {gObjectEventPal_Beauty,               OBJ_EVENT_PAL_TAG_BEAUTY},
+    {gObjectEventPal_Scientist1,           OBJ_EVENT_PAL_TAG_SCIENTIST_1},
+    {gObjectEventPal_Scientist2,           OBJ_EVENT_PAL_TAG_SCIENTIST_2},
+    {gObjectEventPal_Lass,                 OBJ_EVENT_PAL_TAG_LASS},
+    {gObjectEventPal_RunningTriathleteM,   OBJ_EVENT_PAL_TAG_RUNNING_TRIATHLETE_M},
+    {gObjectEventPal_RunningTriathleteF,   OBJ_EVENT_PAL_TAG_RUNNING_TRIATHLETE_F},
+    {gObjectEventPal_CyclingTriathleteM,   OBJ_EVENT_PAL_TAG_CYCLING_TRIATHLETE_M},
+    {gObjectEventPal_CyclingTriathleteF,   OBJ_EVENT_PAL_TAG_CYCLING_TRIATHLETE_F},
+    {gObjectEventPal_CooltrainerM,         OBJ_EVENT_PAL_TAG_COOLTRAINER_M},
+    {gObjectEventPal_CooltrainerF,         OBJ_EVENT_PAL_TAG_COOLTRAINER_F},
+    {gObjectEventPal_DragonTamer,          OBJ_EVENT_PAL_TAG_DRAGON_TAMER},
+    {gObjectEventPal_RuinManiac,           OBJ_EVENT_PAL_TAG_RUIN_MANIAC},
+    {gObjectEventPal_Maniac,               OBJ_EVENT_PAL_TAG_MANIAC},
+    {gObjectEventPal_BugCatcher,           OBJ_EVENT_PAL_TAG_BUG_CATCHER},
+    {gObjectEventPal_SchoolKidM,           OBJ_EVENT_PAL_TAG_SCHOOL_KID_M},
+    {gObjectEventPal_LittleBoy,            OBJ_EVENT_PAL_TAG_LITTLE_BOY},
+    {gObjectEventPal_TuberF,               OBJ_EVENT_PAL_TAG_TUBER_F},
+    {gObjectEventPal_TuberM,               OBJ_EVENT_PAL_TAG_TUBER_M},
+    {gObjectEventPal_Wally,                OBJ_EVENT_PAL_TAG_WALLY},
+    {gObjectEventPal_PokefanM,             OBJ_EVENT_PAL_TAG_POKEFAN_M},
+    {gObjectEventPal_PokefanF,             OBJ_EVENT_PAL_TAG_POKEFAN_F},
+    {gObjectEventPal_RichBoy,              OBJ_EVENT_PAL_TAG_RICH_BOY},
+    {gObjectEventPal_Youngster,            OBJ_EVENT_PAL_TAG_YOUNGSTER},
+    {gObjectEventPal_Camper,               OBJ_EVENT_PAL_TAG_CAMPER},
+    {gObjectEventPal_Steven,               OBJ_EVENT_PAL_TAG_STEVEN},
+    {gObjectEventPal_DevonEmployee,        OBJ_EVENT_PAL_TAG_DEVON_EMPLOYEE},
+    {gObjectEventPal_Roxanne,              OBJ_EVENT_PAL_TAG_ROXANNE},
+    {gObjectEventPal_Brawly,               OBJ_EVENT_PAL_TAG_BRAWLY},
+    {gObjectEventPal_Wattson,              OBJ_EVENT_PAL_TAG_WATTSON},
+    {gObjectEventPal_Flannery,             OBJ_EVENT_PAL_TAG_FLANNERY},
+    {gObjectEventPal_Norman,               OBJ_EVENT_PAL_TAG_NORMAN},
+    {gObjectEventPal_Winona,               OBJ_EVENT_PAL_TAG_WINONA},
+    {gObjectEventPal_Liza,                 OBJ_EVENT_PAL_TAG_LIZA},
+    {gObjectEventPal_Tate,                 OBJ_EVENT_PAL_TAG_TATE},
+    {gObjectEventPal_Wallace,              OBJ_EVENT_PAL_TAG_WALLACE},
+    {gObjectEventPal_Sidney,               OBJ_EVENT_PAL_TAG_SIDNEY},
+    {gObjectEventPal_Phoebe,               OBJ_EVENT_PAL_TAG_PHOEBE},
+    {gObjectEventPal_Glacia,               OBJ_EVENT_PAL_TAG_GLACIA},
+    {gObjectEventPal_Drake,                OBJ_EVENT_PAL_TAG_DRAKE},
     {gObjectEventPal_AquaMemberM,           OBJ_EVENT_PAL_TAG_AQUA_MEMBER_M},
     {gObjectEventPal_AquaMemberF,           OBJ_EVENT_PAL_TAG_AQUA_MEMBER_F},
     {gObjectEventPal_Matt,                  OBJ_EVENT_PAL_TAG_MATT},
@@ -775,6 +833,7 @@ static const struct SpritePalette sObjectEventSpritePalettes[] = {
     {gObjectEventPal_TuroGen9, OBJ_EVENT_PAL_TAG_TURO_GEN9},
     {gObjectEventPal_Wes,                   OBJ_EVENT_PAL_TAG_WES},
     {gObjectEventPal_CipherPeonM,           OBJ_EVENT_PAL_TAG_CIPHER_PEON_M},
+    {gObjectEventPal_CipherPeonF,           OBJ_EVENT_PAL_TAG_CIPHER_PEON_F},
     {gObjectEventPal_Ardos,                  OBJ_EVENT_PAL_TAG_ARDOS},
     {gObjectEventPal_Dakim,                  OBJ_EVENT_PAL_TAG_DAKIM},
     {gObjectEventPal_Ein,                    OBJ_EVENT_PAL_TAG_EIN},
@@ -2065,7 +2124,7 @@ u8 SpawnSpecialObjectEvent(struct ObjectEventTemplate *objectEventTemplate)
 
 u8 SpawnSpecialObjectEventParameterized(u16 graphicsId, u8 movementBehavior, u8 localId, s16 x, s16 y, u8 elevation)
 {
-    struct ObjectEventTemplate objectEventTemplate;
+    struct ObjectEventTemplate objectEventTemplate = {0};
 
     x -= MAP_OFFSET;
     y -= MAP_OFFSET;
@@ -2080,6 +2139,8 @@ u8 SpawnSpecialObjectEventParameterized(u16 graphicsId, u8 movementBehavior, u8 
     objectEventTemplate.movementRangeY = 0;
     objectEventTemplate.trainerType = TRAINER_TYPE_NONE;
     objectEventTemplate.trainerRange_berryTreeId = 0;
+    objectEventTemplate.script = Common_EventScript_NopReturn;
+    objectEventTemplate.flagId = 0;
     return SpawnSpecialObjectEvent(&objectEventTemplate);
 }
 
@@ -4243,6 +4304,20 @@ u16 GetObjectPaletteTag(u8 palSlot)
 movement_type_empty_callback(MovementType_None)
 movement_type_def(MovementType_WanderAround, gMovementTypeFuncs_WanderAround)
 
+static bool8 IsOpenWaterOverworldWildTile(s16 x, s16 y)
+{
+    for (s16 yOffset = -1; yOffset <= 1; yOffset++)
+    {
+        for (s16 xOffset = -1; xOffset <= 1; xOffset++)
+        {
+            if (!MetatileBehavior_IsSurfableAndNotWaterfall(MapGridGetMetatileBehaviorAt(x + xOffset, y + yOffset)))
+                return FALSE;
+        }
+    }
+
+    return TRUE;
+}
+
 bool8 MovementType_WanderAround_Step0(struct ObjectEvent *objectEvent, struct Sprite *sprite)
 {
     ClearObjectEventMovement(objectEvent, sprite);
@@ -4306,14 +4381,33 @@ bool8 MovementType_WanderAround_Step4(struct ObjectEvent *objectEvent, struct Sp
             s16 x = objectEvent->currentCoords.x;
             s16 y = objectEvent->currentCoords.y;
             u8 direction = directions[i];
+            bool8 onWater = MetatileBehavior_IsSurfableAndNotWaterfall(objectEvent->currentMetatileBehavior);
+            u8 nextBehavior;
 
             MoveCoords(direction, &x, &y);
-            if (GetCollisionAtCoords(objectEvent, x, y, direction) != COLLISION_NONE)
-                continue;
-            if (IsElevationMismatchAt(objectEvent->currentElevation, x, y))
-                continue;
-            if (!MetatileBehavior_IsLandWildEncounter(MapGridGetMetatileBehaviorAt(x, y)))
-                continue;
+            nextBehavior = MapGridGetMetatileBehaviorAt(x, y);
+            if (onWater)
+            {
+                if (IsCoordOutsideObjectEventMovementRange(objectEvent, x, y))
+                    continue;
+                if (GetMapBorderIdAt(x, y) == CONNECTION_INVALID)
+                    continue;
+                if (DoesObjectCollideWithObjectAt(objectEvent, x, y))
+                    continue;
+                if (IsElevationMismatchAt(objectEvent->currentElevation, x, y))
+                    continue;
+                if (!IsOpenWaterOverworldWildTile(x, y))
+                    continue;
+            }
+            else
+            {
+                if (GetCollisionAtCoords(objectEvent, x, y, direction) != COLLISION_NONE)
+                    continue;
+                if (IsElevationMismatchAt(objectEvent->currentElevation, x, y))
+                    continue;
+                if (!MetatileBehavior_IsLandWildEncounter(nextBehavior))
+                    continue;
+            }
 
             SetObjectEventDirection(objectEvent, direction);
             sprite->sTypeFuncId = 5;
@@ -10283,8 +10377,14 @@ static void GetGroundEffectFlags_ShortGrass(struct ObjectEvent *objEvent, u32 *f
 
 static void GetGroundEffectFlags_HotSprings(struct ObjectEvent *objEvent, u32 *flags)
 {
-    if (MetatileBehavior_IsHotSprings(objEvent->currentMetatileBehavior)
-        && MetatileBehavior_IsHotSprings(objEvent->previousMetatileBehavior))
+    bool8 inWaterEncounter = objEvent->localId >= OBJ_EVENT_ID_OVERWORLD_WILD_BASE
+                          && objEvent->localId < OBJ_EVENT_ID_OVERWORLD_WILD_BASE + OBJ_EVENT_ID_OVERWORLD_WILD_COUNT
+                          && MetatileBehavior_IsSurfableAndNotWaterfall(objEvent->currentMetatileBehavior)
+                          && MetatileBehavior_IsSurfableAndNotWaterfall(objEvent->previousMetatileBehavior);
+
+    if ((MetatileBehavior_IsHotSprings(objEvent->currentMetatileBehavior)
+         && MetatileBehavior_IsHotSprings(objEvent->previousMetatileBehavior))
+     || inWaterEncounter)
     {
         if (!objEvent->inHotSprings)
         {
@@ -10422,6 +10522,24 @@ static void SetObjectEventSpriteOamTableForLongGrass(struct ObjectEvent *objEven
         return;
 
     if (!MetatileBehavior_IsLongGrass(objEvent->previousMetatileBehavior))
+        return;
+
+    sprite->subspriteTableNum = 3;
+}
+
+static void SetObjectEventSpriteOamTableForOverworldWater(struct ObjectEvent *objEvent, struct Sprite *sprite)
+{
+    if (objEvent->disableCoveringGroundEffects)
+        return;
+
+    if (objEvent->localId < OBJ_EVENT_ID_OVERWORLD_WILD_BASE
+     || objEvent->localId >= OBJ_EVENT_ID_OVERWORLD_WILD_BASE + OBJ_EVENT_ID_OVERWORLD_WILD_COUNT)
+        return;
+
+    if (!MetatileBehavior_IsSurfableAndNotWaterfall(objEvent->currentMetatileBehavior))
+        return;
+
+    if (!MetatileBehavior_IsSurfableAndNotWaterfall(objEvent->previousMetatileBehavior))
         return;
 
     sprite->subspriteTableNum = 4;
@@ -10909,6 +11027,7 @@ static void DoGroundEffects_OnSpawn(struct ObjectEvent *objEvent, struct Sprite 
         UpdateObjectEventElevationAndPriority(objEvent, sprite);
         GetAllGroundEffectFlags_OnSpawn(objEvent, &flags);
         SetObjectEventSpriteOamTableForLongGrass(objEvent, sprite);
+        SetObjectEventSpriteOamTableForOverworldWater(objEvent, sprite);
         DoFlaggedGroundEffects(objEvent, sprite, flags);
         objEvent->triggerGroundEffectsOnMove = FALSE;
         objEvent->disableCoveringGroundEffects = 0;
@@ -10931,6 +11050,7 @@ static void DoGroundEffects_OnBeginStep(struct ObjectEvent *objEvent, struct Spr
         UpdateObjectEventElevationAndPriority(objEvent, sprite);
         GetAllGroundEffectFlags_OnBeginStep(objEvent, &flags);
         SetObjectEventSpriteOamTableForLongGrass(objEvent, sprite);
+        SetObjectEventSpriteOamTableForOverworldWater(objEvent, sprite);
         filters_out_some_ground_effects(objEvent, &flags);
         DoFlaggedGroundEffects(objEvent, sprite, flags);
         objEvent->triggerGroundEffectsOnMove = FALSE;
@@ -10952,6 +11072,7 @@ static void DoGroundEffects_OnFinishStep(struct ObjectEvent *objEvent, struct Sp
         UpdateObjectEventElevationAndPriority(objEvent, sprite);
         GetAllGroundEffectFlags_OnFinishStep(objEvent, &flags);
         SetObjectEventSpriteOamTableForLongGrass(objEvent, sprite);
+        SetObjectEventSpriteOamTableForOverworldWater(objEvent, sprite);
         FilterOutStepOnPuddleGroundEffectIfJumping(objEvent, &flags);
         DoFlaggedGroundEffects(objEvent, sprite, flags);
         objEvent->triggerGroundEffectsOnStop = 0;

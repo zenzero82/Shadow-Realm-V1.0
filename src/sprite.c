@@ -78,6 +78,7 @@ static u8 GetSpriteMatrixNum(struct Sprite *sprite);
 static void AffineAnimStateRestartAnim(u8 matrixNum);
 static void AffineAnimStateStartAnim(u8 matrixNum, u8 animNum);
 static void AffineAnimStateReset(u8 matrixNum);
+static bool8 TryInitSpriteAffineAnim(struct Sprite *sprite);
 static void ApplyAffineAnimFrameAbsolute(u8 matrixNum, struct AffineAnimFrameCmd *frameCmd);
 static void DecrementAnimDelayCounter(struct Sprite *sprite);
 static bool8 DecrementAffineAnimDelayCounter(struct Sprite *sprite, u8 matrixNum);
@@ -258,6 +259,8 @@ static u16 sSpriteTileRanges[MAX_SPRITES * 2];
 static struct AffineAnimState sAffineAnimStates[OAM_MATRIX_COUNT];
 static u16 sSpritePaletteTags[16];
 
+#define FAILED_SPRITE_SENTINEL_TILE_START (TOTAL_OBJ_TILE_COUNT - 192)
+
 // iwram common
 COMMON_DATA u32 gOamMatrixAllocBitmap = 0;
 COMMON_DATA u8 gReservedSpritePaletteCount = 0;
@@ -276,6 +279,8 @@ EWRAM_DATA s16 gSpriteCoordOffsetY = 0;
 EWRAM_DATA struct OamMatrix gOamMatrices[OAM_MATRIX_COUNT] = {0};
 EWRAM_DATA bool8 gAffineAnimsDisabled = FALSE;
 
+static void InitFailedSpriteSentinel(void);
+
 void ResetSpriteData(void)
 {
     ResetOamRange(0, 128);
@@ -289,6 +294,23 @@ void ResetSpriteData(void)
     AllocSpriteTiles(0);
     gSpriteCoordOffsetX = 0;
     gSpriteCoordOffsetY = 0;
+    InitFailedSpriteSentinel();
+}
+
+static void InitFailedSpriteSentinel(void)
+{
+    ResetSprite(&gSprites[MAX_SPRITES]);
+    gSprites[MAX_SPRITES].inUse = TRUE;
+    gSprites[MAX_SPRITES].invisible = TRUE;
+    gSprites[MAX_SPRITES].usingSheet = TRUE;
+    gSprites[MAX_SPRITES].coordOffsetEnabled = FALSE;
+    gSprites[MAX_SPRITES].callback = SpriteCallbackDummy;
+    gSprites[MAX_SPRITES].oam.tileNum = FAILED_SPRITE_SENTINEL_TILE_START;
+    gSprites[MAX_SPRITES].oam.affineMode = ST_OAM_AFFINE_OFF;
+    gSprites[MAX_SPRITES].oam.objMode = ST_OAM_OBJ_NORMAL;
+    gSprites[MAX_SPRITES].oam.shape = ST_OAM_SQUARE;
+    gSprites[MAX_SPRITES].oam.size = ST_OAM_SIZE_0;
+    gSprites[MAX_SPRITES].subpriority = 0xFF;
 }
 
 void AnimateSprites(void)
@@ -514,8 +536,21 @@ u32 CreateSpriteAt(u32 index, const struct SpriteTemplate *template, s16 x, s16 
         SetSpriteSheetFrameTileNum(sprite);
     }
 
-    if (sprite->oam.affineMode & ST_OAM_AFFINE_ON_MASK)
-        InitSpriteAffineAnim(sprite);
+    if ((sprite->oam.affineMode & ST_OAM_AFFINE_ON_MASK) && !TryInitSpriteAffineAnim(sprite))
+    {
+        if (!sprite->usingSheet)
+        {
+            u16 i;
+            s16 tileEnd;
+
+            tileEnd = (sprite->images->size / TILE_SIZE_4BPP) + sprite->oam.tileNum;
+            for (i = sprite->oam.tileNum; i < tileEnd; i++)
+                FREE_SPRITE_TILE(i);
+        }
+
+        ResetSprite(sprite);
+        return MAX_SPRITES;
+    }
 
     if (template->paletteTag != TAG_NONE)
         sprite->oam.paletteNum = IndexOfSpritePaletteTag(template->paletteTag);
@@ -1429,7 +1464,7 @@ void FreeOamMatrix(u8 matrixNum)
     SetOamMatrix(matrixNum, 0x100, 0, 0, 0x100);
 }
 
-void InitSpriteAffineAnim(struct Sprite *sprite)
+static bool8 TryInitSpriteAffineAnim(struct Sprite *sprite)
 {
     u8 matrixNum = AllocOamMatrix();
     if (matrixNum != 0xFF)
@@ -1438,7 +1473,16 @@ void InitSpriteAffineAnim(struct Sprite *sprite)
         sprite->oam.matrixNum = matrixNum;
         sprite->affineAnimBeginning = TRUE;
         AffineAnimStateReset(matrixNum);
+        return TRUE;
     }
+
+    sprite->oam.affineMode = ST_OAM_AFFINE_OFF;
+    return FALSE;
+}
+
+void InitSpriteAffineAnim(struct Sprite *sprite)
+{
+    TryInitSpriteAffineAnim(sprite);
 }
 
 void SetOamMatrixRotationScaling(u8 matrixNum, s16 xScale, s16 yScale, u16 rotation)

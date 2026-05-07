@@ -62,6 +62,114 @@ EventScript_FollowerJump::
 	waitbuttonpress
 	return
 
+FollowerSpeaker_Lillie:
+	.string "LILLIE$"
+
+EventScript_Follower_Nebby::
+	lock
+	random 5
+	switch VAR_RESULT
+	case 0, EventScript_Follower_Nebby_0
+	case 1, EventScript_Follower_Nebby_1
+	case 2, EventScript_Follower_Nebby_2
+	case 3, EventScript_Follower_Nebby_3
+	case 4, EventScript_Follower_Nebby_4
+	end
+
+EventScript_Follower_Nebby_0::
+	msgbox Text_Nebby_Curious, MSGBOX_DEFAULT
+	goto EventScript_Follower_Nebby_End
+
+EventScript_Follower_Nebby_1::
+	msgbox Text_Nebby_TrustsYou, MSGBOX_DEFAULT
+	goto EventScript_Follower_Nebby_End
+
+EventScript_Follower_Nebby_2::
+	playmoncry SPECIES_COSMOG, CRY_MODE_NORMAL
+	waitmoncry
+	msgbox Text_Nebby_Peeking, MSGBOX_DEFAULT
+	goto EventScript_Follower_Nebby_End
+
+EventScript_Follower_Nebby_3::
+	msgbox Text_Nebby_Wobble, MSGBOX_DEFAULT
+	goto EventScript_Follower_Nebby_End
+
+EventScript_Follower_Nebby_4::
+	msgbox Text_Nebby_Sky, MSGBOX_DEFAULT
+	goto EventScript_Follower_Nebby_End
+
+EventScript_Follower_Nebby_End::
+	release
+	end
+
+EventScript_Follower_Bonsly::
+	lock
+	faceplayer
+	playmoncry SPECIES_BONSLY, CRY_MODE_NORMAL
+	waitmoncry
+	msgbox Text_Bonsly_Follower, MSGBOX_DEFAULT
+	release
+	end
+
+EventScript_Follower_Lillie::
+	lock
+	faceplayer
+	setspeaker FollowerSpeaker_Lillie
+	random 5
+	switch VAR_RESULT
+	case 0, EventScript_Follower_Lillie_0
+	case 1, EventScript_Follower_Lillie_1
+	case 2, EventScript_Follower_Lillie_2
+	case 3, EventScript_Follower_Lillie_3
+	case 4, EventScript_Follower_Lillie_4
+	end
+
+EventScript_Follower_Lillie_0::
+	msgbox Text_Lillie_Gladion, MSGBOX_DEFAULT
+	goto EventScript_Follower_Lillie_AskHeal
+
+EventScript_Follower_Lillie_1::
+	msgbox Text_Lillie_Aether, MSGBOX_DEFAULT
+	goto EventScript_Follower_Lillie_AskHeal
+
+EventScript_Follower_Lillie_2::
+	msgbox Text_Lillie_Timeline, MSGBOX_DEFAULT
+	goto EventScript_Follower_Lillie_AskHeal
+
+EventScript_Follower_Lillie_3::
+	msgbox Text_Lillie_Nebby, MSGBOX_DEFAULT
+	goto EventScript_Follower_Lillie_AskHeal
+
+EventScript_Follower_Lillie_4::
+	msgbox Text_Lillie_Elio, MSGBOX_DEFAULT
+	goto EventScript_Follower_Lillie_AskHeal
+
+EventScript_Follower_Lillie_AskHeal::
+	msgbox Text_Lillie_HealAsk, MSGBOX_YESNO
+	goto_if_eq VAR_RESULT, YES, EventScript_Follower_Lillie_HealYes
+	goto_if_eq VAR_RESULT, NO, EventScript_Follower_Lillie_HealNo
+	end
+
+EventScript_Follower_Lillie_HealYes::
+	msgbox Text_Lillie_HealYes, MSGBOX_DEFAULT
+	closemessage
+	fadescreenswapbuffers FADE_TO_BLACK
+	special HealPlayerParty
+	playfanfare MUS_HEAL
+	waitfanfare
+	fadescreenswapbuffers FADE_FROM_BLACK
+	setspeaker FollowerSpeaker_Lillie
+	msgbox Text_Lillie_HealDone, MSGBOX_DEFAULT
+	goto EventScript_Follower_Lillie_End
+
+EventScript_Follower_Lillie_HealNo::
+	msgbox Text_Lillie_HealNo, MSGBOX_DEFAULT
+	goto EventScript_Follower_Lillie_End
+
+EventScript_Follower_Lillie_End::
+	release
+	end
+
 EnterPokeballMovement::
 	enter_pokeball
 	step_end
@@ -661,3 +769,60 @@ EventScript_FollowerFaceRight:
 	applymovement OBJ_EVENT_ID_FOLLOWER Common_Movement_FaceRight
 	waitmovement OBJ_EVENT_ID_FOLLOWER
 	goto EventScript_FollowerGenericSkipFace
+
+Text_Nebby_Curious:
+	.string "Nebby is curious about everything\n"
+	.string "around you.$"
+
+Text_Nebby_TrustsYou:
+	.string "Nebby seems to trust you more with\n"
+	.string "each step.$"
+
+Text_Nebby_Peeking:
+	.string "Nebby is peeking out of your bag.$"
+
+Text_Nebby_Wobble:
+	.string "Nebby wobbles happily.$"
+
+Text_Nebby_Sky:
+	.string "Nebby stares at the sky with\n"
+	.string "wonder.$"
+
+Text_Bonsly_Follower:
+	.string "BONSLY is staying close\n"
+	.string "behind you.$"
+
+Text_Lillie_Gladion:
+	.string "I keep thinking about Gladion...\n"
+	.string "He's so different here.$"
+
+Text_Lillie_Aether:
+	.string "The Aether Foundation in this\n"
+	.string "timeline feels wrong to me.$"
+
+Text_Lillie_Timeline:
+	.string "This world is so different, but I'm\n"
+	.string "glad you're with me.$"
+
+Text_Lillie_Nebby:
+	.string "I hope Nebby is okay.\n"
+	.string "It gets scared so easily.$"
+
+Text_Lillie_Elio:
+	.string "I miss my friend Elio.\n"
+	.string "He helped keep Nebby safe.$"
+
+Text_Lillie_HealAsk:
+	.string "{PLAYER}, did you want me to heal\n"
+	.string "your party by chance?$"
+
+Text_Lillie_HealYes:
+	.string "Okay. Just a moment.$"
+
+Text_Lillie_HealNo:
+	.string "All right. Let me know if you\n"
+	.string "change your mind.$"
+
+Text_Lillie_HealDone:
+	.string "Your POKeMON are feeling much\n"
+	.string "better now.$"

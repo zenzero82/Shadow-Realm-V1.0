@@ -324,6 +324,28 @@ static const struct MenuAction MultichoiceList_Floors[] =
     {gText_Exit},
 };
 
+static const struct MenuAction MultichoiceList_5Floors[] =
+{
+    {gText_5F},
+    {gText_4F},
+    {gText_3F},
+    {gText_2F},
+    {gText_1F},
+    {gText_Exit},
+};
+
+static const struct MenuAction MultichoiceList_7Floors[] =
+{
+    {gText_6F},
+    {gText_5F},
+    {gText_4F},
+    {gText_3F},
+    {gText_2F},
+    {gText_1F},
+    {gText_B1F},
+    {gText_Exit},
+};
+
 static const struct MenuAction MultichoiceList_ShardsR[] =
 {
     {gText_RedShard},
@@ -906,6 +928,8 @@ static const struct MultichoiceListStruct sMultichoiceLists[] =
     [MULTI_FALLARBOR_TENT_RULES]       = MULTICHOICE(MultichoiceList_FallarborTentRules),
     [MULTI_TAG_MATCH_TYPE]             = MULTICHOICE(MultichoiceList_TagMatchType),
     [MULTI_BERRY_PLOT]                 = MULTICHOICE(MultichoiceList_BerryPlot),
+    [MULTI_5FLOORS]                    = MULTICHOICE(MultichoiceList_5Floors),
+    [MULTI_7FLOORS]                    = MULTICHOICE(MultichoiceList_7Floors),
 };
 
 const u8 *const gStdStrings[] =
@@ -958,6 +982,7 @@ static const u8 sLinkServicesMultichoiceIds[] =
 static const u8 *const sPCNameStrings[] =
 {
     gText_SomeonesPC,
+    gText_JinwoosPC,
     gText_LanettesPC,
     gText_PlayersPC,
     gText_LogOff,

@@ -422,6 +422,7 @@ SlowpokeWell_B1F_EventScript_BarryScene_Core::
 	removeobject 0xF8
 	removeobject 0xF9
 	removeobject 0xFA
+	playbgm MUS_ENCOUNTER_INTENSE, FALSE
 	clearflag FLAG_HIDE_SLOWPOKE_WELL_BARRY
 	addobject LOCALID_SLOWPOKE_WELL_BARRY
 	setobjectxy LOCALID_SLOWPOKE_WELL_BARRY, 26, 11
@@ -526,6 +527,7 @@ SlowpokeWell_B1F_EventScript_BarryScene_ToSlowpoke_South::
 
 SlowpokeWell_B1F_EventScript_BarryScene_Throw::
 	waitmovement 0
+	playse SE_BALL_THROW
 	clearflag FLAG_HIDE_SLOWPOKE_WELL_BARRY_POKEBALL
 	addobject LOCALID_SLOWPOKE_WELL_BARRY_BALL
 	goto_if_eq VAR_TEMP_1, 0, SlowpokeWell_B1F_EventScript_BarryScene_Throw_North
@@ -553,10 +555,12 @@ SlowpokeWell_B1F_EventScript_BarryScene_Throw_South::
 SlowpokeWell_B1F_EventScript_BarryScene_Throw_Wait::
 	waitmovement 0
 	delay 16
+	playse SE_BALL_OPEN
 	hideobjectat LOCALID_SLOWPOKE_WELL_GALAR_SLOWPOKE, MAP_SLOWPOKE_WELL_B1F
 	removeobject LOCALID_SLOWPOKE_WELL_GALAR_SLOWPOKE
 	setflag FLAG_HIDE_SLOWPOKE_WELL_SLOWPOKE
 	delay 16
+	playse SE_BALL
 	hideobjectat LOCALID_SLOWPOKE_WELL_BARRY_BALL, MAP_SLOWPOKE_WELL_B1F
 	removeobject LOCALID_SLOWPOKE_WELL_BARRY_BALL
 	setflag FLAG_HIDE_SLOWPOKE_WELL_BARRY_POKEBALL
@@ -587,6 +591,7 @@ SlowpokeWell_B1F_EventScript_BarryScene_RunOff_Wait::
 	setflag FLAG_HIDE_SLOWPOKE_WELL_BARRY
 	applymovement LOCALID_PLAYER, SlowpokeWell_B1F_Movement_PlayerUnlockFacing
 	waitmovement 0
+	fadedefaultbgm
 	special Special_OverworldWildEncounters_OnReturnToField
 SlowpokeWell_B1F_EventScript_BarryScene_Core_Done::
 	return

@@ -174,10 +174,10 @@ cerulean_gym_Text_Misty_After:
 	.string "Also just so you know, when defeating\n"
 	.string "one of us GYM LEADERS, your POKéMON\l"
 	.string "get stronger and you'll be able to\l"
-	.string "increase their strength more with each\l"
-	.string "badge.\p"
-	.string "If it were in terms of levels, I'd say\n"
-	.string "you would be able to go to level 24 now.$"
+	.string "boost their strength more with\l"
+	.string "each badge.\p"
+	.string "If I had to compare it to levels,\n"
+	.string "I'd say level 24 for now.$"
 
 cerulean_gym_Text_GymGuy_Intro:
 	.string "Yo! CHAMP in the making!\p"
@@ -207,7 +207,7 @@ cerulean_gym_Text_SwimmerF1_Defeat:
 
 cerulean_gym_Text_SwimmerF1_After:
 	.string "I'm still training, but it feels like\n"
-	.string "the whole city is holding its breath.$"
+	.string "the whole city is just waiting.$"
 
 cerulean_gym_Text_SwimmerF2_Intro:
 	.string "Hope you're ready for a chilly\n"

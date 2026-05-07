@@ -1,5 +1,22 @@
 route10_powerplantback_MapScripts::
+	map_script MAP_SCRIPT_ON_TRANSITION, route10_powerplantback_EventScript_SyncPlasmaCleanup
 	.byte 0
+
+route10_powerplantback_EventScript_SyncPlasmaCleanup::
+	checkflag FLAG_HIDE_ROUTE10_ZINZOLIN
+	goto_if_eq route10_powerplantback_EventScript_SyncPlasmaCleanup_Hide
+	goto route10_powerplantback_EventScript_SyncPlasmaCleanup_Show
+
+route10_powerplantback_EventScript_SyncPlasmaCleanup_Hide::
+	setflag FLAG_HIDE_ROUTE10_POWERPLANT_PLASMA_3
+	hideobjectat LOCALID_ROUTE10_POWERPLANTBACK_PLASMA_GRUNT_3, MAP_ROUTE10_POWERPLANTBACK
+	removeobject LOCALID_ROUTE10_POWERPLANTBACK_PLASMA_GRUNT_3
+route10_powerplantback_EventScript_SyncPlasmaCleanup_Done::
+	end
+
+route10_powerplantback_EventScript_SyncPlasmaCleanup_Show::
+	clearflag FLAG_HIDE_ROUTE10_POWERPLANT_PLASMA_3
+	end
 
 route10_powerplantback_EventScript_PlasmaGrunt3::
 	setspeaker route10_powerplantback_Speaker_PlasmaGrunt
@@ -95,15 +112,15 @@ route10_powerplantback_EventScript_Voltorb4_Done::
 	end
 
 route10_powerplantback_Text_PlasmaGrunt3_Intro:
-	.string "The generator room is secure.\l"
+	.string "The generator room is secure.\n"
 	.string "ZINZOLIN's plan will succeed.$"
 
 route10_powerplantback_Text_PlasmaGrunt3_Defeat:
-	.string "No... the takeover isn't\l"
+	.string "No... the takeover isn't\n"
 	.string "complete!$"
 
 route10_powerplantback_Text_PlasmaGrunt3_After:
-	.string "Even without me, TEAM PLASMA\l"
+	.string "Even without me, TEAM PLASMA\n"
 	.string "holds this plant.$"
 
 route10_powerplantback_Speaker_PlasmaGrunt:

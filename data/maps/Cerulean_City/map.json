@@ -166,32 +166,6 @@
       "flag": "0"
     },
     {
-      "graphics_id": "OBJ_EVENT_GFX_SPECIES(ROCKRUFF)",
-      "x": 25,
-      "y": 35,
-      "elevation": 0,
-      "movement_type": "MOVEMENT_TYPE_WALK_SLOWLY_IN_PLACE_UP",
-      "movement_range_x": 0,
-      "movement_range_y": 0,
-      "trainer_type": "TRAINER_TYPE_NONE",
-      "trainer_sight_or_berry_tree_id": "0",
-      "script": "CeruleanCity_EventScript_Pokemon_Grimer",
-      "flag": "0"
-    },
-    {
-      "graphics_id": "OBJ_EVENT_GFX_POLICEMAN_GEN2",
-      "x": 26,
-      "y": 35,
-      "elevation": 0,
-      "movement_type": "MOVEMENT_TYPE_FACE_UP",
-      "movement_range_x": 0,
-      "movement_range_y": 0,
-      "trainer_type": "TRAINER_TYPE_NONE",
-      "trainer_sight_or_berry_tree_id": "0",
-      "script": "CeruleanCity_EventScript_RocketGruntM",
-      "flag": "0"
-    },
-    {
       "graphics_id": "OBJ_EVENT_GFX_POLICEMAN_GEN2",
       "x": 37,
       "y": 35,
@@ -202,7 +176,7 @@
       "trainer_type": "TRAINER_TYPE_NONE",
       "trainer_sight_or_berry_tree_id": "0",
       "script": "CeruleanCity_EventScript_PlasmaGruntF",
-      "flag": "0"
+      "flag": "FLAG_HIDE_CERULEAN_ROUTE5_BLOCKADE"
     },
     {
       "graphics_id": "OBJ_EVENT_GFX_SPECIES(BOLTUND)",
@@ -215,33 +189,7 @@
       "trainer_type": "TRAINER_TYPE_NONE",
       "trainer_sight_or_berry_tree_id": "0",
       "script": "CeruleanCity_EventScript_Pokemon_Trubbish",
-      "flag": "0"
-    },
-    {
-      "graphics_id": "OBJ_EVENT_GFX_SPECIES(GROWLITHE)",
-      "x": 39,
-      "y": 35,
-      "elevation": 0,
-      "movement_type": "MOVEMENT_TYPE_WALK_SLOWLY_IN_PLACE_UP",
-      "movement_range_x": 0,
-      "movement_range_y": 0,
-      "trainer_type": "TRAINER_TYPE_NONE",
-      "trainer_sight_or_berry_tree_id": "0",
-      "script": "CeruleanCity_EventScript_Pokemon_Scraggy",
-      "flag": "0"
-    },
-    {
-      "graphics_id": "OBJ_EVENT_GFX_POLICEMAN_GEN2",
-      "x": 40,
-      "y": 35,
-      "elevation": 0,
-      "movement_type": "MOVEMENT_TYPE_FACE_UP",
-      "movement_range_x": 0,
-      "movement_range_y": 0,
-      "trainer_type": "TRAINER_TYPE_NONE",
-      "trainer_sight_or_berry_tree_id": "0",
-      "script": "CeruleanCity_EventScript_PlasmaGruntM",
-      "flag": "0"
+      "flag": "FLAG_HIDE_CERULEAN_ROUTE5_BLOCKADE"
     },
     {
       "graphics_id": "OBJ_EVENT_GFX_SPECIES(SLOWPOKE)",
@@ -267,7 +215,7 @@
       "trainer_type": "TRAINER_TYPE_NONE",
       "trainer_sight_or_berry_tree_id": "0",
       "script": "CeruleanCity_EventScript_Policeman1",
-      "flag": "0"
+      "flag": "FLAG_HIDE_CERULEAN_ROUTE5_BLOCKADE"
     },
     {
       "graphics_id": "OBJ_EVENT_GFX_POLICEMAN_GEN2",
@@ -280,7 +228,7 @@
       "trainer_type": "TRAINER_TYPE_NONE",
       "trainer_sight_or_berry_tree_id": "0",
       "script": "CeruleanCity_EventScript_Policeman2",
-      "flag": "0"
+      "flag": "FLAG_HIDE_CERULEAN_ROUTE5_BLOCKADE"
     },
     {
       "graphics_id": "OBJ_EVENT_GFX_SPECIES(DIGLETT)",
@@ -409,6 +357,32 @@
       "movement_range_y": 0,
       "trainer_type": "TRAINER_TYPE_NONE",
       "trainer_sight_or_berry_tree_id": "0",
+      "script": "NULL",
+      "flag": "0"
+    },
+    {
+      "graphics_id": "OBJ_EVENT_GFX_LIGHT_SPRITE",
+      "x": 29,
+      "y": 19,
+      "elevation": 0,
+      "movement_type": "MOVEMENT_TYPE_NONE",
+      "movement_range_x": 0,
+      "movement_range_y": 0,
+      "trainer_type": "TRAINER_TYPE_NONE",
+      "trainer_sight_or_berry_tree_id": "1",
+      "script": "NULL",
+      "flag": "0"
+    },
+    {
+      "graphics_id": "OBJ_EVENT_GFX_LIGHT_SPRITE",
+      "x": 36,
+      "y": 28,
+      "elevation": 0,
+      "movement_type": "MOVEMENT_TYPE_NONE",
+      "movement_range_x": 0,
+      "movement_range_y": 0,
+      "trainer_type": "TRAINER_TYPE_NONE",
+      "trainer_sight_or_berry_tree_id": "3",
       "script": "NULL",
       "flag": "0"
     }
@@ -570,7 +544,7 @@
     },
     {
       "type": "sign",
-      "x": 43,
+      "x": 44,
       "y": 11,
       "elevation": 0,
       "player_facing_dir": "BG_EVENT_PLAYER_FACING_ANY",
@@ -578,7 +552,7 @@
     },
     {
       "type": "sign",
-      "x": 33,
+      "x": 34,
       "y": 7,
       "elevation": 0,
       "player_facing_dir": "BG_EVENT_PLAYER_FACING_ANY",

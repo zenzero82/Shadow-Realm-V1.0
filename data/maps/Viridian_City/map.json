@@ -276,6 +276,71 @@
       "trainer_sight_or_berry_tree_id": "0",
       "script": "NULL",
       "flag": "0"
+    },
+    {
+      "graphics_id": "OBJ_EVENT_GFX_OLD_MAN_3_GEN2",
+      "x": 25,
+      "y": 5,
+      "elevation": 0,
+      "movement_type": "MOVEMENT_TYPE_NONE",
+      "movement_range_x": 0,
+      "movement_range_y": 0,
+      "trainer_type": "TRAINER_TYPE_NONE",
+      "trainer_sight_or_berry_tree_id": "0",
+      "script": "ViridianCity_EventScript_ExileOldMan",
+      "flag": "FLAG_HIDE_VIRIDIAN_POST_ROCKET_NPCS"
+    },
+    {
+      "graphics_id": "OBJ_EVENT_GFX_TWIN2_GEN2",
+      "x": 35,
+      "y": 25,
+      "elevation": 0,
+      "movement_type": "MOVEMENT_TYPE_LOOK_AROUND",
+      "movement_range_x": 0,
+      "movement_range_y": 0,
+      "trainer_type": "TRAINER_TYPE_NONE",
+      "trainer_sight_or_berry_tree_id": "0",
+      "script": "ViridianCity_EventScript_PostRocketTwinLeft",
+      "flag": "FLAG_HIDE_VIRIDIAN_POST_ROCKET_NPCS"
+    },
+    {
+      "graphics_id": "OBJ_EVENT_GFX_TWIN2_GEN2",
+      "x": 37,
+      "y": 25,
+      "elevation": 0,
+      "movement_type": "MOVEMENT_TYPE_LOOK_AROUND",
+      "movement_range_x": 0,
+      "movement_range_y": 0,
+      "trainer_type": "TRAINER_TYPE_NONE",
+      "trainer_sight_or_berry_tree_id": "0",
+      "script": "ViridianCity_EventScript_PostRocketTwinRight",
+      "flag": "FLAG_HIDE_VIRIDIAN_POST_ROCKET_NPCS"
+    },
+    {
+      "graphics_id": "OBJ_EVENT_GFX_LIGHT_SPRITE",
+      "x": 25,
+      "y": 26,
+      "elevation": 0,
+      "movement_type": "MOVEMENT_TYPE_NONE",
+      "movement_range_x": 0,
+      "movement_range_y": 0,
+      "trainer_type": "TRAINER_TYPE_NONE",
+      "trainer_sight_or_berry_tree_id": "1",
+      "script": "NULL",
+      "flag": "0"
+    },
+    {
+      "graphics_id": "OBJ_EVENT_GFX_LIGHT_SPRITE",
+      "x": 35,
+      "y": 19,
+      "elevation": 0,
+      "movement_type": "MOVEMENT_TYPE_NONE",
+      "movement_range_x": 0,
+      "movement_range_y": 0,
+      "trainer_type": "TRAINER_TYPE_NONE",
+      "trainer_sight_or_berry_tree_id": "3",
+      "script": "NULL",
+      "flag": "0"
     }
   ],
   "warp_events": [
@@ -305,13 +370,6 @@
       "y": 11,
       "elevation": 0,
       "dest_map": "MAP_VIRIDIAN_HOUSE1",
-      "dest_warp_id": "0"
-    },
-    {
-      "x": 35,
-      "y": 10,
-      "elevation": 0,
-      "dest_map": "MAP_VIRIDIAN_GYM",
       "dest_warp_id": "0"
     }
   ],
@@ -351,18 +409,17 @@
       "var": "VAR_TEMP_0",
       "var_value": "0",
       "script": "ViridianCity_EventScript_GymTrigger3"
-    },
-    {
-      "type": "trigger",
-      "x": 35,
-      "y": 11,
-      "elevation": 0,
-      "var": "VAR_TEMP_1",
-      "var_value": "0",
-      "script": "ViridianCity_EventScript_GymDoorLocked"
     }
   ],
   "bg_events": [
+    {
+      "type": "sign",
+      "x": 35,
+      "y": 10,
+      "elevation": 0,
+      "player_facing_dir": "BG_EVENT_PLAYER_FACING_ANY",
+      "script": "ViridianCity_EventScript_GymDoorLocked"
+    },
     {
       "type": "sign",
       "x": 37,

@@ -887,6 +887,14 @@ const u8 gMonIcon_MeloettaShadow[] = INCBIN_U8("graphics/pokemon/meloetta/shadow
 const u32 gObjectEventPic_MeloettaShadow[] = INCBIN_COMP("graphics/pokemon/meloetta/shadow/overworld.4bpp");
 #endif
 
+const u32 gMonFrontPic_MetagrossShadow[] = INCBIN_U32("graphics/pokemon/metagross/shadow/anim_front.4bpp.lz");
+const u32 gMonBackPic_MetagrossShadow[] = INCBIN_U32("graphics/pokemon/metagross/shadow/back.4bpp.lz");
+const u16 gMonPalette_MetagrossShadow[] = INCBIN_U16("graphics/pokemon/metagross/shadow/metagross_shadow.pal");
+const u8 gMonIcon_MetagrossShadow[] = INCBIN_U8("graphics/pokemon/metagross/shadow/icon.4bpp");
+#if OW_POKEMON_OBJECT_EVENTS
+const u32 gObjectEventPic_MetagrossShadow[] = INCBIN_COMP("graphics/pokemon/metagross/shadow/overworld.4bpp");
+#endif
+
 const u32 gMonFrontPic_MespritShadow[] = INCBIN_U32("graphics/pokemon/mesprit/shadow/anim_front.4bpp.lz");
 const u32 gMonBackPic_MespritShadow[] = INCBIN_U32("graphics/pokemon/mesprit/shadow/back.4bpp.lz");
 const u16 gMonPalette_MespritShadow[] = INCBIN_U16("graphics/pokemon/mesprit/shadow/mesprit_shadow.pal");

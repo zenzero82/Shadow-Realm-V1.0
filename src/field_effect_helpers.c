@@ -43,6 +43,13 @@ static void SpriteCB_UnderwaterSurfBlob(struct Sprite *);
 static u32 ShowDisguiseFieldEffect(u8, u8, u8);
 u32 FldEff_Shadow(void);
 
+static const u16 *GetMapMetatileTilesAt(s16 x, s16 y, u16 *layerType);
+static bool8 IsOverworldWildWaterObjectEvent(const struct ObjectEvent *objectEvent);
+static bool8 IsOpenWaterOverlayTile(s16 x, s16 y);
+static u16 GetWaterOverlayTileEntry(const u16 *tiles, u16 layerType, u8 quadrant);
+static void CopyBgTileToBuffer(u16 tileEntry, u8 *dest);
+static void RefreshWaterOverlaySpriteGfx(struct Sprite *sprite, struct ObjectEvent *objectEvent);
+
 // Data used by all the field effects that share UpdateJumpImpactEffect
 #define sJumpElevation  data[0]
 #define sJumpFldEff     data[1]
@@ -54,6 +61,11 @@ u32 FldEff_Shadow(void);
 #define sReflectionObjEventLocalId  data[1]
 #define sReflectionVerticalOffset   data[2]
 #define sIsStillReflection          data[7]
+
+#define BG_TILE_NUM_MASK  0x03FF
+#define BG_TILE_HFLIP     (1 << 10)
+#define BG_TILE_VFLIP     (1 << 11)
+#define BG_TILE_PAL_SHIFT 12
 
 void SetUpShadow(struct ObjectEvent *objectEvent)
 {
@@ -1008,6 +1020,134 @@ u32 FldEff_HotSpringsWater(void)
     return 0;
 }
 
+static const u16 *GetMapMetatileTilesAt(s16 x, s16 y, u16 *layerType)
+{
+    u16 metatileId = MapGridGetMetatileIdAt(x, y);
+    const struct MapLayout *mapLayout = gMapHeader.mapLayout;
+    const u16 *metatiles;
+
+    if (metatileId > NUM_METATILES_TOTAL)
+        metatileId = 0;
+
+    if (metatileId < NUM_METATILES_IN_PRIMARY)
+    {
+        metatiles = mapLayout->primaryTileset->metatiles;
+    }
+    else
+    {
+        metatiles = mapLayout->secondaryTileset->metatiles;
+        metatileId -= NUM_METATILES_IN_PRIMARY;
+    }
+
+    *layerType = MapGridGetMetatileLayerTypeAt(x, y);
+    return metatiles + metatileId * NUM_TILES_PER_METATILE;
+}
+
+static bool8 IsOverworldWildWaterObjectEvent(const struct ObjectEvent *objectEvent)
+{
+    return objectEvent->localId >= OBJ_EVENT_ID_OVERWORLD_WILD_BASE
+        && objectEvent->localId < OBJ_EVENT_ID_OVERWORLD_WILD_BASE + OBJ_EVENT_ID_OVERWORLD_WILD_COUNT;
+}
+
+static bool8 IsOpenWaterOverlayTile(s16 x, s16 y)
+{
+    u8 center = MapGridGetMetatileBehaviorAt(x, y);
+
+    if (!MetatileBehavior_IsSurfableAndNotWaterfall(center))
+        return FALSE;
+    if (!MetatileBehavior_IsSurfableAndNotWaterfall(MapGridGetMetatileBehaviorAt(x - 1, y)))
+        return FALSE;
+    if (!MetatileBehavior_IsSurfableAndNotWaterfall(MapGridGetMetatileBehaviorAt(x + 1, y)))
+        return FALSE;
+    if (!MetatileBehavior_IsSurfableAndNotWaterfall(MapGridGetMetatileBehaviorAt(x, y - 1)))
+        return FALSE;
+    if (!MetatileBehavior_IsSurfableAndNotWaterfall(MapGridGetMetatileBehaviorAt(x, y + 1)))
+        return FALSE;
+
+    return TRUE;
+}
+
+static u16 GetWaterOverlayTileEntry(const u16 *tiles, u16 layerType, u8 quadrant)
+{
+    u16 entry = 0;
+
+    switch (layerType)
+    {
+    case METATILE_LAYER_TYPE_NORMAL:
+    case METATILE_LAYER_TYPE_COVERED:
+    case METATILE_LAYER_TYPE_SPLIT:
+        entry = tiles[quadrant + 4];
+        if ((entry & BG_TILE_NUM_MASK) == 0)
+            entry = tiles[quadrant];
+        break;
+    default:
+        entry = tiles[quadrant];
+        break;
+    }
+
+    return entry;
+}
+
+static void CopyBgTileToBuffer(u16 tileEntry, u8 *dest)
+{
+    const u8 *src = (const u8 *)(BG_VRAM + TILE_OFFSET_4BPP(tileEntry & BG_TILE_NUM_MASK));
+    bool8 hFlip = (tileEntry & BG_TILE_HFLIP) != 0;
+    bool8 vFlip = (tileEntry & BG_TILE_VFLIP) != 0;
+    u8 y;
+
+    if (!hFlip && !vFlip)
+    {
+        CpuCopy16(src, dest, TILE_SIZE_4BPP);
+        return;
+    }
+
+    for (y = 0; y < 8; y++)
+    {
+        const u8 *srcRow = src + (vFlip ? (7 - y) : y) * 4;
+        u8 *destRow = dest + y * 4;
+
+        if (hFlip)
+        {
+            destRow[0] = ((srcRow[3] & 0x0F) << 4) | ((srcRow[3] & 0xF0) >> 4);
+            destRow[1] = ((srcRow[2] & 0x0F) << 4) | ((srcRow[2] & 0xF0) >> 4);
+            destRow[2] = ((srcRow[1] & 0x0F) << 4) | ((srcRow[1] & 0xF0) >> 4);
+            destRow[3] = ((srcRow[0] & 0x0F) << 4) | ((srcRow[0] & 0xF0) >> 4);
+        }
+        else
+        {
+            destRow[0] = srcRow[0];
+            destRow[1] = srcRow[1];
+            destRow[2] = srcRow[2];
+            destRow[3] = srcRow[3];
+        }
+    }
+}
+
+static void RefreshWaterOverlaySpriteGfx(struct Sprite *sprite, struct ObjectEvent *objectEvent)
+{
+    u16 tileBuffer[(4 * TILE_SIZE_4BPP) / sizeof(u16)];
+    u16 layerType;
+    const u16 *metatileTiles = GetMapMetatileTilesAt(objectEvent->currentCoords.x, objectEvent->currentCoords.y, &layerType);
+    u16 tileEntries[4];
+    u8 i;
+
+    for (i = 0; i < ARRAY_COUNT(tileEntries); i++)
+        tileEntries[i] = GetWaterOverlayTileEntry(metatileTiles, layerType, i);
+
+    for (i = 0; i < ARRAY_COUNT(tileEntries); i++)
+        CopyBgTileToBuffer(tileEntries[i], (u8 *)tileBuffer + i * TILE_SIZE_4BPP);
+
+    // Only keep the lower half of the 16x16 overlay visible so the mon
+    // appears partially submerged instead of heavily covered by water.
+    CpuFill16(0, &tileBuffer[0], TILE_SIZE_4BPP);
+    CpuFill16(0, &tileBuffer[TILE_SIZE_4BPP / sizeof(u16)], TILE_SIZE_4BPP);
+
+    CpuCopy16(tileBuffer, (void *)(OBJ_VRAM0 + sprite->oam.tileNum * TILE_SIZE_4BPP), sizeof(tileBuffer));
+    LoadPalette(&gPlttBufferFaded[BG_PLTT_ID(tileEntries[0] >> BG_TILE_PAL_SHIFT)],
+                OBJ_PLTT_ID(sprite->oam.paletteNum),
+                PLTT_SIZE_4BPP);
+}
+
 void UpdateHotSpringsWaterFieldEffect(struct Sprite *sprite)
 {
     u8 objectEventId;
@@ -1023,7 +1163,16 @@ void UpdateHotSpringsWaterFieldEffect(struct Sprite *sprite)
         sprite->x = linkedSprite->x;
         sprite->y = (graphicsInfo->height >> 1) + linkedSprite->y - 8;
         sprite->subpriority = linkedSprite->subpriority - 1;
-        UpdateObjectEventSpriteInvisibility(sprite, FALSE);
+        if (IsOverworldWildWaterObjectEvent(&gObjectEvents[objectEventId])
+         && !IsOpenWaterOverlayTile(gObjectEvents[objectEventId].currentCoords.x, gObjectEvents[objectEventId].currentCoords.y))
+        {
+            sprite->invisible = TRUE;
+        }
+        else
+        {
+            RefreshWaterOverlaySpriteGfx(sprite, &gObjectEvents[objectEventId]);
+            UpdateObjectEventSpriteInvisibility(sprite, FALSE);
+        }
     }
 }
 

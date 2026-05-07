@@ -29,7 +29,7 @@
       "flag": "0"
     },
     {
-      "graphics_id": "OBJ_EVENT_GFX_GIRL_3",
+      "graphics_id": "OBJ_EVENT_GFX_POKEMON_RANGER_F",
       "x": 10,
       "y": 6,
       "elevation": 3,
@@ -56,7 +56,7 @@
     },
     {
       "local_id": "LOCALID_FALLARBOR_LANETTE",
-      "graphics_id": "OBJ_EVENT_GFX_WOMAN_2",
+      "graphics_id": "OBJ_EVENT_GFX_LADY",
       "x": 10,
       "y": 2,
       "elevation": 3,

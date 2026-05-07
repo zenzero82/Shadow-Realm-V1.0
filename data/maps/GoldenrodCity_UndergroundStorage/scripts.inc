@@ -1,2 +1,11 @@
 GoldenrodCity_UndergroundStorage_MapScripts::
+	map_script MAP_SCRIPT_ON_TRANSITION, GoldenrodCity_UndergroundStorage_OnTransition
 	.byte 0
+
+GoldenrodCity_UndergroundStorage_OnTransition::
+	goto_if_set FLAG_GOLDENROD_CIPHER_DISGUISE_ACTIVE, GoldenrodCity_UndergroundStorage_OnTransition_ApplyDisguise
+	end
+
+GoldenrodCity_UndergroundStorage_OnTransition_ApplyDisguise:
+	special Special_ApplyCipherDisguise
+	end

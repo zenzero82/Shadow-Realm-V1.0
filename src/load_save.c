@@ -194,12 +194,25 @@ void LoadPlayerParty(void)
         u32 data;
         gPlayerParty[i] = gSaveBlock1Ptr->playerParty[i];
 
+        // Some older/custom write paths can leave a party mon with a stale
+        // checksum that only surfaces later when the mon is decrypted.
+        // Repair recoverable integrity issues immediately on load so they
+        // don't spontaneously present as a Bad Egg mid-play.
+        if (RepairBoxMonChecksum(&gPlayerParty[i].box))
+            gSaveBlock1Ptr->playerParty[i] = gPlayerParty[i];
+
         // TODO: Turn this into a save migration once those are available.
         // At which point we can remove hp and status from Pokemon entirely.
         data = gPlayerParty[i].maxHP - gPlayerParty[i].hp;
         SetBoxMonData(&gPlayerParty[i].box, MON_DATA_HP_LOST, &data);
         data = gPlayerParty[i].status;
         SetBoxMonData(&gPlayerParty[i].box, MON_DATA_STATUS, &data);
+
+        if (GetMonData(&gPlayerParty[i], MON_DATA_SANITY_IS_BAD_EGG, NULL))
+        {
+            if (RevertBadEgg(&gPlayerParty[i].box))
+                gSaveBlock1Ptr->playerParty[i] = gPlayerParty[i];
+        }
     }
 }
 

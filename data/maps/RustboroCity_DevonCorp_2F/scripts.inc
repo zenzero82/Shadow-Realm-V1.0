@@ -6,6 +6,24 @@ RustboroCity_DevonCorp_2F_OnTransition:
 	call_if_eq VAR_FOSSIL_RESURRECTION_STATE, 1, RustboroCity_DevonCorp_2F_EventScript_SetFossilReady
 	end
 
+RustboroCity_DevonCorp_2F_Speaker_Milo:
+	.string "Milo$"
+
+RustboroCity_DevonCorp_2F_Speaker_Petra:
+	.string "Petra$"
+
+RustboroCity_DevonCorp_2F_Speaker_Quinn:
+	.string "Quinn$"
+
+RustboroCity_DevonCorp_2F_Speaker_Sonia:
+	.string "Sonia$"
+
+RustboroCity_DevonCorp_2F_Speaker_Felix:
+	.string "Felix$"
+
+RustboroCity_DevonCorp_2F_Speaker_Rowan:
+	.string "Rowan$"
+
 RustboroCity_DevonCorp_2F_EventScript_SetFossilReady::
 	setvar VAR_FOSSIL_RESURRECTION_STATE, 2
 	return
@@ -13,6 +31,7 @@ RustboroCity_DevonCorp_2F_EventScript_SetFossilReady::
 RustboroCity_DevonCorp_2F_EventScript_TalkToPokemonScientist::
 	lock
 	faceplayer
+	setspeaker RustboroCity_DevonCorp_2F_Speaker_Milo
 	call_if_eq VAR_FOSSIL_RESURRECTION_STATE, 1, RustboroCity_DevonCorp_2F_EventScript_SetFossilReady
 	msgbox RustboroCity_DevonCorp_2F_Text_DeviceForTalkingToPokemon, MSGBOX_DEFAULT
 	release
@@ -21,6 +40,7 @@ RustboroCity_DevonCorp_2F_EventScript_TalkToPokemonScientist::
 RustboroCity_DevonCorp_2F_EventScript_BallScientist::
 	lock
 	faceplayer
+	setspeaker RustboroCity_DevonCorp_2F_Speaker_Petra
 	call_if_eq VAR_FOSSIL_RESURRECTION_STATE, 1, RustboroCity_DevonCorp_2F_EventScript_SetFossilReady
 	goto_if_set FLAG_MET_DEVON_EMPLOYEE, RustboroCity_DevonCorp_2F_EventScript_DevelopedBalls
 	msgbox RustboroCity_DevonCorp_2F_Text_DevelopingNewBalls, MSGBOX_DEFAULT
@@ -35,6 +55,7 @@ RustboroCity_DevonCorp_2F_EventScript_DevelopedBalls::
 RustboroCity_DevonCorp_2F_EventScript_PokenavScientist::
 	lock
 	faceplayer
+	setspeaker RustboroCity_DevonCorp_2F_Speaker_Quinn
 	call_if_eq VAR_FOSSIL_RESURRECTION_STATE, 1, RustboroCity_DevonCorp_2F_EventScript_SetFossilReady
 	goto_if_set FLAG_RECEIVED_POKENAV, RustboroCity_DevonCorp_2F_EventScript_HasPokenav
 	msgbox RustboroCity_DevonCorp_2F_Text_IMadePokenav, MSGBOX_DEFAULT
@@ -49,6 +70,7 @@ RustboroCity_DevonCorp_2F_EventScript_HasPokenav::
 RustboroCity_DevonCorp_2F_EventScript_PokemonDreamsScientist::
 	lock
 	faceplayer
+	setspeaker RustboroCity_DevonCorp_2F_Speaker_Sonia
 	call_if_eq VAR_FOSSIL_RESURRECTION_STATE, 1, RustboroCity_DevonCorp_2F_EventScript_SetFossilReady
 	msgbox RustboroCity_DevonCorp_2F_Text_DeviceToVisualizePokemonDreams, MSGBOX_DEFAULT
 	release
@@ -57,6 +79,7 @@ RustboroCity_DevonCorp_2F_EventScript_PokemonDreamsScientist::
 RustboroCity_DevonCorp_2F_EventScript_FossilScientist::
 	lock
 	faceplayer
+	setspeaker RustboroCity_DevonCorp_2F_Speaker_Felix
 	goto_if_eq VAR_FOSSIL_RESURRECTION_STATE, 2, RustboroCity_DevonCorp_2F_EventScript_FossilMonReady
 	goto_if_eq VAR_FOSSIL_RESURRECTION_STATE, 1, RustboroCity_DevonCorp_2F_EventScript_StillRegenerating
 	msgbox RustboroCity_DevonCorp_2F_Text_DevelopDeviceToResurrectFossils, MSGBOX_DEFAULT
@@ -257,6 +280,7 @@ RustboroCity_DevonCorp_2F_EventScript_CancelFossilSelect::
 RustboroCity_DevonCorp_2F_EventScript_MatchCallScientist::
 	lock
 	faceplayer
+	setspeaker RustboroCity_DevonCorp_2F_Speaker_Rowan
 	call_if_eq VAR_FOSSIL_RESURRECTION_STATE, 1, RustboroCity_DevonCorp_2F_EventScript_SetFossilReady
 	goto_if_ge VAR_RUSTBORO_CITY_STATE, 6, RustboroCity_DevonCorp_2F_EventScript_WorkOnNext
 	msgbox RustboroCity_DevonCorp_2F_Text_DevelopNewPokenavFeature, MSGBOX_DEFAULT
@@ -379,4 +403,3 @@ RustboroCity_DevonCorp_2F_Text_WhatToWorkOnNext:
 	.string "inspirations into reality.\p"
 	.string "One couldn't ask for a better\n"
 	.string "environment as an engineer.$"
-

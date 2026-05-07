@@ -42,10 +42,14 @@ Route25BillsHouse_EventScript_Molayne::
 @ =================================================
 
 Route25BillsHouse_Text_Bill:
-	.string "Hey, I'm BILL. We just boosted\n"
-	.string "the PC STORAGE SYSTEM with bigger\l"
-	.string "boxes and smarter indexing - thanks\l"
-	.string "to SOPHOCLES, MOLAYNE, and ZEN!\p"
+	.string "Hey, I'm BILL. We just rolled out\n"
+	.string "some major PC STORAGE SYSTEM\l"
+	.string "updates with bigger boxes and\l"
+	.string "smarter indexing.\p"
+	.string "JINWOO was the original creator\n"
+	.string "of the system, and SOPHOCLES and\l"
+	.string "MOLAYNE helped me modernize it\l"
+	.string "without breaking what worked.\p"
 	.string "Oh you met EUSINE? Yeah, he's been\n"
 	.string "looking for this special POKéMON for\l"
 	.string "a while now. I think I might have\l"
@@ -61,5 +65,5 @@ Route25BillsHouse_Text_Sophocles:
 Route25BillsHouse_Text_Molayne:
 	.string "I'm wiring the interface so the\n"
 	.string "expansion feels seamless in the\l"
-	.string "field. ZEN suggested quick-swap\l"
+	.string "field. JINWOO suggested quick-swap\l"
 	.string "flows to make it feel smooth!$"

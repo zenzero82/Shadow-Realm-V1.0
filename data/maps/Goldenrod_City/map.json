@@ -14,11 +14,6 @@
   "battle_scene": "MAP_BATTLE_SCENE_NORMAL",
   "connections": [
     {
-      "map": "MAP_ROUTE37",
-      "offset": 7,
-      "direction": "down"
-    },
-    {
       "map": "MAP_ROUTE34",
       "offset": 7,
       "direction": "down"
@@ -107,6 +102,110 @@
       "trainer_sight_or_berry_tree_id": "0",
       "script": "NULL",
       "flag": "0"
+    },
+    {
+      "graphics_id": "OBJ_EVENT_GFX_WOMAN_6_GEN2",
+      "x": 31,
+      "y": 39,
+      "elevation": 0,
+      "movement_type": "MOVEMENT_TYPE_LOOK_AROUND",
+      "movement_range_x": 0,
+      "movement_range_y": 0,
+      "trainer_type": "TRAINER_TYPE_NONE",
+      "trainer_sight_or_berry_tree_id": "0",
+      "script": "GoldenrodCity_EventScript_Celia",
+      "flag": "0"
+    },
+    {
+      "graphics_id": "OBJ_EVENT_GFX_HIKER_GEN2",
+      "x": 20,
+      "y": 30,
+      "elevation": 0,
+      "movement_type": "MOVEMENT_TYPE_LOOK_AROUND",
+      "movement_range_x": 0,
+      "movement_range_y": 0,
+      "trainer_type": "TRAINER_TYPE_NONE",
+      "trainer_sight_or_berry_tree_id": "0",
+      "script": "GoldenrodCity_EventScript_Gus",
+      "flag": "0"
+    },
+    {
+      "graphics_id": "OBJ_EVENT_GFX_CIPHER_PEON_M",
+      "x": 16,
+      "y": 23,
+      "elevation": 0,
+      "movement_type": "MOVEMENT_TYPE_FACE_DOWN",
+      "movement_range_x": 0,
+      "movement_range_y": 0,
+      "trainer_type": "TRAINER_TYPE_NONE",
+      "trainer_sight_or_berry_tree_id": "0",
+      "script": "GoldenrodCity_EventScript_CipherGrunt",
+      "flag": "FLAG_GOLDENROD_CITY_RADIO_SHIFT_DONE"
+    },
+    {
+      "graphics_id": "OBJ_EVENT_GFX_FAT_MAN2_GEN1",
+      "x": 7,
+      "y": 23,
+      "elevation": 0,
+      "movement_type": "MOVEMENT_TYPE_NONE",
+      "movement_range_x": 0,
+      "movement_range_y": 0,
+      "trainer_type": "TRAINER_TYPE_NONE",
+      "trainer_sight_or_berry_tree_id": "0",
+      "script": "GoldenrodCity_EventScript_Marvin",
+      "flag": "0"
+    },
+    {
+      "graphics_id": "OBJ_EVENT_GFX_YOUNGSTER2_GEN2",
+      "x": 30,
+      "y": 21,
+      "elevation": 0,
+      "movement_type": "MOVEMENT_TYPE_WANDER_AROUND",
+      "movement_range_x": 0,
+      "movement_range_y": 0,
+      "trainer_type": "TRAINER_TYPE_NONE",
+      "trainer_sight_or_berry_tree_id": "0",
+      "script": "GoldenrodCity_EventScript_Eli",
+      "flag": "0"
+    },
+    {
+      "graphics_id": "OBJ_EVENT_GFX_BOY_2_GEN2",
+      "x": 39,
+      "y": 22,
+      "elevation": 0,
+      "movement_type": "MOVEMENT_TYPE_FACE_DOWN",
+      "movement_range_x": 0,
+      "movement_range_y": 0,
+      "trainer_type": "TRAINER_TYPE_NONE",
+      "trainer_sight_or_berry_tree_id": "0",
+      "script": "GoldenrodCity_EventScript_Toby",
+      "flag": "0"
+    },
+    {
+      "graphics_id": "OBJ_EVENT_GFX_OLD_MAN_3_GEN2",
+      "x": 17,
+      "y": 36,
+      "elevation": 0,
+      "movement_type": "MOVEMENT_TYPE_WANDER_AROUND",
+      "movement_range_x": 0,
+      "movement_range_y": 0,
+      "trainer_type": "TRAINER_TYPE_NONE",
+      "trainer_sight_or_berry_tree_id": "0",
+      "script": "GoldenrodCity_EventScript_Harold",
+      "flag": "0"
+    },
+    {
+      "graphics_id": "OBJ_EVENT_GFX_CIPHER_PEON_M",
+      "x": 20,
+      "y": 13,
+      "elevation": 0,
+      "movement_type": "MOVEMENT_TYPE_FACE_UP",
+      "movement_range_x": 0,
+      "movement_range_y": 0,
+      "trainer_type": "TRAINER_TYPE_NONE",
+      "trainer_sight_or_berry_tree_id": "0",
+      "script": "GoldenrodCity_EventScript_CipherPeonM2",
+      "flag": "FLAG_GOLDENROD_CITY_RADIO_SHIFT_DONE"
     }
   ],
   "warp_events": [
@@ -163,14 +262,14 @@
       "x": 33,
       "y": 7,
       "elevation": 0,
-      "dest_map": "MAP_GOLDENROD_CITY",
+      "dest_map": "MAP_GATE_GOLDENROD_CITY_ROUTE35",
       "dest_warp_id": "0"
     },
     {
       "x": 34,
       "y": 7,
       "elevation": 0,
-      "dest_map": "MAP_GOLDENROD_CITY",
+      "dest_map": "MAP_GATE_GOLDENROD_CITY_ROUTE35",
       "dest_warp_id": "0"
     },
     {
@@ -199,7 +298,7 @@
       "y": 38,
       "elevation": 0,
       "dest_map": "MAP_GOLDENROD_CITY_UNDERGROUND_ENTRANCE",
-      "dest_warp_id": "0"
+      "dest_warp_id": "2"
     },
     {
       "x": 44,
@@ -223,7 +322,44 @@
       "dest_warp_id": "0"
     }
   ],
-  "coord_events": [],
+  "coord_events": [
+    {
+      "type": "trigger",
+      "x": 15,
+      "y": 23,
+      "elevation": 0,
+      "var": "VAR_TEMP_0",
+      "var_value": "0",
+      "script": "GoldenrodCity_EventScript_RadioGuardTriggerLeft"
+    },
+    {
+      "type": "trigger",
+      "x": 16,
+      "y": 24,
+      "elevation": 0,
+      "var": "VAR_TEMP_0",
+      "var_value": "0",
+      "script": "GoldenrodCity_EventScript_RadioGuardTriggerFront"
+    },
+    {
+      "type": "trigger",
+      "x": 17,
+      "y": 23,
+      "elevation": 0,
+      "var": "VAR_TEMP_0",
+      "var_value": "0",
+      "script": "GoldenrodCity_EventScript_RadioGuardTriggerRight"
+    },
+    {
+      "type": "trigger",
+      "x": 21,
+      "y": 39,
+      "elevation": 0,
+      "var": "VAR_TEMP_2",
+      "var_value": "0",
+      "script": "GoldenrodCity_EventScript_UndergroundDoorApproach"
+    }
+  ],
   "bg_events": [
     {
       "type": "sign",
@@ -312,6 +448,14 @@
       "elevation": 0,
       "player_facing_dir": "BG_EVENT_PLAYER_FACING_ANY",
       "script": "EventScript_EmptyTrashCan"
+    },
+    {
+      "type": "sign",
+      "x": 21,
+      "y": 38,
+      "elevation": 0,
+      "player_facing_dir": "BG_EVENT_PLAYER_FACING_ANY",
+      "script": "GoldenrodCity_EventScript_LockedDoor"
     }
   ]
 }

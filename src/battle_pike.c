@@ -315,13 +315,13 @@ static const struct PikeRoomNPC sNPCTable[] =
         .speechId3 = 31
     },
     {
-        .graphicsId = OBJ_EVENT_GFX_GIRL_3,
+        .graphicsId = OBJ_EVENT_GFX_POKEMON_RANGER_F,
         .speechId1 = 13,
         .speechId2 = 39,
         .speechId3 = 21
     },
     {
-        .graphicsId = OBJ_EVENT_GFX_WOMAN_2,
+        .graphicsId = OBJ_EVENT_GFX_LADY,
         .speechId1 = 2,
         .speechId2 = 4,
         .speechId3 = 17
@@ -333,7 +333,7 @@ static const struct PikeRoomNPC sNPCTable[] =
         .speechId3 = 36
     },
     {
-        .graphicsId = OBJ_EVENT_GFX_MAN_5,
+        .graphicsId = OBJ_EVENT_GFX_ROCKER,
         .speechId1 = 28,
         .speechId2 = 34,
         .speechId3 = 25
@@ -369,13 +369,13 @@ static const struct PikeRoomNPC sNPCTable[] =
         .speechId3 = 32
     },
     {
-        .graphicsId = OBJ_EVENT_GFX_MAN_3,
+        .graphicsId = OBJ_EVENT_GFX_COOLTRAINER_M,
         .speechId1 = 24,
         .speechId2 = 23,
         .speechId3 = 38
     },
     {
-        .graphicsId = OBJ_EVENT_GFX_WOMAN_3,
+        .graphicsId = OBJ_EVENT_GFX_PARASOL_LADY,
         .speechId1 = 5,
         .speechId2 = 22,
         .speechId3 = 4

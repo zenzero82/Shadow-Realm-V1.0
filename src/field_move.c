@@ -278,7 +278,7 @@ bool8 FindFieldMoveMonForMove(u16 move, u8 *partyIndex, bool8 *fromBox, u16 *spe
 
 static bool32 IsFieldMoveUnlocked_Cut(void)
 {
-    return TRUE;
+    return FlagGet(FLAG_BADGE09_GET);
 }
 
 static bool32 IsFieldMoveUnlocked_Flash(void)

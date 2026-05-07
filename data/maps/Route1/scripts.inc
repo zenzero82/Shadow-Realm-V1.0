@@ -84,6 +84,11 @@ Route1_EventScript_Torkin::
     @ Player is at the trigger tile, facing north
     @ Torkin (local ID 3) is at (11,33)
 
+    playbgm MUS_CIPHER_ENCOUNTER, FALSE
+    setspeaker Route1_Speaker_Torkin
+    msgbox Route1_Text_TorkinPreApproach, MSGBOX_DEFAULT
+    closemessage
+
     playse SE_PIN
     goto_if_eq VAR_TEMP_0, 0, Route1_EventScript_Torkin_ApproachFromTrigger0
     goto_if_eq VAR_TEMP_0, 1, Route1_EventScript_Torkin_ApproachFromTrigger1
@@ -101,9 +106,6 @@ Route1_EventScript_Torkin_ApproachFromTrigger1::
     waitmovement 0
 
 Route1_EventScript_Torkin_AfterApproach::
-
-    playbgm MUS_CIPHER_ENCOUNTER, FALSE
-
     setspeaker Route1_Speaker_Torkin
     msgbox Route1_Text_TorkinIntro, MSGBOX_DEFAULT
     closemessage
@@ -246,13 +248,17 @@ Route1_Text_Sign:
 @ Old Man
 Route1_Text_OldManDrivenOut:
     .string "I used to live in VIRIDIAN CITY.\p"
-    .string "Then TEAM ROCKET came back... and they\n"
-    .string "didn't come alone.\p"
+    .string "Then TEAM ROCKET came back...\n"
+    .string "and they didn't come alone.\p"
     .string "They blocked the streets, pushed folks\n"
     .string "out, and turned the GYM into a fortress.\p"
     .string "I grabbed what I could and ran.\p"
     .string "If you're headed north...\n"
     .string "keep your eyes open, kid.$"
+
+Route1_Text_TorkinPreApproach:
+    .string "Finally I got my own.\p"
+    .string "Now I will be unstoppable!$"
 
 Route1_Text_Leo_PokeBallsIntro:
     .string "Wow you managed to defeat that guy in\n"

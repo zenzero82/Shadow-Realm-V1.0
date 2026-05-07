@@ -147,6 +147,7 @@ static const u32 sAreaGlow_Pal[] = INCBIN_U32("graphics/pokedex/area_glow.gbapal
 static const u32 sAreaGlow_Gfx[] = INCBIN_U32("graphics/pokedex/area_glow.4bpp.lz");
 
 static const u32 sPokedexPlusHGSS_ScreenSelectBarSubmenu_Tilemap[] = INCBIN_U32("graphics/pokedex/hgss/SelectBar.bin.lz");
+static const u32 sPokedexPlusHGSS_ScreenSelectBarSubmenu_Tilemap_Clear[] = INCBIN_U32("graphics/pokedex/hgss/SelectBar_clear.bin.lz");
 static void LoadHGSSScreenSelectBarSubmenu(void);
 
 static const u16 sSpeciesHiddenFromAreaScreen[] = { SPECIES_WYNAUT };
@@ -281,7 +282,7 @@ static const struct WindowTemplate sShadowMonitorHeaderWindowTemplate =
 static EWRAM_DATA u8 sShadowMonitorHeaderWindowId;
 #define SHADOW_MONITOR_HEADER_TILE_ID 255
 #define SHADOW_MONITOR_HEADER_TILE_COLOR 0xFF
-static const u8 sShadowMonitorHeaderBlankTile[32] = { [0 ... 31] = SHADOW_MONITOR_HEADER_TILE_COLOR };
+static const u8 sShadowMonitorHeaderBlankTile[32] = { [0 ... 31] = 0xFF };
 static const u16 sShadowMonitorHeaderBlankTilemap[32 * 3] = { [0 ... 95] = SHADOW_MONITOR_HEADER_TILE_ID };
 
 static void ResetDrawAreaGlowState(void)
@@ -1027,6 +1028,8 @@ static void Task_HandlePokedexAreaScreenInput(u8 taskId)
             ClearAreaWindowLabel(DEX_AREA_LABEL_TIME_OF_DAY);
             ClearAreaWindowLabel(DEX_AREA_LABEL_AREA_UNKNOWN);
             RemoveAllWindowsOnBg(LABEL_WINDOW_BG);
+            ShadowMonitor_ResetTrackerTabWindow();
+            sShadowMonitorHeaderWindowId = WINDOW_NONE;
         }
 
         sPokedexAreaScreen->screenSwitchState[0] = gTasks[taskId].data[1];
@@ -1144,27 +1147,25 @@ static void LoadAreaUnknownGraphics(void)
 static void ShadowMonitor_SetupAreaHeader(void)
 {
     static const u8 sText_Tracker[] = _("TRACKER");
-    static const u8 sTextColor[3] = { TEXT_COLOR_TRANSPARENT, TEXT_DYNAMIC_COLOR_6, TEXT_COLOR_LIGHT_GRAY };
+    static const u8 sTextColor[3] = { TEXT_COLOR_TRANSPARENT, TEXT_COLOR_WHITE, 5 };
     const u8 tabWidth = 7 * 8;
     const u8 tabY = 1;
     u8 x;
 
-    FillBgTilemapBufferRect_Palette0(LABEL_WINDOW_BG, 0, 0, 0, 32, 32);
-    LoadBgTiles(sPokedexAreaMapTemplate.bg, sShadowMonitorHeaderBlankTile,
+    FillBgTilemapBufferRect_Palette0(LABEL_WINDOW_BG, SHADOW_MONITOR_HEADER_TILE_ID, 0, 0, 32, 3);
+    LoadBgTiles(LABEL_WINDOW_BG, sShadowMonitorHeaderBlankTile,
                 sizeof(sShadowMonitorHeaderBlankTile), SHADOW_MONITOR_HEADER_TILE_ID);
-    LoadBgTilemap(sPokedexAreaMapTemplate.bg, sShadowMonitorHeaderBlankTilemap,
-                  sizeof(sShadowMonitorHeaderBlankTilemap), 0);
 
     if (sShadowMonitorHeaderWindowId == WINDOW_NONE)
         sShadowMonitorHeaderWindowId = AddWindow(&sShadowMonitorHeaderWindowTemplate);
     if (sShadowMonitorHeaderWindowId == WINDOW_NONE)
         return;
 
-    FillWindowPixelBuffer(sShadowMonitorHeaderWindowId, PIXEL_FILL(15));
+    FillWindowPixelBuffer(sShadowMonitorHeaderWindowId, PIXEL_FILL(0));
     PutWindowTilemap(sShadowMonitorHeaderWindowId);
     x = GetStringCenterAlignXOffset(FONT_NORMAL, sText_Tracker, tabWidth);
     AddTextPrinterParameterized4(sShadowMonitorHeaderWindowId, FONT_NORMAL, x, tabY, 0, 0, sTextColor, TEXT_SKIP_DRAW, sText_Tracker);
-    CopyWindowToVram(sShadowMonitorHeaderWindowId, COPYWIN_GFX);
+    CopyWindowToVram(sShadowMonitorHeaderWindowId, COPYWIN_FULL);
     CopyBgTilemapBufferToVram(LABEL_WINDOW_BG);
     ShowBg(LABEL_WINDOW_BG);
 }
@@ -1201,6 +1202,9 @@ static void CreateAreaUnknownSprites(void)
 
 static void LoadHGSSScreenSelectBarSubmenu(void)
 {
-    CopyToBgTilemapBuffer(1, sPokedexPlusHGSS_ScreenSelectBarSubmenu_Tilemap, 0, 0);
+    if (gIsShadowMonitorOpen)
+        CopyToBgTilemapBuffer(1, sPokedexPlusHGSS_ScreenSelectBarSubmenu_Tilemap_Clear, 0, 0);
+    else
+        CopyToBgTilemapBuffer(1, sPokedexPlusHGSS_ScreenSelectBarSubmenu_Tilemap, 0, 0);
     CopyBgTilemapBufferToVram(1);
 }

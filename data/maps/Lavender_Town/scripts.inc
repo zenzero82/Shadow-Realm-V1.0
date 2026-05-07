@@ -1,9 +1,28 @@
 Lavender_Town_MapScripts::
 	map_script MAP_SCRIPT_ON_TRANSITION, Lavender_Town_OnTransition
+	map_script MAP_SCRIPT_ON_FRAME_TABLE, Lavender_Town_OnFrame
 	.byte 0
 
 Lavender_Town_OnTransition::
+	setvar VAR_TEMP_1, 0
 	setflag FLAG_VISITED_LAVENDER_TOWN
+	end
+
+Lavender_Town_OnFrame:
+	map_script_2 VAR_TEMP_1, 0, Lavender_Town_EventScript_CityEnterQuest
+	.2byte 0
+
+Lavender_Town_EventScript_CityEnterQuest::
+	setvar VAR_TEMP_1, 1
+	checkflag FLAG_QUEST_LAVENDER_NPCS_STARTED
+	goto_if_eq Lavender_Town_EventScript_CityEnterQuest_End
+	checkflag FLAG_QUEST_LAVENDER_NPCS_COMPLETED
+	goto_if_eq Lavender_Town_EventScript_CityEnterQuest_End
+	lockall
+	setflag FLAG_QUEST_LAVENDER_NPCS_STARTED
+	call QuestJournal_EventScript_NewQuestAlert
+	releaseall
+Lavender_Town_EventScript_CityEnterQuest_End:
 	end
 
 #define LOCALID_LYRA 1
@@ -18,6 +37,18 @@ Lavender_Town_Speaker_Lyra:
 
 Lavender_Town_Speaker_Birch:
 	.string "PROF. BIRCH$"
+
+Lavender_Town_Speaker_LittleBoy:
+	.string "BOY$"
+
+Lavender_Town_Speaker_BaldingMan:
+	.string "BALDING MAN$"
+
+Lavender_Town_Speaker_BattleGirl:
+	.string "BATTLE GIRL$"
+
+Lavender_Town_Speaker_OldMan:
+	.string "OLD MAN$"
 
 @ =========================================================
 @ TRIGGERS
@@ -73,6 +104,34 @@ Lavender_Town_EventScript_LyraTrigger_Done::
 	end
 
 @ =========================================================
+@ NPCS
+@ =========================================================
+
+Lavender_Town_EventScript_LittleBoy::
+	faceplayer
+	setspeaker Lavender_Town_Speaker_LittleBoy
+	msgbox Lavender_Town_Text_LittleBoy, MSGBOX_NPC
+	end
+
+Lavender_Town_EventScript_BaldingMan::
+	faceplayer
+	setspeaker Lavender_Town_Speaker_BaldingMan
+	msgbox Lavender_Town_Text_BaldingMan, MSGBOX_NPC
+	end
+
+Lavender_Town_EventScript_BattleGirl::
+	faceplayer
+	setspeaker Lavender_Town_Speaker_BattleGirl
+	msgbox Lavender_Town_Text_BattleGirl, MSGBOX_NPC
+	end
+
+Lavender_Town_EventScript_OldMan::
+	faceplayer
+	setspeaker Lavender_Town_Speaker_OldMan
+	msgbox Lavender_Town_Text_OldMan, MSGBOX_NPC
+	end
+
+@ =========================================================
 @ MOVEMENTS
 @ =========================================================
 
@@ -124,6 +183,22 @@ Lavender_Town_Text_BirchCall:
 
 Lavender_Town_Text_LyraReturn:
 	.string "We should head back ASAP!$"
+
+Lavender_Town_Text_LittleBoy:
+	.string "A girl with a MEGANIUM chased a\n"
+	.string "TEAM PLASMA grunt through town!$"
+
+Lavender_Town_Text_BaldingMan:
+	.string "I come here for peace, but lately\n"
+	.string "it's been full of rumors.$"
+
+Lavender_Town_Text_BattleGirl:
+	.string "The RADIO TOWER keeps everyone\n"
+	.string "calm. I hope it stays that way.$"
+
+Lavender_Town_Text_OldMan:
+	.string "The SOUL HOUSE reminds us to honor\n"
+	.string "our POKéMON.$"
 
 LavenderTown_EventScript_TownSign::
 	msgbox LavenderTown_Text_Sign, MSGBOX_SIGN

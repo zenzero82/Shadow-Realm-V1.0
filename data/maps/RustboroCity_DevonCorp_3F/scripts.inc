@@ -149,6 +149,7 @@ RustboroCity_DevonCorp_3F_Movement_PlayerApproachDesk:
 RustboroCity_DevonCorp_3F_EventScript_MrStone::
 	lock
 	faceplayer
+	setspeaker RustboroCity_DevonCorp_3F_Speaker_MrStone
 	goto_if_set FLAG_RECEIVED_EXP_SHARE, RustboroCity_DevonCorp_3F_EventScript_MrStoneAfterFavor
 	goto_if_set FLAG_DELIVERED_STEVEN_LETTER, RustboroCity_DevonCorp_3F_EventScript_GiveExpShare
 	msgbox RustboroCity_DevonCorp_3F_Text_CountingOnYou, MSGBOX_DEFAULT
@@ -181,6 +182,7 @@ RustboroCity_DevonCorp_3F_EventScript_MrStoneAfterFavor::
 RustboroCity_DevonCorp_3F_EventScript_Employee::
 	lock
 	faceplayer
+	setspeaker RustboroCity_DevonCorp_3F_Speaker_Clark
 	goto_if_set FLAG_RECEIVED_REPEAT_BALL, RustboroCity_DevonCorp_3F_EventScript_EmployeeBalls
 	msgbox RustboroCity_DevonCorp_3F_Text_VisitCaptSternShipyard, MSGBOX_DEFAULT
 	release
@@ -194,6 +196,12 @@ RustboroCity_DevonCorp_3F_EventScript_EmployeeBalls::
 RustboroCity_DevonCorp_3F_EventScript_RareRocksDisplay::
 	msgbox RustboroCity_DevonCorp_3F_Text_RareRocksDisplay, MSGBOX_SIGN
 	end
+
+RustboroCity_DevonCorp_3F_Speaker_MrStone:
+	.string "Mr. Stone$"
+
+RustboroCity_DevonCorp_3F_Speaker_Clark:
+	.string "Clark$"
 
 RustboroCity_DevonCorp_3F_Text_MrStoneIHaveFavor:
 	.string "I'm MR. STONE, the PRESIDENT of\n"
@@ -303,4 +311,3 @@ RustboroCity_DevonCorp_3F_Text_RepeatAndTimerHugelyPopular:
 RustboroCity_DevonCorp_3F_Text_RareRocksDisplay:
 	.string "It's a collection of rare rocks and\n"
 	.string "stones assembled by the PRESIDENT.$"
-

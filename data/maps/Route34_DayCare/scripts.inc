@@ -303,6 +303,8 @@ Route34_DayCare_EventScript_GiveMonToRaise::
 	special ChooseSendDaycareMon
 	waitstate
 	goto_if_eq VAR_0x8004, PARTY_NOTHING_CHOSEN, Route34_DayCare_EventScript_ComeAgain
+	specialvar VAR_RESULT, IsSelectedMonShadowForDaycare
+	goto_if_eq VAR_RESULT, TRUE, Route34_DayCare_EventScript_RejectShadowMon
 	specialvar VAR_RESULT, CountPartyAliveNonEggMons_IgnoreVar0x8004Slot
 	goto_if_eq VAR_RESULT, 0, Route34_DayCare_EventScript_OnlyOneAliveMon
 	specialvar VAR_0x8005, GetSelectedMonNicknameAndSpecies
@@ -320,6 +322,11 @@ Route34_DayCare_EventScript_GiveMonToRaise::
 
 Route34_DayCare_EventScript_ComeAgain::
 	msgbox Route34_DayCare_Text_ComeAgain, MSGBOX_DEFAULT
+	release
+	end
+
+Route34_DayCare_EventScript_RejectShadowMon::
+	msgbox Route34_DayCare_Text_CannotRaiseShadowPokemon, MSGBOX_DEFAULT
 	release
 	end
 
@@ -552,6 +559,12 @@ Route34_DayCare_Text_TakeOtherOneBackToo:
 Route34_DayCare_Text_ComeAgain:
 	.string "Fine.\n"
 	.string "Come again.$"
+
+Route34_DayCare_Text_CannotRaiseShadowPokemon:
+	.string "We can't raise a SHADOW POKéMON\n"
+	.string "here.\p"
+	.string "It needs a different kind of care\n"
+	.string "than our DAY-CARE can provide.$"
 
 Route34_DayCare_Text_GoodToSeeYou:
 	.string "Ah, it's you! Good to see you.\n"

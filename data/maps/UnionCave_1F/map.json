@@ -90,7 +90,7 @@
       "movement_range_y": 0,
       "trainer_type": "TRAINER_TYPE_NORMAL",
       "trainer_sight_or_berry_tree_id": "4",
-      "script": "UnionCave_1F_EventScript_FirebreatherTrainer",
+      "script": "UnionCave_1F_EventScript_FirebreatherTrainerBo",
       "flag": "0"
     },
     {
@@ -116,7 +116,7 @@
       "movement_range_y": 0,
       "trainer_type": "TRAINER_TYPE_NORMAL",
       "trainer_sight_or_berry_tree_id": "4",
-      "script": "UnionCave_1F_EventScript_FirebreatherTrainer",
+      "script": "UnionCave_1F_EventScript_FirebreatherTrainerWalt",
       "flag": "0"
     },
     {

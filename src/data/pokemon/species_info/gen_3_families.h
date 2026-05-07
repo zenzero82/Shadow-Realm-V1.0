@@ -9848,7 +9848,7 @@ const struct SpeciesInfo gSpeciesInfoGen3[] =
     #if P_UPDATED_ABILITIES >= GEN_6
         .abilities = { ABILITY_PRESSURE, ABILITY_NONE, ABILITY_FRISK },
     #else
-        .abilities = { ABILITY_PRESSURE, ABILITY_NONE, ABILITY_NONE },
+        .abilities = { ABILITY_DNA_SHIFT, ABILITY_NONE, ABILITY_PRESSURE },
     #endif
         .bodyColor = BODY_COLOR_BLACK,
         .speciesName = _("Dusclops"),
@@ -9933,7 +9933,7 @@ const struct SpeciesInfo gSpeciesInfoGen3[] =
     #if P_UPDATED_ABILITIES >= GEN_6
         .abilities = { ABILITY_PRESSURE, ABILITY_NONE, ABILITY_FRISK },
     #else
-        .abilities = { ABILITY_PRESSURE, ABILITY_NONE, ABILITY_NONE },
+        .abilities = { ABILITY_DNA_SHIFT, ABILITY_NONE, ABILITY_PRESSURE },
     #endif
         .bodyColor = BODY_COLOR_BLACK,
         .speciesName = _("Dusknoir"),
@@ -13018,7 +13018,7 @@ const struct SpeciesInfo gSpeciesInfoGen3[] =
         .friendship = 0,
         .growthRate = GROWTH_SLOW,
         .eggGroups = MON_EGG_GROUPS(EGG_GROUP_NO_EGGS_DISCOVERED),
-        .abilities = { ABILITY_PRESSURE, ABILITY_NONE, ABILITY_NONE },
+        .abilities = { ABILITY_DNA_SHIFT, ABILITY_NONE, ABILITY_PRESSURE },
         .bodyColor = BODY_COLOR_RED,
         .speciesName = _("Deoxys"),
         .cryId = CRY_DEOXYS,
@@ -13089,7 +13089,7 @@ const struct SpeciesInfo gSpeciesInfoGen3[] =
         .friendship = 0,
         .growthRate = GROWTH_SLOW,
         .eggGroups = MON_EGG_GROUPS(EGG_GROUP_NO_EGGS_DISCOVERED),
-        .abilities = { ABILITY_PRESSURE, ABILITY_NONE, ABILITY_NONE },
+        .abilities = { ABILITY_DNA_SHIFT, ABILITY_NONE, ABILITY_PRESSURE },
         .bodyColor = BODY_COLOR_RED,
         .speciesName = _("Deoxys"),
         .cryId = CRY_DEOXYS,

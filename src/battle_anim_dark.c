@@ -302,6 +302,8 @@ static void AnimTask_AttackerFadeToInvisible_Step(u8 taskId)
         if (blendA == 16)
         {
             gSprites[gBattlerSpriteIds[gBattleAnimAttacker]].invisible = TRUE;
+            SetGpuReg(REG_OFFSET_BLDCNT, 0);
+            SetGpuReg(REG_OFFSET_BLDALPHA, 0);
             DestroyAnimVisualTask(taskId);
         }
     }

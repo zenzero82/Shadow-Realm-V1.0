@@ -34,7 +34,7 @@
       "flag": "0"
     },
     {
-      "graphics_id": "OBJ_EVENT_GFX_MAN_3",
+      "graphics_id": "OBJ_EVENT_GFX_COOLTRAINER_M",
       "x": 42,
       "y": 15,
       "elevation": 0,
@@ -190,7 +190,7 @@
       "flag": "0"
     },
     {
-      "graphics_id": "OBJ_EVENT_GFX_GIRL_3",
+      "graphics_id": "OBJ_EVENT_GFX_POKEMON_RANGER_F",
       "x": 51,
       "y": 53,
       "elevation": 3,
@@ -203,7 +203,7 @@
       "flag": "0"
     },
     {
-      "graphics_id": "OBJ_EVENT_GFX_PSYCHIC_M",
+      "graphics_id": "OBJ_EVENT_GFX_KINDLER",
       "x": 62,
       "y": 18,
       "elevation": 0,
@@ -216,7 +216,7 @@
       "flag": "0"
     },
     {
-      "graphics_id": "OBJ_EVENT_GFX_MAN_3",
+      "graphics_id": "OBJ_EVENT_GFX_COOLTRAINER_M",
       "x": 11,
       "y": 21,
       "elevation": 0,
@@ -229,7 +229,7 @@
       "flag": "0"
     },
     {
-      "graphics_id": "OBJ_EVENT_GFX_WOMAN_5",
+      "graphics_id": "OBJ_EVENT_GFX_COOLTRAINER_F",
       "x": 10,
       "y": 21,
       "elevation": 0,
@@ -242,7 +242,7 @@
       "flag": "0"
     },
     {
-      "graphics_id": "OBJ_EVENT_GFX_WOMAN_5",
+      "graphics_id": "OBJ_EVENT_GFX_COOLTRAINER_F",
       "x": 16,
       "y": 30,
       "elevation": 0,

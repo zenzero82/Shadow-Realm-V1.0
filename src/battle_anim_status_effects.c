@@ -273,7 +273,11 @@ static u8 UNUSED Task_FlashingCircleImpacts(u8 battler, bool8 red)
     u8 battlerSpriteId = gBattlerSpriteIds[battler];
     u8 taskId = CreateTask(Task_UpdateFlashingCircleImpacts, 10);
     u8 spriteId;
+    u8 lastSpriteId = MAX_SPRITES;
     u8 i;
+
+    if (taskId == TASK_NONE)
+        return TASK_NONE;
 
     LoadCompressedSpriteSheetUsingHeap(&gBattleAnimPicTable[GET_TRUE_SPRITE_INDEX(ANIM_TAG_CIRCLE_IMPACT)]);
     LoadSpritePalette(&gBattleAnimPaletteTable[GET_TRUE_SPRITE_INDEX(ANIM_TAG_CIRCLE_IMPACT)]);
@@ -284,11 +288,14 @@ static u8 UNUSED Task_FlashingCircleImpacts(u8 battler, bool8 red)
         for (i = 0; i < 10; i++)
         {
             spriteId = CreateSprite(&sFlashingCircleImpactSpriteTemplate, gSprites[battlerSpriteId].x, gSprites[battlerSpriteId].y + 32, 0);
+            if (spriteId == MAX_SPRITES)
+                continue;
             gSprites[spriteId].data[0] = i * 51;
             gSprites[spriteId].data[1] = -256;
             gSprites[spriteId].invisible = TRUE;
             if (i > 4)
                 gSprites[spriteId].data[6] = 21;
+            lastSpriteId = spriteId;
         }
     }
     else
@@ -297,14 +304,20 @@ static u8 UNUSED Task_FlashingCircleImpacts(u8 battler, bool8 red)
         for (i = 0; i < 10; i++)
         {
             spriteId = CreateSprite(&sFlashingCircleImpactSpriteTemplate, gSprites[battlerSpriteId].x, gSprites[battlerSpriteId].y - 32, 0);
+            if (spriteId == MAX_SPRITES)
+                continue;
             gSprites[spriteId].data[0] = i * 51;
             gSprites[spriteId].data[1] = 256;
             gSprites[spriteId].invisible = TRUE;
             if (i > 4)
                 gSprites[spriteId].data[6] = 21;
+            lastSpriteId = spriteId;
         }
     }
-    gSprites[spriteId].data[7] = 1;
+    if (lastSpriteId != MAX_SPRITES)
+        gSprites[lastSpriteId].data[7] = 1;
+    else
+        DestroyTask(taskId);
     return taskId;
 }
 
@@ -387,6 +400,13 @@ void AnimTask_FrozenIceCubeAttacker(u8 taskId)
     SetGpuReg(REG_OFFSET_BLDCNT, BLDCNT_EFFECT_BLEND | BLDCNT_TGT2_ALL);
     SetGpuReg(REG_OFFSET_BLDALPHA, BLDALPHA_BLEND(0, 16));
     spriteId = CreateSprite(&sFrozenIceCubeSpriteTemplate, x, y, 4);
+    if (spriteId == MAX_SPRITES)
+    {
+        SetGpuReg(REG_OFFSET_BLDCNT, 0);
+        SetGpuReg(REG_OFFSET_BLDALPHA, 0);
+        DestroyAnimVisualTask(taskId);
+        return;
+    }
     if (GetSpriteTileStartByTag(ANIM_TAG_ICE_CUBE) == 0xFFFF)
         gSprites[spriteId].invisible = TRUE;
     SetSubspriteTables(&gSprites[spriteId], sFrozenIceCubeSubspriteTable);
@@ -417,6 +437,11 @@ void AnimTask_CentredFrozenIceCube(u8 taskId)
     y -= 36;
 
     spriteId = CreateSprite(&sFrozenIceCubeSpriteTemplate, x, y, 4);
+    if (spriteId == MAX_SPRITES)
+    {
+        DestroyAnimVisualTask(taskId);
+        return;
+    }
     if (GetSpriteTileStartByTag(ANIM_TAG_ICE_CUBE) == 0xFFFF)
         gSprites[spriteId].invisible = TRUE;
 
@@ -436,6 +461,13 @@ void AnimTask_FrozenIceCube(u8 taskId)
     SetGpuReg(REG_OFFSET_BLDCNT, BLDCNT_EFFECT_BLEND | BLDCNT_TGT2_ALL);
     SetGpuReg(REG_OFFSET_BLDALPHA, BLDALPHA_BLEND(0, 16));
     spriteId = CreateSprite(&sFrozenIceCubeSpriteTemplate, x, y, 4);
+    if (spriteId == MAX_SPRITES)
+    {
+        SetGpuReg(REG_OFFSET_BLDCNT, 0);
+        SetGpuReg(REG_OFFSET_BLDALPHA, 0);
+        DestroyAnimVisualTask(taskId);
+        return;
+    }
     if (GetSpriteTileStartByTag(ANIM_TAG_ICE_CUBE) == 0xFFFF)
         gSprites[spriteId].invisible = TRUE;
     SetSubspriteTables(&gSprites[spriteId], sFrozenIceCubeSubspriteTable);
@@ -595,6 +627,11 @@ void LaunchStatusAnimation(u8 battler, u8 statusAnimId)
     gBattleAnimTarget = battler;
     LaunchBattleAnimation(ANIM_TYPE_STATUS, statusAnimId);
     taskId = CreateTask(Task_DoStatusAnimation, 10);
+    if (taskId == TASK_NONE)
+    {
+        gBattleSpritesDataPtr->healthBoxesData[battler].statusAnimActive = FALSE;
+        return;
+    }
     gTasks[taskId].data[0] = battler;
 }
 

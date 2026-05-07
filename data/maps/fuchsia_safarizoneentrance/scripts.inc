@@ -1,2 +1,128 @@
 fuchsia_safarizoneentrance_MapScripts::
+	map_script MAP_SCRIPT_ON_FRAME_TABLE, fuchsia_safarizoneentrance_OnFrame
 	.byte 0
+
+fuchsia_safarizoneentrance_OnFrame:
+	map_script_2 VAR_SAFARI_ZONE_STATE, 1, fuchsia_safarizoneentrance_EventScript_ExitSafariZone
+	.2byte 0
+
+fuchsia_safarizoneentrance_EventScript_ExitSafariZone::
+	lockall
+	applymovement LOCALID_PLAYER, fuchsia_safarizoneentrance_Movement_ExitSafariZone
+	waitmovement 0
+	setvar VAR_SAFARI_ZONE_STATE, 0
+	releaseall
+	end
+
+fuchsia_safarizoneentrance_Movement_ExitSafariZone:
+	walk_down
+	walk_down
+	walk_down
+	walk_down
+	walk_down
+	walk_down
+	walk_down
+	step_end
+
+fuchsia_safarizoneentrance_EventScript_InfoAttendant::
+	lock
+	faceplayer
+	msgbox Route121_SafariZoneEntrance_Text_WelcomeFirstTime, MSGBOX_YESNO
+	goto_if_eq VAR_RESULT, YES, fuchsia_safarizoneentrance_EventScript_FirstTimeInfo
+	msgbox Route121_SafariZoneEntrance_Text_ComeInAndEnjoy, MSGBOX_DEFAULT
+	release
+	end
+
+fuchsia_safarizoneentrance_EventScript_FirstTimeInfo::
+	msgbox Route121_SafariZoneEntrance_Text_FirstTimeInfo, MSGBOX_DEFAULT
+	release
+	end
+
+fuchsia_safarizoneentrance_EventScript_EntranceCounterTrigger::
+	lockall
+	turnobject OBJ_EVENT_ID_PLAYER, DIR_WEST
+	showmoneybox 0, 0
+	msgbox Route121_SafariZoneEntrance_Text_WouldYouLikeToPlay, MSGBOX_YESNO
+	goto_if_eq VAR_RESULT, YES, fuchsia_safarizoneentrance_EventScript_TryEnterSafariZone
+	msgbox Route121_SafariZoneEntrance_Text_PlayAnotherTime, MSGBOX_DEFAULT
+	goto fuchsia_safarizoneentrance_EventScript_MovePlayerBackFromCounter
+	end
+
+fuchsia_safarizoneentrance_EventScript_TryEnterSafariZone::
+	checkitem ITEM_POKEBLOCK_CASE
+	goto_if_eq VAR_RESULT, 0, fuchsia_safarizoneentrance_EventScript_NoPokeblockCase
+	call fuchsia_safarizoneentrance_EventScript_CheckHasRoomForPokemon
+	checkmoney 500
+	goto_if_eq VAR_RESULT, 0, fuchsia_safarizoneentrance_EventScript_NotEnoughMoney
+	playse SE_SHOP
+	msgbox Route121_SafariZoneEntrance_Text_ThatWillBe500Please, MSGBOX_DEFAULT
+	removemoney 500
+	updatemoneybox
+	msgbox Route121_SafariZoneEntrance_Text_HereAreYourSafariBalls, MSGBOX_DEFAULT
+	playfanfare MUS_OBTAIN_ITEM
+	message Route121_SafariZoneEntrance_Text_Received30SafariBalls
+	waitfanfare
+	msgbox Route121_SafariZoneEntrance_Text_PleaseEnjoyYourself, MSGBOX_DEFAULT
+	closemessage
+	hidemoneybox
+	getplayerxy VAR_TEMP_0, VAR_TEMP_1
+	call_if_eq VAR_TEMP_0, 4, fuchsia_safarizoneentrance_EventScript_CorrectionLeft
+	call_if_eq VAR_TEMP_0, 6, fuchsia_safarizoneentrance_EventScript_CorrectionRight
+	applymovement OBJ_EVENT_ID_PLAYER, fuchsia_safarizoneentrance_Movement_EnterSafariZone
+	waitmovement 0
+	special EnterSafariMode
+	setvar VAR_SAFARI_ZONE_STATE, 2
+	clearflag FLAG_GOOD_LUCK_SAFARI_ZONE
+	warp MAP_FUCHSIA_SAFARIZONEBEACH, 20, 38
+	waitstate
+	end
+
+fuchsia_safarizoneentrance_EventScript_CorrectionRight::
+	applymovement OBJ_EVENT_ID_PLAYER, Common_Movement_WalkLeft
+	waitmovement 0
+	return
+
+fuchsia_safarizoneentrance_EventScript_CorrectionLeft::
+	applymovement OBJ_EVENT_ID_PLAYER, Common_Movement_WalkRight
+	waitmovement 0
+	return
+
+fuchsia_safarizoneentrance_EventScript_CheckHasRoomForPokemon::
+	getpartysize
+	goto_if_ne VAR_RESULT, PARTY_SIZE, fuchsia_safarizoneentrance_EventScript_HasRoomForPokemon
+	specialvar VAR_RESULT, ScriptCheckFreePokemonStorageSpace
+	goto_if_eq VAR_RESULT, 1, fuchsia_safarizoneentrance_EventScript_HasRoomForPokemon
+	msgbox Route121_SafariZoneEntrance_Text_PCIsFull, MSGBOX_DEFAULT
+	goto fuchsia_safarizoneentrance_EventScript_MovePlayerBackFromCounter
+	end
+
+fuchsia_safarizoneentrance_EventScript_HasRoomForPokemon::
+	return
+
+fuchsia_safarizoneentrance_EventScript_NoPokeblockCase::
+	msgbox Route121_SafariZoneEntrance_Text_YouNeedPokeblockCase, MSGBOX_DEFAULT
+	goto fuchsia_safarizoneentrance_EventScript_MovePlayerBackFromCounter
+	end
+
+fuchsia_safarizoneentrance_EventScript_NotEnoughMoney::
+	msgbox Route121_SafariZoneEntrance_Text_NotEnoughMoney, MSGBOX_DEFAULT
+	goto fuchsia_safarizoneentrance_EventScript_MovePlayerBackFromCounter
+	end
+
+fuchsia_safarizoneentrance_EventScript_MovePlayerBackFromCounter::
+	closemessage
+	hidemoneybox
+	applymovement OBJ_EVENT_ID_PLAYER, fuchsia_safarizoneentrance_Movement_BackAwayFromCounter
+	waitmovement 0
+	releaseall
+	end
+
+fuchsia_safarizoneentrance_Movement_BackAwayFromCounter:
+	walk_down
+	step_end
+
+fuchsia_safarizoneentrance_Movement_EnterSafariZone:
+	walk_up
+	walk_up
+	walk_up
+	step_end

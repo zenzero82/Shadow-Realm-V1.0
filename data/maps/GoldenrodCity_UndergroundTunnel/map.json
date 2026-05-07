@@ -2,7 +2,7 @@
   "id": "MAP_GOLDENROD_CITY_UNDERGROUND_TUNNEL",
   "name": "GoldenrodCity_UndergroundTunnel",
   "layout": "LAYOUT_GOLDENROD_CITY_UNDERGROUND_TUNNEL",
-  "music": "MUS_DUMMY",
+  "music": "MUS_HG_GOLDENROD",
   "region_map_section": "MAPSEC_GOLDENROD_CITY",
   "requires_flash": false,
   "weather": "WEATHER_NONE",
@@ -13,7 +13,34 @@
   "show_map_name": false,
   "battle_scene": "MAP_BATTLE_SCENE_NORMAL",
   "connections": null,
-  "object_events": [],
+  "object_events": [
+    {
+      "graphics_id": "OBJ_EVENT_GFX_CIPHER_PEON_M",
+      "x": 12,
+      "y": 13,
+      "elevation": 0,
+      "movement_type": "MOVEMENT_TYPE_NONE",
+      "movement_range_x": 0,
+      "movement_range_y": 0,
+      "trainer_type": "TRAINER_TYPE_NONE",
+      "trainer_sight_or_berry_tree_id": "0",
+      "script": "GoldenrodCity_UndergroundTunnel_EventScript_CipherPeon",
+      "flag": "FLAG_HIDE_GOLDENROD_UNDERGROUND_TUNNEL_CIPHER_PEON"
+    },
+    {
+      "graphics_id": "OBJ_EVENT_GFX_BOY_2_GEN2",
+      "x": 12,
+      "y": 13,
+      "elevation": 0,
+      "movement_type": "MOVEMENT_TYPE_FACE_DOWN",
+      "movement_range_x": 0,
+      "movement_range_y": 0,
+      "trainer_type": "TRAINER_TYPE_NONE",
+      "trainer_sight_or_berry_tree_id": "0",
+      "script": "NULL",
+      "flag": "FLAG_HIDE_GOLDENROD_UNDERGROUND_TUNNEL_BOY"
+    }
+  ],
   "warp_events": [
     {
       "x": 2,

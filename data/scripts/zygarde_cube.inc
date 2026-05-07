@@ -37,6 +37,12 @@ Common_EventScript_ZygardeCubeItem:
 	msgbox ZygardeCube_Text_GotCube, MSGBOX_DEFAULT
 
 Common_EventScript_ZygardeCubeFinish:
+	compare VAR_ZYGARDE_CELL_COUNT, 95
+	goto_if_ne Common_EventScript_ZygardeCubeFinish_NoComplete
+	compare VAR_ZYGARDE_CORE_COUNT, 5
+	goto_if_ne Common_EventScript_ZygardeCubeFinish_NoComplete
+	setflag FLAG_QUEST_100_POWER_COMPLETED
+Common_EventScript_ZygardeCubeFinish_NoComplete:
 	special SetLastTalkedObjectFlag
 	removeobject VAR_LAST_TALKED
 	release

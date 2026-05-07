@@ -26,6 +26,45 @@
       "trainer_sight_or_berry_tree_id": "0",
       "script": "OldaleTown_Mart_EventScript_Clerk",
       "flag": "0"
+    },
+    {
+      "graphics_id": "OBJ_EVENT_GFX_YOUNGSTER2_GEN2",
+      "x": 6,
+      "y": 2,
+      "elevation": 0,
+      "movement_type": "MOVEMENT_TYPE_FACE_UP",
+      "movement_range_x": 0,
+      "movement_range_y": 0,
+      "trainer_type": "TRAINER_TYPE_NONE",
+      "trainer_sight_or_berry_tree_id": "0",
+      "script": "viridian_pokemart_EventScript_Youngster",
+      "flag": "FLAG_HIDE_VIRIDIAN_POST_ROCKET_NPCS"
+    },
+    {
+      "graphics_id": "OBJ_EVENT_GFX_LASS2_GEN2",
+      "x": 9,
+      "y": 6,
+      "elevation": 0,
+      "movement_type": "MOVEMENT_TYPE_FACE_RIGHT",
+      "movement_range_x": 0,
+      "movement_range_y": 0,
+      "trainer_type": "TRAINER_TYPE_NONE",
+      "trainer_sight_or_berry_tree_id": "0",
+      "script": "viridian_pokemart_EventScript_Lass",
+      "flag": "FLAG_HIDE_VIRIDIAN_POST_ROCKET_NPCS"
+    },
+    {
+      "graphics_id": "OBJ_EVENT_GFX_ROOFTOP_SALE_WOMAN2_GEN2",
+      "x": 6,
+      "y": 5,
+      "elevation": 0,
+      "movement_type": "MOVEMENT_TYPE_FACE_RIGHT",
+      "movement_range_x": 0,
+      "movement_range_y": 0,
+      "trainer_type": "TRAINER_TYPE_NONE",
+      "trainer_sight_or_berry_tree_id": "0",
+      "script": "viridian_pokemart_EventScript_Woman",
+      "flag": "FLAG_HIDE_VIRIDIAN_POST_ROCKET_NPCS"
     }
   ],
   "warp_events": [

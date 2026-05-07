@@ -4,6 +4,7 @@ RustboroCity_CuttersHouse_MapScripts::
 RustboroCity_CuttersHouse_EventScript_Cutter::
 	lock
 	faceplayer
+	setspeaker RustboroCity_CuttersHouse_Speaker_Cedric
 	goto_if_set FLAG_RECEIVED_HM_CUT, RustboroCity_CuttersHouse_EventScript_ExplainCut
 	msgbox RustboroCity_CuttersHouse_Text_YouCanPutThisHMToGoodUse, MSGBOX_DEFAULT
 	giveitem ITEM_HM_CUT
@@ -18,8 +19,16 @@ RustboroCity_CuttersHouse_EventScript_ExplainCut::
 	end
 
 RustboroCity_CuttersHouse_EventScript_Lass::
+	faceplayer
+	setspeaker RustboroCity_CuttersHouse_Speaker_Lila
 	msgbox RustboroCity_CuttersHouse_Text_DadHelpedClearLandOfTrees, MSGBOX_NPC
 	end
+
+RustboroCity_CuttersHouse_Speaker_Cedric:
+	.string "Cedric$"
+
+RustboroCity_CuttersHouse_Speaker_Lila:
+	.string "Lila$"
 
 RustboroCity_CuttersHouse_Text_YouCanPutThisHMToGoodUse:
 	.string "That determined expression…\n"
@@ -49,4 +58,3 @@ RustboroCity_CuttersHouse_Text_DadHelpedClearLandOfTrees:
 	.string "RUSTBORO, my dad helped out.\p"
 	.string "He made his POKéMON use CUT to clear\n"
 	.string "the land of trees.$"
-

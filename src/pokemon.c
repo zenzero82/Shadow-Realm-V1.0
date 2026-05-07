@@ -705,11 +705,11 @@ const struct NatureInfo gNaturesInfo[NUM_NATURES] =
 const u8 gShadowAggressionTable[NUM_AGGRO_LEVELS][HEART_GAUGE_LEVELS] = 
 {
     [SHADOW_AGGRO_NONE]         = { 0,  0,  0,  0,  0,  0},
-    [SHADOW_AGGRO_VERY_LOW]     = { 2,  5, 10, 15, 15, 15},
-    [SHADOW_AGGRO_LOW]          = { 5, 10, 15, 20, 20, 20},
-    [SHADOW_AGGRO_MEDIUM]       = {10, 15, 20, 30, 30, 30},
-    [SHADOW_AGGRO_HIGH]         = {10, 15, 25, 50, 50, 50},
-    [SHADOW_AGGRO_VERY_HIGH]    = {10, 20, 35, 50, 50, 50},
+    [SHADOW_AGGRO_VERY_LOW]     = { 1,  3,  5,  8,  8,  8},
+    [SHADOW_AGGRO_LOW]          = { 2,  5,  8, 12, 12, 12},
+    [SHADOW_AGGRO_MEDIUM]       = { 4,  8, 12, 18, 18, 18},
+    [SHADOW_AGGRO_HIGH]         = { 5, 10, 15, 25, 25, 25},
+    [SHADOW_AGGRO_VERY_HIGH]    = { 5, 12, 18, 30, 30, 30},
     [SHADOW_AGGRO_TEST]         = {80, 80, 80, 80, 80, 80},
 };
 
@@ -1142,7 +1142,7 @@ void CreateMon(struct Pokemon *mon, u16 species, u8 level, u8 fixedIV, u8 hasFix
 
 void CreateBoxMon(struct BoxPokemon *boxMon, u16 species, u8 level, u8 fixedIV, u8 hasFixedPersonality, u32 fixedPersonality, u8 otIdType, u32 fixedOtId)
 {
-    u8 speciesName[POKEMON_NAME_LENGTH + 1];
+    u8 speciesName[POKEMON_NAME_LENGTH + 1] = {0};
     u32 personality = Random32();
     u32 value;
     u16 checksum;
@@ -3181,7 +3181,7 @@ void SetBoxMonData(struct BoxPokemon *boxMon, s32 field, const void *dataArg)
         case MON_DATA_NICKNAME10:
         {
             s32 i;
-            if (substruct3->isShadow)
+            if (substruct3->isShadow && field == MON_DATA_NICKNAME10)
             {
                 u32 species = boxMon->isBadEgg ? SPECIES_EGG : substruct0->species;
                 for (i = 0; i < min(sizeof(boxMon->nickData.nickname), POKEMON_NAME_LENGTH); i++)
@@ -3193,19 +3193,19 @@ void SetBoxMonData(struct BoxPokemon *boxMon, s32 field, const void *dataArg)
             }
             else
             {
-                for (i = 0; i < min(sizeof(boxMon->nickData.nickname), POKEMON_NAME_LENGTH); i++)
+                for (i = 0; i < sizeof(boxMon->nickData.nickname); i++)
+                    boxMon->nickData.nickname[i] = EOS;
+                substruct0->nickname11 = EOS;
+                substruct0->nickname12 = EOS;
+
+                for (i = 0; i < min(sizeof(boxMon->nickData.nickname), POKEMON_NAME_LENGTH) && data[i] != EOS; i++)
                     boxMon->nickData.nickname[i] = data[i];
                 if (field != MON_DATA_NICKNAME10)
                 {
-                    if (POKEMON_NAME_LENGTH >= 11)
+                    if (POKEMON_NAME_LENGTH >= 11 && data[10] != EOS)
                         substruct0->nickname11 = data[10];
-                    if (POKEMON_NAME_LENGTH >= 12)
+                    if (POKEMON_NAME_LENGTH >= 12 && data[11] != EOS)
                         substruct0->nickname12 = data[11];
-                }
-                else
-                {
-                    substruct0->nickname11 = EOS;
-                    substruct0->nickname12 = EOS;
                 }
             }
             break;

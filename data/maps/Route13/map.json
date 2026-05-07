@@ -36,7 +36,7 @@
       "trainer_type": "TRAINER_TYPE_NONE",
       "trainer_sight_or_berry_tree_id": "BERRY_TREE_KANTO_ROUTE_13_ORAN",
       "script": "BerryTreeScript",
-      "flag": "0"
+      "flag": "FLAG_HIDE_ROUTE13_ZYGARDE_CELL"
     },
     {
       "graphics_id": "OBJ_EVENT_GFX_ZYGARDE_CUBE",
@@ -49,7 +49,7 @@
       "trainer_type": "TRAINER_TYPE_NONE",
       "trainer_sight_or_berry_tree_id": "0",
       "script": "Common_EventScript_ZygardeCubePickup",
-      "flag": "0"
+      "flag": "FLAG_HIDE_ROUTE13_ZYGARDE_CELL"
     }
   ],
   "warp_events": [],

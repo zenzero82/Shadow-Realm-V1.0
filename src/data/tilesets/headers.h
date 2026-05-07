@@ -993,7 +993,7 @@ const struct Tileset gTileset_vermilion_gym =
     .palettes = gTilesetPalettes_vermilion_gym,
     .metatiles = gMetatiles_vermilion_gym,
     .metatileAttributes = gMetatileAttributes_vermilion_gym,
-    .callback = NULL,
+    .callback = InitTilesetAnim_VermilionGym,
 };
 
 const struct Tileset gTileset_pewter_city =
@@ -1169,7 +1169,7 @@ const struct Tileset gTileset_celadon_city =
     .palettes = gTilesetPalettes_celadon_city,
     .metatiles = gMetatiles_celadon_city,
     .metatileAttributes = gMetatileAttributes_celadon_city,
-    .callback = NULL,
+    .callback = InitTilesetAnim_CeladonCity,
 };
 
 const struct Tileset gTileset_saffron_city =

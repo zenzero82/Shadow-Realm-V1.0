@@ -28,6 +28,7 @@ static void TilesetAnim_Building(u16);
 static void TilesetAnim_Rustboro(u16);
 static void TilesetAnim_Dewford(u16);
 static void TilesetAnim_Slateport(u16);
+static void TilesetAnim_CeladonCity(u16);
 static void TilesetAnim_Mauville(u16);
 static void TilesetAnim_Lavaridge(u16);
 static void TilesetAnim_EverGrande(u16);
@@ -41,6 +42,7 @@ static void TilesetAnim_Cave(u16);
 static void TilesetAnim_WesCave(u16);
 static void TilesetAnim_EliteFour(u16);
 static void TilesetAnim_MauvilleGym(u16);
+static void TilesetAnim_VermilionGym(u16);
 static void TilesetAnim_BikeShop(u16);
 static void TilesetAnim_BattlePyramid(u16);
 static void TilesetAnim_BattleDome(u16);
@@ -71,6 +73,7 @@ static void QueueAnimTiles_AzaleaTown_Gym_Flower(u16);
 static void QueueAnimTiles_Building_TVTurnedOn(u16);
 static void QueueAnimTiles_Rustboro_WindyWater(u16, u8);
 static void QueueAnimTiles_Rustboro_Fountain(u16);
+static void QueueAnimTiles_CeladonCity_Fountain(u16);
 static void QueueAnimTiles_Dewford_Flag(u16);
 static void QueueAnimTiles_Slateport_Balloons(u16);
 static void QueueAnimTiles_Mauville_Flowers(u16, u8);
@@ -91,6 +94,7 @@ static void QueueAnimTiles_Cave_Lava(u16);
 static void QueueAnimTiles_BattleFrontierOutsideWest_Flag(u16);
 static void QueueAnimTiles_BattleFrontierOutsideEast_Flag(u16);
 static void QueueAnimTiles_MauvilleGym_ElectricGates(u16);
+static void QueueAnimTiles_VermilionGym_MotorizedDoor(u16);
 static void QueueAnimTiles_SootopolisGym_Waterfalls(u16);
 static void QueueAnimTiles_EliteFour_GroundLights(u16);
 static void QueueAnimTiles_EliteFour_WallLights(u16);
@@ -321,6 +325,14 @@ static const u16 *const gTilesetAnims_AzaleaTown_Gym_Flower[] = {
     gTilesetAnims_AzaleaTown_Gym_Flower_Frame1,
 };
 
+static const u16 gTilesetAnims_VermilionGym_MotorizedDoor_Frame0[] = INCBIN_U16("data/tilesets/secondary/vermilion_gym/anim/motorizeddoor/0.4bpp");
+static const u16 gTilesetAnims_VermilionGym_MotorizedDoor_Frame1[] = INCBIN_U16("data/tilesets/secondary/vermilion_gym/anim/motorizeddoor/1.4bpp");
+
+static const u16 *const gTilesetAnims_VermilionGym_MotorizedDoor[] = {
+    gTilesetAnims_VermilionGym_MotorizedDoor_Frame0,
+    gTilesetAnims_VermilionGym_MotorizedDoor_Frame1,
+};
+
 
 const u16 gTilesetAnims_Lavaridge_Steam_Frame0[] = INCBIN_U16("data/tilesets/secondary/lavaridge/anim/steam/0.4bpp");
 const u16 gTilesetAnims_Lavaridge_Steam_Frame1[] = INCBIN_U16("data/tilesets/secondary/lavaridge/anim/steam/1.4bpp");
@@ -493,6 +505,20 @@ const u16 tileset_anims_space_2[16] = {};
 const u16 *const gTilesetAnims_Rustboro_Fountain[] = {
     gTilesetAnims_Rustboro_Fountain_Frame0,
     gTilesetAnims_Rustboro_Fountain_Frame1
+};
+
+static const u16 gTilesetAnims_CeladonCity_Fountain_Frame0[] = INCBIN_U16("data/tilesets/secondary/celadon_city/anim/fountain/0.4bpp");
+static const u16 gTilesetAnims_CeladonCity_Fountain_Frame1[] = INCBIN_U16("data/tilesets/secondary/celadon_city/anim/fountain/1.4bpp");
+static const u16 gTilesetAnims_CeladonCity_Fountain_Frame2[] = INCBIN_U16("data/tilesets/secondary/celadon_city/anim/fountain/2.4bpp");
+static const u16 gTilesetAnims_CeladonCity_Fountain_Frame3[] = INCBIN_U16("data/tilesets/secondary/celadon_city/anim/fountain/3.4bpp");
+static const u16 gTilesetAnims_CeladonCity_Fountain_Frame4[] = INCBIN_U16("data/tilesets/secondary/celadon_city/anim/fountain/4.4bpp");
+
+static const u16 *const gTilesetAnims_CeladonCity_Fountain[] = {
+    gTilesetAnims_CeladonCity_Fountain_Frame0,
+    gTilesetAnims_CeladonCity_Fountain_Frame1,
+    gTilesetAnims_CeladonCity_Fountain_Frame2,
+    gTilesetAnims_CeladonCity_Fountain_Frame3,
+    gTilesetAnims_CeladonCity_Fountain_Frame4,
 };
 
 const u16 gTilesetAnims_Lavaridge_Cave_Lava_Frame0[] = INCBIN_U16("data/tilesets/secondary/cave/anim/lava/0.4bpp");
@@ -945,28 +971,28 @@ static void TilesetAnim_NationalPark(u16 timer)
 static void QueueAnimTiles_NationalPark_LargeFountain(u16 timer)
 {
     AppendTilesetAnimToBuffer(gTilesetAnims_NationalPark_LargeFountain[timer % ARRAY_COUNT(gTilesetAnims_NationalPark_LargeFountain)],
-        (u16 *)(BG_VRAM + TILE_OFFSET_4BPP(NUM_TILES_IN_PRIMARY + 88)),
+        (u16 *)(BG_VRAM + TILE_OFFSET_4BPP(NUM_TILES_IN_PRIMARY + 216)),
         0x100);
 }
 
 static void QueueAnimTiles_NationalPark_SmallFountain(u16 timer)
 {
     AppendTilesetAnimToBuffer(gTilesetAnims_NationalPark_SmallFountain[timer % ARRAY_COUNT(gTilesetAnims_NationalPark_SmallFountain)],
-        (u16 *)(BG_VRAM + TILE_OFFSET_4BPP(NUM_TILES_IN_PRIMARY + 104)),
-        0x100);
+        (u16 *)(BG_VRAM + TILE_OFFSET_4BPP(NUM_TILES_IN_PRIMARY + 232)),
+        0x0C0);
 }
 
 static void QueueAnimTiles_NationalPark_RedFlower(u16 timer)
 {
     AppendTilesetAnimToBuffer(gTilesetAnims_NationalPark_RedFlower[timer % ARRAY_COUNT(gTilesetAnims_NationalPark_RedFlower)],
-        (u16 *)(BG_VRAM + TILE_OFFSET_4BPP(NUM_TILES_IN_PRIMARY + 96)),
+        (u16 *)(BG_VRAM + TILE_OFFSET_4BPP(NUM_TILES_IN_PRIMARY + 224)),
         0x80);
 }
 
 static void QueueAnimTiles_NationalPark_YellowFlower(u16 timer)
 {
     AppendTilesetAnimToBuffer(gTilesetAnims_NationalPark_YellowFlower[timer % ARRAY_COUNT(gTilesetAnims_NationalPark_YellowFlower)],
-        (u16 *)(BG_VRAM + TILE_OFFSET_4BPP(NUM_TILES_IN_PRIMARY + 100)),
+        (u16 *)(BG_VRAM + TILE_OFFSET_4BPP(NUM_TILES_IN_PRIMARY + 228)),
         0x80);
 }
 
@@ -1008,6 +1034,13 @@ static void QueueAnimTiles_AzaleaTown_Gym_Flower(u16 timer)
     AppendTilesetAnimToBuffer(gTilesetAnims_AzaleaTown_Gym_Flower[timer % ARRAY_COUNT(gTilesetAnims_AzaleaTown_Gym_Flower)],
         (u16 *)(BG_VRAM + TILE_OFFSET_4BPP(NUM_TILES_IN_PRIMARY + 227)),
         4 * TILE_SIZE_4BPP);
+}
+
+void InitTilesetAnim_CeladonCity(void)
+{
+    sSecondaryTilesetAnimCounter = 0;
+    sSecondaryTilesetAnimCounterMax = 120;
+    sSecondaryTilesetAnimCallback = TilesetAnim_CeladonCity;
 }
 
 
@@ -1158,6 +1191,13 @@ void InitTilesetAnim_MauvilleGym(void)
     sSecondaryTilesetAnimCallback = TilesetAnim_MauvilleGym;
 }
 
+void InitTilesetAnim_VermilionGym(void)
+{
+    sSecondaryTilesetAnimCounter = 0;
+    sSecondaryTilesetAnimCounterMax = 128;
+    sSecondaryTilesetAnimCallback = TilesetAnim_VermilionGym;
+}
+
 void InitTilesetAnim_BikeShop(void)
 {
     sSecondaryTilesetAnimCounter = 0;
@@ -1212,6 +1252,12 @@ static void TilesetAnim_Slateport(u16 timer)
 {
     if (timer % 16 == 0)
         QueueAnimTiles_Slateport_Balloons(timer / 16);
+}
+
+static void TilesetAnim_CeladonCity(u16 timer)
+{
+    if (timer % 12 == 0)
+        QueueAnimTiles_CeladonCity_Fountain(timer / 12);
 }
 
 static void TilesetAnim_Mauville(u16 timer)
@@ -1381,6 +1427,16 @@ static void QueueAnimTiles_Rustboro_Fountain(u16 timer)
     AppendTilesetAnimToBuffer(gTilesetAnims_Rustboro_Fountain[i], (u16 *)(BG_VRAM + TILE_OFFSET_4BPP(NUM_TILES_IN_PRIMARY + 448)), 4 * TILE_SIZE_4BPP);
 }
 
+static void QueueAnimTiles_CeladonCity_Fountain(u16 timer)
+{
+    u16 i = timer % ARRAY_COUNT(gTilesetAnims_CeladonCity_Fountain);
+    const u16 *frame = gTilesetAnims_CeladonCity_Fountain[i] + (2 * (TILE_SIZE_4BPP / 2));
+
+    AppendTilesetAnimToBuffer(frame,
+        (u16 *)(BG_VRAM + TILE_OFFSET_4BPP(746)),
+        6 * TILE_SIZE_4BPP);
+}
+
 static void QueueAnimTiles_Lavaridge_Lava(u16 timer)
 {
     u16 i = timer % ARRAY_COUNT(gTilesetAnims_Lavaridge_Cave_Lava);
@@ -1429,6 +1485,12 @@ static void TilesetAnim_MauvilleGym(u16 timer)
 {
     if (timer % 2 == 0)
         QueueAnimTiles_MauvilleGym_ElectricGates(timer / 2);
+}
+
+static void TilesetAnim_VermilionGym(u16 timer)
+{
+    if (timer % 8 == 0)
+        QueueAnimTiles_VermilionGym_MotorizedDoor(timer / 8);
 }
 
 static void TilesetAnim_SootopolisGym(u16 timer)
@@ -1501,6 +1563,12 @@ static void QueueAnimTiles_MauvilleGym_ElectricGates(u16 timer)
 {
     u16 i = timer % ARRAY_COUNT(gTilesetAnims_MauvilleGym_ElectricGates);
     AppendTilesetAnimToBuffer(gTilesetAnims_MauvilleGym_ElectricGates[i], (u16 *)(BG_VRAM + TILE_OFFSET_4BPP(NUM_TILES_IN_PRIMARY + 144)), 16 * TILE_SIZE_4BPP);
+}
+
+static void QueueAnimTiles_VermilionGym_MotorizedDoor(u16 timer)
+{
+    u16 i = timer % ARRAY_COUNT(gTilesetAnims_VermilionGym_MotorizedDoor);
+    AppendTilesetAnimToBuffer(gTilesetAnims_VermilionGym_MotorizedDoor[i], (u16 *)(BG_VRAM + TILE_OFFSET_4BPP(NUM_TILES_IN_PRIMARY + 368)), 7 * TILE_SIZE_4BPP);
 }
 
 static void QueueAnimTiles_BikeShop_BlinkingLights(u16 timer)

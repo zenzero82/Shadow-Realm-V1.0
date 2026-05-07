@@ -124,6 +124,8 @@ PalletTown_EventScript_Route1AideTalk::
     end
 
 QuestJournal_EventScript_CheckPalletTownNPCs::
+    checkitem ITEM_QUEST_JOURNAL
+    goto_if_eq VAR_RESULT, FALSE, QuestJournal_EventScript_CheckPalletTownNPCs_End
     checkflag FLAG_QUEST_PALLET_TOWN_COMPLETED
     goto_if_eq QuestJournal_EventScript_CheckPalletTownNPCs_End
     checkflag FLAG_QUEST_PALLET_TOWN_STARTED
@@ -344,17 +346,18 @@ PalletTown_Move_Player_EnterLab:
 
 PalletTown_Text_Teacher:
     .string "I'm a teacher here in town.\p"
-    .string "Lately my students keep talking about\n"
-    .string "POKéMON on the news that should\l"
-    .string "not even exist in KANTO.$"
+    .string "Lately my students keep talking\n"
+    .string "about POKeMON on the news.\p"
+    .string "Some of them should not even\n"
+    .string "exist in KANTO.$"
 
 PalletTown_Text_Fisher:
-    .string "Technology is incredible... and a little\n"
-    .string "terrifying right now.\p"
+    .string "Technology is incredible...\n"
+    .string "and a little terrifying now.\p"
     .string "The news has been covering a lot\n"
     .string "of strange stories lately.\p"
-    .string "Sometimes the broadcast glitches like it\n"
-    .string "was being hacked.$"
+    .string "Sometimes the broadcast glitches\n"
+    .string "like it was being hacked.$"
 
 PalletTown_Text_Sign:
     .string "PALLET TOWN\p"
@@ -386,20 +389,22 @@ PalletTown_Text_Route1Aide_Intro:
     .string "Route 1 is just ahead.\p"
     .string "It is usually a quiet path to\n"
     .string "VIRIDIAN CITY.\p"
-    .string "With all these portals showing up on\n"
-    .string "the news, I am a little on edge.$"
+    .string "With all these portals showing up\n"
+    .string "on the news, I'm on edge.$"
 
 PalletTown_Text_Route1Aide_SawMan:
     .string "NO WAY!\p"
-    .string "I have no idea who you are, but did\n"
-    .string "you see what just happened?!\p"
-    .string "A strange man on Route 1 just captured\n"
-    .string "an innocent POKéMON with some strange\l"
-    .string "looking POKé BALL.\p"
-    .string "He sent it back out and it looks weird!\p"
-    .string "It started to give off a strange aura\n"
-    .string "and even changed colors!\p"
-    .string "Its behavior seems like it's different\n"
-    .string "as well...\p"
-    .string "I have to inform Nia. Please come with\n"
-    .string "me quickly!$"
+    .string "I have no idea who you are,\n"
+    .string "but did you see that?!\p"
+    .string "A strange man on Route 1 just\n"
+    .string "captured an innocent POKeMON.\p"
+    .string "He used some strange looking\n"
+    .string "POKe BALL.\p"
+    .string "He sent it back out and now\n"
+    .string "it looks weird!\p"
+    .string "It started giving off a\n"
+    .string "strange aura!\p"
+    .string "It even changed colors, and\n"
+    .string "it acts different too...\p"
+    .string "I have to inform Nia.\n"
+    .string "Please come with me!$"

@@ -28,3 +28,4 @@ const u32 gMapSummaryScreenMoves[] = INCBIN_U32("graphics/summary_screen_bw/bg_m
 const u32 gMapSummaryScreenMoves2[] = INCBIN_U32("graphics/summary_screen_bw/bg_moves2.bin.lz");
 const u32 gMapSummaryScreenPokemonInfo[] = INCBIN_U32("graphics/summary_screen_bw/bg_pokemon_info.bin.lz");
 const u32 gMapSummaryScreenPokemonSkills[] = INCBIN_U32("graphics/summary_screen_bw/bg_pokemon_skills.bin.lz");
+const u16 gMapSummaryScreenRibbons[] = INCBIN_U16("graphics/summary_screen_bw/bg_ribbons.bin");

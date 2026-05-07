@@ -72,6 +72,8 @@
 #include "fake_rtc.h"
 #include "save.h"
 
+extern const u8 *const gRibbonDescriptionPointers[][2];
+
 // *******************************
 enum DebugMenu
 {
@@ -93,6 +95,13 @@ enum UtilDebugMenu
     DEBUG_UTIL_MENU_ITEM_FLY,
     DEBUG_UTIL_MENU_ITEM_WARP,
     DEBUG_UTIL_MENU_ITEM_WARP_SHADOW_REALM,
+    DEBUG_UTIL_MENU_ITEM_WARP_MT_CHIMNEY,
+    DEBUG_UTIL_MENU_ITEM_WARP_SILPHCO_11F,
+    DEBUG_UTIL_MENU_ITEM_WARP_RUSTBORO_PC,
+    DEBUG_UTIL_MENU_ITEM_WARP_GOLDENROD_RADIO_TOWER_1F,
+    DEBUG_UTIL_MENU_ITEM_WARP_GOLDENROD_RADIO_TOWER_5F,
+    DEBUG_UTIL_MENU_ITEM_WARP_WES_HIDEOUT_ENTRANCE,
+    DEBUG_UTIL_MENU_ITEM_REPAIR_QUEST_FLAGS,
     DEBUG_UTIL_MENU_ITEM_WEATHER,
     DEBUG_UTIL_MENU_ITEM_FONT_TEST,
     DEBUG_UTIL_MENU_ITEM_TIME_MENU,
@@ -327,6 +336,7 @@ struct DebugMonData
     u8 teraType;
     u8 dynamaxLevel:7;
     u8 gmaxFactor:1;
+    u8 ribbonId;
 };
 
 struct DebugMenuListData
@@ -397,6 +407,13 @@ static void DebugTask_HandleMenuInput_BerryFunctions(u8 taskId);
 static void DebugAction_Util_Fly(u8 taskId);
 static void DebugAction_Util_Warp_Warp(u8 taskId);
 static void DebugAction_Util_Warp_ShadowRealm(u8 taskId);
+static void DebugAction_Util_Warp_MtChimney(u8 taskId);
+static void DebugAction_Util_Warp_Silphco11F(u8 taskId);
+static void DebugAction_Util_Warp_RustboroPC(u8 taskId);
+static void DebugAction_Util_Warp_GoldenrodRadioTower1F(u8 taskId);
+static void DebugAction_Util_Warp_GoldenrodRadioTower5F(u8 taskId);
+static void DebugAction_Util_Warp_WesHideoutEntrance(u8 taskId);
+static void DebugAction_Util_RepairQuestFlags(u8 taskId);
 static void DebugAction_Util_Warp_SelectMapGroup(u8 taskId);
 static void DebugAction_Util_Warp_SelectMap(u8 taskId);
 static void DebugAction_Util_Warp_SelectWarp(u8 taskId);
@@ -480,6 +497,7 @@ static void DebugAction_Give_Pokemon_SelectDynamaxLevel(u8 taskId);
 static void DebugAction_Give_Pokemon_SelectGigantamaxFactor(u8 taskId);
 static void DebugAction_Give_Pokemon_SelectIVs(u8 taskId);
 static void DebugAction_Give_Pokemon_SelectEVs(u8 taskId);
+static void DebugAction_Give_Pokemon_SelectRibbon(u8 taskId);
 static void DebugAction_Give_Pokemon_ComplexCreateMon(u8 taskId);
 static void DebugAction_Give_Pokemon_Move(u8 taskId);
 static void DebugAction_Give_MaxMoney(u8 taskId);
@@ -526,6 +544,59 @@ extern const u8 DebugScript_OneDaycareMons[];
 extern const u8 DebugScript_ZeroDaycareMons[];
 
 extern const u8 Debug_ShowFieldMessageStringVar4[];
+
+struct QuestFlagPair
+{
+    u16 started;
+    u16 completed;
+};
+
+static const struct QuestFlagPair sQuestFlagPairs[] =
+{
+    {FLAG_QUEST_PALLET_TOWN_STARTED, FLAG_QUEST_PALLET_TOWN_COMPLETED},
+    {FLAG_QUEST_VIRIDIAN_GYM_STARTED, FLAG_QUEST_VIRIDIAN_GYM_COMPLETED},
+    {FLAG_QUEST_PEWTER_NPCS_STARTED, FLAG_QUEST_PEWTER_NPCS_COMPLETED},
+    {FLAG_QUEST_GIMMI_MY_MONEY_STARTED, FLAG_QUEST_GIMMI_MY_MONEY_COMPLETED},
+    {FLAG_QUEST_BROCK_STARTED, FLAG_QUEST_BROCK_COMPLETED},
+    {FLAG_QUEST_MT_MOON_STARTED, FLAG_QUEST_MT_MOON_COMPLETED},
+    {FLAG_QUEST_CERULEAN_NPCS_STARTED, FLAG_QUEST_CERULEAN_NPCS_COMPLETED},
+    {FLAG_QUEST_CERULEAN_WES_STARTED, FLAG_QUEST_CERULEAN_WES_COMPLETED},
+    {FLAG_QUEST_CAPE_WES_STARTED, FLAG_QUEST_CAPE_WES_COMPLETED},
+    {FLAG_QUEST_TALK_WES_STARTED, FLAG_QUEST_TALK_WES_COMPLETED},
+    {FLAG_QUEST_TALK_TEAM_STARTED, FLAG_QUEST_TALK_TEAM_COMPLETED},
+    {FLAG_QUEST_KUKUI_SHADOW_STARTED, FLAG_QUEST_KUKUI_SHADOW_COMPLETED},
+    {FLAG_QUEST_SNAG_MACHINE_STARTED, FLAG_QUEST_SNAG_MACHINE_COMPLETED},
+    {FLAG_QUEST_SHADOW_TRAINER_STARTED, FLAG_QUEST_SHADOW_TRAINER_COMPLETED},
+    {FLAG_QUEST_DEFEAT_MISTY_STARTED, FLAG_QUEST_DEFEAT_MISTY_COMPLETED},
+    {FLAG_QUEST_ROUTE9_GUARDS_STARTED, FLAG_QUEST_ROUTE9_GUARDS_COMPLETED},
+    {FLAG_QUEST_PLASMA_TUNNEL_STARTED, FLAG_QUEST_PLASMA_TUNNEL_COMPLETED},
+    {FLAG_QUEST_VIOLET_NPCS_STARTED, FLAG_QUEST_VIOLET_NPCS_COMPLETED},
+    {FLAG_QUEST_DEFEAT_FALKNER_STARTED, FLAG_QUEST_DEFEAT_FALKNER_COMPLETED},
+    {FLAG_QUEST_KURT_APRICOT_STARTED, FLAG_QUEST_KURT_APRICOT_COMPLETED},
+    {FLAG_QUEST_AZALEA_NPCS_STARTED, FLAG_QUEST_AZALEA_NPCS_COMPLETED},
+    {FLAG_QUEST_DEFEAT_BUGSY_STARTED, FLAG_QUEST_DEFEAT_BUGSY_COMPLETED},
+    {FLAG_QUEST_SLOWPOKE_WELL_FLARE_STARTED, FLAG_QUEST_SLOWPOKE_WELL_FLARE_COMPLETED},
+    {FLAG_QUEST_CHERRYGROVE_NPCS_STARTED, FLAG_QUEST_CHERRYGROVE_NPCS_COMPLETED},
+    {FLAG_QUEST_NEW_BARK_NPCS_STARTED, FLAG_QUEST_NEW_BARK_NPCS_COMPLETED},
+    {FLAG_QUEST_GOLDS_MOM_STARTED, FLAG_QUEST_GOLDS_MOM_COMPLETED},
+    {FLAG_QUEST_BACK_TO_HQ_STARTED, FLAG_QUEST_BACK_TO_HQ_COMPLETED},
+    {FLAG_QUEST_THUNDERBIRD_STARTED, FLAG_QUEST_THUNDERBIRD_COMPLETED},
+    {FLAG_QUEST_ICEBIRD_STARTED, FLAG_QUEST_ICEBIRD_COMPLETED},
+    {FLAG_QUEST_FIREBIRD_STARTED, FLAG_QUEST_FIREBIRD_COMPLETED},
+    {FLAG_QUEST_PHOENIX_STARTED, FLAG_QUEST_PHOENIX_COMPLETED},
+    {FLAG_QUEST_SHINING_BEAST_STARTED, FLAG_QUEST_SHINING_BEAST_COMPLETED},
+    {FLAG_QUEST_LAVENDER_NPCS_STARTED, FLAG_QUEST_LAVENDER_NPCS_COMPLETED},
+    {FLAG_QUEST_ODD_KEYSTONE_STARTED, FLAG_QUEST_ODD_KEYSTONE_COMPLETED},
+    {FLAG_QUEST_CELADON_NPCS_STARTED, FLAG_QUEST_CELADON_NPCS_COMPLETED},
+    {FLAG_QUEST_MEGA_MOMENTS_STARTED, FLAG_QUEST_MEGA_MOMENTS_COMPLETED},
+    {FLAG_QUEST_ERICA_STARTED, FLAG_QUEST_ERICA_COMPLETED},
+    {FLAG_QUEST_MACHINE_PART_STARTED, FLAG_QUEST_MACHINE_PART_COMPLETED},
+    {FLAG_QUEST_ALOLA_LILLIE_STARTED, FLAG_QUEST_ALOLA_LILLIE_COMPLETED},
+    {FLAG_QUEST_SAFFRON_NPCS_STARTED, FLAG_QUEST_SAFFRON_NPCS_COMPLETED},
+    {FLAG_QUEST_VERMILION_NPCS_STARTED, FLAG_QUEST_VERMILION_NPCS_COMPLETED},
+    {FLAG_QUEST_GOLDENROD_NPCS_STARTED, FLAG_QUEST_GOLDENROD_NPCS_COMPLETED},
+    {FLAG_QUEST_RUSTBORO_NPCS_STARTED, FLAG_QUEST_RUSTBORO_NPCS_COMPLETED},
+};
 extern const u8 Debug_CheatStart[];
 extern const u8 Debug_HatchAnEgg[];
 extern const u8 PlayersHouse_2F_EventScript_SetWallClock[];
@@ -599,6 +670,14 @@ static const u8 sDebugText_PokemonDynamaxLevel[] =      _("Dmax Lvl:{CLEAR_TO 90
 static const u8 sDebugText_PokemonGmaxFactor[] =        _("Gmax Factor:{CLEAR_TO 90}\n   {STR_VAR_2}{CLEAR_TO 90}\n{CLEAR_TO 90}\n{CLEAR_TO 90}");
 static const u8 sDebugText_IVs[] =                      _("IV {STR_VAR_1}:{CLEAR_TO 90}\n    {STR_VAR_3}{CLEAR_TO 90}\n{CLEAR_TO 90}\n{STR_VAR_2}{CLEAR_TO 90}");
 static const u8 sDebugText_EVs[] =                      _("EV {STR_VAR_1}:{CLEAR_TO 90}\n    {STR_VAR_3}{CLEAR_TO 90}\n{CLEAR_TO 90}\n{STR_VAR_2}{CLEAR_TO 90}");
+static const u8 sDebugText_PokemonRibbon[] =            _("Ribbon: {STR_VAR_3}{CLEAR_TO 90}\n{STR_VAR_1}{CLEAR_TO 90}\n{CLEAR_TO 90}\n{STR_VAR_2}{CLEAR_TO 90}");
+static const u8 sDebugText_RibbonMarine[] =             _("MARINE RIBBON");
+static const u8 sDebugText_RibbonLand[] =               _("LAND RIBBON");
+static const u8 sDebugText_RibbonSky[] =                _("SKY RIBBON");
+static const u8 sDebugText_RibbonCountry[] =            _("COUNTRY RIBBON");
+static const u8 sDebugText_RibbonNational[] =           _("NATIONAL RIBBON");
+static const u8 sDebugText_RibbonEarth[] =              _("EARTH RIBBON");
+static const u8 sDebugText_RibbonWorld[] =              _("WORLD RIBBON");
 // Sound Menu
 static const u8 sDebugText_Sound_SFX_ID[] =             _("SFX ID: {STR_VAR_3}   {START_BUTTON} Stop\n{STR_VAR_1}    \n{STR_VAR_2}");
 static const u8 sDebugText_Sound_Music_ID[] =           _("Music ID: {STR_VAR_3}   {START_BUTTON} Stop\n{STR_VAR_1}    \n{STR_VAR_2}");
@@ -651,6 +730,13 @@ static const struct ListMenuItem sDebugMenu_Items_Utilities[] =
     [DEBUG_UTIL_MENU_ITEM_FLY]             = {COMPOUND_STRING("Fly to map…{CLEAR_TO 110}{RIGHT_ARROW}"),       DEBUG_UTIL_MENU_ITEM_FLY},
     [DEBUG_UTIL_MENU_ITEM_WARP]            = {COMPOUND_STRING("Warp to map warp…{CLEAR_TO 110}{RIGHT_ARROW}"), DEBUG_UTIL_MENU_ITEM_WARP},
     [DEBUG_UTIL_MENU_ITEM_WARP_SHADOW_REALM] = {COMPOUND_STRING("Warp: Shadow Realm"),                         DEBUG_UTIL_MENU_ITEM_WARP_SHADOW_REALM},
+    [DEBUG_UTIL_MENU_ITEM_WARP_MT_CHIMNEY] = {COMPOUND_STRING("Warp: Mt. Chimney"),                            DEBUG_UTIL_MENU_ITEM_WARP_MT_CHIMNEY},
+    [DEBUG_UTIL_MENU_ITEM_WARP_SILPHCO_11F] = {COMPOUND_STRING("Warp: Silph Co 11F"),                          DEBUG_UTIL_MENU_ITEM_WARP_SILPHCO_11F},
+    [DEBUG_UTIL_MENU_ITEM_WARP_RUSTBORO_PC] = {COMPOUND_STRING("Warp: Rustboro PC"),                           DEBUG_UTIL_MENU_ITEM_WARP_RUSTBORO_PC},
+    [DEBUG_UTIL_MENU_ITEM_WARP_GOLDENROD_RADIO_TOWER_1F] = {COMPOUND_STRING("Warp: Radio Tower 1F"),          DEBUG_UTIL_MENU_ITEM_WARP_GOLDENROD_RADIO_TOWER_1F},
+    [DEBUG_UTIL_MENU_ITEM_WARP_GOLDENROD_RADIO_TOWER_5F] = {COMPOUND_STRING("Warp: Radio Tower 5F"),          DEBUG_UTIL_MENU_ITEM_WARP_GOLDENROD_RADIO_TOWER_5F},
+    [DEBUG_UTIL_MENU_ITEM_WARP_WES_HIDEOUT_ENTRANCE] = {COMPOUND_STRING("Warp: Wes Hideout Entrance"),        DEBUG_UTIL_MENU_ITEM_WARP_WES_HIDEOUT_ENTRANCE},
+    [DEBUG_UTIL_MENU_ITEM_REPAIR_QUEST_FLAGS] = {COMPOUND_STRING("Repair Quest Flags"),                        DEBUG_UTIL_MENU_ITEM_REPAIR_QUEST_FLAGS},
     [DEBUG_UTIL_MENU_ITEM_WEATHER]         = {COMPOUND_STRING("Set weather…{CLEAR_TO 110}{RIGHT_ARROW}"),      DEBUG_UTIL_MENU_ITEM_WEATHER},
     [DEBUG_UTIL_MENU_ITEM_FONT_TEST]       = {COMPOUND_STRING("Font Test…{CLEAR_TO 110}{RIGHT_ARROW}"),        DEBUG_UTIL_MENU_ITEM_FONT_TEST},
     [DEBUG_UTIL_MENU_ITEM_TIME_MENU]       = {COMPOUND_STRING("Time Functions…{CLEAR_TO 110}{RIGHT_ARROW}"),   DEBUG_UTIL_MENU_ITEM_TIME_MENU},
@@ -863,6 +949,13 @@ static void (*const sDebugMenu_Actions_Utilities[])(u8) =
     [DEBUG_UTIL_MENU_ITEM_FLY]             = DebugAction_Util_Fly,
     [DEBUG_UTIL_MENU_ITEM_WARP]            = DebugAction_Util_Warp_Warp,
     [DEBUG_UTIL_MENU_ITEM_WARP_SHADOW_REALM] = DebugAction_Util_Warp_ShadowRealm,
+    [DEBUG_UTIL_MENU_ITEM_WARP_MT_CHIMNEY] = DebugAction_Util_Warp_MtChimney,
+    [DEBUG_UTIL_MENU_ITEM_WARP_SILPHCO_11F] = DebugAction_Util_Warp_Silphco11F,
+    [DEBUG_UTIL_MENU_ITEM_WARP_RUSTBORO_PC] = DebugAction_Util_Warp_RustboroPC,
+    [DEBUG_UTIL_MENU_ITEM_WARP_GOLDENROD_RADIO_TOWER_1F] = DebugAction_Util_Warp_GoldenrodRadioTower1F,
+    [DEBUG_UTIL_MENU_ITEM_WARP_GOLDENROD_RADIO_TOWER_5F] = DebugAction_Util_Warp_GoldenrodRadioTower5F,
+    [DEBUG_UTIL_MENU_ITEM_WARP_WES_HIDEOUT_ENTRANCE] = DebugAction_Util_Warp_WesHideoutEntrance,
+    [DEBUG_UTIL_MENU_ITEM_REPAIR_QUEST_FLAGS] = DebugAction_Util_RepairQuestFlags,
     [DEBUG_UTIL_MENU_ITEM_WEATHER]         = DebugAction_Util_Weather,
     [DEBUG_UTIL_MENU_ITEM_FONT_TEST]       = DebugAction_Util_FontTest,
     [DEBUG_UTIL_MENU_ITEM_TIME_MENU]       = DebugAction_Util_OpenTimeMenu,
@@ -2016,6 +2109,244 @@ static void DebugAction_Util_Warp_ShadowRealm(u8 taskId)
     ResetInitialPlayerAvatarState();
 }
 
+static void DebugAction_Util_Warp_MtChimney(u8 taskId)
+{
+    Debug_DestroyMenu_Full(taskId);
+    SetWarpDestinationToMapWarp(MAP_GROUP(MAP_MT_CHIMNEY), MAP_NUM(MAP_MT_CHIMNEY), 0);
+    DoWarp();
+    ResetInitialPlayerAvatarState();
+}
+
+static void DebugAction_Util_Warp_Silphco11F(u8 taskId)
+{
+    Debug_DestroyMenu_Full(taskId);
+    SetWarpDestination(MAP_GROUP(MAP_SILPHCO_11F), MAP_NUM(MAP_SILPHCO_11F), WARP_ID_NONE, 9, 14);
+    DoWarp();
+    ResetInitialPlayerAvatarState();
+}
+
+static void DebugAction_Util_Warp_RustboroPC(u8 taskId)
+{
+    Debug_DestroyMenu_Full(taskId);
+    SetWarpDestination(MAP_GROUP(MAP_RUSTBORO_CITY), MAP_NUM(MAP_RUSTBORO_CITY), WARP_ID_NONE, 16, 39);
+    DoWarp();
+    ResetInitialPlayerAvatarState();
+}
+
+static void DebugAction_Util_Warp_GoldenrodRadioTower1F(u8 taskId)
+{
+    Debug_DestroyMenu_Full(taskId);
+    SetWarpDestination(MAP_GROUP(MAP_GOLDENROD_CITY_RADIO_TOWER_1F), MAP_NUM(MAP_GOLDENROD_CITY_RADIO_TOWER_1F), WARP_ID_NONE, 9, 9);
+    DoWarp();
+    ResetInitialPlayerAvatarState();
+}
+
+static void DebugAction_Util_Warp_GoldenrodRadioTower5F(u8 taskId)
+{
+    Debug_DestroyMenu_Full(taskId);
+    SetWarpDestinationToMapWarp(MAP_GROUP(MAP_GOLDENROD_CITY_RADIO_TOWER_5F), MAP_NUM(MAP_GOLDENROD_CITY_RADIO_TOWER_5F), 0);
+    DoWarp();
+    ResetInitialPlayerAvatarState();
+}
+
+static void DebugAction_Util_Warp_WesHideoutEntrance(u8 taskId)
+{
+    Debug_DestroyMenu_Full(taskId);
+    SetWarpDestinationToMapWarp(MAP_GROUP(MAP_WES_HIDEOUT_ENTRANCE), MAP_NUM(MAP_WES_HIDEOUT_ENTRANCE), 0);
+    DoWarp();
+    ResetInitialPlayerAvatarState();
+}
+
+static void DebugAction_Util_RepairQuestFlags(u8 taskId)
+{
+    u32 i;
+    u16 fixes = 0;
+    bool8 hasLegendaryAccess;
+
+    for (i = 0; i < ARRAY_COUNT(sQuestFlagPairs); i++)
+    {
+        if (FlagGet(sQuestFlagPairs[i].completed) && !FlagGet(sQuestFlagPairs[i].started))
+        {
+            FlagSet(sQuestFlagPairs[i].started);
+            fixes++;
+        }
+    }
+
+    if (!FlagGet(FLAG_ILEX_BIRCH_CALL_DONE))
+    {
+        if (FlagGet(FLAG_QUEST_BACK_TO_HQ_STARTED))
+        {
+            FlagClear(FLAG_QUEST_BACK_TO_HQ_STARTED);
+            fixes++;
+        }
+        if (FlagGet(FLAG_QUEST_BACK_TO_HQ_COMPLETED))
+        {
+            FlagClear(FLAG_QUEST_BACK_TO_HQ_COMPLETED);
+            fixes++;
+        }
+    }
+
+    hasLegendaryAccess = FlagGet(FLAG_QUEST_BACK_TO_HQ_STARTED)
+                      || FlagGet(FLAG_QUEST_BACK_TO_HQ_COMPLETED);
+
+    if (!hasLegendaryAccess)
+    {
+        if (FlagGet(FLAG_QUEST_THUNDERBIRD_STARTED))
+        {
+            FlagClear(FLAG_QUEST_THUNDERBIRD_STARTED);
+            fixes++;
+        }
+        if (FlagGet(FLAG_QUEST_THUNDERBIRD_COMPLETED))
+        {
+            FlagClear(FLAG_QUEST_THUNDERBIRD_COMPLETED);
+            fixes++;
+        }
+        if (FlagGet(FLAG_QUEST_ICEBIRD_STARTED))
+        {
+            FlagClear(FLAG_QUEST_ICEBIRD_STARTED);
+            fixes++;
+        }
+        if (FlagGet(FLAG_QUEST_ICEBIRD_COMPLETED))
+        {
+            FlagClear(FLAG_QUEST_ICEBIRD_COMPLETED);
+            fixes++;
+        }
+        if (FlagGet(FLAG_QUEST_FIREBIRD_STARTED))
+        {
+            FlagClear(FLAG_QUEST_FIREBIRD_STARTED);
+            fixes++;
+        }
+        if (FlagGet(FLAG_QUEST_FIREBIRD_COMPLETED))
+        {
+            FlagClear(FLAG_QUEST_FIREBIRD_COMPLETED);
+            fixes++;
+        }
+        if (FlagGet(FLAG_QUEST_PHOENIX_STARTED))
+        {
+            FlagClear(FLAG_QUEST_PHOENIX_STARTED);
+            fixes++;
+        }
+        if (FlagGet(FLAG_QUEST_PHOENIX_COMPLETED))
+        {
+            FlagClear(FLAG_QUEST_PHOENIX_COMPLETED);
+            fixes++;
+        }
+        if (FlagGet(FLAG_QUEST_SHINING_BEAST_STARTED))
+        {
+            FlagClear(FLAG_QUEST_SHINING_BEAST_STARTED);
+            fixes++;
+        }
+        if (FlagGet(FLAG_QUEST_SHINING_BEAST_COMPLETED))
+        {
+            FlagClear(FLAG_QUEST_SHINING_BEAST_COMPLETED);
+            fixes++;
+        }
+    }
+
+    if (!FlagGet(FLAG_HIDE_ROUTE10_ZINZOLIN))
+    {
+        if (FlagGet(FLAG_QUEST_MACHINE_PART_STARTED))
+        {
+            FlagClear(FLAG_QUEST_MACHINE_PART_STARTED);
+            fixes++;
+        }
+        if (FlagGet(FLAG_QUEST_MEGA_MOMENTS_STARTED))
+        {
+            FlagClear(FLAG_QUEST_MEGA_MOMENTS_STARTED);
+            fixes++;
+        }
+        if (FlagGet(FLAG_QUEST_ERICA_STARTED))
+        {
+            FlagClear(FLAG_QUEST_ERICA_STARTED);
+            fixes++;
+        }
+    }
+
+    if (FlagGet(FLAG_QUEST_MACHINE_PART_COMPLETED))
+    {
+        FlagClear(FLAG_QUEST_MACHINE_PART_COMPLETED);
+        fixes++;
+    }
+    if (FlagGet(FLAG_QUEST_MEGA_MOMENTS_COMPLETED))
+    {
+        FlagClear(FLAG_QUEST_MEGA_MOMENTS_COMPLETED);
+        fixes++;
+    }
+    if (FlagGet(FLAG_QUEST_ERICA_COMPLETED))
+    {
+        FlagClear(FLAG_QUEST_ERICA_COMPLETED);
+        fixes++;
+    }
+
+    if (!FlagGet(FLAG_CELADON_LILLIE_JOINED))
+    {
+        if (FlagGet(FLAG_QUEST_ALOLA_LILLIE_STARTED))
+        {
+            FlagClear(FLAG_QUEST_ALOLA_LILLIE_STARTED);
+            fixes++;
+        }
+    }
+    if (!FlagGet(FLAG_VERMILION_PORTINSIDE_BURNET_SCENE_DONE) && FlagGet(FLAG_QUEST_ALOLA_LILLIE_COMPLETED))
+    {
+        FlagClear(FLAG_QUEST_ALOLA_LILLIE_COMPLETED);
+        fixes++;
+    }
+
+    if (!FlagGet(FLAG_VERMILION_PORTINSIDE_BURNET_SCENE_DONE))
+    {
+        if (FlagGet(FLAG_QUEST_NEBBY_POWERHOUSE_STARTED))
+        {
+            FlagClear(FLAG_QUEST_NEBBY_POWERHOUSE_STARTED);
+            fixes++;
+        }
+    }
+    if (!FlagGet(FLAG_WES_HIDEOUT_NEBBY_SCENE_DONE) && FlagGet(FLAG_QUEST_NEBBY_POWERHOUSE_COMPLETED))
+    {
+        FlagClear(FLAG_QUEST_NEBBY_POWERHOUSE_COMPLETED);
+        fixes++;
+    }
+
+    if (!FlagGet(FLAG_VISITED_GOLDENROD_CITY))
+    {
+        if (FlagGet(FLAG_QUEST_GOLDENROD_NPCS_STARTED))
+        {
+            FlagClear(FLAG_QUEST_GOLDENROD_NPCS_STARTED);
+            fixes++;
+        }
+    }
+    if (FlagGet(FLAG_QUEST_GOLDENROD_NPCS_COMPLETED))
+    {
+        FlagClear(FLAG_QUEST_GOLDENROD_NPCS_COMPLETED);
+        fixes++;
+    }
+
+    if (!FlagGet(FLAG_VISITED_RUSTBORO_CITY))
+    {
+        if (FlagGet(FLAG_QUEST_RUSTBORO_NPCS_STARTED))
+        {
+            FlagClear(FLAG_QUEST_RUSTBORO_NPCS_STARTED);
+            fixes++;
+        }
+    }
+    if (FlagGet(FLAG_QUEST_RUSTBORO_NPCS_COMPLETED))
+    {
+        FlagClear(FLAG_QUEST_RUSTBORO_NPCS_COMPLETED);
+        fixes++;
+    }
+
+    if (fixes == 0)
+    {
+        StringCopy(gStringVar4, COMPOUND_STRING("No quest flag fixes were needed."));
+    }
+    else
+    {
+        ConvertIntToDecimalStringN(gStringVar1, fixes, STR_CONV_MODE_LEFT_ALIGN, 3);
+        StringExpandPlaceholders(gStringVar4, COMPOUND_STRING("Repaired {STR_VAR_1} quest flag(s)."));
+    }
+
+    Debug_DestroyMenu_Full_Script(taskId, Debug_ShowFieldMessageStringVar4);
+}
+
 static void DebugAction_Util_Warp_SelectMapGroup(u8 taskId)
 {
     if (JOY_NEW(DPAD_ANY))
@@ -3062,6 +3393,7 @@ static void ResetMonDataStruct(struct DebugMonData *sDebugMonData)
     sDebugMonData->teraType         = TYPE_NONE;
     sDebugMonData->dynamaxLevel     = 0;
     sDebugMonData->gmaxFactor       = FALSE;
+    sDebugMonData->ribbonId         = 0xFF;
     for (u32 i = 0; i < NUM_STATS; i++)
     {
         sDebugMonData->monIVs[i] = 0;
@@ -3072,6 +3404,107 @@ static void ResetMonDataStruct(struct DebugMonData *sDebugMonData)
 #define tIsComplex  data[5]
 #define tSpriteId   data[6]
 #define tIterator   data[7]
+
+static const u8 *Debug_GetRibbonName(u8 ribbonId)
+{
+    switch (ribbonId)
+    {
+    case 0xFF:
+        return sDebugText_Dashes;
+    case MARINE_RIBBON:
+        return sDebugText_RibbonMarine;
+    case LAND_RIBBON:
+        return sDebugText_RibbonLand;
+    case SKY_RIBBON:
+        return sDebugText_RibbonSky;
+    case COUNTRY_RIBBON:
+        return sDebugText_RibbonCountry;
+    case NATIONAL_RIBBON:
+        return sDebugText_RibbonNational;
+    case EARTH_RIBBON:
+        return sDebugText_RibbonEarth;
+    case WORLD_RIBBON:
+        return sDebugText_RibbonWorld;
+    default:
+        return gRibbonDescriptionPointers[ribbonId][0];
+    }
+}
+
+static void Debug_Display_RibbonInfo(u32 ribbonId, u32 digit, u8 windowId)
+{
+    StringCopy(gStringVar2, gText_DigitIndicator[digit]);
+    if (ribbonId == 0xFF)
+        StringCopy(gStringVar3, COMPOUND_STRING("--"));
+    else
+        ConvertIntToDecimalStringN(gStringVar3, ribbonId, STR_CONV_MODE_LEADING_ZEROS, 2);
+    StringCopyPadded(gStringVar3, gStringVar3, CHAR_SPACE, 15);
+    {
+        u8 *end = StringCopy(gStringVar1, Debug_GetRibbonName(ribbonId));
+        WrapFontIdToFit(gStringVar1, end, DEBUG_MENU_FONT, WindowWidthPx(windowId));
+    }
+    StringExpandPlaceholders(gStringVar4, sDebugText_PokemonRibbon);
+    AddTextPrinterParameterized(windowId, DEBUG_MENU_FONT, gStringVar4, 0, 0, 0, NULL);
+}
+
+static void Debug_ApplyRibbonToMon(struct Pokemon *mon, u8 ribbonId)
+{
+    u8 value;
+
+    if (ribbonId == 0xFF)
+        return;
+
+    value = 1;
+    switch (ribbonId)
+    {
+    case CHAMPION_RIBBON: SetMonData(mon, MON_DATA_CHAMPION_RIBBON, &value); break;
+    case COOL_RIBBON_NORMAL:
+    case COOL_RIBBON_SUPER:
+    case COOL_RIBBON_HYPER:
+    case COOL_RIBBON_MASTER:
+        value = ribbonId - COOL_RIBBON_NORMAL + 1;
+        SetMonData(mon, MON_DATA_COOL_RIBBON, &value);
+        break;
+    case BEAUTY_RIBBON_NORMAL:
+    case BEAUTY_RIBBON_SUPER:
+    case BEAUTY_RIBBON_HYPER:
+    case BEAUTY_RIBBON_MASTER:
+        value = ribbonId - BEAUTY_RIBBON_NORMAL + 1;
+        SetMonData(mon, MON_DATA_BEAUTY_RIBBON, &value);
+        break;
+    case CUTE_RIBBON_NORMAL:
+    case CUTE_RIBBON_SUPER:
+    case CUTE_RIBBON_HYPER:
+    case CUTE_RIBBON_MASTER:
+        value = ribbonId - CUTE_RIBBON_NORMAL + 1;
+        SetMonData(mon, MON_DATA_CUTE_RIBBON, &value);
+        break;
+    case SMART_RIBBON_NORMAL:
+    case SMART_RIBBON_SUPER:
+    case SMART_RIBBON_HYPER:
+    case SMART_RIBBON_MASTER:
+        value = ribbonId - SMART_RIBBON_NORMAL + 1;
+        SetMonData(mon, MON_DATA_SMART_RIBBON, &value);
+        break;
+    case TOUGH_RIBBON_NORMAL:
+    case TOUGH_RIBBON_SUPER:
+    case TOUGH_RIBBON_HYPER:
+    case TOUGH_RIBBON_MASTER:
+        value = ribbonId - TOUGH_RIBBON_NORMAL + 1;
+        SetMonData(mon, MON_DATA_TOUGH_RIBBON, &value);
+        break;
+    case WINNING_RIBBON: SetMonData(mon, MON_DATA_WINNING_RIBBON, &value); break;
+    case VICTORY_RIBBON: SetMonData(mon, MON_DATA_VICTORY_RIBBON, &value); break;
+    case ARTIST_RIBBON: SetMonData(mon, MON_DATA_ARTIST_RIBBON, &value); break;
+    case EFFORT_RIBBON: SetMonData(mon, MON_DATA_EFFORT_RIBBON, &value); break;
+    case MARINE_RIBBON: SetMonData(mon, MON_DATA_MARINE_RIBBON, &value); break;
+    case LAND_RIBBON: SetMonData(mon, MON_DATA_LAND_RIBBON, &value); break;
+    case SKY_RIBBON: SetMonData(mon, MON_DATA_SKY_RIBBON, &value); break;
+    case COUNTRY_RIBBON: SetMonData(mon, MON_DATA_COUNTRY_RIBBON, &value); break;
+    case NATIONAL_RIBBON: SetMonData(mon, MON_DATA_NATIONAL_RIBBON, &value); break;
+    case EARTH_RIBBON: SetMonData(mon, MON_DATA_EARTH_RIBBON, &value); break;
+    case WORLD_RIBBON: SetMonData(mon, MON_DATA_WORLD_RIBBON, &value); break;
+    }
+}
 
 static void Debug_Display_SpeciesInfo(u32 species, u32 digit, u8 windowId)
 {
@@ -3667,10 +4100,39 @@ static void DebugAction_Give_Pokemon_Move(u8 taskId)
         {
             gTasks[taskId].tInput = 0;
             gTasks[taskId].tDigit = 0;
-
-            PlaySE(MUS_LEVEL_UP);
-            gTasks[taskId].func = DebugAction_Give_Pokemon_ComplexCreateMon;
+            Debug_Display_RibbonInfo(0xFF, gTasks[taskId].tDigit, gTasks[taskId].tSubWindowId);
+            gTasks[taskId].func = DebugAction_Give_Pokemon_SelectRibbon;
         }
+    }
+    else if (JOY_NEW(B_BUTTON))
+    {
+        PlaySE(SE_SELECT);
+        Free(sDebugMonData);
+        DebugAction_DestroyExtraWindow(taskId);
+    }
+}
+
+static void DebugAction_Give_Pokemon_SelectRibbon(u8 taskId)
+{
+    if (JOY_NEW(DPAD_ANY))
+    {
+        PlaySE(SE_SELECT);
+        Debug_HandleInput_Numeric(taskId, 0, WORLD_RIBBON + 1, 3);
+        if (gTasks[taskId].tInput == 0)
+            Debug_Display_RibbonInfo(0xFF, gTasks[taskId].tDigit, gTasks[taskId].tSubWindowId);
+        else
+            Debug_Display_RibbonInfo(gTasks[taskId].tInput - 1, gTasks[taskId].tDigit, gTasks[taskId].tSubWindowId);
+    }
+
+    if (JOY_NEW(A_BUTTON))
+    {
+        if (gTasks[taskId].tInput == 0)
+            sDebugMonData->ribbonId = 0xFF;
+        else
+            sDebugMonData->ribbonId = gTasks[taskId].tInput - 1;
+
+        PlaySE(MUS_LEVEL_UP);
+        gTasks[taskId].func = DebugAction_Give_Pokemon_ComplexCreateMon;
     }
     else if (JOY_NEW(B_BUTTON))
     {
@@ -3699,6 +4161,7 @@ static void DebugAction_Give_Pokemon_ComplexCreateMon(u8 taskId) //https://githu
     u32 teraType    = sDebugMonData->teraType;
     u32 dmaxLevel   = sDebugMonData->dynamaxLevel;
     u32 gmaxFactor  = sDebugMonData->gmaxFactor;
+    u8 ribbonId     = sDebugMonData->ribbonId;
     for (u32 i = 0; i < MAX_MON_MOVES; i++)
     {
         moves[i] = sDebugMonData->monMoves[i];
@@ -3762,6 +4225,8 @@ static void DebugAction_Give_Pokemon_ComplexCreateMon(u8 taskId) //https://githu
     }
 
     SetMonData(&mon, MON_DATA_ABILITY_NUM, &abilityNum);
+
+    Debug_ApplyRibbonToMon(&mon, ribbonId);
 
     //Update mon stats before giving it to the player
     CalculateMonStats(&mon);

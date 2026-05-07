@@ -746,9 +746,11 @@ static void CreatePCMultichoice(void)
         AddTextPrinterParameterized(windowId, FONT_NORMAL, gText_LogOff, x, 33, TEXT_SKIP_DRAW, NULL);
     }
 
-    // Change PC name if player has met Lanette
+    // Change PC name after the storage system owner is known.
     if (FlagGet(FLAG_SYS_PC_LANETTE))
         AddTextPrinterParameterized(windowId, FONT_NORMAL, gText_LanettesPC, x, 1, TEXT_SKIP_DRAW, NULL);
+    else if (FlagGet(FLAG_SYS_NOT_SOMEONES_PC))
+        AddTextPrinterParameterized(windowId, FONT_NORMAL, gText_JinwoosPC, x, 1, TEXT_SKIP_DRAW, NULL);
     else
         AddTextPrinterParameterized(windowId, FONT_NORMAL, gText_SomeonesPC, x, 1, TEXT_SKIP_DRAW, NULL);
 

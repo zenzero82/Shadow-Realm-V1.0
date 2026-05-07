@@ -23,6 +23,7 @@
 #include "constants/event_objects.h"
 #include "item.h"
 #include "item_menu.h"
+#include "bug_contest.h"
 #include "item_use.h"
 #include "mail.h"
 #include "main.h"
@@ -48,6 +49,8 @@
 #include "constants/event_objects.h"
 #include "constants/item_effects.h"
 #include "constants/items.h"
+#include "constants/map_groups.h"
+#include "constants/opponents.h"
 #include "constants/songs.h"
 #include "constants/map_types.h"
 
@@ -81,10 +84,17 @@ static void Task_UseRepel(u8);
 static void Task_UseLure(u8 taskId);
 static void Task_CloseCantUseKeyItemMessage(u8);
 static void Task_CloseCantUseItemMessageWait(u8);
+static void PromptUseExpShare(u8 taskId);
+static void ToggleExpShareOn(u8 taskId);
+static void ToggleExpShareOff(u8 taskId);
+static void CloseExpSharePrompt(u8 taskId);
 static void SetDistanceOfClosestHiddenItem(u8, s16, s16);
 static void CB2_OpenPokeblockFromBag(void);
 static void ItemUseOnFieldCB_Honey(u8 taskId);
 static bool32 IsValidLocationForVsSeeker(void);
+static const u8 *OddKeystone_GetHintText(void);
+extern const u8 RuinsOfAlph_WordsRoom2_EventScript_CameraPuzzleSolved[];
+extern const u8 RuinsOfAlph_WordsRoom2_EventScript_CameraPuzzleFailed[];
 
 static const u8 sText_CantDismountBike[] = _("You can't dismount your BIKE here.{PAUSE_UNTIL_PRESS}");
 static const u8 sText_ItemFinderNearby[] = _("Huh?\nThe ITEMFINDER's responding!\pThere's an item buried around here!{PAUSE_UNTIL_PRESS}");
@@ -100,6 +110,9 @@ static const u8 sText_UsedVar2WildRepelled[] = _("{PLAYER} used the\n{STR_VAR_2}
 static const u8 sText_PlayedPokeFluteCatchy[] = _("Played the POKé FLUTE.\pNow, that's a catchy tune!{PAUSE_UNTIL_PRESS}");
 static const u8 sText_PlayedPokeFlute[] = _("Played the POKé FLUTE.");
 static const u8 sText_PokeFluteAwakenedMon[] = _("The POKé FLUTE awakened sleeping\nPOKéMON.{PAUSE_UNTIL_PRESS}");
+static const u8 sText_OddKeystone_Quiet[] = _("{COLOR LIGHT_GRAY}... ... ...\pThe keystone is silent.{PAUSE_UNTIL_PRESS}");
+static const u8 sText_OddKeystone_Celadon[] = _("{COLOR LIGHT_GRAY}...a rooftop...\p{COLOR LIGHT_GRAY}A girl touched by the night sky\nwaits above CELADON...{PAUSE_UNTIL_PRESS}");
+static const u8 sText_OddKeystone_Goldenrod[] = _("{COLOR LIGHT_GRAY}...higher still...\p{COLOR LIGHT_GRAY}Past GOLDENROD'S lights, a whispering\nHex Maniac waits on the roof...{PAUSE_UNTIL_PRESS}");
 
 // EWRAM variables
 EWRAM_DATA static void(*sItemUseOnFieldCB)(u8 taskId) = NULL;
@@ -123,6 +136,7 @@ static const u8 sClockwiseDirections[] = {DIR_NORTH, DIR_EAST, DIR_SOUTH, DIR_WE
 
 static const s8 sPhotoCameraSlotOffsets[PHOTO_CAMERA_MAX_MON] = {-3, -2, -1, 1, 2, 3};
 static const u8 sPhotoCameraPartyOrder[PHOTO_CAMERA_MAX_MON] = {0, 2, 4, 1, 3, 5};
+static const u8 sPhotoCameraPartyOrderRuinsOfAlphOmanyte[PHOTO_CAMERA_MAX_MON] = {0, 1, 2, 3, 4, 5};
 static const u8 sPhotoCameraLocalIds[PHOTO_CAMERA_MAX_MON] =
 {
     LOCALID_PHOTO_CAMERA_MON_1,
@@ -142,6 +156,18 @@ static const struct YesNoFuncTable sUseTMHMYesNoFuncTable =
 {
     .yesFunc = UseTMHM,
     .noFunc = CloseItemMessage,
+};
+
+static const struct YesNoFuncTable sUseExpShareYesNoOnFuncTable =
+{
+    .yesFunc = ToggleExpShareOn,
+    .noFunc = CloseExpSharePrompt,
+};
+
+static const struct YesNoFuncTable sUseExpShareYesNoOffFuncTable =
+{
+    .yesFunc = ToggleExpShareOff,
+    .noFunc = CloseExpSharePrompt,
 };
 
 #define tEnigmaBerryType data[4]
@@ -262,25 +288,39 @@ void ItemUseOutOfBattle_ExpShare(u8 taskId)
 {
 #if I_EXP_SHARE_ITEM >= GEN_6
     if (IsGen6ExpShareEnabled())
-    {
-        PlaySE(SE_PC_OFF);
-        if (!gTasks[taskId].data[2]) // to account for pressing select in the overworld
-            DisplayItemMessageOnField(taskId, gText_ExpShareOff, Task_CloseCantUseKeyItemMessage);
-        else
-            DisplayItemMessage(taskId, FONT_NORMAL, gText_ExpShareOff, CloseItemMessage);
-    }
+        DisplayItemMessage(taskId, FONT_NORMAL, gText_TurnOffExpShare, PromptUseExpShare);
     else
-    {
-        PlaySE(SE_EXP_MAX);
-        if (!gTasks[taskId].data[2]) // to account for pressing select in the overworld
-            DisplayItemMessageOnField(taskId, gText_ExpShareOn, Task_CloseCantUseKeyItemMessage);
-        else
-            DisplayItemMessage(taskId, FONT_NORMAL, gText_ExpShareOn, CloseItemMessage);
-    }
-    FlagToggle(I_EXP_SHARE_FLAG);
+        DisplayItemMessage(taskId, FONT_NORMAL, gText_TurnOnExpShare, PromptUseExpShare);
 #else
     DisplayDadsAdviceCannotUseItemMessage(taskId, gTasks[taskId].tUsingRegisteredKeyItem);
 #endif
+}
+
+static void PromptUseExpShare(u8 taskId)
+{
+    if (IsGen6ExpShareEnabled())
+        BagMenu_YesNo(taskId, ITEMWIN_YESNO_HIGH, &sUseExpShareYesNoOffFuncTable);
+    else
+        BagMenu_YesNo(taskId, ITEMWIN_YESNO_HIGH, &sUseExpShareYesNoOnFuncTable);
+}
+
+static void ToggleExpShareOn(u8 taskId)
+{
+    FlagSet(I_EXP_SHARE_FLAG);
+    PlaySE(SE_EXP_MAX);
+    DisplayItemMessage(taskId, FONT_NORMAL, gText_ExpShareOn, CloseItemMessage);
+}
+
+static void ToggleExpShareOff(u8 taskId)
+{
+    FlagClear(I_EXP_SHARE_FLAG);
+    PlaySE(SE_PC_OFF);
+    DisplayItemMessage(taskId, FONT_NORMAL, gText_ExpShareOff, CloseItemMessage);
+}
+
+static void CloseExpSharePrompt(u8 taskId)
+{
+    CloseItemMessage(taskId);
 }
 
 void ItemUseOutOfBattle_Bike(u8 taskId)
@@ -311,10 +351,10 @@ void ItemUseOutOfBattle_Bike(u8 taskId)
 
 static void ItemUseOnFieldCB_Bike(u8 taskId)
 {
-    if (GetItemSecondaryId(gSpecialVar_ItemId) == MACH_BIKE)
-        GetOnOffBike(PLAYER_AVATAR_FLAG_MACH_BIKE);
-    else // ACRO_BIKE
+    if (VarGet(VAR_BICYCLE_MOD) == 1)
         GetOnOffBike(PLAYER_AVATAR_FLAG_ACRO_BIKE);
+    else
+        GetOnOffBike(PLAYER_AVATAR_FLAG_MACH_BIKE);
 
     FollowerNPC_HandleBike();
     ScriptUnfreezeObjectEvents();
@@ -1206,13 +1246,22 @@ bool32 CanThrowBall(void)
 static const u8 sText_CantThrowPokeBall_TwoMons[] = _("Cannot throw a ball!\nThere are two Pokémon out there!\p");
 static const u8 sText_CantThrowPokeBall_SemiInvulnerable[] = _("Cannot throw a ball!\nThere's no Pokémon in sight!\p");
 static const u8 sText_CantThrowPokeBall_Disabled[] = _("POKé BALLS cannot be used\nright now!\p");
+static const u8 sText_BugContestSportBallOnly[] = _("Only SPORT BALLS may be used\nin the Bug-Catching Contest!\p");
 void ItemUseInBattle_PokeBall(u8 taskId)
 {
+    if (GetBugContestFlag() && gSpecialVar_ItemId != ITEM_SPORT_BALL)
+    {
+        if (!InBattlePyramid())
+            DisplayItemMessage(taskId, FONT_NORMAL, sText_BugContestSportBallOnly, CloseItemMessage);
+        else
+            DisplayItemMessageInBattlePyramid(taskId, sText_BugContestSportBallOnly, Task_CloseBattlePyramidBagMessage);
+        return;
+    }
+
     switch (GetBallThrowableState())
     {
     case BALL_THROW_ABLE:
     default:
-        RemoveBagItem(gSpecialVar_ItemId, 1);
         if (!InBattlePyramid())
             Task_FadeAndCloseBagMenu(taskId);
         else
@@ -1562,6 +1611,38 @@ void ItemUseOutOfBattle_CannotUse(u8 taskId)
     DisplayDadsAdviceCannotUseItemMessage(taskId, gTasks[taskId].tUsingRegisteredKeyItem);
 }
 
+static const u8 *OddKeystone_GetHintText(void)
+{
+    bool8 celadonDone = FlagGet(TRAINER_FLAGS_START + TRAINER_CELADON_ODD_KEYSTONE);
+    bool8 goldenrodDone = FlagGet(TRAINER_FLAGS_START + TRAINER_GOLDENROD_ODD_KEYSTONE);
+    u16 mapSec = GetCurrentRegionMapSectionId();
+
+    if (!FlagGet(FLAG_QUEST_ODD_KEYSTONE_STARTED) || FlagGet(FLAG_QUEST_ODD_KEYSTONE_COMPLETED))
+        return sText_OddKeystone_Quiet;
+
+    if (!celadonDone && mapSec == MAPSEC_CELADON_CITY)
+        return sText_OddKeystone_Celadon;
+    if (!goldenrodDone && mapSec == MAPSEC_GOLDENROD_CITY)
+        return sText_OddKeystone_Goldenrod;
+
+    if (!celadonDone)
+        return sText_OddKeystone_Celadon;
+    if (!goldenrodDone)
+        return sText_OddKeystone_Goldenrod;
+
+    return sText_OddKeystone_Quiet;
+}
+
+void ItemUseOutOfBattle_OddKeystone(u8 taskId)
+{
+    const u8 *hintText = OddKeystone_GetHintText();
+
+    if (!gTasks[taskId].tUsingRegisteredKeyItem)
+        DisplayItemMessage(taskId, FONT_NORMAL, hintText, CloseItemMessage);
+    else
+        DisplayItemMessageOnField(taskId, hintText, Task_CloseCantUseKeyItemMessage);
+}
+
 static bool32 IsValidLocationForVsSeeker(void)
 {
     u16 mapGroup = gSaveBlock1Ptr->location.mapGroup;
@@ -1682,6 +1763,20 @@ static bool8 PhotoCamera_IsPartySlotUsable(u8 partyIndex, u8 partyCount)
     return TRUE;
 }
 
+static bool8 PhotoCamera_IsRuinsOfAlphOmanyteRoom(void)
+{
+    return gSaveBlock1Ptr->location.mapGroup == MAP_GROUP(MAP_RUINS_OF_ALPH_WORDS_ROOM2)
+        && gSaveBlock1Ptr->location.mapNum == MAP_NUM(MAP_RUINS_OF_ALPH_WORDS_ROOM2);
+}
+
+static const u8 *PhotoCamera_GetPartyOrder(void)
+{
+    if (PhotoCamera_IsRuinsOfAlphOmanyteRoom())
+        return sPhotoCameraPartyOrderRuinsOfAlphOmanyte;
+
+    return sPhotoCameraPartyOrder;
+}
+
 static bool8 PhotoCamera_IsTileFree(s16 x, s16 y, u8 elevation, bool8 allowPlayer)
 {
     u8 behavior;
@@ -1706,6 +1801,7 @@ static bool8 PhotoCamera_CanUseAt(s16 baseX, s16 baseY, u8 elevation)
     u8 active = 0;
     u8 usable = 0;
     u8 partyCount = CalculatePlayerPartyCount();
+    const u8 *partyOrder = PhotoCamera_GetPartyOrder();
 
     if (!IsPlayerStandingStill())
         return FALSE;
@@ -1715,7 +1811,7 @@ static bool8 PhotoCamera_CanUseAt(s16 baseX, s16 baseY, u8 elevation)
 
     for (i = 0; i < PHOTO_CAMERA_MAX_MON; i++)
     {
-        u8 partyIndex = sPhotoCameraPartyOrder[i];
+        u8 partyIndex = partyOrder[i];
         s16 x;
 
         if (!PhotoCamera_IsPartySlotUsable(partyIndex, partyCount))
@@ -1806,13 +1902,14 @@ static bool8 PhotoCamera_SpawnPartyLine(s16 baseX, s16 baseY, u8 elevation)
     u8 i;
     u8 spawned = 0;
     u8 partyCount = CalculatePlayerPartyCount();
+    const u8 *partyOrder = PhotoCamera_GetPartyOrder();
 
     for (i = 0; i < PHOTO_CAMERA_MAX_MON; i++)
         sPhotoCameraObjectIds[i] = OBJECT_EVENTS_COUNT;
 
     for (i = 0; i < PHOTO_CAMERA_MAX_MON; i++)
     {
-        u8 partyIndex = sPhotoCameraPartyOrder[i];
+        u8 partyIndex = partyOrder[i];
         u16 graphicsId;
         u8 objectEventId;
         s16 x;
@@ -1856,8 +1953,71 @@ static void PhotoCamera_End(u8 taskId)
         SetMainCallback2(CB2_ReturnToBagMenuPocket);
 }
 
+static void PhotoCamera_EndAndRunScript(u8 taskId, const u8 *script)
+{
+    PhotoCamera_ClearObjects();
+    PhotoCamera_RestoreFollower();
+    ScriptUnfreezeObjectEvents();
+    UnlockPlayerFieldControls();
+    DestroyTask(taskId);
+    SetMainCallback2(CB2_ReturnToField);
+    ScriptContext_SetupScript(script);
+}
+
+static bool8 PhotoCamera_MonMatchesOmanyteLetter(struct Pokemon *mon, u16 targetSpecies)
+{
+    u16 species = GetMonData(mon, MON_DATA_SPECIES);
+
+    if (!GetMonData(mon, MON_DATA_SANITY_HAS_SPECIES))
+        return FALSE;
+    if (GetMonData(mon, MON_DATA_IS_EGG))
+        return FALSE;
+
+    if (species == SPECIES_UNOWN)
+    {
+        u32 personality = GetMonData(mon, MON_DATA_PERSONALITY);
+        species = GetFormSpeciesId(SPECIES_UNOWN, GET_UNOWN_LETTER(personality));
+    }
+
+    return species == targetSpecies;
+}
+
+static bool8 PhotoCamera_CheckOmanyteRoomSequence(void)
+{
+    static const u16 sRequiredSpecies[PARTY_SIZE] =
+    {
+        SPECIES_UNOWN_H,
+        SPECIES_UNOWN_E,
+        SPECIES_UNOWN_L,
+        SPECIES_UNOWN_I,
+        SPECIES_UNOWN_X,
+        SPECIES_UNOWN_EXCLAMATION,
+    };
+    u8 i;
+
+    if (CalculatePlayerPartyCount() < PARTY_SIZE)
+        return FALSE;
+
+    for (i = 0; i < PARTY_SIZE; i++)
+    {
+        if (!PhotoCamera_MonMatchesOmanyteLetter(&gPlayerParty[i], sRequiredSpecies[i]))
+            return FALSE;
+    }
+
+    return TRUE;
+}
+
 static void Task_PhotoCamera_HandleInput(u8 taskId)
 {
+    if (JOY_NEW(A_BUTTON) && PhotoCamera_IsRuinsOfAlphOmanyteRoom())
+    {
+        if (PhotoCamera_CheckOmanyteRoomSequence())
+            PhotoCamera_EndAndRunScript(taskId, RuinsOfAlph_WordsRoom2_EventScript_CameraPuzzleSolved);
+        else
+            PhotoCamera_EndAndRunScript(taskId, RuinsOfAlph_WordsRoom2_EventScript_CameraPuzzleFailed);
+        return;
+    }
+
     if (JOY_NEW(B_BUTTON))
         PhotoCamera_End(taskId);
 }

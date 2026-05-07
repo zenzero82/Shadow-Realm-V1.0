@@ -109,7 +109,7 @@
       "flag": "0"
     },
     {
-      "graphics_id": "OBJ_EVENT_GFX_BOY_3",
+      "graphics_id": "OBJ_EVENT_GFX_POKEMON_RANGER_M",
       "x": 15,
       "y": 7,
       "elevation": 3,
@@ -174,7 +174,7 @@
       "flag": "0"
     },
     {
-      "graphics_id": "OBJ_EVENT_GFX_PSYCHIC_M",
+      "graphics_id": "OBJ_EVENT_GFX_KINDLER",
       "x": 3,
       "y": 39,
       "elevation": 3,
@@ -463,7 +463,7 @@
       "flag": "0"
     },
     {
-      "graphics_id": "OBJ_EVENT_GFX_MAN_5",
+      "graphics_id": "OBJ_EVENT_GFX_ROCKER",
       "x": 36,
       "y": 40,
       "elevation": 3,

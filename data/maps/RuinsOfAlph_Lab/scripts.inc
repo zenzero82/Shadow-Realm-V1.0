@@ -112,10 +112,10 @@ RuinsOfAlph_Lab_EventScript_ZygardeCube::
 	lock
 	giveitem ITEM_ZYGARDE_CUBE
 	goto_if_eq VAR_RESULT, FALSE, RuinsOfAlph_Lab_EventScript_ZygardeCube_BagFull
+	setflag FLAG_QUEST_100_POWER_STARTED
 	setflag FLAG_HIDE_RUINS_OF_ALPH_LAB_ZYGARDE_CUBE
 	hideobjectat RUINSOFALPH_LAB_LOCALID_ZYGARDE_CUBE, MAP_RUINS_OF_ALPH_LAB
 	removeobject RUINSOFALPH_LAB_LOCALID_ZYGARDE_CUBE
-	msgbox ZygardeCube_Text_GotCube, MSGBOX_DEFAULT
 	release
 	end
 

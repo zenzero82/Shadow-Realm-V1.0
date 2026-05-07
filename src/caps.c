@@ -13,10 +13,10 @@ static u32 GetLevelCapForMode(u8 levelCapMode)
         {FLAG_BADGE10_GET, 20},
         {FLAG_BADGE17_GET, 24},
         {FLAG_BADGE18_GET, 28},
-        {FLAG_BADGE05_GET, 31},
-        {FLAG_BADGE06_GET, 33},
-        {FLAG_BADGE07_GET, 42},
-        {FLAG_BADGE08_GET, 46},
+        {FLAG_BADGE12_GET, 32},
+        {FLAG_BADGE11_GET, 36},
+        {FLAG_BADGE19_GET, 40},
+        {FLAG_BADGE01_GET, 44},
         {FLAG_IS_CHAMPION, 58},
     };
 

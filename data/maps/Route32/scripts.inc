@@ -122,6 +122,30 @@ Route32_EventScript_BirdKeeper_After::
 	release
 	end
 
+Route32_EventScript_Youngster2::
+	setspeaker Route32_Speaker_YoungsterNPC
+	trainerbattle_single TRAINER_ROUTE32_YOUNGSTER_2, Route32_Text_Youngster2_Intro, Route32_Text_Youngster2_Defeat, Route32_EventScript_Youngster2_After
+	end
+
+Route32_EventScript_Youngster2_After::
+	setspeaker Route32_Speaker_YoungsterNPC
+	msgbox Route32_Text_Youngster2_After, MSGBOX_NPC
+	closemessage
+	release
+	end
+
+Route32_EventScript_CooltrainerTrainer::
+	setspeaker Route32_Speaker_Cooltrainer
+	trainerbattle_single TRAINER_ROUTE32_COOLTRAINER, Route32_Text_Cooltrainer_Intro, Route32_Text_Cooltrainer_Defeat, Route32_EventScript_CooltrainerTrainer_After
+	end
+
+Route32_EventScript_CooltrainerTrainer_After::
+	setspeaker Route32_Speaker_Cooltrainer
+	msgbox Route32_Text_Cooltrainer_After, MSGBOX_NPC
+	closemessage
+	release
+	end
+
 @ =========================================================
 @ NPCS
 @ =========================================================
@@ -141,13 +165,13 @@ Route32_EventScript_Camper::
 Route32_EventScript_YoungsterNPC::
 	faceplayer
 	setspeaker Route32_Speaker_YoungsterNPC
-	msgbox Route32_Text_YoungsterNPC, MSGBOX_NPC
+	msgbox Route32_Text_Youngster2_After, MSGBOX_NPC
 	end
 
 Route32_EventScript_Cooltrainer::
 	faceplayer
 	setspeaker Route32_Speaker_Cooltrainer
-	msgbox Route32_Text_Cooltrainer, MSGBOX_NPC
+	msgbox Route32_Text_Cooltrainer_After, MSGBOX_NPC
 	end
 
 Route32_EventScript_AquaGrunt::
@@ -243,11 +267,25 @@ Route32_Text_Camper:
 	.string "I'm waiting before heading into\n"
 	.string "UNION CAVE.$"
 
-Route32_Text_YoungsterNPC:
+Route32_Text_Youngster2_Intro:
+	.string "I train by the RUINS every day.\p"
+	.string "Let's see what you've got!$"
+
+Route32_Text_Youngster2_Defeat:
+	.string "Whoa, that's ancient power!$"
+
+Route32_Text_Youngster2_After:
 	.string "The RUINS nearby are full of old\n"
 	.string "mysteries.$"
 
-Route32_Text_Cooltrainer:
+Route32_Text_Cooltrainer_Intro:
+	.string "Before I enter UNION CAVE, I test\n"
+	.string "my team on every challenger.$"
+
+Route32_Text_Cooltrainer_Defeat:
+	.string "So much for my warm-up.$"
+
+Route32_Text_Cooltrainer_After:
 	.string "I keep my team ready for the cave.\n"
 	.string "It's rough down there.$"
 

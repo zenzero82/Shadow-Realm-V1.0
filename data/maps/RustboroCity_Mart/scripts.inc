@@ -51,16 +51,31 @@ RustboroCity_Mart_Pokemart_Expanded:
 	pokemartlistend
 
 RustboroCity_Mart_EventScript_PokefanF::
+	faceplayer
+	setspeaker RustboroCity_Mart_Speaker_Mara
 	msgbox RustboroCity_Mart_Text_BuyingHealsInCaseOfShroomish, MSGBOX_NPC
 	end
 
 RustboroCity_Mart_EventScript_Boy::
+	faceplayer
+	setspeaker RustboroCity_Mart_Speaker_Tobin
 	msgbox RustboroCity_Mart_Text_ShouldBuySuperPotionsInstead, MSGBOX_NPC
 	end
 
 RustboroCity_Mart_EventScript_BugCatcher::
+	faceplayer
+	setspeaker RustboroCity_Mart_Speaker_Wes
 	msgbox RustboroCity_Mart_Text_GettingEscapeRopeJustInCase, MSGBOX_NPC
 	end
+
+RustboroCity_Mart_Speaker_Mara:
+	.string "Mara$"
+
+RustboroCity_Mart_Speaker_Tobin:
+	.string "Tobin$"
+
+RustboroCity_Mart_Speaker_Wes:
+	.string "Wes$"
 
 RustboroCity_Mart_Text_BuyingHealsInCaseOfShroomish:
 	.string "I'm buying some PARLYZ HEALS and\n"

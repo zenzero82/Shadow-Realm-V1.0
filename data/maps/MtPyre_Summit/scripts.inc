@@ -18,7 +18,9 @@ MtPyre_Summit_EventScript_GimmighoulDefeated::
 	setvar VAR_0x8000, 75
 	additem ITEM_GIMMIGHOUL_COIN, 75
 	buffernumberstring STR_VAR_1, VAR_0x8000
+	playfanfare MUS_OBTAIN_ITEM
 	msgbox gText_GimmighoulCoinsObtained, MSGBOX_DEFAULT
+	waitfanfare
 	goto Common_EventScript_RemoveStaticPokemon
 	end
 
@@ -630,4 +632,3 @@ MtPyre_Summit_Text_HoennTrioTale:
 	.string "becalmed the two enraged POKéMON.\p"
 	.string "Then, its duty done, the green POKéMON\n"
 	.string "flew off into the wild blue yonder…$"
-

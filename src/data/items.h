@@ -2911,7 +2911,7 @@ const struct Item gItemsInfo[] =
             "occasionally."),
         .pocket = POCKET_KEY_ITEMS,
         .type = ITEM_USE_BAG_MENU,
-        .fieldUseFunc = ItemUseOutOfBattle_CannotUse,
+        .fieldUseFunc = ItemUseOutOfBattle_OddKeystone,
         .flingPower = 80,
         .iconPic = gItemIcon_OddKeystone,
         .iconPalette = gItemIconPalette_OddKeystone,
@@ -6145,7 +6145,41 @@ const struct Item gItemsInfo[] =
         .iconPalette = gItemIconPalette_Greninjite,
     },
 
-// Gems
+    [ITEM_RAICHUNITE_X] =
+    {
+        .name = _("Raichunite X"),
+        .price = 0,
+        .holdEffect = HOLD_EFFECT_MEGA_STONE,
+        .description = COMPOUND_STRING(
+            "This stone enables\n"
+            "Raichu to Mega\n"
+            "Evolve in battle."),
+        .pocket = POCKET_ITEMS,
+        .type = ITEM_USE_BAG_MENU,
+        .fieldUseFunc = ItemUseOutOfBattle_CannotUse,
+        .flingPower = 80,
+        .iconPic = gItemIcon_RaichuniteX,
+        .iconPalette = gItemIconPalette_RaichuniteX,
+    },
+
+    [ITEM_RAICHUNITE_Y] =
+    {
+        .name = _("Raichunite Y"),
+        .price = 0,
+        .holdEffect = HOLD_EFFECT_MEGA_STONE,
+        .description = COMPOUND_STRING(
+            "This stone enables\n"
+            "Raichu to Mega\n"
+            "Evolve in battle."),
+        .pocket = POCKET_ITEMS,
+        .type = ITEM_USE_BAG_MENU,
+        .fieldUseFunc = ItemUseOutOfBattle_CannotUse,
+        .flingPower = 80,
+        .iconPic = gItemIcon_RaichuniteY,
+        .iconPalette = gItemIconPalette_RaichuniteY,
+    },
+
+    // Gems
 
     [ITEM_NORMAL_GEM] =
     {
@@ -12303,7 +12337,8 @@ const struct Item gItemsInfo[] =
         .importance = 1,
         .pocket = POCKET_KEY_ITEMS,
         .type = ITEM_USE_FIELD,
-        .fieldUseFunc = ItemUseOutOfBattle_CannotUse,
+        .fieldUseFunc = ItemUseOutOfBattle_Bike,
+        .secondaryId = MACH_BIKE,
         .iconPic = gItemIcon_Bicycle,
         .iconPalette = gItemIconPalette_Bicycle,
     },

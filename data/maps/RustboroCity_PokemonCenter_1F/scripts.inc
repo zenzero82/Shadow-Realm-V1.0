@@ -17,16 +17,31 @@ RustboroCity_PokemonCenter_1F_EventScript_Nurse::
 	end
 
 RustboroCity_PokemonCenter_1F_EventScript_Man::
+	faceplayer
+	setspeaker RustboroCity_PokemonCenter_1F_Speaker_Benton
 	msgbox RustboroCity_PokemonCenter_1F_Text_PokemonHavePersonalities, MSGBOX_NPC
 	end
 
 RustboroCity_PokemonCenter_1F_EventScript_Boy::
+	faceplayer
+	setspeaker RustboroCity_PokemonCenter_1F_Speaker_Nico
 	msgbox RustboroCity_PokemonCenter_1F_Text_MaleAndFemalePokemon, MSGBOX_NPC
 	end
 
 RustboroCity_PokemonCenter_1F_EventScript_Girl::
+	faceplayer
+	setspeaker RustboroCity_PokemonCenter_1F_Speaker_Rhea
 	msgbox RustboroCity_PokemonCenter_1F_Text_HMCutNextDoor, MSGBOX_NPC
 	end
+
+RustboroCity_PokemonCenter_1F_Speaker_Benton:
+	.string "Benton$"
+
+RustboroCity_PokemonCenter_1F_Speaker_Nico:
+	.string "Nico$"
+
+RustboroCity_PokemonCenter_1F_Speaker_Rhea:
+	.string "Rhea$"
 
 RustboroCity_PokemonCenter_1F_Text_PokemonHavePersonalities:
 	.string "My POKéMON has a NAIVE nature, and my\n"
@@ -44,4 +59,3 @@ RustboroCity_PokemonCenter_1F_Text_HMCutNextDoor:
 	.string "The man next door gave me an HM!\p"
 	.string "I used it to teach my POKéMON how to\n"
 	.string "CUT down skinny trees.$"
-

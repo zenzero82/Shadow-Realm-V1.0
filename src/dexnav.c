@@ -120,9 +120,15 @@ struct DexNavGUI
     MainCallback savedCallback;
     u8 state;
     u8 cursorSpriteId;
+    u8 timeIconSpriteId;
+    u8 selectedTimeOfDay;
     u16 landSpecies[LAND_WILD_COUNT];
     u16 waterSpecies[WATER_WILD_COUNT];
     u16 hiddenSpecies[HIDDEN_WILD_COUNT];
+    u8 landIconSpriteIds[LAND_WILD_COUNT];
+    u8 waterIconSpriteIds[WATER_WILD_COUNT];
+    u8 hiddenIconSpriteIds[HIDDEN_WILD_COUNT];
+    u8 capturedAllSpriteIds[3];
     u8 cursorRow;
     u8 cursorCol;
     u8 environment;
@@ -136,6 +142,7 @@ struct DexNavGUI
 EWRAM_DATA static struct DexNavSearch *sDexNavSearchDataPtr = NULL;
 EWRAM_DATA static struct DexNavGUI *sDexNavUiDataPtr = NULL;
 EWRAM_DATA static u8 *sBg1TilemapBuffer = NULL;
+EWRAM_DATA static u8 sDexNavSelectedTimeOfDay;
 EWRAM_DATA u16 gDexNavSpecies = SPECIES_NONE;
 
 //// Function Declarations
@@ -143,6 +150,9 @@ EWRAM_DATA u16 gDexNavSpecies = SPECIES_NONE;
 static void Task_DexNavWaitFadeIn(u8 taskId);
 static void Task_DexNavMain(u8 taskId);
 static void PrintCurrentSpeciesInfo(void);
+static void PrintTimeOfDayPage(void);
+static void PrintSearchableSpecies(u16 species);
+static void UpdateTimeOfDayIconSprite(void);
 // SEARCH
 static bool8 TryStartHiddenMonFieldEffect(enum EncounterType environment, u8 xSize, u8 ySize, bool8 smallScan);
 static void DexNavGenerateMoveset(u16 species, u8 searchLevel, u8 encounterLevel, u16 *moveDst);
@@ -162,6 +172,9 @@ static void EndDexNavSearchSetupScript(const u8 *script, u8 taskId);
 // HIDDEN MONS
 static void DexNavDrawHiddenIcons(void);
 static void DrawHiddenSearchWindow(u8 width);
+static enum TimeOfDay DexNavGetEncounterTimeOfDay(u32 headerId, enum WildPokemonArea area);
+static void DexNavRefreshEncounterDisplay(void);
+static void DexNavRedrawSpeciesIcon(u8 section, u8 slot);
 
 //// Const Data
 // gui image data
@@ -172,6 +185,8 @@ static const u32 sDexNavGuiPal[] = INCBIN_U32("graphics/dexnav/gui.gbapal");
 static const u32 sSelectionCursorGfx[] = INCBIN_U32("graphics/dexnav/cursor.4bpp.lz");
 static const u16 sSelectionCursorPal[] = INCBIN_U16("graphics/dexnav/cursor.gbapal");
 static const u32 sCapturedAllMonsTiles[] = INCBIN_U32("graphics/dexnav/captured_all.4bpp.lz");  //uses selection cursor pal
+static const u32 sTimeOfDayIconGfx[] = INCBIN_U32("graphics/dexnav/time_icons.4bpp.lz");
+static const u16 sTimeOfDayIconPal[] = INCBIN_U16("graphics/dexnav/time_icons.gbapal");
 
 static const u32 sNoDataGfx[] = INCBIN_U32("graphics/dexnav/no_data.4bpp.lz");
 
@@ -187,6 +202,11 @@ static const u8 sText_DexNav_CaptureToSee[] = _("Capture first!");
 static const u8 sText_DexNav_PressRToRegister[] = _("R TO REGISTER!");
 static const u8 sText_DexNav_SearchForRegisteredSpecies[] = _("Search {STR_VAR_1}");
 static const u8 sText_DexNav_NotFoundHere[] = _("This Pokémon cannot be found here!");
+static const u8 sText_DexNav_TimePage[] = _("{SELECT_BUTTON} {STR_VAR_1}");
+static const u8 sText_DexNav_Morning[] = _("MORNING");
+static const u8 sText_DexNav_Day[] = _("DAY");
+static const u8 sText_DexNav_Evening[] = _("EVENING");
+static const u8 sText_DexNav_Night[] = _("NIGHT");
 static const u8 sText_ThreeQmarks[] = _("???");
 static const u8 sText_SearchLevel[] = _("SEARCH {LV}. {STR_VAR_1}");
 static const u8 sText_MonLevel[] = _("{LV}. {STR_VAR_1}");
@@ -249,6 +269,15 @@ static const struct OamData sHeldItemOam =
     .size = SPRITE_SIZE(8x8),
     .priority = 0,
     .paletteNum = 13,
+};
+
+static const struct OamData sTimeOfDayIconOam =
+{
+    .affineMode = ST_OAM_AFFINE_OFF,
+    .objMode = ST_OAM_OBJ_NORMAL,
+    .shape = SPRITE_SHAPE(8x8),
+    .size = SPRITE_SIZE(8x8),
+    .priority = 0,
 };
 
 static const struct OamData sCapturedAllOam =
@@ -355,6 +384,49 @@ static const struct SpriteTemplate sCaptureAllMonsSpriteTemplate =
     .callback = SpriteCallbackDummy,
 };
 
+static const union AnimCmd sAnimCmdTimeOfDayMorning[] =
+{
+    ANIMCMD_FRAME(0, 1),
+    ANIMCMD_END
+};
+
+static const union AnimCmd sAnimCmdTimeOfDayDay[] =
+{
+    ANIMCMD_FRAME(1, 1),
+    ANIMCMD_END
+};
+
+static const union AnimCmd sAnimCmdTimeOfDayEvening[] =
+{
+    ANIMCMD_FRAME(2, 1),
+    ANIMCMD_END
+};
+
+static const union AnimCmd sAnimCmdTimeOfDayNight[] =
+{
+    ANIMCMD_FRAME(3, 1),
+    ANIMCMD_END
+};
+
+static const union AnimCmd *const sAnimCmdTable_TimeOfDayIcon[] =
+{
+    sAnimCmdTimeOfDayMorning,
+    sAnimCmdTimeOfDayDay,
+    sAnimCmdTimeOfDayEvening,
+    sAnimCmdTimeOfDayNight,
+};
+
+static const struct SpriteTemplate sTimeOfDayIconSpriteTemplate =
+{
+    .tileTag = TIME_OF_DAY_ICON_TAG,
+    .paletteTag = TIME_OF_DAY_ICON_PAL_TAG,
+    .oam = &sTimeOfDayIconOam,
+    .anims = sAnimCmdTable_TimeOfDayIcon,
+    .images = NULL,
+    .affineAnims = gDummySpriteAffineAnimTable,
+    .callback = SpriteCallbackDummy,
+};
+
 static const struct SpriteTemplate sSelectionCursorSpriteTemplate =
 {
     .tileTag = SELECTION_CURSOR_TAG,
@@ -425,6 +497,8 @@ static const struct SpriteTemplate sHiddenMonIconTemplate =
 // gui sprite sheets
 static const struct CompressedSpriteSheet sNoDataIconSpriteSheet = {sNoDataGfx, (32 * 32) / 2, ICON_GFX_TAG};
 static const struct CompressedSpriteSheet sCapturedAllPokemonSpriteSheet = {sCapturedAllMonsTiles, (8 * 8) / 2, CAPTURED_ALL_TAG};
+static const struct CompressedSpriteSheet sTimeOfDayIconSpriteSheet = {sTimeOfDayIconGfx, (8 * 8 * TIMES_OF_DAY_COUNT) / 2, TIME_OF_DAY_ICON_TAG};
+static const struct SpritePalette sTimeOfDayIconSpritePalette = {sTimeOfDayIconPal, TIME_OF_DAY_ICON_PAL_TAG};
 // search sprite sheets
 static const struct CompressedSpriteSheet sPotentialStarSpriteSheet = {sPotentialStarGfx, (8 * 8) / 2, LIT_STAR_TILE_TAG};
 static const struct CompressedSpriteSheet sOwnedIconSpriteSheet = {sOwnedIconGfx, (8 * 8) / 2, OWNED_ICON_TAG};
@@ -1593,7 +1667,7 @@ static u8 GetEncounterLevelFromMapData(u16 species, enum EncounterType environme
     switch (environment)
     {
     case ENCOUNTER_TYPE_LAND:    // grass
-        timeOfDay = GetTimeOfDayForEncounters(headerId, WILD_AREA_LAND);
+        timeOfDay = DexNavGetEncounterTimeOfDay(headerId, WILD_AREA_LAND);
         const struct WildPokemonInfo *landMonsInfo = gWildMonHeaders[headerId].encounterTypes[timeOfDay].landMonsInfo;
 
         if (landMonsInfo == NULL)
@@ -1609,7 +1683,7 @@ static u8 GetEncounterLevelFromMapData(u16 species, enum EncounterType environme
         }
         break;
     case ENCOUNTER_TYPE_WATER:    //water
-        timeOfDay = GetTimeOfDayForEncounters(headerId, WILD_AREA_WATER);
+        timeOfDay = DexNavGetEncounterTimeOfDay(headerId, WILD_AREA_WATER);
         const struct WildPokemonInfo *waterMonsInfo = gWildMonHeaders[headerId].encounterTypes[timeOfDay].waterMonsInfo;
 
         if (waterMonsInfo == NULL)
@@ -1625,7 +1699,7 @@ static u8 GetEncounterLevelFromMapData(u16 species, enum EncounterType environme
         }
         break;
     case ENCOUNTER_TYPE_HIDDEN:
-        timeOfDay = GetTimeOfDayForEncounters(headerId, WILD_AREA_HIDDEN);
+        timeOfDay = DexNavGetEncounterTimeOfDay(headerId, WILD_AREA_HIDDEN);
         const struct WildPokemonInfo *hiddenMonsInfo = gWildMonHeaders[headerId].encounterTypes[timeOfDay].hiddenMonsInfo;
 
         if (hiddenMonsInfo == NULL)
@@ -1654,6 +1728,31 @@ static u8 GetEncounterLevelFromMapData(u16 species, enum EncounterType environme
         return MON_LEVEL_NONEXISTENT;
 
     return RandomUniform(RNG_DEXNAV_ENCOUNTER_LEVEL, min, max);
+}
+
+static enum TimeOfDay DexNavGetEncounterTimeOfDay(u32 headerId, enum WildPokemonArea area)
+{
+    const struct WildPokemonInfo *monsInfo = NULL;
+
+    switch (area)
+    {
+    case WILD_AREA_LAND:
+        monsInfo = gWildMonHeaders[headerId].encounterTypes[sDexNavSelectedTimeOfDay].landMonsInfo;
+        break;
+    case WILD_AREA_WATER:
+        monsInfo = gWildMonHeaders[headerId].encounterTypes[sDexNavSelectedTimeOfDay].waterMonsInfo;
+        break;
+    case WILD_AREA_HIDDEN:
+        monsInfo = gWildMonHeaders[headerId].encounterTypes[sDexNavSelectedTimeOfDay].hiddenMonsInfo;
+        break;
+    default:
+        break;
+    }
+
+    if (monsInfo != NULL)
+        return sDexNavSelectedTimeOfDay;
+
+    return GetTimeOfDayForEncounters(headerId, area);
 }
 
 
@@ -1795,16 +1894,28 @@ static void CreateSelectionCursor(void)
     UpdateCursorPosition();
 }
 
-static void CreateNoDataIcon(s16 x, s16 y)
+static void UpdateTimeOfDayIconSprite(void)
 {
-    CreateSprite(&sNoDataIconTemplate, x, y, 0);
+    if (sDexNavUiDataPtr->timeIconSpriteId != MAX_SPRITES)
+        StartSpriteAnim(&gSprites[sDexNavUiDataPtr->timeIconSpriteId], sDexNavSelectedTimeOfDay);
+}
+
+static void CreateTimeOfDayIconSprite(void)
+{
+    s16 x = GetWindowAttribute(WINDOW_INFO, WINDOW_TILEMAP_LEFT) * 8 + 54;
+    s16 y = GetWindowAttribute(WINDOW_INFO, WINDOW_TILEMAP_TOP) * 8 + 1;
+
+    LoadCompressedSpriteSheetUsingHeap(&sTimeOfDayIconSpriteSheet);
+    LoadSpritePalette(&sTimeOfDayIconSpritePalette);
+    sDexNavUiDataPtr->timeIconSpriteId = CreateSprite(&sTimeOfDayIconSpriteTemplate, x, y, 0);
+    UpdateTimeOfDayIconSprite();
 }
 
 static bool8 CapturedAllLandMons(u32 headerId)
 {
     u16 i, species;
     int count = 0;
-    enum TimeOfDay timeOfDay = GetTimeOfDayForEncounters(headerId, WILD_AREA_LAND);
+    enum TimeOfDay timeOfDay = DexNavGetEncounterTimeOfDay(headerId, WILD_AREA_LAND);
 
     const struct WildPokemonInfo *landMonsInfo = gWildMonHeaders[headerId].encounterTypes[timeOfDay].landMonsInfo;
 
@@ -1839,7 +1950,7 @@ static bool8 CapturedAllWaterMons(u32 headerId)
     u32 i;
     u16 species;
     u8 count = 0;
-    enum TimeOfDay timeOfDay = GetTimeOfDayForEncounters(headerId, WILD_AREA_WATER);
+    enum TimeOfDay timeOfDay = DexNavGetEncounterTimeOfDay(headerId, WILD_AREA_WATER);
 
     const struct WildPokemonInfo *waterMonsInfo = gWildMonHeaders[headerId].encounterTypes[timeOfDay].waterMonsInfo;
 
@@ -1872,7 +1983,7 @@ static bool8 CapturedAllHiddenMons(u32 headerId)
     u32 i;
     u16 species;
     u8 count = 0;
-    enum TimeOfDay timeOfDay = GetTimeOfDayForEncounters(headerId, WILD_AREA_HIDDEN);
+    enum TimeOfDay timeOfDay = DexNavGetEncounterTimeOfDay(headerId, WILD_AREA_HIDDEN);
 
         const struct WildPokemonInfo *hiddenMonsInfo = gWildMonHeaders[headerId].encounterTypes[timeOfDay].hiddenMonsInfo;
 
@@ -1906,14 +2017,18 @@ static void DexNavLoadCapturedAllSymbols(void)
 
     LoadCompressedSpriteSheetUsingHeap(&sCapturedAllPokemonSpriteSheet);
 
+    sDexNavUiDataPtr->capturedAllSpriteIds[0] = SPRITE_NONE;
+    sDexNavUiDataPtr->capturedAllSpriteIds[1] = SPRITE_NONE;
+    sDexNavUiDataPtr->capturedAllSpriteIds[2] = SPRITE_NONE;
+
     if (CapturedAllLandMons(headerId))
-        CreateSprite(&sCaptureAllMonsSpriteTemplate, 152, 58, 0);
+        sDexNavUiDataPtr->capturedAllSpriteIds[0] = CreateSprite(&sCaptureAllMonsSpriteTemplate, 152, 58, 0);
 
     if (CapturedAllWaterMons(headerId))
-        CreateSprite(&sCaptureAllMonsSpriteTemplate, 139, 17, 0);
+        sDexNavUiDataPtr->capturedAllSpriteIds[1] = CreateSprite(&sCaptureAllMonsSpriteTemplate, 139, 17, 0);
 
     if (CapturedAllHiddenMons(headerId))
-        CreateSprite(&sCaptureAllMonsSpriteTemplate, 114, 123, 0);
+        sDexNavUiDataPtr->capturedAllSpriteIds[2] = CreateSprite(&sCaptureAllMonsSpriteTemplate, 114, 123, 0);
 }
 
 //#define WIN_DETAILS_TILE        0x3a3
@@ -1975,36 +2090,65 @@ static void DexNavFadeAndExit(void)
     SetMainCallback2(DexNav_MainCB);
 }
 
+static u16 *DexNavGetSpeciesArray(u8 section)
+{
+    switch (section)
+    {
+    case 0:
+        return sDexNavUiDataPtr->landSpecies;
+    case 1:
+        return sDexNavUiDataPtr->waterSpecies;
+    case 2:
+        return sDexNavUiDataPtr->hiddenSpecies;
+    default:
+        return NULL;
+    }
+}
+
+static u8 *DexNavGetIconSpriteIdArray(u8 section)
+{
+    switch (section)
+    {
+    case 0:
+        return sDexNavUiDataPtr->landIconSpriteIds;
+    case 1:
+        return sDexNavUiDataPtr->waterIconSpriteIds;
+    case 2:
+        return sDexNavUiDataPtr->hiddenIconSpriteIds;
+    default:
+        return NULL;
+    }
+}
+
+static u8 DexNavGetSectionSlotCount(u8 section)
+{
+    switch (section)
+    {
+    case 0:
+        return LAND_WILD_COUNT;
+    case 1:
+        return WATER_WILD_COUNT;
+    case 2:
+        return HIDDEN_WILD_COUNT;
+    default:
+        return 0;
+    }
+}
+
 static bool8 SpeciesInArray(u16 species, u8 section)
 {
     u32 i;
-    u16 dexNum = SpeciesToNationalPokedexNum(species);
+    u16 *speciesArray = DexNavGetSpeciesArray(section);
+    u8 slotCount = DexNavGetSectionSlotCount(section);
+    u16 baseSpecies = GET_BASE_SPECIES_ID(species);
 
-    switch (section)
+    if (speciesArray == NULL)
+        return FALSE;
+
+    for (i = 0; i < slotCount; i++)
     {
-    case 0: //land
-        for (i = 0; i < LAND_WILD_COUNT; i++)
-        {
-            if (SpeciesToNationalPokedexNum(sDexNavUiDataPtr->landSpecies[i]) == dexNum)
-                return TRUE;
-        }
-        break;
-    case 1: //water
-        for (i = 0; i < WATER_WILD_COUNT; i++)
-        {
-            if (SpeciesToNationalPokedexNum(sDexNavUiDataPtr->waterSpecies[i]) == dexNum)
-                return TRUE;
-        }
-        break;
-    case 2: //hidden
-        for (i = 0; i < HIDDEN_WILD_COUNT; i++)
-        {
-            if (SpeciesToNationalPokedexNum(sDexNavUiDataPtr->hiddenSpecies[i]) == dexNum)
-                return TRUE;
-        }
-        break;
-    default:
-        break;
+        if (GET_BASE_SPECIES_ID(speciesArray[i]) == baseSpecies)
+            return TRUE;
     }
 
     return FALSE;
@@ -2021,11 +2165,11 @@ static void DexNavLoadEncounterData(void)
     u32 headerId = GetCurrentMapWildMonHeaderId();
     enum TimeOfDay timeOfDay;
 
-    timeOfDay = GetTimeOfDayForEncounters(headerId, WILD_AREA_LAND);
+    timeOfDay = DexNavGetEncounterTimeOfDay(headerId, WILD_AREA_LAND);
     const struct WildPokemonInfo *landMonsInfo = gWildMonHeaders[headerId].encounterTypes[timeOfDay].landMonsInfo;
-    timeOfDay = GetTimeOfDayForEncounters(headerId, WILD_AREA_WATER);
+    timeOfDay = DexNavGetEncounterTimeOfDay(headerId, WILD_AREA_WATER);
     const struct WildPokemonInfo *waterMonsInfo = gWildMonHeaders[headerId].encounterTypes[timeOfDay].waterMonsInfo;
-    timeOfDay = GetTimeOfDayForEncounters(headerId, WILD_AREA_HIDDEN);
+    timeOfDay = DexNavGetEncounterTimeOfDay(headerId, WILD_AREA_HIDDEN);
     const struct WildPokemonInfo *hiddenMonsInfo = gWildMonHeaders[headerId].encounterTypes[timeOfDay].hiddenMonsInfo;
 
     // nop struct data
@@ -2067,77 +2211,247 @@ static void DexNavLoadEncounterData(void)
     }
 }
 
-static void TryDrawIconInSlot(u16 species, s16 x, s16 y)
+static void DexNavRefreshEncounterDisplay(void)
+{
+    u8 i;
+    u16 species;
+
+    DexNavLoadEncounterData();
+
+    for (i = 0; i < LAND_WILD_COUNT; i++)
+        DexNavRedrawSpeciesIcon(0, i);
+
+    for (i = 0; i < WATER_WILD_COUNT; i++)
+        DexNavRedrawSpeciesIcon(1, i);
+
+    for (i = 0; i < HIDDEN_WILD_COUNT; i++)
+        DexNavRedrawSpeciesIcon(2, i);
+
+    for (i = 0; i < ARRAY_COUNT(sDexNavUiDataPtr->capturedAllSpriteIds); i++)
+    {
+        if (sDexNavUiDataPtr->capturedAllSpriteIds[i] != SPRITE_NONE)
+            DestroySprite(&gSprites[sDexNavUiDataPtr->capturedAllSpriteIds[i]]);
+    }
+
+    DexNavLoadCapturedAllSymbols();
+    species = VarGet(DN_VAR_SPECIES) & DEXNAV_MASK_SPECIES;
+    PrintSearchableSpecies(species);
+    UpdateTimeOfDayIconSprite();
+    UpdateCursorPosition();
+}
+
+static u8 CreateNoDataIcon(s16 x, s16 y)
+{
+    return CreateSprite(&sNoDataIconTemplate, x, y, 0);
+}
+
+static u8 TryDrawIconInSlot(u16 species, s16 x, s16 y)
 {
     if (species == SPECIES_NONE || species > NUM_SPECIES)
-        CreateNoDataIcon(x, y);   //'X' in slot
+        return CreateNoDataIcon(x, y);   //'X' in slot
     else if (!GetSetPokedexFlag(SpeciesToNationalPokedexNum(species), FLAG_GET_SEEN))
-        CreateMonIcon(SPECIES_NONE, SpriteCB_MonIcon, x, y, 0, 0xFFFFFFFF, FALSE, FALSE); //question mark
+        return CreateMonIcon(SPECIES_NONE, SpriteCB_MonIcon, x, y, 0, 0xFFFFFFFF, FALSE, FALSE); //question mark
     else
-        CreateMonIcon(species, SpriteCB_MonIcon, x, y, 0, 0xFFFFFFFF, FALSE, FALSE);
+        return CreateMonIcon(species, SpriteCB_MonIcon, x, y, 0, 0xFFFFFFFF, FALSE, FALSE);
+}
+
+static void DexNavGetSpeciesIconPosition(u8 section, u8 slot, s16 *x, s16 *y)
+{
+    switch (section)
+    {
+    case 0:
+        *x = ROW_LAND_ICON_X + (24 * (slot % COL_LAND_COUNT));
+        *y = ROW_LAND_TOP_ICON_Y + (slot > COL_LAND_MAX ? 28 : 0);
+        break;
+    case 1:
+        *x = ROW_WATER_ICON_X + 24 * slot;
+        *y = ROW_WATER_ICON_Y;
+        break;
+    case 2:
+        *x = ROW_HIDDEN_ICON_X + 24 * slot;
+        *y = ROW_HIDDEN_ICON_Y;
+        break;
+    default:
+        *x = 0;
+        *y = 0;
+        break;
+    }
+}
+
+static void DexNavRedrawSpeciesIcon(u8 section, u8 slot)
+{
+    u16 species;
+    s16 x, y;
+    u8 *iconSpriteIds = DexNavGetIconSpriteIdArray(section);
+    u16 *speciesArray = DexNavGetSpeciesArray(section);
+
+    if (iconSpriteIds == NULL || speciesArray == NULL)
+        return;
+
+    species = speciesArray[slot];
+    DexNavGetSpeciesIconPosition(section, slot, &x, &y);
+
+    if (iconSpriteIds[slot] != 0xFF)
+    {
+        if (species != SPECIES_NONE && species <= NUM_SPECIES)
+            FreeAndDestroyMonIconSprite(&gSprites[iconSpriteIds[slot]]);
+        else
+            DestroySprite(&gSprites[iconSpriteIds[slot]]);
+    }
+
+    if (section == 2 && !FlagGet(DN_FLAG_DETECTOR_MODE) && species != SPECIES_NONE && species <= NUM_SPECIES)
+        iconSpriteIds[slot] = CreateMonIcon(SPECIES_NONE, SpriteCB_MonIcon, x, y, 0, 0xFFFFFFFF, FALSE, FALSE);
+    else
+        iconSpriteIds[slot] = TryDrawIconInSlot(species, x, y);
+}
+
+static u8 DexNavGetCurrentSection(void)
+{
+    switch (sDexNavUiDataPtr->cursorRow)
+    {
+    case ROW_WATER:
+        return 1;
+    case ROW_LAND_TOP:
+    case ROW_LAND_BOT:
+        return 0;
+    case ROW_HIDDEN:
+        return 2;
+    default:
+        return 0xFF;
+    }
+}
+
+static u8 DexNavGetCurrentSlot(void)
+{
+    if (sDexNavUiDataPtr->cursorRow == ROW_LAND_BOT)
+        return sDexNavUiDataPtr->cursorCol + COL_LAND_COUNT;
+
+    return sDexNavUiDataPtr->cursorCol;
+}
+
+static const struct WildPokemonInfo *DexNavGetWildMonInfo(u8 section)
+{
+    u32 headerId = GetCurrentMapWildMonHeaderId();
+    enum TimeOfDay timeOfDay;
+
+    switch (section)
+    {
+    case 0:
+        timeOfDay = DexNavGetEncounterTimeOfDay(headerId, WILD_AREA_LAND);
+        return gWildMonHeaders[headerId].encounterTypes[timeOfDay].landMonsInfo;
+    case 1:
+        timeOfDay = DexNavGetEncounterTimeOfDay(headerId, WILD_AREA_WATER);
+        return gWildMonHeaders[headerId].encounterTypes[timeOfDay].waterMonsInfo;
+    case 2:
+        timeOfDay = DexNavGetEncounterTimeOfDay(headerId, WILD_AREA_HIDDEN);
+        return gWildMonHeaders[headerId].encounterTypes[timeOfDay].hiddenMonsInfo;
+    default:
+        return NULL;
+    }
+}
+
+static bool8 DexNavTryCycleCurrentSpeciesForm(void)
+{
+    u8 i;
+    u8 currentVariant = 0xFF;
+    u8 variantCount = 0;
+    u8 section = DexNavGetCurrentSection();
+    u8 slot = DexNavGetCurrentSlot();
+    u16 currentSpecies;
+    u16 nextSpecies;
+    u16 variants[LAND_WILD_COUNT];
+    u16 *speciesArray = DexNavGetSpeciesArray(section);
+    const struct WildPokemonInfo *monsInfo = DexNavGetWildMonInfo(section);
+    u8 encounterCount = DexNavGetSectionSlotCount(section);
+
+    if (speciesArray == NULL || monsInfo == NULL)
+        return FALSE;
+
+    currentSpecies = speciesArray[slot];
+    if (currentSpecies == SPECIES_NONE || currentSpecies > NUM_SPECIES)
+        return FALSE;
+
+    for (i = 0; i < encounterCount; i++)
+    {
+        u8 j;
+        u16 species = monsInfo->wildPokemon[i].species;
+
+        if (species == SPECIES_NONE || GET_BASE_SPECIES_ID(species) != GET_BASE_SPECIES_ID(currentSpecies))
+            continue;
+
+        for (j = 0; j < variantCount; j++)
+        {
+            if (variants[j] == species)
+                break;
+        }
+
+        if (j != variantCount)
+            continue;
+
+        if (species == currentSpecies)
+            currentVariant = variantCount;
+
+        variants[variantCount++] = species;
+    }
+
+    if (variantCount <= 1)
+        return FALSE;
+
+    if (currentVariant == 0xFF)
+        currentVariant = 0;
+
+    nextSpecies = variants[(currentVariant + 1) % variantCount];
+    if (nextSpecies == currentSpecies)
+        return FALSE;
+
+    speciesArray[slot] = nextSpecies;
+    DexNavRedrawSpeciesIcon(section, slot);
+    PrintCurrentSpeciesInfo();
+    return TRUE;
 }
 
 static void DrawSpeciesIcons(void)
 {
     s16 x, y;
     u32 i;
-    u16 species;
 
     LoadCompressedSpriteSheetUsingHeap(&sNoDataIconSpriteSheet);
     for (i = 0; i < LAND_WILD_COUNT; i++)
     {
-        species = sDexNavUiDataPtr->landSpecies[i];
-        x = ROW_LAND_ICON_X + (24 * (i % COL_LAND_COUNT));
-        y = ROW_LAND_TOP_ICON_Y + (i > COL_LAND_MAX ? 28 : 0);
-        TryDrawIconInSlot(species, x, y);
+        DexNavGetSpeciesIconPosition(0, i, &x, &y);
+        sDexNavUiDataPtr->landIconSpriteIds[i] = TryDrawIconInSlot(sDexNavUiDataPtr->landSpecies[i], x, y);
     }
 
     for (i = 0; i < WATER_WILD_COUNT; i++)
     {
-        species = sDexNavUiDataPtr->waterSpecies[i];
-        x = ROW_WATER_ICON_X + 24 * i;
-        y = ROW_WATER_ICON_Y;
-        TryDrawIconInSlot(species, x, y);
+        DexNavGetSpeciesIconPosition(1, i, &x, &y);
+        sDexNavUiDataPtr->waterIconSpriteIds[i] = TryDrawIconInSlot(sDexNavUiDataPtr->waterSpecies[i], x, y);
     }
 
     for (i = 0; i < HIDDEN_WILD_COUNT; i++)
     {
-        species = sDexNavUiDataPtr->hiddenSpecies[i];
-        x = ROW_HIDDEN_ICON_X + 24 * i;
-        y = ROW_HIDDEN_ICON_Y;
+        DexNavGetSpeciesIconPosition(2, i, &x, &y);
         if (FlagGet(DN_FLAG_DETECTOR_MODE))
-            TryDrawIconInSlot(species, x, y);
-       else if (species == SPECIES_NONE || species > NUM_SPECIES)
-            CreateNoDataIcon(x, y);
+            sDexNavUiDataPtr->hiddenIconSpriteIds[i] = TryDrawIconInSlot(sDexNavUiDataPtr->hiddenSpecies[i], x, y);
+       else if (sDexNavUiDataPtr->hiddenSpecies[i] == SPECIES_NONE || sDexNavUiDataPtr->hiddenSpecies[i] > NUM_SPECIES)
+            sDexNavUiDataPtr->hiddenIconSpriteIds[i] = CreateNoDataIcon(x, y);
         else
-            CreateMonIcon(SPECIES_NONE, SpriteCB_MonIcon, x, y, 0, 0xFFFFFFFF, FALSE, FALSE); //question mark if detector mode inactive
+            sDexNavUiDataPtr->hiddenIconSpriteIds[i] = CreateMonIcon(SPECIES_NONE, SpriteCB_MonIcon, x, y, 0, 0xFFFFFFFF, FALSE, FALSE); //question mark if detector mode inactive
     }
 }
 
 static u16 DexNavGetSpecies(void)
 {
+    u16 *speciesArray = DexNavGetSpeciesArray(DexNavGetCurrentSection());
     u16 species;
 
-    switch (sDexNavUiDataPtr->cursorRow)
-    {
-    case ROW_WATER:
-        species = sDexNavUiDataPtr->waterSpecies[sDexNavUiDataPtr->cursorCol];
-        break;
-    case ROW_LAND_TOP:
-        species = sDexNavUiDataPtr->landSpecies[sDexNavUiDataPtr->cursorCol];
-        break;
-    case ROW_LAND_BOT:
-        species = sDexNavUiDataPtr->landSpecies[sDexNavUiDataPtr->cursorCol + COL_LAND_COUNT];
-        break;
-    case ROW_HIDDEN:
-        if (!FlagGet(DN_FLAG_DETECTOR_MODE))
-            species = SPECIES_NONE;
-        else
-            species = sDexNavUiDataPtr->hiddenSpecies[sDexNavUiDataPtr->cursorCol];
-        break;
-    default:
+    if (speciesArray == NULL)
         return SPECIES_NONE;
-    }
+
+    if (sDexNavUiDataPtr->cursorRow == ROW_HIDDEN && !FlagGet(DN_FLAG_DETECTOR_MODE))
+        return SPECIES_NONE;
+
+    species = speciesArray[DexNavGetCurrentSlot()];
 
     if (!GetSetPokedexFlag(SpeciesToNationalPokedexNum(species), FLAG_GET_SEEN))
         return SPECIES_NONE;
@@ -2265,6 +2579,29 @@ static void PrintMapName(void)
     AddTextPrinterParameterized3(WINDOW_REGISTERED, 1, 108 +
                                  GetStringRightAlignXOffset(1, gStringVar3, MAP_NAME_LENGTH * GetFontAttribute(1, FONTATTR_MAX_LETTER_WIDTH)),
                                  0, sFontColor_White, 0, gStringVar3);
+}
+
+static const u8 *DexNavGetTimeOfDayName(enum TimeOfDay timeOfDay)
+{
+    switch (timeOfDay)
+    {
+    case TIME_MORNING:
+        return sText_DexNav_Morning;
+    case TIME_EVENING:
+        return sText_DexNav_Evening;
+    case TIME_NIGHT:
+        return sText_DexNav_Night;
+    case TIME_DAY:
+    default:
+        return sText_DexNav_Day;
+    }
+}
+
+static void PrintTimeOfDayPage(void)
+{
+    StringCopy(gStringVar1, DexNavGetTimeOfDayName(sDexNavSelectedTimeOfDay));
+    StringExpandPlaceholders(gStringVar4, sText_DexNav_TimePage);
+    AddTextPrinterParameterized3(WINDOW_REGISTERED, 1, 12, 16, sFontColor_White, TEXT_SKIP_DRAW, gStringVar4);
     CopyWindowToVram(WINDOW_REGISTERED, 3);
 }
 
@@ -2284,6 +2621,7 @@ static void PrintSearchableSpecies(u16 species)
     }
 
     PrintMapName();
+    PrintTimeOfDayPage();
 }
 
 static void CreateTypeIconSprites(void)
@@ -2347,6 +2685,8 @@ static bool8 DexNav_DoGfxSetup(void)
         sDexNavUiDataPtr->cursorRow = ROW_LAND_TOP;
         sDexNavUiDataPtr->cursorCol = 0;
         sDexNavUiDataPtr->environment = ENCOUNTER_TYPE_LAND;
+        sDexNavUiDataPtr->selectedTimeOfDay = GetTimeOfDayForDex();
+        sDexNavSelectedTimeOfDay = sDexNavUiDataPtr->selectedTimeOfDay;
         gMain.state++;
         break;
     case 7:
@@ -2361,8 +2701,13 @@ static bool8 DexNav_DoGfxSetup(void)
         gMain.state++;
         break;
     case 9:
+        sDexNavUiDataPtr->timeIconSpriteId = MAX_SPRITES;
         sDexNavUiDataPtr->typeIconSpriteIds[0] = 0xFF;
         sDexNavUiDataPtr->typeIconSpriteIds[1] = 0xFF;
+        memset(sDexNavUiDataPtr->landIconSpriteIds, 0xFF, sizeof(sDexNavUiDataPtr->landIconSpriteIds));
+        memset(sDexNavUiDataPtr->waterIconSpriteIds, 0xFF, sizeof(sDexNavUiDataPtr->waterIconSpriteIds));
+        memset(sDexNavUiDataPtr->hiddenIconSpriteIds, 0xFF, sizeof(sDexNavUiDataPtr->hiddenIconSpriteIds));
+        memset(sDexNavUiDataPtr->capturedAllSpriteIds, SPRITE_NONE, sizeof(sDexNavUiDataPtr->capturedAllSpriteIds));
         CreateTypeIconSprites();
         gMain.state++;
         break;
@@ -2370,6 +2715,7 @@ static bool8 DexNav_DoGfxSetup(void)
         LoadMonIconPalettes();
         DrawSpeciesIcons();
         CreateSelectionCursor();
+        CreateTimeOfDayIconSprite();
         DexNavLoadCapturedAllSymbols();
         gMain.state++;
         break;
@@ -2554,6 +2900,25 @@ static void Task_DexNavMain(u8 taskId)
         {
             PlaySE(SE_FAILURE);
         }
+    }
+    else if (JOY_NEW(L_BUTTON))
+    {
+        if (DexNavTryCycleCurrentSpeciesForm())
+        {
+            PlaySE(SE_RG_BAG_CURSOR);
+            PlayCry_Script(DexNavGetSpecies(), 0);
+        }
+        else
+        {
+            PlaySE(SE_FAILURE);
+        }
+    }
+    else if (JOY_NEW(SELECT_BUTTON))
+    {
+        sDexNavUiDataPtr->selectedTimeOfDay = TryIncrementTimeOfDay(sDexNavUiDataPtr->selectedTimeOfDay);
+        sDexNavSelectedTimeOfDay = sDexNavUiDataPtr->selectedTimeOfDay;
+        PlaySE(SE_RG_BAG_CURSOR);
+        DexNavRefreshEncounterDisplay();
     }
     else if (JOY_NEW(A_BUTTON))
     {

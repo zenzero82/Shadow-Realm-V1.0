@@ -1,5 +1,6 @@
 #include "global.h"
 #include "battle.h"
+#include "bug_contest.h"
 #include "load_save.h"
 #include "battle_setup.h"
 #include "battle_tower.h"
@@ -69,6 +70,7 @@ enum {
 // this file's functions
 static void DoBattlePikeWildBattle(void);
 static void DoSafariBattle(void);
+static void DoBugContestBattle(void);
 static void DoStandardWildBattle(bool32 isDouble);
 static void CB2_EndWildBattle(void);
 static void CB2_EndScriptedWildBattle(void);
@@ -233,6 +235,8 @@ void BattleSetup_StartWildBattle(void)
 {
     if (GetSafariZoneFlag())
         DoSafariBattle();
+    else if (GetBugContestFlag())
+        DoBugContestBattle();
     else
         DoStandardWildBattle(FALSE);
 }
@@ -313,6 +317,27 @@ static void DoSafariBattle(void)
     gMain.savedCallback = CB2_EndSafariBattle;
     gBattleTypeFlags = BATTLE_TYPE_SAFARI;
     CreateBattleStartTask(GetWildBattleTransition(), 0);
+}
+
+static void DoBugContestBattle(void)
+{
+    LockPlayerFieldControls();
+    FreezeObjectEvents();
+    StopPlayerAvatar();
+    gMain.savedCallback = CB2_EndBugContestBattle;
+    gBattleTypeFlags = 0;
+    gBallToDisplay = ITEM_SPORT_BALL;
+    gLastThrownBall = ITEM_SPORT_BALL;
+    if (InBattlePyramid())
+    {
+        VarSet(VAR_TEMP_E, 0);
+        gBattleTypeFlags |= BATTLE_TYPE_PYRAMID;
+    }
+    CreateBattleStartTask(GetWildBattleTransition(), 0);
+    IncrementGameStat(GAME_STAT_TOTAL_BATTLES);
+    IncrementGameStat(GAME_STAT_WILD_BATTLES);
+    IncrementDailyWildBattles();
+    TryUpdateGymLeaderRematchFromWild();
 }
 
 static void DoBattlePikeWildBattle(void)

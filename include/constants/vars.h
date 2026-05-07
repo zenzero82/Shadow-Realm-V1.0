@@ -178,6 +178,7 @@
 #define VAR_RUINSOFALPH_STATE                            VAR_UNUSED_0x409B
 #define VAR_ELITE_4_STATE                                0x409C
 #define VAR_UNUSED_0x409D                                0x409D // Unused Var
+#define VAR_BICYCLE_MOD                                  VAR_UNUSED_0x409D
 #define VAR_MOSSDEEP_SPACE_CENTER_STAIR_GUARD_STATE      0x409E
 #define VAR_MOSSDEEP_SPACE_CENTER_STATE                  0x409F
 #define VAR_SLATEPORT_HARBOR_STATE                       0x40A0
@@ -207,6 +208,7 @@
 #define VAR_TRICK_HOUSE_PUZZLE_7_STATE_2                 0x40B6 // Leftover from RS, never set
 #define VAR_SLATEPORT_FAN_CLUB_STATE                     0x40B7
 #define VAR_UNUSED_0x40B8                                0x40B8 // Unused Var
+#define VAR_BUG_CONTEST_STATE                            VAR_UNUSED_0x40B8
 #define VAR_MT_PYRE_STATE                                0x40B9
 #define VAR_NEW_MAUVILLE_STATE                           0x40BA
 #define VAR_UNUSED_0x40BB                                0x40BB // Unused Var
@@ -245,15 +247,22 @@
 #define VAR_UNUSED_0x40DB                                0x40DB // Unused Var
 #define VAR_RUINSOFALPH_ZYGARDE_QUEST                    VAR_UNUSED_0x40DB
 #define VAR_UNUSED_0x40DC                                0x40DC // Unused Var
+#define VAR_RUINSOFALPH_GUARDIAN_SLOT_1_SPECIES          VAR_UNUSED_0x40DC
 #define VAR_GIFT_PICHU_SLOT                              0x40DD
 #define VAR_GIFT_UNUSED_1                                0x40DE // Var is written to, but never read
+#define VAR_RUINSOFALPH_GUARDIAN_SLOT_2_SPECIES          VAR_GIFT_UNUSED_1
 #define VAR_GIFT_UNUSED_2                                0x40DF // Var is written to, but never read
+#define VAR_RUINSOFALPH_GUARDIAN_SLOT_3_SPECIES          VAR_GIFT_UNUSED_2
 #define VAR_GIFT_UNUSED_3                                0x40E0 // Var is written to, but never read
+#define VAR_RUINSOFALPH_GUARDIAN_SLOT_1_GFX              VAR_GIFT_UNUSED_3
 #define VAR_GIFT_UNUSED_4                                0x40E1 // Var is written to, but never read
+#define VAR_RUINSOFALPH_GUARDIAN_SLOT_2_GFX              VAR_GIFT_UNUSED_4
 #define VAR_GIFT_UNUSED_5                                0x40E2 // Var is written to, but never read
+#define VAR_RUINSOFALPH_GUARDIAN_SLOT_3_GFX              VAR_GIFT_UNUSED_5
 #define VAR_GIFT_UNUSED_6                                0x40E3 // Var is written to, but never read
 #define VAR_GIFT_UNUSED_7                                0x40E4 // var is written to, but never read
 #define VAR_UNUSED_0x40E5                                0x40E5 // Unused Var
+#define VAR_RUINSOFALPH_OMANYTE_CAMERA_PUZZLE            VAR_UNUSED_0x40E5
 #define VAR_DAILY_SLOTS                                  0x40E6
 #define VAR_DAILY_WILDS                                  0x40E7
 #define VAR_DAILY_BLENDER                                0x40E8

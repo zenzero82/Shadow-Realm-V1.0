@@ -71,7 +71,7 @@ VioletCity_Gym_EventScript_Falkner::
 	message VioletCity_Gym_Text_ReceivedZephyrBadge
 	waitmessage
 	call Common_EventScript_PlayGymBadgeFanfare
-	msgbox VioletCity_Gym_Text_Falkner_Badge, MSGBOX_DEFAULT
+	msgbox VioletCity_Gym_Text_Falkner_After, MSGBOX_DEFAULT
 	setflag FLAG_BADGE17_GET
 	addvar VAR_NUM_BADGES, 1
 	setvar VAR_0x8008, 17
@@ -142,10 +142,6 @@ VioletCity_Gym_Text_Falkner_Defeat:
 
 VioletCity_Gym_Text_ReceivedZephyrBadge:
 	.string "{PLAYER} received the ZEPHYRBADGE!$"
-
-VioletCity_Gym_Text_Falkner_Badge:
-	.string "I can't believe you defeated me!\n"
-	.string "The ZEPHYRBADGE is yours.$"
 
 VioletCity_Gym_Text_Falkner_After:
 	.string "Keep your eyes on the skies.\n"

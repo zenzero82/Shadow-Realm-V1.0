@@ -416,6 +416,8 @@ void RoamingHunter_OnShadowSnagFailed(u16 species, u8 level, u8 region, u16 shad
     struct RoamingShadowHunterSave *save;
     s8 regionIndex;
 
+    if (!RoamingHunter_IsUnlocked())
+        return;
     if (species == SPECIES_NONE)
         return;
     if (level == 0)

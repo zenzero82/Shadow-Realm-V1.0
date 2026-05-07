@@ -1,34 +1,327 @@
 Gate_NationalPark_MapScripts::
 	.byte 0
 
+Gate_NationalPark_Speaker_Attendant:
+	.string "ATTENDANT$"
+
+Gate_NationalPark_Speaker_Policeman:
+	.string "OFFICER$"
+
+Gate_NationalPark_Speaker_BC1:
+	.string "LIAM$"
+
+Gate_NationalPark_Speaker_BC2:
+	.string "WADE$"
+
+Gate_NationalPark_Speaker_Rocker:
+	.string "REX$"
+
+Gate_NationalPark_Speaker_Beauty:
+	.string "NINA$"
+
+Gate_NationalPark_EventScript_Attendant::
+	lockall
+	faceplayer
+	goto_if_set FLAG_DAILY_BUG_CONTEST_COMPLETED, Gate_NationalPark_EventScript_AttendantAlreadyPlayed
+	setspeaker Gate_NationalPark_Speaker_Attendant
+	msgbox Route35NationalParkGate_Text_OfficerAskToParticipate, MSGBOX_YESNO
+	goto_if_eq VAR_RESULT, TRUE, Gate_NationalPark_EventScript_AttendantStart
+	setspeaker Gate_NationalPark_Speaker_Attendant
+	msgbox Route35NationalParkGate_Text_TakePartInFuture, MSGBOX_DEFAULT
+	releaseall
+	end
+
+Gate_NationalPark_EventScript_AttendantStart::
+	setspeaker Gate_NationalPark_Speaker_Attendant
+	msgbox Route35NationalParkGate_Text_OfficerAskToUseFirstMon, MSGBOX_YESNO
+	goto_if_eq VAR_RESULT, FALSE, Gate_NationalPark_EventScript_AttendantCancel
+	getpartysize
+	call_if_eq VAR_RESULT, 1, Gate_NationalPark_EventScript_OnlyOneMon
+	setspeaker Gate_NationalPark_Speaker_Attendant
+	msgbox Route35NationalParkGate_Text_OfficerHoldYourMon, MSGBOX_DEFAULT
+	closemessage
+	special SavePlayerParty
+	special PreparePartyForBugContest
+	goto_if_eq VAR_RESULT, MON_CANT_GIVE, Gate_NationalPark_EventScript_AttendantFaint
+	playfanfare MUS_OBTAIN_ITEM
+	setspeaker Gate_NationalPark_Speaker_Attendant
+	message Route35NationalParkGate_Text_MonLeftWithHelper
+	waitfanfare
+	closemessage
+	setspeaker Gate_NationalPark_Speaker_Attendant
+	msgbox Route35NationalParkGate_Text_OfficerGiveParkBalls, MSGBOX_DEFAULT
+	closemessage
+	giveitem ITEM_SPORT_BALL, 20
+	closemessage
+	setspeaker Gate_NationalPark_Speaker_Attendant
+	msgbox Route35NationalParkGate_Text_OfficerExplainRules, MSGBOX_DEFAULT
+	closemessage
+	call_if_eq VAR_FACING, DIR_WEST, Gate_NationalPark_EventScript_AttendantEnterTop
+	call_if_eq VAR_FACING, DIR_NORTH, Gate_NationalPark_EventScript_AttendantEnterBot
+	playse SE_EXIT
+	clearflag FLAG_HIDE_BUG_CONTEST_ATTENDANT_SIDE
+	special EnterBugContestMode
+	setvar VAR_BUG_CONTEST_STATE, 1
+	warp MAP_NATIONAL_PARK_BUG_CONTEST, 1
+	waitstate
+	end
+
+Gate_NationalPark_EventScript_OnlyOneMon::
+	special SavePlayerParty
+	setspeaker Gate_NationalPark_Speaker_Attendant
+	msgbox Route35NationalParkGate_Text_OfficerGiveParkBalls, MSGBOX_DEFAULT
+	closemessage
+	giveitem ITEM_SPORT_BALL, 20
+	closemessage
+	setspeaker Gate_NationalPark_Speaker_Attendant
+	msgbox Route35NationalParkGate_Text_OfficerExplainRules, MSGBOX_DEFAULT
+	closemessage
+	call_if_eq VAR_FACING, DIR_WEST, Gate_NationalPark_EventScript_AttendantEnterTop
+	call_if_eq VAR_FACING, DIR_NORTH, Gate_NationalPark_EventScript_AttendantEnterBot
+	playse SE_EXIT
+	clearflag FLAG_HIDE_BUG_CONTEST_ATTENDANT_SIDE
+	special EnterBugContestMode
+	setvar VAR_BUG_CONTEST_STATE, 1
+	warp MAP_NATIONAL_PARK_BUG_CONTEST, 1
+	waitstate
+	end
+
+Gate_NationalPark_EventScript_AttendantEnterTop::
+	applymovement OBJ_EVENT_ID_PLAYER, Gate_NationalPark_Movement_Player_EnterParkTop
+	waitmovement 0
+	return
+
+Gate_NationalPark_EventScript_AttendantEnterBot::
+	applymovement OBJ_EVENT_ID_PLAYER, Gate_NationalPark_Movement_Player_EnterParkBot
+	waitmovement 0
+	return
+
+Gate_NationalPark_EventScript_AttendantFaint::
+	setspeaker Gate_NationalPark_Speaker_Attendant
+	msgbox Route35NationalParkGate_Text_FirstMonCantBattle, MSGBOX_DEFAULT
+	closemessage
+	release
+	end
+
+Gate_NationalPark_EventScript_AttendantCancel::
+	setspeaker Gate_NationalPark_Speaker_Attendant
+	msgbox Route35NationalParkGate_Text_TakePartInFuture, MSGBOX_DEFAULT
+	closemessage
+	release
+	end
+
+Gate_NationalPark_EventScript_AttendantAlreadyPlayed::
+	setspeaker Gate_NationalPark_Speaker_Attendant
+	msgbox Route35NationalParkGate_Text_ContestIsOver, MSGBOX_DEFAULT
+	closemessage
+	release
+	end
+
+Gate_NationalPark_EventScript_AttendantExit::
+	special LoadPlayerParty
+	setvar VAR_BUG_CONTEST_STATE, 0
+	release
+	end
+
+Gate_NationalPark_Movement_Player_EnterParkTop:
+	walk_down
+	walk_right
+	walk_right
+	walk_right
+	walk_up
+	walk_up
+	step_end
+
+Gate_NationalPark_Movement_Player_EnterParkBot:
+	walk_right
+	walk_right
+	walk_right
+	walk_right
+	walk_up
+	walk_up
+	step_end
+
+Gate_NationalPark_EventScript_BAttendant::
+	lockall
+	faceplayer
+	goto_if_set FLAG_DAILY_BUG_CONTEST_COMPLETED, Gate_NationalPark_EventScript_AttendantAlreadyPlayed
+	setspeaker Gate_NationalPark_Speaker_Attendant
+	msgbox Route35NationalParkGate_Text_OfficerAskToParticipate, MSGBOX_YESNO
+	goto_if_eq VAR_RESULT, TRUE, Gate_NationalPark_EventScript_BAttendantStart
+	setspeaker Gate_NationalPark_Speaker_Attendant
+	msgbox Route35NationalParkGate_Text_TakePartInFuture, MSGBOX_DEFAULT
+	releaseall
+	end
+
+Gate_NationalPark_EventScript_BAttendantStart::
+	setspeaker Gate_NationalPark_Speaker_Attendant
+	msgbox Route35NationalParkGate_Text_OfficerAskToUseFirstMon, MSGBOX_YESNO
+	goto_if_eq VAR_RESULT, FALSE, Gate_NationalPark_EventScript_AttendantCancel
+	getpartysize
+	call_if_eq VAR_RESULT, 1, Gate_NationalPark_EventScript_OnlyOneMonB
+	setspeaker Gate_NationalPark_Speaker_Attendant
+	msgbox Route35NationalParkGate_Text_OfficerHoldYourMon, MSGBOX_DEFAULT
+	closemessage
+	special SavePlayerParty
+	special PreparePartyForBugContest
+	goto_if_eq VAR_RESULT, MON_CANT_GIVE, Gate_NationalPark_EventScript_AttendantFaint
+	playfanfare MUS_OBTAIN_ITEM
+	setspeaker Gate_NationalPark_Speaker_Attendant
+	message Route35NationalParkGate_Text_MonLeftWithHelper
+	waitfanfare
+	closemessage
+	setspeaker Gate_NationalPark_Speaker_Attendant
+	msgbox Route35NationalParkGate_Text_OfficerGiveParkBalls, MSGBOX_DEFAULT
+	closemessage
+	giveitem ITEM_SPORT_BALL, 20
+	closemessage
+	setspeaker Gate_NationalPark_Speaker_Attendant
+	msgbox Route35NationalParkGate_Text_OfficerExplainRules, MSGBOX_DEFAULT
+	closemessage
+	call_if_eq VAR_FACING, DIR_EAST, Gate_NationalPark_EventScript_AttendantBEnterTop
+	call_if_eq VAR_FACING, DIR_NORTH, Gate_NationalPark_EventScript_AttendantBEnterBot
+	playse SE_EXIT
+	special EnterBugContestMode
+	setflag FLAG_HIDE_BUG_CONTEST_ATTENDANT_SIDE
+	setvar VAR_BUG_CONTEST_STATE, 5
+	warp MAP_NATIONAL_PARK_BUG_CONTEST, 40, 19
+	waitstate
+	end
+
+Gate_NationalPark_EventScript_OnlyOneMonB::
+	special SavePlayerParty
+	setspeaker Gate_NationalPark_Speaker_Attendant
+	msgbox Route35NationalParkGate_Text_OfficerGiveParkBalls, MSGBOX_DEFAULT
+	closemessage
+	giveitem ITEM_SPORT_BALL, 20
+	closemessage
+	setspeaker Gate_NationalPark_Speaker_Attendant
+	msgbox Route35NationalParkGate_Text_OfficerExplainRules, MSGBOX_DEFAULT
+	closemessage
+	call_if_eq VAR_FACING, DIR_EAST, Gate_NationalPark_EventScript_AttendantBEnterTop
+	call_if_eq VAR_FACING, DIR_NORTH, Gate_NationalPark_EventScript_AttendantBEnterBot
+	playse SE_EXIT
+	special EnterBugContestMode
+	setflag FLAG_HIDE_BUG_CONTEST_ATTENDANT_SIDE
+	setvar VAR_BUG_CONTEST_STATE, 5
+	warp MAP_NATIONAL_PARK_BUG_CONTEST, 40, 19
+	waitstate
+	end
+
+Gate_NationalPark_EventScript_AttendantBEnterTop::
+	applymovement OBJ_EVENT_ID_PLAYER, Gate_NationalPark_Movement_Player_EnterParkTopB
+	waitmovement 0
+	return
+
+Gate_NationalPark_EventScript_AttendantBEnterBot::
+	applymovement OBJ_EVENT_ID_PLAYER, Gate_NationalPark_Movement_Player_EnterParkBotB
+	waitmovement 0
+	return
+
+Gate_NationalPark_Movement_Player_EnterParkTopB:
+	walk_down
+	walk_down
+	walk_down
+	walk_down
+	walk_down
+	walk_left
+	walk_left
+	walk_left
+	walk_in_place_left
+	step_end
+
+Gate_NationalPark_Movement_Player_EnterParkBotB:
+	walk_down
+	walk_down
+	walk_down
+	walk_down
+	walk_left
+	walk_left
+	walk_left
+	walk_left
+	walk_in_place_left
+	step_end
+
+Route35NationalParkGate_Text_OfficerAskToParticipate:
+	.string "Hello Trainer! The Bug-Catching\n"
+	.string "Contest is on today.\p"
+	.string "The rules are simple.\p"
+	.string "Using one of your POKéMON, catch a\n"
+	.string "bug POKéMON to be judged.\p"
+	.string "Would you like to give it a try?$"
+
+Route35NationalParkGate_Text_OfficerGiveParkBalls:
+	.string "Any EXP your POKéMON gains during\n"
+	.string "the contest will be reverted when\l"
+	.string "you leave.\p"
+	.string "Here are the SPORT BALLS for the\n"
+	.string "Contest.$"
+
+Route35NationalParkGate_Text_ReceivedParkBalls:
+	.string "{PLAYER} received SPORT BALLS.$"
+
+Route35NationalParkGate_Text_OfficerExplainRules:
+	.string "The person who gets the strongest\n"
+	.string "bug POKéMON is the winner.\p"
+	.string "If you run out of SPORT BALLS,\n"
+	.string "you're done.\p"
+	.string "You can catch up to 5 POKéMON. The\n"
+	.string "last one caught will be the only\l"
+	.string "one kept and placed in the contest.\p"
+	.string "Go out and catch the strongest bug\n"
+	.string "POKéMON you can find!$"
+
+Route35NationalParkGate_Text_OfficerAskToUseFirstMon:
+	.string "If you have more than one POKéMON,\n"
+	.string "you'll have to use the\l"
+	.string "first POKéMON in your party.\p"
+	.string "Is that OK with you?$"
+
+Route35NationalParkGate_Text_OfficerHoldYourMon:
+	.string "Fine, we'll hold your other POKéMON\n"
+	.string "while you compete.$"
+
+Route35NationalParkGate_Text_MonLeftWithHelper:
+	.string "{PLAYER}'s POKéMON were left with the\n"
+	.string "CONTEST HELPER.$"
+
+Route35NationalParkGate_Text_ChooseMonAndComeBack:
+	.string "Please choose the POKéMON to be used\n"
+	.string "in the Contest, then come see me.$"
+
+Route35NationalParkGate_Text_TakePartInFuture:
+	.string "OK. We hope you'll take part in the\n"
+	.string "future.$"
+
+Route35NationalParkGate_Text_FirstMonCantBattle:
+	.string "Uh-oh… The first POKéMON in your\n"
+	.string "party can't battle.\p"
+	.string "Please switch it with the POKéMON\n"
+	.string "you want to use, then come see me.$"
+
+Route35NationalParkGate_Text_MakeRoom:
+	.string "Uh-oh… Both your party and your\n"
+	.string "PC BOX are full.\p"
+	.string "You have no room to put the bug\n"
+	.string "POKéMON you catch.\p"
+	.string "Please make room in your party or\n"
+	.string "your PC BOX, then come see me.$"
+
+Route35NationalParkGate_Text_EggAsFirstMon:
+	.string "Uh-oh… You have an EGG as the first\n"
+	.string "POKéMON in your party.\p"
+	.string "Please switch it with the POKéMON\n"
+	.string "you want to use, then come see me.$"
+
+Route35NationalParkGate_Text_ContestIsOver:
+	.string "Today's Contest is over. We hope you\n"
+	.string "will participate in the future.$"
+
 Route35NationalParkGate_EventScript_Policeman::
 	lock
 	faceplayer
-	msgbox Route35NationalParkGate_Text_Policeman, MSGBOX_DEFAULT
-	closemessage
-	release
-	end
-
-Gate_NationalPark_EventScript_Attendant::
-	lock
-	faceplayer
-	msgbox Route35NationalParkGate_Text_Attendant, MSGBOX_DEFAULT
-	closemessage
-	release
-	end
-
-Gate_NationalPark_EventScript_BAttendant::
-	lock
-	faceplayer
-	msgbox Route35NationalParkGate_Text_Attendant, MSGBOX_DEFAULT
-	closemessage
-	release
-	end
-
-Route35NationalParkGate_EventScript_Rocker::
-	lock
-	faceplayer
-	msgbox Route35NationalParkGate_Text_Rocker, MSGBOX_DEFAULT
+	setspeaker Gate_NationalPark_Speaker_Policeman
+	msgbox Route35NationalParkGate_Text_WeHoldContests, MSGBOX_DEFAULT
 	closemessage
 	release
 	end
@@ -36,7 +329,8 @@ Route35NationalParkGate_EventScript_Rocker::
 Route35NationalParkGate_EventScript_BC1::
 	lock
 	faceplayer
-	msgbox Route35NationalParkGate_Text_BugCatcher1, MSGBOX_DEFAULT
+	setspeaker Gate_NationalPark_Speaker_BC1
+	msgbox Route35NationalParkGate_Text_YoungsterWonders, MSGBOX_DEFAULT
 	closemessage
 	release
 	end
@@ -44,7 +338,17 @@ Route35NationalParkGate_EventScript_BC1::
 Route35NationalParkGate_EventScript_BC2::
 	lock
 	faceplayer
-	msgbox Route35NationalParkGate_Text_BugCatcher2, MSGBOX_DEFAULT
+	setspeaker Gate_NationalPark_Speaker_BC2
+	msgbox Route35NationalParkGate_Text_BC2, MSGBOX_DEFAULT
+	closemessage
+	release
+	end
+
+Route35NationalParkGate_EventScript_Rocker::
+	lock
+	faceplayer
+	setspeaker Gate_NationalPark_Speaker_Rocker
+	msgbox Route35NationalParkGate_Text_Rocker, MSGBOX_DEFAULT
 	closemessage
 	release
 	end
@@ -52,30 +356,28 @@ Route35NationalParkGate_EventScript_BC2::
 Route35NationalParkGate_EventScript_Beauty::
 	lock
 	faceplayer
+	setspeaker Gate_NationalPark_Speaker_Beauty
 	msgbox Route35NationalParkGate_Text_Beauty, MSGBOX_DEFAULT
 	closemessage
 	release
 	end
 
-Route35NationalParkGate_Text_Policeman:
-	.string "The BUG-CATCHING CONTEST\n"
-	.string "is held in the PARK.$"
+Route35NationalParkGate_Text_WeHoldContests:
+	.string "We hold contests regularly in the\n"
+	.string "PARK. You should give it a try.$"
 
-Route35NationalParkGate_Text_Attendant:
-	.string "The BUG-CATCHING CONTEST\n"
-	.string "is on today. Good luck!$"
+Route35NationalParkGate_Text_YoungsterWonders:
+	.string "Don’t you think Bug POKéMON are\n"
+	.string "neat? I think so.$"
+
+Route35NationalParkGate_Text_BC2:
+	.string "I’m trying to win, but I’m not sure\n"
+	.string "what the judges look for.$"
 
 Route35NationalParkGate_Text_Rocker:
-	.string "I can't wait to see who wins\n"
-	.string "the contest today.$"
-
-Route35NationalParkGate_Text_BugCatcher1:
-	.string "I'm going to catch the strongest\n"
-	.string "bug POKéMON!$"
-
-Route35NationalParkGate_Text_BugCatcher2:
-	.string "I love big, tough bug POKéMON.$"
+	.string "Bug-Catching Contests are a great\n"
+	.string "way to find strong bug POKéMON.$"
 
 Route35NationalParkGate_Text_Beauty:
-	.string "Bug POKéMON are full of surprises.$"
-
+	.string "Catching the last POKéMON matters.\n"
+	.string "Pick wisely before time runs out.$"

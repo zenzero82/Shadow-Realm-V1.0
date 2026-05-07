@@ -636,6 +636,8 @@ gSongTable::
 	song mus_hg_game_corner, 0, 0
 	song mus_hg_dance_theater, 0, 0
 	song mus_hg_pokemon_league, 0, 0
+	song mus_hg_national_park, 0, 0
+	song mus_hg_gym, 0, 0
 
 
 	.align 2

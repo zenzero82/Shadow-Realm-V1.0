@@ -1641,8 +1641,10 @@
 #define SPECIES_CHESNAUGHT_MEGA                         1524
 #define SPECIES_DELPHOX_MEGA                            1525
 #define SPECIES_GRENINJA_MEGA                           1526
+#define SPECIES_RAICHU_MEGA_X                           1527
+#define SPECIES_RAICHU_MEGA_Y                           1528
 
-#define SPECIES_EGG                                     (SPECIES_GRENINJA_MEGA + 1)
+#define SPECIES_EGG                                     (SPECIES_RAICHU_MEGA_Y + 1)
 
 #define NUM_SPECIES SPECIES_EGG
 

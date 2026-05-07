@@ -783,6 +783,13 @@
         .icon = gMonIcon_MeloettaShadow,
     },
     {
+        .species = SPECIES_METAGROSS,
+        .frontPic = gMonFrontPic_MetagrossShadow,
+        .backPic = gMonBackPic_MetagrossShadow,
+        .palette = gMonPalette_MetagrossShadow,
+        .icon = gMonIcon_MetagrossShadow,
+    },
+    {
         .species = SPECIES_MESPRIT,
         .frontPic = gMonFrontPic_MespritShadow,
         .backPic = gMonBackPic_MespritShadow,

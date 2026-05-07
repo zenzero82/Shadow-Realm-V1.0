@@ -2,8 +2,13 @@ RustboroCity_Flat2_1F_MapScripts::
 	.byte 0
 
 RustboroCity_Flat2_1F_EventScript_OldWoman::
+	faceplayer
+	setspeaker RustboroCity_Flat2_1F_Speaker_Agnes
 	msgbox RustboroCity_Flat2_1F_Text_DevonWorkersLiveHere, MSGBOX_NPC
 	end
+
+RustboroCity_Flat2_1F_Speaker_Agnes:
+	.string "Agnes$"
 
 RustboroCity_Flat2_1F_EventScript_Skitty::
 	lock
@@ -21,4 +26,3 @@ RustboroCity_Flat2_1F_Text_DevonWorkersLiveHere:
 
 RustboroCity_Flat2_1F_Text_Skitty:
 	.string "SKITTY: Gyaaaah!$"
-

@@ -287,7 +287,21 @@ static void StorePokemonInEmptyDaycareSlot(struct Pokemon *mon, struct DayCare *
 void StoreSelectedPokemonInDaycare(void)
 {
     u8 monId = GetCursorSelectionMonId();
+
+    if (monId >= PARTY_SIZE || GetMonData(&gPlayerParty[monId], MON_DATA_IS_SHADOW, NULL))
+        return;
+
     StorePokemonInEmptyDaycareSlot(&gPlayerParty[monId], &gSaveBlock1Ptr->daycare);
+}
+
+u8 IsSelectedMonShadowForDaycare(void)
+{
+    u8 monId = GetCursorSelectionMonId();
+
+    if (monId >= PARTY_SIZE)
+        return FALSE;
+
+    return GetMonData(&gPlayerParty[monId], MON_DATA_IS_SHADOW, NULL);
 }
 
 // Shifts the second daycare Pokémon slot into the first slot.

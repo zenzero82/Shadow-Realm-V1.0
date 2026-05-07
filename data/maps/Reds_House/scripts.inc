@@ -116,8 +116,10 @@ RedsHouse_Text_MomIntro_3:
 	.string "going on.\p"
 	.string "Speaking of crazy things, you must be\n"
 	.string "so tired and confused right now.\p"
-	.string "You can use his bed to rest if you want.\p"
-	.string "It's not like he's ever home to use it.$"
+	.string "You can use his bed to rest\n"
+	.string "if you want.\p"
+	.string "It's not like he's ever home\n"
+	.string "to use it.$"
 
 RedsHouse_Text_MomRepeatLine:
 	.string "If you see RED, can you please\n"
@@ -129,8 +131,8 @@ RedsHouse_Text_MomRestAsk:
 RedsHouse_Text_TV:
 	.string "PROF. OAK has been missing for \n"
 	.string "quite some time.\p"
-	.string "Since he has been gone we have\l"
+	.string "Since he has been gone we have\n"
 	.string "seen an increase in ROCKET activity.\p"
 	.string "They seem to have invaded\n"
-	.string "VIRIDIAN CITY.\l"
+	.string "VIRIDIAN CITY.\p"
 	.string "Please be safe out there.$"

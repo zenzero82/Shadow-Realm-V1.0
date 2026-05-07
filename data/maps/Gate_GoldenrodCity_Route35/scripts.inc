@@ -1,48 +1,62 @@
 Gate_GoldenrodCity_Route35_MapScripts::
 	.byte 0
 
+Gate_GoldenrodCity_Route35_Speaker_Randy:
+	.string "RANDY$"
+
+Gate_GoldenrodCity_Route35_Speaker_Miles:
+	.string "MILES$"
+
+Gate_GoldenrodCity_Route35_Speaker_Lena:
+	.string "LENA$"
+
+Gate_GoldenrodCity_Route35_Speaker_Otis:
+	.string "OTIS$"
+
 Gate_GoldenrodCity_Route35_EventScript_Randy::
 	lock
 	faceplayer
-	msgbox Route35GoldenrodGate_Text_RandyAskFavor, MSGBOX_DEFAULT
-	closemessage
+	setspeaker Gate_GoldenrodCity_Route35_Speaker_Randy
+	msgbox Gate_GoldenrodCity_Route35_Text_Randy, MSGBOX_DEFAULT
+	release
+	end
+
+Gate_GoldenrodCity_Route35_EventScript_Miles::
+	lock
+	faceplayer
+	setspeaker Gate_GoldenrodCity_Route35_Speaker_Miles
+	msgbox Gate_GoldenrodCity_Route35_Text_Miles, MSGBOX_DEFAULT
 	release
 	end
 
 Gate_GoldenrodCity_Route35_EventScript_Lady::
 	lock
 	faceplayer
-	msgbox Route35GoldenrodGate_Text_PokefanF_TreeBlocking, MSGBOX_DEFAULT
-	closemessage
+	setspeaker Gate_GoldenrodCity_Route35_Speaker_Lena
+	msgbox Gate_GoldenrodCity_Route35_Text_Lena, MSGBOX_DEFAULT
 	release
 	end
 
 Gate_GoldenrodCity_Route35_EventScript_Fisher::
 	lock
 	faceplayer
-	msgbox Route35GoldenrodGate_Text_Fisher, MSGBOX_DEFAULT
-	closemessage
+	setspeaker Gate_GoldenrodCity_Route35_Speaker_Otis
+	msgbox Gate_GoldenrodCity_Route35_Text_Otis, MSGBOX_DEFAULT
 	release
 	end
 
-Route35GoldenrodGate_Text_RandyAskFavor:
-	.string "Excuse me, kid! Can you do a guy\n"
-	.string "a favor?\p"
-	.string "Can you take this POKéMON with MAIL\n"
-	.string "to my friend?\p"
-	.string "He's on ROUTE 31.$"
+Gate_GoldenrodCity_Route35_Text_Randy:
+	.string "Goldenrod's north gate stays open,\n"
+	.string "but we're checking everyone twice.$"
 
-Route35GoldenrodGate_Text_PokefanF_TreeBlocking:
-	.string "A strange tree is blocking the road.\p"
-	.string "It wriggles around if you talk to it.\p"
-	.string "I heard it became wild when someone\n"
-	.string "watered it with a SQUIRTBOTTLE.$"
+Gate_GoldenrodCity_Route35_Text_Miles:
+	.string "If CIPHER pushes farther north,\n"
+	.string "we'll know before they do.$"
 
-Route35GoldenrodGate_Text_Fisher:
-	.string "I wonder how many kinds of POKéMON\n"
-	.string "there are in the world.\p"
-	.string "Three years ago, PROF. OAK said that\n"
-	.string "there were 150 different kinds.\p"
-	.string "But recently I heard there's\n"
-	.string "over 400!$"
+Gate_GoldenrodCity_Route35_Text_Lena:
+	.string "I was headed for the PARK, but all\n"
+	.string "these uniforms ruined the trip.$"
 
+Gate_GoldenrodCity_Route35_Text_Otis:
+	.string "The bug catching crowd stopped\n"
+	.string "coming through once CIPHER arrived.$"

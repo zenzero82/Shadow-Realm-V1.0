@@ -57,6 +57,8 @@ enum EncounterType
 #define ICON_GFX_TAG            55130
 #define SELECTION_CURSOR_TAG    0x4005
 #define CAPTURED_ALL_TAG        0x4002
+#define TIME_OF_DAY_ICON_TAG    0x4008
+#define TIME_OF_DAY_ICON_PAL_TAG 0x4009
 
 // Search tags
 #define OWNED_ICON_TAG          0x4003

@@ -53,8 +53,8 @@ static const struct LilycoveContestLadyValues sContestLadyValues[] =
 static const u16 sLilycoveLadyGfxId[] =
 {
     OBJ_EVENT_GFX_WOMAN_4,
-    OBJ_EVENT_GFX_WOMAN_2,
-    OBJ_EVENT_GFX_GIRL_2
+    OBJ_EVENT_GFX_LADY,
+    OBJ_EVENT_GFX_AROMA_GIRL
 };
 
 // Quiz Lady data

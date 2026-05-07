@@ -12,7 +12,7 @@ Route3_Speaker_Youngster2:
 	.string "CALVIN$"
 
 Route3_Speaker_Lass:
-	.string "LASS$"
+	.string "MAYA$"
 
 Route3_Speaker_Firebreather:
 	.string "Otis$"
@@ -120,4 +120,3 @@ Route3_Text_Firebreather_After:
 Route3_Text_MtMoonSquareSign:
 	.string "MT.MOON SQUARE\p"
 	.string "Just go up the stairs.$"
-

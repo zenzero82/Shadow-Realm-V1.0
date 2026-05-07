@@ -158,6 +158,11 @@ void AnimTask_SetCamouflageBlend(u8 taskId)
 void AnimTask_BlendParticle(u8 taskId)
 {
     u8 paletteIndex = IndexOfSpritePaletteTag(gBattleAnimArgs[0]);
+    if (paletteIndex == 0xFF)
+    {
+        DestroyAnimVisualTask(taskId);
+        return;
+    }
     u32 selectedPalettes = 1 << (paletteIndex + 16);
     StartBlendAnimSpriteColor(taskId, selectedPalettes);
 }

@@ -13,7 +13,60 @@
   "show_map_name": false,
   "battle_scene": "MAP_BATTLE_SCENE_NORMAL",
   "connections": null,
-  "object_events": [],
+  "object_events": [
+    {
+      "graphics_id": "OBJ_EVENT_GFX_CONTEST_JUDGE",
+      "x": 14,
+      "y": 2,
+      "elevation": 0,
+      "movement_type": "MOVEMENT_TYPE_NONE",
+      "movement_range_x": 0,
+      "movement_range_y": 0,
+      "trainer_type": "TRAINER_TYPE_NONE",
+      "trainer_sight_or_berry_tree_id": "0",
+      "script": "viridian_contesthall_EventScript_Judge",
+      "flag": "FLAG_HIDE_VIRIDIAN_POST_ROCKET_NPCS"
+    },
+    {
+      "graphics_id": "OBJ_EVENT_GFX_ATTENDANT_F_GEN2",
+      "x": 15,
+      "y": 2,
+      "elevation": 0,
+      "movement_type": "MOVEMENT_TYPE_NONE",
+      "movement_range_x": 0,
+      "movement_range_y": 0,
+      "trainer_type": "TRAINER_TYPE_NONE",
+      "trainer_sight_or_berry_tree_id": "0",
+      "script": "viridian_contesthall_EventScript_Attendant",
+      "flag": "FLAG_HIDE_VIRIDIAN_POST_ROCKET_NPCS"
+    },
+    {
+      "graphics_id": "OBJ_EVENT_GFX_WOMAN_6_GEN2",
+      "x": 0,
+      "y": 6,
+      "elevation": 0,
+      "movement_type": "MOVEMENT_TYPE_FACE_RIGHT",
+      "movement_range_x": 0,
+      "movement_range_y": 0,
+      "trainer_type": "TRAINER_TYPE_NONE",
+      "trainer_sight_or_berry_tree_id": "0",
+      "script": "viridian_contesthall_EventScript_Woman",
+      "flag": "FLAG_HIDE_VIRIDIAN_POST_ROCKET_NPCS"
+    },
+    {
+      "graphics_id": "OBJ_EVENT_GFX_BEAUTY2_GEN1",
+      "x": 0,
+      "y": 9,
+      "elevation": 0,
+      "movement_type": "MOVEMENT_TYPE_FACE_RIGHT",
+      "movement_range_x": 0,
+      "movement_range_y": 0,
+      "trainer_type": "TRAINER_TYPE_NONE",
+      "trainer_sight_or_berry_tree_id": "0",
+      "script": "viridian_contesthall_EventScript_Beauty",
+      "flag": "FLAG_HIDE_VIRIDIAN_POST_ROCKET_NPCS"
+    }
+  ],
   "warp_events": [
     {
       "x": 14,

@@ -14,6 +14,8 @@ PalletTown_House2_EventScript_Blue::
 	setflag FLAG_QUEST_PALLET_TOWN_NPC_DAISY
 	checkflag FLAG_QUEST_VIRIDIAN_GYM_STARTED
 	goto_if_eq PalletTown_House2_EventScript_Blue_QuestSkip
+	checkitem ITEM_QUEST_JOURNAL
+	goto_if_eq VAR_RESULT, FALSE, PalletTown_House2_EventScript_Blue_QuestSkip
 	setflag FLAG_QUEST_VIRIDIAN_GYM_STARTED
 	call QuestJournal_EventScript_NewQuestAlert
 PalletTown_House2_EventScript_Blue_QuestSkip:
@@ -38,7 +40,7 @@ PalletTown_House2_Text_Hello:
 	.string "Hi!\p"
 	.string "My kid brother GARY is the GYM LEADER\n"
 	.string "in VIRIDIAN CITY.\p"
-	.string "Lately, the news has been talking about\n"
+	.string "Lately, the news keeps talking\n"
 	.string "TEAM ROCKET sightings near his GYM…\p"
 	.string "The GYM's been closed for days, and I\n"
 	.string "haven't heard from him at all.\p"
@@ -46,7 +48,7 @@ PalletTown_House2_Text_Hello:
 	.string "on him for me?$"
 
 PalletTown_BluesHouse_Text_TV:
-	.string "A TV show about POKéMON battles\p"
+	.string "A TV show about POKéMON battles\n"
 	.string "is playing in the background.$"
 
 PalletTown_BluesHouse_Text_Bookshelf1:

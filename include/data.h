@@ -2,6 +2,7 @@
 #define GUARD_DATA_H
 
 #include "constants/moves.h"
+#include "constants/opponents.h"
 #include "constants/trainers.h"
 #include "constants/battle.h"
 #include "constants/pokemon.h"
@@ -249,14 +250,18 @@ static inline const u8 GetTrainerClassFromId(u16 trainerId)
 static inline const u8 *GetTrainerClassNameFromId(u16 trainerId)
 {
     enum DifficultyLevel difficulty = GetBattlePartnerDifficultyLevel(trainerId);
+    static const u8 sTrainerClassName_AetherAdmin[] = COMPOUND_STRING("AETHER ADMIN");
 
     if (trainerId > TRAINER_PARTNER(PARTNER_NONE))
         return gTrainerClasses[gBattlePartners[difficulty][trainerId - TRAINER_PARTNER(PARTNER_NONE)].trainerClass].name;
+    if (trainerId == TRAINER_CELADON_GLADION)
+        return sTrainerClassName_AetherAdmin;
     return gTrainerClasses[GetTrainerClassFromId(trainerId)].name;
 }
 
 static inline const u8 *GetTrainerNameFromId(u16 trainerId)
 {
+    static const u8 sText_JessieAndJames[] = _("Jessie & James");
     u32 sanitizedTrainerId = GetTrainerIndexFromId(trainerId);
 
     enum DifficultyLevel difficulty = GetTrainerDifficultyLevel(sanitizedTrainerId);
@@ -265,6 +270,8 @@ static inline const u8 *GetTrainerNameFromId(u16 trainerId)
 
     if (trainerId > TRAINER_PARTNER(PARTNER_NONE))
         return gBattlePartners[partnerDifficulty][trainerId - TRAINER_PARTNER(PARTNER_NONE)].trainerName;
+    if (sanitizedTrainerId == TRAINER_JJ_VIRIDIAN || sanitizedTrainerId == TRAINER_JJ_ILEX)
+        return sText_JessieAndJames;
     return gTrainers[difficulty][sanitizedTrainerId].trainerName;
 }
 

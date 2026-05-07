@@ -71,6 +71,7 @@ static bool32 CanBeInfinitelyConfused(u32 battler);
 static bool32 IsAnyTargetAffected(u32 battlerAtk);
 static bool32 IsNonVolatileStatusBlocked(u32 battlerDef, u32 abilityDef, u32 abilityAffected, const u8 *battleScript, enum NonVolatileStatus option);
 static bool32 CanSleepDueToSleepClause(u32 battlerAtk, u32 battlerDef, enum NonVolatileStatus option);
+static bool32 TryDnaShiftFormChange(u32 battler, bool32 beforeMove);
 #ifndef SHADOW_AGGRO_MAX_DEFAULT
 #define SHADOW_AGGRO_MAX_DEFAULT 255
 #endif
@@ -78,6 +79,101 @@ static bool32 CanSleepDueToSleepClause(u32 battlerAtk, u32 battlerDef, enum NonV
 bool32 IsBattlerShadow(u32 battler)
 {
     return gBattleMons[battler].isShadow;
+}
+
+static bool32 IsDnaShiftDeoxysSpecies(u16 species)
+{
+    return GET_BASE_SPECIES_ID(species) == SPECIES_DEOXYS;
+}
+
+static bool32 DoesBattlerTypeThreatenDeoxys(u32 battlerAtk, u32 battlerDef)
+{
+    uq4_12_t modifier;
+    u32 atkTypes[3];
+    u32 defTypes[3];
+    int i;
+
+    GetBattlerTypes(battlerAtk, FALSE, atkTypes);
+    GetBattlerTypes(battlerDef, FALSE, defTypes);
+
+    for (i = 0; i < 3; i++)
+    {
+        u32 atkType = atkTypes[i];
+
+        if (atkType == TYPE_MYSTERY)
+            continue;
+        if (i > 0 && atkType == atkTypes[i - 1])
+            continue;
+
+        modifier = GetTypeModifier(atkType, defTypes[0]);
+
+        if (defTypes[1] != TYPE_MYSTERY && defTypes[1] != defTypes[0])
+            modifier = uq4_12_multiply(modifier, GetTypeModifier(atkType, defTypes[1]));
+        if (defTypes[2] != TYPE_MYSTERY && defTypes[2] != defTypes[0] && defTypes[2] != defTypes[1])
+            modifier = uq4_12_multiply(modifier, GetTypeModifier(atkType, defTypes[2]));
+
+        if (modifier >= UQ_4_12(2.0))
+            return TRUE;
+    }
+
+    return FALSE;
+}
+
+static u16 GetDnaShiftTargetSpecies(u32 battler, bool32 beforeMove)
+{
+    int i;
+
+    if (beforeMove && GetBattleMoveCategory(gCurrentMove) != DAMAGE_CATEGORY_STATUS)
+        return SPECIES_DEOXYS_ATTACK;
+
+    for (i = 0; i < gBattlersCount; i++)
+    {
+        if (i == battler || IsBattlerAlly(battler, i) || !IsBattlerAlive(i))
+            continue;
+
+        if (GetBattlerTotalSpeedStat(i) > GetBattlerTotalSpeedStat(battler))
+            return SPECIES_DEOXYS_SPEED;
+    }
+
+    for (i = 0; i < gBattlersCount; i++)
+    {
+        if (i == battler || IsBattlerAlly(battler, i) || !IsBattlerAlive(i))
+            continue;
+
+        if (DoesBattlerTypeThreatenDeoxys(i, battler))
+            return SPECIES_DEOXYS_DEFENSE;
+    }
+
+    return SPECIES_DEOXYS_NORMAL;
+}
+
+static bool32 TryDnaShiftFormChange(u32 battler, bool32 beforeMove)
+{
+    u32 monId, side;
+    u16 targetSpecies;
+    struct Pokemon *party;
+
+    if (!IsBattlerAlive(battler)
+     || (gBattleMons[battler].status2 & STATUS2_TRANSFORMED)
+     || GetBattlerAbility(battler) != ABILITY_DNA_SHIFT
+     || !IsDnaShiftDeoxysSpecies(gBattleMons[battler].species))
+        return FALSE;
+
+    targetSpecies = GetDnaShiftTargetSpecies(battler, beforeMove);
+    if (targetSpecies == gBattleMons[battler].species)
+        return FALSE;
+
+    monId = gBattlerPartyIndexes[battler];
+    side = GetBattlerSide(battler);
+    party = GetBattlerParty(battler);
+
+    if (gBattleStruct->changedSpecies[side][monId] == SPECIES_NONE)
+        gBattleStruct->changedSpecies[side][monId] = gBattleMons[battler].species;
+
+    SetMonData(&party[monId], MON_DATA_SPECIES, &targetSpecies);
+    gBattleMons[battler].species = targetSpecies;
+    RecalcBattlerStats(battler, &party[monId], FALSE);
+    return TRUE;
 }
 
 bool32 GetBattlerShadowReverse(u32 battler)
@@ -807,6 +903,13 @@ void HandleAction_Call(void)
     gCurrentMove             = MOVE_NONE;
     gChosenMove              = MOVE_NONE;
 
+    if (!IsBattlerAlive(battler))
+    {
+        gBattlescriptCurrInstr = BattleScript_ButItFailed;
+        gCurrentActionFuncId = B_ACTION_EXEC_SCRIPT;
+        return;
+    }
+
     if (!gBattleMons[battler].isShadow)
     {
         // Non-shadow: use a simple player call script (avoids move-end side effects)
@@ -872,7 +975,7 @@ void HandleAction_SafariZoneBallThrow(void)
     gBattle_BG0_X = 0;
     gBattle_BG0_Y = 0;
     gNumSafariBalls--;
-    gLastUsedItem = ITEM_SAFARI_BALL;
+    gLastUsedItem = FlagGet(FLAG_SYS_BUG_CONTEST_MODE) ? ITEM_SPORT_BALL : ITEM_SAFARI_BALL;
     gBattlescriptCurrInstr = BattleScript_SafariBallThrow;
     gCurrentActionFuncId = B_ACTION_EXEC_SCRIPT;
 }
@@ -883,6 +986,8 @@ void HandleAction_ThrowBall(void)
     gBattle_BG0_X = 0;
     gBattle_BG0_Y = 0;
     gLastUsedItem = gBallToDisplay;
+    if (FlagGet(FLAG_SYS_BUG_CONTEST_MODE) && gNumSafariBalls != 0)
+        gNumSafariBalls--;
     if (!GetItemImportance(gLastUsedItem))
     	RemoveBagItem(gLastUsedItem, 1);
     gBattlescriptCurrInstr = BattleScript_BallThrow;
@@ -1952,7 +2057,14 @@ void TryClearRageAndFuryCutter(void)
 
 static inline bool32 TryFormChangeBeforeMove(void)
 {
-    bool32 result = TryBattleFormChange(gBattlerAttacker, FORM_CHANGE_BATTLE_BEFORE_MOVE);
+    bool32 result = TryDnaShiftFormChange(gBattlerAttacker, TRUE);
+    if (result)
+    {
+        BattleScriptCall(BattleScript_AttackerFormChangeNoPopup);
+        return TRUE;
+    }
+
+    result = TryBattleFormChange(gBattlerAttacker, FORM_CHANGE_BATTLE_BEFORE_MOVE);
     if (!result)
         result = TryBattleFormChange(gBattlerAttacker, FORM_CHANGE_BATTLE_BEFORE_MOVE_CATEGORY);
     if (!result)
@@ -3993,6 +4105,14 @@ u32 AbilityBattleEffects(u32 caseID, u32 battler, u32 ability, u32 special, u32 
                 effect++;
             }
             break;
+        case ABILITY_DNA_SHIFT:
+            if (TryDnaShiftFormChange(battler, FALSE))
+            {
+                gBattlerAttacker = battler;
+                BattleScriptPushCursorAndCallback(BattleScript_AttackerFormChangeEnd3NoPopup);
+                effect++;
+            }
+            break;
         case ABILITY_INTREPID_SWORD:
             if (!gSpecialStatuses[battler].switchInAbilityDone && CompareStat(battler, STAT_ATK, MAX_STAT_STAGE, CMP_LESS_THAN)
              && !gBattleStruct->partyState[GetBattlerSide(battler)][gBattlerPartyIndexes[battler]].intrepidSwordBoost)
@@ -4413,6 +4533,14 @@ u32 AbilityBattleEffects(u32 caseID, u32 battler, u32 ability, u32 special, u32 
                 {
                     gBattlerAttacker = battler;
                     BattleScriptPushCursorAndCallback(BattleScript_AttackerFormChangeEnd3);
+                    effect++;
+                }
+                break;
+            case ABILITY_DNA_SHIFT:
+                if (TryDnaShiftFormChange(battler, FALSE))
+                {
+                    gBattlerAttacker = battler;
+                    BattleScriptPushCursorAndCallback(BattleScript_AttackerFormChangeEnd3NoPopup);
                     effect++;
                 }
                 break;

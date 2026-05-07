@@ -36,6 +36,7 @@
 #include "constants/moves.h"
 #include "constants/songs.h"
 #include "constants/trainer_types.h"
+#include "constants/flags.h"
 
 #define NUM_FORCED_MOVEMENTS 18
 #define NUM_ACRO_BIKE_COLLISIONS 5
@@ -102,6 +103,7 @@ static bool8 CanStopSurfing(s16, s16, u8);
 static bool8 ShouldJumpLedge(s16, s16, u8);
 static bool8 TryPushBoulder(s16, s16, u8);
 static void CheckAcroBikeCollision(s16, s16, u8, u8 *);
+static bool8 IsLillieFollowerActive(void);
 
 static void DoPlayerAvatarTransition(void);
 static void PlayerAvatarTransition_Dummy(struct ObjectEvent *);
@@ -836,6 +838,8 @@ static void PlayerNotOnBikeMoving(u8 direction, u16 heldKeys)
      && FlagGet(FLAG_SYS_B_DASH)
      && IsRunningDisallowed(gObjectEvents[gPlayerAvatar.objectEventId].currentMetatileBehavior) == 0
      && !FollowerNPCComingThroughDoor()
+     && !IsLillieFollowerActive()
+     && !FlagGet(FLAG_GOLDENROD_CIPHER_DISGUISE_ACTIVE)
      && ((heldKeys & B_BUTTON)
          || (gSaveBlock2Ptr->optionsAutoRun == OPTIONS_AUTO_RUN_ON && !(heldKeys & A_BUTTON))))
     {
@@ -859,6 +863,12 @@ static void PlayerNotOnBikeMoving(u8 direction, u16 heldKeys)
         else
             PlayerWalkNormal(direction);
     }
+}
+
+static bool8 IsLillieFollowerActive(void)
+{
+    return PlayerHasFollowerNPC()
+        && GetFollowerNPCData(FNPC_DATA_EVENT_FLAG) == FLAG_CELADON_LILLIE_JOINED;
 }
 
 static u8 CheckForPlayerAvatarCollision(u8 direction)
@@ -1075,11 +1085,10 @@ static void PlayerAvatarTransition_MachBike(struct ObjectEvent *objEvent)
 
 static void PlayerAvatarTransition_AcroBike(struct ObjectEvent *objEvent)
 {
-    ObjectEventSetGraphicsId(objEvent, GetPlayerAvatarGraphicsIdByStateId(PLAYER_AVATAR_STATE_ACRO_BIKE));
+    ObjectEventSetGraphicsId(objEvent, GetPlayerAvatarGraphicsIdByStateId(PLAYER_AVATAR_STATE_MACH_BIKE));
     ObjectEventTurn(objEvent, objEvent->movementDirection);
-    SetPlayerAvatarStateMask(PLAYER_AVATAR_FLAG_ACRO_BIKE);
+    SetPlayerAvatarStateMask(PLAYER_AVATAR_FLAG_MACH_BIKE);
     BikeClearState(0, 0);
-    Bike_HandleBumpySlopeJump();
 }
 
 static void PlayerAvatarTransition_Surfing(struct ObjectEvent *objEvent)
@@ -1487,6 +1496,14 @@ u16 GetRivalAvatarGraphicsIdByStateIdAndGender(u8 state, u8 gender)
 
 u16 GetPlayerAvatarGraphicsIdByStateIdAndGender(u8 state, u8 gender)
 {
+    if (FlagGet(FLAG_GOLDENROD_CIPHER_DISGUISE_ACTIVE)
+     && (state == PLAYER_AVATAR_STATE_NORMAL
+      || state == PLAYER_AVATAR_STATE_FIELD_MOVE
+      || state == PLAYER_AVATAR_STATE_WATERING
+      || state == PLAYER_AVATAR_STATE_FISHING
+      || state == PLAYER_AVATAR_STATE_VSSEEKER))
+        return OBJ_EVENT_GFX_CIPHER_PEON_M;
+
     return sPlayerAvatarGfxIds[state][gender];
 }
 

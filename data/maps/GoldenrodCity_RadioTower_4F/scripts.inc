@@ -1,5 +1,136 @@
 GoldenrodCity_RadioTower_4F_MapScripts::
+	map_script MAP_SCRIPT_ON_TRANSITION, GoldenrodCity_RadioTower_4F_OnTransition
 	.byte 0
+
+#define LOCALID_GOLDENROD_RADIO_4F_CIPHER_F6 1
+#define LOCALID_GOLDENROD_RADIO_4F_CIPHER_F7 2
+
+GoldenrodCity_RadioTower_4F_Speaker_CipherPeonF:
+	.string "CIPHER PEON$"
+
+GoldenrodCity_RadioTower_4F_OnTransition::
+	setflag FLAG_TEMP_HIDE_FOLLOWER
+	setvar VAR_TEMP_0, 0
+	setflag FLAG_HIDE_GOLDENROD_RADIO_4F_CIPHER_F6
+	setflag FLAG_HIDE_GOLDENROD_RADIO_4F_CIPHER_F7
+	removeobject LOCALID_GOLDENROD_RADIO_4F_CIPHER_F6
+	removeobject LOCALID_GOLDENROD_RADIO_4F_CIPHER_F7
+	end
+
+GoldenrodCity_RadioTower_4F_EventScript_CipherF6Trigger1::
+	checktrainerflag TRAINER_GOLDENROD_RADIO_CIPHER_F6
+	goto_if_eq GoldenrodCity_RadioTower_4F_EventScript_TriggerDone
+	lockall
+	setvar VAR_TEMP_0, 1
+	setvar VAR_0x8004, 9
+	setvar VAR_0x8005, 6
+	call GoldenrodCity_RadioTower_4F_EventScript_SpawnCipherF6Ambush
+	goto GoldenrodCity_RadioTower_4F_EventScript_CipherF6
+
+GoldenrodCity_RadioTower_4F_EventScript_CipherF6Trigger2::
+	checktrainerflag TRAINER_GOLDENROD_RADIO_CIPHER_F6
+	goto_if_eq GoldenrodCity_RadioTower_4F_EventScript_TriggerDone
+	lockall
+	setvar VAR_TEMP_0, 1
+	setvar VAR_0x8004, 9
+	setvar VAR_0x8005, 5
+	call GoldenrodCity_RadioTower_4F_EventScript_SpawnCipherF6Ambush
+	goto GoldenrodCity_RadioTower_4F_EventScript_CipherF6
+
+GoldenrodCity_RadioTower_4F_EventScript_CipherF6Trigger3::
+	checktrainerflag TRAINER_GOLDENROD_RADIO_CIPHER_F6
+	goto_if_eq GoldenrodCity_RadioTower_4F_EventScript_TriggerDone
+	lockall
+	setvar VAR_TEMP_0, 1
+	setvar VAR_0x8004, 9
+	setvar VAR_0x8005, 4
+	call GoldenrodCity_RadioTower_4F_EventScript_SpawnCipherF6Ambush
+	goto GoldenrodCity_RadioTower_4F_EventScript_CipherF6
+
+GoldenrodCity_RadioTower_4F_EventScript_CipherF7Trigger1::
+	checktrainerflag TRAINER_GOLDENROD_RADIO_CIPHER_F7
+	goto_if_eq GoldenrodCity_RadioTower_4F_EventScript_TriggerDone
+	lockall
+	setvar VAR_TEMP_0, 1
+	setvar VAR_0x8004, 17
+	setvar VAR_0x8005, 5
+	call GoldenrodCity_RadioTower_4F_EventScript_SpawnCipherF7Ambush
+	goto GoldenrodCity_RadioTower_4F_EventScript_CipherF7
+
+GoldenrodCity_RadioTower_4F_EventScript_CipherF7Trigger2::
+	checktrainerflag TRAINER_GOLDENROD_RADIO_CIPHER_F7
+	goto_if_eq GoldenrodCity_RadioTower_4F_EventScript_TriggerDone
+	lockall
+	setvar VAR_TEMP_0, 1
+	setvar VAR_0x8004, 17
+	setvar VAR_0x8005, 6
+	call GoldenrodCity_RadioTower_4F_EventScript_SpawnCipherF7Ambush
+	goto GoldenrodCity_RadioTower_4F_EventScript_CipherF7
+
+GoldenrodCity_RadioTower_4F_EventScript_CipherF7Trigger3::
+	checktrainerflag TRAINER_GOLDENROD_RADIO_CIPHER_F7
+	goto_if_eq GoldenrodCity_RadioTower_4F_EventScript_TriggerDone
+	lockall
+	setvar VAR_TEMP_0, 1
+	setvar VAR_0x8004, 19
+	setvar VAR_0x8005, 8
+	call GoldenrodCity_RadioTower_4F_EventScript_SpawnCipherF7Ambush
+	goto GoldenrodCity_RadioTower_4F_EventScript_CipherF7
+
+GoldenrodCity_RadioTower_4F_EventScript_TriggerDone::
+	end
+
+GoldenrodCity_RadioTower_4F_EventScript_SpawnCipherF6Ambush::
+	fadescreen FADE_TO_BLACK
+	clearflag FLAG_HIDE_GOLDENROD_RADIO_4F_CIPHER_F6
+	setobjectxy LOCALID_GOLDENROD_RADIO_4F_CIPHER_F6, VAR_0x8004, VAR_0x8005
+	setobjectxyperm LOCALID_GOLDENROD_RADIO_4F_CIPHER_F6, VAR_0x8004, VAR_0x8005
+	addobject LOCALID_GOLDENROD_RADIO_4F_CIPHER_F6
+	fadescreen FADE_FROM_BLACK
+	playse SE_PIN
+	applymovement LOCALID_GOLDENROD_RADIO_4F_CIPHER_F6, Common_Movement_ExclamationMark
+	waitmovement 0
+	return
+
+GoldenrodCity_RadioTower_4F_EventScript_SpawnCipherF7Ambush::
+	fadescreen FADE_TO_BLACK
+	clearflag FLAG_HIDE_GOLDENROD_RADIO_4F_CIPHER_F7
+	setobjectxy LOCALID_GOLDENROD_RADIO_4F_CIPHER_F7, VAR_0x8004, VAR_0x8005
+	setobjectxyperm LOCALID_GOLDENROD_RADIO_4F_CIPHER_F7, VAR_0x8004, VAR_0x8005
+	addobject LOCALID_GOLDENROD_RADIO_4F_CIPHER_F7
+	fadescreen FADE_FROM_BLACK
+	playse SE_PIN
+	applymovement LOCALID_GOLDENROD_RADIO_4F_CIPHER_F7, Common_Movement_ExclamationMark
+	waitmovement 0
+	return
+
+GoldenrodCity_RadioTower_4F_EventScript_CipherF6::
+	setvar VAR_LAST_TALKED, LOCALID_GOLDENROD_RADIO_4F_CIPHER_F6
+	setspeaker GoldenrodCity_RadioTower_4F_Speaker_CipherPeonF
+	trainerbattle_single TRAINER_GOLDENROD_RADIO_CIPHER_F6, GoldenrodCity_RadioTower_4F_Text_CipherPeonF6_Intro, GoldenrodCity_RadioTower_4F_Text_CipherPeonF_Defeat, GoldenrodCity_RadioTower_4F_EventScript_CipherF6After
+	goto GoldenrodCity_RadioTower_4F_EventScript_CipherF6After
+
+GoldenrodCity_RadioTower_4F_EventScript_CipherF7::
+	setvar VAR_LAST_TALKED, LOCALID_GOLDENROD_RADIO_4F_CIPHER_F7
+	setspeaker GoldenrodCity_RadioTower_4F_Speaker_CipherPeonF
+	trainerbattle_single TRAINER_GOLDENROD_RADIO_CIPHER_F7, GoldenrodCity_RadioTower_4F_Text_CipherPeonF7_Intro, GoldenrodCity_RadioTower_4F_Text_CipherPeonF_Defeat, GoldenrodCity_RadioTower_4F_EventScript_CipherF7After
+	goto GoldenrodCity_RadioTower_4F_EventScript_CipherF7After
+
+GoldenrodCity_RadioTower_4F_EventScript_CipherF6After::
+	settrainerflag TRAINER_GOLDENROD_RADIO_CIPHER_F6
+	setvar VAR_TEMP_0, 0
+	setspeaker GoldenrodCity_RadioTower_4F_Speaker_CipherPeonF
+	msgbox GoldenrodCity_RadioTower_4F_Text_CipherPeonF6_After, MSGBOX_DEFAULT
+	releaseall
+	end
+
+GoldenrodCity_RadioTower_4F_EventScript_CipherF7After::
+	settrainerflag TRAINER_GOLDENROD_RADIO_CIPHER_F7
+	setvar VAR_TEMP_0, 0
+	setspeaker GoldenrodCity_RadioTower_4F_Speaker_CipherPeonF
+	msgbox GoldenrodCity_RadioTower_4F_Text_CipherPeonF7_After, MSGBOX_DEFAULT
+	releaseall
+	end
 
 GoldenrodCity_RadioTower_4F4_EventScript_Sign1::
 	msgbox GoldenrodCity_RadioTower_4F4_EventScript_Sign1_Text, MSGBOX_SIGN
@@ -14,3 +145,22 @@ GoldenrodCity_RadioTower_4F4_EventScript_Sign2::
 
 GoldenrodCity_RadioTower_4F4_EventScript_Sign2_Text:
 	.string "It's a sign.$"
+
+GoldenrodCity_RadioTower_4F_Text_CipherPeonF6_Intro:
+	.string "CIPHER's grip tightens the closer\n"
+	.string "you get to the top.$"
+
+GoldenrodCity_RadioTower_4F_Text_CipherPeonF7_Intro:
+	.string "No hero act is saving this tower\n"
+	.string "from us now.$"
+
+GoldenrodCity_RadioTower_4F_Text_CipherPeonF_Defeat:
+	.string "We were supposed to hold this floor!$"
+
+GoldenrodCity_RadioTower_4F_Text_CipherPeonF6_After:
+	.string "Our shadow Pokemon were meant to\n"
+	.string "crush anybody climbing up...$"
+
+GoldenrodCity_RadioTower_4F_Text_CipherPeonF7_After:
+	.string "VENUS is still above. You're not\n"
+	.string "done fighting CIPHER yet...$"
