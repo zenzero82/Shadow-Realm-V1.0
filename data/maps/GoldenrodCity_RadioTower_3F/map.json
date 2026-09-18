@@ -2,7 +2,7 @@
   "id": "MAP_GOLDENROD_CITY_RADIO_TOWER_3F",
   "name": "GoldenrodCity_RadioTower_3F",
   "layout": "LAYOUT_GOLDENROD_CITY_RADIO_TOWER_3F",
-  "music": "MUS_HG_GOLDENROD",
+  "music": "MUS_THE_UNDER",
   "region_map_section": "MAPSEC_GOLDENROD_CITY",
   "requires_flash": false,
   "weather": "WEATHER_NONE",
@@ -116,7 +116,25 @@
     },
     {
       "type": "trigger",
+      "x": 19,
+      "y": 5,
+      "elevation": 0,
+      "var": "VAR_TEMP_0",
+      "var_value": "0",
+      "script": "GoldenrodCity_RadioTower_3F_EventScript_CipherF5Trigger1"
+    },
+    {
+      "type": "trigger",
       "x": 18,
+      "y": 6,
+      "elevation": 0,
+      "var": "VAR_TEMP_0",
+      "var_value": "0",
+      "script": "GoldenrodCity_RadioTower_3F_EventScript_CipherF5Trigger2"
+    },
+    {
+      "type": "trigger",
+      "x": 19,
       "y": 6,
       "elevation": 0,
       "var": "VAR_TEMP_0",
@@ -143,7 +161,25 @@
     },
     {
       "type": "trigger",
+      "x": 29,
+      "y": 5,
+      "elevation": 0,
+      "var": "VAR_TEMP_0",
+      "var_value": "0",
+      "script": "GoldenrodCity_RadioTower_3F_EventScript_CipherM1Trigger1"
+    },
+    {
+      "type": "trigger",
       "x": 28,
+      "y": 6,
+      "elevation": 0,
+      "var": "VAR_TEMP_0",
+      "var_value": "0",
+      "script": "GoldenrodCity_RadioTower_3F_EventScript_CipherM1Trigger2"
+    },
+    {
+      "type": "trigger",
+      "x": 29,
       "y": 6,
       "elevation": 0,
       "var": "VAR_TEMP_0",
@@ -179,59 +215,59 @@
     },
     {
       "type": "sign",
-      "x": 25,
+      "x": 15,
       "y": 9,
       "elevation": 0,
       "player_facing_dir": "BG_EVENT_PLAYER_FACING_ANY",
-      "script": "GoldenrodCity_RadioTower_3F_EventScript_Gate"
+      "script": "GoldenrodCity_RadioTower_3F_EventScript_Gate2"
     },
     {
       "type": "sign",
-      "x": 26,
+      "x": 16,
       "y": 9,
       "elevation": 0,
       "player_facing_dir": "BG_EVENT_PLAYER_FACING_ANY",
-      "script": "GoldenrodCity_RadioTower_3F_EventScript_Gate"
+      "script": "GoldenrodCity_RadioTower_3F_EventScript_Gate3"
     },
     {
       "type": "sign",
-      "x": 27,
+      "x": 17,
       "y": 9,
       "elevation": 0,
       "player_facing_dir": "BG_EVENT_PLAYER_FACING_ANY",
-      "script": "GoldenrodCity_RadioTower_3F_EventScript_Gate"
+      "script": "GoldenrodCity_RadioTower_3F_EventScript_Gate4"
     },
     {
       "type": "sign",
-      "x": 28,
+      "x": 18,
       "y": 9,
       "elevation": 0,
       "player_facing_dir": "BG_EVENT_PLAYER_FACING_ANY",
-      "script": "GoldenrodCity_RadioTower_3F_EventScript_Gate"
+      "script": "GoldenrodCity_RadioTower_3F_EventScript_Gate5"
     },
     {
       "type": "sign",
-      "x": 29,
+      "x": 19,
       "y": 9,
       "elevation": 0,
       "player_facing_dir": "BG_EVENT_PLAYER_FACING_ANY",
-      "script": "GoldenrodCity_RadioTower_3F_EventScript_Gate"
+      "script": "GoldenrodCity_RadioTower_3F_EventScript_Gate6"
     },
     {
       "type": "sign",
-      "x": 30,
+      "x": 20,
       "y": 9,
       "elevation": 0,
       "player_facing_dir": "BG_EVENT_PLAYER_FACING_ANY",
-      "script": "GoldenrodCity_RadioTower_3F_EventScript_Gate"
+      "script": "GoldenrodCity_RadioTower_3F_EventScript_Gate7"
     },
     {
       "type": "sign",
-      "x": 31,
+      "x": 21,
       "y": 9,
       "elevation": 0,
       "player_facing_dir": "BG_EVENT_PLAYER_FACING_ANY",
-      "script": "GoldenrodCity_RadioTower_3F_EventScript_Gate"
+      "script": "GoldenrodCity_RadioTower_3F_EventScript_Gate8"
     }
   ]
 }

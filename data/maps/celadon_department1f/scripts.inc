@@ -28,7 +28,6 @@ celadon_department1f_Text_Directory:
 	.string "6F: ROOFTOP SQUARE$"
 
 CeladonDeptElevator_OnFrame::
-	map_script_2 VAR_TEMP_0, 1, CeladonDeptElevator_EventScript_Exit
 	.2byte 0
 
 CeladonDeptElevator_EventScript_Exit::

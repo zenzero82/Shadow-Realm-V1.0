@@ -48,7 +48,7 @@
 #define MULTI_MECHADOLL5_Q1                37
 #define MULTI_MECHADOLL5_Q2                38
 #define MULTI_MECHADOLL5_Q3                39
-#define MULTI_UNUSED_40                    40
+#define MULTI_GAME_CORNER_EVOLUTION_ITEMS  40
 #define MULTI_UNUSED_41                    41
 #define MULTI_VENDING_MACHINE              42
 #define MULTI_MACH_BIKE_INFO               43
@@ -59,7 +59,7 @@
 #define MULTI_GAME_CORNER_DOLLS            48
 #define MULTI_GAME_CORNER_COINS            49
 #define MULTI_HOWS_FISHING                 50
-#define MULTI_UNUSED_51                    51
+#define MULTI_GAME_CORNER_Z_CRYSTALS       51
 #define MULTI_SSTIDAL_SLATEPORT_WITH_BF    52
 #define MULTI_SSTIDAL_BATTLE_FRONTIER      53
 #define MULTI_RIGHTLEFT                    54
@@ -125,6 +125,7 @@
 #define MULTI_BERRY_PLOT                   114
 #define MULTI_5FLOORS                      115
 #define MULTI_7FLOORS                      116
+#define MULTI_WEEKDAYS                     117
 
 // Lilycove SS Tidal Multichoice Selections
 #define SSTIDAL_SELECTION_SLATEPORT        0

@@ -282,6 +282,28 @@ static const struct MenuAction MultichoiceList_GameCornerCoins[] =
     {gText_Exit},
 };
 
+static const struct MenuAction MultichoiceList_GameCornerZCrystals[] =
+{
+    {COMPOUND_STRING("NORMALIUM Z{CLEAR_TO 0x68}5,000")},
+    {COMPOUND_STRING("FIRIUM Z{CLEAR_TO 0x68}5,000")},
+    {COMPOUND_STRING("WATERIUM Z{CLEAR_TO 0x68}5,000")},
+    {COMPOUND_STRING("ELECTRIUM Z{CLEAR_TO 0x68}5,000")},
+    {COMPOUND_STRING("GRASSIUM Z{CLEAR_TO 0x68}5,000")},
+    {COMPOUND_STRING("FIGHTINIUM Z{CLEAR_TO 0x68}5,000")},
+    {gText_Exit},
+};
+
+static const struct MenuAction MultichoiceList_GameCornerEvolutionItems[] =
+{
+    {COMPOUND_STRING("AUSPICIOUS ARMOR{CLEAR_TO 0x68}5,000")},
+    {COMPOUND_STRING("MALICIOUS ARMOR{CLEAR_TO 0x68}5,000")},
+    {COMPOUND_STRING("BLACK AUGURITE{CLEAR_TO 0x68}5,000")},
+    {COMPOUND_STRING("LINKING CORD{CLEAR_TO 0x68}5,000")},
+    {COMPOUND_STRING("PEAT BLOCK{CLEAR_TO 0x68}5,000")},
+    {COMPOUND_STRING("SYRUPY APPLE{CLEAR_TO 0x68}5,000")},
+    {gText_Exit},
+};
+
 static const struct MenuAction MultichoiceList_HowsFishing[] =
 {
     {COMPOUND_STRING("Excellent")},
@@ -344,6 +366,17 @@ static const struct MenuAction MultichoiceList_7Floors[] =
     {gText_1F},
     {gText_B1F},
     {gText_Exit},
+};
+
+static const struct MenuAction MultichoiceList_Weekdays[] =
+{
+    {COMPOUND_STRING("Monday")},
+    {COMPOUND_STRING("Tuesday")},
+    {COMPOUND_STRING("Wednesday")},
+    {COMPOUND_STRING("Thursday")},
+    {COMPOUND_STRING("Friday")},
+    {COMPOUND_STRING("Saturday")},
+    {COMPOUND_STRING("Sunday")},
 };
 
 static const struct MenuAction MultichoiceList_ShardsR[] =
@@ -853,7 +886,7 @@ static const struct MultichoiceListStruct sMultichoiceLists[] =
     [MULTI_MECHADOLL5_Q1]              = MULTICHOICE(MultichoiceList_Mechadoll5_Q1),
     [MULTI_MECHADOLL5_Q2]              = MULTICHOICE(MultichoiceList_Mechadoll5_Q2),
     [MULTI_MECHADOLL5_Q3]              = MULTICHOICE(MultichoiceList_Mechadoll5_Q3),
-    [MULTI_UNUSED_40]                  = MULTICHOICE(MultichoiceList_Exit),
+    [MULTI_GAME_CORNER_EVOLUTION_ITEMS]= MULTICHOICE(MultichoiceList_GameCornerEvolutionItems),
     [MULTI_UNUSED_41]                  = MULTICHOICE(MultichoiceList_Exit),
     [MULTI_VENDING_MACHINE]            = MULTICHOICE(MultichoiceList_VendingMachine),
     [MULTI_MACH_BIKE_INFO]             = MULTICHOICE(MultichoiceList_MachBikeInfo),
@@ -864,7 +897,7 @@ static const struct MultichoiceListStruct sMultichoiceLists[] =
     [MULTI_GAME_CORNER_DOLLS]          = MULTICHOICE(MultichoiceList_GameCornerDolls),
     [MULTI_GAME_CORNER_COINS]          = MULTICHOICE(MultichoiceList_GameCornerCoins),
     [MULTI_HOWS_FISHING]               = MULTICHOICE(MultichoiceList_HowsFishing),
-    [MULTI_UNUSED_51]                  = MULTICHOICE(MultichoiceList_Exit),
+    [MULTI_GAME_CORNER_Z_CRYSTALS]     = MULTICHOICE(MultichoiceList_GameCornerZCrystals),
     [MULTI_SSTIDAL_SLATEPORT_WITH_BF]  = MULTICHOICE(MultichoiceList_SSTidalSlateportWithBF),
     [MULTI_SSTIDAL_BATTLE_FRONTIER]    = MULTICHOICE(MultichoiceList_SSTidalBattleFrontier),
     [MULTI_RIGHTLEFT]                  = MULTICHOICE(MultichoiceList_RightLeft),
@@ -930,6 +963,7 @@ static const struct MultichoiceListStruct sMultichoiceLists[] =
     [MULTI_BERRY_PLOT]                 = MULTICHOICE(MultichoiceList_BerryPlot),
     [MULTI_5FLOORS]                    = MULTICHOICE(MultichoiceList_5Floors),
     [MULTI_7FLOORS]                    = MULTICHOICE(MultichoiceList_7Floors),
+    [MULTI_WEEKDAYS]                   = MULTICHOICE(MultichoiceList_Weekdays),
 };
 
 const u8 *const gStdStrings[] =

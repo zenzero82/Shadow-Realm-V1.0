@@ -29,6 +29,30 @@ struct SurfBoxCache
 
 static EWRAM_DATA struct SurfBoxCache sSurfBoxCache;
 
+static bool8 IsPartyMonUsableForFieldMove(struct Pokemon *mon)
+{
+    if (GetMonData(mon, MON_DATA_SPECIES) == SPECIES_NONE)
+        return FALSE;
+    if (GetMonData(mon, MON_DATA_IS_EGG))
+        return FALSE;
+    if (GetMonData(mon, MON_DATA_IS_SHADOW))
+        return FALSE;
+
+    return TRUE;
+}
+
+static bool8 IsBoxMonUsableForFieldMove(u8 boxId, u8 boxPos)
+{
+    if (!GetBoxMonDataAt(boxId, boxPos, MON_DATA_SANITY_HAS_SPECIES))
+        return FALSE;
+    if (GetBoxMonDataAt(boxId, boxPos, MON_DATA_SANITY_IS_EGG))
+        return FALSE;
+    if (GetBoxMonDataAt(boxId, boxPos, MON_DATA_IS_SHADOW))
+        return FALSE;
+
+    return TRUE;
+}
+
 void FieldMove_MarkSurfBoxCacheDirty(void)
 {
     sSurfBoxCache.dirty = TRUE;
@@ -46,9 +70,7 @@ static void RebuildSurfBoxCache(void)
     {
         for (boxPos = 0; boxPos < IN_BOX_COUNT; boxPos++)
         {
-            if (!GetBoxMonDataAt(boxId, boxPos, MON_DATA_SANITY_HAS_SPECIES))
-                continue;
-            if (GetBoxMonDataAt(boxId, boxPos, MON_DATA_SANITY_IS_EGG))
+            if (!IsBoxMonUsableForFieldMove(boxId, boxPos))
                 continue;
 
             u16 monSpecies = GetBoxMonDataAt(boxId, boxPos, MON_DATA_SPECIES);
@@ -128,12 +150,10 @@ bool8 FindFieldMoveMonForMove(u16 move, u8 *partyIndex, bool8 *fromBox, u16 *spe
     {
         for (i = PARTY_SIZE; i-- > 0;)
         {
-            u16 monSpecies = GetMonData(&gPlayerParty[i], MON_DATA_SPECIES);
+            if (!IsPartyMonUsableForFieldMove(&gPlayerParty[i]))
+                continue;
 
-            if (monSpecies == SPECIES_NONE)
-                continue;
-            if (GetMonData(&gPlayerParty[i], MON_DATA_IS_EGG))
-                continue;
+            u16 monSpecies = GetMonData(&gPlayerParty[i], MON_DATA_SPECIES);
             if (!SurfOw_IsSpeciesEligible(monSpecies))
                 continue;
             if (CanLearnTeachableMove(monSpecies, move))
@@ -183,12 +203,10 @@ bool8 FindFieldMoveMonForMove(u16 move, u8 *partyIndex, bool8 *fromBox, u16 *spe
 
     for (i = PARTY_SIZE; i-- > 0;)
     {
-        u16 monSpecies = GetMonData(&gPlayerParty[i], MON_DATA_SPECIES);
+        if (!IsPartyMonUsableForFieldMove(&gPlayerParty[i]))
+            continue;
 
-        if (monSpecies == SPECIES_NONE)
-            continue;
-        if (GetMonData(&gPlayerParty[i], MON_DATA_IS_EGG))
-            continue;
+        u16 monSpecies = GetMonData(&gPlayerParty[i], MON_DATA_SPECIES);
         if (CanLearnTeachableMove(monSpecies, move))
         {
             gFieldMoveMonInfo.valid = TRUE;
@@ -235,10 +253,9 @@ bool8 FindFieldMoveMonForMove(u16 move, u8 *partyIndex, bool8 *fromBox, u16 *spe
         {
             for (u8 boxPos = 0; boxPos < IN_BOX_COUNT; boxPos++)
             {
-                if (!GetBoxMonDataAt(boxId, boxPos, MON_DATA_SANITY_HAS_SPECIES))
+                if (!IsBoxMonUsableForFieldMove(boxId, boxPos))
                     continue;
-                if (GetBoxMonDataAt(boxId, boxPos, MON_DATA_SANITY_IS_EGG))
-                    continue;
+
                 u16 monSpecies = GetBoxMonDataAt(boxId, boxPos, MON_DATA_SPECIES);
 
                 if (monSpecies == SPECIES_NONE)

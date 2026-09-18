@@ -5,35 +5,29 @@ route2_house_Speaker_OldMan:
 	.string "OLD MAN$"
 
 route2_house_EventScript_OldMan::
+	lock
 	faceplayer
 	setspeaker route2_house_Speaker_OldMan
-	msgbox route2_house_Text_OldMan_Intro, MSGBOX_NPC
-	setvar VAR_0x8004, SCROLL_MULTI_ROUTE2_GUIDE
-	special ShowScrollableMultichoice
-	waitstate
-	switch VAR_RESULT
-	case 0, route2_house_EventScript_OldMan_Dexnav
-	case 1, route2_house_EventScript_OldMan_EvIv
-	case 2, route2_house_EventScript_OldMan_PokeballSwap
-	case MULTI_B_PRESSED, route2_house_EventScript_OldMan_Cancel
+	checkflag FLAG_RECEIVED_ROUTE2_HOUSE_RARE_CANDY
+	goto_if_eq route2_house_EventScript_OldMan_AfterGift
+	msgbox route2_house_Text_OldMan_GiftIntro, MSGBOX_DEFAULT
+	setvar VAR_0x8000, ITEM_RARE_CANDY
+	setvar VAR_0x8001, 1
+	call Std_ObtainItem
+	goto_if_eq VAR_RESULT, FALSE, route2_house_EventScript_OldMan_BagFull
+	setflag FLAG_RECEIVED_ROUTE2_HOUSE_RARE_CANDY
+	msgbox route2_house_Text_OldMan_GiftOutro, MSGBOX_DEFAULT
+	release
 	end
 
-route2_house_EventScript_OldMan_Dexnav::
-	setspeaker route2_house_Speaker_OldMan
-	msgbox route2_house_Text_OldMan_Dexnav, MSGBOX_NPC
+route2_house_EventScript_OldMan_BagFull::
+	msgbox route2_house_Text_OldMan_BagFull, MSGBOX_DEFAULT
+	release
 	end
 
-route2_house_EventScript_OldMan_EvIv::
-	setspeaker route2_house_Speaker_OldMan
-	msgbox route2_house_Text_OldMan_EvIv, MSGBOX_NPC
-	end
-
-route2_house_EventScript_OldMan_PokeballSwap::
-	setspeaker route2_house_Speaker_OldMan
-	msgbox route2_house_Text_OldMan_PokeballSwap, MSGBOX_NPC
-	end
-
-route2_house_EventScript_OldMan_Cancel::
+route2_house_EventScript_OldMan_AfterGift::
+	msgbox route2_house_Text_OldMan_AfterGift, MSGBOX_DEFAULT
+	release
 	end
 
 route2_house_Text_OldMan_Intro:
@@ -59,3 +53,27 @@ route2_house_Text_OldMan_PokeballSwap:
 	.string "ball your POKéMON is stored in.\p"
 	.string "Open the bag menu and pick a new\n"
 	.string "ball to apply.$"
+
+route2_house_Text_OldMan_GiftIntro:
+	.string "Most folks never bother cutting\n"
+	.string "through to this old house.\p"
+	.string "That kind of curiosity ought to be\n"
+	.string "rewarded.\p"
+	.string "Here, take this RARE CANDY.\n"
+	.string "Save it for a POKéMON you really\l"
+	.string "believe in.$"
+
+route2_house_Text_OldMan_GiftOutro:
+	.string "A quick burst of strength can turn a\n"
+	.string "close battle in your favor.\p"
+	.string "Don't waste it on just any partner.$"
+
+route2_house_Text_OldMan_BagFull:
+	.string "Your bag's packed tight.\p"
+	.string "Make some space and I'll hand over\n"
+	.string "that RARE CANDY.$"
+
+route2_house_Text_OldMan_AfterGift:
+	.string "That RARE CANDY is a rare find out\n"
+	.string "here.\p"
+	.string "Use it when the right moment comes.$"

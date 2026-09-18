@@ -6,14 +6,8 @@ Route7_EventScript_Sign::
 	goto EventScript_GimmighoulSignpost
 
 Route7_Text_UndergroundPathSign:
-	.string "What's this flyer?\p"
-	.string "… Uncouth trainers have been\n"
-	.string "holding battles in the\l"
-	.string "UNDERGROUND PATH.\p"
-	.string "Because of rising complaints by\n"
-	.string "local residents, the UNDERGROUND\l"
-	.string "PATH has been sealed indefinitely.\p"
-	.string "CELADON POLICE$"
+	.string "Underground Tunnel:\p"
+	.string "Route 7 {RIGHT_ARROW} Route 8$"
 
 Route7_EventScript_Door::
 	msgbox Route7_Text_LockedDoor, MSGBOX_SIGN

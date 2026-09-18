@@ -14,6 +14,9 @@ Route34_OnTransition:
 	checkflag FLAG_WES_HIDEOUT_NEBBY_SCENE_DONE
 	goto_if_eq Route34_OnTransition_HideOfficer
 	goto_if_unset FLAG_ROUTE34_HOOPA_SCENE, Route34_OnTransition_Done
+	call Route34_EventScript_CheckHoopaArrival
+	compare VAR_RESULT, 0
+	goto_if_eq Route34_OnTransition_Done
 	hideobjectat LOCALID_PLAYER, MAP_ROUTE34
 	hideobjectat ROUTE34_LOCALID_HOOPA_RING, MAP_ROUTE34
 	removeobject ROUTE34_LOCALID_HOOPA_RING
@@ -24,6 +27,9 @@ Route34_OnTransition_HideOfficer:
 	hideobjectat ROUTE34_LOCALID_OFFICER, MAP_ROUTE34
 	removeobject ROUTE34_LOCALID_OFFICER
 	goto_if_unset FLAG_ROUTE34_HOOPA_SCENE, Route34_OnTransition_Done
+	call Route34_EventScript_CheckHoopaArrival
+	compare VAR_RESULT, 0
+	goto_if_eq Route34_OnTransition_Done
 	hideobjectat LOCALID_PLAYER, MAP_ROUTE34
 	hideobjectat ROUTE34_LOCALID_HOOPA_RING, MAP_ROUTE34
 	removeobject ROUTE34_LOCALID_HOOPA_RING
@@ -37,6 +43,9 @@ Route34_OnLoad:
 	checkflag FLAG_WES_HIDEOUT_NEBBY_SCENE_DONE
 	goto_if_eq Route34_OnLoad_HideOfficer
 	goto_if_unset FLAG_ROUTE34_HOOPA_SCENE, Route34_OnLoad_Done
+	call Route34_EventScript_CheckHoopaArrival
+	compare VAR_RESULT, 0
+	goto_if_eq Route34_OnLoad_Done
 	setvar VAR_TEMP_1, 0
 	setvar VAR_TEMP_2, 0
 	hideobjectat LOCALID_PLAYER, MAP_ROUTE34
@@ -49,6 +58,9 @@ Route34_OnLoad_HideOfficer:
 	hideobjectat ROUTE34_LOCALID_OFFICER, MAP_ROUTE34
 	removeobject ROUTE34_LOCALID_OFFICER
 	goto_if_unset FLAG_ROUTE34_HOOPA_SCENE, Route34_OnLoad_Done
+	call Route34_EventScript_CheckHoopaArrival
+	compare VAR_RESULT, 0
+	goto_if_eq Route34_OnLoad_Done
 	setvar VAR_TEMP_1, 0
 	setvar VAR_TEMP_2, 0
 	hideobjectat LOCALID_PLAYER, MAP_ROUTE34
@@ -70,9 +82,24 @@ Route34_EventScript_HidePlayerOnWarp::
 Route34_EventScript_HidePlayerOnWarp_Done:
 	end
 
+Route34_EventScript_CheckHoopaArrival::
+	special StorePlayerCoordsInVars
+	compare VAR_0x8004, 36
+	goto_if_ne Route34_EventScript_CheckHoopaArrival_Invalid
+	compare VAR_0x8005, 55
+	goto_if_ne Route34_EventScript_CheckHoopaArrival_Invalid
+	setvar VAR_RESULT, 1
+	return
+
+Route34_EventScript_CheckHoopaArrival_Invalid:
+	clearflag FLAG_ROUTE34_HOOPA_SCENE
+	setvar VAR_RESULT, 0
+	return
+
 Route34_EventScript_PlayerEmerges::
 	lockall
 	setvar VAR_TEMP_1, 1
+	setvar VAR_TEMP_2, 1
 	clearflag FLAG_ROUTE34_HOOPA_SCENE
 	hideobjectat LOCALID_PLAYER, MAP_ROUTE34
 	setobjectxy LOCALID_PLAYER, 36, 55
@@ -386,7 +413,7 @@ Route34_Text_Birch_VictorCall:
 Route34_Text_Victor_Dynamax:
 	.string "Well so much for that.\p"
 	.string "Hey before I forget take this\n"
-	.string "DYNAMAX BRACELET.$"
+	.string "DYNAMAX BAND.$"
 
 Route34_Text_Victor_Dynamax_After:
 	.string "You won't be able to use that just\n"

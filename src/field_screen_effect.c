@@ -36,6 +36,7 @@
 #include "constants/event_object_movement.h"
 #include "constants/event_objects.h"
 #include "constants/heal_locations.h"
+#include "constants/metatile_labels.h"
 #include "constants/songs.h"
 #include "constants/rgb.h"
 #include "trainer_hill.h"
@@ -273,15 +274,26 @@ static void SetUpWarpExitTask(void)
     TaskFunc func;
 
     PlayerGetDestCoords(&x, &y);
-    behavior = MapGridGetMetatileBehaviorAt(x, y);
-    if (MetatileBehavior_IsDoor(behavior) == TRUE)
-        func = Task_ExitDoor;
-    else if (MetatileBehavior_IsDirectionalStairWarp(behavior) == TRUE && !gExitStairsMovementDisabled)
-        func = Task_ExitStairs;
-    else if (MetatileBehavior_IsNonAnimDoor(behavior) == TRUE)
+    if (gSaveBlock1Ptr->location.mapGroup == MAP_GROUP(MAP_GOLDENROD_CITY)
+     && gSaveBlock1Ptr->location.mapNum == MAP_NUM(MAP_GOLDENROD_CITY)
+     && gSaveBlock1Ptr->location.warpId == 12
+     && FlagGet(FLAG_GOLDENROD_TUNNEL_DOOR_UNLOCKED))
+    {
+        MapGridSetMetatileIdAt(x, y, METATILE_johto_general_og_IntactDoor_Bottom_Unlocked | MAPGRID_COLLISION_MASK);
         func = Task_ExitNonAnimDoor;
+    }
     else
-        func = Task_ExitNonDoor;
+    {
+        behavior = MapGridGetMetatileBehaviorAt(x, y);
+        if (FieldIsDoorAt(x, y) == TRUE)
+            func = Task_ExitDoor;
+        else if (MetatileBehavior_IsDirectionalStairWarp(behavior) == TRUE && !gExitStairsMovementDisabled)
+            func = Task_ExitStairs;
+        else if (MetatileBehavior_IsNonAnimDoor(behavior) == TRUE)
+            func = Task_ExitNonAnimDoor;
+        else
+            func = Task_ExitNonDoor;
+    }
 
     gExitStairsMovementDisabled = FALSE;
     CreateTask(func, 10);
@@ -742,7 +754,7 @@ void Task_DoDoorWarp(u8 taskId)
         PlayerGetDestCoords(x, y);
         task->tDoorX = *x;
         task->tDoorY = *y - 1;
-        if (MetatileBehavior_IsDoor(MapGridGetMetatileBehaviorAt(*x, *y)))
+        if (FieldIsDoorAt(*x, *y))
             task->tDoorY = *y;
         PlaySE(GetDoorSoundEffect(task->tDoorX, task->tDoorY));
         if (followerObject)

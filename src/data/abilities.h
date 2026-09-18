@@ -2415,4 +2415,40 @@ const struct Ability gAbilitiesInfo[ABILITIES_COUNT] =
         .description = COMPOUND_STRING("Change forms based on battle conditions."),
         .aiRating = 8,
     },
+
+    [ABILITY_MEGA_SOL] =
+    {
+        .name = _("Mega Sol"),
+        .description = COMPOUND_STRING("Acts like under sun."),
+    },
+
+    [ABILITY_PIERCING_DRILL] =
+    {
+        .name = _("Piercing Drill"),
+        .description = COMPOUND_STRING("Contact evades protection."),
+    },
+
+    [ABILITY_DRAGONIZE] =
+    {
+        .name = _("Dragonize"),
+        .description = COMPOUND_STRING("Normal moves turn Dragon."),
+    },
+
+    [ABILITY_EELEVATE] =
+    {
+        .name = _("Eelevate"),
+        .description = COMPOUND_STRING("Unimplemented."),
+    },
+
+    [ABILITY_FIRE_MANE] =
+    {
+        .name = _("Fire Mane"),
+        .description = COMPOUND_STRING("Unimplemented."),
+    },
+
+    [ABILITY_SPICY_SPRAY] =
+    {
+        .name = _("Spicy Spray"),
+        .description = COMPOUND_STRING("Burns the foe when damaged."),
+    },
 };

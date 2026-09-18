@@ -187,27 +187,26 @@ enum
 
 enum
 {
-    MC_HEADER_MR_STONE,
+    MC_HEADER_BROCK,
+    MC_HEADER_MISTY,
+    MC_HEADER_SURGE,
+    MC_HEADER_ERIKA,
+    MC_HEADER_SABRINA,
+    MC_HEADER_KOGA,
+    MC_HEADER_BLAINE,
+    MC_HEADER_BLUE,
+    MC_HEADER_FALKNER,
+    MC_HEADER_BUGSY,
+    MC_HEADER_WHITNEY,
+    MC_HEADER_MORTY,
+    MC_HEADER_CHUCK,
+    MC_HEADER_JASMINE,
+    MC_HEADER_PRYCE,
+    MC_HEADER_CLAIR,
+    MC_HEADER_WES,
     MC_HEADER_PROF_BIRCH,
-    MC_HEADER_BRENDAN,
-    MC_HEADER_MAY,
-    MC_HEADER_WALLY,
-    MC_HEADER_NORMAN,
+    MC_HEADER_PROF_ROWAN,
     MC_HEADER_MOM,
-    MC_HEADER_STEVEN,
-    MC_HEADER_SCOTT,
-    MC_HEADER_ROXANNE,
-    MC_HEADER_BRAWLY,
-    MC_HEADER_WATTSON,
-    MC_HEADER_FLANNERY,
-    MC_HEADER_WINONA,
-    MC_HEADER_TATE_LIZA,
-    MC_HEADER_JUAN,
-    MC_HEADER_SIDNEY,
-    MC_HEADER_PHOEBE,
-    MC_HEADER_GLACIA,
-    MC_HEADER_DRAKE,
-    MC_HEADER_WALLACE,
     MC_HEADER_COUNT
 };
 
@@ -283,6 +282,7 @@ enum
     POKENAV_MC_FUNC_CALL_MSG,
     POKENAV_MC_FUNC_NEARBY_MSG,
     POKENAV_MC_FUNC_EXIT_CALL,
+    POKENAV_MC_FUNC_REFRESH_CALL,
     POKENAV_MC_FUNC_SHOW_CHECK_PAGE,
     POKENAV_MC_FUNC_CHECK_PAGE_UP,
     POKENAV_MC_FUNC_CHECK_PAGE_DOWN,
@@ -352,6 +352,7 @@ bool32 MatchCall_GetEnabled(u32 idx);
 u32 MatchCall_GetRematchTableIdx(u32 idx);
 u32 GetTrainerIdxByRematchIdx(u32 rematchIdx);
 int MatchCall_GetOverrideFacilityClass(u32 idx);
+int MatchCall_GetOverrideTrainerPic(u32 idx);
 void MatchCall_GetMessage(u32 idx, u8 *dest);
 const u8 *MatchCall_GetOverrideFlavorText(u32 idx, u32 offset);
 void MatchCall_GetNameAndDesc(u32 idx, const u8 **desc, const u8 **name);

@@ -7636,7 +7636,7 @@
     {
       "id": "LAYOUT_GOLDENROD_CITY_UNDERGROUND_SWITCHES",
       "name": "GoldenrodCity_UndergroundSwitches_Layout",
-      "width": 60,
+      "width": 38,
       "height": 18,
       "border_width": 2,
       "border_height": 2,
@@ -8812,8 +8812,8 @@
     {
       "id": "LAYOUT_NOTHING",
       "name": "Nothing_Layout",
-      "width": 80,
-      "height": 80,
+      "width": 40,
+      "height": 40,
       "border_width": 2,
       "border_height": 2,
       "primary_tileset": "gTileset_shadowrealm",
@@ -9396,6 +9396,18 @@
       "secondary_tileset": "gTileset_departmentstore",
       "border_filepath": "data/layouts/celadon_department_elevator/border.bin",
       "blockdata_filepath": "data/layouts/celadon_department_elevator/map.bin"
+    },
+    {
+      "id": "LAYOUT_AGATE_VILLAGE",
+      "name": "Agate_Village_Layout",
+      "width": 42,
+      "height": 33,
+      "border_width": 2,
+      "border_height": 2,
+      "primary_tileset": "gTileset_johto_general_og",
+      "secondary_tileset": "gTileset_agate",
+      "border_filepath": "data/layouts/Agate_Village/border.bin",
+      "blockdata_filepath": "data/layouts/Agate_Village/map.bin"
     }
   ]
 }

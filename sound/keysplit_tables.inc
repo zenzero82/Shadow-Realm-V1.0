@@ -7281,3 +7281,48 @@
 	.byte 6 @ 125
 	.byte 6 @ 126
 	.byte 6 @ 127
+
+@ Pokemon Black/White instruments used by the Team Plasma themes.
+KeySplitTable59: @ Strings: 69 / 77 / 84
+	.fill 76, 1, 0
+	.fill 7, 1, 1
+	.fill 45, 1, 2
+
+KeySplitTable60: @ Trumpet: 69 / 79
+	.fill 75, 1, 0
+	.fill 53, 1, 1
+
+KeySplitTable61: @ Vibraphone: 60 / 72 / 84
+	.fill 69, 1, 0
+	.fill 12, 1, 1
+	.fill 47, 1, 2
+
+KeySplitTable62: @ Marimba: 60 / 72
+	.fill 70, 1, 0
+	.fill 58, 1, 1
+
+KeySplitTable63: @ Acoustic bass: 36 / 48
+	.fill 41, 1, 0
+	.fill 87, 1, 1
+
+KeySplitTable64: @ Steel-string guitar: 40 / 45 / 50 / 55 / 59 / 64
+	.fill 44, 1, 0
+	.fill 5, 1, 1
+	.fill 5, 1, 2
+	.fill 4, 1, 3
+	.fill 5, 1, 4
+	.fill 65, 1, 5
+
+KeySplitTable65: @ Fretless bass: 31 / 36 / 43 / 48
+	.fill 35, 1, 0
+	.fill 7, 1, 1
+	.fill 5, 1, 2
+	.fill 81, 1, 3
+
+KeySplitTable66: @ Grand piano: 48 / 55 / 60 / 67 / 72 / 79
+	.fill 54, 1, 0
+	.fill 5, 1, 1
+	.fill 7, 1, 2
+	.fill 5, 1, 3
+	.fill 7, 1, 4
+	.fill 50, 1, 5

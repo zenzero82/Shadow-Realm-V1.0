@@ -61,7 +61,7 @@ enum
 
 #define TAG_HEALTHBAR_PAL               TAG_HEALTHBAR_PLAYER1_TILE
 #define TAG_HEALTHBOX_PAL               TAG_HEALTHBOX_PLAYER1_PAL
-#define TAG_SHADOW_PAL                  TAG_HEALTHBOX_FRAME_OPPONENT1_PAL
+#define TAG_SHADOW_PAL                  0xD797
 
 #define TAG_SHADOW_TILE                 0xD759
 
@@ -146,8 +146,12 @@ u8 GetHPBarLevel(s16 hp, s16 maxhp);
 void CreateAbilityPopUp(u8 battlerId, u32 ability, bool32 isDoubleBattle);
 void DestroyAbilityPopUp(u8 battlerId);
 void BattleInterface_RestoreAbilityPopupPalette(void);
+void BattleInterface_FreeInactiveWindowPalettes(void);
+void BattleInterface_DiscardTransientWindows(void);
+void BattleInterface_RefreshPersistentPalettes(void);
 void ReserveAbilityPopupPaletteSlot(void);
 void ReserveMoveTypeIconPaletteSlot(void);
+void ReserveCategoryIconPaletteSlot(void);
 bool32 CanThrowLastUsedBall(void);
 void TryHideLastUsedBall(void);
 void TryRestoreLastUsedBall(void);

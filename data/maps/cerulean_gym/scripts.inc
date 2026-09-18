@@ -1,12 +1,5 @@
 cerulean_gym_MapScripts::
-	map_script MAP_SCRIPT_ON_TRANSITION, cerulean_gym_OnTransition
 	.byte 0
-
-cerulean_gym_OnTransition:
-	goto_if_unset FLAG_BADGE10_GET, cerulean_gym_OnTransition_End
-	call cerulean_gym_EventScript_SetGymTrainers
-cerulean_gym_OnTransition_End:
-	end
 
 cerulean_gym_Speaker_Misty:
 	.string "MISTY$"
@@ -29,6 +22,7 @@ cerulean_gym_EventScript_Misty::
 	setspeaker cerulean_gym_Speaker_Misty
 	goto_if_set FLAG_BADGE10_GET, cerulean_gym_EventScript_Misty_Defeated
 
+	playbgm MUS_RG_ENCOUNTER_GYM_LEADER, FALSE
 	msgbox cerulean_gym_Text_Misty_Intro, MSGBOX_DEFAULT
 	trainerbattle_no_intro TRAINER_MISTY, cerulean_gym_Text_Misty_WinLoss
 
@@ -63,7 +57,7 @@ cerulean_gym_EventScript_Misty_Defeated::
 	end
 
 cerulean_gym_EventScript_SetGymTrainers::
-	settrainerflag TRAINER_CERULEAN_GYM_SWIMMER_M
+	settrainerflag TRAINER_CERULEAN_GYM_SWIMMER_M_TYLER
 	settrainerflag TRAINER_CERULEAN_GYM_SWIMMER_F1
 	settrainerflag TRAINER_CERULEAN_GYM_SWIMMER_F2
 	return
@@ -86,7 +80,7 @@ cerulean_gym_EventScript_GymGuy_After::
 
 cerulean_gym_EventScript_SwimmerM::
 	setspeaker cerulean_gym_Speaker_SwimmerM
-	trainerbattle_single TRAINER_CERULEAN_GYM_SWIMMER_M, cerulean_gym_Text_SwimmerM_Intro, cerulean_gym_Text_SwimmerM_Defeat, cerulean_gym_EventScript_SwimmerM_After
+	trainerbattle_single TRAINER_CERULEAN_GYM_SWIMMER_M_TYLER, cerulean_gym_Text_SwimmerM_Intro, cerulean_gym_Text_SwimmerM_Defeat, cerulean_gym_EventScript_SwimmerM_After
 	end
 
 cerulean_gym_EventScript_SwimmerM_After::

@@ -17,15 +17,27 @@ Route30_EventScript_LittleBoy::
 	end
 
 Route30_EventScript_Youngster::
-	faceplayer
 	setspeaker Route30_Speaker_Youngster
-	msgbox Route30_Text_Youngster, MSGBOX_NPC
+	trainerbattle_single TRAINER_ROUTE30_YOUNGSTER, Route30_Text_Youngster_Intro, Route30_Text_Youngster_Defeat, Route30_EventScript_Youngster_After
 	end
 
 Route30_EventScript_BugCatcher::
-	faceplayer
 	setspeaker Route30_Speaker_BugCatcher
-	msgbox Route30_Text_BugCatcher, MSGBOX_NPC
+	trainerbattle_single TRAINER_ROUTE30_BUG_CATCHER, Route30_Text_BugCatcher_Intro, Route30_Text_BugCatcher_Defeat, Route30_EventScript_BugCatcher_After
+	end
+
+Route30_EventScript_Youngster_After::
+	setspeaker Route30_Speaker_Youngster
+	msgbox Route30_Text_Youngster_After, MSGBOX_NPC
+	closemessage
+	release
+	end
+
+Route30_EventScript_BugCatcher_After::
+	setspeaker Route30_Speaker_BugCatcher
+	msgbox Route30_Text_BugCatcher_After, MSGBOX_NPC
+	closemessage
+	release
 	end
 
 Route30_EventScript_SignRoute30::
@@ -44,13 +56,27 @@ Route30_Text_LittleBoy:
 	.string "I ran into a researcher heading\n"
 	.string "to MR. POKEMON'S house.$"
 
-Route30_Text_Youngster:
+Route30_Text_Youngster_Intro:
+	.string "I train out here every day.\p"
+	.string "Let's see your ROUTE 30 team!$"
+
+Route30_Text_Youngster_Defeat:
+	.string "Back to training for me...$"
+
+Route30_Text_Youngster_After:
 	.string "The grass here is great for\n"
 	.string "training early teams.$"
 
-Route30_Text_BugCatcher:
-	.string "Bugs love the trees on ROUTE 30.\n"
-	.string "I'm always looking around.$"
+Route30_Text_BugCatcher_Intro:
+	.string "Bugs love the trees on ROUTE 30!\p"
+	.string "Come on, battle me!$"
+
+Route30_Text_BugCatcher_Defeat:
+	.string "My bugs got blown away!$"
+
+Route30_Text_BugCatcher_After:
+	.string "I'm always looking around for\n"
+	.string "more bug POKéMON.$"
 
 Route30_Text_SignRoute30:
 	.string "ROUTE 30\n"

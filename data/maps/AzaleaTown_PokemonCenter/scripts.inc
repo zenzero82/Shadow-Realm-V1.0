@@ -13,6 +13,7 @@ AzaleaTown_PokemonCenter_Speaker_Woman:
 
 AzaleaTown_PokemonCenter_OnTransition:
 	setrespawn HEAL_LOCATION_AZALEA_TOWN
+	call CableClub_EventScript_HideOrShowMysteryGiftMan
 	end
 
 AzaleaTown_PokemonCenter_EventScript_Fisherman::

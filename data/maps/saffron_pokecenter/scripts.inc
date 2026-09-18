@@ -29,6 +29,7 @@ saffron_pokecenter_EventScript_Chansey::
 
 saffron_pokecenter_OnTransition:
 	setrespawn HEAL_LOCATION_SAFFRON_CITY
+	call CableClub_EventScript_HideOrShowMysteryGiftMan
 	end
 
 saffron_pokecenter_EventScript_Boy::

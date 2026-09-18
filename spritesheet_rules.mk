@@ -6242,3 +6242,33 @@ $(POKEMONGFXDIR)/zeraora/shadow/overworld.4bpp: %.4bpp: %.png
 
 $(POKEMONGFXDIR)/zygarde/shadow/overworld.4bpp: %.4bpp: %.png
 	$(GFX) $< $@ -mwidth 8 -mheight 8
+
+# Surfable Pokemon use frame-major tile ordering. Most are twelve 32x32
+# frames (six Pokemon frames followed by six player-overlap frames).
+$(OBJEVENTGFXDIR)/pokemon/surfable/%.4bpp: $(OBJEVENTGFXDIR)/pokemon/surfable/%.png
+	$(GFX) $< $@ -mwidth 4 -mheight 4
+
+SURFABLE_POKEMON_64BPP := \
+	$(OBJEVENTGFXDIR)/pokemon/surfable/0130_gyarados.4bpp \
+	$(OBJEVENTGFXDIR)/pokemon/surfable/0130_gyarados_shiny.4bpp \
+	$(OBJEVENTGFXDIR)/pokemon/surfable/0148_dragonair.4bpp \
+	$(OBJEVENTGFXDIR)/pokemon/surfable/0148_dragonair_shiny.4bpp \
+	$(OBJEVENTGFXDIR)/pokemon/surfable/0160_feraligatr.4bpp \
+	$(OBJEVENTGFXDIR)/pokemon/surfable/0160_feraligatr_shiny.4bpp \
+	$(OBJEVENTGFXDIR)/pokemon/surfable/0249_lugia.4bpp \
+	$(OBJEVENTGFXDIR)/pokemon/surfable/0249_lugia_shadow.4bpp \
+	$(OBJEVENTGFXDIR)/pokemon/surfable/0249_lugia_shiny.4bpp \
+	$(OBJEVENTGFXDIR)/pokemon/surfable/0321_wailord.4bpp \
+	$(OBJEVENTGFXDIR)/pokemon/surfable/0321_wailord_shiny.4bpp \
+	$(OBJEVENTGFXDIR)/pokemon/surfable/0382_kyogre.4bpp \
+	$(OBJEVENTGFXDIR)/pokemon/surfable/0382_kyogre_shiny.4bpp \
+	$(OBJEVENTGFXDIR)/pokemon/surfable/0382_kyogre_primal.4bpp \
+	$(OBJEVENTGFXDIR)/pokemon/surfable/0382_kyogre_primal_shiny.4bpp \
+	$(OBJEVENTGFXDIR)/pokemon/surfable/0384_rayquaza.4bpp \
+	$(OBJEVENTGFXDIR)/pokemon/surfable/0384_rayquaza_shiny.4bpp \
+	$(OBJEVENTGFXDIR)/pokemon/surfable/0384_rayquaza_mega.4bpp \
+	$(OBJEVENTGFXDIR)/pokemon/surfable/arceus.4bpp \
+	$(OBJEVENTGFXDIR)/pokemon/surfable/palkia.4bpp
+
+$(SURFABLE_POKEMON_64BPP): %.4bpp: %.png
+	$(GFX) $< $@ -mwidth 8 -mheight 8

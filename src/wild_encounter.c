@@ -1,6 +1,7 @@
 #include "global.h"
 #include "wild_encounter.h"
 #include "pokemon.h"
+#include "route_outbreak.h"
 #include "metatile_behavior.h"
 #include "fieldmap.h"
 #include "follower_npc.h"
@@ -24,6 +25,8 @@
 #include "constants/item.h"
 #include "constants/items.h"
 #include "constants/layouts.h"
+#include "constants/maps.h"
+#include "constants/flags.h"
 #include "constants/weather.h"
 
 extern const u8 EventScript_SprayWoreOff[];
@@ -351,6 +354,14 @@ u16 GetCurrentMapWildMonHeaderId(void)
 {
     u16 i;
 
+    if (gSaveBlock1Ptr->location.mapGroup == MAP_GROUP(MAP_RUINS_OF_ALPH_B1F)
+     && gSaveBlock1Ptr->location.mapNum == MAP_NUM(MAP_RUINS_OF_ALPH_B1F)
+     && !FlagGet(FLAG_COMPLETED_KABUTO_PUZZLE)
+     && !FlagGet(FLAG_COMPLETED_OMANYTE_PUZZLE)
+     && !FlagGet(FLAG_COMPLETED_AERODACTYL_PUZZLE)
+     && !FlagGet(FLAG_COMPLETED_HOOH_PUZZLE))
+        return HEADER_NONE;
+
     for (i = 0; ; i++)
     {
         const struct WildPokemonHeader *wildHeader = &gWildMonHeaders[i];
@@ -669,6 +680,7 @@ static bool8 SetUpMassOutbreakEncounter(u8 flags)
     CreateWildMon(gSaveBlock1Ptr->outbreakPokemonSpecies, gSaveBlock1Ptr->outbreakPokemonLevel);
     for (i = 0; i < MAX_MON_MOVES; i++)
         SetMonMoveSlot(&gEnemyParty[0], gSaveBlock1Ptr->outbreakPokemonMoves[i], i);
+    RouteOutbreak_ApplyEncounterBonuses(&gEnemyParty[0]);
 
     return TRUE;
 }

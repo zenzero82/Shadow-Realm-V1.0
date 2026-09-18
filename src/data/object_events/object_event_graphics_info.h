@@ -3297,7 +3297,7 @@ const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_BigSnorlaxDoll = {
     .size = 512,
     .width = 32,
     .height = 32,
-    .paletteSlot = PALSLOT_NPC_4,
+    .paletteSlot = PALSLOT_NPC_SPECIAL,
     .shadowSize = SHADOW_SIZE_M,
     .inanimate = TRUE,
     .compressed = FALSE,
@@ -3863,7 +3863,7 @@ const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_Scott = {
 
 const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_MysteryEventDeliveryman = {
     .tileTag = TAG_NONE,
-    .paletteTag = OBJ_EVENT_PAL_TAG_NPC_1,
+    .paletteTag = OBJ_EVENT_PAL_TAG_MYSTERY_GIFT_MAN,
     .reflectionPaletteTag = OBJ_EVENT_PAL_TAG_NONE,
     .size = 256,
     .width = 16,
@@ -4226,6 +4226,25 @@ const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_ZygardeCube = {
     .subspriteTables = sOamTables_16x32,
     .anims = sAnimTable_ZygardeCube,
     .images = sPicTable_ZygardeCube,
+    .affineAnims = gDummySpriteAffineAnimTable,
+};
+
+const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_ItemShine = {
+    .tileTag = TAG_NONE,
+    .paletteTag = OBJ_EVENT_PAL_TAG_ITEM_SHINE,
+    .reflectionPaletteTag = OBJ_EVENT_PAL_TAG_NONE,
+    .size = 512,
+    .width = 32,
+    .height = 32,
+    .paletteSlot = PALSLOT_NPC_1,
+    .shadowSize = SHADOW_SIZE_NONE,
+    .inanimate = TRUE,
+    .compressed = FALSE,
+    .tracks = TRACKS_NONE,
+    .oam = &gObjectEventBaseOam_32x32,
+    .subspriteTables = sOamTables_32x32,
+    .anims = sAnimTable_ItemShine,
+    .images = sPicTable_ItemShine,
     .affineAnims = gDummySpriteAffineAnimTable,
 };
 
@@ -4984,7 +5003,7 @@ const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_Berry_Tree_Late_St
 
 const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_ArtistGen2 = {
     .tileTag = TAG_NONE,
-    .paletteTag = OBJ_EVENT_PAL_TAG_ARTIST_GEN2,
+    .paletteTag = OBJ_EVENT_PAL_TAG_NPC_4,
     .reflectionPaletteTag = OBJ_EVENT_PAL_TAG_NONE,
     .size = 256,
     .width = 16,
@@ -5008,7 +5027,7 @@ const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_AttendantFGen2 = {
     .size = 256,
     .width = 16,
     .height = 32,
-    .paletteSlot = PALSLOT_NPC_SPECIAL,
+    .paletteSlot = PALSLOT_NPC_1,
     .shadowSize = SHADOW_SIZE_M,
     .inanimate = FALSE,
     .compressed = FALSE,
@@ -5027,7 +5046,7 @@ const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_AttendantMGen2 = {
     .size = 256,
     .width = 16,
     .height = 32,
-    .paletteSlot = PALSLOT_NPC_SPECIAL,
+    .paletteSlot = PALSLOT_NPC_2,
     .shadowSize = SHADOW_SIZE_M,
     .inanimate = FALSE,
     .compressed = FALSE,
@@ -8243,6 +8262,25 @@ const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_SnagemGrunt = {
     .subspriteTables = sOamTables_16x32,
     .anims = sAnimTable_Standard,
     .images = sPicTable_SnagemGrunt,
+    .affineAnims = gDummySpriteAffineAnimTable,
+};
+
+const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_SnagemAgrev = {
+    .tileTag = TAG_NONE,
+    .paletteTag = OBJ_EVENT_PAL_TAG_SNAGEM_AGREV,
+    .reflectionPaletteTag = OBJ_EVENT_PAL_TAG_NONE,
+    .size = 256,
+    .width = 16,
+    .height = 32,
+    .paletteSlot = PALSLOT_NPC_SPECIAL,
+    .shadowSize = SHADOW_SIZE_M,
+    .inanimate = FALSE,
+    .compressed = FALSE,
+    .tracks = TRACKS_FOOT,
+    .oam = &gObjectEventBaseOam_16x32,
+    .subspriteTables = sOamTables_16x32,
+    .anims = sAnimTable_Standard,
+    .images = sPicTable_SnagemAgrev,
     .affineAnims = gDummySpriteAffineAnimTable,
 };
 

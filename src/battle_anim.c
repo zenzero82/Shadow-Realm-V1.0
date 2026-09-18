@@ -3,6 +3,7 @@
 #include "battle_anim.h"
 #include "battle_anim_scripts.h"
 #include "battle_controllers.h"
+#include "battle_gfx_sfx_util.h"
 #include "battle_interface.h"
 #include "battle_util.h"
 #include "bg.h"
@@ -899,6 +900,12 @@ static void Cmd_end(void)
             FreeSpritePaletteByTag(gBattleAnimPicTable[sAnimSpriteIndexArray[i]].tag);
             sAnimSpriteIndexArray[i] = 0xFFFF; // set terminator.
         }
+    }
+
+    if (!IsContest())
+    {
+        BattleInterface_RefreshPersistentPalettes();
+        RefreshEnemyShadowPalettes();
     }
 
     if (!continuousAnim) // May have been used for debug?

@@ -50,8 +50,9 @@ vermilion_fanclub_Text_Chairman:
 	.string "storm, as long as POKeMON are loved.$"
 
 vermilion_fanclub_Text_Secretary:
-	.string "People arrive here anxious from the\n"
-	.string "port and leave smiling.$"
+	.string "People visit from all over KANTO.\p"
+	.string "A few minutes with their favorite\n"
+	.string "POKeMON usually fixes any bad mood.$"
 
 vermilion_fanclub_Text_FanM:
 	.string "I heard a giant SNORLAX is blocking\n"
@@ -61,5 +62,5 @@ vermilion_fanclub_Text_FanM:
 
 vermilion_fanclub_Text_FanF:
 	.string "VERMILION is never quiet for long.\p"
-	.string "Ships dock, stories spread, and the\n"
-	.string "fan club hears all of it.$"
+	.string "That is why the fan club is perfect.\n"
+	.string "It gives us one happy thing to share.$"

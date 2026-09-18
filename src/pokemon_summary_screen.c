@@ -183,6 +183,8 @@ static const u8 gText_PSS_RelearnL[] = _("{L_BUTTON} RELEARN");
 static const u8 gText_PSS_EvIv[] = _("{A_BUTTON} EV-IV");
 static const u8 gText_PSS_NextRibbon[] = _("{A_BUTTON} NEXT");
 static const u8 gText_PSS_NoRibbons[] = _("No Ribbons");
+static const u8 gText_PSS_WorldRibbon[] = _("WORLD RIBBON");
+static const u8 gText_PSS_WorldRibbonDesc[] = _("A special WORLD RIBBON.");
 static const u8 gText_8419C4D[] = _("Exp. Points");
 static const u8 gText_8419C59[] = _("To Next Lv.");
 
@@ -3279,6 +3281,9 @@ static u8 PSS_LoadSpritesData(void)
     case 8:
         PSS_LoadMonIcon();
         break;
+    case 9:
+        PSS_LoadRibbonSprite();
+        break;
     default:
         PSS_LoadMonSprite();
         return TRUE;
@@ -3728,6 +3733,7 @@ static u32 PSS_GetSelectedRibbonId(void)
 static const u8 *PSS_GetRibbonTextLineByIndex(u8 index, u8 lineIndex)
 {
     u32 ribbonId;
+    u32 giftRibbonId;
 
     if (!PSS_HasAnyRibbons())
         return gText_PSS_NoRibbons;
@@ -3736,12 +3742,14 @@ static const u8 *PSS_GetRibbonTextLineByIndex(u8 index, u8 lineIndex)
     if (ribbonId < FIRST_GIFT_RIBBON)
         return gRibbonDescriptionPointers[ribbonId][lineIndex];
 
-    ribbonId = gSaveBlock1Ptr->giftRibbons[ribbonId - FIRST_GIFT_RIBBON];
-    if (ribbonId == 0)
+    giftRibbonId = gSaveBlock1Ptr->giftRibbons[ribbonId - FIRST_GIFT_RIBBON];
+    if (ribbonId == WORLD_RIBBON && (giftRibbonId == 0 || giftRibbonId == WORLD_RIBBON))
+        return lineIndex == 0 ? gText_PSS_WorldRibbon : gText_PSS_WorldRibbonDesc;
+    if (giftRibbonId == 0)
         return gText_PSS_NoRibbons;
 
-    ribbonId--;
-    return gGiftRibbonDescriptionPointers[ribbonId][lineIndex];
+    giftRibbonId--;
+    return gGiftRibbonDescriptionPointers[giftRibbonId][lineIndex];
 }
 
 static const u8 *PSS_GetSelectedRibbonTextLine(u8 lineIndex)
@@ -5378,11 +5386,10 @@ static void PSS_LoadRibbonSprite(void)
     LoadPalette(sSummaryRibbonIcons3_Pal, BG_PLTT_ID(SUMMARY_RIBBON_SMALL_BG_PAL_3), PLTT_SIZE_4BPP);
     LoadPalette(sSummaryRibbonIcons4_Pal, BG_PLTT_ID(SUMMARY_RIBBON_SMALL_BG_PAL_4), PLTT_SIZE_4BPP);
     LoadPalette(sSummaryRibbonIcons5_Pal, BG_PLTT_ID(SUMMARY_RIBBON_SMALL_BG_PAL_5), PLTT_SIZE_4BPP);
+
+    // The large ribbon sprite uses palette 1. The other palettes are for the BG
+    // ribbon grid and must not consume OBJ slots used by the Pokemon sprite.
     LoadSpritePalette(&(struct SpritePalette){sSummaryRibbonIcons1_Pal, SUMMARY_RIBBON_PALTAG_1});
-    LoadSpritePalette(&(struct SpritePalette){sSummaryRibbonIcons2_Pal, SUMMARY_RIBBON_PALTAG_2});
-    LoadSpritePalette(&(struct SpritePalette){sSummaryRibbonIcons3_Pal, SUMMARY_RIBBON_PALTAG_3});
-    LoadSpritePalette(&(struct SpritePalette){sSummaryRibbonIcons4_Pal, SUMMARY_RIBBON_PALTAG_4});
-    LoadSpritePalette(&(struct SpritePalette){sSummaryRibbonIcons5_Pal, SUMMARY_RIBBON_PALTAG_5});
 
     spriteId = CreateSprite(&sSpriteTemplate_SummaryRibbonIconBig, 180, 76, 0);
     sSummaryRibbonSprite = &gSprites[spriteId];
@@ -6247,7 +6254,6 @@ static void sub_813AFC4(void)
     PSS_SetInvisiblePokeball(0);
     PSS_LoadMonIcon();
     PSS_LoadMonSprite();
-    PSS_LoadRibbonSprite();
     PSS_SetMonSpritePositionForPage();
     PSS_SetMonIconPositionForPage();
     PSS_SetInvisibleMonSprite(0);

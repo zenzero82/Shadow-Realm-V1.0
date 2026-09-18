@@ -5,6 +5,7 @@ import sys
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 TOOLS_GBAGFX = REPO_ROOT / "tools" / "gbagfx" / "gbagfx"
+PNG_SIGNATURE = b"\x89PNG\r\n\x1a\n"
 SPECIAL_SPRITESHEET_OPTIONS = {
     "graphics/pokemon/arceus": ["-mwidth", "8", "-mheight", "8"],
     "graphics/pokemon/articuno": ["-mwidth", "4", "-mheight", "4"],
@@ -56,6 +57,22 @@ SPECIAL_SPRITESHEET_OPTIONS = {
 
 }
 
+def read_png_dimensions(png_path):
+    with png_path.open("rb") as f:
+        header = f.read(24)
+    if not header.startswith(PNG_SIGNATURE):
+        raise ValueError(f"{png_path} is not a PNG")
+    width = int.from_bytes(header[16:20], "big")
+    height = int.from_bytes(header[20:24], "big")
+    return width, height
+
+def get_overworld_options(png_path):
+    width, height = read_png_dimensions(png_path)
+    frame_width = width // 6 if width % 6 == 0 else width
+    tile_width = max(1, frame_width // 8)
+    tile_height = max(1, height // 8)
+    return ["-mwidth", str(tile_width), "-mheight", str(tile_height)]
+
 if not TOOLS_GBAGFX.exists():
     sys.exit(f"Missing tool: {TOOLS_GBAGFX}")
 
@@ -69,10 +86,12 @@ for png in png_files:
     base = png.with_suffix("")
     target_4bpp = base.with_suffix(".4bpp")
     target_lz = base.with_suffix(".4bpp.lz")
+    target_gbapal = base.with_suffix(".gbapal")
 
     rel_dir = str(png.parent.relative_to(REPO_ROOT))
     extra_opts = []
     if png.name in ("overworld.png", "overworldf.png"):
+        extra_opts = get_overworld_options(png)
         for prefix, opts in SPECIAL_SPRITESHEET_OPTIONS.items():
             if rel_dir.startswith(prefix):
                 extra_opts = opts
@@ -81,6 +100,8 @@ for png in png_files:
     try:
         run([str(TOOLS_GBAGFX), str(png), str(target_4bpp), *extra_opts], check=True)
         run([str(TOOLS_GBAGFX), str(target_4bpp), str(target_lz)], check=True)
+        if png.name in ("icon.png", "iconf.png"):
+            run([str(TOOLS_GBAGFX), str(png), str(target_gbapal)], check=True)
         converted += 1
     except CalledProcessError as e:
         print(f"conversion failed for {png}: {e}", file=sys.stderr)

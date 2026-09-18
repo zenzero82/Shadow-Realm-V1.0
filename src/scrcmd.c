@@ -130,12 +130,12 @@ bool8 ScrCmd_end(struct ScriptContext *ctx)
 
 bool8 ScrCmd_gotonative(struct ScriptContext *ctx)
 {
-    bool8 (*addr)(void) = (bool8 (*)(void))ScriptReadWord(ctx);
+    bool8 (*addr)(void) = (bool8 (*)(void))(uintptr_t)ScriptReadWord(ctx);
 
     Script_RequestEffects(SCREFF_V1);
     Script_CheckEffectInstrumentedGotoNative(addr);
 
-    SetupNativeScript(ctx, addr);
+    SetupNativeScript(ctx, (bool8 (*)(void))ScriptStripNativeTag((uintptr_t)addr));
     return TRUE;
 }
 
@@ -146,7 +146,7 @@ bool8 ScrCmd_special(struct ScriptContext *ctx)
     Script_RequestEffects(SCREFF_V1);
     Script_CheckEffectInstrumentedSpecial(index);
 
-    gSpecials[index]();
+    ((SpecialFunc)ScriptStripNativeTag((uintptr_t)gSpecials[index]))();
     return FALSE;
 }
 
@@ -160,18 +160,18 @@ bool8 ScrCmd_specialvar(struct ScriptContext *ctx)
     Script_RequestWriteVar(varId);
     Script_CheckEffectInstrumentedSpecial(index);
 
-    *ptr = gSpecials[index]();
+    *ptr = ((SpecialFunc)ScriptStripNativeTag((uintptr_t)gSpecials[index]))();
     return FALSE;
 }
 
 bool8 ScrCmd_callnative(struct ScriptContext *ctx)
 {
-    NativeFunc func = (NativeFunc)ScriptReadWord(ctx);
+    NativeFunc func = (NativeFunc)(uintptr_t)ScriptReadWord(ctx);
 
     Script_RequestEffects(SCREFF_V1);
     Script_CheckEffectInstrumentedCallNative(func);
 
-    func(ctx);
+    ((NativeFunc)ScriptStripNativeTag((uintptr_t)func))(ctx);
     return FALSE;
 }
 
@@ -2604,6 +2604,17 @@ bool8 ScrCmd_pokemartdecoration2(struct ScriptContext *ctx)
     Script_RequestEffects(SCREFF_V1 | SCREFF_HARDWARE);
 
     CreateDecorationShop2Menu(ptr);
+    ScriptContext_Stop();
+    return TRUE;
+}
+
+bool8 ScrCmd_coinmart(struct ScriptContext *ctx)
+{
+    const void *ptr = (void *)ScriptReadWord(ctx);
+
+    Script_RequestEffects(SCREFF_V1 | SCREFF_HARDWARE);
+
+    CreateCoinsMartMenu(ptr);
     ScriptContext_Stop();
     return TRUE;
 }

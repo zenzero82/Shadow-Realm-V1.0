@@ -94,6 +94,7 @@ struct TrainerMon
     u8 shadowAggro;
     u8 shadowID;
     u16 heartGauge;
+    u16 shadowUnlockMove;
 };
 
 #define TRAINER_PARTY(partyArray) partyArray, .partySize = ARRAY_COUNT(partyArray)

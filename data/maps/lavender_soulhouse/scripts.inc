@@ -40,6 +40,8 @@ lavender_soulhouse_EventScript_GimmighoulDefeated::
 lavender_soulhouse_EventScript_MrFuji::
 	lock
 	faceplayer
+	setvar VAR_0x8000, 11
+	call Lavender_Town_EventScript_RecordInteriorNPC
 	goto_if_eq VAR_LAVENDER_SOULHOUSE_ODD_KEYSTONE_STATE, 2, lavender_soulhouse_EventScript_MrFuji_GaveOddKeystone
 	goto_if_eq VAR_LAVENDER_SOULHOUSE_ODD_KEYSTONE_STATE, 1, lavender_soulhouse_EventScript_MrFuji_AskAgain
 	setspeaker lavender_soulhouse_Speaker_MrFuji

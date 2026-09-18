@@ -168,6 +168,8 @@ SaffronCity_EventScript_SuperNerdTrigger::
 	waitmovement 0
 	setspeaker SaffronCity_Speaker_SuperNerd
 	msgbox SaffronCity_Text_SuperNerd, MSGBOX_DEFAULT
+	applymovement LOCALID_PLAYER, SaffronCity_Movement_SuperNerdTurnAway
+	waitmovement 0
 	releaseall
 	end
 
@@ -218,6 +220,7 @@ SaffronCity_EventScript_LookerScene_Common::
 	setspeaker SaffronCity_Speaker_Looker
 	msgbox SaffronCity_Text_LookerStealthIntro, MSGBOX_DEFAULT
 	special SpawnCameraObject
+	playbgm MUS_CIPHER_ENCOUNTER, FALSE
 	applymovement LOCALID_CAMERA, SaffronCity_Movement_CameraToSilphCo
 	waitmovement 0
 	setspeaker SaffronCity_Speaker_EinUnknown
@@ -238,6 +241,7 @@ SaffronCity_EventScript_LookerScene_Common::
 	applymovement LOCALID_SAFFRON_CITY_GRUNT_4, Common_Movement_FaceDown
 	applymovement LOCALID_SAFFRON_CITY_GRUNT_5, Common_Movement_FaceDown
 	waitmovement 0
+	fadedefaultbgm
 	applymovement LOCALID_CAMERA, SaffronCity_Movement_CameraBackToPlayer
 	waitmovement 0
 	special RemoveCameraObject
@@ -317,6 +321,11 @@ SaffronCity_Movement_PlayerToLooker_Lower:
 	walk_left
 	walk_left
 	face_left
+	step_end
+
+SaffronCity_Movement_SuperNerdTurnAway:
+	walk_up
+	face_up
 	step_end
 
 SaffronCity_Movement_BonslyToLooker:

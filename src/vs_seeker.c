@@ -205,6 +205,7 @@ void VsSeekerResetObjectMovementAfterChargeComplete(void)
     for (i = 0; i < gMapHeader.events->objectEventCount; i++)
     {
         if (templates[i].trainerType != TRAINER_TYPE_NORMAL
+        && templates[i].trainerType != TRAINER_TYPE_SEE_ALL_DIRECTIONS
         && templates[i].trainerType != TRAINER_TYPE_BURIED)
             continue;
 
@@ -373,7 +374,9 @@ static void GatherNearbyTrainerInfo(void)
 
     for (objectEventIdx = 0; objectEventIdx < gMapHeader.events->objectEventCount; objectEventIdx++)
     {
-        if (templates[objectEventIdx].trainerType != TRAINER_TYPE_NORMAL && templates[objectEventIdx].trainerType != TRAINER_TYPE_BURIED)
+        if (templates[objectEventIdx].trainerType != TRAINER_TYPE_NORMAL
+         && templates[objectEventIdx].trainerType != TRAINER_TYPE_SEE_ALL_DIRECTIONS
+         && templates[objectEventIdx].trainerType != TRAINER_TYPE_BURIED)
             continue;
 
         sVsSeeker->trainerInfo[vsSeekerObjectIdx].script = templates[objectEventIdx].script;
@@ -523,6 +526,7 @@ void ClearRematchMovementByTrainerId(void)
     for (i = 0; i < gMapHeader.events->objectEventCount; i++)
     {
         if ((objectEventTemplates[i].trainerType != TRAINER_TYPE_NORMAL
+        && objectEventTemplates[i].trainerType != TRAINER_TYPE_SEE_ALL_DIRECTIONS
         && objectEventTemplates[i].trainerType != TRAINER_TYPE_BURIED)
         || vsSeekerDataIdx != TrainerIdToRematchTableId(gRematchTable, GetTrainerFlagFromScript(objectEventTemplates[i].script)))
             continue;

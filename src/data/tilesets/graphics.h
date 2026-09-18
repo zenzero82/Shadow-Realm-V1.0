@@ -3307,6 +3307,25 @@ const u16 gTilesetPalettes_shadowrealm[][16] =
 
 const u32 gTilesetTiles_shadowrealm[] = INCBIN_U32("data/tilesets/primary/shadowrealm/tiles.4bpp.lz");
 
+const u16 gTilesetPalettes_agate_village[][16] =
+{
+    INCBIN_U16("data/tilesets/primary/agate_village/palettes/00.gbapal"),
+    INCBIN_U16("data/tilesets/primary/agate_village/palettes/01.gbapal"),
+    INCBIN_U16("data/tilesets/primary/agate_village/palettes/02.gbapal"),
+    INCBIN_U16("data/tilesets/primary/agate_village/palettes/03.gbapal"),
+    INCBIN_U16("data/tilesets/primary/agate_village/palettes/04.gbapal"),
+    INCBIN_U16("data/tilesets/primary/agate_village/palettes/05.gbapal"),
+    INCBIN_U16("data/tilesets/primary/agate_village/palettes/06.gbapal"),
+    INCBIN_U16("data/tilesets/primary/agate_village/palettes/07.gbapal"),
+    INCBIN_U16("data/tilesets/primary/agate_village/palettes/08.gbapal"),
+    INCBIN_U16("data/tilesets/primary/agate_village/palettes/09.gbapal"),
+    INCBIN_U16("data/tilesets/primary/agate_village/palettes/10.gbapal"),
+    INCBIN_U16("data/tilesets/primary/agate_village/palettes/11.gbapal"),
+    INCBIN_U16("data/tilesets/primary/agate_village/palettes/12.gbapal"),
+};
+
+const u32 gTilesetTiles_agate_village[] = INCBIN_U32("data/tilesets/primary/agate_village/tiles.4bpp.lz");
+
 const u16 gTilesetPalettes_wescave[][16] =
 {
     INCBIN_U16("data/tilesets/primary/wescave/palettes/00.gbapal"),
@@ -3515,3 +3534,22 @@ const u16 gTilesetPalettes_DragonsDen_Shrine[][16] =
 };
 
 const u32 gTilesetTiles_DragonsDen_Shrine[] = INCBIN_U32("data/tilesets/secondary/dragons_den_shrine/tiles.4bpp.lz");
+
+const u16 gTilesetPalettes_agate[][16] =
+{
+    INCBIN_U16("data/tilesets/secondary/agate/palettes/00.gbapal"),
+    INCBIN_U16("data/tilesets/secondary/agate/palettes/01.gbapal"),
+    INCBIN_U16("data/tilesets/secondary/agate/palettes/02.gbapal"),
+    INCBIN_U16("data/tilesets/secondary/agate/palettes/03.gbapal"),
+    INCBIN_U16("data/tilesets/secondary/agate/palettes/04.gbapal"),
+    INCBIN_U16("data/tilesets/secondary/agate/palettes/05.gbapal"),
+    INCBIN_U16("data/tilesets/secondary/agate/palettes/06.gbapal"),
+    INCBIN_U16("data/tilesets/secondary/agate/palettes/07.gbapal"),
+    INCBIN_U16("data/tilesets/secondary/agate/palettes/08.gbapal"),
+    INCBIN_U16("data/tilesets/secondary/agate/palettes/09.gbapal"),
+    INCBIN_U16("data/tilesets/secondary/agate/palettes/10.gbapal"),
+    INCBIN_U16("data/tilesets/secondary/agate/palettes/11.gbapal"),
+    INCBIN_U16("data/tilesets/secondary/agate/palettes/12.gbapal"),
+};
+
+const u32 gTilesetTiles_agate[] = INCBIN_U32("data/tilesets/secondary/agate/tiles.4bpp.lz");

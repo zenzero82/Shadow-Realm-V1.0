@@ -1705,7 +1705,7 @@
     },
     {
       "id": "MAPSEC_SHADOW_REALM",
-      "name": "Nightmare Realm",
+      "name": "Shadow Realm",
       "x": 0,
       "y": 0,
       "width": 1,
@@ -1718,6 +1718,14 @@
     {
       "id": "MAPSEC_SAFARI_ZONE_GATE",
       "name": "Safari Zone Johto"
+    },
+    {
+      "id": "MAPSEC_Agate_Village",
+      "name": "Agate Village",
+      "x": 0,
+      "y": 0,
+      "width": 1,
+      "height": 1
     }
   ]
 }

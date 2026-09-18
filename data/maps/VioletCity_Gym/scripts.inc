@@ -65,6 +65,7 @@ VioletCity_Gym_EventScript_Falkner::
 	lock
 	faceplayer
 	goto_if_set FLAG_BADGE17_GET, VioletCity_Gym_EventScript_Falkner_After
+	playbgm MUS_RG_ENCOUNTER_GYM_LEADER, FALSE
 	setspeaker VioletCity_Gym_Speaker_Falkner
 	msgbox VioletCity_Gym_Text_Falkner_Intro, MSGBOX_DEFAULT
 	trainerbattle_no_intro TRAINER_LEADER_FALKNER, VioletCity_Gym_Text_Falkner_Defeat

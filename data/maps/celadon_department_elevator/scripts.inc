@@ -3,12 +3,11 @@ celadon_department_elevator_MapScripts::
 
 CeladonDeptElevator_EventScript_Elevator::
 	lock
-	msgbox CeladonDeptElevator_Text_Welcome, MSGBOX_DEFAULT
 	setvar VAR_0x8004, 0
 	special SetDeptStoreFloor
 	copyvar VAR_0x8005, VAR_DEPT_STORE_FLOOR
 	special ShowDeptStoreElevatorFloorSelect
-	message gText_WhichFloorWouldYouLike
+	message CeladonDeptElevator_Text_WhichFloorWouldYouLike
 	waitmessage
 	setvar VAR_0x8004, 0
 	specialvar VAR_RESULT, GetDeptStoreDefaultFloorChoice
@@ -59,50 +58,45 @@ CeladonDeptElevator_EventScript_ChooseFloor::
 
 CeladonDeptElevator_EventScript_F1::
 	setvar VAR_0x8006, DEPT_STORE_FLOORNUM_1F
-	setdynamicwarp MAP_CELADON_DEPARTMENT1F, 6, 0
+	setdynamicwarp MAP_CELADON_DEPARTMENT1F, 3
 	goto_if_eq VAR_DEPT_STORE_FLOOR, DEPT_STORE_FLOORNUM_1F, CeladonDeptElevator_EventScript_ExitFloorSelect
 	call CeladonDeptElevator_EventScript_MoveElevator
-	setvar VAR_TEMP_0, 1
 	setvar VAR_DEPT_STORE_FLOOR, DEPT_STORE_FLOORNUM_1F
 	goto CeladonDeptElevator_EventScript_ExitFloorSelect
 	end
 
 CeladonDeptElevator_EventScript_F2::
 	setvar VAR_0x8006, DEPT_STORE_FLOORNUM_2F
-	setdynamicwarp MAP_CELADON_DEPARTMENT2F, 6, 0
+	setdynamicwarp MAP_CELADON_DEPARTMENT2F, 2
 	goto_if_eq VAR_DEPT_STORE_FLOOR, DEPT_STORE_FLOORNUM_2F, CeladonDeptElevator_EventScript_ExitFloorSelect
 	call CeladonDeptElevator_EventScript_MoveElevator
-	setvar VAR_TEMP_0, 1
 	setvar VAR_DEPT_STORE_FLOOR, DEPT_STORE_FLOORNUM_2F
 	goto CeladonDeptElevator_EventScript_ExitFloorSelect
 	end
 
 CeladonDeptElevator_EventScript_F3::
 	setvar VAR_0x8006, DEPT_STORE_FLOORNUM_3F
-	setdynamicwarp MAP_CELADON_DEPARTMENT3F, 6, 0
+	setdynamicwarp MAP_CELADON_DEPARTMENT3F, 2
 	goto_if_eq VAR_DEPT_STORE_FLOOR, DEPT_STORE_FLOORNUM_3F, CeladonDeptElevator_EventScript_ExitFloorSelect
 	call CeladonDeptElevator_EventScript_MoveElevator
-	setvar VAR_TEMP_0, 1
 	setvar VAR_DEPT_STORE_FLOOR, DEPT_STORE_FLOORNUM_3F
 	goto CeladonDeptElevator_EventScript_ExitFloorSelect
 	end
 
 CeladonDeptElevator_EventScript_F4::
 	setvar VAR_0x8006, DEPT_STORE_FLOORNUM_4F
-	setdynamicwarp MAP_CELADON_DEPARTMENT4F, 6, 0
+	setdynamicwarp MAP_CELADON_DEPARTMENT4F, 2
 	goto_if_eq VAR_DEPT_STORE_FLOOR, DEPT_STORE_FLOORNUM_4F, CeladonDeptElevator_EventScript_ExitFloorSelect
 	call CeladonDeptElevator_EventScript_MoveElevator
-	setvar VAR_TEMP_0, 1
 	setvar VAR_DEPT_STORE_FLOOR, DEPT_STORE_FLOORNUM_4F
 	goto CeladonDeptElevator_EventScript_ExitFloorSelect
 	end
 
 CeladonDeptElevator_EventScript_F5::
 	setvar VAR_0x8006, DEPT_STORE_FLOORNUM_5F
-	setdynamicwarp MAP_CELADON_DEPARTMENT5F, 6, 0
+	setdynamicwarp MAP_CELADON_DEPARTMENT5F, 2
 	goto_if_eq VAR_DEPT_STORE_FLOOR, DEPT_STORE_FLOORNUM_5F, CeladonDeptElevator_EventScript_ExitFloorSelect
 	call CeladonDeptElevator_EventScript_MoveElevator
-	setvar VAR_TEMP_0, 1
 	setvar VAR_DEPT_STORE_FLOOR, DEPT_STORE_FLOORNUM_5F
 	goto CeladonDeptElevator_EventScript_ExitFloorSelect
 	end
@@ -122,6 +116,7 @@ CeladonDeptElevator_EventScript_MoveElevator::
 	waitstate
 	return
 
-CeladonDeptElevator_Text_Welcome:
-	.string "Welcome to the CELADON DEPARTMENT\n"
-	.string "STORE.$"
+CeladonDeptElevator_Text_WhichFloorWouldYouLike:
+	.string "Welcome to the CELADON DEPARTMENT.\n"
+	.string "STORE.\p"
+	.string "Which floor would you like?$"

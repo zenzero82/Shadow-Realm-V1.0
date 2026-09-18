@@ -1,8 +1,12 @@
 CableClub_OnTransition:
+	special ZenwoosBlessing_ClearGiftRedeemedThisVisit
 	call CableClub_EventScript_HideOrShowMysteryGiftMan
 	end
 
 CableClub_EventScript_HideOrShowMysteryGiftMan::
+	specialvar VAR_RESULT, ZenwoosBlessing_HasPendingGift
+	goto_if_eq VAR_RESULT, TRUE, CableClub_EventScript_ShowMysteryGiftMan
+	goto_if_set FLAG_ZENWOOS_BLESSING_CRIMSON_AURA_USED, CableClub_EventScript_HideMysteryGiftMan
 	specialvar VAR_RESULT, ShouldDistributeEonTicket
 	goto_if_eq VAR_RESULT, TRUE, CableClub_EventScript_ShowMysteryGiftMan
 	specialvar VAR_RESULT, ValidateSavedWonderCard
@@ -11,17 +15,60 @@ CableClub_EventScript_HideOrShowMysteryGiftMan::
 	end
 
 CableClub_EventScript_ShowMysteryGiftMan::
+	clearflag FLAG_HIDE_POKEMON_CENTER_1F_MYSTERY_GIFT_MAN
 	clearflag FLAG_HIDE_POKEMON_CENTER_2F_MYSTERY_GIFT_MAN
 	return
 
 CableClub_EventScript_HideMysteryGiftMan::
+	setflag FLAG_HIDE_POKEMON_CENTER_1F_MYSTERY_GIFT_MAN
 	setflag FLAG_HIDE_POKEMON_CENTER_2F_MYSTERY_GIFT_MAN
 	return
 
 CableClub_EventScript_MysteryGiftMan::
+	specialvar VAR_RESULT, ZenwoosBlessing_HasPendingGift
+	goto_if_eq VAR_RESULT, TRUE, CableClub_EventScript_DeliverZenwoosBlessing
 	specialvar VAR_RESULT, ShouldDistributeEonTicket
 	goto_if_eq VAR_RESULT, TRUE, CableClub_EventScript_DistributeEonTicket
+	specialvar VAR_RESULT, ValidateSavedWonderCard
+	goto_if_eq VAR_RESULT, TRUE, CableClub_EventScript_TryWonderCardScript
+	specialvar VAR_RESULT, ZenwoosBlessing_WasGiftRedeemedThisVisit
+	goto_if_eq VAR_RESULT, TRUE, CableClub_EventScript_ZenwoosBlessingSeeMeAgain
 	goto CableClub_EventScript_TryWonderCardScript
+	end
+
+CableClub_EventScript_DeliverZenwoosBlessing::
+	lock
+	faceplayer
+	msgbox CableClub_Text_ZenwoosBlessingDelivery, MSGBOX_DEFAULT
+	specialvar VAR_RESULT, ZenwoosBlessing_TryDeliverGift
+	goto_if_eq VAR_RESULT, MON_GIVEN_TO_PARTY, CableClub_EventScript_ZenwoosBlessingDelivered
+	goto_if_eq VAR_RESULT, MON_GIVEN_TO_PC, CableClub_EventScript_ZenwoosBlessingDeliveredToPC
+	msgbox CableClub_Text_ZenwoosBlessingNoRoom, MSGBOX_DEFAULT
+	release
+	end
+
+CableClub_EventScript_ZenwoosBlessingDelivered::
+	msgbox CableClub_Text_ZenwoosBlessingDelivered, MSGBOX_DEFAULT
+	goto CableClub_EventScript_ZenwoosBlessingFinalize
+
+CableClub_EventScript_ZenwoosBlessingDeliveredToPC::
+	msgbox CableClub_Text_ZenwoosBlessingDeliveredToPC, MSGBOX_DEFAULT
+	goto CableClub_EventScript_ZenwoosBlessingFinalize
+
+CableClub_EventScript_ZenwoosBlessingFinalize::
+	setflag FLAG_ZENWOOS_BLESSING_CRIMSON_AURA_USED
+	clearflag FLAG_ZENWOOS_BLESSING_CRIMSON_AURA_PENDING
+	setflag FLAG_HIDE_POKEMON_CENTER_1F_MYSTERY_GIFT_MAN
+	setflag FLAG_HIDE_POKEMON_CENTER_2F_MYSTERY_GIFT_MAN
+	removeobject VAR_LAST_TALKED
+	release
+	end
+
+CableClub_EventScript_ZenwoosBlessingSeeMeAgain::
+	lock
+	faceplayer
+	msgbox CableClub_Text_ZenwoosBlessingSeeMeAgain, MSGBOX_DEFAULT
+	release
 	end
 
 CableClub_EventScript_TryWonderCardScript::
@@ -47,6 +94,28 @@ CableClub_EventScript_MysteryGiftThankYou2::
 	msgbox gText_ThankYouForAccessingMysteryGift, MSGBOX_DEFAULT
 	release
 	end
+
+CableClub_Text_ZenwoosBlessingDelivery:
+	.string "I have a gift waiting for you from\n"
+	.string "ZENWOO'S BLESSING.$"
+
+CableClub_Text_ZenwoosBlessingDelivered:
+	.string "Here you are.\p"
+	.string "Please take good care of RIOLU.$"
+
+CableClub_Text_ZenwoosBlessingDeliveredToPC:
+	.string "Here you are.\p"
+	.string "Your party was full, so RIOLU was\n"
+	.string "sent to your PC.$"
+
+CableClub_Text_ZenwoosBlessingNoRoom:
+	.string "Your party and POKeMON BOXES are\n"
+	.string "full.\p"
+	.string "Please make room and come back.$"
+
+CableClub_Text_ZenwoosBlessingSeeMeAgain:
+	.string "See me again when I have another\n"
+	.string "gift for you.$"
 
 CableClub_OnWarp:
 	map_script_2 VAR_CABLE_CLUB_STATE, USING_SINGLE_BATTLE, CableClub_EventScript_CheckTurnAttendant

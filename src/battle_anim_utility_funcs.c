@@ -44,6 +44,8 @@ static const u16 sCurseLinesPalette[] = { RGB_WHITE };
 void AnimTask_RestoreAbilityPopupPalette(u8 taskId)
 {
     BattleInterface_RestoreAbilityPopupPalette();
+    ReserveMoveTypeIconPaletteSlot();
+    ReserveCategoryIconPaletteSlot();
     DestroyAnimVisualTask(taskId);
 }
 

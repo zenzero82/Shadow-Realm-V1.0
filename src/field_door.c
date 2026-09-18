@@ -53,11 +53,16 @@ extern const struct Tileset gTileset_EverGrande;
 extern const struct Tileset gTileset_Pacifidlog;
 extern const struct Tileset gTileset_Sootopolis;
 extern const struct Tileset gTileset_PetalburgGym;
-
 static EWRAM_DATA u16 ALIGNED(4) sDoorAnimVramBackup[16 * (TILE_SIZE_4BPP / 2)] = {0};
 
 static bool8 ShouldUseMultiCorridorDoor(void);
 static bool8 IsHoennDoorGraphics(const struct DoorGraphics *gfx);
+static bool8 IsDeptStoreElevatorLayoutActive(void);
+static bool8 IsDeptStoreElevatorDoorMetatileAny(u16 metatileNum);
+static bool8 IsDeptStoreElevatorDoorMetatile(u16 metatileNum);
+static const u16 *GetMetatileTilesById(u16 metatileId);
+static bool8 MetatileUsesUpperLayerDoorTiles(u16 metatileId);
+static bool8 MetatileUsesCoveredDoorTiles(u16 metatileId);
 
 static const u8 sDoorAnimTiles_Littleroot[] = INCBIN_U8("graphics/door_anims/littleroot.4bpp");
 static const u16 sDoorNullPalette1[16] = {};
@@ -165,6 +170,7 @@ static const u16 sDoorNullPalette49[16] = {};
 //new
 static const u8 sDoorAnimTiles_Goldenrod[] = INCBIN_U8("graphics/door_anims/goldenrod.4bpp");
 static const u16 sDoorNullPalette50[16] = {};
+static const u8 sDoorAnimTiles_DeptStore[] = INCBIN_U8("graphics/door_anims/dept_store.4bpp");
 static const u8 sDoorAnimTiles_NewBarkTown_Door_Yellow[] = INCBIN_U8("graphics/door_anims/NewBarkTown_Door_Yellow.4bpp");
 static const u16 sDoorNullPalette51[16] = {};
 static const u8 sDoorAnimTiles_NewBarkTown_Door_Blue[] = INCBIN_U8("graphics/door_anims/cerulean.4bpp");
@@ -179,6 +185,7 @@ static const u8 sDoorAnimTiles_Cianwood[] = INCBIN_U8("graphics/door_anims/cianw
 static const u16 sDoorNullPalette55[16] = {};
 static const u8 sDoorAnimTiles_Viridian[] = INCBIN_U8("graphics/door_anims/viridian.4bpp");
 static const u16 sDoorNullPalette56[16] = {};
+static const u8 sDoorAnimTiles_JoyfulGameCorner[] = INCBIN_U8("graphics/door_anims/joyful_game_corner.4bpp");
 static const u8 sDoorAnimTiles_Pewter[] = INCBIN_U8("graphics/door_anims/pewter.4bpp");
 static const u16 sDoorNullPalette57[16] = {};
 static const u8 sDoorAnimTiles_Cerulean[] = INCBIN_U8("graphics/door_anims/cerulean.4bpp");
@@ -282,10 +289,10 @@ static const struct DoorAnimFrame sHugeDoorCloseAnimFrames[] =
 
 
 
-static const u8 sDoorAnimPalettes_General[] = {1, 1, 1, 1, 1, 1, 1, 1};
-static const u8 sDoorAnimPalettes_PokeCenter[] = {1, 1, 1, 1, 1, 1, 1, 1};
-static const u8 sDoorAnimPalettes_Gym[] = {5, 5, 5, 5, 5, 5, 5, 5};
-static const u8 sDoorAnimPalettes_PokeMart[] = {0, 0, 1, 1, 1, 1, 1, 1};
+static const u8 sDoorAnimPalettes_General[] = {2, 2, 2, 2, 2, 2, 2, 2};
+static const u8 sDoorAnimPalettes_PokeCenter[] = {1, 1, 5, 5, 5, 5, 5, 5};
+static const u8 sDoorAnimPalettes_Gym[] = {3, 3, 3, 3, 3, 3, 3, 3};
+static const u8 sDoorAnimPalettes_PokeMart[] = {0, 0, 5, 5, 5, 5, 5, 5};
 static const u8 sDoorAnimPalettes_Littleroot[] = {10, 10, 6, 6, 6, 6, 6, 6};
 static const u8 sDoorAnimPalettes_BirchsLab[] = {8, 8, 8, 8, 8, 8, 8, 8};
 static const u8 sDoorAnimPalettes_RustboroTan[] = {11, 11, 11, 11, 11, 11, 11, 11};
@@ -293,7 +300,7 @@ static const u8 sDoorAnimPalettes_RustboroGray[] = {10, 10, 10, 10, 10, 10, 10, 
 static const u8 sDoorAnimPalettes_FallarborLightRoof[] = {7, 7, 7, 7, 7, 7, 7, 7};
 static const u8 sDoorAnimPalettes_Lilycove[] = {8, 8, 8, 8, 8, 8, 8, 8};
 static const u8 sDoorAnimPalettes_Oldale[] = {10, 10, 9, 9, 9, 9, 9, 9};
-static const u8 sDoorAnimPalettes_Mossdeep[] = {9, 9, 1, 1, 1, 1, 1, 1};
+static const u8 sDoorAnimPalettes_Mossdeep[] = {9, 9, 12, 12, 12, 12, 12, 12};
 static const u8 sDoorAnimPalettes_PokemonLeague[] = {8, 8, 8, 8, 8, 8, 8, 8};
 static const u8 sDoorAnimPalettes_Pacifidlog[] = {9, 9, 9, 9, 9, 9, 9, 9};
 static const u8 sDoorAnimPalettes_SootopolisPeakedRoof[] = {6, 6, 6, 6, 6, 6, 6, 6};
@@ -303,11 +310,11 @@ static const u8 sDoorAnimPalettes_Slateport[] = {6, 6, 1, 1, 1, 1, 1, 1};
 static const u8 sDoorAnimPalettes_Mauville[] = {7, 7, 7, 7, 7, 7, 7, 7};
 static const u8 sDoorAnimPalettes_Verdanturf[] = {6, 6, 5, 5, 5, 5, 5, 5};
 static const u8 sDoorAnimPalettes_LilycoveWooden[] = {5, 5, 5, 5, 5, 5, 5, 5};
-static const u8 sDoorAnimPalettes_Contest[] = {1, 1, 1, 1, 1, 1, 1, 1};
+static const u8 sDoorAnimPalettes_Contest[] = {1, 1, 12, 12, 12, 12, 12, 12};
 static const u8 sDoorAnimPalettes_PetalburgGym[] = {6, 6, 6, 6, 6, 6, 6, 6};
 static const u8 sDoorAnimPalettes_CyclingRoad[] = {7, 7, 7, 7, 7, 7, 7, 7};
-static const u8 sDoorAnimPalettes_LilycoveDeptStore[] = {5, 5, 5, 5, 5, 5, 5, 5};
-static const u8 sDoorAnimPalettes_SafariZone[] = {9, 9, 9, 9, 9, 9, 9, 9};
+static const u8 sDoorAnimPalettes_LilycoveDeptStore[] = {5, 5, 5, 5, 12, 12, 12, 12};
+static const u8 sDoorAnimPalettes_SafariZone[] = {9, 9, 9, 9, 11, 11, 11, 11};
 static const u8 sDoorAnimPalettes_MossdeepSpaceCenter[] = {8, 8, 8, 8, 8, 8, 8, 8};
 static const u8 sDoorAnimPalettes_CableClub[] = {6, 6, 6, 6, 6, 6, 6, 6};
 static const u8 sDoorAnimPalettes_AbandonedShip[] = {7, 7, 7, 7, 7, 7, 7, 7};
@@ -317,18 +324,19 @@ static const u8 sDoorAnimPalettes_LilycoveDeptStoreElevator[] = {6, 6, 7, 7, 7, 
 static const u8 sDoorAnimPalettes_BattleTowerOld[] = {9, 9, 9, 9, 9, 9, 9, 9};
 static const u8 sDoorAnimPalettes_BattleTowerElevator[] = {7, 7, 7, 7, 7, 7, 7, 7};
 static const u8 sDoorAnimPalettes_UnusedBattleFrontier[] = {9, 9, 9, 9, 9, 9, 9, 9};
-static const u8 sDoorAnimPalettes_BattleDome[] = {1, 1, 1, 1, 1, 1, 1, 1};
+static const u8 sDoorAnimPalettes_BattleDome[] = {9, 9, 9, 9, 9, 9, 9, 9};
 static const u8 sDoorAnimPalettes_BattleFactory[] = {9, 9, 9, 9, 9, 9, 9, 9};
-static const u8 sDoorAnimPalettes_BattleTower[] = {0, 0, 0, 0, 0, 0, 0, 0};
+static const u8 sDoorAnimPalettes_BattleTower[] = {0, 0, 5, 5, 5, 5, 5, 5};
 static const u8 sDoorAnimPalettes_BattleArena[] = {5, 5, 5, 5, 5, 5, 5, 5};
 static const u8 sDoorAnimPalettes_BattleArenaLobby[] = {7, 7, 7, 7, 7, 7, 7, 7};
 static const u8 sDoorAnimPalettes_BattleDomeLobby[] = {7, 7, 7, 7, 7, 7, 7, 7};
 static const u8 sDoorAnimPalettes_BattlePalaceLobby[] = {7, 7, 7, 7, 7, 7, 7, 7};
-static const u8 sDoorAnimPalettes_BattleTent[] = {1, 1, 1, 1, 1, 1, 1, 1};
+static const u8 sDoorAnimPalettes_BattleTent[] = {1, 1, 5, 5, 5, 5, 5, 5};
 static const u8 sDoorAnimPalettes_BattleDomeCorridor[] = {7, 7, 7, 7, 7, 7, 7, 7};
 static const u8 sDoorAnimPalettes_BattleTowerMultiCorridor[] = {7, 7, 7, 7, 7, 7, 7, 7};
 static const u8 sDoorAnimPalettes_Unused[] = {1, 1, 1, 1, 1, 1, 1, 1};
-static const u8 sDoorAnimPalettes_BattleFrontier[] = {1, 1, 1, 1, 1, 1, 1, 1};
+static const u8 sDoorAnimPalettes_BattleFrontier[] = {1, 1, 9, 9, 9, 9, 9, 9};
+static const u8 sDoorAnimPalettes_BattleFrontier_Sliding[] = {1, 1, 1, 1, 9, 9, 9, 9};
 static const u8 sDoorAnimPalettes_BattleDomePreBattleRoom[] = {9, 9, 7, 7, 7, 7, 7, 7};
 static const u8 sDoorAnimPalettes_BattleTentInterior[] = {9, 9, 9, 9, 9, 9, 9, 9};
 static const u8 sDoorAnimPalettes_TrainerHillLobbyElevator[] = {7, 7, 7, 7, 7, 7, 7, 7};
@@ -338,6 +346,7 @@ static const u8 sDoorAnimPalettes_TrainerHillRoofElevator[] = {9, 9, 7, 7, 7, 7,
 static const u8 sDoorAnimPalettes_Generaljk[] = {2, 2, 2, 2, 2, 2, 2, 2};
 static const u8 sDoorAnimPalettes_PokeCenterjk[] = {3, 3, 3, 3, 3, 3, 3, 3};
 static const u8 sDoorAnimPalettes_Goldenrod[] = {10, 10, 10, 10, 10, 10, 10, 10};
+static const u8 sDoorAnimPalettes_DeptStore[] = {7, 7, 7, 7, 7, 7, 7, 7};
 static const u8 sDoorAnimPalettes_NewBarkTown_Door_Blue[] = {7, 7, 7, 7, 7, 7, 7, 7};
 static const u8 sDoorAnimPalettes_NewBarkTown_Door_Yellow[] = {5, 5, 5, 5, 5, 5, 5, 5};
 static const u8 sDoorAnimPalettes_SafariZoneJohto_Door[] = {9, 9, 9, 9, 9, 9, 9, 9};
@@ -345,12 +354,13 @@ static const u8 sDoorAnimPalettes_NewBarkTown_Door_Red[] = {8, 8, 8, 8, 8, 8, 8,
 static const u8 sDoorAnimPalettes_Azalea[] = {5, 5, 5, 5, 5, 5, 5, 5};
 static const u8 sDoorAnimPalettes_Cianwood[] = {11, 11, 11, 11, 11, 11, 11, 11};
 static const u8 sDoorAnimPalettes_Viridian[] = {8, 8, 8, 8, 8, 8, 8, 8};
+static const u8 sDoorAnimPalettes_JoyfulGameCorner[] = {3, 3, 3, 3, 3, 3, 3, 3};
 static const u8 sDoorAnimPalettes_Pewter[] = {8, 8, 8, 8, 8, 8, 8, 8};
 static const u8 sDoorAnimPalettes_Cerulean[] = {12, 12, 12, 12, 12, 12, 12, 12};
 static const u8 sDoorAnimPalettes_Vermilion[] = {9, 9, 9, 9, 9, 9, 9, 9};
 static const u8 sDoorAnimPalettes_Lavender[] = {9, 9, 9, 9, 9, 9, 9, 9};
-static const u8 sDoorAnimPalettes_Saffron[] = {10, 10, 10, 10, 10, 10, 10, 10};
-static const u8 sDoorAnimPalettes_SilphCo[] = {12, 12, 12, 12, 12, 12, 12, 12};
+static const u8 sDoorAnimPalettes_Saffron[] = {8, 8, 8, 8, 8, 8, 8, 8};
+static const u8 sDoorAnimPalettes_SilphCo[] = {3, 3, 3, 3, 3, 3, 3, 3};
 static const u8 sDoorAnimPalettes_TrainStation[] = {8, 8, 8, 8, 8, 8, 8, 8};
 static const u8 sDoorAnimPalettes_Fuchsia[] = {8, 8, 8, 8, 8, 8, 8, 8};
 static const u8 sDoorAnimPalettes_CherryGrove_Door_Red[] = {8, 8, 8, 8, 8, 8, 8, 8};
@@ -400,7 +410,16 @@ static const struct DoorGraphics sDoorAnimGraphicsTable[] =
     {METATILE_InsideShip_IntactDoor_Bottom_Unlocked, DOOR_SOUND_NORMAL, DOOR_SIZE_1x1, sDoorAnimTiles_AbandonedShip, sDoorAnimPalettes_AbandonedShip},
     {METATILE_Fallarbor_Door_DarkRoof, DOOR_SOUND_NORMAL, DOOR_SIZE_1x1, sDoorAnimTiles_FallarborDarkRoof, sDoorAnimPalettes_FallarborDarkRoof},
     {METATILE_InsideShip_IntactDoor_Bottom_Interior, DOOR_SOUND_NORMAL, DOOR_SIZE_1x1, sDoorAnimTiles_AbandonedShipRoom, sDoorAnimPalettes_AbandonedShipRoom},
-    {METATILE_Shop_Door_Elevator, DOOR_SOUND_SLIDING, DOOR_SIZE_1x1, sDoorAnimTiles_LilycoveDeptStoreElevator, sDoorAnimPalettes_LilycoveDeptStoreElevator},
+    {METATILE_Shop_Door_Elevator, DOOR_SOUND_SLIDING, DOOR_SIZE_1x1, sDoorAnimTiles_DeptStoreElevator, sDoorAnimPalettes_DeptStore_Door},
+    {0x20D, DOOR_SOUND_SLIDING, DOOR_SIZE_1x1, sDoorAnimTiles_DeptStoreElevator, sDoorAnimPalettes_DeptStore_Door},
+    {0x268, DOOR_SOUND_SLIDING, DOOR_SIZE_1x1, sDoorAnimTiles_DeptStoreElevator, sDoorAnimPalettes_DeptStore_Door},
+    {0x26A, DOOR_SOUND_SLIDING, DOOR_SIZE_1x1, sDoorAnimTiles_DeptStoreElevator, sDoorAnimPalettes_DeptStore_Door},
+    {0x270, DOOR_SOUND_SLIDING, DOOR_SIZE_1x1, sDoorAnimTiles_DeptStoreElevator, sDoorAnimPalettes_DeptStore_Door},
+    {0x271, DOOR_SOUND_SLIDING, DOOR_SIZE_1x1, sDoorAnimTiles_DeptStoreElevator, sDoorAnimPalettes_DeptStore_Door},
+    {0x272, DOOR_SOUND_SLIDING, DOOR_SIZE_1x1, sDoorAnimTiles_DeptStoreElevator, sDoorAnimPalettes_DeptStore_Door},
+    {0x278, DOOR_SOUND_SLIDING, DOOR_SIZE_1x1, sDoorAnimTiles_DeptStoreElevator, sDoorAnimPalettes_DeptStore_Door},
+    {0x279, DOOR_SOUND_SLIDING, DOOR_SIZE_1x1, sDoorAnimTiles_DeptStoreElevator, sDoorAnimPalettes_DeptStore_Door},
+    {0x27A, DOOR_SOUND_SLIDING, DOOR_SIZE_1x1, sDoorAnimTiles_DeptStoreElevator, sDoorAnimPalettes_DeptStore_Door},
     {METATILE_Dewford_Door_BattleTower, DOOR_SOUND_SLIDING, DOOR_SIZE_1x1, sDoorAnimTiles_BattleTowerOld, sDoorAnimPalettes_BattleTowerOld},
     {METATILE_BattleFrontier_Door_Elevator, DOOR_SOUND_SLIDING, DOOR_SIZE_1x1, sDoorAnimTiles_BattleTowerElevator, sDoorAnimPalettes_BattleTowerElevator},
     // The metatile for this door doesn't seem to correspond to a door in any Emerald tileset. Given the surrounding door animations, it was likely cut from the Battle Frontier.
@@ -419,7 +438,7 @@ static const struct DoorGraphics sDoorAnimGraphicsTable[] =
     {METATILE_BattleDome_Door_Corridor, DOOR_SOUND_SLIDING, DOOR_SIZE_1x2, sDoorAnimTiles_BattleDomeCorridor, sDoorAnimPalettes_BattleDomeCorridor},
     {METATILE_BattleFrontier_Door_MultiCorridor, DOOR_SOUND_SLIDING, DOOR_SIZE_2x2, sDoorAnimTiles_BattleTowerMultiCorridor, sDoorAnimPalettes_BattleTowerMultiCorridor},
     {METATILE_BattleFrontierOutsideWest_Door, DOOR_SOUND_NORMAL, DOOR_SIZE_1x2, sDoorAnimTiles_BattleFrontier, sDoorAnimPalettes_BattleFrontier},
-    {METATILE_BattleFrontierOutsideWest_Door_Sliding, DOOR_SOUND_SLIDING, DOOR_SIZE_1x2, sDoorAnimTiles_BattleFrontierSliding, sDoorAnimPalettes_BattleFrontier},
+    {METATILE_BattleFrontierOutsideWest_Door_Sliding, DOOR_SOUND_SLIDING, DOOR_SIZE_1x2, sDoorAnimTiles_BattleFrontierSliding, sDoorAnimPalettes_BattleFrontier_Sliding},
     {METATILE_BattleDome_Door_PreBattleRoom, DOOR_SOUND_SLIDING, DOOR_SIZE_1x2, sDoorAnimTiles_BattleDomePreBattleRoom, sDoorAnimPalettes_BattleDomePreBattleRoom},
     {METATILE_BattleTent_Door, DOOR_SOUND_SLIDING, DOOR_SIZE_1x1, sDoorAnimTiles_BattleTentInterior, sDoorAnimPalettes_BattleTentInterior},
     {METATILE_TrainerHill_Door_Elevator_Lobby, DOOR_SOUND_SLIDING, DOOR_SIZE_1x2, sDoorAnimTiles_TrainerHillLobbyElevator, sDoorAnimPalettes_TrainerHillLobbyElevator},
@@ -432,6 +451,7 @@ static const struct DoorGraphics sDoorAnimGraphicsTable[] =
     {METATILE_johto_general_og_johto_shop, DOOR_SOUND_SLIDING, DOOR_SIZE_1x1, sDoorAnimTiles_PokeCenterjk, sDoorAnimPalettes_PokeCenterjk},
     {METATILE_johto_general_og_johto_gym, DOOR_SOUND_SLIDING, DOOR_SIZE_1x1, sDoorAnimTiles_JohtoGym, sDoorAnimPalettes_JohtoGym},
     {METATILE_goldenrod_city_Goldenrod, DOOR_SOUND_NORMAL, DOOR_SIZE_1x1, sDoorAnimTiles_Goldenrod, sDoorAnimPalettes_Goldenrod},
+    {METATILE_goldenrod_city_DeptStore_Door, DOOR_SOUND_SLIDING, DOOR_SIZE_1x1, sDoorAnimTiles_DeptStore, sDoorAnimPalettes_DeptStore},
     {METATILE_new_bark_Door_Blue, DOOR_SOUND_NORMAL, DOOR_SIZE_1x1, sDoorAnimTiles_NewBarkTown_Door_Blue, sDoorAnimPalettes_NewBarkTown_Door_Blue},
     {METATILE_new_bark_Door_Red, DOOR_SOUND_NORMAL, DOOR_SIZE_1x1, sDoorAnimTiles_NewBarkTown_Door_Red, sDoorAnimPalettes_NewBarkTown_Door_Red},
     {METATILE_safari_johto_Safari, DOOR_SOUND_SLIDING, DOOR_SIZE_1x2, sDoorAnimTiles_JohtoSafariZone_Door, sDoorAnimPalettes_SafariZoneJohto_Door},
@@ -439,23 +459,17 @@ static const struct DoorGraphics sDoorAnimGraphicsTable[] =
     {METATILE_ecruteak_city_Door, DOOR_SOUND_NORMAL, DOOR_SIZE_1x1, sDoorAnimTiles_EcruteakCity_Dojo_Door, sDoorAnimPalettes_EcruteakCity_Dojo_Door},
     {METATILE_blackthorn_city_Door, DOOR_SOUND_NORMAL, DOOR_SIZE_1x1, sDoorAnimTiles_BlackthornCity_Door, sDoorAnimPalettes_BlackthornCity_Door},
     {METATILE_cerulean_city_Cerulean, DOOR_SOUND_NORMAL, DOOR_SIZE_1x1, sDoorAnimTiles_Cerulean, sDoorAnimPalettes_Cerulean},
+    {0x21E, DOOR_SOUND_NORMAL, DOOR_SIZE_1x1, sDoorAnimTiles_Vermilion, sDoorAnimPalettes_Vermilion},
     {METATILE_lavender_town_Lavender, DOOR_SOUND_NORMAL, DOOR_SIZE_1x1, sDoorAnimTiles_Lavender, sDoorAnimPalettes_Lavender},
+    {0x204, DOOR_SOUND_NORMAL, DOOR_SIZE_1x1, sDoorAnimTiles_Saffron, sDoorAnimPalettes_Saffron},
     {0x23C, DOOR_SOUND_SLIDING, DOOR_SIZE_1x1, sDoorAnimTiles_SilphCo, sDoorAnimPalettes_SilphCo},
     {METATILE_fuchsia_city_Fuchsia, DOOR_SOUND_NORMAL, DOOR_SIZE_1x1, sDoorAnimTiles_Fuchsia, sDoorAnimPalettes_Fuchsia},
     {METATILE_fuchsia_city_Red_Door, DOOR_SOUND_SLIDING, DOOR_SIZE_1x1, sDoorAnimTiles_Fuchsia_Red_Door, sDoorAnimPalettes_Fuchsia_Red_Door},
+    {0x046, DOOR_SOUND_SLIDING, DOOR_SIZE_1x1, sDoorAnimTiles_JoyfulGameCorner, sDoorAnimPalettes_JoyfulGameCorner},
     {METATILE_viridian_Viridian_Door, DOOR_SOUND_NORMAL, DOOR_SIZE_1x1, sDoorAnimTiles_Viridian, sDoorAnimPalettes_Viridian},
-    {0x246, DOOR_SOUND_SLIDING, DOOR_SIZE_1x1, sDoorAnimTiles_Viridian, sDoorAnimPalettes_Viridian},
-    {0x26B, DOOR_SOUND_NORMAL, DOOR_SIZE_1x1, sDoorAnimTiles_Pewter, sDoorAnimPalettes_Pewter},
+    {METATILE_viridian_JoyfulGameCorner_Door, DOOR_SOUND_SLIDING, DOOR_SIZE_1x1, sDoorAnimTiles_JoyfulGameCorner, sDoorAnimPalettes_JoyfulGameCorner},
+    {0x26B, DOOR_SOUND_NORMAL, DOOR_SIZE_1x1, sDoorAnimTiles_NewBarkTown_Door_Red, sDoorAnimPalettes_NewBarkTown_Door_Red},
     {},
-};
-
-static const struct DoorGraphics sDoorGraphics_CherrygroveDoor =
-{
-    METATILE_new_bark_Door_Red,
-    DOOR_SOUND_NORMAL,
-    DOOR_SIZE_1x1,
-    sDoorAnimTiles_CherryGrove_Door,
-    sDoorAnimPalettes_CherryGrove_Door_Red,
 };
 
 static const struct DoorGraphics sDoorGraphics_NewBarkYellowDoor =
@@ -465,24 +479,6 @@ static const struct DoorGraphics sDoorGraphics_NewBarkYellowDoor =
     DOOR_SIZE_1x1,
     sDoorAnimTiles_NewBarkTown_Door_Yellow,
     sDoorAnimPalettes_NewBarkTown_Door_Yellow,
-};
-
-static const struct DoorGraphics sDoorGraphics_SaffronDoor =
-{
-    0x26C,
-    DOOR_SOUND_NORMAL,
-    DOOR_SIZE_1x1,
-    sDoorAnimTiles_Saffron,
-    sDoorAnimPalettes_Saffron,
-};
-
-static const struct DoorGraphics sDoorGraphics_SilphCoDoor =
-{
-    0x23C,
-    DOOR_SOUND_SLIDING,
-    DOOR_SIZE_1x1,
-    sDoorAnimTiles_SilphCo,
-    sDoorAnimPalettes_SilphCo,
 };
 
 static const struct DoorGraphics sDoorGraphics_TrainStationDoor =
@@ -501,6 +497,42 @@ static const struct DoorGraphics sDoorGraphics_RocketElevatorDoor =
     DOOR_SIZE_1x1,
     sDoorAnimTiles_RocketElevator,
     sDoorAnimPalettes_Rocket_Door,
+};
+
+static const struct DoorGraphics sDoorGraphics_PewterCherrygroveDoor =
+{
+    0x26B,
+    DOOR_SOUND_NORMAL,
+    DOOR_SIZE_1x1,
+    sDoorAnimTiles_Pewter,
+    sDoorAnimPalettes_Pewter,
+};
+
+static const struct DoorGraphics sDoorGraphics_CeladonDoor =
+{
+    0x03D,
+    DOOR_SOUND_NORMAL,
+    DOOR_SIZE_1x1,
+    sDoorAnimTiles_Generaljk,
+    sDoorAnimPalettes_Generaljk,
+};
+
+static const struct DoorGraphics sDoorGraphics_VermilionDoor =
+{
+    0x21E,
+    DOOR_SOUND_NORMAL,
+    DOOR_SIZE_1x1,
+    sDoorAnimTiles_Vermilion,
+    sDoorAnimPalettes_Vermilion,
+};
+
+static const struct DoorGraphics sDoorGraphics_GoldenrodDeptStoreDoor =
+{
+    METATILE_goldenrod_city_DeptStore_Door,
+    DOOR_SOUND_SLIDING,
+    DOOR_SIZE_1x1,
+    sDoorAnimTiles_DeptStore,
+    sDoorAnimPalettes_DeptStore,
 };
 
 static const struct DoorTilesetMatch sHoennDoorTilesetMatches[] =
@@ -555,6 +587,126 @@ static u16 GetDoorTileStartSize1(void)
     return DOOR_TILE_START_SIZE1_DEFAULT;
 }
 
+static bool8 IsDeptStoreElevatorLayoutActive(void)
+{
+    switch (gMapHeader.mapLayoutId)
+    {
+    case LAYOUT_CELADON_DEPARTMENT1F:
+    case LAYOUT_CELADON_DEPARTMENT2F:
+    case LAYOUT_CELADON_DEPARTMENT3F:
+    case LAYOUT_CELADON_DEPARTMENT4F:
+    case LAYOUT_CELADON_DEPARTMENT5F:
+    case LAYOUT_CELADON_DEPARTMENTROOFDAY:
+    case LAYOUT_CELADON_DEPARTMENTROOFNIGHT:
+    case LAYOUT_CELADON_DEPARTMENT_ELEVATOR:
+    case LAYOUT_GOLDENROD_CITY_DEPARTMENT_STORE_BASEMENT:
+    case LAYOUT_GOLDENROD_CITY_DEPARTMENT_STORE_1F:
+    case LAYOUT_GOLDENROD_CITY_DEPARTMENT_STORE_2F:
+    case LAYOUT_GOLDENROD_CITY_DEPARTMENT_STORE_3F:
+    case LAYOUT_GOLDENROD_CITY_DEPARTMENT_STORE_4F:
+    case LAYOUT_GOLDENROD_CITY_DEPARTMENT_STORE_5F:
+    case LAYOUT_GOLDENROD_CITY_DEPARTMENT_STORE_6F:
+    case LAYOUT_GOLDENROD_CITY_DEPARTMENT_STORE_7F:
+    case LAYOUT_GOLDENROD_CITY_DEPARTMENT_STORE_7FNIGHT:
+    case LAYOUT_GOLDENROD_CITY_DEPARTMENT_STORE_ELEVATOR:
+        return TRUE;
+    default:
+        return FALSE;
+    }
+}
+
+static bool8 IsDeptStoreElevatorDoorMetatileAny(u16 metatileNum)
+{
+    switch (metatileNum)
+    {
+    case METATILE_Shop_Door_Elevator:
+    case 0x20D:
+    case 0x268:
+    case 0x26A:
+    case 0x270:
+    case 0x271:
+    case 0x272:
+    case 0x278:
+    case 0x279:
+    case 0x27A:
+        return TRUE;
+    default:
+        return FALSE;
+    }
+}
+
+static bool8 IsDeptStoreElevatorDoorMetatile(u16 metatileNum)
+{
+    if (!IsDeptStoreElevatorLayoutActive())
+        return FALSE;
+
+    return IsDeptStoreElevatorDoorMetatileAny(metatileNum);
+}
+
+static const u16 *GetMetatileTilesById(u16 metatileId)
+{
+    if (metatileId < NUM_METATILES_IN_PRIMARY)
+        return gMapHeader.mapLayout->primaryTileset->metatiles + metatileId * NUM_TILES_PER_METATILE;
+    else if (metatileId < NUM_METATILES_TOTAL)
+        return gMapHeader.mapLayout->secondaryTileset->metatiles + (metatileId - NUM_METATILES_IN_PRIMARY) * NUM_TILES_PER_METATILE;
+    else
+        return NULL;
+}
+
+static bool8 MetatileUsesUpperLayerDoorTiles(u16 metatileId)
+{
+    const u16 *tiles = GetMetatileTilesById(metatileId);
+    u8 layerType;
+    int i;
+    bool8 lowerUsed = FALSE;
+    bool8 upperUsed = FALSE;
+
+    if (tiles == NULL)
+        return FALSE;
+
+    for (i = 0; i < 4; i++)
+    {
+        if ((tiles[i] & 0x03FF) != 0)
+            lowerUsed = TRUE;
+        if ((tiles[4 + i] & 0x03FF) != 0)
+            upperUsed = TRUE;
+    }
+
+    layerType = (GetMetatileAttributesById(metatileId) & METATILE_ATTR_LAYER_MASK) >> METATILE_ATTR_LAYER_SHIFT;
+
+    // Covered metatiles place their background/building tiles on the lower
+    // layer and the visible door on the upper layer. Some imported tilesets
+    // use a nonzero filler tile on the lower layer, so checking only whether
+    // that layer is empty leaves the closed door drawn over the animation.
+    return upperUsed && (!lowerUsed || layerType == METATILE_LAYER_TYPE_COVERED);
+}
+
+static bool8 MetatileUsesCoveredDoorTiles(u16 metatileId)
+{
+    const u16 *tiles = GetMetatileTilesById(metatileId);
+    int i;
+    bool8 lowerUsed = FALSE;
+    bool8 upperUsed = FALSE;
+
+    // The shared Johto exterior door metatile renders correctly with the
+    // plain single-layer path on maps like Celadon and Route 7.
+    if (metatileId == 0x03D)
+        return FALSE;
+
+    if (tiles == NULL)
+        return FALSE;
+
+    for (i = 0; i < 4; i++)
+    {
+        if ((tiles[i] & 0x03FF) != 0)
+            lowerUsed = TRUE;
+        if ((tiles[4 + i] & 0x03FF) != 0)
+            upperUsed = TRUE;
+    }
+
+    return lowerUsed || upperUsed;
+}
+
 static void BackupDoorAnimTilesFromVram(void)
 {
     CpuFastCopy((void *)(VRAM + TILE_OFFSET_4BPP(GetDoorTileStartSize2())),
@@ -601,6 +753,41 @@ static void BuildDoorTiles(u16 *tiles, u16 tileNum, const u8 *paletteNums)
     }
 }
 
+static void BuildDoorTilesForMetatile(u16 *tiles, u16 tileNum, const u8 *paletteNums, u16 metatileId)
+{
+    const u16 *sourceTiles = GetMetatileTilesById(metatileId);
+    int i;
+
+    if (sourceTiles == NULL)
+    {
+        BuildDoorTiles(tiles, tileNum, paletteNums);
+        return;
+    }
+
+    if (!MetatileUsesCoveredDoorTiles(metatileId))
+    {
+        BuildDoorTiles(tiles, tileNum, paletteNums);
+        return;
+    }
+
+    if (MetatileUsesUpperLayerDoorTiles(metatileId))
+    {
+        for (i = 0; i < 4; i++)
+            tiles[i] = sourceTiles[i];
+
+        for (i = 0; i < 4; i++)
+            tiles[4 + i] = (paletteNums[4 + i] << 12) | (tileNum + i);
+    }
+    else
+    {
+        for (i = 0; i < 4; i++)
+            tiles[i] = (paletteNums[i] << 12) | (tileNum + i);
+
+        for (i = 0; i < 4; i++)
+            tiles[4 + i] = sourceTiles[4 + i];
+    }
+}
+
 static void DrawCurrentDoorAnimFrame(const struct DoorGraphics *gfx, u32 x, u32 y, const u8 *paletteNums)
 {
     u16 tiles[24];
@@ -636,7 +823,7 @@ static void DrawCurrentDoorAnimFrame(const struct DoorGraphics *gfx, u32 x, u32 
     else
     {
         // Build tiles for the door's "main" metatile (drawn at y)
-        BuildDoorTiles(&tiles[0], doorTileStartSize1 + 0, &paletteNums[0]);
+        BuildDoorTilesForMetatile(&tiles[0], doorTileStartSize1 + 0, &paletteNums[0], MapGridGetMetatileIdAt(x, y));
 
         // If this door is 1x2, also draw a top metatile at y-1 and prepare bottom tiles for y.
         if (gfx->size == DOOR_SIZE_1x2)
@@ -776,40 +963,38 @@ static const struct DoorGraphics *GetDoorGraphics(const struct DoorGraphics *gfx
 {
     const struct DoorTilesetMatch *tilesetMatch = sHoennDoorTilesetMatches;
 
-    if ((gMapHeader.mapLayoutId == LAYOUT_CELADON_DEPARTMENT1F
-      || gMapHeader.mapLayoutId == LAYOUT_CELADON_DEPARTMENT2F
-      || gMapHeader.mapLayoutId == LAYOUT_CELADON_DEPARTMENT3F
-      || gMapHeader.mapLayoutId == LAYOUT_CELADON_DEPARTMENT4F
-      || gMapHeader.mapLayoutId == LAYOUT_CELADON_DEPARTMENT5F
-      || gMapHeader.mapLayoutId == LAYOUT_GOLDENROD_CITY_DEPARTMENT_STORE_BASEMENT
-      || gMapHeader.mapLayoutId == LAYOUT_GOLDENROD_CITY_DEPARTMENT_STORE_1F
-      || gMapHeader.mapLayoutId == LAYOUT_GOLDENROD_CITY_DEPARTMENT_STORE_2F
-      || gMapHeader.mapLayoutId == LAYOUT_GOLDENROD_CITY_DEPARTMENT_STORE_3F
-      || gMapHeader.mapLayoutId == LAYOUT_GOLDENROD_CITY_DEPARTMENT_STORE_4F
-      || gMapHeader.mapLayoutId == LAYOUT_GOLDENROD_CITY_DEPARTMENT_STORE_5F
-      || gMapHeader.mapLayoutId == LAYOUT_GOLDENROD_CITY_DEPARTMENT_STORE_6F)
-     && metatileNum == METATILE_Shop_Door_Elevator)
-        return &sDoorGraphics_RocketElevatorDoor;
-
     if (gMapHeader.regionMapSectionId == MAPSEC_NEW_BARK_TOWN
      && metatileNum == METATILE_johto_general_og_Door)
         return &sDoorGraphics_NewBarkYellowDoor;
 
-    if (gMapHeader.regionMapSectionId == MAPSEC_CHERRYGROVE_CITY
-     && metatileNum == METATILE_new_bark_Door_Red)
-        return &sDoorGraphics_CherrygroveDoor;
-
-    if (gMapHeader.regionMapSectionId == MAPSEC_SAFFRON_CITY
-     && (metatileNum == 0x269 || metatileNum == 0x26C))
-        return &sDoorGraphics_SaffronDoor;
-
-    if (gMapHeader.regionMapSectionId == MAPSEC_SILPH_CO
-     && metatileNum == 0x23C)
-        return &sDoorGraphics_SilphCoDoor;
-
     if (gMapHeader.mapLayoutId == LAYOUT_TRAIN_STATION
      && metatileNum == 0x23C)
         return &sDoorGraphics_TrainStationDoor;
+
+    if (gMapHeader.mapLayoutId == LAYOUT_GOLDENROD_CITY_DEPARTMENT_STORE_BASEMENT
+     && IsDeptStoreElevatorDoorMetatileAny(metatileNum))
+        return &sDoorGraphics_RocketElevatorDoor;
+
+    if ((gMapHeader.regionMapSectionId == MAPSEC_CHERRYGROVE_CITY
+      || gMapHeader.regionMapSectionId == MAPSEC_ROUTE_30)
+     && (metatileNum == 0x26B || metatileNum == METATILE_new_bark_Door_Red))
+        return &sDoorGraphics_PewterCherrygroveDoor;
+
+    if (gMapHeader.regionMapSectionId == MAPSEC_CELADON_CITY
+     && metatileNum == 0x03D)
+        return &sDoorGraphics_CeladonDoor;
+
+    if (gMapHeader.regionMapSectionId == MAPSEC_VERMILION_CITY
+     && metatileNum == 0x21E)
+        return &sDoorGraphics_VermilionDoor;
+
+    if (gMapHeader.regionMapSectionId == MAPSEC_GOLDENROD_CITY
+     && metatileNum == METATILE_goldenrod_city_DeptStore_Door)
+        return &sDoorGraphics_GoldenrodDeptStoreDoor;
+
+    if (!IsDeptStoreElevatorLayoutActive()
+     && IsDeptStoreElevatorDoorMetatileAny(metatileNum))
+        return NULL;
 
     while (tilesetMatch->tileset != NULL)
     {
@@ -923,19 +1108,19 @@ static void UNUSED Debug_FieldAnimateDoorOpen(u32 x, u32 y)
 
 void FieldSetDoorOpened(u32 x, u32 y)
 {
-    if (MetatileBehavior_IsDoor(MapGridGetMetatileBehaviorAt(x, y)))
+    if (FieldIsDoorAt(x, y))
         DrawOpenedDoor(sDoorAnimGraphicsTable, x, y);
 }
 
 void FieldSetDoorClosed(u32 x, u32 y)
 {
-    if (MetatileBehavior_IsDoor(MapGridGetMetatileBehaviorAt(x, y)))
+    if (FieldIsDoorAt(x, y))
         DrawClosedDoor(sDoorAnimGraphicsTable, x, y);
 }
 
 s8 FieldAnimateDoorClose(u32 x, u32 y)
 {
-    if (!MetatileBehavior_IsDoor(MapGridGetMetatileBehaviorAt(x, y)))
+    if (!FieldIsDoorAt(x, y))
         return -1;
     else
         return StartDoorCloseAnimation(sDoorAnimGraphicsTable, x, y);
@@ -943,10 +1128,26 @@ s8 FieldAnimateDoorClose(u32 x, u32 y)
 
 s8 FieldAnimateDoorOpen(u32 x, u32 y)
 {
-    if (!MetatileBehavior_IsDoor(MapGridGetMetatileBehaviorAt(x, y)))
+    if (!FieldIsDoorAt(x, y))
         return -1;
     else
         return StartDoorOpenAnimation(sDoorAnimGraphicsTable, x, y);
+}
+
+bool8 FieldIsDoorAt(s32 x, s32 y)
+{
+    if (MetatileBehavior_IsDoor(MapGridGetMetatileBehaviorAt(x, y)))
+        return TRUE;
+
+    return IsDeptStoreElevatorDoorMetatile(MapGridGetMetatileIdAt(x, y));
+}
+
+bool8 FieldIsWarpDoorAt(s32 x, s32 y)
+{
+    if (MetatileBehavior_IsWarpDoor(MapGridGetMetatileBehaviorAt(x, y)))
+        return TRUE;
+
+    return IsDeptStoreElevatorDoorMetatile(MapGridGetMetatileIdAt(x, y));
 }
 
 bool8 FieldIsDoorAnimationRunning(void)

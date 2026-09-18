@@ -1,5 +1,10 @@
 indigoplateau_pokecenter_MapScripts::
+	map_script MAP_SCRIPT_ON_TRANSITION, indigoplateau_pokecenter_OnTransition
 	.byte 0
+
+indigoplateau_pokecenter_OnTransition:
+	call CableClub_EventScript_HideOrShowMysteryGiftMan
+	end
 
 indigoplateau_pokecenter_EventScript_Bookshelf1::
 	msgbox indigoplateau_pokecenter_Text_Bookshelf1, MSGBOX_SIGN

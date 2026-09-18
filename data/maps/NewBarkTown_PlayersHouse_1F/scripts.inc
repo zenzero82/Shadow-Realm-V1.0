@@ -22,13 +22,13 @@ NewBarkTown_PlayersHouse_1F_EventScript_Mom::
 	lock
 	faceplayer
 	goto_if_set FLAG_ENABLE_GOLD_MOM_SAVINGS, NewBarkTown_PlayersHouse_1F_EventScript_MomSavingsMenu
+	setflag FLAG_ENABLE_MOM_MATCH_CALL
 	setspeaker NewBarkTown_PlayersHouse_1F_Speaker_Mom
 	msgbox NewBarkTown_PlayersHouse_1F_Text_Mom, MSGBOX_DEFAULT
 	setspeaker NewBarkTown_PlayersHouse_1F_Speaker_Mom
 	msgbox NewBarkTown_PlayersHouse_1F_Text_Mom_SavingsOffer, MSGBOX_YESNO
 	goto_if_eq VAR_RESULT, FALSE, NewBarkTown_PlayersHouse_1F_EventScript_MomSavingsNo
 	setflag FLAG_ENABLE_GOLD_MOM_SAVINGS
-	setflag FLAG_ENABLE_MOM_MATCH_CALL
 	special GoldMomSavingsInit
 	setspeaker NewBarkTown_PlayersHouse_1F_Speaker_Mom
 	msgbox NewBarkTown_PlayersHouse_1F_Text_Mom_SavingsYes, MSGBOX_DEFAULT

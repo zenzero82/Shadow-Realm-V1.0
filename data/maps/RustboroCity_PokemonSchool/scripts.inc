@@ -80,6 +80,12 @@ RustboroCity_PokemonSchool_EventScript_SchoolKidM::
 	msgbox RustboroCity_PokemonSchool_Text_PokemonHealItselfWithBerry, MSGBOX_NPC
 	end
 
+RustboroCity_PokemonSchool_EventScript_Visitor::
+	faceplayer
+	setspeaker RustboroCity_PokemonSchool_Speaker_Harvey
+	msgbox RustboroCity_PokemonSchool_Text_Visitor, MSGBOX_NPC
+	end
+
 RustboroCity_PokemonSchool_EventScript_StudentNotebook::
 	msgbox RustboroCity_PokemonSchool_Text_StudentsNotes, MSGBOX_SIGN
 	end
@@ -230,6 +236,9 @@ RustboroCity_PokemonSchool_Speaker_Dana:
 RustboroCity_PokemonSchool_Speaker_Ethan:
 	.string "Ethan$"
 
+RustboroCity_PokemonSchool_Speaker_Harvey:
+	.string "Harvey$"
+
 RustboroCity_PokemonSchool_Speaker_MsLaurel:
 	.string "Ms. Laurel$"
 
@@ -238,6 +247,12 @@ RustboroCity_PokemonSchool_Speaker_Scott:
 
 RustboroCity_PokemonSchool_Text_ReadWhichTopic:
 	.string "Which topic do you want to read?$"
+
+RustboroCity_PokemonSchool_Text_Visitor:
+	.string "ROXANNE's lessons are precise.\p"
+	.string "She says GROUND-type POKéMON reward\n"
+	.string "TRAINERS who understand positioning\l"
+	.string "and patience.$"
 
 RustboroCity_PokemonSchool_Text_ExplainPoison:
 	.string "If a POKéMON is poisoned, it will\n"

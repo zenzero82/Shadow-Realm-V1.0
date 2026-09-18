@@ -797,13 +797,16 @@
 #define METATILE_fuchsia_city_Red_Door  0x252
 
 // gTileset_goldenrod_city
-#define METATILE_goldenrod_city_Goldenrod  0x204
+#define METATILE_goldenrod_city_DeptStore_Door            0x2DC
+#define METATILE_goldenrod_city_Goldenrod                 0x204
+#define METATILE_goldenrod_city_IntactDoor_Bottom_Locked  0x383
 
 // gTileset_johto_general
-#define METATILE_johto_general_og_CalmWater   0x12B
-#define METATILE_johto_general_og_Door        0x03D
-#define METATILE_johto_general_og_johto_gym   0x15B
-#define METATILE_johto_general_og_johto_shop  0x062
+#define METATILE_johto_general_og_CalmWater                   0x12B
+#define METATILE_johto_general_og_Door                        0x03D
+#define METATILE_johto_general_og_IntactDoor_Bottom_Unlocked  0x03D
+#define METATILE_johto_general_og_johto_gym                   0x15B
+#define METATILE_johto_general_og_johto_shop                  0x062
 
 // gTileset_lavender_town
 #define METATILE_lavender_town_Lavender  0x26C
@@ -819,7 +822,8 @@
 #define METATILE_violet_city_Dojo_Door  0x2AB
 
 // gTileset_viridian
-#define METATILE_viridian_Viridian_Door  0x29B
+#define METATILE_viridian_JoyfulGameCorner_Door  0x246
+#define METATILE_viridian_Viridian_Door          0x29B
 
 // Other
 #define METATILE_RSMossdeepGym_RedArrow_Down                     0x205

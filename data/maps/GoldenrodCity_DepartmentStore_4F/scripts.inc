@@ -46,7 +46,8 @@ GoldenrodCity_DepartmentStore_4F_Text_Sign:
 
 GoldenrodCity_DepartmentStore_4F_Text_Clerk:
 	.string "We doubled our stock of status cures.\n"
-	.string "Stress does half of CIPHER's work.$"
+	.string "Stress has everyone buying more than\n"
+	.string "usual lately.$"
 
 GoldenrodCity_DepartmentStore_4F_Text_Ollie:
 	.string "My bug POKéMON get jumpy around the\n"

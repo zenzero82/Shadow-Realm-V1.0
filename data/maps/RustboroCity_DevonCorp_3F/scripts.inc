@@ -193,6 +193,18 @@ RustboroCity_DevonCorp_3F_EventScript_EmployeeBalls::
 	release
 	end
 
+RustboroCity_DevonCorp_3F_EventScript_Steven::
+	faceplayer
+	setspeaker RustboroCity_DevonCorp_3F_Speaker_Steven
+	msgbox RustboroCity_DevonCorp_3F_Text_Steven, MSGBOX_NPC
+	end
+
+RustboroCity_DevonCorp_3F_EventScript_Brendan::
+	faceplayer
+	setspeaker RustboroCity_DevonCorp_3F_Speaker_Brendan
+	msgbox RustboroCity_DevonCorp_3F_Text_Brendan, MSGBOX_NPC
+	end
+
 RustboroCity_DevonCorp_3F_EventScript_RareRocksDisplay::
 	msgbox RustboroCity_DevonCorp_3F_Text_RareRocksDisplay, MSGBOX_SIGN
 	end
@@ -202,6 +214,24 @@ RustboroCity_DevonCorp_3F_Speaker_MrStone:
 
 RustboroCity_DevonCorp_3F_Speaker_Clark:
 	.string "Clark$"
+
+RustboroCity_DevonCorp_3F_Speaker_Steven:
+	.string "Steven$"
+
+RustboroCity_DevonCorp_3F_Speaker_Brendan:
+	.string "Brendan$"
+
+RustboroCity_DevonCorp_3F_Text_Steven:
+	.string "DEVON's reports are troubling.\p"
+	.string "Cipher activity near LAVARIDGE means\n"
+	.string "HOENN's old routes may not stay quiet\l"
+	.string "for long.$"
+
+RustboroCity_DevonCorp_3F_Text_Brendan:
+	.string "MAY said she was heading north to\n"
+	.string "check things out.\p"
+	.string "I'm comparing DEVON's data with\n"
+	.string "STEVEN's notes before I move.$"
 
 RustboroCity_DevonCorp_3F_Text_MrStoneIHaveFavor:
 	.string "I'm MR. STONE, the PRESIDENT of\n"

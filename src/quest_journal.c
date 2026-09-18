@@ -18,6 +18,7 @@
 #include "event_data.h"
 #include "gimmighoul_signpost.h"
 #include "sprite.h"
+#include "item.h"
 #include "constants/maps.h"
 #include "constants/rgb.h"
 #include "constants/flags.h"
@@ -41,6 +42,7 @@ struct QuestJournalEntry
     const u8 *description;
     u16 flagStarted;
     u16 flagCompleted;
+    u16 flagReveal;
 };
 
 struct GimmighoulJournalEntry
@@ -279,7 +281,7 @@ static const u8 sText_QuestTalkWesDesc[] = _("{COLOR 1}{HIGHLIGHT TRANSPARENT}En
 static const u8 sText_QuestTalkTeamTitle[] = _("Talk to the Team");
 static const u8 sText_QuestTalkTeamDesc[] = _("{COLOR 1}{HIGHLIGHT TRANSPARENT}Visit The Under and speak to all\nProfessors.");
 static const u8 sText_QuestKukuiShadowTitle[] = _("Finding a... specific Shadow?");
-static const u8 sText_QuestKukuiShadowDesc[] = _("{COLOR 1}{HIGHLIGHT TRANSPARENT}There is a certain {COLOR PURPLE}Shadow POKéMON{COLOR 1}\nthat Kukui needs.");
+static const u8 sText_QuestKukuiShadowDesc[] = _("{COLOR 1}{HIGHLIGHT TRANSPARENT}There is a certain {COLOR BLUE}Shadow POKéMON{COLOR 1}\nthat Kukui needs.");
 static const u8 sText_QuestSnagMachineTitle[] = _("The Snag Machine!");
 static const u8 sText_QuestSnagMachineDesc[] = _("{COLOR 1}{HIGHLIGHT TRANSPARENT}Talk to Wes before you leave the\nHideout.");
 static const u8 sText_QuestMistyTitle[] = _("Defeat Misty!");
@@ -312,6 +314,8 @@ static const u8 sText_QuestShadowTrainerTitle[] = _("The Shadow Imitation");
 static const u8 sText_QuestShadowTrainerDesc[] = _("{COLOR 1}{HIGHLIGHT TRANSPARENT}Search Route 10 for any suspicious\ntrainers.");
 static const u8 sText_QuestBackToHQTitle[] = _("Back To HQ... ASAP!");
 static const u8 sText_QuestBackToHQDesc[] = _("{COLOR 1}{HIGHLIGHT TRANSPARENT}Birch is tripping... bad.\nLet's get to the Lab as fast as we can!");
+static const u8 sText_QuestStartersStolenTitle[] = _("Starters Stolen!");
+static const u8 sText_QuestStartersStolenDesc[] = _("{COLOR 1}{HIGHLIGHT TRANSPARENT}Someone has stolen the remaining\nstarter POKeMON! Track them down!");
 static const u8 sText_QuestThunderbirdTitle[] = _("The Thunderbird");
 static const u8 sText_QuestThunderbirdDesc[] = _("{COLOR 1}{HIGHLIGHT TRANSPARENT}Visit the Power Plant on Route 10\nto seek ZAPDOS.");
 static const u8 sText_QuestEricaTitle[] = _("Erica, Natures Princess");
@@ -394,10 +398,18 @@ static const u8 sText_QuestSaffronNPCsTitle[] = _("NPCs in Saffron City");
 static const u8 sText_QuestSaffronNPCsDesc[] = _("{COLOR 1}{HIGHLIGHT TRANSPARENT}Learn about whats happening in\nSaffron City. Might help!");
 static const u8 sText_QuestVermilionNPCsTitle[] = _("NPCs in Vermilion City");
 static const u8 sText_QuestVermilionNPCsDesc[] = _("{COLOR 1}{HIGHLIGHT TRANSPARENT}Learn about whats happening in\nVermilion City. Might help!");
-static const u8 sText_QuestGoldenrodNPCsTitle[] = _("NPCs in Goldenrod City");
-static const u8 sText_QuestGoldenrodNPCsDesc[] = _("{COLOR 1}{HIGHLIGHT TRANSPARENT}Learn about whats happening in\nGoldenrod City. Might help!");
+static const u8 sText_QuestGoldenrodCityInfoTitle[] = _("NPCs in Goldenrod City");
+static const u8 sText_QuestGoldenrodCityInfoDesc[] = _("{COLOR 1}{HIGHLIGHT TRANSPARENT}Learn about whats happening in\nGoldenrod City. Might help!");
+static const u8 sText_QuestGoldenrodNPCsTitle[] = _("Peril In Goldenrod!");
+static const u8 sText_QuestGoldenrodNPCsDesc[] = _("{COLOR 1}{HIGHLIGHT TRANSPARENT}Investigate the Dept. Store\nBasement for clues on the Radio\nTower employees.");
 static const u8 sText_QuestRustboroNPCsTitle[] = _("NPCs in Rustboro City");
 static const u8 sText_QuestRustboroNPCsDesc[] = _("{COLOR 1}{HIGHLIGHT TRANSPARENT}Learn about whats happening in\nRustboro City. Might help!");
+static const u8 sText_QuestRockyRoxyTitle[] = _("Rocky Roxy... Right?");
+static const u8 sText_QuestRockyRoxyDesc[] = _("{COLOR 1}{HIGHLIGHT TRANSPARENT}Roxanne is different than before.\nNo matter, that stone badge\nbelongs on your trainer card!");
+static const u8 sText_QuestFindBrendanMayTitle[] = _("Find Brendan and May");
+static const u8 sText_QuestFindBrendanMayDesc[] = _("{COLOR 1}{HIGHLIGHT TRANSPARENT}Brendan and May are in Hoenn.\nFind out what they know.");
+static const u8 sText_QuestMoreToComeTitle[] = _("More to Come...");
+static const u8 sText_QuestMoreToComeDesc[] = _("{COLOR 1}{HIGHLIGHT TRANSPARENT}Talk to Brendan in the Devon\nCorp. Building.");
 static const u8 sText_GimmiShort_Pewter[] = _("Pewter");
 static const u8 sText_GimmiShort_Route6[] = _("Rt 6");
 static const u8 sText_GimmiShort_Route7[] = _("Rt 7");
@@ -742,42 +754,57 @@ static const struct QuestJournalEntry sQuestJournalEntries[] =
         .description = sText_QuestBackToHQDesc,
         .flagStarted = FLAG_QUEST_BACK_TO_HQ_STARTED,
         .flagCompleted = FLAG_QUEST_BACK_TO_HQ_COMPLETED,
+        // This flag is set immediately before Birch's Ilex Forest call and is
+        // independent of the quest progress flags used by older saves.
+        .flagReveal = FLAG_HIDE_ILEX_JJ_GROUP,
+    },
+    {
+        .title = sText_QuestStartersStolenTitle,
+        .description = sText_QuestStartersStolenDesc,
+        .flagStarted = FLAG_QUEST_STARTERS_STOLEN_STARTED,
+        .flagCompleted = FLAG_QUEST_STARTERS_STOLEN_COMPLETED,
     },
     {
         .title = sText_QuestThunderbirdTitle,
         .description = sText_QuestThunderbirdDesc,
         .flagStarted = FLAG_QUEST_THUNDERBIRD_STARTED,
         .flagCompleted = FLAG_QUEST_THUNDERBIRD_COMPLETED,
+        .flagReveal = FLAG_WES_HIDEOUT_LEGENDARY_QUESTS_REVEALED,
     },
     {
         .title = sText_QuestMachinePartTitle,
         .description = sText_QuestMachinePartDesc,
         .flagStarted = FLAG_QUEST_MACHINE_PART_STARTED,
         .flagCompleted = FLAG_QUEST_MACHINE_PART_COMPLETED,
+        .flagReveal = FLAG_QUEST_MACHINE_PART_REVEALED,
     },
     {
         .title = sText_QuestIcebirdTitle,
         .description = sText_QuestIcebirdDesc,
         .flagStarted = FLAG_QUEST_ICEBIRD_STARTED,
         .flagCompleted = FLAG_QUEST_ICEBIRD_COMPLETED,
+        .flagReveal = FLAG_WES_HIDEOUT_LEGENDARY_QUESTS_REVEALED,
     },
     {
         .title = sText_QuestFirebirdTitle,
         .description = sText_QuestFirebirdDesc,
         .flagStarted = FLAG_QUEST_FIREBIRD_STARTED,
         .flagCompleted = FLAG_QUEST_FIREBIRD_COMPLETED,
+        .flagReveal = FLAG_WES_HIDEOUT_LEGENDARY_QUESTS_REVEALED,
     },
     {
         .title = sText_QuestPhoenixTitle,
         .description = sText_QuestPhoenixDesc,
         .flagStarted = FLAG_QUEST_PHOENIX_STARTED,
         .flagCompleted = FLAG_QUEST_PHOENIX_COMPLETED,
+        .flagReveal = FLAG_WES_HIDEOUT_LEGENDARY_QUESTS_REVEALED,
     },
     {
         .title = sText_QuestShiningBeastTitle,
         .description = sText_QuestShiningBeastDesc,
         .flagStarted = FLAG_QUEST_SHINING_BEAST_STARTED,
         .flagCompleted = FLAG_QUEST_SHINING_BEAST_COMPLETED,
+        .flagReveal = FLAG_WES_HIDEOUT_LEGENDARY_QUESTS_REVEALED,
     },
     {
         .title = sText_QuestLavenderNPCsTitle,
@@ -814,6 +841,7 @@ static const struct QuestJournalEntry sQuestJournalEntries[] =
         .description = sText_QuestAlolaLillieDesc,
         .flagStarted = FLAG_QUEST_ALOLA_LILLIE_STARTED,
         .flagCompleted = FLAG_QUEST_ALOLA_LILLIE_COMPLETED,
+        .flagReveal = FLAG_CELADON_LILLIE_JOINED,
     },
     {
         .title = sText_QuestLtSurgeTitle,
@@ -826,6 +854,7 @@ static const struct QuestJournalEntry sQuestJournalEntries[] =
         .description = sText_QuestNebbyPowerhouseDesc,
         .flagStarted = FLAG_QUEST_NEBBY_POWERHOUSE_STARTED,
         .flagCompleted = FLAG_QUEST_NEBBY_POWERHOUSE_COMPLETED,
+        .flagReveal = FLAG_VERMILION_PORTINSIDE_BURNET_SCENE_DONE,
     },
     {
         .title = sText_QuestSaffronNPCsTitle,
@@ -840,28 +869,57 @@ static const struct QuestJournalEntry sQuestJournalEntries[] =
         .flagCompleted = FLAG_QUEST_VERMILION_NPCS_COMPLETED,
     },
     {
+        .title = sText_QuestGoldenrodCityInfoTitle,
+        .description = sText_QuestGoldenrodCityInfoDesc,
+        .flagStarted = FLAG_QUEST_GOLDENROD_CITY_INFO_STARTED,
+        .flagCompleted = FLAG_QUEST_GOLDENROD_CITY_INFO_COMPLETED,
+        .flagReveal = FLAG_VISITED_GOLDENROD_CITY,
+    },
+    {
         .title = sText_QuestWhitneyTitle,
         .description = sText_QuestWhitneyDesc,
         .flagStarted = FLAG_QUEST_WHITNEY_STARTED,
         .flagCompleted = FLAG_QUEST_WHITNEY_COMPLETED,
+        .flagReveal = FLAG_KURTS_HOUSE_GOLD_QUESTS_REVEALED,
     },
     {
         .title = sText_QuestCipherTakeoverTitle,
         .description = sText_QuestCipherTakeoverDesc,
         .flagStarted = FLAG_QUEST_CIPHER_TAKEOVER_STARTED,
         .flagCompleted = FLAG_QUEST_CIPHER_TAKEOVER_COMPLETED,
+        .flagReveal = FLAG_KURTS_HOUSE_GOLD_QUESTS_REVEALED,
     },
     {
         .title = sText_QuestGoldenrodNPCsTitle,
         .description = sText_QuestGoldenrodNPCsDesc,
         .flagStarted = FLAG_QUEST_GOLDENROD_NPCS_STARTED,
         .flagCompleted = FLAG_QUEST_GOLDENROD_NPCS_COMPLETED,
+        .flagReveal = FLAG_VISITED_GOLDENROD_CITY,
     },
     {
         .title = sText_QuestRustboroNPCsTitle,
         .description = sText_QuestRustboroNPCsDesc,
         .flagStarted = FLAG_QUEST_RUSTBORO_NPCS_STARTED,
         .flagCompleted = FLAG_QUEST_RUSTBORO_NPCS_COMPLETED,
+        .flagReveal = FLAG_VISITED_RUSTBORO_CITY,
+    },
+    {
+        .title = sText_QuestRockyRoxyTitle,
+        .description = sText_QuestRockyRoxyDesc,
+        .flagStarted = FLAG_QUEST_ROCKY_ROXY_STARTED,
+        .flagCompleted = FLAG_QUEST_ROCKY_ROXY_COMPLETED,
+    },
+    {
+        .title = sText_QuestFindBrendanMayTitle,
+        .description = sText_QuestFindBrendanMayDesc,
+        .flagStarted = FLAG_QUEST_FIND_BRENDAN_MAY_STARTED,
+        .flagCompleted = FLAG_QUEST_FIND_BRENDAN_MAY_COMPLETED,
+    },
+    {
+        .title = sText_QuestMoreToComeTitle,
+        .description = sText_QuestMoreToComeDesc,
+        .flagStarted = FLAG_QUEST_MORE_TO_COME_STARTED,
+        .flagCompleted = FLAG_QUEST_MORE_TO_COME_COMPLETED,
     },
 };
 
@@ -1321,6 +1379,8 @@ static void QuestJournal_AddEntriesByStatePinned(u8 state, bool8 pinned)
             break;
         if (sQuestJournalEntryPinned[i] != pinned)
             continue;
+        if (!QuestJournal_IsEntryUnlocked(entry))
+            continue;
         if (QuestJournal_GetEntryState(entry) != state)
             continue;
 
@@ -1334,9 +1394,13 @@ static void QuestJournal_AddEntriesAllPinned(bool8 pinned)
 
     for (i = 0; i < ARRAY_COUNT(sQuestJournalEntries); i++)
     {
+        const struct QuestJournalEntry *entry = &sQuestJournalEntries[i];
+
         if (sQuestJournalEntryCount >= QUEST_JOURNAL_MAX_ENTRIES)
             break;
         if (sQuestJournalEntryPinned[i] != pinned)
+            continue;
+        if (!QuestJournal_IsEntryUnlocked(entry))
             continue;
 
         sQuestJournalEntryIds[sQuestJournalEntryCount++] = i;
@@ -1734,6 +1798,10 @@ static void QuestJournal_HideButtonIcons(void)
 
 static bool8 QuestJournal_IsEntryUnlocked(const struct QuestJournalEntry *entry)
 {
+    if (entry->flagReveal != 0
+     && !FlagGet(entry->flagReveal))
+        return FALSE;
+
     if (entry->flagStarted == FLAG_QUEST_ERICA_STARTED
      && !FlagGet(FLAG_QUEST_THUNDERBIRD_COMPLETED))
         return FALSE;
@@ -1742,31 +1810,83 @@ static bool8 QuestJournal_IsEntryUnlocked(const struct QuestJournalEntry *entry)
      && VarGet(VAR_LAVENDER_SOULHOUSE_ODD_KEYSTONE_STATE) != 2)
         return FALSE;
 
-    if (entry->flagStarted == FLAG_QUEST_GOLDENROD_NPCS_STARTED
-     && !FlagGet(FLAG_VISITED_GOLDENROD_CITY))
-        return FALSE;
-
-    if (entry->flagStarted == FLAG_QUEST_RUSTBORO_NPCS_STARTED
-     && !FlagGet(FLAG_VISITED_RUSTBORO_CITY))
-        return FALSE;
-
-    if (entry->flagStarted == FLAG_QUEST_MACHINE_PART_STARTED
-     && !FlagGet(FLAG_HIDE_ROUTE10_ZINZOLIN))
-        return FALSE;
-
-    if (entry->flagStarted == FLAG_QUEST_ALOLA_LILLIE_STARTED
-     && !FlagGet(FLAG_CELADON_LILLIE_JOINED))
-        return FALSE;
-
-    if (entry->flagStarted == FLAG_QUEST_NEBBY_POWERHOUSE_STARTED
-     && !FlagGet(FLAG_VERMILION_PORTINSIDE_BURNET_SCENE_DONE))
-        return FALSE;
-
     return FlagGet(entry->flagStarted) || FlagGet(entry->flagCompleted);
 }
 
 static u8 QuestJournal_GetEntryState(const struct QuestJournalEntry *entry)
 {
+    if (entry->flagStarted == FLAG_QUEST_ODD_KEYSTONE_STARTED)
+    {
+        FlagClear(FLAG_QUEST_ODD_KEYSTONE_COMPLETED);
+        if (FlagGet(entry->flagStarted))
+            return QUEST_JOURNAL_ENTRY_STATE_INCOMPLETE;
+        return QUEST_JOURNAL_ENTRY_STATE_UNOBTAINED;
+    }
+
+    if (entry->flagStarted == FLAG_QUEST_ERICA_STARTED)
+    {
+        if (FlagGet(FLAG_BADGE12_GET))
+            return QUEST_JOURNAL_ENTRY_STATE_COMPLETE;
+        if (FlagGet(entry->flagStarted))
+            return QUEST_JOURNAL_ENTRY_STATE_INCOMPLETE;
+        return QUEST_JOURNAL_ENTRY_STATE_UNOBTAINED;
+    }
+
+    if (entry->flagStarted == FLAG_QUEST_MACHINE_PART_STARTED)
+    {
+        if (FlagGet(entry->flagStarted))
+            return QUEST_JOURNAL_ENTRY_STATE_INCOMPLETE;
+        return QUEST_JOURNAL_ENTRY_STATE_UNOBTAINED;
+    }
+
+    if (entry->flagStarted == FLAG_QUEST_WHITNEY_STARTED)
+    {
+        if (FlagGet(FLAG_BADGE19_GET))
+            return QUEST_JOURNAL_ENTRY_STATE_COMPLETE;
+        if (FlagGet(entry->flagStarted))
+            return QUEST_JOURNAL_ENTRY_STATE_INCOMPLETE;
+        return QUEST_JOURNAL_ENTRY_STATE_UNOBTAINED;
+    }
+
+    if (entry->flagStarted == FLAG_QUEST_CIPHER_TAKEOVER_STARTED)
+    {
+        if (FlagGet(entry->flagStarted))
+            return QUEST_JOURNAL_ENTRY_STATE_INCOMPLETE;
+        return QUEST_JOURNAL_ENTRY_STATE_UNOBTAINED;
+    }
+
+    if (entry->flagStarted == FLAG_QUEST_GOLDENROD_CITY_INFO_STARTED)
+    {
+        if (FlagGet(entry->flagCompleted))
+            return QUEST_JOURNAL_ENTRY_STATE_COMPLETE;
+        if (FlagGet(FLAG_VISITED_GOLDENROD_CITY) || FlagGet(entry->flagStarted))
+            return QUEST_JOURNAL_ENTRY_STATE_INCOMPLETE;
+        return QUEST_JOURNAL_ENTRY_STATE_UNOBTAINED;
+    }
+
+    if (entry->flagStarted == FLAG_QUEST_ROCKY_ROXY_STARTED)
+    {
+        if (FlagGet(FLAG_BADGE01_GET))
+            return QUEST_JOURNAL_ENTRY_STATE_COMPLETE;
+        if (FlagGet(entry->flagStarted))
+            return QUEST_JOURNAL_ENTRY_STATE_INCOMPLETE;
+        return QUEST_JOURNAL_ENTRY_STATE_UNOBTAINED;
+    }
+
+    if (entry->flagStarted == FLAG_QUEST_ICEBIRD_STARTED)
+    {
+        if (FlagGet(entry->flagStarted))
+            return QUEST_JOURNAL_ENTRY_STATE_INCOMPLETE;
+        return QUEST_JOURNAL_ENTRY_STATE_UNOBTAINED;
+    }
+
+    if (entry->flagStarted == FLAG_QUEST_PHOENIX_STARTED)
+    {
+        if (FlagGet(entry->flagStarted))
+            return QUEST_JOURNAL_ENTRY_STATE_INCOMPLETE;
+        return QUEST_JOURNAL_ENTRY_STATE_UNOBTAINED;
+    }
+
     if (FlagGet(entry->flagCompleted))
         return QUEST_JOURNAL_ENTRY_STATE_COMPLETE;
     if (FlagGet(entry->flagStarted))
@@ -2019,8 +2139,20 @@ static void QuestJournal_GetZygardeDescription(u8 *dst, u8 entryIndex)
 static bool8 QuestJournal_IsZygardeEntryDiscovered(u8 entryIndex)
 {
     const struct ZygardeJournalEntry *entry = &sZygardeJournalEntries[entryIndex];
+    const u16 foundCount = entry->isCore ? VarGet(VAR_ZYGARDE_CORE_COUNT) : VarGet(VAR_ZYGARDE_CELL_COUNT);
 
     if (entry->discoveredFlag == 0)
+        return FALSE;
+
+    if (!FlagGet(FLAG_QUEST_100_POWER_STARTED)
+     && !FlagGet(FLAG_QUEST_100_POWER_COMPLETED))
+        return FALSE;
+
+    if (!CheckBagHasItem(ITEM_ZYGARDE_CUBE, 1)
+     && !FlagGet(FLAG_QUEST_100_POWER_COMPLETED))
+        return FALSE;
+
+    if (foundCount == 0)
         return FALSE;
 
     return FlagGet(entry->discoveredFlag);

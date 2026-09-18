@@ -2,7 +2,7 @@ CherrygroveCity_Mart_MapScripts::
 	.byte 0
 
 CherrygroveCity_Mart_Speaker_Clerk:
-	.string "CLERK$"
+	.string "MARCY$"
 
 CherrygroveCity_Mart_Speaker_Youngster:
 	.string "NATE$"

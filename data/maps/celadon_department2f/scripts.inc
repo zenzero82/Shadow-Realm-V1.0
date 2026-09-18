@@ -22,10 +22,14 @@ celadon_department2f_EventScript_Directory::
 
 	.align 2
 celadon_department2f_Pokemart:
-	.2byte ITEM_HYPER_POTION
-	.2byte ITEM_REPEL
-	.2byte ITEM_REVIVE
+	.2byte ITEM_QUICK_BALL
+	.2byte ITEM_TIMER_BALL
+	.2byte ITEM_NEST_BALL
+	.2byte ITEM_HEAL_BALL
 	.2byte ITEM_SUPER_POTION
+	.2byte ITEM_HYPER_POTION
+	.2byte ITEM_REVIVE
+	.2byte ITEM_REPEL
 	.2byte ITEM_SUPER_REPEL
 	pokemartlistend
 

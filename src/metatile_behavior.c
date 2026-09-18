@@ -493,7 +493,8 @@ bool8 MetatileBehavior_IsPlayerFacingTVScreen(u8 metatileBehavior, u8 playerDir)
 {
     if (playerDir != DIR_NORTH)
         return FALSE;
-    else if (metatileBehavior == MB_TELEVISION)
+    else if (metatileBehavior == MB_TELEVISION
+          || metatileBehavior == MB_TELEVISION_KANTO_JOHTO)
         return TRUE;
     else
         return FALSE;

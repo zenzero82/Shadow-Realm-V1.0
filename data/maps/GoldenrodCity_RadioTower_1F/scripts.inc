@@ -5,8 +5,11 @@ GoldenrodCity_RadioTower_1F_MapScripts::
 #define LOCALID_GOLDENROD_RADIO_1F_CIPHER_F1 1
 #define LOCALID_GOLDENROD_RADIO_1F_CIPHER_F5 2
 
-GoldenrodCity_RadioTower_1F_Speaker_CipherPeonF:
-	.string "CIPHER PEON$"
+GoldenrodCity_RadioTower_1F_Speaker_CipherPeonVexa:
+	.string "PEON VEXA$"
+
+GoldenrodCity_RadioTower_1F_Speaker_CipherPeonZia:
+	.string "PEON ZIA$"
 
 GoldenrodCity_RadioTower_1F_OnTransition::
 	setvar VAR_TEMP_0, 0
@@ -142,20 +145,22 @@ GoldenrodCity_RadioTower_1F_EventScript_SpawnCipherF5Ambush::
 
 GoldenrodCity_RadioTower_1F_EventScript_CipherF1::
 	setvar VAR_LAST_TALKED, LOCALID_GOLDENROD_RADIO_1F_CIPHER_F1
-	setspeaker GoldenrodCity_RadioTower_1F_Speaker_CipherPeonF
+	faceplayer
+	setspeaker GoldenrodCity_RadioTower_1F_Speaker_CipherPeonVexa
 	trainerbattle_single TRAINER_GOLDENROD_RADIO_CIPHER_F1, GoldenrodCity_RadioTower_1F_Text_CipherPeonF1_Intro, GoldenrodCity_RadioTower_1F_Text_CipherPeonF_Defeat, GoldenrodCity_RadioTower_1F_EventScript_CipherF1After
 	goto GoldenrodCity_RadioTower_1F_EventScript_CipherF1After
 
 GoldenrodCity_RadioTower_1F_EventScript_CipherF5::
 	setvar VAR_LAST_TALKED, LOCALID_GOLDENROD_RADIO_1F_CIPHER_F5
-	setspeaker GoldenrodCity_RadioTower_1F_Speaker_CipherPeonF
+	faceplayer
+	setspeaker GoldenrodCity_RadioTower_1F_Speaker_CipherPeonZia
 	trainerbattle_single TRAINER_GOLDENROD_RADIO_CIPHER_F5, GoldenrodCity_RadioTower_1F_Text_CipherPeonF5_Intro, GoldenrodCity_RadioTower_1F_Text_CipherPeonF_Defeat, GoldenrodCity_RadioTower_1F_EventScript_CipherF5After
 	goto GoldenrodCity_RadioTower_1F_EventScript_CipherF5After
 
 GoldenrodCity_RadioTower_1F_EventScript_CipherF1After::
 	settrainerflag TRAINER_GOLDENROD_RADIO_CIPHER_F1
 	setvar VAR_TEMP_0, 0
-	setspeaker GoldenrodCity_RadioTower_1F_Speaker_CipherPeonF
+	setspeaker GoldenrodCity_RadioTower_1F_Speaker_CipherPeonVexa
 	msgbox GoldenrodCity_RadioTower_1F_Text_CipherPeonF1_After, MSGBOX_DEFAULT
 	releaseall
 	end
@@ -163,7 +168,7 @@ GoldenrodCity_RadioTower_1F_EventScript_CipherF1After::
 GoldenrodCity_RadioTower_1F_EventScript_CipherF5After::
 	settrainerflag TRAINER_GOLDENROD_RADIO_CIPHER_F5
 	setvar VAR_TEMP_0, 0
-	setspeaker GoldenrodCity_RadioTower_1F_Speaker_CipherPeonF
+	setspeaker GoldenrodCity_RadioTower_1F_Speaker_CipherPeonZia
 	msgbox GoldenrodCity_RadioTower_1F_Text_CipherPeonF5_After, MSGBOX_DEFAULT
 	releaseall
 	end
@@ -192,4 +197,8 @@ GoldenrodCity_RadioTower_1F_Text_CipherPeonF5_After:
 	.string "the broadcast gets delayed...$"
 
 GoldenrodCity_RadioTower_1F_EventScript_Sign_Text:
-	.string "It's a sign.$"
+	.string "1F RECEPTION\n"
+	.string "2F SALES\p"
+	.string "3F PERSONNEL\n"
+	.string "4F PRODUCTION\p"
+	.string "5F DIRECTOR'S OFFICE$"

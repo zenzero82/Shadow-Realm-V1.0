@@ -102,10 +102,8 @@ static void TryMarkShadowFailedOnFaint(u32 battler)
     Shdw_SetState(shadowId, SHDW_STATE_FAILED);
     gShadowMonFledThisBattle = TRUE;
     RoamingHunter_OnShadowSnagFailed(
-        GetMonData(mon, MON_DATA_SPECIES),
-        GetMonData(mon, MON_DATA_LEVEL),
-        RegionMap_GetRegionFromMapGroup(gSaveBlock1Ptr->location.mapGroup),
-        shadowId
+        mon,
+        RegionMap_GetRegionFromMapGroup(gSaveBlock1Ptr->location.mapGroup)
     );
 }
 
@@ -11992,8 +11990,9 @@ static void Cmd_various(void)
                         gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_SOMEONES_BOX_FULL;
                     }
 
-                    // Change to B_MSG_SENT_LANETTES_PC or B_MSG_LANETTES_BOX_FULL
                     if (FlagGet(FLAG_SYS_PC_LANETTE))
+                        gBattleCommunication[MULTISTRING_CHOOSER] += 2;
+                    else if (FlagGet(FLAG_SYS_NOT_SOMEONES_PC))
                         gBattleCommunication[MULTISTRING_CHOOSER]++;
                 }
 
@@ -16568,8 +16567,9 @@ static void Cmd_givecaughtmon(void)
                 gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_SOMEONES_BOX_FULL;
             }
 
-            // Change to B_MSG_SENT_LANETTES_PC or B_MSG_LANETTES_BOX_FULL
             if (FlagGet(FLAG_SYS_PC_LANETTE))
+                gBattleCommunication[MULTISTRING_CHOOSER] += 2;
+            else if (FlagGet(FLAG_SYS_NOT_SOMEONES_PC))
                 gBattleCommunication[MULTISTRING_CHOOSER]++;
         }
 
@@ -17070,7 +17070,6 @@ void BS_ClearReverseModeAfterCall(void)
         if (gHealthboxSpriteIds[battler] < MAX_SPRITES)
         {
             bool8 isShadowNow = GetMonData(GetBattlerMon(battler), MON_DATA_IS_SHADOW);
-            ShdwLoadHealthboxPalette(battler);
             BattleHud_ApplyHealthboxPalette(battler, isShadowNow);
         }
     }

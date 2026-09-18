@@ -1,2 +1,7 @@
 Olivine_pokecenter_MapScripts::
+	map_script MAP_SCRIPT_ON_TRANSITION, Olivine_pokecenter_OnTransition
 	.byte 0
+
+Olivine_pokecenter_OnTransition:
+	call CableClub_EventScript_HideOrShowMysteryGiftMan
+	end

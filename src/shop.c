@@ -4,6 +4,7 @@
 #include "decompress.h"
 #include "decoration.h"
 #include "decoration_inventory.h"
+#include "coins.h"
 #include "event_object_movement.h"
 #include "field_player_avatar.h"
 #include "field_screen_effect.h"
@@ -68,6 +69,7 @@ enum {
 
 enum {
     MART_TYPE_NORMAL,
+    MART_TYPE_COINS,
     MART_TYPE_DECOR,
     MART_TYPE_DECOR2,
 };
@@ -156,6 +158,18 @@ static void Task_HandleShopMenuBuy(u8 taskId);
 static void Task_HandleShopMenuSell(u8 taskId);
 static void BuyMenuPrintItemDescriptionAndShowItemIcon(s32 item, bool8 onInit, struct ListMenu *list);
 static void BuyMenuPrintPriceInList(u8 windowId, u32 itemId, u8 y);
+static u16 GetMartItemIdByIndex(u16 index);
+static u32 GetMartItemPrice(u16 itemId);
+static u32 GetShopCurrencyAmount(void);
+static bool8 CanAffordShopItem(u32 price);
+static void SubtractShopCurrency(u32 price);
+static void BuyMenuPrintCurrencyAmount(u8 windowId, u32 amount, u8 colorSet);
+static void BuyMenuPrintCurrencyBalance(void);
+
+static const u8 sText_CoinShopPriceTag[] = _("{STR_VAR_1} COINS");
+static const u8 sText_CoinShopNotEnoughCoins[] = _("You don't have enough coins.{PAUSE_UNTIL_PRESS}");
+static const u8 sText_CoinShopWantedThatWillBe[] = _("{STR_VAR_1}? And you wanted {STR_VAR_2}?\nThat will be {STR_VAR_3} COINS.");
+static const u8 sText_CoinShopSingleItemPrice[] = _("You wanted {STR_VAR_1}?\nThat will be {STR_VAR_2} COINS.");
 
 static const struct YesNoFuncTable sShopPurchaseYesNoFuncs =
 {
@@ -381,15 +395,16 @@ static void SetShopMenuCallback(void (*callback)(void))
 static void SetShopItemsForSale(const u16 *items)
 {
     u16 i = 0;
+    u16 step = (sMartInfo.martType == MART_TYPE_COINS ? 2 : 1);
 
     sMartInfo.itemList = items;
     sMartInfo.itemCount = 0;
 
-    // Read items until ITEM_NONE / DECOR_NONE is reached
+    // Read items until ITEM_NONE / DECOR_NONE is reached.
     while (sMartInfo.itemList[i])
     {
         sMartInfo.itemCount++;
-        i++;
+        i += step;
     }
 }
 
@@ -566,7 +581,7 @@ static void BuyMenuBuildListMenuTemplate(void)
     sListMenuItems = Alloc((sMartInfo.itemCount + 1) * sizeof(*sListMenuItems));
     sItemNames = Alloc((sMartInfo.itemCount + 1) * sizeof(*sItemNames));
     for (i = 0; i < sMartInfo.itemCount; i++)
-        BuyMenuSetListEntry(&sListMenuItems[i], sMartInfo.itemList[i], sItemNames[i]);
+        BuyMenuSetListEntry(&sListMenuItems[i], GetMartItemIdByIndex(i), sItemNames[i]);
 
     StringCopy(sItemNames[i], gText_Cancel2);
     sListMenuItems[i].name = sItemNames[i];
@@ -585,7 +600,7 @@ static void BuyMenuBuildListMenuTemplate(void)
 
 static void BuyMenuSetListEntry(struct ListMenuItem *menuItem, u16 item, u8 *name)
 {
-    if (sMartInfo.martType == MART_TYPE_NORMAL)
+    if (sMartInfo.martType == MART_TYPE_NORMAL || sMartInfo.martType == MART_TYPE_COINS)
         CopyItemName(item, name);
     else
         StringCopy(name, gDecorations[item].name);
@@ -609,7 +624,7 @@ static void BuyMenuPrintItemDescriptionAndShowItemIcon(s32 item, bool8 onInit, s
     sShopData->iconSlot ^= 1;
     if (item != LIST_CANCEL)
     {
-        if (sMartInfo.martType == MART_TYPE_NORMAL)
+        if (sMartInfo.martType == MART_TYPE_NORMAL || sMartInfo.martType == MART_TYPE_COINS)
             description = GetItemDescription(item);
         else
             description = gDecorations[item].description;
@@ -629,15 +644,7 @@ static void BuyMenuPrintPriceInList(u8 windowId, u32 itemId, u8 y)
 
     if (itemId != LIST_CANCEL)
     {
-        if (sMartInfo.martType == MART_TYPE_NORMAL)
-        {
-            ConvertIntToDecimalStringN(
-                gStringVar1,
-                GetItemPrice(itemId) >> IsPokeNewsActive(POKENEWS_SLATEPORT),
-                STR_CONV_MODE_LEFT_ALIGN,
-                6);
-        }
-        else
+        if (sMartInfo.martType == MART_TYPE_DECOR || sMartInfo.martType == MART_TYPE_DECOR2)
         {
             ConvertIntToDecimalStringN(
                 gStringVar1,
@@ -645,9 +652,19 @@ static void BuyMenuPrintPriceInList(u8 windowId, u32 itemId, u8 y)
                 STR_CONV_MODE_LEFT_ALIGN,
                 6);
         }
+        else
+        {
+            ConvertIntToDecimalStringN(
+                gStringVar1,
+                GetMartItemPrice(itemId),
+                STR_CONV_MODE_LEFT_ALIGN,
+                6);
+        }
 
         if (GetItemImportance(itemId) && (CheckBagHasItem(itemId, 1) || CheckPCHasItem(itemId, 1)))
             StringCopy(gStringVar4, gText_SoldOut);
+        else if (sMartInfo.martType == MART_TYPE_COINS)
+            StringExpandPlaceholders(gStringVar4, sText_CoinShopPriceTag);
         else
             StringExpandPlaceholders(gStringVar4, gText_PokedollarVar1);
         x = GetStringRightAlignXOffset(FONT_NARROW, gStringVar4, 120);
@@ -693,7 +710,7 @@ static void BuyMenuAddItemIcon(u16 item, u8 iconSlot)
     if (*spriteIdPtr != SPRITE_NONE)
         return;
 
-    if (sMartInfo.martType == MART_TYPE_NORMAL || item == ITEM_LIST_END)
+    if (sMartInfo.martType == MART_TYPE_NORMAL || sMartInfo.martType == MART_TYPE_COINS || item == ITEM_LIST_END)
     {
         spriteId = AddItemIconSprite(iconSlot + TAG_ITEM_ICON_BASE, iconSlot + TAG_ITEM_ICON_BASE, item);
         if (spriteId != MAX_SPRITES)
@@ -778,8 +795,16 @@ static void BuyMenuDisplayMessage(u8 taskId, const u8 *text, TaskFunc callback)
 static void BuyMenuDrawGraphics(void)
 {
     FillWindowPixelBuffer(WIN_MONEY, PIXEL_FILL(0));
-    AddMoneyLabelObject(19, 11);
-    PrintMoneyAmountInMoneyBoxWithBorder(WIN_MONEY, 1, 13, GetMoney(&gSaveBlock1Ptr->money));
+    if (sMartInfo.martType == MART_TYPE_COINS)
+    {
+        DrawStdFrameWithCustomTileAndPalette(WIN_MONEY, FALSE, 1, 13);
+        BuyMenuPrintCurrencyBalance();
+    }
+    else
+    {
+        AddMoneyLabelObject(19, 11);
+        PrintMoneyAmountInMoneyBoxWithBorder(WIN_MONEY, 1, 13, GetMoney(&gSaveBlock1Ptr->money));
+    }
     ScheduleBgCopyTilemapToVram(0);
     ScheduleBgCopyTilemapToVram(1);
     ScheduleBgCopyTilemapToVram(2);
@@ -1002,28 +1027,31 @@ static void Task_BuyMenu(u8 taskId)
             BuyMenuRemoveScrollIndicatorArrows();
             BuyMenuPrintCursor(tListTaskId, COLORID_GRAY_CURSOR);
 
-            if (sMartInfo.martType == MART_TYPE_NORMAL)
-                sShopData->totalCost = (GetItemPrice(itemId) >> IsPokeNewsActive(POKENEWS_SLATEPORT));
-            else
+            if (sMartInfo.martType == MART_TYPE_DECOR || sMartInfo.martType == MART_TYPE_DECOR2)
                 sShopData->totalCost = gDecorations[itemId].price;
+            else
+                sShopData->totalCost = GetMartItemPrice(itemId);
 
             if (GetItemImportance(itemId) && (CheckBagHasItem(itemId, 1) || CheckPCHasItem(itemId, 1)))
                 BuyMenuDisplayMessage(taskId, gText_ThatItemIsSoldOut, BuyMenuReturnToItemList);
-            else if (!IsEnoughMoney(&gSaveBlock1Ptr->money, sShopData->totalCost))
+            else if (!CanAffordShopItem(sShopData->totalCost))
             {
-                BuyMenuDisplayMessage(taskId, gText_YouDontHaveMoney, BuyMenuReturnToItemList);
+                BuyMenuDisplayMessage(taskId, (sMartInfo.martType == MART_TYPE_COINS ? sText_CoinShopNotEnoughCoins : gText_YouDontHaveMoney), BuyMenuReturnToItemList);
             }
             else
             {
-                if (sMartInfo.martType == MART_TYPE_NORMAL)
+                if (sMartInfo.martType == MART_TYPE_NORMAL || sMartInfo.martType == MART_TYPE_COINS)
                 {
                     CopyItemName(itemId, gStringVar1);
                     if (GetItemImportance(itemId))
                     {
                         ConvertIntToDecimalStringN(gStringVar2, sShopData->totalCost, STR_CONV_MODE_LEFT_ALIGN, 6);
-                        StringExpandPlaceholders(gStringVar4, gText_YouWantedVar1ThatllBeVar2);
+                        if (sMartInfo.martType == MART_TYPE_COINS)
+                            StringExpandPlaceholders(gStringVar4, sText_CoinShopSingleItemPrice);
+                        else
+                            StringExpandPlaceholders(gStringVar4, gText_YouWantedVar1ThatllBeVar2);
                         tItemCount = 1;
-                        sShopData->totalCost = (GetItemPrice(tItemId) >> IsPokeNewsActive(POKENEWS_SLATEPORT)) * tItemCount;
+                        sShopData->totalCost = GetMartItemPrice(tItemId) * tItemCount;
                         BuyMenuDisplayMessage(taskId, gStringVar4, BuyMenuConfirmPurchase);
                     }
                     else if (GetItemPocket(itemId) == POCKET_TM_HM)
@@ -1074,7 +1102,7 @@ static void Task_BuyHowManyDialogueInit(u8 taskId)
     if (sShopData->totalCost == 0)
         maxQuantity = MAX_BAG_ITEM_CAPACITY;
     else
-        maxQuantity = GetMoney(&gSaveBlock1Ptr->money) / sShopData->totalCost;
+        maxQuantity = GetShopCurrencyAmount() / sShopData->totalCost;
 
     if (maxQuantity > MAX_BAG_ITEM_CAPACITY)
         sShopData->maxQuantity = MAX_BAG_ITEM_CAPACITY;
@@ -1090,7 +1118,7 @@ static void Task_BuyHowManyDialogueHandleInput(u8 taskId)
 
     if (AdjustQuantityAccordingToDPadInput(&tItemCount, sShopData->maxQuantity) == TRUE)
     {
-        sShopData->totalCost = (GetItemPrice(tItemId) >> IsPokeNewsActive(POKENEWS_SLATEPORT)) * tItemCount;
+        sShopData->totalCost = GetMartItemPrice(tItemId) * tItemCount;
         BuyMenuPrintItemQuantityAndPrice(taskId);
     }
     else
@@ -1106,7 +1134,7 @@ static void Task_BuyHowManyDialogueHandleInput(u8 taskId)
             CopyItemName(tItemId, gStringVar1);
             ConvertIntToDecimalStringN(gStringVar2, tItemCount, STR_CONV_MODE_LEFT_ALIGN, MAX_ITEM_DIGITS);
             ConvertIntToDecimalStringN(gStringVar3, sShopData->totalCost, STR_CONV_MODE_LEFT_ALIGN, MAX_MONEY_DIGITS);
-            BuyMenuDisplayMessage(taskId, gText_Var1AndYouWantedVar2, BuyMenuConfirmPurchase);
+            BuyMenuDisplayMessage(taskId, (sMartInfo.martType == MART_TYPE_COINS ? sText_CoinShopWantedThatWillBe : gText_Var1AndYouWantedVar2), BuyMenuConfirmPurchase);
         }
         else if (JOY_NEW(B_BUTTON))
         {
@@ -1131,7 +1159,7 @@ static void BuyMenuTryMakePurchase(u8 taskId)
 
     PutWindowTilemap(WIN_ITEM_LIST);
 
-    if (sMartInfo.martType == MART_TYPE_NORMAL)
+    if (sMartInfo.martType == MART_TYPE_NORMAL || sMartInfo.martType == MART_TYPE_COINS)
     {
         if (AddBagItem(tItemId, tItemCount) == TRUE)
         {
@@ -1163,11 +1191,14 @@ static void BuyMenuTryMakePurchase(u8 taskId)
 static void BuyMenuSubtractMoney(u8 taskId)
 {
     IncrementGameStat(GAME_STAT_SHOPPED);
-    RemoveMoney(&gSaveBlock1Ptr->money, sShopData->totalCost);
+    SubtractShopCurrency(sShopData->totalCost);
     PlaySE(SE_SHOP);
-    PrintMoneyAmountInMoneyBox(WIN_MONEY, GetMoney(&gSaveBlock1Ptr->money), 0);
+    if (sMartInfo.martType == MART_TYPE_COINS)
+        BuyMenuPrintCurrencyBalance();
+    else
+        PrintMoneyAmountInMoneyBox(WIN_MONEY, GetMoney(&gSaveBlock1Ptr->money), 0);
 
-    if (sMartInfo.martType == MART_TYPE_NORMAL)
+    if (sMartInfo.martType == MART_TYPE_NORMAL || sMartInfo.martType == MART_TYPE_COINS)
         gTasks[taskId].func = Task_ReturnToItemListAfterItemPurchase;
     else
         gTasks[taskId].func = Task_ReturnToItemListAfterDecorationPurchase;
@@ -1235,10 +1266,13 @@ static void BuyMenuPrintItemQuantityAndPrice(u8 taskId)
     s16 *data = gTasks[taskId].data;
 
     FillWindowPixelBuffer(WIN_QUANTITY_PRICE, PIXEL_FILL(1));
-    PrintMoneyAmount(WIN_QUANTITY_PRICE, CalculateMoneyTextHorizontalPosition(sShopData->totalCost), 1, sShopData->totalCost, TEXT_SKIP_DRAW);
     ConvertIntToDecimalStringN(gStringVar1, tItemCount, STR_CONV_MODE_LEADING_ZEROS, MAX_ITEM_DIGITS);
     StringExpandPlaceholders(gStringVar4, gText_xVar1);
     BuyMenuPrint(WIN_QUANTITY_PRICE, gStringVar4, 0, 1, 0, COLORID_NORMAL);
+    if (sMartInfo.martType == MART_TYPE_COINS)
+        BuyMenuPrintCurrencyAmount(WIN_QUANTITY_PRICE, sShopData->totalCost, COLORID_NORMAL);
+    else
+        PrintMoneyAmount(WIN_QUANTITY_PRICE, CalculateMoneyTextHorizontalPosition(sShopData->totalCost), 1, sShopData->totalCost, TEXT_SKIP_DRAW);
 }
 
 static void ExitBuyMenu(u8 taskId)
@@ -1252,11 +1286,77 @@ static void Task_ExitBuyMenu(u8 taskId)
 {
     if (!gPaletteFade.active)
     {
-        RemoveMoneyLabelObject();
+        if (sMartInfo.martType != MART_TYPE_COINS)
+            RemoveMoneyLabelObject();
         BuyMenuFreeMemory();
         SetMainCallback2(CB2_ReturnToField);
         DestroyTask(taskId);
     }
+}
+
+static u16 GetMartItemIdByIndex(u16 index)
+{
+    if (sMartInfo.martType == MART_TYPE_COINS)
+        return sMartInfo.itemList[index * 2];
+    return sMartInfo.itemList[index];
+}
+
+static u32 GetMartItemPrice(u16 itemId)
+{
+    u16 i;
+
+    if (sMartInfo.martType == MART_TYPE_COINS)
+    {
+        for (i = 0; i < sMartInfo.itemCount; i++)
+        {
+            if (sMartInfo.itemList[i * 2] == itemId)
+                return sMartInfo.itemList[i * 2 + 1];
+        }
+        return 0;
+    }
+
+    if (sMartInfo.martType == MART_TYPE_NORMAL)
+        return GetItemPrice(itemId) >> IsPokeNewsActive(POKENEWS_SLATEPORT);
+
+    return gDecorations[itemId].price;
+}
+
+static u32 GetShopCurrencyAmount(void)
+{
+    if (sMartInfo.martType == MART_TYPE_COINS)
+        return GetCoins();
+    return GetMoney(&gSaveBlock1Ptr->money);
+}
+
+static bool8 CanAffordShopItem(u32 price)
+{
+    if (sMartInfo.martType == MART_TYPE_COINS)
+        return GetCoins() >= price;
+    return IsEnoughMoney(&gSaveBlock1Ptr->money, price);
+}
+
+static void SubtractShopCurrency(u32 price)
+{
+    if (sMartInfo.martType == MART_TYPE_COINS)
+        RemoveCoins(price);
+    else
+        RemoveMoney(&gSaveBlock1Ptr->money, price);
+}
+
+static void BuyMenuPrintCurrencyAmount(u8 windowId, u32 amount, u8 colorSet)
+{
+    ConvertIntToDecimalStringN(gStringVar1, amount, STR_CONV_MODE_LEFT_ALIGN, 6);
+    StringExpandPlaceholders(gStringVar4, sText_CoinShopPriceTag);
+    BuyMenuPrint(windowId, gStringVar4, GetStringRightAlignXOffset(FONT_NARROW, gStringVar4, 76), 1, 0, colorSet);
+}
+
+static void BuyMenuPrintCurrencyBalance(void)
+{
+    FillWindowPixelBuffer(WIN_MONEY, PIXEL_FILL(0));
+    DrawStdFrameWithCustomTileAndPalette(WIN_MONEY, FALSE, 1, 13);
+    ConvertIntToDecimalStringN(gStringVar1, GetCoins(), STR_CONV_MODE_LEFT_ALIGN, 6);
+    StringExpandPlaceholders(gStringVar4, sText_CoinShopPriceTag);
+    BuyMenuPrint(WIN_MONEY, gStringVar4, GetStringRightAlignXOffset(FONT_NORMAL, gStringVar4, 78), 1, 0, COLORID_NORMAL);
 }
 
 static void ClearItemPurchases(void)
@@ -1300,6 +1400,14 @@ static void RecordItemPurchase(u8 taskId)
 void CreatePokemartMenu(const u16 *itemsForSale)
 {
     CreateShopMenu(MART_TYPE_NORMAL);
+    SetShopItemsForSale(itemsForSale);
+    ClearItemPurchases();
+    SetShopMenuCallback(ScriptContext_Enable);
+}
+
+void CreateCoinsMartMenu(const u16 *itemsForSale)
+{
+    CreateShopMenu(MART_TYPE_COINS);
     SetShopItemsForSale(itemsForSale);
     ClearItemPurchases();
     SetShopMenuCallback(ScriptContext_Enable);

@@ -59,7 +59,7 @@
       "y": 12,
       "elevation": 0,
       "player_facing_dir": "BG_EVENT_PLAYER_FACING_ANY",
-      "script": "NULL"
+      "script": "celadon_apartmentroofday_EventScript_RooftopSign1"
     },
     {
       "type": "sign",
@@ -67,7 +67,7 @@
       "y": 12,
       "elevation": 0,
       "player_facing_dir": "BG_EVENT_PLAYER_FACING_ANY",
-      "script": "NULL"
+      "script": "celadon_apartmentroofday_EventScript_RooftopSign2"
     }
   ]
 }

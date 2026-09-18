@@ -45,7 +45,7 @@
       "y": 1,
       "elevation": 0,
       "player_facing_dir": "BG_EVENT_PLAYER_FACING_ANY",
-      "script": "EventScript_BookShelf"
+      "script": "Route30_MrPokemonsHouse_EventScript_Bookshelf_ShadowNotes"
     },
     {
       "type": "sign",
@@ -53,7 +53,7 @@
       "y": 1,
       "elevation": 0,
       "player_facing_dir": "BG_EVENT_PLAYER_FACING_ANY",
-      "script": "EventScript_BookShelf"
+      "script": "Route30_MrPokemonsHouse_EventScript_Bookshelf_EggResearch"
     },
     {
       "type": "sign",
@@ -61,7 +61,7 @@
       "y": 1,
       "elevation": 0,
       "player_facing_dir": "BG_EVENT_PLAYER_FACING_ANY",
-      "script": "EventScript_BookShelf"
+      "script": "Route30_MrPokemonsHouse_EventScript_Bookshelf_CipherFile"
     },
     {
       "type": "sign",
@@ -69,7 +69,7 @@
       "y": 1,
       "elevation": 0,
       "player_facing_dir": "BG_EVENT_PLAYER_FACING_ANY",
-      "script": "EventScript_BookShelf"
+      "script": "Route30_MrPokemonsHouse_EventScript_Bookshelf_OakClipping"
     }
   ]
 }

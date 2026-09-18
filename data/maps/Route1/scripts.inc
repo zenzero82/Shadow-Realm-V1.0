@@ -113,6 +113,9 @@ Route1_EventScript_Torkin_AfterApproach::
     @ No-intro battle: shows defeat text automatically if you win
     trainerbattle_no_intro TRAINER_TORKIN, Route1_Text_TorkinDefeated
 
+    @ The battle restores Route 1's music; resume Torkin's theme for his exit.
+    playbgm MUS_CIPHER_ENCOUNTER, FALSE
+
     @ Ensure player is still facing Torkin after battle
     applymovement OBJ_EVENT_ID_PLAYER, Route1_Move_Player_FaceNorth
     waitmovement 0
@@ -126,6 +129,7 @@ Route1_EventScript_Torkin_AfterApproach::
     waitmovement 0
     setflag FLAG_HIDE_ROUTE1_TORKIN
     removeobject 3
+    fadedefaultbgm
 
     goto Route1_EventScript_Leo_AfterTorkin
 

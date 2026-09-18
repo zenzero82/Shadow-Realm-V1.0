@@ -6,6 +6,7 @@
 // Exported RAM declarations
 
 // Exported ROM declarations
+bool32 ShouldUseSwShMapPopup(u16 regionMapSectionId);
 void HideMapNamePopUpWindow(void);
 void ShowMapNamePopup(void);
 #endif //GUARD_MAP_NAME_POPUP_H

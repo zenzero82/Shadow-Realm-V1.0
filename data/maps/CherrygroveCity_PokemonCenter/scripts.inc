@@ -4,6 +4,7 @@ CherrygroveCity_PokemonCenter_MapScripts::
 
 CherrygroveCity_PokemonCenter_OnTransition:
 	setrespawn HEAL_LOCATION_CHERRYGROVE_CITY
+	call CableClub_EventScript_HideOrShowMysteryGiftMan
 	end
 
 CherrygroveCity_PokemonCenter_Speaker_Fisherman:

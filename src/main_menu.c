@@ -21,6 +21,7 @@
 #include "menu.h"
 #include "list_menu.h"
 #include "mystery_event_menu.h"
+#include "mystery_gift.h"
 #include "naming_screen.h"
 #include "option_menu.h"
 #include "overworld.h"
@@ -178,8 +179,17 @@
 
 static EWRAM_DATA bool8 sStartedPokeBallTask = 0;
 static EWRAM_DATA u16 sCurrItemAndOptionMenuCheck = 0;
+static EWRAM_DATA u8 sZenwoosBlessingMessage = 0;
 
 static u8 sBirchSpeechMainTaskId;
+
+enum
+{
+    ZENWOOS_BLESSING_MSG_NONE,
+    ZENWOOS_BLESSING_MSG_INVALID,
+    ZENWOOS_BLESSING_MSG_ALREADY_USED,
+    ZENWOOS_BLESSING_MSG_SUCCESS,
+};
 
 // Static ROM declarations
 
@@ -187,6 +197,8 @@ static u32 InitMainMenu(bool8);
 static void Task_MainMenuCheckSaveFile(u8);
 static void Task_MainMenuCheckBattery(u8);
 static void Task_WaitForSaveFileErrorWindow(u8);
+static void Task_WaitForZenwoosBlessingWindow(u8);
+static void Task_WaitForZenwoosBlessingWindowDismiss(u8);
 static void UNUSED CreateMainMenuErrorWindow(const u8 *);
 static void UNUSED ClearMainMenuWindowTilemap(const struct WindowTemplate *);
 static void Task_DisplayMainMenu(u8);
@@ -204,15 +216,23 @@ static void PrintTeam(void);
 static void DestroyAllSprites(void);
 static void LoadOverWorld(u8 anim);
 static void LoadMonIcon(u8 anim);
+static void LoadContinuePreview(bool8 animate);
 static void LoadUserFrameToBg(u8 bgId);
 static void SetStdFrame0OnBg(u8 bgId);
 static void MainMenu_BlankScreen(void);
 static void PrintMainMenuItem(const u8 *string, u8 left, u8 top, u8 textColor);
+static void PrintMainMenuItemOnWindow(u8 windowId, const u8 *string, u8 left, u8 top, u8 textColor);
 static void MainMenu_DrawWindow(const struct WindowTemplate *template);
 static void MainMenu_EraseWindow(const struct WindowTemplate *template);
 static void Task_WaitForBatteryDryErrorWindow(u8);
 static void UNUSED MainMenu_FormatSavegameText(void);
 static void HighlightSelectedMainMenuItem(u8, u8, s16);
+static void PrintSelectableMainMenuItems(u8 menuType, u8 selectedMenuItem, u8 scrollOffset);
+static void GetMainMenuItems(u8 menuType, const u8 *const **labels, u8 *itemCount);
+static const struct WindowTemplate *GetMainMenuSlotTemplate(u8 menuType, u8 scrollOffset, u8 slot);
+static u8 GetMainMenuVisibleSlotCount(u8 menuType);
+static void ClearSelectableMainMenuWindows(u8 menuType);
+static void DrawNoSaveOptionsFrame(void);
 static void Task_HandleMainMenuInput(u8);
 static void Task_HandleMainMenuAPressed(u8);
 static void Task_HandleMainMenuBPressed(u8);
@@ -266,6 +286,9 @@ static void Task_NewGameBirchSpeech_FadePlayerToWhite(u8);
 static void Task_NewGameBirchSpeech_Cleanup(u8);
 static void SpriteCB_Null(struct Sprite *);
 static void Task_NewGameBirchSpeech_ReturnFromNamingScreenShowTextbox(u8);
+static void CB2_MainMenu_ReturnFromZenwoosBlessingCode(void);
+static void CB2_ZenwoosBlessingMessageScreen(void);
+static void Task_ZenwoosBlessingMessageScreen(u8 taskId);
 static void UNUSED MainMenu_FormatSavegamePlayer(void);
 static void UNUSED MainMenu_FormatSavegamePokedex(void);
 static void UNUSED MainMenu_FormatSavegameTime(void);
@@ -297,8 +320,8 @@ static const u8 gText_BatteryRunDry[] = _("The internal battery has run dry.\nTh
 static const u8 gText_MainMenuNewGame[] = _("NEW GAME");
 static const u8 gText_MainMenuContinue[] = _("CONTINUE");
 static const u8 gText_MainMenuOption[] = _("OPTION");
-static const u8 gText_MainMenuMysteryGift[] UNUSED = _("MYSTERY GIFT");
-static const u8 gText_MainMenuMysteryGift2[] UNUSED = _("MYSTERY GIFT");
+static const u8 gText_MainMenuMysteryGift[] = _("ZENWOO'S BLESSING");
+static const u8 gText_MainMenuMysteryGift2[] UNUSED = _("ZENWOO'S BLESSING");
 static const u8 gText_MainMenuMysteryEvents[] UNUSED = _("MYSTERY EVENTS");
 static const u8 gText_WirelessNotConnected[] = _("The Wireless Adapter is not\nconnected.");
 static const u8 gText_MysteryGiftCantUse[] = _("MYSTERY GIFT can't be used while\nthe Wireless Adapter is attached.");
@@ -335,6 +358,9 @@ static const u8 sText_NewGameIntroStory[] = _(
 static const u8 sText_NewGameChooseGender[] = _(
     "First choose your gender.\n"
     "Use LEFT/RIGHT to choose, then press A."
+);
+static const u8 sText_NewGameFemaleUnavailable[] = _(
+    "This option is not yet available.$"
 );
 
 static const u8 gText_ContinueMenuPlayer[] = _("PLAYER");
@@ -496,6 +522,7 @@ static const struct WindowTemplate sNewGameBirchSpeechTextWindows[] =
 enum MainMenuBWWindow
 {
     MAIN_MENU_BW_WINDOW_TEXT,
+    MAIN_MENU_BW_WINDOW_SCROLL_MENU,
     MAIN_MENU_BW_WINDOW_ERROR,
 };
 
@@ -510,6 +537,16 @@ static const struct WindowTemplate sMainMenuBWWindowTemplates[] =
         .height = 20,
         .paletteNum = 15,
         .baseBlock = 0
+    },
+    [MAIN_MENU_BW_WINDOW_SCROLL_MENU] =
+    {
+        .bg = 0,
+        .tilemapLeft = 0,
+        .tilemapTop = 8,
+        .width = 30,
+        .height = 12,
+        .paletteNum = 15,
+        .baseBlock = 600
     },
     [MAIN_MENU_BW_WINDOW_ERROR] =
     {
@@ -740,7 +777,7 @@ static void Task_MainMenuCheckSaveFile(u8 taskId)
         {
         case SAVE_STATUS_OK:
             LoadUserFrameToBg(0);
-            tMenuType = HAS_SAVED_GAME;
+            tMenuType = HAS_MYSTERY_GIFT;
             gTasks[taskId].func = Task_MainMenuCheckBattery;
             break;
         case SAVE_STATUS_CORRUPT:
@@ -751,7 +788,7 @@ static void Task_MainMenuCheckSaveFile(u8 taskId)
             break;
         case SAVE_STATUS_ERROR:
             SetStdFrame0OnBg(0);
-            tMenuType = HAS_SAVED_GAME;
+            tMenuType = HAS_MYSTERY_GIFT;
             PrintSaveErrorStatus(taskId, gText_SaveFileCorrupted);
             gTasks[taskId].func = Task_WaitForSaveFileErrorWindow;
             break;
@@ -772,16 +809,20 @@ static void Task_MainMenuCheckSaveFile(u8 taskId)
         if (sCurrItemAndOptionMenuCheck & OPTION_MENU_FLAG)
         {
             sCurrItemAndOptionMenuCheck &= ~OPTION_MENU_FLAG;
-            tCurrItem = (tMenuType == HAS_SAVED_GAME) ? 2 : 1;
+            tCurrItem = (tMenuType == HAS_MYSTERY_GIFT) ? 3 : 2;
         }
         else
         {
             tCurrItem = sCurrItemAndOptionMenuCheck;
         }
 
-        tItemCount = (tMenuType == HAS_SAVED_GAME) ? 3 : 2;
+        tItemCount = (tMenuType == HAS_MYSTERY_GIFT) ? 4 : 3;
         if (tCurrItem >= tItemCount)
             tCurrItem = 0;
+        if (tMenuType == HAS_MYSTERY_GIFT)
+            tIsScrolled = (tCurrItem >= 3) ? 1 : 0;
+        else
+            tIsScrolled = 0;
     }
 }
 
@@ -833,6 +874,20 @@ static void Task_WaitForBatteryDryErrorWindow(u8 taskId)
     }
 }
 
+static void Task_WaitForZenwoosBlessingWindowDismiss(u8 taskId)
+{
+    if (!gPaletteFade.active)
+    {
+        RunTextPrinters();
+        if (!IsTextPrinterActive(MAIN_MENU_BW_WINDOW_ERROR) && JOY_NEW(A_BUTTON))
+        {
+            ClearWindowTilemap(MAIN_MENU_BW_WINDOW_ERROR);
+            MainMenu_EraseWindow(&sMainMenuBWWindowTemplates[MAIN_MENU_BW_WINDOW_ERROR]);
+            gTasks[taskId].func = Task_HighlightSelectedMainMenuItem;
+        }
+    }
+}
+
 static void Task_DisplayMainMenu(u8 taskId)
 {
 
@@ -852,17 +907,14 @@ static void Task_DisplayMainMenu(u8 taskId)
         case HAS_NO_SAVED_GAME:
         default:
             LZ77UnCompVram(sMainMenuMapNewGame, (void *)BG_SCREEN_ADDR(29));
-            PrintMainMenuItem(gText_MainMenuNewGame, 24, 16, 0);
-            PrintMainMenuItem(gText_MainMenuOption, 24, 40, 0);
+            DrawNoSaveOptionsFrame();
             break;
-        case HAS_SAVED_GAME:
+        case HAS_MYSTERY_GIFT:
             LZ77UnCompVram(sMainMenuMapContinue, (void *)BG_SCREEN_ADDR(29));
-            PrintMainMenuItem(gText_MainMenuContinue, 24, 8, 0);
-            PrintMainMenuItem(gText_MainMenuNewGame, 24, 112, 0);
-            PrintMainMenuItem(gText_MainMenuOption, 24, 136, 0);
             PrintContinueStats();
             break;
         }
+        PrintSelectableMainMenuItems(gTasks[taskId].tMenuType, gTasks[taskId].tCurrItem, gTasks[taskId].tIsScrolled);
 
         PutWindowTilemap(MAIN_MENU_BW_WINDOW_TEXT);
         CopyWindowToVram(MAIN_MENU_BW_WINDOW_TEXT, COPYWIN_FULL);
@@ -874,7 +926,9 @@ static void Task_WaitDma3AndFadeIn(u8 taskId)
 {
     if (!IsDma3ManagerBusyWithBgCopy())
     {
-        gTasks[taskId].func = Task_HighlightSelectedMainMenuItem;
+        gTasks[taskId].func = (sZenwoosBlessingMessage == ZENWOOS_BLESSING_MSG_NONE)
+            ? Task_HighlightSelectedMainMenuItem
+            : Task_WaitForZenwoosBlessingWindow;
         if (gTasks[taskId].tReturnFromOptions == TRUE)
             BeginNormalPaletteFade(PALETTES_ALL, 0, 16, 0, RGB_BLACK);
         else
@@ -884,6 +938,32 @@ static void Task_WaitDma3AndFadeIn(u8 taskId)
         ShowBg(2);
         SetVBlankCallback(VBlankCB_MainMenu);
     }
+}
+
+static void Task_WaitForZenwoosBlessingWindow(u8 taskId)
+{
+    const u8 *message = NULL;
+
+    if (gPaletteFade.active)
+        return;
+
+    switch (sZenwoosBlessingMessage)
+    {
+    case ZENWOOS_BLESSING_MSG_INVALID:
+        message = gText_ZenwoosBlessingCodeInvalid;
+        break;
+    case ZENWOOS_BLESSING_MSG_ALREADY_USED:
+        message = gText_ZenwoosBlessingCodeUsed;
+        break;
+    case ZENWOOS_BLESSING_MSG_SUCCESS:
+        message = gText_ZenwoosBlessingCodeSuccess;
+        break;
+    }
+
+    if (message != NULL)
+        PrintMessageOnWindow4(message);
+    sZenwoosBlessingMessage = ZENWOOS_BLESSING_MSG_NONE;
+    gTasks[taskId].func = Task_WaitForZenwoosBlessingWindowDismiss;
 }
 static void Task_HighlightSelectedMainMenuItem(u8 taskId)
 {
@@ -895,6 +975,7 @@ static bool8 HandleMainMenuInput(u8 taskId)
 {
     s16 *data = gTasks[taskId].data;
     u8 menuItemCount = tItemCount;
+    u8 visibleSlotCount = GetMainMenuVisibleSlotCount(tMenuType);
 
     if (JOY_NEW(A_BUTTON) || JOY_NEW(START_BUTTON))
     {
@@ -913,6 +994,15 @@ static bool8 HandleMainMenuInput(u8 taskId)
     else if (JOY_NEW(DPAD_UP) && tCurrItem > 0)
     {
         tCurrItem--;
+        if (tMenuType == HAS_MYSTERY_GIFT)
+        {
+            if (tCurrItem <= 2)
+                tIsScrolled = 0;
+        }
+        else if (tCurrItem < tIsScrolled)
+        {
+            tIsScrolled = tCurrItem;
+        }
         sCurrItemAndOptionMenuCheck = tCurrItem;
         PlaySE(SE_SELECT);
         return TRUE;
@@ -920,6 +1010,15 @@ static bool8 HandleMainMenuInput(u8 taskId)
     else if (JOY_NEW(DPAD_DOWN) && tCurrItem < menuItemCount - 1)
     {
         tCurrItem++;
+        if (tMenuType == HAS_MYSTERY_GIFT)
+        {
+            if (tCurrItem >= 3)
+                tIsScrolled = 1;
+        }
+        else if (tCurrItem >= tIsScrolled + visibleSlotCount)
+        {
+            tIsScrolled = tCurrItem - visibleSlotCount + 1;
+        }
         sCurrItemAndOptionMenuCheck = tCurrItem;
         PlaySE(SE_SELECT);
         return TRUE;
@@ -942,7 +1041,7 @@ static void Task_HandleMainMenuAPressed(u8 taskId)
     {
         switch (gTasks[taskId].tMenuType)
         {
-        case HAS_SAVED_GAME:
+        case HAS_MYSTERY_GIFT:
             switch (gTasks[taskId].tCurrItem)
             {
             case 0:
@@ -953,13 +1052,28 @@ static void Task_HandleMainMenuAPressed(u8 taskId)
                 action = ACTION_NEW_GAME;
                 break;
             case 2:
+                action = ACTION_MYSTERY_GIFT;
+                break;
+            case 3:
                 action = ACTION_OPTION;
                 break;
             }
             break;
         case HAS_NO_SAVED_GAME:
         default:
-            action = (gTasks[taskId].tCurrItem == 0) ? ACTION_NEW_GAME : ACTION_OPTION;
+            switch (gTasks[taskId].tCurrItem)
+            {
+            case 0:
+            default:
+                action = ACTION_NEW_GAME;
+                break;
+            case 1:
+                action = ACTION_MYSTERY_GIFT;
+                break;
+            case 2:
+                action = ACTION_OPTION;
+                break;
+            }
             break;
         }
 
@@ -982,6 +1096,12 @@ static void Task_HandleMainMenuAPressed(u8 taskId)
             SetMainCallback2(CB2_ContinueSavedGame);
             DestroyTask(taskId);
             break;
+        case ACTION_MYSTERY_GIFT:
+            gStringVar2[0] = EOS;
+            DestroyTask(taskId);
+            FreeAllWindowBuffers();
+            DoNamingScreen(NAMING_SCREEN_CODE, gStringVar2, 0, 0, 0, FALSE, CB2_MainMenu_ReturnFromZenwoosBlessingCode);
+            return;
         case ACTION_OPTION:
             OptionMenu_SetNewGameSetup(FALSE);
             gMain.savedCallback = CB2_ReinitMainMenu;
@@ -1007,6 +1127,113 @@ static void Task_HandleMainMenuBPressed(u8 taskId)
         FreeAllWindowBuffers();
         SetMainCallback2(CB2_InitTitleScreen);
         DestroyTask(taskId);
+    }
+}
+
+static void CB2_MainMenu_ReturnFromZenwoosBlessingCode(void)
+{
+    bool8 hasSaveFile = (gSaveFileStatus == SAVE_STATUS_OK || gSaveFileStatus == SAVE_STATUS_ERROR);
+
+    switch (ZenwoosBlessing_TryUseCode(gStringVar2, hasSaveFile))
+    {
+    case ZENWOOS_BLESSING_CODE_SUCCESS:
+        if (hasSaveFile)
+            TrySavingData(SAVE_NORMAL);
+        sZenwoosBlessingMessage = ZENWOOS_BLESSING_MSG_SUCCESS;
+        break;
+    case ZENWOOS_BLESSING_CODE_ALREADY_USED:
+        sZenwoosBlessingMessage = ZENWOOS_BLESSING_MSG_ALREADY_USED;
+        break;
+    case ZENWOOS_BLESSING_CODE_INVALID:
+    default:
+        sZenwoosBlessingMessage = ZENWOOS_BLESSING_MSG_INVALID;
+        break;
+    }
+
+    CB2_ZenwoosBlessingMessageScreen();
+}
+
+static void CB2_ZenwoosBlessingMessageScreen(void)
+{
+    ResetBgsAndClearDma3BusyFlags(0);
+    SetGpuReg(REG_OFFSET_DISPCNT, 0);
+    SetGpuReg(REG_OFFSET_WIN0H, 0);
+    SetGpuReg(REG_OFFSET_WIN0V, 0);
+    SetGpuReg(REG_OFFSET_WININ, 0);
+    SetGpuReg(REG_OFFSET_WINOUT, 0);
+    SetGpuReg(REG_OFFSET_BLDCNT, 0);
+    SetGpuReg(REG_OFFSET_BLDALPHA, 0);
+    SetGpuReg(REG_OFFSET_BLDY, 0);
+    SetGpuReg(REG_OFFSET_BG0HOFS, 0);
+    SetGpuReg(REG_OFFSET_BG0VOFS, 0);
+    SetGpuReg(REG_OFFSET_BG1HOFS, 0);
+    SetGpuReg(REG_OFFSET_BG1VOFS, 0);
+    SetGpuReg(REG_OFFSET_BG2HOFS, 0);
+    SetGpuReg(REG_OFFSET_BG2VOFS, 0);
+    ResetTasks();
+    ResetSpriteData();
+    FreeAllSpritePalettes();
+    ResetAllPicSprites();
+
+    InitBgsFromTemplates(0, sMainMenuBgTemplates, ARRAY_COUNT(sMainMenuBgTemplates));
+    ShowBg(0);
+    HideBg(1);
+    HideBg(2);
+    SetGpuReg(REG_OFFSET_DISPCNT, DISPCNT_BG0_ON | DISPCNT_OBJ_ON | DISPCNT_OBJ_1D_MAP);
+    FillBgTilemapBufferRect(0, 0, 0, 0, DISPLAY_TILE_WIDTH, DISPLAY_TILE_HEIGHT, 0);
+    CopyBgTilemapBufferToVram(0);
+    InitWindows(sNewGameBirchSpeechTextWindows);
+    LoadMainMenuWindowFrameTiles(0, 0xF3);
+    LoadMessageBoxGfx(0, BIRCH_DLG_BASE_TILE_NUM, BG_PLTT_ID(15));
+    LoadPalette(sNewGameTextPal, BG_PLTT_ID(15), sizeof(sNewGameTextPal));
+    BeginNormalPaletteFade(PALETTES_ALL, 0, 16, 0, RGB_BLACK);
+
+    CreateTask(Task_ZenwoosBlessingMessageScreen, 0);
+
+    SetVBlankCallback(VBlankCB_MainMenu);
+    SetMainCallback2(CB2_MainMenu);
+}
+
+static void Task_ZenwoosBlessingMessageScreen(u8 taskId)
+{
+    switch (gTasks[taskId].data[0])
+    {
+    case 0:
+        if (!gPaletteFade.active)
+        {
+            PrepareNewGameFlowTextWindow();
+            switch (sZenwoosBlessingMessage)
+            {
+            case ZENWOOS_BLESSING_MSG_SUCCESS:
+                StringCopy(gStringVar4, gText_ZenwoosBlessingCodeSuccess);
+                break;
+            case ZENWOOS_BLESSING_MSG_ALREADY_USED:
+                StringCopy(gStringVar4, gText_ZenwoosBlessingCodeUsed);
+                break;
+            case ZENWOOS_BLESSING_MSG_INVALID:
+            default:
+                StringCopy(gStringVar4, gText_ZenwoosBlessingCodeInvalid);
+                break;
+            }
+            PrintNewGameFlowText();
+            gTasks[taskId].data[0] = 1;
+        }
+        break;
+    case 1:
+        if (!RunTextPrintersAndIsPrinter0Active() && JOY_NEW(A_BUTTON | B_BUTTON))
+        {
+            BeginNormalPaletteFade(PALETTES_ALL, 0, 0, 16, RGB_BLACK);
+            gTasks[taskId].data[0] = 2;
+        }
+        break;
+    case 2:
+        if (!gPaletteFade.active)
+        {
+            sZenwoosBlessingMessage = ZENWOOS_BLESSING_MSG_NONE;
+            FreeAllWindowBuffers();
+            InitMainMenu(TRUE);
+        }
+        break;
     }
 }
 
@@ -1059,9 +1286,154 @@ static void UNUSED Task_DisplayMainMenuInvalidActionError(u8 taskId)
 
 #undef tArrowTaskIsScrolled
 
+static void PrintSelectableMainMenuItems(u8 menuType, u8 selectedMenuItem, u8 scrollOffset)
+{
+    const u8 *const *labels;
+    const struct WindowTemplate *windowTemplate;
+    u8 visibleSlotCount;
+    u8 itemCount;
+    u8 startIndex;
+    u8 visibleCount;
+    u8 i;
+    u8 buffer[32];
+
+    GetMainMenuItems(menuType, &labels, &itemCount);
+    visibleSlotCount = GetMainMenuVisibleSlotCount(menuType);
+    DeactivateAllTextPrinters();
+    ClearSelectableMainMenuWindows(menuType);
+    FillWindowPixelBuffer(MAIN_MENU_BW_WINDOW_TEXT, PIXEL_FILL(0));
+
+    if (menuType == HAS_MYSTERY_GIFT)
+    {
+        buffer[0] = (selectedMenuItem == 0) ? CHAR_RIGHT_ARROW : CHAR_SPACE;
+        buffer[1] = CHAR_SPACE;
+        StringCopy(&buffer[2], labels[0]);
+        MainMenu_DrawWindow(&sWindowTemplates_MainMenu[2]);
+        PrintMainMenuItem(buffer, sWindowTemplates_MainMenu[2].tilemapLeft * 8, sWindowTemplates_MainMenu[2].tilemapTop * 8 + 4, 0);
+        startIndex = 1 + scrollOffset;
+        visibleCount = min((u8)(itemCount - 1 - scrollOffset), visibleSlotCount);
+    }
+    else
+    {
+        startIndex = 0;
+        visibleCount = itemCount;
+    }
+
+    for (i = 0; i < visibleCount; i++)
+    {
+        u8 itemIndex = startIndex + i;
+
+        windowTemplate = GetMainMenuSlotTemplate(menuType, scrollOffset, i);
+        MainMenu_DrawWindow(windowTemplate);
+        buffer[0] = (itemIndex == selectedMenuItem) ? CHAR_RIGHT_ARROW : CHAR_SPACE;
+        buffer[1] = CHAR_SPACE;
+        StringCopy(&buffer[2], labels[itemIndex]);
+        PrintMainMenuItem(buffer, windowTemplate->tilemapLeft * 8, windowTemplate->tilemapTop * 8 + 4, 0);
+    }
+
+    if (menuType == HAS_MYSTERY_GIFT)
+        PrintContinueStats();
+
+    CopyBgTilemapBufferToVram(0);
+    PutWindowTilemap(MAIN_MENU_BW_WINDOW_TEXT);
+    CopyWindowToVram(MAIN_MENU_BW_WINDOW_TEXT, COPYWIN_FULL);
+
+    if (menuType == HAS_NO_SAVED_GAME)
+    {
+        MainMenu_DrawWindow(&sWindowTemplates_MainMenu[3]);
+        CopyBgTilemapBufferToVram(0);
+    }
+}
+
+static void GetMainMenuItems(u8 menuType, const u8 *const **labels, u8 *itemCount)
+{
+    static const u8 *const sNoSaveLabels[] = {
+        gText_MainMenuNewGame,
+        gText_MainMenuMysteryGift,
+        gText_MainMenuOption,
+    };
+    static const u8 *const sHasSaveLabels[] = {
+        gText_MainMenuContinue,
+        gText_MainMenuNewGame,
+        gText_MainMenuMysteryGift,
+        gText_MainMenuOption,
+    };
+
+    if (menuType == HAS_MYSTERY_GIFT)
+    {
+        *labels = sHasSaveLabels;
+        *itemCount = ARRAY_COUNT(sHasSaveLabels);
+    }
+    else
+    {
+        *labels = sNoSaveLabels;
+        *itemCount = ARRAY_COUNT(sNoSaveLabels);
+    }
+}
+
+static const struct WindowTemplate *GetMainMenuSlotTemplate(u8 menuType, u8 scrollOffset, u8 slot)
+{
+    static const u8 sNoSaveTemplateIds[] = {0, 1, 3};
+    static const u8 sHasSaveTemplateIds[] = {4, 5};
+
+    if (menuType == HAS_MYSTERY_GIFT)
+        return &sWindowTemplates_MainMenu[sHasSaveTemplateIds[slot]];
+    else
+        return &sWindowTemplates_MainMenu[sNoSaveTemplateIds[slot]];
+}
+
+static u8 GetMainMenuVisibleSlotCount(u8 menuType)
+{
+    if (menuType == HAS_MYSTERY_GIFT)
+        return 2;
+    return 3;
+}
+
+static void DrawNoSaveOptionsFrame(void)
+{
+    u16 *tilemap = (u16 *)BG_SCREEN_ADDR(29);
+    u8 x;
+    u8 y;
+
+    // The no-save background only contains two frames. Reuse the second
+    // frame's tiles for OPTION, assigning it its own selection palette.
+    for (y = 0; y < 3; y++)
+    {
+        for (x = MENU_LEFT; x < MENU_LEFT + MENU_WIDTH; x++)
+        {
+            u16 tile = tilemap[(4 + y) * 32 + x];
+
+            tilemap[(8 + y) * 32 + x] = (tile & 0x0FFF) | (3 << 12);
+        }
+    }
+}
+
+static void ClearSelectableMainMenuWindows(u8 menuType)
+{
+    static const u8 sNoSaveTemplateIds[] = {0, 1, 3};
+    static const u8 sHasSaveTemplateIds[] = {2, 4, 5, 6};
+    const u8 *templateIds;
+    u8 count;
+    u8 i;
+
+    if (menuType == HAS_MYSTERY_GIFT)
+    {
+        templateIds = sHasSaveTemplateIds;
+        count = ARRAY_COUNT(sHasSaveTemplateIds);
+    }
+    else
+    {
+        templateIds = sNoSaveTemplateIds;
+        count = ARRAY_COUNT(sNoSaveTemplateIds);
+    }
+
+    for (i = 0; i < count; i++)
+        MainMenu_EraseWindow(&sWindowTemplates_MainMenu[templateIds[i]]);
+}
+
 static void HighlightSelectedMainMenuItem(u8 menuType, u8 selectedMenuItem, s16 isScrolled)
 {
-    (void)isScrolled;
+    PrintSelectableMainMenuItems(menuType, selectedMenuItem, isScrolled);
     MoveWindowByMenuTypeAndCursorPos(menuType, selectedMenuItem);
 }
 
@@ -1070,24 +1442,25 @@ static void MoveWindowByMenuTypeAndCursorPos(u8 menuType, u8 cursorPos)
     LoadPalette(sMainMenuNoSelPal, BG_PLTT_ID(1), 96);
     switch (menuType)
     {
-    case HAS_SAVED_GAME:
+    case HAS_MYSTERY_GIFT:
         switch (cursorPos)
         {
         case 0:
         default:
             LoadPalette(sMainMenuSelPal, BG_PLTT_ID(1), 32);
-            DestroyAllSprites();
-            LoadOverWorld(1);
-            LoadMonIcon(1);
+            LoadContinuePreview(TRUE);
             break;
         case 1:
             LoadPalette(sMainMenuSelPal, BG_PLTT_ID(2), 32);
-            DestroyAllSprites();
-            LoadOverWorld(0);
-            LoadMonIcon(0);
+            LoadContinuePreview(FALSE);
             break;
         case 2:
             LoadPalette(sMainMenuSelPal, BG_PLTT_ID(3), 32);
+            LoadContinuePreview(FALSE);
+            break;
+        case 3:
+            LoadPalette(sMainMenuSelPal, BG_PLTT_ID(3), 32);
+            LoadContinuePreview(FALSE);
             break;
         }
         break;
@@ -1101,6 +1474,9 @@ static void MoveWindowByMenuTypeAndCursorPos(u8 menuType, u8 cursorPos)
             break;
         case 1:
             LoadPalette(sMainMenuSelPal, BG_PLTT_ID(2), 32);
+            break;
+        case 2:
+            LoadPalette(sMainMenuSelPal, BG_PLTT_ID(3), 32);
             break;
         }
         break;
@@ -1136,8 +1512,6 @@ static void PrintContinueStats(void)
     PrintBadgeCount();
     PrintLocation();
     PrintTeam();
-    LoadOverWorld(1);
-    LoadMonIcon(1);
 }
 
 static void PrintPlayerName(void)
@@ -1263,6 +1637,13 @@ static void DestroyAllSprites(void)
     FreeAllSpritePalettes();
 }
 
+static void LoadContinuePreview(bool8 animate)
+{
+    DestroyAllSprites();
+    LoadOverWorld(animate ? 1 : 0);
+    LoadMonIcon(animate ? 1 : 0);
+}
+
 static void LoadOverWorld(u8 anim)
 {
     u16 graphicsId;
@@ -1316,6 +1697,11 @@ static void SetStdFrame0OnBg(u8 bgId)
 
 static void PrintMainMenuItem(const u8 *string, u8 left, u8 top, u8 textColor)
 {
+    PrintMainMenuItemOnWindow(MAIN_MENU_BW_WINDOW_TEXT, string, left, top, textColor);
+}
+
+static void PrintMainMenuItemOnWindow(u8 windowId, const u8 *string, u8 left, u8 top, u8 textColor)
+{
     u8 color[3];
 
     switch (textColor)
@@ -1333,8 +1719,7 @@ static void PrintMainMenuItem(const u8 *string, u8 left, u8 top, u8 textColor)
         break;
     }
 
-    AddTextPrinterParameterized3(MAIN_MENU_BW_WINDOW_TEXT, FONT_NORMAL, left, top + 1, color, 0, string);
-    CopyWindowToVram(MAIN_MENU_BW_WINDOW_TEXT, COPYWIN_GFX);
+    AddTextPrinterParameterized3(windowId, FONT_NORMAL, left, top + 1, color, TEXT_SKIP_DRAW, string);
 }
 
 static void MainMenu_DrawWindow(const struct WindowTemplate *windowTemplate)
@@ -1349,7 +1734,6 @@ static void MainMenu_DrawWindow(const struct WindowTemplate *windowTemplate)
     FillBgTilemapBufferRect(windowTemplate->bg, 0x1B7, windowTemplate->tilemapLeft - 1, windowTemplate->tilemapTop + windowTemplate->height, 1, 1, palNum);
     FillBgTilemapBufferRect(windowTemplate->bg, 0x1B8, windowTemplate->tilemapLeft, windowTemplate->tilemapTop + windowTemplate->height, windowTemplate->width, 1, palNum);
     FillBgTilemapBufferRect(windowTemplate->bg, 0x1B9, windowTemplate->tilemapLeft + windowTemplate->width, windowTemplate->tilemapTop + windowTemplate->height, 1, 1, palNum);
-    CopyBgTilemapBufferToVram(windowTemplate->bg);
 }
 
 static void MainMenu_EraseWindow(const struct WindowTemplate *windowTemplate)
@@ -2506,6 +2890,9 @@ static void Task_GenderThenName(u8 taskId)
         }
         break;
     case 3:
+        if (RunTextPrintersAndIsPrinter0Active())
+            break;
+
         if (JOY_NEW(DPAD_LEFT) || JOY_NEW(DPAD_RIGHT))
         {
             gTasks[taskId].tSelectedGender = (gTasks[taskId].tSelectedGender == MALE) ? FEMALE : MALE;
@@ -2516,6 +2903,13 @@ static void Task_GenderThenName(u8 taskId)
         if (JOY_NEW(A_BUTTON))
         {
             PlaySE(SE_SELECT);
+            if (gTasks[taskId].tSelectedGender == FEMALE)
+            {
+                PrepareNewGameFlowTextWindow();
+                StringCopy(gStringVar4, sText_NewGameFemaleUnavailable);
+                PrintNewGameFlowText();
+                break;
+            }
             gSaveBlock2Ptr->playerGender = gTasks[taskId].tSelectedGender;
             BeginNormalPaletteFade(PALETTES_ALL, 0, 0, 16, RGB_BLACK);
             gTasks[taskId].tState = 4;

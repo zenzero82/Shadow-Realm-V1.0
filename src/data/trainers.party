@@ -87,7 +87,10 @@ IVs: 0 HP / 0 Atk / 0 Def / 31 SpA / 0 SpD / 31 Spe
 Shadow: Yes
 Shadow ID: 3
 Heart Gauge: 5000
-- Shadow Rush
+Relearn Move: Thunderbolt
+- Shadow Bolt
+- Shadow Blitz
+- Shadow Panic
 
 === TRAINER_JJ_VIRIDIAN ===
 Name: JESS&JAMES
@@ -141,7 +144,7 @@ Class: CAMPER
 Pic: CAMPER_KANTO
 Gender: Male
 
-Geodude 
+Geodude
 Level: 12
 Nature: HARDY
 - Tackle
@@ -201,7 +204,7 @@ Level: 26
 === TRAINER_AZALEA_AMY_AND_MAY ===
 Name: AMY&MAY
 Class: TWINS
-Pic: TWINS
+Pic: TWINS2
 Gender: Female
 Double Battle: Yes
 
@@ -292,10 +295,11 @@ Nature: Jolly
 IVs: 0 HP / 0 Atk / 0 Def / 0 SpA / 0 SpD / 0 Spe
 Shadow: Yes
 Shadow ID: 49
-Heart Gauge: 5000
-- Shadow Half
-- Shadow Sky
+Heart Gauge: 7500
+Relearn Move: Play Rough
 - Shadow Rush
+- Shadow Half
+- Shadow Panic
 
 === TRAINER_VF_BUGCATCHER1 ===
 Name: Neil
@@ -362,10 +366,10 @@ Class: TRAINER_CLASS_YOUNGSTER
 Pic: YOUNGSTER2
 Gender: Male
 
-Roggenrola
+Rattata
 Level: 10
 
-Woobat
+Pidove
 Level: 10
 
 === TRAINER_RT3_YOUNGSTER2 ===
@@ -374,10 +378,10 @@ Class: TRAINER_CLASS_YOUNGSTER
 Pic: YOUNGSTER2
 Gender: Male
 
-Mudbray
+Spearow
 Level: 10
 
-Minccino
+Yungoos
 Level: 10
 
 === TRAINER_RT3_LASS ===
@@ -401,7 +405,7 @@ Gender: Male
 Ponyta
 Level: 10
 
-Audino
+Vulpix
 Level: 10
 
 === TRAINER_TEMP_MIROR_B ===
@@ -450,13 +454,13 @@ Heart Gauge: 10000
 === TRAINER_RT4_BLACK_BELT ===
 Name: RYU
 Class: TRAINER_CLASS_BLACK_BELT
-Pic: BLACK_BELT
+Pic: BLACK_BELT_GEN2
 Gender: Male
 
-Ponyta
+Mankey
 Level: 15
 
-Emolga
+Throh
 Level: 15
 
 === TRAINER_RT4_ROCKER ===
@@ -465,10 +469,10 @@ Class: TRAINER_CLASS_GUITARIST
 Pic: GUITARIST
 Gender: Male
 
-Deerling
+Blitzle
 Level: 15
 
-Stufful
+Koffing
 Level: 15
 
 === TRAINER_RT4_PICNICKER1 ===
@@ -480,7 +484,7 @@ Gender: Female
 Petilil
 Level: 15
 
-SPECIES_PONYTA_GALAR
+Deerling
 Level: 15
 
 === TRAINER_RT4_PICNICKER2 ===
@@ -489,7 +493,7 @@ Class: TRAINER_CLASS_PICNICKER
 Pic: PICNICKER
 Gender: Female
 
-Emolga
+Cottonee
 Level: 15
 
 Deerling
@@ -543,6 +547,285 @@ Level: 16
 Geodude
 Level: 17
 
+=== TRAINER_ROUTE27_COOLTRAINER_F1 ===
+Name: MARA
+Class: TRAINER_CLASS_ACE_TRAINER
+Pic: ACE_TRAINER_GEN2F
+Gender: Female
+
+Noctowl
+Level: 27
+
+Luxio
+Level: 28
+
+Espeon
+Level: 29
+
+=== TRAINER_ROUTE27_COOLTRAINER_M ===
+Name: RYAN
+Class: TRAINER_CLASS_COOLTRAINER
+Pic: ACE_TRAINER_GEN2M
+Gender: Male
+
+Heracross
+Level: 27
+
+Quagsire
+Level: 28
+
+Skarmory
+Level: 29
+
+=== TRAINER_ROUTE27_ROCKER ===
+Name: VINCE
+Class: TRAINER_CLASS_GUITARIST
+Pic: GUITARIST
+Gender: Male
+
+Mareep
+Level: 27
+
+Helioptile
+Level: 28
+
+Ampharos
+Level: 29
+
+=== TRAINER_ROUTE27_FISHERMAN_1 ===
+Name: NOLAN
+Class: TRAINER_CLASS_FISHERMAN
+Pic: FISHERMAN
+Gender: Male
+
+Lanturn
+Level: 27
+
+Octillery
+Level: 28
+
+Floatzel
+Level: 29
+
+=== TRAINER_ROUTE27_PSYCHIC ===
+Name: ELI
+Class: TRAINER_CLASS_PSYCHIC_M
+Pic: PSYCHIC_M2
+Gender: Male
+
+Girafarig
+Level: 27
+
+Misdreavus
+Level: 28
+
+Xatu
+Level: 29
+
+=== TRAINER_ROUTE27_COOLTRAINER_F2 ===
+Name: TESSA
+Class: TRAINER_CLASS_ACE_TRAINER
+Pic: ACE_TRAINER_GEN2F
+Gender: Female
+
+Mawile
+Level: 27
+
+Meowstic
+Level: 28
+
+Hawlucha
+Level: 29
+
+=== TRAINER_ROUTE27_FISHERMAN_2 ===
+Name: BRODY
+Class: TRAINER_CLASS_FISHERMAN
+Pic: FISHERMAN
+Gender: Male
+
+Qwilfish
+Level: 27
+
+Clauncher
+Level: 28
+
+Clawitzer
+Level: 29
+
+=== TRAINER_ROUTE26_PSYCHIC ===
+Name: SEER
+Class: TRAINER_CLASS_PSYCHIC_M
+Pic: PSYCHIC_M2
+Gender: Male
+
+Girafarig
+Level: 27
+
+Meowstic
+Level: 28
+
+Espeon
+Level: 29
+
+=== TRAINER_ROUTE26_COOLTRAINER_M ===
+Name: GARRETT
+Class: TRAINER_CLASS_COOLTRAINER
+Pic: ACE_TRAINER_GEN2M
+Gender: Male
+
+Donphan
+Level: 27
+
+Golbat
+Level: 28
+
+Skarmory
+Level: 29
+
+=== TRAINER_ROUTE26N_COOLTRAINER_F1 ===
+Name: LENA
+Class: TRAINER_CLASS_ACE_TRAINER
+Pic: ACE_TRAINER_GEN2F
+Gender: Female
+
+Flaaffy
+Level: 27
+
+Togetic
+Level: 28
+
+Azumarill
+Level: 29
+
+=== TRAINER_ROUTE26N_COOLTRAINER_M ===
+Name: BRETT
+Class: TRAINER_CLASS_COOLTRAINER
+Pic: ACE_TRAINER_GEN2M
+Gender: Male
+
+Quagsire
+Level: 27
+
+Gligar
+Level: 28
+
+Gabite
+Level: 29
+
+=== TRAINER_ROUTE26N_COOLTRAINER_F2 ===
+Name: NIA
+Class: TRAINER_CLASS_ACE_TRAINER
+Pic: ACE_TRAINER_GEN2F
+Gender: Female
+
+Sneasel
+Level: 27
+
+Misdreavus
+Level: 28
+
+Sylveon
+Level: 29
+
+=== TRAINER_ROUTE8_BIKER_1 ===
+Name: ZEKE
+Class: TRAINER_CLASS_BIKER
+Pic: BIKER
+Gender: Male
+
+Koffing
+Level: 31
+
+Grimer
+Level: 31
+
+Weezing
+Level: 33
+
+=== TRAINER_ROUTE8_BIKER_2 ===
+Name: AXEL
+Class: TRAINER_CLASS_BIKER
+Pic: BIKER
+Gender: Male
+
+Trubbish
+Level: 31
+
+Golbat
+Level: 32
+
+Garbodor
+Level: 33
+
+=== TRAINER_ROUTE8_BIKER_3 ===
+Name: DUKE
+Class: TRAINER_CLASS_BIKER
+Pic: BIKER
+Gender: Male
+
+Salandit
+Level: 31
+
+SPECIES_GRIMER_ALOLA
+Level: 32
+
+SPECIES_MUK_ALOLA
+Level: 33
+
+=== TRAINER_ROUTE8_BIKER_4 ===
+Name: ROCCO
+Class: TRAINER_CLASS_BIKER
+Pic: BIKER
+Gender: Male
+
+Pawniard
+Level: 31
+
+Koffing
+Level: 32
+
+Muk
+Level: 33
+
+=== TRAINER_ROUTE8_BIKER_5 ===
+Name: JETT
+Class: TRAINER_CLASS_BIKER
+Pic: BIKER
+Gender: Male
+
+Croagunk
+Level: 31
+
+Mareanie
+Level: 32
+
+Toxapex
+Level: 33
+
+=== TRAINER_ROUTE8_SUPER_NERD_1 ===
+Name: MILO
+Class: TRAINER_CLASS_SUPER_NERD
+Pic: SUPER_NERD
+Gender: Male
+
+Magnemite
+Level: 31
+
+Magneton
+Level: 33
+
+=== TRAINER_ROUTE8_SUPER_NERD_2 ===
+Name: ORIN
+Class: TRAINER_CLASS_SUPER_NERD
+Pic: SUPER_NERD
+Gender: Male
+
+Porygon
+Level: 32
+
+Klang
+Level: 33
+
 === TRAINER_ROUTE9_CAMPER_2 ===
 Name: TROY
 Class: TRAINER_CLASS_CAMPER
@@ -593,7 +876,10 @@ Level: 30
 Shadow: Yes
 Shadow ID: 8
 Heart Gauge: 5000
-- Shadow Rush
+Relearn Move: Fury Swipes
+- Shadow Blitz
+- Shadow Panic
+- Shadow Hold
 
 === TRAINER_ILEX_ROCKET_GRUNT_F1 ===
 Name: SABRINA
@@ -754,10 +1040,10 @@ Class: TRAINER_CLASS_BATTLE_GIRL
 Pic: BATTLE_GIRL
 Gender: Female
 
-Clefairy
+Mankey
 Level: 14
 
-Jigglypuff
+Timburr
 Level: 15
 
 === TRAINER_RT25_COOLTRAINER_F ===
@@ -823,7 +1109,7 @@ Level: 16
 === TRAINER_CERULEAN_GYM_SWIMMER_M ===
 Name: TYLER
 Class: TRAINER_CLASS_SWIMMER_M
-Pic: SWIMMER_M
+Pic: SWIMMER_M_GEN2
 Gender: Male
 
 Poliwag
@@ -835,7 +1121,7 @@ Level: 16
 === TRAINER_CERULEAN_GYM_SWIMMER_F1 ===
 Name: MAYA
 Class: TRAINER_CLASS_SWIMMER_F
-Pic: SWIMMER_F
+Pic: SWIMMER_F_GEN2
 Gender: Female
 
 Goldeen
@@ -847,7 +1133,7 @@ Level: 17
 === TRAINER_CERULEAN_GYM_SWIMMER_F2 ===
 Name: KAREN
 Class: TRAINER_CLASS_SWIMMER_F
-Pic: SWIMMER_F
+Pic: SWIMMER_F_GEN2
 Gender: Female
 
 Psyduck
@@ -873,11 +1159,11 @@ Level: 29
 Nature: Impish
 Shadow: Yes
 Shadow ID: 9
-Heart Gauge: 7500
+Heart Gauge: 10000
+Relearn Move: Steel Wing
 - Shadow Rush
+- Shadow Storm
 - Shadow Hold
-- Shadow Mist 
-- Shadow Shed
 
 === TRAINER_ROCK_TUNNEL_1F_PLASMA_1 ===
 Name: AXEL
@@ -1064,11 +1350,11 @@ Level: 29
 Nature: Adamant
 Shadow: Yes
 Shadow ID: 45
-Heart Gauge: 7500
-- Shadow Blitz
-- Shadow Break 
-- Shadow Down
+Heart Gauge: 10000
+Relearn Move: Crunch
+- Shadow Break
 - Shadow Half
+- Shadow Hold
 
 === TRAINER_SLOWPOKEWELL_FLARE_1 ===
 Name: VESPER
@@ -1122,10 +1408,10 @@ Name: KYLE
 Class: TRAINER_CLASS_BIRD_KEEPER
 Pic: BIRD_KEEPER
 
-Trumbeak
+Fletchling
 Level: 21
 
-Pidgeotto
+Noctowl
 Level: 21
 
 === TRAINER_ROUTE32_YOUNGSTER ===
@@ -1134,10 +1420,10 @@ Class: TRAINER_CLASS_YOUNGSTER
 Pic: YOUNGSTER2
 Gender: Male
 
-Rattata
+Sentret
 Level: 21
 
-Pidgey
+Hoothoot
 Level: 21
 
 === TRAINER_ROUTE32_PICNICKER ===
@@ -1149,7 +1435,7 @@ Gender: Female
 Hoppip
 Level: 21
 
-Bellsprout
+Marill
 Level: 21
 
 === TRAINER_ROUTE32_FISHERMAN_1 ===
@@ -1158,7 +1444,7 @@ Class: TRAINER_CLASS_FISHERMAN
 Pic: FISHERMAN
 Gender: Male
 
-Magikarp
+Wooper
 Level: 21
 
 === TRAINER_ROUTE32_FISHERMAN_2 ===
@@ -1167,7 +1453,7 @@ Class: TRAINER_CLASS_FISHERMAN
 Pic: FISHERMAN
 Gender: Male
 
-Poliwag
+Chinchou
 Level: 21
 
 === TRAINER_ROUTE32_FISHERMAN_3 ===
@@ -1176,7 +1462,7 @@ Class: TRAINER_CLASS_FISHERMAN
 Pic: FISHERMAN
 Gender: Male
 
-Goldeen
+Finneon
 Level: 21
 
 === TRAINER_ROUTE32_BIRD_KEEPER ===
@@ -1185,7 +1471,7 @@ Class: TRAINER_CLASS_BIRD_KEEPER
 Pic: BIRD_KEEPER
 Gender: Male
 
-Pidgey
+Starly
 Level: 21
 
 Hoothoot
@@ -1197,7 +1483,10 @@ Class: TRAINER_CLASS_HIKER
 Pic: HIKER
 Gender: Male
 
-Geodude
+Bonsly
+Level: 24
+
+Phanpy
 Level: 24
 
 === TRAINER_ROUTE34_CAMPER ===
@@ -1230,7 +1519,7 @@ Level: 27
 === TRAINER_ROUTE34_YOUNGSTER ===
 Name: TIM
 Class: TRAINER_CLASS_YOUNGSTER
-Pic: YOUNGSTER
+Pic: YOUNGSTER2
 Gender: Male
 
 Hoothoot
@@ -1245,10 +1534,10 @@ Class: TRAINER_CLASS_HIKER
 Pic: HIKER
 Gender: Male
 
-Geodude
+Bonsly
 Level: 22
 
-Zubat
+Noibat
 Level: 22
 
 === TRAINER_UNION_CAVE_SUPER_NERD ===
@@ -1287,10 +1576,10 @@ Gender: Male
 Music: TRAINER_ENCOUNTER_MUSIC_PLASMA
 
 Krokorok
-Level: 34
+Level: 29
 
 Golbat
-Level: 35
+Level: 30
 
 === TRAINER_POWERPLANT_PLASMA_2 ===
 Name: VOSS
@@ -1300,10 +1589,10 @@ Gender: Male
 Music: TRAINER_ENCOUNTER_MUSIC_PLASMA
 
 Mightyena
-Level: 34
+Level: 31
 
 Watchog
-Level: 35
+Level: 31
 
 === TRAINER_POWERPLANT_PLASMA_3 ===
 Name: NERO
@@ -1313,14 +1602,14 @@ Gender: Male
 Music: TRAINER_ENCOUNTER_MUSIC_PLASMA
 
 Liepard
-Level: 35
+Level: 31
 
 Garbodor
-Level: 36
+Level: 31
 - Sludge Bomb
 - Body Slam
 - Clear Smog
-- Toxic Spikes
+- Gunk Shot
 
 === TRAINER_ZINZOLIN_POWER_PLANT ===
 Name: ZINZOLIN
@@ -1330,19 +1619,23 @@ Gender: Male
 Music: TRAINER_ENCOUNTER_MUSIC_PLASMA
 
 Cryogonal
-Level: 36
+Level: 33
 
 Weavile
-Level: 36
+Level: 35
 Shadow: Yes
 Shadow ID: 25
 Heart Gauge: 10000
+Relearn Move: Ice Punch
+- Shadow Chill
+- Shadow Blitz
+- Shadow Rush
 
 Drifblim
-Level: 36
+Level: 33
 
 Abomasnow
-Level: 38
+Level: 34
 
 === TRAINER_CELADON_SHAUNA ===
 Name: SHAUNA
@@ -1351,10 +1644,10 @@ Pic: SHAUNA
 Gender: Female
 
 Klefki
-Level: 30
+Level: 32
 
 Sliggoo
-Level: 31
+Level: 32
 
 Ivysaur
 Level: 32
@@ -1366,10 +1659,10 @@ Pic: TREVOR
 Gender: Male
 
 Floette
-Level: 30
+Level: 32
 
 Aerodactyl
-Level: 31
+Level: 32
 
 Charmeleon
 Level: 32
@@ -1381,10 +1674,10 @@ Pic: TIERNO
 Gender: Male
 
 Hawlucha
-Level: 30
+Level: 31
 
 Hitmontop
-Level: 31
+Level: 32
 
 Wartortle
 Level: 32
@@ -1396,16 +1689,16 @@ Pic: SERENA
 Gender: Female
 
 Absol
-Level: 30
+Level: 33
 
 Sylveon
-Level: 31
+Level: 32
 
 Pangoro
-Level: 32
+Level: 33
 
 Delphox @ Delphoxite
-Level: 32
+Level: 34
 
 === TRAINER_CELADON_CALEM ===
 Name: CALEM
@@ -1414,16 +1707,16 @@ Pic: CALEM
 Gender: Male
 
 Meowstic
-Level: 30
+Level: 32
 
 Barbaracle
-Level: 31
+Level: 32
 
 Noivern
-Level: 32
+Level: 34
 
 Chesnaught @ Chesnaughtite
-Level: 32
+Level: 36
 
 === TRAINER_CELADON_AETHER_GRUNT_1 ===
 Name: GRUNT
@@ -1433,10 +1726,10 @@ Gender: Male
 Music: TRAINER_ENCOUNTER_MUSIC_PLASMA
 
 Golbat
-Level: 30
+Level: 32
 
 Magneton
-Level: 30
+Level: 32
 
 === TRAINER_CELADON_AETHER_GRUNT_2 ===
 Name: GRUNT
@@ -1446,10 +1739,10 @@ Gender: Male
 Music: TRAINER_ENCOUNTER_MUSIC_PLASMA
 
 Hypno
-Level: 30
+Level: 32
 
 Raticate
-Level: 30
+Level: 32
 
 === TRAINER_CELADON_GYM_MICHELLE ===
 Name: MICHELLE
@@ -1458,10 +1751,10 @@ Pic: LASS
 Gender: Female
 
 Gloom
-Level: 30
+Level: 32
 
 Weepinbell
-Level: 30
+Level: 32
 
 === TRAINER_CELADON_GYM_TANYA ===
 Name: TANYA
@@ -1470,10 +1763,10 @@ Pic: PICNICKER
 Gender: Female
 
 Ivysaur
-Level: 31
+Level: 32
 
 Skiploom
-Level: 31
+Level: 32
 
 === TRAINER_CELADON_GYM_JULIA ===
 Name: JULIA
@@ -1490,15 +1783,15 @@ Level: 32
 === TRAINER_CELADON_GYM_JO_AND_ZOE ===
 Name: JO&ZOE
 Class: TRAINER_CLASS_TWINS
-Pic: TWINS
+Pic: TWINS2
 Gender: Female
 Double Battle: Yes
 
 Oddish
-Level: 29
+Level: 31
 
 Bellsprout
-Level: 29
+Level: 31
 
 === TRAINER_ERIKA ===
 Name: ERIKA
@@ -1514,10 +1807,10 @@ Victreebel
 Level: 34
 
 Vileplume
-Level: 34
+Level: 35
 
 Bellossom
-Level: 34
+Level: 35
 
 === TRAINER_CELADON_GLADION ===
 Name: GLADION
@@ -1527,7 +1820,7 @@ Gender: Male
 Music: TRAINER_ENCOUNTER_MUSIC_INTENSE
 
 SPECIES_TYPE_NULL
-Level: 32
+Level: 34
 
 Zoroark
 Level: 32
@@ -1542,14 +1835,20 @@ Music: Gym Leader
 Pic: SURGE
 Gender: Male
 
-Magneton
-Level: 25
+Magnezone
+Level: 36
 
-Electabuzz
-Level: 25
+Electivire
+Level: 37
+
+Rotom-Fan
+Level: 36
+
+Heliolisk
+Level: 36
 
 Raichu @ Raichunite X
-Level: 26
+Level: 39
 
 === TRAINER_VERMILION_GYM_JUGGLER ===
 Name: LEO
@@ -1557,11 +1856,11 @@ Class: TRAINER_CLASS_JUGGLER
 Pic: JUGGLER
 Gender: Male
 
-Voltorb
-Level: 33
+Electrode
+Level: 34
 
 Magnemite
-Level: 33
+Level: 34
 
 === TRAINER_VERMILION_GYM_GENTLEMAN ===
 Name: EDGAR
@@ -1581,7 +1880,7 @@ Class: TRAINER_CLASS_GUITARIST
 Pic: GUITARIST
 Gender: Male
 
-Electrike
+Kilowattrel
 Level: 35
 
 Magneton
@@ -1593,10 +1892,10 @@ Class: TRAINER_CLASS_LASS
 Pic: LASS_GEN2
 Gender: Female
 
-Snubbull
-Level: 36
+Granbull
+Level: 37
 
-Jigglypuff
+Wigglytuff
 Level: 36
 
 === TRAINER_GOLDENROD_GYM_LEAH ===
@@ -1608,7 +1907,7 @@ Gender: Female
 Clefairy
 Level: 37
 
-Teddiursa
+Ursaring
 Level: 37
 
 === TRAINER_GOLDENROD_GYM_BROOKE ===
@@ -1630,10 +1929,10 @@ Pic: BATTLE_GIRL
 Gender: Female
 
 Lickitung
-Level: 39
+Level: 37
 
 Wigglytuff
-Level: 39
+Level: 38
 
 === TRAINER_LEADER_WHITNEY ===
 Name: WHITNEY
@@ -1642,10 +1941,16 @@ Music: Gym Leader
 Pic: LEADER_WHITNEY
 Gender: Female
 
-Clefairy
+Porygon2
+Level: 39
+
+Snorlax
 Level: 38
 
-Snubbull
+Wigglytuff
+Level: 39
+
+Bewear
 Level: 39
 
 Miltank
@@ -1660,28 +1965,36 @@ Music: TRAINER_ENCOUNTER_MUSIC_CIPHER_PEON
 Double Battle: Yes
 
 SPECIES_HATTERENE
-Level: 46
+Level: 43
 
 SPECIES_AMOONGUSS
-Level: 46
+Level: 43
 
 SPECIES_ROSERADE
-Level: 47
+Level: 44
 
 SPECIES_MILOTIC
-Level: 47
+Level: 44
 
 SPECIES_VENUSAUR
-Level: 48
+Level: 46
 Shadow: Yes
 Shadow ID: 71
 Heart Gauge: 10000
+Relearn Move: Giga Drain
+- Shadow Rush
+- Shadow Sky
+- Shadow Hold
 
 SPECIES_GOODRA
-Level: 48
+Level: 46
 Shadow: Yes
 Shadow ID: 104
 Heart Gauge: 10000
+Relearn Move: Dragon Pulse
+- Shadow Mist
+- Shadow Hold
+- Shadow Storm
 
 === TRAINER_GIOVANNI_SHADOW_REALM ===
 Name: GIOVANNI
@@ -2285,18 +2598,29 @@ Pic: CIPHER_PEON_F
 Gender: Female
 Music: TRAINER_ENCOUNTER_MUSIC_CIPHER_PEON
 
-SPECIES_KOFFING
+SPECIES_WEEZING
 Level: 39
+- Sludge Bomb
+- Will-O-Wisp
+- Clear Smog
+- Smokescreen
 
-SPECIES_GLOOM
+SPECIES_VILEPLUME
 Level: 40
+- Giga Drain
+- Sleep Powder
+- Stun Spore
+- Moonlight
 
 SPECIES_BEEDRILL
 Level: 41
 Shadow: Yes
 Shadow ID: 4
-Heart Gauge: 10000
+Heart Gauge: 7500
+Relearn Move: Fell Stinger
 - Shadow Rush
+- Shadow Blitz
+- Shadow Panic
 
 === TRAINER_GOLDENROD_RADIO_CIPHER_F2 ===
 Name: NYRA
@@ -2305,10 +2629,10 @@ Pic: CIPHER_PEON_F
 Gender: Female
 Music: TRAINER_ENCOUNTER_MUSIC_CIPHER_PEON
 
-SPECIES_HOUNDOUR
-Level: 39
+SPECIES_Toucannon
+Level: 40
 
-SPECIES_MURKROW
+SPECIES_Pidgeot
 Level: 40
 
 SPECIES_HONCHKROW
@@ -2316,7 +2640,10 @@ Level: 41
 Shadow: Yes
 Shadow ID: 30
 Heart Gauge: 7500
+Relearn Move: Night Slash
 - Shadow Rush
+- Shadow Panic
+- Shadow Sky
 
 === TRAINER_GOLDENROD_RADIO_CIPHER_F3 ===
 Name: MIRA
@@ -2325,18 +2652,25 @@ Pic: CIPHER_PEON_F
 Gender: Female
 Music: TRAINER_ENCOUNTER_MUSIC_CIPHER_PEON
 
-SPECIES_GOLBAT
-Level: 39
-
-SPECIES_CUBCHOO
+SPECIES_Glalie
 Level: 40
+
+SPECIES_PILOSWINE
+Level: 40
+- Icy Wind
+- Mud-Slap
+- Rock Tomb
+- Hail
 
 SPECIES_BEARTIC
 Level: 41
 Shadow: Yes
 Shadow ID: 35
 Heart Gauge: 7500
-- Shadow Rush
+Relearn Move: Icicle Crash
+- Shadow Chill
+- Shadow Storm
+- Shadow End
 
 === TRAINER_GOLDENROD_RADIO_CIPHER_F4 ===
 Name: SERA
@@ -2345,18 +2679,21 @@ Pic: CIPHER_PEON_F
 Gender: Female
 Music: TRAINER_ENCOUNTER_MUSIC_CIPHER_PEON
 
-SPECIES_AMAURA
-Level: 39
+SPECIES_Avalugg
+Level: 41
 
-SPECIES_SNORUNT
-Level: 40
+SPECIES_Froslass
+Level: 41
 
 SPECIES_AURORUS
 Level: 41
 Shadow: Yes
 Shadow ID: 44
 Heart Gauge: 7500
-- Shadow Rush
+Relearn Move: Ancient Power
+- Shadow Chill
+- Shadow Storm
+- Shadow Sky
 
 === TRAINER_GOLDENROD_RADIO_CIPHER_F5 ===
 Name: ZIA
@@ -2365,18 +2702,25 @@ Pic: CIPHER_PEON_F
 Gender: Female
 Music: TRAINER_ENCOUNTER_MUSIC_CIPHER_PEON
 
-SPECIES_SALANDIT
-Level: 39
+SPECIES_SKUNTANK
+Level: 41
+- Toxic
+- Sucker Punch
+- Acid Spray
+- Smokescreen
 
-SPECIES_WEEZING
-Level: 40
+SPECIES_WEEZING_GALAR
+Level: 41
 
 SPECIES_SALAZZLE
 Level: 41
 Shadow: Yes
 Shadow ID: 47
 Heart Gauge: 7500
+Relearn Move: Flamethrower
 - Shadow Rush
+- Shadow Mist
+- Shadow Panic
 
 === TRAINER_GOLDENROD_RADIO_CIPHER_F6 ===
 Name: VERA
@@ -2385,18 +2729,25 @@ Pic: CIPHER_PEON_F
 Gender: Female
 Music: TRAINER_ENCOUNTER_MUSIC_CIPHER_PEON
 
-SPECIES_TENTACOOL
+SPECIES_TENTACRUEL
 Level: 40
+- Acid Spray
+- Water Pulse
+- Icy Wind
+- Hex
 
-SPECIES_MAREANIE
-Level: 41
+SPECIES_Overqwil
+Level: 42
 
 SPECIES_TOXAPEX
 Level: 42
 Shadow: Yes
 Shadow ID: 51
 Heart Gauge: 7500
-- Shadow Rush
+Relearn Move: Baneful Bunker
+- Shadow Down
+- Shadow Hold
+- Shadow Mist
 
 === TRAINER_GOLDENROD_RADIO_CIPHER_F7 ===
 Name: LYNX
@@ -2405,18 +2756,79 @@ Pic: CIPHER_PEON_F
 Gender: Female
 Music: TRAINER_ENCOUNTER_MUSIC_CIPHER_PEON
 
-SPECIES_DEWPIDER
+SPECIES_Pinsir
 Level: 40
 
 SPECIES_MASQUERAIN
 Level: 41
+- Stun Spore
+- Air Cutter
+- Water Pulse
+- Scary Face
 
 SPECIES_ARAQUANID
 Level: 42
 Shadow: Yes
 Shadow ID: 53
+Heart Gauge: 10000
+Relearn Move: Liquidation
+- Shadow Mist
+- Shadow Hold
+- Shadow Chill
+
+=== TRAINER_GOLDENROD_RADIO_CIPHER_F8 ===
+Name: KORA
+Class: TRAINER_CLASS_CIPHER_PEON
+Pic: CIPHER_PEON_F
+Gender: Female
+Music: TRAINER_ENCOUNTER_MUSIC_CIPHER_PEON
+
+SPECIES_KLANG
+Level: 42
+- Thunder Wave
+- Gear Grind
+- Screech
+- Rock Tomb
+
+SPECIES_GLISCOR
+Level: 42
+
+SPECIES_COPPERAJAH
+Level: 42
+Shadow: Yes
+Shadow ID: 54
 Heart Gauge: 7500
-- Shadow Rush
+Relearn Move: Heavy Slam
+- Shadow Hold
+- Shadow Break
+- Shadow Blitz
+
+=== TRAINER_GOLDENROD_RADIO_CIPHER_F9 ===
+Name: VESPA
+Class: TRAINER_CLASS_CIPHER_PEON
+Pic: CIPHER_PEON_F
+Gender: Female
+Music: TRAINER_ENCOUNTER_MUSIC_CIPHER_PEON
+
+SPECIES_GALVANTULA
+Level: 41
+- Sticky Web
+- Volt Switch
+- Bug Buzz
+- Thunder Wave
+
+SPECIES_SCOVILLAIN
+Level: 41
+
+SPECIES_CENTISKORCH
+Level: 43
+Shadow: Yes
+Shadow ID: 58
+Heart Gauge: 7500
+Relearn Move: Fire Lash
+- Shadow Fire
+- Shadow Hold
+- Shadow Blitz
 
 === TRAINER_GOLDENROD_RADIO_CIPHER_M1 ===
 Name: DREX
@@ -2425,18 +2837,29 @@ Pic: CIPHER_PEON_M
 Gender: Male
 Music: TRAINER_ENCOUNTER_MUSIC_CIPHER_PEON
 
-SPECIES_ELECTRIKE
+SPECIES_ELECTABUZZ
 Level: 40
+- Thunder Wave
+- Shock Wave
+- Light Screen
+- Quick Attack
 
 SPECIES_MAGNETON
 Level: 41
+- Electro Ball
+- Mirror Shot
+- Thunder Wave
+- Tri Attack
 
 SPECIES_MANECTRIC
 Level: 42
 Shadow: Yes
 Shadow ID: 22
 Heart Gauge: 7500
-- Shadow Rush
+Relearn Move: Thunder Fang
+- Shadow Blitz
+- Shadow Bolt
+- Shadow Hold
 
 === TRAINER_UNION_CAVE_FIREBREATHER_WALT ===
 Name: WALT
@@ -2453,23 +2876,321 @@ Level: 22
 === TRAINER_ROUTE32_YOUNGSTER_2 ===
 Name: OLLIE
 Class: TRAINER_CLASS_YOUNGSTER
-Pic: YOUNGSTER
+Pic: YOUNGSTER2
 Gender: Male
 
-Rattata
+Bidoof
 Level: 19
 
-Spearow
+Starly
 Level: 20
 
 === TRAINER_ROUTE32_COOLTRAINER ===
 Name: DAREN
 Class: TRAINER_CLASS_COOLTRAINER
-Pic: COOLTRAINER_M
+Pic: ACE_TRAINER_GEN2M
 Gender: Male
 
 Mareep
 Level: 21
 
-Bellsprout
+Riolu
 Level: 21
+
+=== TRAINER_ROUTE30_YOUNGSTER ===
+Name: KYLE
+Class: TRAINER_CLASS_YOUNGSTER
+Pic: YOUNGSTER2
+Gender: Male
+
+Sentret
+Level: 13
+
+Hoothoot
+Level: 13
+
+=== TRAINER_ROUTE30_BUG_CATCHER ===
+Name: MILO
+Class: TRAINER_CLASS_BUG_CATCHER
+Pic: BUG_CATCHER
+Gender: Male
+
+Scatterbug
+Level: 12
+
+Spinarak
+Level: 12
+
+=== TRAINER_ROUTE31_YOUNGSTER ===
+Name: JARED
+Class: TRAINER_CLASS_YOUNGSTER
+Pic: YOUNGSTER2
+Gender: Male
+
+Staravia
+Level: 17
+
+Luxio
+Level: 17
+
+=== TRAINER_ROUTE31_BUG_CATCHER ===
+Name: ELI
+Class: TRAINER_CLASS_BUG_CATCHER
+Pic: BUG_CATCHER
+Gender: Male
+
+Ledian
+Level: 16
+
+Ariados
+Level: 16
+
+=== TRAINER_ROUTE20_FISHERMAN ===
+Name: WADE
+Class: TRAINER_CLASS_FISHERMAN
+Pic: FISHERMAN
+Gender: Male
+
+Tentacruel
+Level: 35
+
+Starmie
+Level: 36
+
+Basculin
+Level: 37
+
+=== TRAINER_ROUTE20_SWIMMER_F1 ===
+Name: MARINA
+Class: TRAINER_CLASS_SWIMMER_F
+Pic: SWIMMER_F
+Gender: Female
+
+Wishiwashi
+Level: 34
+
+Frillish
+Level: 35
+
+Alomomola
+Level: 36
+
+=== TRAINER_ROUTE20_SWIMMER_F2 ===
+Name: SELENE
+Class: TRAINER_CLASS_SWIMMER_F
+Pic: SWIMMER_F
+Gender: Female
+
+Tentacool
+Level: 34
+
+Bruxish
+Level: 36
+
+Jellicent
+Level: 37
+
+=== TRAINER_ROUTE20_SWIMMER_M ===
+Name: BROOKS
+Class: TRAINER_CLASS_SWIMMER_M
+Pic: SWIMMER_M
+Gender: Male
+
+Basculin
+Level: 35
+
+Tentacruel
+Level: 36
+
+Jellicent
+Level: 37
+
+=== TRAINER_RUSTBORO_ROXANNE ===
+Name: ROXANNE
+Class: TRAINER_CLASS_LEADER
+Pic: LEADER_ROXANNE
+Gender: Female
+Music: Gym Leader
+
+Whiscash
+Level: 42
+
+Claydol
+Level: 45
+
+Krookodile
+Level: 47
+
+Flygon
+Level: 48
+
+Mamoswine
+Level: 48
+
+Excadrill
+Level: 49
+
+=== TRAINER_JOSH ===
+Name: JOSH
+Class: TRAINER_CLASS_HIKER
+Pic: HIKER
+Gender: Male
+
+Graveler
+Level: 39
+
+Stunfisk
+Level: 40
+
+Mudsdale
+Level: 41
+
+=== TRAINER_TOMMY ===
+Name: TOMMY
+Class: TRAINER_CLASS_RUIN_MANIAC
+Pic: RUIN_MANIAC
+Gender: Male
+
+Palpitoad
+Level: 39
+
+Sandslash
+Level: 40
+
+Claydol
+Level: 42
+
+=== TRAINER_MARC ===
+Name: MARC
+Class: TRAINER_CLASS_HIKER
+Pic: HIKER
+Gender: Male
+
+Diggersby
+Level: 40
+
+Golurk
+Level: 41
+
+Flygon
+Level: 42
+
+=== TRAINER_GOLDENROD_RADIO_MARNIE ===
+Name: MARNIE
+Class: TRAINER_CLASS_CIPHER_ADMIN
+Pic: MARNIE
+Gender: Female
+Music: TRAINER_ENCOUNTER_MUSIC_CIPHER_PEON
+
+Mandibuzz
+Level: 43
+
+Sableye
+Level: 43
+
+Krookodile
+Level: 43
+
+Morpeko
+Level: 44
+
+Absol
+Level: 45
+Shadow: Yes
+Shadow ID: 17
+Heart Gauge: 7500
+Relearn Move: Psycho Cut
+- Shadow Rush
+- Shadow Break
+- Shadow Sky
+
+=== TRAINER_GOLDENROD_UNDERGROUND_SWITCHES_ROCKET_1 ===
+Name: JAX
+Class: TRAINER_CLASS_TEAM_ROCKET
+Pic: ROCKET_GRUNT_M
+Gender: Male
+Music: TRAINER_ENCOUNTER_MUSIC_TEAM_ROCKET
+
+Koffing
+Level: 38
+
+Golbat
+Level: 39
+
+Arbok
+Level: 40
+
+=== TRAINER_GOLDENROD_UNDERGROUND_SWITCHES_ROCKET_2 ===
+Name: REESE
+Class: TRAINER_CLASS_TEAM_ROCKET
+Pic: ROCKET_GRUNT_M
+Gender: Male
+Music: TRAINER_ENCOUNTER_MUSIC_TEAM_ROCKET
+
+Raticate
+Level: 38
+
+Weezing
+Level: 39
+
+Murkrow
+Level: 40
+
+=== TRAINER_GOLDENROD_UNDERGROUND_SWITCHES_BURGLAR ===
+Name: VINCE
+Class: TRAINER_CLASS_BURGLAR
+Pic: BURGLAR
+Gender: Male
+Music: TRAINER_ENCOUNTER_MUSIC_TEAM_ROCKET
+
+Koffing
+Level: 38
+
+Magcargo
+Level: 39
+
+Houndoom
+Level: 40
+
+=== TRAINER_GOLDENROD_UNDERGROUND_STORAGE_ROCKET ===
+Name: CLYDE
+Class: TRAINER_CLASS_TEAM_ROCKET
+Pic: ROCKET_GRUNT_M
+Gender: Male
+Music: TRAINER_ENCOUNTER_MUSIC_TEAM_ROCKET
+
+Koffing
+Level: 39
+
+Golbat
+Level: 39
+
+Raticate
+Level: 40
+
+=== TRAINER_CERULEAN_GYM_SWIMMER_M_TYLER ===
+Name: TYLER
+Class: TRAINER_CLASS_SWIMMER_M
+Pic: SWIMMER_M_GEN2
+Gender: Male
+
+Poliwag
+Level: 16
+
+Horsea
+Level: 16
+
+=== TRAINER_PEWTER_GYM_CAMPER_JERRY ===
+Name: JERRY
+Class: CAMPER
+Pic: CAMPER_KANTO
+Gender: Male
+
+Geodude
+Level: 12
+Nature: HARDY
+
+
+Roggenrola
+Level: 12
+Nature: HARDY

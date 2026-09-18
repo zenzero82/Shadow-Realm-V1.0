@@ -2,20 +2,17 @@ RustboroCity_Gym_MapScripts::
 	.byte 0
 
 RustboroCity_Gym_EventScript_Roxanne::
+	lock
 	faceplayer
 	setspeaker RustboroCity_Gym_Speaker_Roxanne
-; 	@ trainerbattle_single TRAINER_ROXANNE_1, RustboroCity_Gym_Text_RoxanneIntro, RustboroCity_Gym_Text_RoxanneDefeat, RustboroCity_Gym_EventScript_RoxanneDefeated, NO_MUSIC
-	specialvar VAR_RESULT, ShouldTryRematchBattle
-	goto_if_eq VAR_RESULT, TRUE, RustboroCity_Gym_EventScript_RoxanneRematch
-	goto_if_unset FLAG_RECEIVED_TM_ROCK_TOMB, RustboroCity_Gym_EventScript_GiveRockTomb
-	msgbox RustboroCity_Gym_Text_RoxannePostBattle, MSGBOX_DEFAULT
-	release
-	end
-
-RustboroCity_Gym_EventScript_RoxanneDefeated::
+	goto_if_set FLAG_BADGE01_GET, RustboroCity_Gym_EventScript_Roxanne_Defeated
+	playbgm MUS_RG_ENCOUNTER_GYM_LEADER, FALSE
+	msgbox RustboroCity_Gym_Text_RoxanneIntro, MSGBOX_DEFAULT
+	trainerbattle_no_intro TRAINER_RUSTBORO_ROXANNE, RustboroCity_Gym_Text_RoxanneDefeat
 	message RustboroCity_Gym_Text_ReceivedStoneBadge
 	waitmessage
 	call Common_EventScript_PlayGymBadgeFanfare
+	setspeaker RustboroCity_Gym_Speaker_Roxanne
 	msgbox RustboroCity_Gym_Text_StoneBadgeInfoTakeThis, MSGBOX_DEFAULT
 	setflag FLAG_DEFEATED_RUSTBORO_GYM
 	setflag FLAG_BADGE01_GET
@@ -24,7 +21,20 @@ RustboroCity_Gym_EventScript_RoxanneDefeated::
 	setvar VAR_0x8008, 1
 	call Common_EventScript_SetGymTrainers
 	call_if_eq VAR_PETALBURG_GYM_STATE, 6, Common_EventScript_ReadyPetalburgGymForBattle
+	checkflag FLAG_QUEST_ROCKY_ROXY_STARTED
+	goto_if_ne RustboroCity_Gym_EventScript_Roxanne_QuestDone
+	checkflag FLAG_QUEST_ROCKY_ROXY_COMPLETED
+	goto_if_eq RustboroCity_Gym_EventScript_Roxanne_QuestDone
+	setflag FLAG_QUEST_ROCKY_ROXY_COMPLETED
+	call QuestJournal_EventScript_QuestCompleteAlert
+RustboroCity_Gym_EventScript_Roxanne_QuestDone:
 	goto RustboroCity_Gym_EventScript_GiveRockTomb
+	end
+
+RustboroCity_Gym_EventScript_Roxanne_Defeated::
+	goto_if_unset FLAG_RECEIVED_TM_ROCK_TOMB, RustboroCity_Gym_EventScript_GiveRockTomb
+	msgbox RustboroCity_Gym_Text_RoxannePostBattle, MSGBOX_DEFAULT
+	release
 	end
 
 RustboroCity_Gym_EventScript_GiveRockTomb::
@@ -35,30 +45,43 @@ RustboroCity_Gym_EventScript_GiveRockTomb::
 	release
 	end
 
-RustboroCity_Gym_EventScript_RoxanneRematch::
-; 	@ trainerbattle_rematch_double TRAINER_ROXANNE_1, RustboroCity_Gym_Text_RoxannePreRematch, RustboroCity_Gym_Text_RoxanneRematchDefeat, RustboroCity_Gym_Text_RoxanneRematchNeedTwoMons
-	msgbox RustboroCity_Gym_Text_RoxannePostRematch, MSGBOX_AUTOCLOSE
-	end
-
 RustboroCity_Gym_EventScript_Josh::
 	faceplayer
 	setspeaker RustboroCity_Gym_Speaker_Josh
-; 	@ trainerbattle_single TRAINER_JOSH, RustboroCity_Gym_Text_JoshIntro, RustboroCity_Gym_Text_JoshDefeat
-	msgbox RustboroCity_Gym_Text_JoshPostBattle, MSGBOX_AUTOCLOSE
+	trainerbattle_single TRAINER_JOSH, RustboroCity_Gym_Text_JoshIntro, RustboroCity_Gym_Text_JoshDefeat, RustboroCity_Gym_EventScript_JoshPostBattle
+	end
+
+RustboroCity_Gym_EventScript_JoshPostBattle::
+	setspeaker RustboroCity_Gym_Speaker_Josh
+	msgbox RustboroCity_Gym_Text_JoshPostBattle, MSGBOX_NPC
+	closemessage
+	release
 	end
 
 RustboroCity_Gym_EventScript_Tommy::
 	faceplayer
 	setspeaker RustboroCity_Gym_Speaker_Tommy
-; 	@ trainerbattle_single TRAINER_TOMMY, RustboroCity_Gym_Text_TommyIntro, RustboroCity_Gym_Text_TommyDefeat
-	msgbox RustboroCity_Gym_Text_TommyPostBattle, MSGBOX_AUTOCLOSE
+	trainerbattle_single TRAINER_TOMMY, RustboroCity_Gym_Text_TommyIntro, RustboroCity_Gym_Text_TommyDefeat, RustboroCity_Gym_EventScript_TommyPostBattle
+	end
+
+RustboroCity_Gym_EventScript_TommyPostBattle::
+	setspeaker RustboroCity_Gym_Speaker_Tommy
+	msgbox RustboroCity_Gym_Text_TommyPostBattle, MSGBOX_NPC
+	closemessage
+	release
 	end
 
 RustboroCity_Gym_EventScript_Marc::
 	faceplayer
 	setspeaker RustboroCity_Gym_Speaker_Marc
-; 	@ trainerbattle_single TRAINER_MARC, RustboroCity_Gym_Text_MarcIntro, RustboroCity_Gym_Text_MarcDefeat
-	msgbox RustboroCity_Gym_Text_MarcPostBattle, MSGBOX_AUTOCLOSE
+	trainerbattle_single TRAINER_MARC, RustboroCity_Gym_Text_MarcIntro, RustboroCity_Gym_Text_MarcDefeat, RustboroCity_Gym_EventScript_MarcPostBattle
+	end
+
+RustboroCity_Gym_EventScript_MarcPostBattle::
+	setspeaker RustboroCity_Gym_Speaker_Marc
+	msgbox RustboroCity_Gym_Text_MarcPostBattle, MSGBOX_NPC
+	closemessage
+	release
 	end
 
 RustboroCity_Gym_EventScript_GymGuide::
@@ -72,6 +95,17 @@ RustboroCity_Gym_EventScript_GymGuide::
 
 RustboroCity_Gym_EventScript_GymGuidePostVictory::
 	msgbox RustboroCity_Gym_Text_GymGuidePostVictory, MSGBOX_DEFAULT
+	release
+	end
+
+RustboroCity_Gym_EventScript_Excadrill::
+	lock
+	faceplayer
+	setspeaker RustboroCity_Gym_Speaker_Excadrill
+	waitse
+	playmoncry SPECIES_EXCADRILL, CRY_MODE_NORMAL
+	msgbox RustboroCity_Gym_Text_Excadrill, MSGBOX_DEFAULT
+	waitmoncry
 	release
 	end
 
@@ -127,6 +161,9 @@ RustboroCity_Gym_Speaker_Marc:
 RustboroCity_Gym_Speaker_Orson:
 	.string "Orson$"
 
+RustboroCity_Gym_Speaker_Excadrill:
+	.string "Excadrill$"
+
 RustboroCity_Gym_Text_GymGuideAdvice:
 	.string "Yo, how's it going?\p"
 	.string "Listen, my friend!\n"
@@ -141,10 +178,11 @@ RustboroCity_Gym_Text_GymGuideAdvice:
 	.string "And that's where I come in!\n"
 	.string "I'm here to provide expert advice!\p"
 	.string "ROXANNE, the GYM LEADER, is a user\n"
-	.string "of ROCK-type POKéMON.\p"
-	.string "The ROCK type is very durable, but\n"
-	.string "it can't stand WATER-type and\l"
-	.string "GRASS-type moves.\p"
+	.string "of GROUND-type POKéMON.\p"
+	.string "The GROUND type hits hard and shuts\n"
+	.string "down ELECTRIC-type attacks.\p"
+	.string "WATER, GRASS, and ICE-type moves\n"
+	.string "can crack open her strategy.\p"
 	.string "Come see me afterwards, if you beat\n"
 	.string "the GYM LEADER.\p"
 	.string "Well, go for it!$"
@@ -169,8 +207,8 @@ RustboroCity_Gym_Text_JoshDefeat:
 	.string "You were too good for me…$"
 
 RustboroCity_Gym_Text_JoshPostBattle:
-	.string "You haven't seen anything of the ROCK\n"
-	.string "type's terrifying power!$"
+	.string "You haven't seen anything of the\n"
+	.string "GROUND type's terrifying power!$"
 
 RustboroCity_Gym_Text_TommyIntro:
 	.string "If you can't beat me, you won't stand\n"
@@ -187,8 +225,8 @@ RustboroCity_Gym_Text_TommyPostBattle:
 RustboroCity_Gym_Text_MarcIntro:
 	.string "We might be in the middle of town,\n"
 	.string "but so what?\p"
-	.string "My ROCK POKéMON need room to\n"
-	.string "rampage!$"
+	.string "My GROUND POKéMON need room to\n"
+	.string "shake the whole floor!$"
 
 RustboroCity_Gym_Text_MarcDefeat:
 	.string "Oh, man oh man!\n"
@@ -197,7 +235,8 @@ RustboroCity_Gym_Text_MarcDefeat:
 RustboroCity_Gym_Text_MarcPostBattle:
 	.string "I have to hand it to our LEADER.\p"
 	.string "It took smarts and sense for her to\n"
-	.string "pick the ROCK type at her young age.$"
+	.string "master the GROUND type at her\l"
+	.string "young age.$"
 
 RustboroCity_Gym_Text_RoxanneIntro:
 	.string "Hello, I am ROXANNE, the RUSTBORO\n"
@@ -205,6 +244,9 @@ RustboroCity_Gym_Text_RoxanneIntro:
 	.string "I became a GYM LEADER so that I might\n"
 	.string "apply what I learned at the POKéMON\l"
 	.string "TRAINER'S SCHOOL in battle.\p"
+	.string "I now specialize in GROUND-type\n"
+	.string "POKéMON: steady, powerful, and\l"
+	.string "difficult to move once they are set.\p"
 	.string "Would you kindly demonstrate how you\n"
 	.string "battle, and with which POKéMON?$"
 
@@ -225,8 +267,10 @@ RustboroCity_Gym_Text_ReceivedStoneBadge:
 	.string "from ROXANNE.$"
 
 RustboroCity_Gym_Text_StoneBadgeInfoTakeThis:
-	.string "The STONE BADGE heightens the ATTACK\n"
-	.string "power of your POKéMON.\p"
+	.string "The STONE BADGE proves that you can\n"
+	.string "handle stronger POKéMON.\p"
+	.string "Your level cap has now expanded to\n"
+	.string "Lv. 48.\p"
 	.string "It also enables them to use the HM move\n"
 	.string "CUT outside of battle.\p"
 	.string "Please take this with you, too.$"
@@ -275,6 +319,12 @@ RustboroCity_Gym_Text_RoxanneRegisterCall:
 RustboroCity_Gym_Text_RegisteredRoxanne:
 	.string "Registered GYM LEADER ROXANNE\n"
 	.string "in the POKéNAV.$"
+
+RustboroCity_Gym_Text_Excadrill:
+	.string "EXCADRILL stamps the floor with a\n"
+	.string "heavy thud.\p"
+	.string "The whole GYM seems built to handle\n"
+	.string "that kind of power.$"
 
 RustboroCity_Gym_Text_RoxannePreRematch:
 	.string "ROXANNE: I'm so glad to see you again.\n"

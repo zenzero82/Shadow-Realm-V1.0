@@ -1,3 +1,5 @@
+	.set SCRIPT_EFFECT_TAG, 2
+
 	.set ALLOCATE_SCRIPT_CMD_TABLE, 0
 	.include "data/script_cmd_table.inc"
 
@@ -265,7 +267,7 @@
 	.if \requests_effects == 0
 	.4byte \func
 	.else
-	.4byte \func + ROM_SIZE
+	.4byte \func + SCRIPT_EFFECT_TAG
 	.endif
 	.endm
 
@@ -275,7 +277,7 @@
 	.if \requests_effects == 0
 	.4byte \func
 	.else
-	.4byte \func + ROM_SIZE
+	.4byte \func + SCRIPT_EFFECT_TAG
 	.endif
 	.endm
 
@@ -1239,6 +1241,18 @@
 	.macro pokemartdecoration2 products:req
 	.byte SCR_OP_POKEMARTDECORATION2
 	.4byte \products
+	.endm
+
+	@ Opens a mart-style shop that charges coins instead of money.
+	@ Products should be a list of .2byte item values followed by .2byte coin prices, preceded by an .align 2
+	.macro coinmart products:req
+	.byte SCR_OP_COINMART
+	.4byte \products
+	.endm
+
+	@ Used as the endpoint for a coin mart item list
+	.macro coinmartlistend
+	.2byte ITEM_NONE
 	.endm
 
 	@ Starts up the slot machine minigame. id is a SLOT_MACHINE_* value that influences probabilities of certain reel outcomes.

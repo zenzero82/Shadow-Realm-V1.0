@@ -42,7 +42,6 @@ PetalburgCity_Gym_OnTransition:
 	end
 
 PetalburgCity_Gym_EventScript_MoveWallyToEntrance::
-	setobjectxyperm LOCALID_PETALBURG_GYM_WALLY, 5, 108
 	return
 
 PetalburgCity_Gym_EventScript_MoveNormanToEntrance::
@@ -79,10 +78,8 @@ PetalburgCity_Gym_EventScript_ReturnFromWallyTutorial::
 	msgbox PetalburgCity_Gym_Text_WallyThankYouBye, MSGBOX_DEFAULT
 	closemessage
 	applymovement LOCALID_PLAYER, Common_Movement_WalkInPlaceFasterDown
-	applymovement LOCALID_PETALBURG_GYM_WALLY, PetalburgCity_Gym_Movement_WallyExitGym
 	waitmovement 0
 	playse SE_EXIT
-	removeobject LOCALID_PETALBURG_GYM_WALLY
 	setflag FLAG_HIDE_PETALBURG_CITY_WALLY
 	delay 30
 	applymovement LOCALID_PLAYER, Common_Movement_WalkInPlaceFasterUp
@@ -140,7 +137,6 @@ PetalburgCity_Gym_EventScript_BeginWallyTutorialEast::
 	end
 
 PetalburgCity_Gym_EventScript_BeginWallyTutorial::
-	addobject LOCALID_PETALBURG_GYM_WALLY
 	playse SE_DOOR
 	call_if_eq VAR_0x8008, 0, PetalburgCity_Gym_EventScript_WallyArriveSouth
 	call_if_eq VAR_0x8008, 1, PetalburgCity_Gym_EventScript_WallyArriveNorth
@@ -178,7 +174,6 @@ PetalburgCity_Gym_EventScript_BeginWallyTutorial::
 	call_if_eq VAR_0x8008, 1, PetalburgCity_Gym_EventScript_ExitGymWithWallyNorth
 	call_if_eq VAR_0x8008, 2, PetalburgCity_Gym_EventScript_ExitGymWithWallyWest
 	call_if_eq VAR_0x8008, 3, PetalburgCity_Gym_EventScript_ExitGymWithWallyEast
-	removeobject LOCALID_PETALBURG_GYM_WALLY
 	setflag FLAG_HIDE_PETALBURG_CITY_WALLYS_MOM
 	setvar VAR_PETALBURG_GYM_STATE, 1
 	setvar VAR_PETALBURG_CITY_STATE, 2
@@ -193,13 +188,10 @@ PetalburgCity_Gym_EventScript_BeginWallyTutorial::
 
 PetalburgCity_Gym_EventScript_WallyArriveSouth::
 	applymovement LOCALID_PETALBURG_GYM_NORMAN, Common_Movement_WalkInPlaceFasterDown
-	applymovement LOCALID_PETALBURG_GYM_WALLY, PetalburgCity_Gym_Movement_WallyArrive
 	waitmovement 0
 	return
 
 PetalburgCity_Gym_EventScript_WallyArriveNorth::
-	applymovement LOCALID_PETALBURG_GYM_WALLY, PetalburgCity_Gym_Movement_WallyArriveNorth
-	waitmovement 0
 	applymovement LOCALID_PETALBURG_GYM_NORMAN, Common_Movement_WalkInPlaceFasterRight
 	applymovement LOCALID_PLAYER, Common_Movement_WalkInPlaceFasterRight
 	waitmovement 0
@@ -208,31 +200,26 @@ PetalburgCity_Gym_EventScript_WallyArriveNorth::
 PetalburgCity_Gym_EventScript_WallyArriveWestEast::
 	applymovement LOCALID_PETALBURG_GYM_NORMAN, Common_Movement_WalkInPlaceFasterDown
 	applymovement LOCALID_PLAYER, Common_Movement_WalkInPlaceFasterDown
-	applymovement LOCALID_PETALBURG_GYM_WALLY, PetalburgCity_Gym_Movement_WallyArrive
 	waitmovement 0
 	return
 
 PetalburgCity_Gym_EventScript_ExitGymWithWallySouth::
 	applymovement LOCALID_PETALBURG_GYM_NORMAN, Common_Movement_WalkInPlaceFasterDown
-	applymovement LOCALID_PETALBURG_GYM_WALLY, PetalburgCity_Gym_Movement_WallyExitSouthWest
 	applymovement LOCALID_PLAYER, PetalburgCity_Gym_Movement_PlayerExitWithWallySouth
 	waitmovement 0
 	return
 
 PetalburgCity_Gym_EventScript_ExitGymWithWallyNorth::
-	applymovement LOCALID_PETALBURG_GYM_WALLY, PetalburgCity_Gym_Movement_WallyExitNorth
 	applymovement LOCALID_PLAYER, PetalburgCity_Gym_Movement_PlayerExitWithWallyNorth
 	waitmovement 0
 	return
 
 PetalburgCity_Gym_EventScript_ExitGymWithWallyWest::
-	applymovement LOCALID_PETALBURG_GYM_WALLY, PetalburgCity_Gym_Movement_WallyExitSouthWest
 	applymovement LOCALID_PLAYER, PetalburgCity_Gym_Movement_PlayerExitWithWallyWest
 	waitmovement 0
 	return
 
 PetalburgCity_Gym_EventScript_ExitGymWithWallyEast::
-	applymovement LOCALID_PETALBURG_GYM_WALLY, PetalburgCity_Gym_Movement_WallyExitEast
 	applymovement LOCALID_PLAYER, PetalburgCity_Gym_Movement_PlayerExitWithWallyEast
 	waitmovement 0
 	return
@@ -281,13 +268,9 @@ PetalburgCity_Gym_EventScript_NormanAddressWallyEast::
 	return
 
 PetalburgCity_Gym_EventScript_WallyFacePlayer::
-	applymovement LOCALID_PETALBURG_GYM_WALLY, Common_Movement_FacePlayer
-	waitmovement 0
 	return
 
 PetalburgCity_Gym_EventScript_WallyFaceDown::
-	applymovement LOCALID_PETALBURG_GYM_WALLY, Common_Movement_WalkInPlaceFasterDown
-	waitmovement 0
 	return
 
 PetalburgCity_Gym_EventScript_NormanNoBadges::
@@ -1588,5 +1571,4 @@ PetalburgCity_Gym_Text_NormanRematchNeedTwoMons:
 	.string "capable of battle?\p"
 	.string "Sorry, but you'll have to come back\n"
 	.string "with at least two POKéMON.$"
-
 

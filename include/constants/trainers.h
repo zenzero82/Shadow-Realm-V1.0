@@ -271,8 +271,12 @@
 #define TRAINER_PIC_PICNICKER_GEN2      234
 #define TRAINER_PIC_DELINQUENT_F        235
 #define TRAINER_PIC_FISHERMAN_GEN2      236
+#define TRAINER_PIC_PROF_BIRCHFP        237
+#define TRAINER_PIC_PROF_ROWAN          238
+#define TRAINER_PIC_SWIMMER_M_GEN2      239
+#define TRAINER_PIC_SWIMMER_F_GEN2      240
 
-#define TRAINER_PIC_COUNT                237
+#define TRAINER_PIC_COUNT                241
 
 // The player back pics are assumed to alternate according to the gender values (MALE/FEMALE)
 #define TRAINER_BACK_PIC_BRENDAN                0

@@ -18,6 +18,7 @@ Oaks_Lab_MapScripts::
 
 OaksLab_EventScript_OnLoad::
     setvar VAR_TEMP_1, 0
+    setvar VAR_TEMP_4, 0
     checkflag FLAG_OAKS_LAB_NEWGAME_INTRO_DONE
     goto_if_eq OaksLab_EventScript_OnLoad_AfterIntro
     checkflag FLAG_WEST_FOREST_INTRO_DONE
@@ -227,8 +228,17 @@ OaksLab_EventScript_Nia_PreStarter::
     end
 
 OaksLab_EventScript_Nia_PostStarter::
+    checkflag FLAG_OAKS_LAB_STARTERS_STOLEN
+    goto_if_eq OaksLab_EventScript_Nia_StartersStolen
     setspeaker OaksLab_Speaker_Nia
     msgbox OaksLab_Text_Nia_PostStarter, MSGBOX_DEFAULT
+    closemessage
+    release
+    end
+
+OaksLab_EventScript_Nia_StartersStolen::
+    setspeaker OaksLab_Speaker_Nia
+    msgbox OaksLab_Text_Nia_StartersStolen, MSGBOX_DEFAULT
     closemessage
     release
     end
@@ -272,9 +282,19 @@ OaksLab_EventScript_Leo_Talk_Release::
     release
     end
 OaksLab_EventScript_Leo_PostStarter::
+    checkflag FLAG_OAKS_LAB_STARTERS_STOLEN
+    goto_if_eq OaksLab_EventScript_Leo_StartersStolen
     setspeaker OaksLab_Speaker_Leo
     call OaksLab_EventScript_Leo_GiveQuestJournal
     msgbox OaksLab_Text_Leo_PostStarter, MSGBOX_DEFAULT
+    closemessage
+    release
+    end
+
+OaksLab_EventScript_Leo_StartersStolen::
+    setspeaker OaksLab_Speaker_Leo
+    call OaksLab_EventScript_Leo_GiveQuestJournal
+    msgbox OaksLab_Text_Leo_StartersStolen, MSGBOX_DEFAULT
     closemessage
     release
     end
@@ -290,11 +310,7 @@ OaksLab_EventScript_ExitLab::
 OaksLab_EventScript_ExitLab_AfterLeo::
     checkflag FLAG_SYS_POKEMON_GET
     goto_if_eq OaksLab_EventScript_ExitLab_Allow
-
-    checkflag FLAG_OAKS_LAB_LEO_SCENE_DONE
-    goto_if_eq OaksLab_EventScript_ExitLab_Block
-
-    end
+    goto OaksLab_EventScript_ExitLab_Block
 
 OaksLab_EventScript_ExitLab_Block::
     lockall
@@ -767,6 +783,8 @@ OaksLab_EventScript_ApplyPostStarterState::
     goto_if_eq OaksLab_EventScript_ApplyPostStarterState_Apply
     return
 OaksLab_EventScript_ApplyPostStarterState_Apply::
+    checkflag FLAG_OAKS_LAB_STARTERS_STOLEN
+    goto_if_eq OaksLab_EventScript_ApplyStartersStolenState
     setobjectxy LOCALID_LEO, 2, 10
     setobjectxyperm LOCALID_LEO, 2, 10
     setobjectmovementtype LOCALID_LEO, MOVEMENT_TYPE_WANDER_AROUND
@@ -774,6 +792,19 @@ OaksLab_EventScript_ApplyPostStarterState_Apply::
     setobjectxyperm LOCALID_NIA, 7, 2
     setobjectmovementtype LOCALID_NIA, MOVEMENT_TYPE_FACE_UP
     turnobject LOCALID_NIA, DIR_NORTH
+    return
+
+OaksLab_EventScript_ApplyStartersStolenState::
+    clearflag FLAG_HIDE_OAKS_LAB_LEO
+    clearflag FLAG_HIDE_OAKS_LAB_NIA
+    setobjectxy LOCALID_LEO, 7, 5
+    setobjectxyperm LOCALID_LEO, 7, 5
+    setobjectmovementtype LOCALID_LEO, MOVEMENT_TYPE_FACE_DOWN
+    turnobject LOCALID_LEO, DIR_SOUTH
+    setobjectxy LOCALID_NIA, 8, 5
+    setobjectxyperm LOCALID_NIA, 8, 5
+    setobjectmovementtype LOCALID_NIA, MOVEMENT_TYPE_FACE_DOWN
+    turnobject LOCALID_NIA, DIR_SOUTH
     return
 @ ---------------- TEXT ----------------
 
@@ -829,6 +860,19 @@ OaksLab_Text_Leo_PostStarter:
     .string "entrust a POKéMON to you.\p"
     .string "There has been a lot of strange\n"
     .string "activity lately. I'm cautious...$"
+OaksLab_Text_Leo_StartersStolen:
+    .string "ROCKET grunts forced their way into\n"
+    .string "the lab and went straight for the\l"
+    .string "two starters Oak kept in reserve.\p"
+    .string "Nia and I have been digging through\n"
+    .string "the Professor's notes ever since.\p"
+    .string "Those three species were the only\n"
+    .string "ones in his research that showed\l"
+    .string "natural resistance to XD\l"
+    .string "CONVERSION.\p"
+    .string "This theft was targeted. Whoever\n"
+    .string "sent those grunts knew exactly what\l"
+    .string "Oak had discovered.$"
 OaksLab_Text_Leo_GrantNationalDex:
     .string "Ah, yes. Good point.\p"
     .string "Like she said, take this and use it\n"
@@ -844,7 +888,7 @@ OaksLab_Text_Leo_Dexnav:
 OaksLab_Text_Leo_QuestJournal:
     .string "You should also take this\n"
     .string "Quest Journal.\p"
-    .string "Use it to track the crazy things\l"
+    .string "Use it to track the crazy things\n"
     .string "happening.\p"
     .string "Maybe your first entry can be\n"
     .string "talking with Pallet Town folk.$"
@@ -856,6 +900,23 @@ OaksLab_Text_Nia_PostStarter:
     .string "said he was close to solving it.\p"
     .string "Next thing we knew, he just\n"
     .string "vanished from the lab!$"
+OaksLab_Text_Nia_StartersStolen:
+    .string "It happened so fast...\p"
+    .string "The ROCKET grunts smashed their way\n"
+    .string "inside, grabbed the other two\l"
+    .string "starter POKeMON, and fled.\p"
+    .string "I saw one of them running out of\n"
+    .string "PALLET TOWN too.\p"
+    .string "He kept murmuring something about\n"
+    .string "the POWER PLANT on ROUTE 10.$"
+    .string "\p"
+    .string "Leo and I went back over Oak's data,\n"
+    .string "and it all points to the same thing:\l"
+    .string "those three species resist XD\l"
+    .string "CONVERSION better than anything else.\p"
+    .string "If TEAM ROCKET learns why, they're\n"
+    .string "not going to stop at just stealing\l"
+    .string "specimens.$"
 OaksLab_Text_Ball_Ralts_Inspect:
     .string "Do you want to select IMPIDIMP\nas your starter?$"
 

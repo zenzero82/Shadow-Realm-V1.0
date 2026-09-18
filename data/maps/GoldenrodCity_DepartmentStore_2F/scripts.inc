@@ -73,12 +73,17 @@ GoldenrodCity_DepartmentStore_2F_Text_Jules:
 
 	.align 2
 GoldenrodDeptStore2_Pokemart:
-	.2byte ITEM_FULL_HEAL
-	.2byte ITEM_HYPER_POTION
-	.2byte ITEM_MAX_REPEL
-	.2byte ITEM_MAX_REVIVE
-	.2byte ITEM_REPEL
-	.2byte ITEM_REVIVE
+	.2byte ITEM_DUSK_BALL
+	.2byte ITEM_REPEAT_BALL
+	.2byte ITEM_LUXURY_BALL
+	.2byte ITEM_DIVE_BALL
+	.2byte ITEM_NET_BALL
 	.2byte ITEM_SUPER_POTION
+	.2byte ITEM_HYPER_POTION
+	.2byte ITEM_REVIVE
+	.2byte ITEM_MAX_REVIVE
+	.2byte ITEM_FULL_HEAL
+	.2byte ITEM_REPEL
 	.2byte ITEM_SUPER_REPEL
+	.2byte ITEM_MAX_REPEL
 	pokemartlistend

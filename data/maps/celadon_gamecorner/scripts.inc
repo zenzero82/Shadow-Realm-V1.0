@@ -4,6 +4,8 @@ celadon_gamecorner_MapScripts::
 @ Game Corner prices
 	.set COINS_PRICE_50,  1000
 	.set COINS_PRICE_500, 10000
+	.set COMPETITIVE_ITEM_COINS, 5000
+	.set EVOLUTION_ITEM_COINS, 5000
 
 @ =========================================================
 @ SPEAKERS
@@ -120,15 +122,36 @@ celadon_gamecorner_EventScript_CoinsClerk_NoRoomForCoins::
 	end
 
 celadon_gamecorner_EventScript_AttendantF::
+	lock
 	faceplayer
 	setspeaker celadon_gamecorner_Speaker_AttendantF
-	msgbox celadon_gamecorner_Text_AttendantF, MSGBOX_NPC
+	msgbox celadon_gamecorner_Text_AttendantF, MSGBOX_DEFAULT
+	checkitem ITEM_COIN_CASE
+	goto_if_eq VAR_RESULT, FALSE, celadon_gamecorner_EventScript_Attendant_NeedCoinCase
+	message celadon_gamecorner_Text_WhichPrize
+	waitmessage
+	coinmart celadon_gamecorner_CoinMart_CompetitiveItems
+	msgbox gText_PleaseComeAgain, MSGBOX_DEFAULT
+	release
 	end
 
 celadon_gamecorner_EventScript_AttendantM::
+	lock
 	faceplayer
 	setspeaker celadon_gamecorner_Speaker_AttendantM
-	msgbox celadon_gamecorner_Text_AttendantM, MSGBOX_NPC
+	msgbox celadon_gamecorner_Text_AttendantM, MSGBOX_DEFAULT
+	checkitem ITEM_COIN_CASE
+	goto_if_eq VAR_RESULT, FALSE, celadon_gamecorner_EventScript_Attendant_NeedCoinCase
+	message celadon_gamecorner_Text_WhichPrize
+	waitmessage
+	coinmart celadon_gamecorner_CoinMart_EvolutionItems
+	msgbox gText_PleaseComeAgain, MSGBOX_DEFAULT
+	release
+	end
+
+celadon_gamecorner_EventScript_Attendant_NeedCoinCase::
+	msgbox celadon_gamecorner_Text_Attendant_NeedCoinCase, MSGBOX_DEFAULT
+	release
 	end
 
 celadon_gamecorner_EventScript_Juggler::
@@ -195,12 +218,22 @@ celadon_gamecorner_Text_CoinsClerk_DontNeedCoinsThen:
 	.string "Come back if you want COINS.$"
 
 celadon_gamecorner_Text_AttendantF:
-	.string "Prizes are exchanged next door.\n"
-	.string "Stock up on COINS first.$"
+	.string "I trade COINS for battle-ready hold\n"
+	.string "items.\p"
+	.string "Bring enough COINS and they're yours.$"
 
 celadon_gamecorner_Text_AttendantM:
-	.string "Each slot machine has different\n"
-	.string "odds. Pick carefully.$"
+	.string "I handle the harder-to-find evolution\n"
+	.string "items.\p"
+	.string "Some POKeMON need more than a simple\n"
+	.string "STONE to reach their full power.$"
+
+celadon_gamecorner_Text_Attendant_NeedCoinCase:
+	.string "You'll need a COIN CASE before you\n"
+	.string "can exchange prizes.$"
+
+celadon_gamecorner_Text_WhichPrize:
+	.string "Which prize would you like?$"
 
 celadon_gamecorner_Text_Juggler:
 	.string "Timing is everything on these\n"
@@ -229,3 +262,22 @@ celadon_gamecorner_Text_Beauty:
 
 celadon_gamecorner_Text_BaldingMan:
 	.string "Don't tell my wife I'm here...$"
+
+	.align 2
+celadon_gamecorner_CoinMart_CompetitiveItems:
+	.2byte ITEM_LEFTOVERS, COMPETITIVE_ITEM_COINS
+	.2byte ITEM_BLACK_SLUDGE, COMPETITIVE_ITEM_COINS
+	.2byte ITEM_SCOPE_LENS, COMPETITIVE_ITEM_COINS
+	.2byte ITEM_LIGHT_CLAY, COMPETITIVE_ITEM_COINS
+	.2byte ITEM_POWER_HERB, COMPETITIVE_ITEM_COINS
+	.2byte ITEM_ROCKY_HELMET, COMPETITIVE_ITEM_COINS
+	coinmartlistend
+
+celadon_gamecorner_CoinMart_EvolutionItems:
+	.2byte ITEM_METAL_COAT, EVOLUTION_ITEM_COINS
+	.2byte ITEM_DRAGON_SCALE, EVOLUTION_ITEM_COINS
+	.2byte ITEM_UP_GRADE, EVOLUTION_ITEM_COINS
+	.2byte ITEM_PROTECTOR, EVOLUTION_ITEM_COINS
+	.2byte ITEM_ELECTIRIZER, EVOLUTION_ITEM_COINS
+	.2byte ITEM_MAGMARIZER, EVOLUTION_ITEM_COINS
+	coinmartlistend

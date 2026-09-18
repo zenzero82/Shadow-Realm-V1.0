@@ -22,6 +22,21 @@ celadon_house1_Speaker_Trevor:
 celadon_house1_Speaker_Tierno:
 	.string "Tierno$"
 
+celadon_house1_Speaker_Cook:
+	.string "TAKESHI$"
+
+celadon_house1_Speaker_Juggler:
+	.string "MONTY$"
+
+celadon_house1_Speaker_BaldingMan:
+	.string "HAROLD$"
+
+celadon_house1_Speaker_Beauty:
+	.string "EMI$"
+
+celadon_house1_Speaker_FatMan:
+	.string "DAN$"
+
 celadon_house1_EventScript_Calem::
 	faceplayer
 	goto_if_set FLAG_CELADON_HOUSE1_REWARD_GIVEN, celadon_house1_EventScript_Calem_RewardGate
@@ -131,6 +146,54 @@ celadon_house1_EventScript_Tierno::
 	faceplayer
 	setspeaker celadon_house1_Speaker_Tierno
 	msgbox celadon_house1_Text_Tierno_Talk, MSGBOX_NPC
+	end
+
+celadon_house1_EventScript_Cook::
+	faceplayer
+	setspeaker celadon_house1_Speaker_Cook
+	msgbox celadon_house1_Text_Cook, MSGBOX_NPC
+	end
+
+celadon_house1_EventScript_Juggler::
+	faceplayer
+	setspeaker celadon_house1_Speaker_Juggler
+	msgbox celadon_house1_Text_Juggler, MSGBOX_NPC
+	end
+
+celadon_house1_EventScript_BaldingMan::
+	faceplayer
+	setspeaker celadon_house1_Speaker_BaldingMan
+	msgbox celadon_house1_Text_BaldingMan, MSGBOX_NPC
+	end
+
+celadon_house1_EventScript_Beauty::
+	faceplayer
+	setspeaker celadon_house1_Speaker_Beauty
+	msgbox celadon_house1_Text_Beauty, MSGBOX_NPC
+	end
+
+celadon_house1_EventScript_FatMan::
+	faceplayer
+	setspeaker celadon_house1_Speaker_FatMan
+	msgbox celadon_house1_Text_FatMan, MSGBOX_NPC
+	end
+
+celadon_house1_EventScript_Magmar::
+	lock
+	faceplayer
+	waitse
+	playmoncry SPECIES_MAGMAR, CRY_MODE_NORMAL
+	waitmoncry
+	msgbox celadon_house1_Text_Magmar, MSGBOX_NPC
+	release
+	end
+
+celadon_house1_EventScript_MenuBoard1::
+	msgbox celadon_house1_Text_MenuBoard1, MSGBOX_SIGN
+	end
+
+celadon_house1_EventScript_MenuBoard2::
+	msgbox celadon_house1_Text_MenuBoard2, MSGBOX_SIGN
 	end
 
 celadon_house1_EventScript_Challenge_Start::
@@ -346,3 +409,44 @@ celadon_house1_Text_Serena_Defeat:
 celadon_house1_Text_Serena_Reward:
 	.string "Here, take this DELPHOXITE.\n"
 	.string "You've earned it.$"
+
+celadon_house1_Text_Cook:
+	.string "Lunch rush in CELADON never stops.\p"
+	.string "Keep your hands quick and your broth\n"
+	.string "hot, that's the secret to good ramen.$"
+
+celadon_house1_Text_Juggler:
+	.string "I come here for the dumplings and\n"
+	.string "stay for the stories.\p"
+	.string "You hear every rumor in KANTO over a\n"
+	.string "steaming bowl of noodles.$"
+
+celadon_house1_Text_BaldingMan:
+	.string "The DEPT. STORE takes your money.\n"
+	.string "This place takes your hunger.$"
+
+celadon_house1_Text_Beauty:
+	.string "Nothing beats a hot bowl of miso\n"
+	.string "ramen after shopping all day.$"
+
+celadon_house1_Text_FatMan:
+	.string "I ordered extra pork buns, fried rice,\n"
+	.string "and a lemonade.\p"
+	.string "A trainer needs fuel for a long day\n"
+	.string "in CELADON.$"
+
+celadon_house1_Text_Magmar:
+	.string "MAGMAR snorts a puff of heat.\p"
+	.string "It looks proud to help keep the\n"
+	.string "kitchen blazing.$"
+
+celadon_house1_Text_MenuBoard1:
+	.string "Today's Specials:\n"
+	.string "TONKOTSU RAMEN\l"
+	.string "SPICY MISO RAMEN\l"
+	.string "GYOZA PLATE$"
+
+celadon_house1_Text_MenuBoard2:
+	.string "Kitchen Orders:\n"
+	.string "FRIED RICE, CURRY RICE,\l"
+	.string "PORK BUNS, LEMONADE$"

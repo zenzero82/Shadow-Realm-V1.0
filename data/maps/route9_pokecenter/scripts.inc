@@ -1,5 +1,11 @@
 route9_pokecenter_MapScripts::
+	map_script MAP_SCRIPT_ON_TRANSITION, route9_pokecenter_OnTransition
 	.byte 0
+
+route9_pokecenter_OnTransition:
+	call CableClub_EventScript_HideOrShowMysteryGiftMan
+	end
+
 route9_pokecenter_EventScript_Chansey::
 	lock
 	faceplayer

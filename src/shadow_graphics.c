@@ -1,6 +1,7 @@
 #include "global.h"
 #include "pokemon.h"
 #include "shadow_graphics.h"
+#include "sprite.h"
 #include "data/graphics/shadow_forms.h"
 
 
@@ -43,6 +44,34 @@ const u16 *GetShadowMonPalette(u16 species)
 {
     const struct ShadowGraphicsOverride *override = GetShadowGraphicsOverride(species);
     return override ? override->palette : NULL;
+}
+
+const u16 *GetShadowMonIconPalette(u16 species, u32 personality)
+{
+    const struct ShadowGraphicsOverride *override = GetShadowGraphicsOverride(species);
+    if (override == NULL)
+        return NULL;
+
+#if P_GENDER_DIFFERENCES
+    if (IsPersonalityFemale(species, personality) && override->iconPaletteFemale != NULL)
+        return override->iconPaletteFemale;
+#endif
+
+    return override->iconPalette;
+}
+
+u16 GetShadowMonIconPaletteTag(u16 species, u32 personality)
+{
+    const struct ShadowGraphicsOverride *override = GetShadowGraphicsOverride(species);
+    if (override == NULL)
+        return TAG_NONE;
+
+#if P_GENDER_DIFFERENCES
+    if (IsPersonalityFemale(species, personality) && override->iconPaletteFemale != NULL)
+        return override->iconPaletteTagFemale;
+#endif
+
+    return override->iconPaletteTag;
 }
 
 const u8 *GetShadowMonIcon(u16 species, u32 personality)

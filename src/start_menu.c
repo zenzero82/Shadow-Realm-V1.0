@@ -54,6 +54,7 @@
 #include "rtc.h"
 #include "constants/battle_frontier.h"
 #include "constants/flags.h"
+#include "constants/map_types.h"
 #include "constants/rgb.h"
 #include "constants/songs.h"
 
@@ -1707,7 +1708,10 @@ static bool8 HandleStartMenuInput(void)
             if (GetNationalPokedexCount(FLAG_GET_SEEN) == 0 && !FlagGet(FLAG_SYS_POKEDEX_GET))
                 return FALSE;
         }
-        if (action == MENU_ACTION_DEXNAV && MapHasNoEncounterData())
+        if (action == MENU_ACTION_DEXNAV
+         && (MapHasNoEncounterData()
+          || gMapHeader.mapType == MAP_TYPE_INDOOR
+          || gMapHeader.mapType == MAP_TYPE_SECRET_BASE))
             return FALSE;
 
         gMenuCallback = sStartMenuItems[action].func.u8_void;

@@ -13,7 +13,21 @@
   "show_map_name": false,
   "battle_scene": "MAP_BATTLE_SCENE_NORMAL",
   "connections": null,
-  "object_events": [],
+  "object_events": [
+        {
+            "graphics_id": "OBJ_EVENT_GFX_BOY_2_GEN2",
+            "x": 5,
+            "y": 7,
+      "elevation": 0,
+      "movement_type": "MOVEMENT_TYPE_FACE_DOWN",
+      "movement_range_x": 0,
+            "movement_range_y": 0,
+            "trainer_type": "TRAINER_TYPE_NONE",
+            "trainer_sight_or_berry_tree_id": "0",
+            "script": "GoldenrodCity_UndergroundEntrance_EventScript_FormerPeon",
+            "flag": "FLAG_GOLDENROD_CITY_RADIO_SHIFT_DONE"
+        }
+  ],
   "warp_events": [
     {
       "x": 5,
@@ -30,18 +44,18 @@
       "dest_warp_id": "0"
     },
     {
-      "x": 22,
-      "y": 7,
-      "elevation": 0,
-      "dest_map": "MAP_GOLDENROD_CITY",
-      "dest_warp_id": "12"
-    },
-    {
       "x": 23,
       "y": 3,
       "elevation": 0,
       "dest_map": "MAP_GOLDENROD_CITY_UNDERGROUND_TUNNEL",
       "dest_warp_id": "1"
+    },
+    {
+      "x": 22,
+      "y": 7,
+      "elevation": 0,
+      "dest_map": "MAP_GOLDENROD_CITY",
+      "dest_warp_id": "12"
     }
   ],
   "coord_events": [],

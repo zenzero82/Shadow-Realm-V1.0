@@ -522,6 +522,16 @@ const u32 gTrainerFrontPic_DelinquentF[] = INCBIN_U32("graphics/trainers/front_p
 const u16 gTrainerPalette_DelinquentF[] = INCBIN_U16("graphics/trainers/front_pics/delinquent_f.gbapal");
 const u32 gTrainerFrontPic_FishermanGen2[] = INCBIN_U32("graphics/trainers/front_pics/fisherman_gen2.4bpp.lz");
 const u16 gTrainerPalette_FishermanGen2[] = INCBIN_U16("graphics/trainers/front_pics/fisherman_gen2.gbapal");
+const u32 gTrainerFrontPic_SwimmerMGen2[] = INCBIN_U32("graphics/trainers/front_pics/swimmerm_gen2.4bpp.lz");
+const u16 gTrainerPalette_SwimmerMGen2[] = INCBIN_U16("graphics/trainers/front_pics/swimmerm_gen2.gbapal");
+const u32 gTrainerFrontPic_SwimmerFGen2[] = INCBIN_U32("graphics/trainers/front_pics/swimmerf_gen2.4bpp.lz");
+const u16 gTrainerPalette_SwimmerFGen2[] = INCBIN_U16("graphics/trainers/front_pics/swimmerf_gen2.gbapal");
+
+const u32 gTrainerFrontPic_ProfBirchfp[] = INCBIN_U32("graphics/trainers/front_pics/prof_birchfp.4bpp.lz");
+const u16 gTrainerPalette_ProfBirchfp[] = INCBIN_U16("graphics/trainers/front_pics/prof_birchfp.gbapal");
+
+const u32 gTrainerFrontPic_ProfRowan[] = INCBIN_U32("graphics/trainers/front_pics/prof_rowan.4bpp.lz");
+const u16 gTrainerPalette_ProfRowan[] = INCBIN_U16("graphics/trainers/front_pics/prof_rowan.gbapal");
 const u32 gTrainerFrontPic_Wes[] = INCBIN_U32("graphics/trainers/front_pics/wesfp.4bpp.lz");
 const u16 gTrainerPalette_Wes[] = INCBIN_U16("graphics/trainers/front_pics/wesfp.gbapal");
 const u32 gTrainerFrontPic_Evice[] = INCBIN_U32("graphics/trainers/front_pics/Evicefp.4bpp.lz");
@@ -958,6 +968,10 @@ const struct TrainerSprite gTrainerSprites[] =
     TRAINER_SPRITE(TRAINER_PIC_PICNICKER_GEN2, gTrainerFrontPic_PicnickerGen2, gTrainerPalette_PicnickerGen2),
     TRAINER_SPRITE(TRAINER_PIC_DELINQUENT_F, gTrainerFrontPic_DelinquentF, gTrainerPalette_DelinquentF),
     TRAINER_SPRITE(TRAINER_PIC_FISHERMAN_GEN2, gTrainerFrontPic_FishermanGen2, gTrainerPalette_FishermanGen2),
+    TRAINER_SPRITE(TRAINER_PIC_PROF_BIRCHFP, gTrainerFrontPic_ProfBirchfp, gTrainerPalette_ProfBirchfp),
+    TRAINER_SPRITE(TRAINER_PIC_PROF_ROWAN, gTrainerFrontPic_ProfRowan, gTrainerPalette_ProfRowan),
+    TRAINER_SPRITE(TRAINER_PIC_SWIMMER_M_GEN2, gTrainerFrontPic_SwimmerMGen2, gTrainerPalette_SwimmerMGen2),
+    TRAINER_SPRITE(TRAINER_PIC_SWIMMER_F_GEN2, gTrainerFrontPic_SwimmerFGen2, gTrainerPalette_SwimmerFGen2),
 };
 
 static const union AnimCmd sAnimCmd_Hoenn[] =

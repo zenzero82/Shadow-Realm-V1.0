@@ -1,2 +1,7 @@
 Mahogany_pokecenter_MapScripts::
+	map_script MAP_SCRIPT_ON_TRANSITION, Mahogany_pokecenter_OnTransition
 	.byte 0
+
+Mahogany_pokecenter_OnTransition:
+	call CableClub_EventScript_HideOrShowMysteryGiftMan
+	end

@@ -36,6 +36,7 @@ void CreateEnemyShadowSprite(u32 battler);
 void LoadAndCreateEnemyShadowSprites(void);
 void SpriteCB_SetInvisible(struct Sprite *sprite);
 void SetBattlerShadowSpriteCallback(u8 battler, u16 species);
+void RefreshEnemyShadowPalettes(void);
 void HideBattlerShadowSprite(u8 battler);
 void FillAroundBattleWindows(void);
 void ClearTemporarySpeciesSpriteData(u32 battler, bool32 dontClearTransform, bool32 dontClearSubstitute);

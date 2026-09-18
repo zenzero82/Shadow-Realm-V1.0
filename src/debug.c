@@ -586,7 +586,6 @@ static const struct QuestFlagPair sQuestFlagPairs[] =
     {FLAG_QUEST_PHOENIX_STARTED, FLAG_QUEST_PHOENIX_COMPLETED},
     {FLAG_QUEST_SHINING_BEAST_STARTED, FLAG_QUEST_SHINING_BEAST_COMPLETED},
     {FLAG_QUEST_LAVENDER_NPCS_STARTED, FLAG_QUEST_LAVENDER_NPCS_COMPLETED},
-    {FLAG_QUEST_ODD_KEYSTONE_STARTED, FLAG_QUEST_ODD_KEYSTONE_COMPLETED},
     {FLAG_QUEST_CELADON_NPCS_STARTED, FLAG_QUEST_CELADON_NPCS_COMPLETED},
     {FLAG_QUEST_MEGA_MOMENTS_STARTED, FLAG_QUEST_MEGA_MOMENTS_COMPLETED},
     {FLAG_QUEST_ERICA_STARTED, FLAG_QUEST_ERICA_COMPLETED},
@@ -594,6 +593,7 @@ static const struct QuestFlagPair sQuestFlagPairs[] =
     {FLAG_QUEST_ALOLA_LILLIE_STARTED, FLAG_QUEST_ALOLA_LILLIE_COMPLETED},
     {FLAG_QUEST_SAFFRON_NPCS_STARTED, FLAG_QUEST_SAFFRON_NPCS_COMPLETED},
     {FLAG_QUEST_VERMILION_NPCS_STARTED, FLAG_QUEST_VERMILION_NPCS_COMPLETED},
+    {FLAG_QUEST_GOLDENROD_CITY_INFO_STARTED, FLAG_QUEST_GOLDENROD_CITY_INFO_COMPLETED},
     {FLAG_QUEST_GOLDENROD_NPCS_STARTED, FLAG_QUEST_GOLDENROD_NPCS_COMPLETED},
     {FLAG_QUEST_RUSTBORO_NPCS_STARTED, FLAG_QUEST_RUSTBORO_NPCS_COMPLETED},
 };
@@ -2157,11 +2157,40 @@ static void DebugAction_Util_Warp_WesHideoutEntrance(u8 taskId)
     ResetInitialPlayerAvatarState();
 }
 
+static const u16 sZygardeRepairFlags[] =
+{
+    FLAG_HIDE_RUINS_OF_ALPH_LAB_ZYGARDE_CUBE,
+    FLAG_HIDE_UNION_CAVE_B2F_ZYGARDE_CELL,
+    FLAG_HIDE_CELADON_CITY_ZYGARDE_CELL,
+    FLAG_HIDE_CERULEAN_CAVE_B1F_ZYGARDE_CELL,
+    FLAG_HIDE_CINNABAR_ISLAND_ZYGARDE_CELL,
+    FLAG_HIDE_DIGLETTS_CAVE_TUNNEL_ZYGARDE_CELL,
+    FLAG_HIDE_FUCHSIA_CITY_ZYGARDE_CELL,
+    FLAG_HIDE_MT_MOON_CAVE_ZYGARDE_CELL,
+    FLAG_HIDE_PALLET_TOWN_WESTERN_FOREST_ZYGARDE_CELL,
+    FLAG_HIDE_PEWTER_CITY_ZYGARDE_CELL,
+    FLAG_HIDE_ROUTE11_ZYGARDE_CELL,
+    FLAG_HIDE_ROUTE12_ZYGARDE_CELL,
+    FLAG_HIDE_ROUTE13_ZYGARDE_CELL,
+    FLAG_HIDE_ROUTE17_ZYGARDE_CELL,
+    FLAG_HIDE_ROUTE2_ZYGARDE_CELL,
+    FLAG_HIDE_ROUTE20_ZYGARDE_CELL,
+    FLAG_HIDE_ROUTE21_NORTH_ZYGARDE_CELL,
+    FLAG_HIDE_ROUTE8_ZYGARDE_CELL,
+    FLAG_HIDE_SAFFRON_CITY_ZYGARDE_CELL,
+    FLAG_HIDE_VERMILION_CITY_ZYGARDE_CELL,
+    FLAG_HIDE_ROUTE10_POWERPLANTBACK_ZYGARDE_CELL,
+    FLAG_HIDE_SAFFRON_TUNNEL_ZYGARDE_CELL,
+    FLAG_HIDE_SAFFRON_TUNNEL_SW_ZYGARDE_CELL,
+    FLAG_HIDE_VIRIDIAN_FOREST_ZYGARDE_CELL,
+};
+
 static void DebugAction_Util_RepairQuestFlags(u8 taskId)
 {
     u32 i;
     u16 fixes = 0;
     bool8 hasLegendaryAccess;
+    bool8 hasBackToHQCompletionProof;
 
     for (i = 0; i < ARRAY_COUNT(sQuestFlagPairs); i++)
     {
@@ -2171,6 +2200,49 @@ static void DebugAction_Util_RepairQuestFlags(u8 taskId)
             fixes++;
         }
     }
+
+    if (FlagGet(FLAG_QUEST_ODD_KEYSTONE_COMPLETED))
+    {
+        FlagClear(FLAG_QUEST_ODD_KEYSTONE_COMPLETED);
+        FlagSet(FLAG_QUEST_ODD_KEYSTONE_STARTED);
+        fixes++;
+    }
+
+    if (!FlagGet(FLAG_QUEST_100_POWER_STARTED)
+     && !FlagGet(FLAG_QUEST_100_POWER_COMPLETED))
+    {
+        if (VarGet(VAR_ZYGARDE_CELL_COUNT) != 0)
+        {
+            VarSet(VAR_ZYGARDE_CELL_COUNT, 0);
+            fixes++;
+        }
+        if (VarGet(VAR_ZYGARDE_CORE_COUNT) != 0)
+        {
+            VarSet(VAR_ZYGARDE_CORE_COUNT, 0);
+            fixes++;
+        }
+
+        for (i = 0; i < ARRAY_COUNT(sZygardeRepairFlags); i++)
+        {
+            if (FlagGet(sZygardeRepairFlags[i]))
+            {
+                FlagClear(sZygardeRepairFlags[i]);
+                fixes++;
+            }
+        }
+    }
+
+    hasBackToHQCompletionProof = FlagGet(FLAG_WES_HIDEOUT_LEGENDARY_QUESTS_REVEALED)
+                              || FlagGet(FLAG_QUEST_THUNDERBIRD_STARTED)
+                              || FlagGet(FLAG_QUEST_THUNDERBIRD_COMPLETED)
+                              || FlagGet(FLAG_QUEST_ICEBIRD_STARTED)
+                              || FlagGet(FLAG_QUEST_ICEBIRD_COMPLETED)
+                              || FlagGet(FLAG_QUEST_FIREBIRD_STARTED)
+                              || FlagGet(FLAG_QUEST_FIREBIRD_COMPLETED)
+                              || FlagGet(FLAG_QUEST_PHOENIX_STARTED)
+                              || FlagGet(FLAG_QUEST_PHOENIX_COMPLETED)
+                              || FlagGet(FLAG_QUEST_SHINING_BEAST_STARTED)
+                              || FlagGet(FLAG_QUEST_SHINING_BEAST_COMPLETED);
 
     if (!FlagGet(FLAG_ILEX_BIRCH_CALL_DONE))
     {
@@ -2184,6 +2256,30 @@ static void DebugAction_Util_RepairQuestFlags(u8 taskId)
             FlagClear(FLAG_QUEST_BACK_TO_HQ_COMPLETED);
             fixes++;
         }
+    }
+    else if (!FlagGet(FLAG_QUEST_BACK_TO_HQ_STARTED) && FlagGet(FLAG_QUEST_BACK_TO_HQ_COMPLETED))
+    {
+        if (!hasBackToHQCompletionProof)
+        {
+            FlagClear(FLAG_QUEST_BACK_TO_HQ_COMPLETED);
+            FlagSet(FLAG_QUEST_BACK_TO_HQ_STARTED);
+        }
+        else
+        {
+            FlagSet(FLAG_QUEST_BACK_TO_HQ_STARTED);
+        }
+        fixes++;
+    }
+    else if (!FlagGet(FLAG_QUEST_BACK_TO_HQ_STARTED) && !FlagGet(FLAG_QUEST_BACK_TO_HQ_COMPLETED))
+    {
+        if (hasBackToHQCompletionProof)
+        {
+            FlagSet(FLAG_QUEST_BACK_TO_HQ_COMPLETED);
+            FlagSet(FLAG_QUEST_BACK_TO_HQ_STARTED);
+        }
+        else
+            FlagSet(FLAG_QUEST_BACK_TO_HQ_STARTED);
+        fixes++;
     }
 
     hasLegendaryAccess = FlagGet(FLAG_QUEST_BACK_TO_HQ_STARTED)
@@ -2243,8 +2339,13 @@ static void DebugAction_Util_RepairQuestFlags(u8 taskId)
         }
     }
 
-    if (!FlagGet(FLAG_HIDE_ROUTE10_ZINZOLIN))
+    if (!HasTrainerBeenFought(TRAINER_ZINZOLIN_POWER_PLANT))
     {
+        if (FlagGet(FLAG_ROUTE10_SYCAMORE_CALL_DONE))
+        {
+            FlagClear(FLAG_ROUTE10_SYCAMORE_CALL_DONE);
+            fixes++;
+        }
         if (FlagGet(FLAG_QUEST_MACHINE_PART_STARTED))
         {
             FlagClear(FLAG_QUEST_MACHINE_PART_STARTED);
@@ -2551,7 +2652,7 @@ void CheckROMSize(struct ScriptContext *ctx)
     extern u8 __rom_end[];
     u32 currROMSizeB = __rom_end - (const u8 *)ROM_START;
     u32 currROMSizeKB = (currROMSizeB + 1023) / 1024;
-    u32 currROMFreeKB = ((const u8 *)ROM_END - __rom_end) / 1024;
+    u32 currROMFreeKB = ((const u8 *)ROM_TOTAL_END - __rom_end) / 1024;
     ConvertQ22_10ToDecimalString(gStringVar1, currROMSizeKB, 2, ROUND_CEILING);
     ConvertQ22_10ToDecimalString(gStringVar2, currROMFreeKB, 2, ROUND_FLOOR);
 }

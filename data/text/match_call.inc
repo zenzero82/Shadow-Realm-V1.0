@@ -2032,6 +2032,10 @@ MatchCall_Text_Mom3::
 	.string "Press A to have me send it, or B\l"
 	.string "to keep saving.$"
 
+MatchCall_Text_MomWithdrawn::
+	.string "MOM: Sent {STR_VAR_1} to you.\p"
+	.string "Spend it wisely, {PLAYER}!$"
+
 MatchCall_Text_Roxanne1::
 	.string "ROXANNE: Oh, hello, {PLAYER}!\p"
 	.string "I've been hard at work retraining\n"

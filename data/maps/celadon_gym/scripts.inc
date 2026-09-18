@@ -16,7 +16,7 @@ celadon_gym_Speaker_Erika:
 	.string "ERIKA$"
 
 celadon_gym_Speaker_GymGuy:
-	.string "VINCE$"
+	.string "GYM GUY$"
 
 celadon_gym_Speaker_Michelle:
 	.string "MICHELLE$"
@@ -48,6 +48,7 @@ celadon_gym_EventScript_Erika::
 	faceplayer
 	setspeaker celadon_gym_Speaker_Erika
 	goto_if_set FLAG_BADGE12_GET, celadon_gym_EventScript_Erika_Defeated
+	playbgm MUS_RG_ENCOUNTER_GYM_LEADER, FALSE
 	msgbox celadon_gym_Text_Erika_Intro, MSGBOX_DEFAULT
 	trainerbattle_no_intro TRAINER_ERIKA, celadon_gym_Text_Erika_WinLoss
 	message celadon_gym_Text_ReceivedRainbowBadge
@@ -121,16 +122,54 @@ celadon_gym_EventScript_Julia_After::
 	end
 
 celadon_gym_EventScript_Jo::
+	call celadon_gym_EventScript_MoveTwinPartnerBeforeBattle
 	setspeaker celadon_gym_Speaker_Jo
-	trainerbattle_double TRAINER_CELADON_GYM_JO_AND_ZOE, celadon_gym_Text_Jo_Intro, celadon_gym_Text_Jo_Defeat, celadon_gym_Text_Twins_NotEnoughMons
-	msgbox celadon_gym_Text_Jo_After, MSGBOX_AUTOCLOSE
+	trainerbattle_double TRAINER_CELADON_GYM_JO_AND_ZOE, celadon_gym_Text_Jo_Intro, celadon_gym_Text_Jo_Defeat, celadon_gym_Text_Twins_NotEnoughMons, celadon_gym_EventScript_Jo_After
+	end
+
+celadon_gym_EventScript_Jo_After::
+	setspeaker celadon_gym_Speaker_Jo
+	msgbox celadon_gym_Text_Jo_After, MSGBOX_NPC
+	closemessage
+	release
 	end
 
 celadon_gym_EventScript_Zoe::
+	call celadon_gym_EventScript_MoveTwinPartnerBeforeBattle
 	setspeaker celadon_gym_Speaker_Zoe
-	trainerbattle_double TRAINER_CELADON_GYM_JO_AND_ZOE, celadon_gym_Text_Zoe_Intro, celadon_gym_Text_Zoe_Defeat, celadon_gym_Text_Twins_NotEnoughMons
-	msgbox celadon_gym_Text_Zoe_After, MSGBOX_AUTOCLOSE
+	trainerbattle_double TRAINER_CELADON_GYM_JO_AND_ZOE, celadon_gym_Text_Zoe_Intro, celadon_gym_Text_Zoe_Defeat, celadon_gym_Text_Twins_NotEnoughMons, celadon_gym_EventScript_Zoe_After
 	end
+
+celadon_gym_EventScript_Zoe_After::
+	setspeaker celadon_gym_Speaker_Zoe
+	msgbox celadon_gym_Text_Zoe_After, MSGBOX_NPC
+	closemessage
+	release
+	end
+
+celadon_gym_EventScript_MoveTwinPartnerBeforeBattle::
+	checktrainerflag TRAINER_CELADON_GYM_JO_AND_ZOE
+	goto_if_eq celadon_gym_EventScript_MoveTwinPartnerBeforeBattle_End
+	getplayerxy VAR_0x8004, VAR_0x8005
+	compare VAR_0x8004, 6
+	goto_if_ne celadon_gym_EventScript_MoveTwinPartnerBeforeBattle_End
+	compare VAR_LAST_TALKED, 6
+	goto_if_eq celadon_gym_EventScript_MoveTwinPartnerBeforeBattle_MoveZoe
+	compare VAR_LAST_TALKED, 7
+	goto_if_eq celadon_gym_EventScript_MoveTwinPartnerBeforeBattle_MoveJo
+	goto celadon_gym_EventScript_MoveTwinPartnerBeforeBattle_End
+
+celadon_gym_EventScript_MoveTwinPartnerBeforeBattle_MoveZoe:
+	applymovement 7, celadon_gym_Movement_TwinStepRight
+	waitmovement 0
+	goto celadon_gym_EventScript_MoveTwinPartnerBeforeBattle_End
+
+celadon_gym_EventScript_MoveTwinPartnerBeforeBattle_MoveJo:
+	applymovement 6, celadon_gym_Movement_TwinStepRight
+	waitmovement 0
+
+celadon_gym_EventScript_MoveTwinPartnerBeforeBattle_End:
+	return
 
 @ =========================================================
 @ POKEMON
@@ -173,6 +212,10 @@ celadon_gym_EventScript_GymStatuePostVictory::
 	msgbox celadon_gym_Text_GymStatuePlayerWon, MSGBOX_SIGN
 	releaseall
 	end
+
+celadon_gym_Movement_TwinStepRight:
+	walk_right
+	step_end
 
 @ =========================================================
 @ TEXT

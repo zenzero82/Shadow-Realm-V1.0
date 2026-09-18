@@ -1,5 +1,10 @@
 Route32_PokemonCenter_MapScripts::
+	map_script MAP_SCRIPT_ON_TRANSITION, Route32_PokemonCenter_OnTransition
 	.byte 0
+
+Route32_PokemonCenter_OnTransition:
+	call CableClub_EventScript_HideOrShowMysteryGiftMan
+	end
 
 Route32_PokemonCenter_Speaker_Fisherman:
 	.string "MARLIN$"

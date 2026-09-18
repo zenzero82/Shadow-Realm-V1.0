@@ -7,8 +7,26 @@ WesHideout_Entrance_MapScripts::
 #define LOCALID_ESPEON 3
 
 WesHideout_Entrance_OnLoad::
+	setvar VAR_TEMP_0, 0
+	checkflag FLAG_QUEST_TALK_WES_STARTED
+	goto_if_ne WesHideout_Entrance_OnLoad_CheckBackToHQ
+	checkflag FLAG_QUEST_TALK_WES_COMPLETED
+	goto_if_eq WesHideout_Entrance_OnLoad_CheckBackToHQ
+	@ Repair older saves where Back to HQ was released early. Talk to Wes
+	@ happens much earlier, so these quest states cannot legitimately overlap.
+	clearflag FLAG_QUEST_BACK_TO_HQ_STARTED
+	clearflag FLAG_QUEST_BACK_TO_HQ_COMPLETED
+	clearflag FLAG_WES_HIDEOUT_WES_TRIGGERED
+	goto WesHideout_Entrance_OnLoad_ShowWes
+
+WesHideout_Entrance_OnLoad_CheckBackToHQ:
 	checkflag FLAG_QUEST_BACK_TO_HQ_STARTED
 	goto_if_eq WesHideout_Entrance_OnLoad_HideWes
+
+WesHideout_Entrance_OnLoad_ShowWes:
+	showobjectat LOCALID_WES, MAP_WES_HIDEOUT_ENTRANCE
+	showobjectat LOCALID_UMBREON, MAP_WES_HIDEOUT_ENTRANCE
+	showobjectat LOCALID_ESPEON, MAP_WES_HIDEOUT_ENTRANCE
 	end
 
 WesHideout_Entrance_OnLoad_HideWes::
@@ -26,6 +44,24 @@ WesHideout_Entrance_Speaker_Wes:
 	.string "WES$"
 
 WesHideout_Entrance_EventScript_Nop::
+	end
+
+WesHideout_Entrance_EventScript_Umbreon::
+	lock
+	faceplayer
+	waitse
+	playmoncry SPECIES_UMBREON, CRY_MODE_NORMAL
+	waitmoncry
+	release
+	end
+
+WesHideout_Entrance_EventScript_Espeon::
+	lock
+	faceplayer
+	waitse
+	playmoncry SPECIES_ESPEON, CRY_MODE_NORMAL
+	waitmoncry
+	release
 	end
 
 @ =========================================================
@@ -243,13 +279,13 @@ WesHideout_Entrance_Text_Wes_Gift_Part2:
 	.string "been a trainer spotted near the water\l"
 	.string "just before the POWER PLANT on\l"
 	.string "ROUTE 10. Find him and see if he has\l"
-	.string "a {COLOR PURPLE}Shadow POKéMON{COLOR DARK_GRAY}. Our reports say he\l"
+	.string "a {COLOR BLUE}Shadow POKéMON{COLOR DARK_GRAY}. Our reports say he\l"
 	.string "does.$"
 
 WesHideout_Entrance_Text_Wes_AfterGift:
 	.string "Head to ROUTE 10 and find that\n"
 	.string "trainer. Be ready to snag if you\l"
-	.string "see a {COLOR PURPLE}Shadow POKéMON{COLOR DARK_GRAY}.$"
+	.string "see a {COLOR BLUE}Shadow POKéMON{COLOR DARK_GRAY}.$"
 
 WesHideout_Entrance_Text_Wes_Zander_Report:
 	.string "Right on! Looks like you were able to\n"

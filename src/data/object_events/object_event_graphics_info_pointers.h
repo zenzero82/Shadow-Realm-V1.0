@@ -245,6 +245,7 @@ extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_HoOh;
 extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_PokeBall;
 extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_BallTm;
 extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_ZygardeCube;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_ItemShine;
 extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_LaprasSurf;
 extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_TowerBeam;
 extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_Follower;
@@ -508,6 +509,7 @@ extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_Lovrina;
 extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_Michael;
 extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_Nascour;
 extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_SnagemGrunt;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_SnagemAgrev;
 extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_Venus;
 extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_Ash;
 extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_MirrorB;
@@ -584,6 +586,7 @@ const struct ObjectEventGraphicsInfo *const gObjectEventGraphicsInfoPointers[NUM
     [OBJ_EVENT_GFX_ITEM_BALL] =                &gObjectEventGraphicsInfo_PokeBall,
     [OBJ_EVENT_GFX_BALL_TM] =                  &gObjectEventGraphicsInfo_BallTm,
     [OBJ_EVENT_GFX_ZYGARDE_CUBE] =             &gObjectEventGraphicsInfo_ZygardeCube,
+    [OBJ_EVENT_GFX_ITEM_SHINE] =               &gObjectEventGraphicsInfo_ItemShine,
     [OBJ_EVENT_GFX_LAPRAS_SURF] =              &gObjectEventGraphicsInfo_LaprasSurf,
     [OBJ_EVENT_GFX_TOWER_BEAM] =               &gObjectEventGraphicsInfo_TowerBeam,
     [OBJ_EVENT_GFX_BERRY_TREE] =               &gObjectEventGraphicsInfo_BerryTree,
@@ -991,6 +994,7 @@ const struct ObjectEventGraphicsInfo *const gObjectEventGraphicsInfoPointers[NUM
     [OBJ_EVENT_GFX_MICHAEL] = &gObjectEventGraphicsInfo_Michael,
     [OBJ_EVENT_GFX_NASCOUR] = &gObjectEventGraphicsInfo_Nascour,
     [OBJ_EVENT_GFX_SNAGEM_GRUNT] = &gObjectEventGraphicsInfo_SnagemGrunt,
+    [OBJ_EVENT_GFX_SNAGEM_AGREV] = &gObjectEventGraphicsInfo_SnagemAgrev,
     [OBJ_EVENT_GFX_VENUS] = &gObjectEventGraphicsInfo_Venus,
     [OBJ_EVENT_GFX_ASH] = &gObjectEventGraphicsInfo_Ash,
     [OBJ_EVENT_GFX_IRONMASK] = &gObjectEventGraphicsInfo_Ironmask,

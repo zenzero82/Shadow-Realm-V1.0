@@ -118,6 +118,7 @@ static const u8 sText_FoePkmnPrefix[] = _("The opposing ");
 static const u8 sText_WildPkmnPrefixLower[] = _("the wild ");
 static const u8 sText_FoePkmnPrefixLower[] = _("the opposing ");
 static const u8 sText_EmptyString8[] = _("");
+static const u8 sText_Jinwoos[] = _("JINWOO's");
 static const u8 sText_FoePkmnPrefix2[] = _("Opposing");
 static const u8 sText_AllyPkmnPrefix[] = _("Ally");
 static const u8 sText_FoePkmnPrefix3[] = _("Opposing");
@@ -166,8 +167,8 @@ static const u8 sText_BerrySuffix[] = _(" BERRY"); //no decapitalize until it is
 const u8 gText_EmptyString3[] = _("");
 
 static const u8 sText_TwoInGameTrainersDefeated[] = _("You defeated\n{B_TRAINER1_NAME_WITH_CLASS} and {B_TRAINER2_NAME_WITH_CLASS}!\p");
-static const u8 sText_ShadowPokemonFledTrainer[] = COMPOUND_STRING("The {COLOR PURPLE}Shadow POKéMON{COLOR WHITE} has fled from\n{B_TRAINER1_NAME}.\p");
-static const u8 sText_ShadowPokemonFledGeneric[] = COMPOUND_STRING("The {COLOR PURPLE}Shadow POKéMON{COLOR WHITE} appears to have fled.\p");
+static const u8 sText_ShadowPokemonFledTrainer[] = COMPOUND_STRING("The {COLOR BLUE}Shadow POKéMON{COLOR WHITE} has fled from\n{B_TRAINER1_NAME}.\p");
+static const u8 sText_ShadowPokemonFledGeneric[] = COMPOUND_STRING("The {COLOR BLUE}Shadow POKéMON{COLOR WHITE} appears to have fled.\p");
 
 // New battle strings.
 const u8 gText_drastically[] = _("drastically ");
@@ -547,8 +548,10 @@ const u8 *const gBattleStringsTable[STRINGID_COUNT] =
     [STRINGID_QUESTIONFORFEITMATCH]                 = COMPOUND_STRING("Would you like to forfeit the match and quit now?"),
     [STRINGID_FORFEITEDMATCH]                       = COMPOUND_STRING("The match was forfeited."),
     [STRINGID_PKMNTRANSFERREDSOMEONESPC]            = gText_PkmnTransferredSomeonesPC,
+    [STRINGID_PKMNTRANSFERREDJINWOOSPC]             = gText_PkmnTransferredJinwoosPC,
     [STRINGID_PKMNTRANSFERREDLANETTESPC]            = gText_PkmnTransferredLanettesPC,
     [STRINGID_PKMNBOXSOMEONESPCFULL]                = gText_PkmnTransferredSomeonesPCBoxFull,
+    [STRINGID_PKMNBOXJINWOOSPCFULL]                 = gText_PkmnTransferredJinwoosPCBoxFull,
     [STRINGID_PKMNBOXLANETTESPCFULL]                = gText_PkmnTransferredLanettesPCBoxFull,
     [STRINGID_TRAINER1WINTEXT]                      = COMPOUND_STRING("{B_TRAINER1_WIN_TEXT}"),
     [STRINGID_TRAINER2WINTEXT]                      = COMPOUND_STRING("{B_TRAINER2_WIN_TEXT}"),
@@ -910,7 +913,7 @@ const u8 *const gBattleStringsTable[STRINGID_COUNT] =
     [STRINGID_FORFEITBATTLEGAVEMONEY]               = COMPOUND_STRING("You gave ¥{B_BUFF1} to the winner…{PAUSE_UNTIL_PRESS}"),
     [STRINGID_POWERCONSTRUCTPRESENCEOFMANY]         = COMPOUND_STRING("You sense the presence of many!"),
     [STRINGID_POWERCONSTRUCTTRANSFORM]              = COMPOUND_STRING("{B_ATK_NAME_WITH_PREFIX} transformed into its Complete Forme!"),
-    [STRINGID_SHADOWPKMNNOTICE]                     = COMPOUND_STRING("Oh! A {COLOR PURPLE}Shadow Pokémon{COLOR DARK_GRAY}!\p"),
+    [STRINGID_SHADOWPKMNNOTICE]                     = COMPOUND_STRING("Oh! A {COLOR BLUE}Shadow Pokémon{COLOR DARK_GRAY}!\p"),
     [STRINGID_TRAINERCALLTOMON]                     = COMPOUND_STRING("{B_ATK_TRAINER_NAME} called out to {B_ATK_NAME_WITH_PREFIX}!"),
     [STRINGID_PKMNSTOREDEXP]                        = COMPOUND_STRING("{B_BUFF1} stored{B_BUFF2} {B_BUFF3} EXP. Points!\p"),
     [STRINGID_PKMNHEARTGAUGEUPDATE]                 = COMPOUND_STRING("The door to {B_BUFF1}'s heart opened a little!\p"),
@@ -923,7 +926,7 @@ const u8 *const gBattleStringsTable[STRINGID_COUNT] =
     [STRINGID_REVERSEMODE_CALLED]                   = COMPOUND_STRING("{B_ATK_NAME_WITH_PREFIX} came to its senses!"),
     [STRINGID_GOTCHAPKMNCAUGHTTRAINER]              = COMPOUND_STRING("Gotcha! {B_DEF_NAME} was caught!{WAIT_SE}\p"),
     [STRINGID_TRAINERCALLEDTOMON]                   = COMPOUND_STRING("{B_PLAYER_NAME} called to {B_ATK_NAME_WITH_PREFIX}!\p"),
-    [STRINGID_SHADOWCALMEDSLIGHTLY]                 = COMPOUND_STRING("The {COLOR PURPLE}Shadow Pokémon{COLOR DARK_GRAY} calmed down a little!\p"),
+    [STRINGID_SHADOWCALMEDSLIGHTLY]                 = COMPOUND_STRING("The {COLOR BLUE}Shadow Pokémon{COLOR DARK_GRAY} calmed down a little!\p"),
     [STRINGID_SHADOWCAMETOSENSES]                   = COMPOUND_STRING("{B_ATK_NAME_WITH_PREFIX} came to its senses!\p"),
     [STRINGID_TRAINERENCOURAGEDMON]                 = COMPOUND_STRING("{B_ATK_NAME_WITH_PREFIX} was encouraged!\p"),
 
@@ -1392,8 +1395,10 @@ const u16 gFlashFireStringIds[] =
 const u16 gCaughtMonStringIds[] =
 {
     [B_MSG_SENT_SOMEONES_PC]   = STRINGID_PKMNTRANSFERREDSOMEONESPC,
+    [B_MSG_SENT_JINWOOS_PC]    = STRINGID_PKMNTRANSFERREDJINWOOSPC,
     [B_MSG_SENT_LANETTES_PC]   = STRINGID_PKMNTRANSFERREDLANETTESPC,
     [B_MSG_SOMEONES_BOX_FULL]  = STRINGID_PKMNBOXSOMEONESPCFULL,
+    [B_MSG_JINWOOS_BOX_FULL]   = STRINGID_PKMNBOXJINWOOSPCFULL,
     [B_MSG_LANETTES_BOX_FULL]  = STRINGID_PKMNBOXLANETTESPCFULL,
     [B_MSG_SWAPPED_INTO_PARTY] = STRINGID_PKMNSENTTOPCAFTERCATCH,
 };
@@ -2951,6 +2956,8 @@ u32 BattleStringExpandPlaceholders(const u8 *src, u8 *dst, u32 dstSize)
             case B_TXT_PC_CREATOR_NAME: // lanette pc
                 if (FlagGet(FLAG_SYS_PC_LANETTE))
                     toCpy = sText_Lanettes;
+                else if (FlagGet(FLAG_SYS_NOT_SOMEONES_PC))
+                    toCpy = sText_Jinwoos;
                 else
                     toCpy = sText_Someones;
                 break;

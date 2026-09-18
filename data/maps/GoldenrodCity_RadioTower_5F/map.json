@@ -2,7 +2,7 @@
   "id": "MAP_GOLDENROD_CITY_RADIO_TOWER_5F",
   "name": "GoldenrodCity_RadioTower_5F",
   "layout": "LAYOUT_GOLDENROD_CITY_RADIO_TOWER_5F",
-  "music": "MUS_HG_GOLDENROD",
+  "music": "MUS_THE_UNDER",
   "region_map_section": "MAPSEC_GOLDENROD_CITY",
   "requires_flash": false,
   "weather": "WEATHER_NONE",
@@ -15,6 +15,7 @@
   "connections": null,
   "object_events": [
     {
+      "local_id": "LOCALID_GOLDENROD_RADIO_5F_VENUS",
       "graphics_id": "OBJ_EVENT_GFX_VENUS",
       "x": 11,
       "y": 11,
@@ -25,9 +26,10 @@
       "trainer_type": "TRAINER_TYPE_NONE",
       "trainer_sight_or_berry_tree_id": "0",
       "script": "GoldenrodCity_RadioTower_5F_EventScript_Venus",
-      "flag": "0"
+      "flag": "FLAG_HIDE_GOLDENROD_RADIO_5F_VENUS"
     },
     {
+      "local_id": "LOCALID_GOLDENROD_RADIO_5F_GOODRA",
       "graphics_id": "OBJ_EVENT_GFX_SPECIES_SHADOW(GOODRA)",
       "x": 9,
       "y": 10,
@@ -37,10 +39,11 @@
       "movement_range_y": 0,
       "trainer_type": "TRAINER_TYPE_NONE",
       "trainer_sight_or_berry_tree_id": "0",
-      "script": "GoldenrodCity_RadioTower_5F_EventScript_Grunt1",
-      "flag": "0"
+      "script": "NULL",
+      "flag": "FLAG_HIDE_GOLDENROD_RADIO_5F_GOODRA"
     },
     {
+      "local_id": "LOCALID_GOLDENROD_RADIO_5F_VENUSAUR",
       "graphics_id": "OBJ_EVENT_GFX_SPECIES_SHADOW(VENUSAUR)",
       "x": 13,
       "y": 10,
@@ -50,8 +53,8 @@
       "movement_range_y": 0,
       "trainer_type": "TRAINER_TYPE_NONE",
       "trainer_sight_or_berry_tree_id": "0",
-      "script": "GoldenrodCity_RadioTower_5F_EventScript_Grunt2",
-      "flag": "0"
+      "script": "NULL",
+      "flag": "FLAG_HIDE_GOLDENROD_RADIO_5F_VENUSAUR"
     },
     {
       "graphics_id": "OBJ_EVENT_GFX_CAMERAMAN",
@@ -63,7 +66,7 @@
       "movement_range_y": 0,
       "trainer_type": "TRAINER_TYPE_NONE",
       "trainer_sight_or_berry_tree_id": "0",
-      "script": "NULL",
+      "script": "GoldenrodCity_RadioTower_5F_EventScript_Cameraman",
       "flag": "0"
     },
     {
@@ -76,11 +79,26 @@
       "movement_range_y": 0,
       "trainer_type": "TRAINER_TYPE_NONE",
       "trainer_sight_or_berry_tree_id": "0",
-      "script": "NULL",
+      "script": "GoldenrodCity_RadioTower_5F_EventScript_Grunt1",
       "flag": "0"
     },
     {
-      "graphics_id": "OBJ_EVENT_GFX_LOVRINA",
+      "local_id": "LOCALID_GOLDENROD_RADIO_5F_HOOPA_RING",
+      "graphics_id": "OBJ_EVENT_GFX_HOOPA_RING",
+      "x": 11,
+      "y": 10,
+      "elevation": 0,
+      "movement_type": "MOVEMENT_TYPE_NONE",
+      "movement_range_x": 0,
+      "movement_range_y": 0,
+      "trainer_type": "TRAINER_TYPE_NONE",
+      "trainer_sight_or_berry_tree_id": "0",
+      "script": "NULL",
+      "flag": "FLAG_HIDE_GOLDENROD_RADIO_5F_HOOPA_RING"
+    },
+    {
+      "local_id": "LOCALID_GOLDENROD_RADIO_5F_MARNIE",
+      "graphics_id": "OBJ_EVENT_GFX_MARNIE_GEN8",
       "x": 20,
       "y": 12,
       "elevation": 0,
@@ -90,7 +108,7 @@
       "trainer_type": "TRAINER_TYPE_NONE",
       "trainer_sight_or_berry_tree_id": "0",
       "script": "NULL",
-      "flag": "0"
+      "flag": "FLAG_HIDE_GOLDENROD_RADIO_5F_MARNIE"
     }
   ],
   "warp_events": [
@@ -109,6 +127,97 @@
       "dest_warp_id": "3"
     }
   ],
-  "coord_events": [],
+  "coord_events": [
+    {
+      "type": "trigger",
+      "x": 13,
+      "y": 10,
+      "elevation": 0,
+      "var": "VAR_TEMP_0",
+      "var_value": "0",
+      "script": "GoldenrodCity_RadioTower_5F_EventScript_HoopaTrap"
+    },
+    {
+      "type": "trigger",
+      "x": 14,
+      "y": 10,
+      "elevation": 0,
+      "var": "VAR_TEMP_0",
+      "var_value": "0",
+      "script": "GoldenrodCity_RadioTower_5F_EventScript_HoopaTrap"
+    },
+    {
+      "type": "trigger",
+      "x": 15,
+      "y": 10,
+      "elevation": 0,
+      "var": "VAR_TEMP_0",
+      "var_value": "0",
+      "script": "GoldenrodCity_RadioTower_5F_EventScript_HoopaTrap"
+    },
+    {
+      "type": "trigger",
+      "x": 9,
+      "y": 10,
+      "elevation": 0,
+      "var": "VAR_TEMP_0",
+      "var_value": "0",
+      "script": "GoldenrodCity_RadioTower_5F_EventScript_HoopaTrap"
+    },
+    {
+      "type": "trigger",
+      "x": 8,
+      "y": 10,
+      "elevation": 0,
+      "var": "VAR_TEMP_0",
+      "var_value": "0",
+      "script": "GoldenrodCity_RadioTower_5F_EventScript_HoopaTrap"
+    },
+    {
+      "type": "trigger",
+      "x": 19,
+      "y": 12,
+      "elevation": 0,
+      "var": "VAR_TEMP_0",
+      "var_value": "0",
+      "script": "GoldenrodCity_RadioTower_5F_EventScript_MarnieTriggerLeft"
+    },
+    {
+      "type": "trigger",
+      "x": 19,
+      "y": 13,
+      "elevation": 0,
+      "var": "VAR_TEMP_0",
+      "var_value": "0",
+      "script": "GoldenrodCity_RadioTower_5F_EventScript_MarnieTriggerDownLeft"
+    },
+    {
+      "type": "trigger",
+      "x": 20,
+      "y": 13,
+      "elevation": 0,
+      "var": "VAR_TEMP_0",
+      "var_value": "0",
+      "script": "GoldenrodCity_RadioTower_5F_EventScript_MarnieTriggerDown"
+    },
+    {
+      "type": "trigger",
+      "x": 13,
+      "y": 11,
+      "elevation": 0,
+      "var": "VAR_TEMP_0",
+      "var_value": "0",
+      "script": "GoldenrodCity_RadioTower_5F_EventScript_VenusTriggerRight"
+    },
+    {
+      "type": "trigger",
+      "x": 9,
+      "y": 11,
+      "elevation": 0,
+      "var": "VAR_TEMP_0",
+      "var_value": "0",
+      "script": "GoldenrodCity_RadioTower_5F_EventScript_VenusTriggerLeft"
+    }
+  ],
   "bg_events": []
 }

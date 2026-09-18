@@ -1,3 +1,5 @@
+	.set SCRIPT_EFFECT_TAG, 2
+
 @ 'requests_effects' should be set to 1 if the special contains a call
 @ to 'Script_RequestEffects', which allows it to be analyzed with
 @ 'RunScriptImmediatelyUntilEffect'.
@@ -8,7 +10,7 @@
 	.if \requests_effects == 0
 	.4byte \ptr
 	.else
-	.4byte \ptr + ROM_SIZE
+	.4byte \ptr + SCRIPT_EFFECT_TAG
 	.endif
 .endm
 
@@ -386,6 +388,7 @@ gSpecials::
 	def_special Script_FadeOutMapMusic
 	def_special SetPacifidlogTMReceivedDay
 	def_special GetDaysUntilPacifidlogTMAvailable
+	def_special GetDayOfWeek
 	def_special HasAllHoennMons
 	def_special MonOTNameNotPlayer
 	def_special BufferLottoTicketNumber
@@ -598,10 +601,20 @@ gSpecials::
 	def_special UseBlankMessageToCancelPokemonPic
 	def_special EnterCode
 	def_special GetCodeFeedback
+	def_special ZenwoosBlessing_HasPendingGift
+	def_special ZenwoosBlessing_TryDeliverGift
+	def_special ZenwoosBlessing_WasGiftRedeemedThisVisit
+	def_special ZenwoosBlessing_ClearGiftRedeemedThisVisit
 	def_special RoamingHunter_TryCreateNpcOnMap
 	def_special RoamingHunter_TryConsumeAlert
 	def_special RoamingHunter_StartBattle
 	def_special RoamingHunter_OnBattleWon
+	def_special RoamingHunter_DidPlayerWinBattle
+	def_special RoamingHunter_GetActiveTrainerId
+	def_special RoamingHunter_LoadIntroText
+	def_special RoamingHunter_LoadDefeatText
+	def_special RoamingHunter_LoadOutroText
+	def_special RoamingHunter_DespawnNpc
 	def_special BufferGoldMomSavings
 	def_special GoldMomSavingsHasMoney
 	def_special GoldMomSavingsWithdrawAll
@@ -622,3 +635,4 @@ gSpecials::
 	def_special SetVermilionTrashCans
 	def_special Special_RestoreNebbyFollower
 	def_special IsHoldingAButton
+	def_special LavenderNPCQuest_RecordInteriorNPC

@@ -2,6 +2,15 @@ viridian_pokemart_MapScripts::
 	map_script MAP_SCRIPT_ON_TRANSITION, viridian_pokemart_OnTransition
 	.byte 0
 
+viridian_pokemart_Speaker_Youngster:
+	.string "Owen$"
+
+viridian_pokemart_Speaker_Lass:
+	.string "Nora$"
+
+viridian_pokemart_Speaker_Woman:
+	.string "Elise$"
+
 viridian_pokemart_OnTransition:
 	checkflag FLAG_QUEST_BACK_TO_HQ_STARTED
 	goto_if_eq VAR_RESULT, FALSE, viridian_pokemart_HideCivilians
@@ -15,6 +24,7 @@ viridian_pokemart_HideCivilians:
 viridian_pokemart_EventScript_Youngster::
 	lock
 	faceplayer
+	setspeaker viridian_pokemart_Speaker_Youngster
 	msgbox viridian_pokemart_Text_Youngster, MSGBOX_DEFAULT
 	release
 	end
@@ -22,6 +32,7 @@ viridian_pokemart_EventScript_Youngster::
 viridian_pokemart_EventScript_Lass::
 	lock
 	faceplayer
+	setspeaker viridian_pokemart_Speaker_Lass
 	msgbox viridian_pokemart_Text_Lass, MSGBOX_DEFAULT
 	release
 	end
@@ -29,6 +40,7 @@ viridian_pokemart_EventScript_Lass::
 viridian_pokemart_EventScript_Woman::
 	lock
 	faceplayer
+	setspeaker viridian_pokemart_Speaker_Woman
 	msgbox viridian_pokemart_Text_Woman, MSGBOX_DEFAULT
 	release
 	end

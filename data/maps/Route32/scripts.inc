@@ -35,7 +35,7 @@ Route32_Speaker_AquaGrunt:
 	.string "MASON$"
 
 Route32_Speaker_FatMan:
-	.string "HANK$"
+	.string "KYLE$"
 
 Route32_Speaker_Camper:
 	.string "CALEB$"
@@ -44,7 +44,7 @@ Route32_Speaker_YoungsterNPC:
 	.string "OLLIE$"
 
 Route32_Speaker_Cooltrainer:
-	.string "KARA$"
+	.string "DAREN$"
 
 @ =========================================================
 @ TRAINERS

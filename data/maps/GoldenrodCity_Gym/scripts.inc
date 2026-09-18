@@ -6,7 +6,7 @@ GoldenrodCity_Gym_Speaker_Whitney:
 	.string "WHITNEY$"
 
 GoldenrodCity_Gym_Speaker_GymGuy:
-	.string "GUIDE$"
+	.string "Gym Guy$"
 
 GoldenrodCity_Gym_Speaker_Carrie:
 	.string "CARRIE$"
@@ -37,14 +37,16 @@ GoldenrodCity_Gym_EventScript_Whitney::
 	lock
 	faceplayer
 	goto_if_set FLAG_BADGE19_GET, GoldenrodCity_Gym_EventScript_Whitney_After
+	playbgm MUS_RG_ENCOUNTER_GYM_LEADER, FALSE
 	setspeaker GoldenrodCity_Gym_Speaker_Whitney
 	msgbox GoldenrodCity_Gym_Text_Whitney_Intro, MSGBOX_DEFAULT
 	trainerbattle_no_intro TRAINER_LEADER_WHITNEY, GoldenrodCity_Gym_Text_Whitney_Defeat
-	applymovement LOCALID_PLAYER, GoldenrodCity_Gym_Movement_PlayerStepRight
+	turnobject LOCALID_PLAYER, DIR_SOUTH
 	applymovement LOCALID_GOLDENROD_CITY_GYM_MARA, GoldenrodCity_Gym_Movement_MaraStepUp
 	waitmovement 0
 	setspeaker GoldenrodCity_Gym_Speaker_Mara
 	msgbox GoldenrodCity_Gym_Text_Mara_Alert, MSGBOX_DEFAULT
+	turnobject LOCALID_PLAYER, DIR_NORTH
 	setspeaker GoldenrodCity_Gym_Speaker_Whitney
 	msgbox GoldenrodCity_Gym_Text_Whitney_Badge, MSGBOX_DEFAULT
 	message GoldenrodCity_Gym_Text_ReceivedPlainBadge
@@ -55,6 +57,7 @@ GoldenrodCity_Gym_EventScript_Whitney::
 	addvar VAR_NUM_BADGES, 1
 	setvar VAR_0x8008, 19
 	call GoldenrodCity_Gym_EventScript_SetGymTrainers
+	setspeaker GoldenrodCity_Gym_Speaker_Whitney
 	msgbox GoldenrodCity_Gym_Text_Whitney_After, MSGBOX_DEFAULT
 	closemessage
 	release
@@ -124,10 +127,10 @@ GoldenrodCity_Gym_EventScript_ExitTrigger_MoveGymGuyDone:
 	turnobject LOCALID_GOLDENROD_CITY_GYM_GYM_GUY, DIR_SOUTH
 	setspeaker GoldenrodCity_Gym_Speaker_GymGuy
 	msgbox GoldenrodCity_Gym_Text_GymGuy_BasementKey1, MSGBOX_DEFAULT
-	giveitem ITEM_BASEMENT_KEY
-	goto_if_eq VAR_RESULT, FALSE, GoldenrodCity_Gym_EventScript_ExitTrigger_BagFull
-	setflag FLAG_GOLDENROD_BASEMENT_KEY_GIVEN
 	msgbox GoldenrodCity_Gym_Text_GymGuy_BasementKey2, MSGBOX_DEFAULT
+	setflag FLAG_GOLDENROD_BASEMENT_KEY_GIVEN
+	setflag FLAG_QUEST_GOLDENROD_NPCS_STARTED
+	call QuestJournal_EventScript_NewQuestAlert
 	switch VAR_0x8004
 	case 0, GoldenrodCity_Gym_EventScript_ExitTrigger_ReturnGymGuyLeft
 	case 1, GoldenrodCity_Gym_EventScript_ExitTrigger_ReturnGymGuyCenter
@@ -149,10 +152,6 @@ GoldenrodCity_Gym_EventScript_ExitTrigger_ReturnGymGuyDone:
 	turnobject LOCALID_GOLDENROD_CITY_GYM_GYM_GUY, DIR_SOUTH
 	releaseall
 	end
-
-GoldenrodCity_Gym_EventScript_ExitTrigger_BagFull:
-	setvar VAR_TEMP_0, 0
-	goto Common_EventScript_ShowBagIsFull
 
 GoldenrodCity_Gym_EventScript_ExitTrigger_End:
 	releaseall
@@ -233,16 +232,32 @@ GoldenrodCity_Gym_Text_GymGuy_After:
 	.string "Goldenrod needed a win.$"
 
 GoldenrodCity_Gym_Text_GymGuy_BasementKey1:
-	.string "Before you go, I also took a peek\n"
-	.string "outside and I noticed that there was\n"
-	.string "a guy in a white uniform blocking the\n"
-	.string "underground entrance.\p"
-	.string "I would imagine something is happening\n"
-	.string "down there. Take this BASEMENT KEY\n"
-	.string "just in case, it can open those doors.$"
+	.string "Hey kid! The RADIO TOWER,\n"
+	.string "CIPHER has taken it over and they\l"
+	.string "are preparing for a broadcast!\p"
+	.string "WHITNEY's POKeMON are much\n"
+	.string "too weak right now, so she needs\l"
+	.string "to stay here and make sure the \n"
+	.string "people of the city are safe.\p"
+	.string "{PLAYER}, can you go see if you can\n"
+	.string "figure out what is going on over\l"
+	.string "there?$"
 
 GoldenrodCity_Gym_Text_GymGuy_BasementKey2:
-	.string "Good luck, and congrats on the win!$"
+	.string "The RADIO TOWER CEO\n"
+	.string "and their workers were spotted being\l"
+	.string "moved through the underground tunnels.\p"
+	.string "Some are saying that the doors are\n"
+	.string "locked!\p"
+	.string "There's a connection in\n"
+	.string "the GOLDENROD DEPARTMENT STORE.\p"
+	.string "In the basement, there's a storage\n"
+	.string "area that links to the tunnel.\p"
+	.string "That has to be where they\n"
+	.string "were moved.\p"
+	.string "Can you go check that out and see if\n"
+	.string "you find anything? Maybe there's a\l"
+	.string "clue if nothing else.$"
 
 GoldenrodCity_Gym_Text_Carrie_Intro:
 	.string "If Goldenrod's under pressure, we just\n"
@@ -290,9 +305,9 @@ GoldenrodCity_Gym_Text_Mara_After:
 
 GoldenrodCity_Gym_Text_Whitney_Intro:
 	.string "I'm WHITNEY!\p"
-	.string "The city is being taken over you say?\n"
+	.string "The city is being taken over you say?\p"
 	.string "You're just trying to distract me,\n"
-	.string "I've been listening to the radio and\n"
+	.string "I've been listening to the radio and\l"
 	.string "I haven't heard a thing!\p"
 	.string "Now lets battle!$"
 
@@ -304,32 +319,28 @@ GoldenrodCity_Gym_Text_ReceivedPlainBadge:
 
 GoldenrodCity_Gym_Text_Whitney_Badge:
 	.string "Oh no! They must have been running a\n"
-	.string "different program to the city as I\n"
+	.string "different program to the city as I\l"
 	.string "heard nothing on the airwaves.\p"
 	.string "{PLAYER} since you defeated me I know\n"
-	.string "you have what it takes to run those\n"
+	.string "you have what it takes to run those\l"
 	.string "guys out. Here take this badge.$"
 
 GoldenrodCity_Gym_Text_Whitney_After:
 	.string "By the way your POKéMON should be able\n"
 	.string "to continue getting stronger.\p"
 	.string "In terms of level I would say 44 is\n"
-	.string "the bar now. Be careful {PLAYER},\n"
+	.string "the bar now. Be careful {PLAYER},\l"
 	.string "I'll do my best to lend some help!$"
 
 GoldenrodCity_Gym_Text_Mara_Alert:
 	.string "WHITNEY he's telling the truth!\n"
-	.string "While you were battling I took a walk\n"
-	.string "over to the RADIO TOWER and it's been\n"
+	.string "While you were battling I took a walk\l"
+	.string "over to the RADIO TOWER and it's been\l"
 	.string "hijacked!$"
 
 GoldenrodCity_Gym_Text_Miltank:
 	.string "Miltank looks ready to charge into\n"
 	.string "another battle.$"
-
-GoldenrodCity_Gym_Movement_PlayerStepRight:
-	walk_right
-	step_end
 
 GoldenrodCity_Gym_Movement_MaraStepUp:
 	walk_up

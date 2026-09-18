@@ -472,6 +472,9 @@ const u16 gMetatileAttributes_burnedtower[] = INCBIN_U16("data/tilesets/secondar
 const u16 gMetatiles_shadowrealm[] = INCBIN_U16("data/tilesets/primary/shadowrealm/metatiles.bin");
 const u16 gMetatileAttributes_shadowrealm[] = INCBIN_U16("data/tilesets/primary/shadowrealm/metatile_attributes.bin");
 
+const u16 gMetatiles_agate_village[] = INCBIN_U16("data/tilesets/primary/agate_village/metatiles.bin");
+const u16 gMetatileAttributes_agate_village[] = INCBIN_U16("data/tilesets/primary/agate_village/metatile_attributes.bin");
+
 const u16 gMetatiles_wescave[] = INCBIN_U16("data/tilesets/primary/wescave/metatiles.bin");
 const u16 gMetatileAttributes_wescave[] = INCBIN_U16("data/tilesets/primary/wescave/metatile_attributes.bin");
 
@@ -504,3 +507,6 @@ const u16 gMetatileAttributes_Cave_DragonsDen[] = INCBIN_U16("data/tilesets/seco
 
 const u16 gMetatiles_DragonsDen_Shrine[] = INCBIN_U16("data/tilesets/secondary/dragons_den_shrine/metatiles.bin");
 const u16 gMetatileAttributes_DragonsDen_Shrine[] = INCBIN_U16("data/tilesets/secondary/dragons_den_shrine/metatile_attributes.bin");
+
+const u16 gMetatiles_agate[] = INCBIN_U16("data/tilesets/secondary/agate/metatiles.bin");
+const u16 gMetatileAttributes_agate[] = INCBIN_U16("data/tilesets/secondary/agate/metatile_attributes.bin");

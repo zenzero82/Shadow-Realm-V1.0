@@ -34,7 +34,9 @@
 #include "pokemon.h"
 #include "pokemon_animation.h"
 #include "pokemon_icon.h"
+#include "route_outbreak.h"
 #include "shadow_graphics.h"
+#include "shadow_heart.h"
 #include "pokemon_summary_screen.h"
 #include "pokemon_storage_system.h"
 #include "random.h"
@@ -76,6 +78,12 @@
 #include "constants/species.h"
 
 extern const u16 gMonPalette_PikachuShadow[];
+extern const u16 gMonPalette_RioluGiftAura[];
+extern const u16 gMonPalette_LucarioGiftAura[];
+extern const u16 gMonPalette_LucarioMegaGiftAura[];
+
+#define GIFT_AURA_PERSONALITY_MASK  0xFFFF0000
+#define GIFT_AURA_PERSONALITY_VALUE 0xA71A0000
 
 static u32 GetShinyOddsThreshold(void)
 {
@@ -1190,7 +1198,7 @@ void CreateBoxMon(struct BoxPokemon *boxMon, u16 species, u8 level, u8 fixedIV, 
         else
         {
             u32 totalRerolls = 0;
-            u32 shinyOdds = GetShinyOddsThreshold();
+            u32 shinyOdds = RouteOutbreak_ModifyShinyThreshold(species, GetShinyOddsThreshold());
             if (CheckBagHasItem(ITEM_SHINY_CHARM, 1))
                 totalRerolls += I_SHINY_CHARM_ADDITIONAL_ROLLS;
             if (LURE_STEP_COUNT != 0)
@@ -6326,6 +6334,8 @@ u16 GetBattleBGM(void)
         case TRAINER_CLASS_TEAM_FLARE:
         case TRAINER_CLASS_TEAM_FLARE_ADMIN:
             return MUS_BATTLE_TEAM_FLARE;
+        case TRAINER_CLASS_AETHER:
+            return MUS_SHOWDOWN_AETHER;
         case TRAINER_CLASS_TEAM_SKULL:
             return MUS_BATTLE_TEAM_SKULL;
         default:
@@ -6388,8 +6398,69 @@ const u16 *GetMonFrontSpritePal(struct Pokemon *mon)
     return GetMonSpritePalFromSpeciesAndPersonality(species, isShiny, personality);
 }
 
+bool32 IsGiftAuraPersonality(u32 personality)
+{
+    return (personality & GIFT_AURA_PERSONALITY_MASK) == GIFT_AURA_PERSONALITY_VALUE;
+}
+
+u32 CreateGiftAuraPersonality(u8 nature, u32 otId)
+{
+    u32 lower = nature;
+    u32 personality;
+
+    while (((GIFT_AURA_PERSONALITY_VALUE | lower) % NUM_NATURES) != nature)
+        lower++;
+
+    personality = GIFT_AURA_PERSONALITY_VALUE | lower;
+    while (GET_SHINY_VALUE(otId, personality) < SHINY_ODDS)
+        personality += NUM_NATURES;
+
+    return personality;
+}
+
+static const u16 *GetGiftAuraBattlePalette(u16 species, u32 personality, bool32 isShiny)
+{
+    if (isShiny || !IsGiftAuraPersonality(personality))
+        return NULL;
+
+    switch (SanitizeSpeciesId(species))
+    {
+    case SPECIES_RIOLU:
+        return gMonPalette_RioluGiftAura;
+    case SPECIES_LUCARIO:
+        return gMonPalette_LucarioGiftAura;
+    case SPECIES_LUCARIO_MEGA:
+        return gMonPalette_LucarioMegaGiftAura;
+    default:
+        return NULL;
+    }
+}
+
+bool32 ShouldPlayGiftAuraShinyAnimation(struct Pokemon *mon)
+{
+    u16 species = GetMonData(mon, MON_DATA_SPECIES_OR_EGG, NULL);
+    u32 personality = GetMonData(mon, MON_DATA_PERSONALITY, NULL);
+
+    if (!IsGiftAuraPersonality(personality))
+        return FALSE;
+
+    switch (SanitizeSpeciesId(species))
+    {
+    case SPECIES_RIOLU:
+    case SPECIES_LUCARIO:
+    case SPECIES_LUCARIO_MEGA:
+        return TRUE;
+    default:
+        return FALSE;
+    }
+}
+
 const u16 *GetMonSpritePalFromSpeciesAndPersonality(u16 species, bool32 isShiny, u32 personality)
 {
+    const u16 *giftAuraPalette = GetGiftAuraBattlePalette(species, personality, isShiny);
+    if (giftAuraPalette != NULL)
+        return giftAuraPalette;
+
     return GetMonSpritePalFromSpecies(species, isShiny, IsPersonalityFemale(species, personality));
 }
 
@@ -6911,6 +6982,9 @@ struct MonSpritesGfxManager *CreateMonSpritesGfxManager(u8 managerId, u8 mode)
 
     failureFlags = 0;
     managerId %= MON_SPR_GFX_MANAGERS_COUNT;
+    if (sMonSpritesGfxManagers[managerId] != NULL && sMonSpritesGfxManagers[managerId]->active == GFX_MANAGER_ACTIVE)
+        return sMonSpritesGfxManagers[managerId];
+
     gfx = AllocZeroed(sizeof(*gfx));
     if (gfx == NULL)
         return NULL;
@@ -7022,6 +7096,7 @@ void DestroyMonSpritesGfxManager(u8 managerId)
         memset(gfx, 0, sizeof(*gfx));
         Free(gfx);
     }
+    sMonSpritesGfxManagers[managerId] = NULL;
 }
 
 u8 *MonSpritesGfxManager_GetSpritePtr(u8 managerId, u8 spriteNum)
@@ -7657,12 +7732,14 @@ void SetMonHeartValue(struct Pokemon *mon, u16 val)
 {
     val = Shadow_ClampHeartGauge(val);
     SetMonData(mon, MON_DATA_HEART_VALUE, &val);
+    Shadow_SyncQuarterUnlockMove(mon);
 }
 
 void SetMonHeartMax(struct Pokemon *mon, u16 val)
 {
     val = Shadow_ClampHeartGauge(val);
     SetMonData(mon, MON_DATA_HEART_MAX, &val);
+    Shadow_SyncQuarterUnlockMove(mon);
 }
 
 

@@ -64,6 +64,7 @@
 #include "start_menu.h"
 #include "string_util.h"
 #include "strings.h"
+#include "shadow_heart.h"
 #include "task.h"
 #include "text.h"
 #include "text_window.h"
@@ -81,6 +82,8 @@
 #include "constants/party_menu.h"
 #include "constants/rgb.h"
 #include "constants/songs.h"
+
+#if !SWSH_PARTY_MENU
 
 enum {
     MENU_SUMMARY,
@@ -3176,28 +3179,32 @@ static void SetPartyMonFieldSelectionActions(struct Pokemon *mons, u8 slotId)
     sPartyMenuInternal->numActions = 0;
     AppendToList(sPartyMenuInternal->actions, &sPartyMenuInternal->numActions, MENU_SUMMARY);
 
-    // Add field moves to action list
-    for (i = 0; i < MAX_MON_MOVES; i++)
+    // Shadow Pokemon cannot use overworld field moves.
+    if (!GetMonData(&mons[slotId], MON_DATA_IS_SHADOW))
     {
-        for (j = 0; j != FIELD_MOVES_COUNT; j++)
+        // Add field moves to action list
+        for (i = 0; i < MAX_MON_MOVES; i++)
         {
-            if (GetMonData(&mons[slotId], i + MON_DATA_MOVE1) == FieldMove_GetMoveId(j))
+            for (j = 0; j != FIELD_MOVES_COUNT; j++)
             {
-                if (!IsFieldMoveUnlocked(j))
+                if (GetMonData(&mons[slotId], i + MON_DATA_MOVE1) == FieldMove_GetMoveId(j))
+                {
+                    if (!IsFieldMoveUnlocked(j))
+                        break;
+                    AppendToList(sPartyMenuInternal->actions, &sPartyMenuInternal->numActions, j + MENU_FIELD_MOVES);
+                    if (j == FIELD_MOVE_FLY)
+                        hasFlyAction = TRUE;
+                    else if (j == FIELD_MOVE_FLASH)
+                        hasFlashAction = TRUE;
                     break;
-                AppendToList(sPartyMenuInternal->actions, &sPartyMenuInternal->numActions, j + MENU_FIELD_MOVES);
-                if (j == FIELD_MOVE_FLY)
-                    hasFlyAction = TRUE;
-                else if (j == FIELD_MOVE_FLASH)
-                    hasFlashAction = TRUE;
-                break;
+                }
             }
         }
+        if (!hasFlyAction && CanMonUseFlyAction(&mons[slotId]))
+            AppendToList(sPartyMenuInternal->actions, &sPartyMenuInternal->numActions, FIELD_MOVE_FLY + MENU_FIELD_MOVES);
+        if (!hasFlashAction && CanMonUseFlashAction(&mons[slotId]))
+            AppendToList(sPartyMenuInternal->actions, &sPartyMenuInternal->numActions, FIELD_MOVE_FLASH + MENU_FIELD_MOVES);
     }
-    if (!hasFlyAction && CanMonUseFlyAction(&mons[slotId]))
-        AppendToList(sPartyMenuInternal->actions, &sPartyMenuInternal->numActions, FIELD_MOVE_FLY + MENU_FIELD_MOVES);
-    if (!hasFlashAction && CanMonUseFlashAction(&mons[slotId]))
-        AppendToList(sPartyMenuInternal->actions, &sPartyMenuInternal->numActions, FIELD_MOVE_FLASH + MENU_FIELD_MOVES);
 
     if (!InBattlePike())
     {
@@ -6831,6 +6838,50 @@ void ItemUseCB_RelicTablet(u8 taskId, TaskFunc task)
     BeginPurificationScene(mon, gPartyMenu.slotId);
 }
 
+void ItemUseCB_ShadowCologne(u8 taskId, TaskFunc task)
+{
+    struct Pokemon *mon = &gPlayerParty[gPartyMenu.slotId];
+    u16 itemId = gSpecialVar_ItemId;
+    u16 heartValue;
+    u16 reduction;
+
+    PlaySE(SE_SELECT);
+    if (!GetMonData(mon, MON_DATA_IS_SHADOW, NULL))
+    {
+        gPartyMenuUseExitCallback = FALSE;
+        DisplayPartyMenuMessage(gText_ShadowCologneShadowOnly, TRUE);
+        ScheduleBgCopyTilemapToVram(2);
+        gTasks[taskId].func = task;
+        return;
+    }
+
+    heartValue = GetMonData(mon, MON_DATA_HEART_VALUE, NULL);
+    if (heartValue == 0)
+    {
+        gPartyMenuUseExitCallback = FALSE;
+        DisplayPartyMenuMessage(gText_WontHaveEffect, TRUE);
+        ScheduleBgCopyTilemapToVram(2);
+        gTasks[taskId].func = task;
+        return;
+    }
+
+    reduction = Shadow_GetCologneHeartReduction(mon, itemId);
+    SetMonHeartValue(mon, (heartValue > reduction) ? heartValue - reduction : 0);
+    Shdw_UpdatePurifyReadyFlag();
+    RemoveBagItem(itemId, 1);
+
+    GetMonNickname(mon, gStringVar1);
+    CopyItemName(itemId, gStringVar2);
+    StringExpandPlaceholders(gStringVar4, gText_UsedVar2OnVar1);
+    DisplayPartyMenuMessage(gStringVar4, TRUE);
+    ScheduleBgCopyTilemapToVram(2);
+
+    if (gPartyMenu.menuType == PARTY_MENU_TYPE_FIELD && CheckBagHasItem(gSpecialVar_ItemId, 1))
+        gTasks[taskId].func = Task_ReturnToChooseMonAfterText;
+    else
+        gTasks[taskId].func = Task_ClosePartyMenuAfterText;
+}
+
 static bool8 IsShadowDefaultNickname(u16 shadowId, const u8 *nickname)
 {
     static const u8 sText_XD[] = _("XD");
@@ -8938,3 +8989,5 @@ void CursorCb_MoveItem(u8 taskId)
         gTasks[taskId].func = Task_UpdateHeldItemSprite;
     }
 }
+
+#endif // !SWSH_PARTY_MENU

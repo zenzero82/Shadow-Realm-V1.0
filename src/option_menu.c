@@ -71,15 +71,24 @@ enum
 
 enum
 {
+    MENUITEM_SPEED_OVERWORLD,
+    MENUITEM_SPEED_BATTLE,
+    MENUITEM_SPEED_COUNT,
+};
+
+enum
+{
     OPTION_MENU_PAGE_FEATURES,
     OPTION_MENU_PAGE_DIFFICULTY,
     OPTION_MENU_PAGE_OPTIONS,
+    OPTION_MENU_PAGE_SPEED,
     OPTION_MENU_PAGE_COUNT,
 };
 
 static const u8 sOptionMenuPagesDefault[] =
 {
     OPTION_MENU_PAGE_OPTIONS,
+    OPTION_MENU_PAGE_SPEED,
 };
 
 static const u8 sOptionMenuPagesNewGame[] =
@@ -119,6 +128,10 @@ static void EvIvEditor_DrawChoices(u8 selection);
 static u8   LevelCap_ProcessInput(u8 selection);
 static void LevelCap_DrawChoices(u8 selection);
 static void CompetitiveAI_DrawChoices(void);
+static u8   OverworldSpeed_ProcessInput(u8 selection);
+static void OverworldSpeed_DrawChoices(u8 selection);
+static u8   BattleSpeed_ProcessInput(u8 selection);
+static void BattleSpeed_DrawChoices(u8 selection);
 static void DrawOptionMenuTexts(u8 page, u8 selection);
 static void OptionMenu_DrawChoicesForPage(u8 taskId);
 static void DrawFrame(void);
@@ -146,6 +159,8 @@ static u8 OptionMenu_ClampAutoSave(u8 value);
 static u8 OptionMenu_ClampAutoRun(u8 value);
 static u8 OptionMenu_ClampEvIvEditor(u8 value);
 static u8 OptionMenu_ClampLevelCap(u8 value);
+static u8 OptionMenu_ClampOverworldSpeed(u8 value);
+static u8 OptionMenu_ClampBattleSpeed(u8 value);
 
 // EWRAM vars
 EWRAM_DATA static bool8 sArrowPressed = FALSE;
@@ -153,6 +168,9 @@ EWRAM_DATA static bool8 sOptionMenuNewGameSetup = FALSE;
 EWRAM_DATA static u8 sOptionMenuLevelCapSelection;
 EWRAM_DATA static u8 sOptionMenuEvIvEditorSelection;
 EWRAM_DATA static u8 sOptionMenuFeaturesSelection;
+EWRAM_DATA static u8 sOptionMenuSpeedSelection;
+EWRAM_DATA static u8 sOptionMenuOverworldSpeed;
+EWRAM_DATA static u8 sOptionMenuBattleSpeed;
 
 // const rom data
 const u16 gPalOptionMenu[] = INCBIN_U16("graphics/option_menu/option_menu_text.gbapal");
@@ -166,11 +184,13 @@ const u32 gMapOptionMenu5[] = INCBIN_U32("graphics/option_menu/option_menu_5.bin
 const u8 localText_Option[] = _("{COLOR 2}{HIGHLIGHT TRANSPARENT}OPTIONS");
 const u8 localText_Features[] = _("{COLOR 2}{HIGHLIGHT TRANSPARENT}FEATURES");
 const u8 localText_Difficulty[] = _("{COLOR 2}{HIGHLIGHT TRANSPARENT}DIFFICULTY");
+const u8 localText_Speed[] = _("{COLOR 2}{HIGHLIGHT TRANSPARENT}SPEED");
 const u8 localText_InstructionsSave[] = _("{COLOR 2}{HIGHLIGHT TRANSPARENT}SAVE");
 const u8 localText_InstructionsCancel[] = _("{COLOR 2}{HIGHLIGHT TRANSPARENT}CANCEL");
 const u8 localText_InstructionsSaveNewGame[] = _("{COLOR 2}{HIGHLIGHT TRANSPARENT}{A_BUTTON}SAVE");
 const u8 localText_InstructionsPrev[] = _("{COLOR 2}{HIGHLIGHT TRANSPARENT}L:PREV");
 const u8 localText_InstructionsNext[] = _("{COLOR 2}{HIGHLIGHT TRANSPARENT}R:NEXT");
+const u8 localText_InstructionsPage[] = _("{COLOR 2}{HIGHLIGHT TRANSPARENT}L/R:PAGE");
 const u8 localText_TextSpeed[] = _("{COLOR 1}{HIGHLIGHT TRANSPARENT}Text Speed");
 const u8 localText_BattleScene[] = _("{COLOR 1}{HIGHLIGHT TRANSPARENT}BATTLE SCENE");
 const u8 localText_BattleStyle[] = _("{COLOR 1}{HIGHLIGHT TRANSPARENT}BATTLE STYLE");
@@ -210,6 +230,12 @@ const u8 localText_CompetitiveAIHard[] = _("{COLOR 1}{HIGHLIGHT TRANSPARENT}HARD
 const u8 localText_OverworldWild[] = _("{COLOR 1}{HIGHLIGHT TRANSPARENT}VISIBLE WILD");
 const u8 localText_AutoSave[] = _("{COLOR 1}{HIGHLIGHT TRANSPARENT}AUTO SAVE");
 const u8 localText_AutoRun[] = _("{COLOR 1}{HIGHLIGHT TRANSPARENT}AUTO RUN");
+const u8 localText_OverworldSpeed[] = _("{COLOR 1}{HIGHLIGHT TRANSPARENT}OVERWORLD");
+const u8 localText_BattleSpeed[] = _("{COLOR 1}{HIGHLIGHT TRANSPARENT}BATTLE");
+const u8 localText_Speed1x[] = _("{COLOR 1}{HIGHLIGHT TRANSPARENT}1x");
+const u8 localText_Speed2x[] = _("{COLOR 1}{HIGHLIGHT TRANSPARENT}2x");
+const u8 localText_Speed3x[] = _("{COLOR 1}{HIGHLIGHT TRANSPARENT}3x");
+const u8 localText_Speed4x[] = _("{COLOR 1}{HIGHLIGHT TRANSPARENT}4x");
 const u8 localText_TextSpeedDescription[] = _("{COLOR 1}{HIGHLIGHT TRANSPARENT}Choose from three text speed levels.");
 const u8 localText_BattleSceneDescription[] = _("{COLOR 1}{HIGHLIGHT TRANSPARENT}Show or disable animations\nduring battles.");
 const u8 localText_BattleStyleDescription[] = _("{COLOR 1}{HIGHLIGHT TRANSPARENT}Configure the rules that apply in\ncombat.");
@@ -220,6 +246,8 @@ const u8 localText_ShinyOddsDescription[] = _("{COLOR 1}{HIGHLIGHT TRANSPARENT}C
 const u8 localText_OverworldWildDescription[] = _("{COLOR 1}{HIGHLIGHT TRANSPARENT}Show wild Pokemon on the map\n(land encounters only).");
 const u8 localText_AutoSaveDescription[] = _("{COLOR 1}{HIGHLIGHT TRANSPARENT}Autosave every 500 steps.");
 const u8 localText_AutoRunDescription[] = _("{COLOR 1}{HIGHLIGHT TRANSPARENT}Always run while moving.");
+const u8 localText_OverworldSpeedDescription[] = _("{COLOR 1}{HIGHLIGHT TRANSPARENT}Speed up movement and animations.\nHold R for 1x speed.");
+const u8 localText_BattleSpeedDescription[] = _("{COLOR 1}{HIGHLIGHT TRANSPARENT}Speed up battle animations and text.\nMenus stay at 1x. Hold L for 1x.");
 const u8 localText_EvIvEditorOffDescription[] = _("{COLOR 1}{HIGHLIGHT TRANSPARENT}Off: Ev/Iv work as normal.\nItems/Grinding needed.");
 const u8 localText_EvIvEditorOnDescription[] = _("{COLOR 1}{HIGHLIGHT TRANSPARENT}On: Manipulate values from the\nsummary screen. (A on EV/IV page)");
 const u8 localText_LevelCapOffDescription[] = _("{COLOR 1}{HIGHLIGHT TRANSPARENT}Off: Overleveling is allowed.");
@@ -262,6 +290,12 @@ static const u8 *const sOptionMenuItemsNamesDifficulty[MENUITEM_DIFFICULTY_COUNT
     localText_CompetitiveAI,
 };
 
+static const u8 *const sOptionMenuItemsNamesSpeed[MENUITEM_SPEED_COUNT] =
+{
+    localText_OverworldSpeed,
+    localText_BattleSpeed,
+};
+
 static const u8 *const sOptionMenuDescriptionsOptions[MENUITEM_COUNT] =
 {
     localText_TextSpeedDescription,
@@ -285,6 +319,12 @@ static const u8 *const sOptionMenuDescriptionsDifficulty[MENUITEM_DIFFICULTY_COU
 {
     localText_LevelCapNormalDescription,
     localText_CompetitiveAIDescription,
+};
+
+static const u8 *const sOptionMenuDescriptionsSpeed[MENUITEM_SPEED_COUNT] =
+{
+    localText_OverworldSpeedDescription,
+    localText_BattleSpeedDescription,
 };
 
 static const u32 *const sOptionMenuItems[MENUITEM_COUNT] =
@@ -449,6 +489,8 @@ void CB2_InitOptionMenu(void)
     case 8:
         sOptionMenuLevelCapSelection = OptionMenu_ClampLevelCap(gSaveBlock2Ptr->optionsLevelCap);
         sOptionMenuEvIvEditorSelection = OptionMenu_ClampEvIvEditor(gSaveBlock2Ptr->optionsEvIvEditor);
+        sOptionMenuOverworldSpeed = OptionMenu_ClampOverworldSpeed(gSaveBlock2Ptr->optionsOverworldSpeed);
+        sOptionMenuBattleSpeed = OptionMenu_ClampBattleSpeed(gSaveBlock2Ptr->optionsBattleSpeed);
 		PutWindowTilemap(0);
 		DrawOptionMenuTexts(OptionMenu_GetInitialPage(), 0);
         gMain.state++;
@@ -466,6 +508,7 @@ void CB2_InitOptionMenu(void)
         gTasks[taskId].data[TD_PAGE] = initialPage;
         gTasks[taskId].data[TD_PAGE_SELECTION_OPTIONS] = 0;
         sOptionMenuFeaturesSelection = 0;
+        sOptionMenuSpeedSelection = 0;
         switch (initialPage)
         {
         case OPTION_MENU_PAGE_FEATURES:
@@ -473,6 +516,9 @@ void CB2_InitOptionMenu(void)
             break;
         case OPTION_MENU_PAGE_DIFFICULTY:
             gTasks[taskId].data[TD_MENUSELECTION] = 0;
+            break;
+        case OPTION_MENU_PAGE_SPEED:
+            gTasks[taskId].data[TD_MENUSELECTION] = sOptionMenuSpeedSelection;
             break;
         case OPTION_MENU_PAGE_OPTIONS:
         default:
@@ -693,6 +739,25 @@ static void Task_OptionMenuProcessInput(u8 taskId)
                 break;
             }
             break;
+        case OPTION_MENU_PAGE_SPEED:
+            switch (gTasks[taskId].data[TD_MENUSELECTION])
+            {
+            case MENUITEM_SPEED_OVERWORLD:
+                previousOption = sOptionMenuOverworldSpeed;
+                sOptionMenuOverworldSpeed = OverworldSpeed_ProcessInput(sOptionMenuOverworldSpeed);
+                if (previousOption != sOptionMenuOverworldSpeed)
+                    OverworldSpeed_DrawChoices(sOptionMenuOverworldSpeed);
+                break;
+            case MENUITEM_SPEED_BATTLE:
+                previousOption = sOptionMenuBattleSpeed;
+                sOptionMenuBattleSpeed = BattleSpeed_ProcessInput(sOptionMenuBattleSpeed);
+                if (previousOption != sOptionMenuBattleSpeed)
+                    BattleSpeed_DrawChoices(sOptionMenuBattleSpeed);
+                break;
+            default:
+                return;
+            }
+            break;
         default:
             return;
         }
@@ -739,6 +804,8 @@ static void Task_OptionMenuSave(u8 taskId)
 		gSaveBlock2Ptr->optionsAutoRun = gTasks[taskId].data[TD_AUTO_RUN];
 		gSaveBlock2Ptr->optionsEvIvEditor = gTasks[taskId].data[TD_EVIV_EDITOR];
 		gSaveBlock2Ptr->optionsLevelCap = gTasks[taskId].data[TD_LEVEL_CAP];
+		gSaveBlock2Ptr->optionsOverworldSpeed = sOptionMenuOverworldSpeed;
+		gSaveBlock2Ptr->optionsBattleSpeed = sOptionMenuBattleSpeed;
 
 		BeginNormalPaletteFade(0xFFFFFFFF, 0, 0, 0x10, 0);
 		gTasks[taskId].func = Task_OptionMenuFadeOut;
@@ -869,6 +936,8 @@ static u8 OptionMenu_GetItemCount(u8 page)
         return MENUITEM_FEATURES_COUNT;
     case OPTION_MENU_PAGE_DIFFICULTY:
         return MENUITEM_DIFFICULTY_COUNT;
+    case OPTION_MENU_PAGE_SPEED:
+        return MENUITEM_SPEED_COUNT;
     default:
         return 0;
     }
@@ -890,6 +959,10 @@ static const u8 *OptionMenu_GetItemName(u8 page, u8 index)
         if (index >= MENUITEM_DIFFICULTY_COUNT)
             index = 0;
         return sOptionMenuItemsNamesDifficulty[index];
+    case OPTION_MENU_PAGE_SPEED:
+        if (index >= MENUITEM_SPEED_COUNT)
+            index = 0;
+        return sOptionMenuItemsNamesSpeed[index];
     default:
         return localText_TextSpeed;
     }
@@ -915,6 +988,10 @@ static const u8 *OptionMenu_GetDescription(u8 page, u8 index)
         if (index >= MENUITEM_DIFFICULTY_COUNT)
             index = 0;
         return sOptionMenuDescriptionsDifficulty[index];
+    case OPTION_MENU_PAGE_SPEED:
+        if (index >= MENUITEM_SPEED_COUNT)
+            index = 0;
+        return sOptionMenuDescriptionsSpeed[index];
     default:
         return localText_TextSpeedDescription;
     }
@@ -969,6 +1046,8 @@ static const u8 *OptionMenu_GetPageTitle(u8 page)
         return localText_Features;
     case OPTION_MENU_PAGE_DIFFICULTY:
         return localText_Difficulty;
+    case OPTION_MENU_PAGE_SPEED:
+        return localText_Speed;
     default:
         return localText_Option;
     }
@@ -1020,6 +1099,9 @@ static void OptionMenu_ChangePage(u8 taskId, s8 direction)
     case OPTION_MENU_PAGE_FEATURES:
         sOptionMenuFeaturesSelection = selection;
         break;
+    case OPTION_MENU_PAGE_SPEED:
+        sOptionMenuSpeedSelection = selection;
+        break;
     }
 
     {
@@ -1051,6 +1133,9 @@ static void OptionMenu_ChangePage(u8 taskId, s8 direction)
         break;
     case OPTION_MENU_PAGE_DIFFICULTY:
         selection = 0;
+        break;
+    case OPTION_MENU_PAGE_SPEED:
+        selection = sOptionMenuSpeedSelection;
         break;
     default:
         selection = 0;
@@ -1107,6 +1192,20 @@ static u8 OptionMenu_ClampLevelCap(u8 value)
 {
     if (value > OPTIONS_LEVEL_CAP_HARD)
         return OPTIONS_LEVEL_CAP_NORMAL;
+    return value;
+}
+
+static u8 OptionMenu_ClampOverworldSpeed(u8 value)
+{
+    if (value >= OPTIONS_OVERWORLD_SPEED_COUNT)
+        return OPTIONS_OVERWORLD_SPEED_1X;
+    return value;
+}
+
+static u8 OptionMenu_ClampBattleSpeed(u8 value)
+{
+    if (value >= OPTIONS_BATTLE_SPEED_COUNT)
+        return OPTIONS_BATTLE_SPEED_1X;
     return value;
 }
 
@@ -1541,6 +1640,79 @@ static void CompetitiveAI_DrawChoices(void)
     DrawOptionMenuChoice(localText_CompetitiveAIHard,   208, 32, style);
 }
 
+static u8 OverworldSpeed_ProcessInput(u8 selection)
+{
+    if (gMain.newKeys & DPAD_RIGHT)
+    {
+        if (selection < OPTIONS_OVERWORLD_SPEED_COUNT - 1)
+            selection++;
+        else
+            selection = OPTIONS_OVERWORLD_SPEED_1X;
+        sArrowPressed = TRUE;
+    }
+    if (gMain.newKeys & DPAD_LEFT)
+    {
+        if (selection > OPTIONS_OVERWORLD_SPEED_1X)
+            selection--;
+        else
+            selection = OPTIONS_OVERWORLD_SPEED_COUNT - 1;
+        sArrowPressed = TRUE;
+    }
+    return selection;
+}
+
+static void OverworldSpeed_DrawChoices(u8 selection)
+{
+    u8 styles[OPTIONS_OVERWORLD_SPEED_COUNT];
+    u8 i;
+
+    selection = OptionMenu_ClampOverworldSpeed(selection);
+    for (i = 0; i < OPTIONS_OVERWORLD_SPEED_COUNT; i++)
+        styles[i] = 5;
+    styles[selection] = 1;
+
+    DrawOptionMenuChoice(localText_Speed1x, 112, 16, styles[OPTIONS_OVERWORLD_SPEED_1X]);
+    DrawOptionMenuChoice(localText_Speed2x, 142, 16, styles[OPTIONS_OVERWORLD_SPEED_2X]);
+    DrawOptionMenuChoice(localText_Speed3x, 172, 16, styles[OPTIONS_OVERWORLD_SPEED_3X]);
+    DrawOptionMenuChoice(localText_Speed4x, 202, 16, styles[OPTIONS_OVERWORLD_SPEED_4X]);
+}
+
+static u8 BattleSpeed_ProcessInput(u8 selection)
+{
+    if (gMain.newKeys & DPAD_RIGHT)
+    {
+        if (selection < OPTIONS_BATTLE_SPEED_COUNT - 1)
+            selection++;
+        else
+            selection = OPTIONS_BATTLE_SPEED_1X;
+        sArrowPressed = TRUE;
+    }
+    if (gMain.newKeys & DPAD_LEFT)
+    {
+        if (selection > OPTIONS_BATTLE_SPEED_1X)
+            selection--;
+        else
+            selection = OPTIONS_BATTLE_SPEED_COUNT - 1;
+        sArrowPressed = TRUE;
+    }
+    return selection;
+}
+
+static void BattleSpeed_DrawChoices(u8 selection)
+{
+    u8 styles[OPTIONS_BATTLE_SPEED_COUNT];
+    u8 i;
+
+    selection = OptionMenu_ClampBattleSpeed(selection);
+    for (i = 0; i < OPTIONS_BATTLE_SPEED_COUNT; i++)
+        styles[i] = 5;
+    styles[selection] = 1;
+
+    DrawOptionMenuChoice(localText_Speed1x, 112, 32, styles[OPTIONS_BATTLE_SPEED_1X]);
+    DrawOptionMenuChoice(localText_Speed2x, 152, 32, styles[OPTIONS_BATTLE_SPEED_2X]);
+    DrawOptionMenuChoice(localText_Speed3x, 192, 32, styles[OPTIONS_BATTLE_SPEED_3X]);
+}
+
 static void DrawOptionMenuTexts(u8 page, u8 selection)
 {
     u8 i;
@@ -1561,10 +1733,15 @@ static void DrawOptionMenuTexts(u8 page, u8 selection)
 
     FillWindowPixelBuffer(0, PIXEL_FILL(0));
 	AddTextPrinterParameterized(0, FONT_NORMAL, OptionMenu_GetPageTitle(page), 8, 1, TEXT_SPEED_FF, NULL);
-    if (OptionMenu_GetPageCount() > 1)
+    if (OptionMenu_GetPageCount() > 1 && sOptionMenuNewGameSetup)
     {
         AddTextPrinterParameterized(0, FONT_NORMAL, localText_InstructionsPrev, prevX, instructionsY, TEXT_SPEED_FF, NULL);
         AddTextPrinterParameterized(0, FONT_NORMAL, localText_InstructionsNext, nextX, instructionsY, TEXT_SPEED_FF, NULL);
+    }
+    else if (OptionMenu_GetPageCount() > 1)
+    {
+        AddTextPrinterParameterized(0, FONT_NORMAL, localText_InstructionsPage, 76, instructionsY, TEXT_SPEED_FF, NULL);
+        saveX = 148;
     }
     if (sOptionMenuNewGameSetup)
     {
@@ -1573,7 +1750,7 @@ static void DrawOptionMenuTexts(u8 page, u8 selection)
     else
     {
 	    AddTextPrinterParameterized(0, FONT_NORMAL, saveText, saveX, instructionsY , TEXT_SPEED_FF, NULL);
-	    AddTextPrinterParameterized(0, FONT_NORMAL, localText_InstructionsCancel, 204, instructionsY , TEXT_SPEED_FF, NULL);
+	    AddTextPrinterParameterized(0, FONT_NORMAL, localText_InstructionsCancel, 196, instructionsY , TEXT_SPEED_FF, NULL);
     }
 	SetDescriptionForSelection(page, selection);
 	for (i = 0; i < itemCount; i++)
@@ -1605,6 +1782,10 @@ static void OptionMenu_DrawChoicesForPage(u8 taskId)
     case OPTION_MENU_PAGE_DIFFICULTY:
         LevelCap_DrawChoices(gTasks[taskId].data[TD_LEVEL_CAP]);
         CompetitiveAI_DrawChoices();
+        break;
+    case OPTION_MENU_PAGE_SPEED:
+        OverworldSpeed_DrawChoices(sOptionMenuOverworldSpeed);
+        BattleSpeed_DrawChoices(sOptionMenuBattleSpeed);
         break;
     }
 }

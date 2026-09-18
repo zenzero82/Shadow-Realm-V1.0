@@ -43,27 +43,12 @@ GoldenrodCity_UndergroundTunnel_EventScript_CipherPeon::
 	setspeaker GoldenrodCity_UndergroundTunnel_Speaker_Boy
 	msgbox GoldenrodCity_UndergroundTunnel_Text_Boy_After, MSGBOX_DEFAULT
 	switch VAR_0x8004
-	case DIR_NORTH, GoldenrodCity_UndergroundTunnel_EventScript_BoyEscapeFromFront
 	case DIR_SOUTH, GoldenrodCity_UndergroundTunnel_EventScript_BoyEscapeFromBehind
-	case DIR_EAST, GoldenrodCity_UndergroundTunnel_EventScript_BoyEscapeFromLeft
-	case DIR_WEST, GoldenrodCity_UndergroundTunnel_EventScript_BoyEscapeFromRight
-	applymovement LOCALID_GOLDENROD_UNDERGROUND_TUNNEL_BOY, GoldenrodCity_UndergroundTunnel_Movement_BoyEscapeFromFront
-	goto GoldenrodCity_UndergroundTunnel_EventScript_BoyEscapeDone
-
-GoldenrodCity_UndergroundTunnel_EventScript_BoyEscapeFromFront:
-	applymovement LOCALID_GOLDENROD_UNDERGROUND_TUNNEL_BOY, GoldenrodCity_UndergroundTunnel_Movement_BoyEscapeFromFront
+	applymovement LOCALID_GOLDENROD_UNDERGROUND_TUNNEL_BOY, GoldenrodCity_UndergroundTunnel_Movement_BoyEscapeMain
 	goto GoldenrodCity_UndergroundTunnel_EventScript_BoyEscapeDone
 
 GoldenrodCity_UndergroundTunnel_EventScript_BoyEscapeFromBehind:
-	applymovement LOCALID_GOLDENROD_UNDERGROUND_TUNNEL_BOY, GoldenrodCity_UndergroundTunnel_Movement_BoyEscapeFromBehind
-	goto GoldenrodCity_UndergroundTunnel_EventScript_BoyEscapeDone
-
-GoldenrodCity_UndergroundTunnel_EventScript_BoyEscapeFromLeft:
-	applymovement LOCALID_GOLDENROD_UNDERGROUND_TUNNEL_BOY, GoldenrodCity_UndergroundTunnel_Movement_BoyEscapeFromLeft
-	goto GoldenrodCity_UndergroundTunnel_EventScript_BoyEscapeDone
-
-GoldenrodCity_UndergroundTunnel_EventScript_BoyEscapeFromRight:
-	applymovement LOCALID_GOLDENROD_UNDERGROUND_TUNNEL_BOY, GoldenrodCity_UndergroundTunnel_Movement_BoyEscapeFromRight
+	applymovement LOCALID_GOLDENROD_UNDERGROUND_TUNNEL_BOY, GoldenrodCity_UndergroundTunnel_Movement_BoyEscapeBehind
 
 GoldenrodCity_UndergroundTunnel_EventScript_BoyEscapeDone:
 	waitmovement 0
@@ -76,34 +61,22 @@ GoldenrodCity_UndergroundTunnel_EventScript_Door::
 	msgbox GoldenrodCity_UndergroundTunnel_EventScript_Door_Text, MSGBOX_SIGN
 	end
 
+GoldenrodCity_UndergroundTunnel_EventScript_WarnBeforeTunnelExit::
+	goto_if_set FLAG_GOLDENROD_CIPHER_DISGUISE_ACTIVE, GoldenrodCity_UndergroundTunnel_EventScript_WarnBeforeTunnelExit_End
+	lock
+	msgbox GoldenrodCity_UndergroundTunnel_Text_WarnBeforeTunnelExit, MSGBOX_DEFAULT
+	release
+	end
+
+GoldenrodCity_UndergroundTunnel_EventScript_WarnBeforeTunnelExit_End:
+	end
+
 GoldenrodCity_UndergroundTunnel_Movement_DoubleExclamation:
 	emote_double_exclamation_mark
 	step_end
 
-GoldenrodCity_UndergroundTunnel_Movement_BoyEscapeFromFront:
-	walk_down
-	walk_left
-	walk_left
-	walk_left
-	walk_left
-	walk_left
-	walk_left
-	walk_left
-	walk_left
-	step_end
-
-GoldenrodCity_UndergroundTunnel_Movement_BoyEscapeFromBehind:
-	walk_left
-	walk_left
-	walk_left
-	walk_left
-	walk_left
-	walk_left
-	walk_left
-	walk_left
-	step_end
-
-GoldenrodCity_UndergroundTunnel_Movement_BoyEscapeFromLeft:
+GoldenrodCity_UndergroundTunnel_Movement_BoyEscapeMain:
+	walk_up
 	walk_up
 	walk_left
 	walk_left
@@ -113,11 +86,16 @@ GoldenrodCity_UndergroundTunnel_Movement_BoyEscapeFromLeft:
 	walk_left
 	walk_left
 	walk_left
-	walk_down
+	walk_left
+	walk_left
 	step_end
 
-GoldenrodCity_UndergroundTunnel_Movement_BoyEscapeFromRight:
-	walk_down
+GoldenrodCity_UndergroundTunnel_Movement_BoyEscapeBehind:
+	walk_left
+	walk_up
+	walk_up
+	walk_left
+	walk_left
 	walk_left
 	walk_left
 	walk_left
@@ -148,7 +126,8 @@ GoldenrodCity_UndergroundTunnel_Text_CipherPeon_Confession:
 	.string "people we kidnapped from the\l"
 	.string "RADIO TOWER but I left the key\l"
 	.string "on the 5th floor.\p"
-	.string "The CARD KEY is in her office...\n"
+	.string "The CARD KEY was in the\n"
+	.string "broadcasting room.\p"
 	.string "I'm making a run for it.\p"
 	.string "If you want to sneak in the\n"
 	.string "building be my guest, you'll\l"
@@ -160,5 +139,10 @@ GoldenrodCity_UndergroundTunnel_Text_Boy_After:
 	.string "well. I'll sneak out the back\l"
 	.string "entrance. Be careful kid.$"
 
+GoldenrodCity_UndergroundTunnel_Text_WarnBeforeTunnelExit:
+	.string "Hm, something feels off about this\n"
+	.string "tunnel. I should investigate a bit\l"
+	.string "more before heading this way.$"
+
 GoldenrodCity_UndergroundTunnel_EventScript_Door_Text:
-	.string "It's locked.$"
+	.string "The elevator says it's out of order.$"

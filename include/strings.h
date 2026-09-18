@@ -18,6 +18,10 @@ extern const u8 gText_ExpandedPlaceholder_Brendan[];
 extern const u8 gText_ExpandedPlaceholder_May[];
 
 extern const u8 gText_FromSpace[];
+extern const u8 gText_InputGiftCode[];
+extern const u8 gText_ZenwoosBlessingCodeInvalid[];
+extern const u8 gText_ZenwoosBlessingCodeUsed[];
+extern const u8 gText_ZenwoosBlessingCodeSuccess[];
 
 extern const u8 gText_Lv50[];
 extern const u8 gText_OpenLevel[];
@@ -378,6 +382,11 @@ extern const u8 gText_ShadowPokemonCantLearnMoves[];
 extern const u8 gText_TimeFluteShadowOnly[];
 extern const u8 gText_RelicTabletShadowOnly[];
 extern const u8 gText_RelicTabletNotReady[];
+extern const u8 gText_ShadowCologneShadowOnly[];
+extern const u8 gText_CologneCaseEmpty[];
+extern const u8 gText_ChooseAScent[];
+extern const u8 gText_NoScentsLeft[];
+extern const u8 gText_UsedVar2OnVar1[];
 extern const u8 gText_ZygardeCubeCounts[];
 extern const u8 gText_ZygardeCubeNeedCells[];
 extern const u8 gText_NicknamePurifyPrompt[];
@@ -1573,8 +1582,10 @@ extern const u8 gText_Love[];
 
 // battle message
 extern const u8 gText_PkmnTransferredSomeonesPCBoxFull[];
+extern const u8 gText_PkmnTransferredJinwoosPCBoxFull[];
 extern const u8 gText_PkmnTransferredLanettesPCBoxFull[];
 extern const u8 gText_PkmnTransferredSomeonesPC[];
+extern const u8 gText_PkmnTransferredJinwoosPC[];
 extern const u8 gText_PkmnTransferredLanettesPC[];
 extern const u8 gText_PkmnSentToPCAfterCatch[];
 
@@ -1896,6 +1907,7 @@ extern const u8 MatchCall_Text_Norman9[];
 extern const u8 MatchCall_Text_Mom1[];
 extern const u8 MatchCall_Text_Mom2[];
 extern const u8 MatchCall_Text_Mom3[];
+extern const u8 MatchCall_Text_MomWithdrawn[];
 extern const u8 MatchCall_Text_Steven1[];
 extern const u8 MatchCall_Text_Steven2[];
 extern const u8 MatchCall_Text_Steven3[];
@@ -2449,8 +2461,12 @@ extern const u8 gText_TellHimTheWords[];
 extern const u8 gText_RivalsName[];
 extern const u8 gText_AlphabetUpperLower[];
 extern const u8 gText_MonSentToBoxInSomeonesPC[];
+extern const u8 gText_MonSentToBoxInJinwoosPC[];
+extern const u8 gText_MonSentToBoxInLanettesPC[];
 extern const u8 gText_MonSentToBoxInBillsPC[];
 extern const u8 gText_MonSentToBoxSomeonesBoxFull[];
+extern const u8 gText_MonSentToBoxJinwoosBoxFull[];
+extern const u8 gText_MonSentToBoxLanettesBoxFull[];
 extern const u8 gText_MonSentToBoxBillsBoxFull[];
 
 // Exp. Share

@@ -377,6 +377,13 @@ static void SwitchIn_ShowHealthbox(u32 battler)
         // Full HUD refresh
         UpdateHealthboxAttribute(gHealthboxSpriteIds[battler], GetBattlerMon(battler), HEALTHBOX_ALL);
 
+        {
+            struct Pokemon *party = GetBattlerParty(battler);
+            const bool8 isShadow = GetMonData(&party[gBattlerPartyIndexes[battler]], MON_DATA_IS_SHADOW);
+
+            if (IsDoubleBattle() && isShadow)
+                BattleHud_ApplyHealthboxPalette(battler, TRUE);
+        }
 
         gBattlerControllerFuncs[battler] = SwitchIn_ShowSubstitute;
     }

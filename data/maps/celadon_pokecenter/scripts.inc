@@ -19,18 +19,23 @@ celadon_pokecenter_EventScript_Chansey::
 
 celadon_pokecenter_EventScript_Gentleman::
 	faceplayer
+	setflag FLAG_QUEST_CELADON_NPC_POKECENTER_GENTLEMAN
+	call CeladonCity_EventScript_CheckNPCQuestState
 	setspeaker celadon_pokecenter_Speaker_Gentleman
 	msgbox celadon_pokecenter_Text_Gentleman, MSGBOX_NPC
 	end
 
 celadon_pokecenter_EventScript_BattleGirl::
 	faceplayer
+	setflag FLAG_QUEST_CELADON_NPC_POKECENTER_BATTLE_GIRL
+	call CeladonCity_EventScript_CheckNPCQuestState
 	setspeaker celadon_pokecenter_Speaker_BattleGirl
 	msgbox celadon_pokecenter_Text_BattleGirl, MSGBOX_NPC
 	end
 
 celadon_pokecenter_OnTransition:
 	setrespawn HEAL_LOCATION_CELADON_CITY
+	call CableClub_EventScript_HideOrShowMysteryGiftMan
 	end
 
 celadon_pokecenter_EventScript_Bookshelf1::

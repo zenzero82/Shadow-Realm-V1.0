@@ -50,12 +50,11 @@ vermilion_mart_Pokemart:
 	pokemartlistend
 
 vermilion_mart_Text_Rocker:
-	.string "Everybody shops like the city is\n"
-	.string "about to explode.\p"
-	.string "I'm just trying to stay stocked for\n"
-	.string "whatever comes next.$"
+	.string "If you're heading out toward ROUTE 11,\n"
+	.string "bring extra supplies.\p"
+	.string "That stretch always wears me down.$"
 
 vermilion_mart_Text_Lass:
-	.string "If the port gets weird, the MART gets\n"
-	.string "crowded.\p"
-	.string "People always buy their nerves out.$"
+	.string "VERMILION always feels busy, so I like\n"
+	.string "shopping early.\p"
+	.string "Less waiting, more training.$"

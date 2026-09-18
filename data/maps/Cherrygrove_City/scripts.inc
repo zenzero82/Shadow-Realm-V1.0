@@ -25,14 +25,20 @@ Cherrygrove_City_EventScript_CityEnter_End:
 @ SPEAKER DEFINITIONS
 @ =================================================
 
-Cherrygrove_City_Speaker_Flare:
-	.string "FLARE$"
+Cherrygrove_City_Speaker_FlareGrunt1:
+	.string "ALAIN$"
+
+Cherrygrove_City_Speaker_FlareGrunt2:
+	.string "BRYCE$"
+
+Cherrygrove_City_Speaker_FlareGrunt3:
+	.string "CELIA$"
 
 Cherrygrove_City_Speaker_Boy:
-	.string "BOY$"
+	.string "OWEN$"
 
 Cherrygrove_City_Speaker_Lass:
-	.string "LASS$"
+	.string "MIA$"
 
 @ =================================================
 @ FLARE GRUNTS
@@ -40,19 +46,19 @@ Cherrygrove_City_Speaker_Lass:
 
 Cherrygrove_City_EventScript_FlareGrunt1::
 	faceplayer
-	setspeaker Cherrygrove_City_Speaker_Flare
+	setspeaker Cherrygrove_City_Speaker_FlareGrunt1
 	msgbox Cherrygrove_City_Text_FlareGrunt1, MSGBOX_NPC
 	end
 
 Cherrygrove_City_EventScript_FlareGrunt2::
 	faceplayer
-	setspeaker Cherrygrove_City_Speaker_Flare
+	setspeaker Cherrygrove_City_Speaker_FlareGrunt2
 	msgbox Cherrygrove_City_Text_FlareGrunt2, MSGBOX_NPC
 	end
 
 Cherrygrove_City_EventScript_FlareGrunt3::
 	faceplayer
-	setspeaker Cherrygrove_City_Speaker_Flare
+	setspeaker Cherrygrove_City_Speaker_FlareGrunt3
 	msgbox Cherrygrove_City_Text_FlareGrunt3, MSGBOX_NPC
 	end
 
@@ -195,4 +201,3 @@ CherrygroveCity_Text_CitySign:
 	.string "CHERRYGROVE CITY\p"
 	.string "The City of Cute, Fragrant\n"
 	.string "Flowers$"
-

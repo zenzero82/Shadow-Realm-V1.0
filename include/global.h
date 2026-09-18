@@ -256,7 +256,13 @@ struct SaveBlock3
     u8 dexNavChain;
     u8 gimmighoulSignpostFlags[GIMMIGHOUL_SIGNPOST_FLAGS_BYTES];
     u8 gimmighoulSignpostInit;
-}; /* max size 1624 bytes */
+    // Append-only protected storage for quest/story flags. Keep this at the
+    // end so all existing SaveBlock3 field offsets remain save-compatible.
+    u32 customFlagsMagic;
+    u16 customFlagsVersion;
+    u16 customFlagsVersionXor;
+    u8 customFlags[CUSTOM_FLAG_BYTES];
+}; /* max serialized size: SAVE_BLOCK_3_CHUNK_SIZE * NUM_SECTORS_PER_SLOT */
 
 extern struct SaveBlock3 *gSaveBlock3Ptr;
 
@@ -595,7 +601,8 @@ struct SaveBlock2
     /*0x93*/ u8 optionsAutoSave;
     /*0x94*/ u8 optionsEvIvEditor;
     /*0x95*/ u8 optionsAutoRun;
-    /*0x96*/ u8 filler_96[0x2];
+    /*0x96*/ u8 optionsOverworldSpeed;
+    /*0x97*/ u8 optionsBattleSpeed;
     /*0x98*/ struct Time localTimeOffset;
     /*0xA0*/ struct Time lastBerryTreeUpdate;
     /*0xA8*/ u32 gcnLinkFlags; // Read by Pokémon Colosseum/XD

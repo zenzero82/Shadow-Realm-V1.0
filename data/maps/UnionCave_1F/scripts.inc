@@ -117,11 +117,7 @@ UnionCave_1F_EventScript_MattCallTrigger_FromLeft::
 
 UnionCave_1F_EventScript_MattCallTrigger_Call::
 	setspeaker UnionCave_1F_Speaker_Unknown
-	msgbox UnionCave_1F_Text_MattCall_Intro, MSGBOX_POKENAV
-	setspeaker UnionCave_1F_Speaker_Matt
-	msgbox UnionCave_1F_Text_MattCall_Response, MSGBOX_POKENAV
-	setspeaker UnionCave_1F_Speaker_Unknown
-	msgbox UnionCave_1F_Text_MattCall_End, MSGBOX_POKENAV
+	msgbox UnionCave_1F_Text_MattCall_Full, MSGBOX_POKENAV
 	applymovement LOCALID_UNION_CAVE_1F_MATT, UnionCave_1F_Movement_MattExit
 	waitmovement 0
 	setflag FLAG_HIDE_UNION_CAVE_MATT
@@ -184,7 +180,7 @@ UnionCave_1F_Movement_CameraToPlayer_Left:
 @ =========================================================
 
 UnionCave_1F_Text_Hiker_Intro:
-	.string "These tunnels are my training\l"
+	.string "These tunnels are my training\n"
 	.string "ground!\p"
 	.string "Let's battle!$"
 
@@ -247,5 +243,19 @@ UnionCave_1F_Text_MattCall_Response:
 	.string "Aye aye, Cap.$"
 
 UnionCave_1F_Text_MattCall_End:
+	.string "… … … … … …\n"
+	.string "… … … … … Click!$"
+
+UnionCave_1F_Text_MattCall_Full:
+	.string "… … … … … …\n"
+	.string "… … … … … Beep!\p"
+	.string "We were able to lure MICHAEL out\n"
+	.string "of VIOLET.\p"
+	.string "The MARAUDER should be\n"
+	.string "finishing up getting the\l"
+	.string "blueprints from that old man.\p"
+	.string "Make your way over to OLIVINE.\n"
+	.string "We got somethings to take care of.\p"
+	.string "MATT: Aye aye, Cap.\p"
 	.string "… … … … … …\n"
 	.string "… … … … … Click!$"

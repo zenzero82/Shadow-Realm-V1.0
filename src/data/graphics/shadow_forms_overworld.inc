@@ -93,8 +93,16 @@ static const struct SpriteFrameImage sPicTable_CalyrexShadow[] = {
     overworld_ascending_frames(gObjectEventPic_CalyrexShadow, 4, 4),
 };
 
+static const struct SpriteFrameImage sPicTable_CalyrexIceShadow[] = {
+    overworld_ascending_frames(gObjectEventPic_CalyrexIceShadow, 4, 4),
+};
+
 static const struct SpriteFrameImage sPicTable_CameruptShadow[] = {
     overworld_ascending_frames(gObjectEventPic_CameruptShadow, 4, 4),
+};
+
+static const struct SpriteFrameImage sPicTable_CelebiShadow[] = {
+    overworld_ascending_frames(gObjectEventPic_CelebiShadow, 4, 4),
 };
 
 static const struct SpriteFrameImage sPicTable_CelesteelaShadow[] = {
@@ -793,6 +801,10 @@ static const struct SpriteFrameImage sPicTable_ZygardeShadow[] = {
     overworld_ascending_frames(gObjectEventPic_ZygardeShadow, 8, 8),
 };
 
+static const struct SpriteFrameImage sPicTable_ZygardeCompleteShadow[] = {
+    overworld_ascending_frames(gObjectEventPic_ZygardeCompleteShadow, 8, 8),
+};
+
 static const struct SpriteFrameImage *const sShadowOverworldPicTables[NUM_SPECIES] = {
     [SPECIES_PIKACHU] = sPicTable_PikachuShadow,
     [SPECIES_ABSOL] = sPicTable_AbsolShadow,
@@ -816,7 +828,9 @@ static const struct SpriteFrameImage *const sShadowOverworldPicTables[NUM_SPECIE
     [SPECIES_BISHARP] = sPicTable_BisharpShadow,
     [SPECIES_BUZZWOLE] = sPicTable_BuzzwoleShadow,
     [SPECIES_CALYREX] = sPicTable_CalyrexShadow,
+    [SPECIES_CALYREX_ICE] = sPicTable_CalyrexIceShadow,
     [SPECIES_CAMERUPT] = sPicTable_CameruptShadow,
+    [SPECIES_CELEBI] = sPicTable_CelebiShadow,
     [SPECIES_CELESTEELA] = sPicTable_CelesteelaShadow,
     [SPECIES_CENTISKORCH] = sPicTable_CentiskorchShadow,
     [SPECIES_CERULEDGE] = sPicTable_CeruledgeShadow,
@@ -991,6 +1005,7 @@ static const struct SpriteFrameImage *const sShadowOverworldPicTables[NUM_SPECIE
     [SPECIES_ZEKROM] = sPicTable_ZekromShadow,
     [SPECIES_ZERAORA] = sPicTable_ZeraoraShadow,
     [SPECIES_ZYGARDE] = sPicTable_ZygardeShadow,
+    [SPECIES_ZYGARDE_COMPLETE] = sPicTable_ZygardeCompleteShadow,
 };
 
 #if P_GENDER_DIFFERENCES
@@ -1022,8 +1037,10 @@ static const u16 *const sShadowOverworldPalettes[NUM_SPECIES] = {
     [SPECIES_BLISSEY] = gMonPalette_BlisseyShadow,
     [SPECIES_BISHARP] = gMonPalette_BisharpShadow,
     [SPECIES_BUZZWOLE] = gMonPalette_BuzzwoleShadow,
-    [SPECIES_CALYREX] = gOverworldPalette_CalyrexShadow,
+    [SPECIES_CALYREX] = gMonPalette_CalyrexShadow,
+    [SPECIES_CALYREX_ICE] = gMonPalette_CalyrexIceShadow,
     [SPECIES_CAMERUPT] = gMonPalette_CameruptShadow,
+    [SPECIES_CELEBI] = gMonPalette_CelebiShadow,
     [SPECIES_CELESTEELA] = gMonPalette_CelesteelaShadow,
     [SPECIES_CENTISKORCH] = gMonPalette_CentiskorchShadow,
     [SPECIES_CERULEDGE] = gMonPalette_CeruledgeShadow,
@@ -1079,6 +1096,7 @@ static const u16 *const sShadowOverworldPalettes[NUM_SPECIES] = {
     [SPECIES_HEATRAN] = gMonPalette_HeatranShadow,
     [SPECIES_HO_OH] = gMonPalette_HoOhShadow,
     [SPECIES_HONCHKROW] = gMonPalette_HonchkrowShadow,
+    [SPECIES_HOOPA] = gMonPalette_HoopaShadow,
     [SPECIES_HOUNDOOM] = gMonPalette_HoundoomShadow,
     [SPECIES_HYDREIGON] = gMonPalette_HydreigonShadow,
     [SPECIES_INCINEROAR] = gMonPalette_IncineroarShadow,
@@ -1197,6 +1215,7 @@ static const u16 *const sShadowOverworldPalettes[NUM_SPECIES] = {
     [SPECIES_ZEKROM] = gMonPalette_ZekromShadow,
     [SPECIES_ZERAORA] = gMonPalette_ZeraoraShadow,
     [SPECIES_ZYGARDE] = gMonPalette_ZygardeShadow,
+    [SPECIES_ZYGARDE_COMPLETE] = gMonPalette_ZygardeCompleteShadow,
 };
 #endif
 #endif

@@ -8,6 +8,7 @@
 #include "load_save.h"
 #include "overworld.h"
 #include "hall_of_fame.h"
+#include "event_data.h"
 #include "pokemon_storage_system.h"
 #include "main.h"
 #include "trainer_hill.h"
@@ -906,6 +907,7 @@ u8 LoadGameSave(u8 saveType)
     case SAVE_NORMAL:
     default:
         status = TryLoadSaveSlot(FULL_SAVE_SLOT, gRamSaveSectorLocations);
+        EnsureCustomFlagData();
         CopyPartyAndObjectsFromSave();
         InitBoxStorageCache();
         RepairBoxStorageChecksums();

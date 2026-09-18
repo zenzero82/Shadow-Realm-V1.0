@@ -12,6 +12,7 @@ fuchsia_pokecenter_EventScript_Chansey::
 
 fuchsia_pokecenter_OnTransition:
 	setrespawn HEAL_LOCATION_FUCHSIA_CITY
+	call CableClub_EventScript_HideOrShowMysteryGiftMan
 	end
 
 fuchsia_pokecenter_EventScript_Bookshelf1::

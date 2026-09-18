@@ -1,10 +1,12 @@
 Route10_MapScripts::
+	map_script MAP_SCRIPT_ON_LOAD, Route10_EventScript_SetZanderVisibility
 	map_script MAP_SCRIPT_ON_TRANSITION, Route10_EventScript_SetZanderVisibility
 	map_script MAP_SCRIPT_ON_FRAME_TABLE, Route10_MapScripts_OnFrame
 	.byte 0
 
 Route10_MapScripts_OnFrame:
 	map_script_2 VAR_TEMP_0, 1, Route10_EventScript_PlasmaGrunt_Auto
+	map_script_2 VAR_TEMP_0, 2, Route10_EventScript_SycamoreCall_Auto
 	.2byte 0
 
 Route10_EventScript_Sign::
@@ -18,6 +20,7 @@ Route10_EventScript_PPSign::
 Route10_EventScript_SetZanderVisibility::
 	setvar VAR_TEMP_0, 0
 	call Route10_EventScript_SetZinzolinVisibility
+	call Route10_EventScript_SyncPowerPlantRocket
 	checkflag FLAG_ROUTE_24_ZANDER_DEFEATED
 	goto_if_eq Route10_EventScript_SetZanderVisibility_Done
 	checkflag FLAG_HAS_SNAG_MACHINE
@@ -38,15 +41,43 @@ Route10_EventScript_SetZanderVisibility_Done::
 
 Route10_EventScript_SetZinzolinVisibility::
 	checktrainerflag TRAINER_ZINZOLIN_POWER_PLANT
-	goto_if_eq VAR_RESULT, FALSE, Route10_EventScript_SetZinzolinVisibility_Show
+	goto_if_eq Route10_EventScript_SetZinzolinVisibility_Hide
+	setflag FLAG_ROUTE10_POWERPLANT_INVASION_ACTIVE
+	goto Route10_EventScript_SetZinzolinVisibility_Show
+
+Route10_EventScript_SetZinzolinVisibility_Hide:
+	clearflag FLAG_ROUTE10_POWERPLANT_INVASION_ACTIVE
 	setflag FLAG_HIDE_ROUTE10_ZINZOLIN
 	hideobjectat LOCALID_ROUTE10_ZINZOLIN, MAP_ROUTE10
 	removeobject LOCALID_ROUTE10_ZINZOLIN
+	call Route10_EventScript_TryQueueSycamoreCall
 Route10_EventScript_SetZinzolinVisibility_Done::
 	return
 
 Route10_EventScript_SetZinzolinVisibility_Show::
+	clearflag FLAG_ROUTE10_SYCAMORE_CALL_DONE
+	clearflag FLAG_QUEST_MEGA_MOMENTS_STARTED
+	clearflag FLAG_QUEST_MEGA_MOMENTS_COMPLETED
 	clearflag FLAG_HIDE_ROUTE10_ZINZOLIN
+	addobject LOCALID_ROUTE10_ZINZOLIN
+	showobjectat LOCALID_ROUTE10_ZINZOLIN, MAP_ROUTE10
+	return
+
+Route10_EventScript_TryQueueSycamoreCall:
+	checkflag FLAG_ROUTE10_SYCAMORE_CALL_DONE
+	goto_if_eq Route10_EventScript_TryQueueSycamoreCall_Done
+	setvar VAR_TEMP_0, 2
+Route10_EventScript_TryQueueSycamoreCall_Done:
+	return
+
+Route10_EventScript_SyncPowerPlantRocket::
+	checkflag FLAG_QUEST_BACK_TO_HQ_COMPLETED
+	goto_if_eq Route10_EventScript_SyncPowerPlantRocket_Hide
+	clearflag FLAG_HIDE_ROUTE10_POWERPLANT_ROCKET_GRUNT
+	return
+
+Route10_EventScript_SyncPowerPlantRocket_Hide::
+	setflag FLAG_HIDE_ROUTE10_POWERPLANT_ROCKET_GRUNT
 	return
 
 Route10_EventScript_TryPlasmaExit::
@@ -111,6 +142,30 @@ Route10_EventScript_Zinzolin::
 Route10_EventScript_HoopaRing::
 	end
 
+Route10_EventScript_PowerPlantRocketGrunt::
+	lock
+	checkflag FLAG_QUEST_BACK_TO_HQ_COMPLETED
+	goto_if_eq Route10_EventScript_PowerPlantRocketGrunt_Gone
+	setspeaker Route10_Speaker_PowerPlantRocketGrunt
+	msgbox Route10_Text_PowerPlantRocketGrunt_SelfTalk, MSGBOX_DEFAULT
+	closemessage
+	playse SE_PIN
+	applymovement VAR_LAST_TALKED, Common_Movement_ExclamationMark
+	waitmovement 0
+	faceplayer
+	setspeaker Route10_Speaker_PowerPlantRocketGrunt
+	msgbox Route10_Text_PowerPlantRocketGrunt_PlayerCaught, MSGBOX_DEFAULT
+	closemessage
+	applymovement VAR_LAST_TALKED, Common_Movement_FaceUp
+	waitmovement 0
+	release
+	end
+
+Route10_EventScript_PowerPlantRocketGrunt_Gone:
+	setflag FLAG_HIDE_ROUTE10_POWERPLANT_ROCKET_GRUNT
+	release
+	end
+
 Route10_EventScript_Zinzolin_After::
 	settrainerflag TRAINER_ZINZOLIN_POWER_PLANT
 	setspeaker Route10_Speaker_Zinzolin
@@ -133,6 +188,7 @@ Route10_EventScript_Zinzolin_After::
 	hideobjectat LOCALID_ROUTE10_ZINZOLIN, MAP_ROUTE10
 	setflag FLAG_HIDE_ROUTE10_ZINZOLIN
 	removeobject LOCALID_ROUTE10_ZINZOLIN
+	clearflag FLAG_ROUTE10_POWERPLANT_INVASION_ACTIVE
 	setflag FLAG_HIDE_ROCK_TUNNEL_PLASMA
 	hideobjectat LOCALID_ROUTE10_PLASMA_GRUNT, MAP_ROUTE10
 	removeobject LOCALID_ROUTE10_PLASMA_GRUNT
@@ -146,22 +202,46 @@ Route10_EventScript_Zinzolin_After::
 	setflag FLAG_HIDE_ROUTE10_HOOPA_RING
 	removeobject LOCALID_ROUTE10_HOOPA_RING
 	checkflag FLAG_QUEST_THUNDERBIRD_COMPLETED
-	goto_if_eq Route10_EventScript_Zinzolin_QuestDone
+	goto_if_eq Route10_EventScript_ThunderbirdQuestDone
+	call Route10_EventScript_CompleteThunderbirdQuest
+Route10_EventScript_ThunderbirdQuestDone:
+	call Route10_EventScript_SycamoreCall
+	releaseall
+	end
+
+Route10_EventScript_CompleteThunderbirdQuest:
 	setflag FLAG_QUEST_THUNDERBIRD_COMPLETED
 	call QuestJournal_EventScript_QuestCompleteAlert
-	checkflag FLAG_QUEST_ERICA_STARTED
-	goto_if_eq Route10_EventScript_Zinzolin_QuestDone
+	return
+
+Route10_EventScript_SycamoreCall_Auto::
+	setvar VAR_TEMP_0, 0
+	lockall
+	call Route10_EventScript_SycamoreCall
+	releaseall
+	end
+
+Route10_EventScript_SycamoreCall:
+	checkflag FLAG_ROUTE10_SYCAMORE_CALL_DONE
+	goto_if_eq Route10_EventScript_SycamoreCall_Done
 	playfanfare MUS_REGISTER_MATCH_CALL
 	setspeaker Route10_Speaker_Sycamore
 	pokenavcall Route10_Text_Sycamore_Call
 	waitmessage
 	closemessage
-	setflag FLAG_QUEST_ERICA_STARTED
+	setflag FLAG_ROUTE10_SYCAMORE_CALL_DONE
+	clearflag FLAG_QUEST_MEGA_MOMENTS_COMPLETED
 	setflag FLAG_QUEST_MEGA_MOMENTS_STARTED
+	checkflag FLAG_QUEST_ERICA_STARTED
+	goto_if_eq Route10_EventScript_SycamoreCall_OneNewQuest
+	setflag FLAG_QUEST_ERICA_STARTED
 	call QuestJournal_EventScript_NewQuestsAlert
-Route10_EventScript_Zinzolin_QuestDone:
-	releaseall
-	end
+	return
+
+Route10_EventScript_SycamoreCall_OneNewQuest:
+	call QuestJournal_EventScript_NewQuestAlert
+Route10_EventScript_SycamoreCall_Done:
+	return
 
 Route10_Speaker_Zander:
 	.string "Zander$"
@@ -228,6 +308,9 @@ Route10_Speaker_Zinzolin:
 Route10_Speaker_Sycamore:
 	.string "Prof. Sycamore$"
 
+Route10_Speaker_PowerPlantRocketGrunt:
+	.string "ROCKET GRUNT$"
+
 Route10_Text_PlasmaGrunt_Exit:
 	.string "Out of my way! I need to let the\n"
 	.string "others know a really strong trainer\l"
@@ -236,6 +319,18 @@ Route10_Text_PlasmaGrunt_Exit:
 	.string "...This is so sad...\n"
 	.string "Now I have to tell the Sages.\p"
 	.string "MOVE!$"
+
+Route10_Text_PowerPlantRocketGrunt_SelfTalk:
+	.string "Heh... helping swipe those starter\n"
+	.string "POKéMON was easy enough.\p"
+	.string "Once the survey's done, this old\n"
+	.string "POWER PLANT is next on the list.$"
+
+Route10_Text_PowerPlantRocketGrunt_PlayerCaught:
+	.string "What!? How long have you been\n"
+	.string "standing there!?\p"
+	.string "Get lost, we're in the middle of a\n"
+	.string "survey here.$"
 
 @ ======================
 @ TEXT – ZANDER
@@ -246,7 +341,7 @@ Route10_Text_Zander_Intro:
 	.string "myself about stomping a twerp haha.$"
 
 Route10_Text_Zander_Defeated:
-	.string "You beat me, but {COLOR PURPLE}Shadow POKéMON{COLOR WHITE}\n"
+	.string "You beat me, but {COLOR BLUE}Shadow POKéMON{COLOR WHITE}\n"
 	.string "won't leave our side yet.\p"
 	.string "You're stepping into\n"
 	.string "deep water, kid.$"
@@ -254,7 +349,7 @@ Route10_Text_Zander_Defeated:
 Route10_Text_Zander_PostBattle:
 	.string "Our associates have taken over\n"
 	.string "Rock Tunnel. You're going to have a\l"
-	.string "real tough time getting\n"
+	.string "real tough time getting\l"
 	.string "through there.$"
 
 Route10_Text_Zinzolin_Intro:

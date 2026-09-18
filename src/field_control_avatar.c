@@ -12,6 +12,7 @@
 #include "event_object_movement.h"
 #include "event_scripts.h"
 #include "fieldmap.h"
+#include "field_door.h"
 #include "field_control_avatar.h"
 #include "field_message_box.h"
 #include "field_move.h"
@@ -100,6 +101,18 @@ static const u8 *GetKantoBookshelfScript(u16 mapSecId)
         return Kanto_Furniture_EventScript_Bookshelf_Cerulean;
     case MAPSEC_LAVENDER_TOWN:
         return Kanto_Furniture_EventScript_Bookshelf_Lavender;
+    case MAPSEC_ROUTE_2:
+    case MAPSEC_ROUTE_5:
+    case MAPSEC_ROUTE_12:
+    case MAPSEC_ROUTE_16:
+    case MAPSEC_ROUTE_25:
+        return RouteHouse_Furniture_EventScript_Bookshelf_Kanto;
+    case MAPSEC_ROUTE_26:
+    case MAPSEC_ROUTE_27:
+    case MAPSEC_ROUTE_28:
+    case MAPSEC_ROUTE_30:
+    case MAPSEC_ROUTE_39:
+        return RouteHouse_Furniture_EventScript_Bookshelf_Johto;
     default:
         return NULL;
     }
@@ -119,6 +132,17 @@ static const u8 *GetKantoTVScript(u16 mapSecId)
         return Kanto_Furniture_EventScript_TV_Cerulean;
     case MAPSEC_LAVENDER_TOWN:
         return Kanto_Furniture_EventScript_TV_Lavender;
+    case MAPSEC_ROUTE_2:
+    case MAPSEC_ROUTE_5:
+    case MAPSEC_ROUTE_12:
+    case MAPSEC_ROUTE_16:
+    case MAPSEC_ROUTE_25:
+    case MAPSEC_ROUTE_26:
+    case MAPSEC_ROUTE_27:
+    case MAPSEC_ROUTE_28:
+    case MAPSEC_ROUTE_30:
+    case MAPSEC_ROUTE_39:
+        return RouteHouse_Furniture_EventScript_TV;
     default:
         return NULL;
     }
@@ -1149,11 +1173,14 @@ static bool8 TryStartWarpEventScript(struct MapPosition *position, u16 metatileB
 {
     s8 warpEventId = GetWarpEventAtMapPosition(&gMapHeader, position);
 
-    if (warpEventId != WARP_ID_NONE && IsWarpMetatileBehavior(metatileBehavior) == TRUE)
+    if (warpEventId != WARP_ID_NONE
+     && (IsWarpMetatileBehavior(metatileBehavior) == TRUE
+      || FieldIsWarpDoorAt(position->x, position->y) == TRUE))
     {
         StoreInitialPlayerAvatarState();
         SetupWarp(&gMapHeader, warpEventId, position);
-        if (MetatileBehavior_IsWarpDoor(metatileBehavior) == TRUE)
+        if (MetatileBehavior_IsWarpDoor(metatileBehavior) == TRUE
+         || FieldIsWarpDoorAt(position->x, position->y) == TRUE)
         {
             DoDoorWarp();
             return TRUE;
@@ -1293,10 +1320,13 @@ static bool8 TryDoorWarp(struct MapPosition *position, u16 metatileBehavior, u8 
             return TRUE;
         }
 
-        if (MetatileBehavior_IsWarpDoor(metatileBehavior) == TRUE)
+        if (MetatileBehavior_IsWarpDoor(metatileBehavior) == TRUE
+         || FieldIsWarpDoorAt(position->x, position->y) == TRUE)
         {
             warpEventId = GetWarpEventAtMapPosition(&gMapHeader, position);
-            if (warpEventId != WARP_ID_NONE && IsWarpMetatileBehavior(metatileBehavior) == TRUE)
+            if (warpEventId != WARP_ID_NONE
+             && (IsWarpMetatileBehavior(metatileBehavior) == TRUE
+              || FieldIsWarpDoorAt(position->x, position->y) == TRUE))
             {
                 StoreInitialPlayerAvatarState();
                 SetupWarp(&gMapHeader, warpEventId, position);

@@ -206,6 +206,19 @@
       "trainer_sight_or_berry_tree_id": "0",
       "script": "GoldenrodCity_EventScript_CipherPeonM2",
       "flag": "FLAG_GOLDENROD_CITY_RADIO_SHIFT_DONE"
+    },
+    {
+      "graphics_id": "OBJ_EVENT_GFX_CIPHER_PEON_M",
+      "x": 25,
+      "y": 23,
+      "elevation": 0,
+      "movement_type": "MOVEMENT_TYPE_FACE_LEFT",
+      "movement_range_x": 0,
+      "movement_range_y": 0,
+      "trainer_type": "TRAINER_TYPE_NONE",
+      "trainer_sight_or_berry_tree_id": "0",
+      "script": "GoldenrodCity_EventScript_CipherPeonM2",
+      "flag": "FLAG_HIDE_GOLDENROD_CITY_CIPHER_PEON_M_3"
     }
   ],
   "warp_events": [
@@ -298,7 +311,7 @@
       "y": 38,
       "elevation": 0,
       "dest_map": "MAP_GOLDENROD_CITY_UNDERGROUND_ENTRANCE",
-      "dest_warp_id": "2"
+      "dest_warp_id": "3"
     },
     {
       "x": 44,
@@ -352,12 +365,75 @@
     },
     {
       "type": "trigger",
-      "x": 21,
-      "y": 39,
+      "x": 32,
+      "y": 8,
       "elevation": 0,
-      "var": "VAR_TEMP_2",
+      "var": "VAR_TEMP_0",
       "var_value": "0",
-      "script": "GoldenrodCity_EventScript_UndergroundDoorApproach"
+      "script": "GoldenrodCity_EventScript_ExitBlockerNorth"
+    },
+    {
+      "type": "trigger",
+      "x": 33,
+      "y": 8,
+      "elevation": 0,
+      "var": "VAR_TEMP_0",
+      "var_value": "0",
+      "script": "GoldenrodCity_EventScript_ExitBlockerNorth"
+    },
+    {
+      "type": "trigger",
+      "x": 34,
+      "y": 8,
+      "elevation": 0,
+      "var": "VAR_TEMP_0",
+      "var_value": "0",
+      "script": "GoldenrodCity_EventScript_ExitBlockerNorth"
+    },
+    {
+      "type": "trigger",
+      "x": 35,
+      "y": 8,
+      "elevation": 0,
+      "var": "VAR_TEMP_0",
+      "var_value": "0",
+      "script": "GoldenrodCity_EventScript_ExitBlockerNorth"
+    },
+    {
+      "type": "trigger",
+      "x": 32,
+      "y": 45,
+      "elevation": 0,
+      "var": "VAR_TEMP_0",
+      "var_value": "0",
+      "script": "GoldenrodCity_EventScript_ExitBlockerSouth"
+    },
+    {
+      "type": "trigger",
+      "x": 33,
+      "y": 45,
+      "elevation": 0,
+      "var": "VAR_TEMP_0",
+      "var_value": "0",
+      "script": "GoldenrodCity_EventScript_ExitBlockerSouth"
+    },
+    {
+      "type": "trigger",
+      "x": 34,
+      "y": 45,
+      "elevation": 0,
+      "var": "VAR_TEMP_0",
+      "var_value": "0",
+      "script": "GoldenrodCity_EventScript_ExitBlockerSouth"
+    },
+    {
+      "type": "trigger",
+      "x": 35,
+      "y": 45,
+      "elevation": 0,
+      "var": "VAR_TEMP_0",
+      "var_value": "0",
+      "script": "GoldenrodCity_EventScript_ExitBlockerSouth"
     }
   ],
   "bg_events": [

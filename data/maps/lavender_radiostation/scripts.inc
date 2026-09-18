@@ -20,30 +20,40 @@ lavender_radiostation_EventScript_WorkerM::
 	faceplayer
 	setspeaker lavender_radiostation_Speaker_WorkerM
 	msgbox lavender_radiostation_Text_WorkerM, MSGBOX_NPC
+	setvar VAR_0x8000, 6
+	call Lavender_Town_EventScript_RecordInteriorNPC
 	end
 
 lavender_radiostation_EventScript_Officer::
 	faceplayer
 	setspeaker lavender_radiostation_Speaker_Officer
 	msgbox lavender_radiostation_Text_Officer, MSGBOX_NPC
+	setvar VAR_0x8000, 7
+	call Lavender_Town_EventScript_RecordInteriorNPC
 	end
 
 lavender_radiostation_EventScript_WorkerF::
 	faceplayer
 	setspeaker lavender_radiostation_Speaker_WorkerF
 	msgbox lavender_radiostation_Text_WorkerF, MSGBOX_NPC
+	setvar VAR_0x8000, 8
+	call Lavender_Town_EventScript_RecordInteriorNPC
 	end
 
 lavender_radiostation_EventScript_Gentleman::
 	faceplayer
 	setspeaker lavender_radiostation_Speaker_Gentleman
 	msgbox lavender_radiostation_Text_Gentleman, MSGBOX_NPC
+	setvar VAR_0x8000, 9
+	call Lavender_Town_EventScript_RecordInteriorNPC
 	end
 
 lavender_radiostation_EventScript_Youngster::
 	faceplayer
 	setspeaker lavender_radiostation_Speaker_Youngster
 	msgbox lavender_radiostation_Text_Youngster, MSGBOX_NPC
+	setvar VAR_0x8000, 10
+	call Lavender_Town_EventScript_RecordInteriorNPC
 	end
 
 lavender_radiostation_Text_WorkerM:

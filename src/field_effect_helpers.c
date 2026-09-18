@@ -1405,6 +1405,9 @@ void UpdateSurfBlobFieldEffect(struct Sprite *sprite)
     SynchroniseSurfPosition(playerObj, sprite);
     UpdateBobbingEffect(playerObj, playerSprite, sprite);
     sprite->oam.priority = playerSprite->oam.priority;
+    sprite->subpriority = playerSprite->subpriority;
+    sprite->subspriteMode = playerSprite->subspriteMode;
+    sprite->subspriteTableNum = playerSprite->subspriteTableNum;
     if (SurfOw_ShouldOverridePlayerPriority(sprite->sPlayerObjId))
     {
         u8 direction = playerObj->movementDirection;
@@ -1424,6 +1427,8 @@ void UpdateSurfBlobFieldEffect(struct Sprite *sprite)
 
         sprite->oam.priority = priority;
         sprite->subpriority = playerSprite->subpriority;
+        sprite->subspriteMode = playerSprite->subspriteMode;
+        sprite->subspriteTableNum = playerSprite->subspriteTableNum;
     }
 }
 

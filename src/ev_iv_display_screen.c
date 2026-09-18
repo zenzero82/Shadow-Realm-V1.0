@@ -106,6 +106,8 @@ struct EvIvDisplayScreen
     bool8 editValueMode;
     u8 selectedRow;
     u8 selectedColumn;
+    s8 editValueRepeatDirection;
+    u8 editValueRepeatCount;
 
     u8 stats_ev[NUM_STATS];
     u8 stats_iv[NUM_STATS];
@@ -151,6 +153,7 @@ static u8 GetDigitsDec(u32 num);
 static u8 GetDigitsHex(u32 num);
 static u8 GetColorByNature(u8 nature, u8 statIndex);
 static bool8 TryAdjustSelectedValue(s8 delta);
+static s8 GetEditValueDeltaFromInput(void);
 static void MoveSelectedRow(s8 delta);
 static u8 GetSelectedStat(void);
 static void SetSelectedStatData(u16 field, u8 value);
@@ -475,6 +478,8 @@ void Show_EvIv(struct Pokemon * party, u8 cursorPos, u8 lastIdx, MainCallback sa
     gEvIv->editValueMode = FALSE;
     gEvIv->selectedRow = 0;
     gEvIv->selectedColumn = EV_IV_EDIT_COL_EV;
+    gEvIv->editValueRepeatDirection = 0;
+    gEvIv->editValueRepeatCount = 0;
 
     BufferMonData(&gEvIv->currentMon);
 
@@ -564,20 +569,25 @@ static void Task_WaitForExit(u8 taskId)
 
             if (gEvIv->editValueMode)
             {
+                s8 valueDelta = 0;
+
                 if (JOY_REPEAT(DPAD_LEFT) || JOY_REPEAT(DPAD_RIGHT))
                 {
                     gEvIv->selectedColumn ^= 1;
+                    gEvIv->editValueRepeatDirection = 0;
+                    gEvIv->editValueRepeatCount = 0;
                     redraw = TRUE;
                 }
 
-                if (JOY_REPEAT(DPAD_UP))
-                    TryAdjustSelectedValue(+1);
-                else if (JOY_REPEAT(DPAD_DOWN))
-                    TryAdjustSelectedValue(-1);
+                valueDelta = GetEditValueDeltaFromInput();
+                if (valueDelta != 0)
+                    TryAdjustSelectedValue(valueDelta);
 
                 if (JOY_NEW(B_BUTTON))
                 {
                     gEvIv->editValueMode = FALSE;
+                    gEvIv->editValueRepeatDirection = 0;
+                    gEvIv->editValueRepeatCount = 0;
                     redraw = TRUE;
                 }
             }
@@ -597,6 +607,8 @@ static void Task_WaitForExit(u8 taskId)
                 if (JOY_NEW(A_BUTTON))
                 {
                     gEvIv->editValueMode = TRUE;
+                    gEvIv->editValueRepeatDirection = 0;
+                    gEvIv->editValueRepeatCount = 0;
                     redraw = TRUE;
                 }
                 else if (JOY_NEW(B_BUTTON))
@@ -1313,6 +1325,42 @@ static bool8 TryAdjustSelectedValue(s8 delta)
 
     UpdateCurrentStats();
     return TRUE;
+}
+
+static s8 GetEditValueDeltaFromInput(void)
+{
+    s8 direction = 0;
+    s8 magnitude = 1;
+
+    if (JOY_REPEAT(DPAD_UP))
+        direction = +1;
+    else if (JOY_REPEAT(DPAD_DOWN))
+        direction = -1;
+
+    if (direction == 0)
+    {
+        gEvIv->editValueRepeatDirection = 0;
+        gEvIv->editValueRepeatCount = 0;
+        return 0;
+    }
+
+    if (gEvIv->editValueRepeatDirection == direction)
+    {
+        if (gEvIv->editValueRepeatCount < 0xFF)
+            gEvIv->editValueRepeatCount++;
+    }
+    else
+    {
+        gEvIv->editValueRepeatDirection = direction;
+        gEvIv->editValueRepeatCount = 1;
+    }
+
+    if (gEvIv->editValueRepeatCount >= 30)
+        magnitude = 50;
+    else if (gEvIv->editValueRepeatCount >= 5)
+        magnitude = 10;
+
+    return direction * magnitude;
 }
 
 static void MoveSelectedRow(s8 delta)

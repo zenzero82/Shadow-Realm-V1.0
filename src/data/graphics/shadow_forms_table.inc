@@ -7,7 +7,13 @@
         .backPicFemale = gMonBackPic_PikachuFShadow,
 #endif
         .palette = gMonPalette_PikachuShadow,
+        .iconPalette = gMonIconPalette_PikachuShadow,
+        .iconPaletteTag = POKE_ICON_SHADOW_UNIQUE_PAL_TAG_START + 0,
         .icon = gMonIcon_PikachuShadow,
+#if P_GENDER_DIFFERENCES && P_CUSTOM_GENDER_DIFF_ICONS
+        .iconPaletteFemale = gMonIconPalette_PikachuFShadow,
+        .iconPaletteTagFemale = POKE_ICON_SHADOW_UNIQUE_PAL_TAG_START + 0,
+#endif
 #if P_GENDER_DIFFERENCES && P_CUSTOM_GENDER_DIFF_ICONS
         .iconFemale = gMonIcon_PikachuFShadow,
 #endif
@@ -17,6 +23,8 @@
         .frontPic = gMonFrontPic_AbsolShadow,
         .backPic = gMonBackPic_AbsolShadow,
         .palette = gMonPalette_AbsolShadow,
+        .iconPalette = gMonIconPalette_AbsolShadow,
+        .iconPaletteTag = POKE_ICON_SHADOW_UNIQUE_PAL_TAG_START + 0,
         .icon = gMonIcon_AbsolShadow,
     },
     {
@@ -24,6 +32,8 @@
         .frontPic = gMonFrontPic_AggronShadow,
         .backPic = gMonBackPic_AggronShadow,
         .palette = gMonPalette_AggronShadow,
+        .iconPalette = gMonIconPalette_AggronShadow,
+        .iconPaletteTag = POKE_ICON_SHADOW_UNIQUE_PAL_TAG_START + 1,
         .icon = gMonIcon_AggronShadow,
     },
     {
@@ -31,6 +41,8 @@
         .frontPic = gMonFrontPic_AlakazamShadow,
         .backPic = gMonBackPic_AlakazamShadow,
         .palette = gMonPalette_AlakazamShadow,
+        .iconPalette = gMonIconPalette_AlakazamShadow,
+        .iconPaletteTag = POKE_ICON_SHADOW_UNIQUE_PAL_TAG_START + 1,
         .icon = gMonIcon_AlakazamShadow,
     },
     {
@@ -38,6 +50,8 @@
         .frontPic = gMonFrontPic_AnnihilapeShadow,
         .backPic = gMonBackPic_AnnihilapeShadow,
         .palette = gMonPalette_AnnihilapeShadow,
+        .iconPalette = gMonIconPalette_AnnihilapeShadow,
+        .iconPaletteTag = POKE_ICON_SHADOW_UNIQUE_PAL_TAG_START + 2,
         .icon = gMonIcon_AnnihilapeShadow,
     },
     {
@@ -45,6 +59,8 @@
         .frontPic = gMonFrontPic_AraquanidShadow,
         .backPic = gMonBackPic_AraquanidShadow,
         .palette = gMonPalette_AraquanidShadow,
+        .iconPalette = gMonIconPalette_AraquanidShadow,
+        .iconPaletteTag = POKE_ICON_SHADOW_UNIQUE_PAL_TAG_START + 3,
         .icon = gMonIcon_AraquanidShadow,
     },
     {
@@ -52,6 +68,8 @@
         .frontPic = gMonFrontPic_ArcanineShadow,
         .backPic = gMonBackPic_ArcanineShadow,
         .palette = gMonPalette_ArcanineShadow,
+        .iconPalette = gMonIconPalette_ArcanineShadow,
+        .iconPaletteTag = POKE_ICON_SHADOW_UNIQUE_PAL_TAG_START + 4,
         .icon = gMonIcon_ArcanineShadow,
     },
     {
@@ -59,6 +77,8 @@
         .frontPic = gMonFrontPic_ArceusShadow,
         .backPic = gMonBackPic_ArceusShadow,
         .palette = gMonPalette_ArceusShadow,
+        .iconPalette = gMonIconPalette_ArceusShadow,
+        .iconPaletteTag = POKE_ICON_SHADOW_UNIQUE_PAL_TAG_START + 5,
         .icon = gMonIcon_ArceusShadow,
     },
     {
@@ -66,6 +86,8 @@
         .frontPic = gMonFrontPic_ArmarougeShadow,
         .backPic = gMonBackPic_ArmarougeShadow,
         .palette = gMonPalette_ArmarougeShadow,
+        .iconPalette = gMonIconPalette_ArmarougeShadow,
+        .iconPaletteTag = POKE_ICON_SHADOW_UNIQUE_PAL_TAG_START + 2,
         .icon = gMonIcon_ArmarougeShadow,
     },
     {
@@ -73,6 +95,8 @@
         .frontPic = gMonFrontPic_ArticunoShadow,
         .backPic = gMonBackPic_ArticunoShadow,
         .palette = gMonPalette_ArticunoShadow,
+        .iconPalette = gMonIconPalette_ArticunoShadow,
+        .iconPaletteTag = POKE_ICON_SHADOW_UNIQUE_PAL_TAG_START + 1,
         .icon = gMonIcon_ArticunoShadow,
     },
     {
@@ -80,6 +104,8 @@
         .frontPic = gMonFrontPic_AurorusShadow,
         .backPic = gMonBackPic_AurorusShadow,
         .palette = gMonPalette_AurorusShadow,
+        .iconPalette = gMonIconPalette_AurorusShadow,
+        .iconPaletteTag = POKE_ICON_SHADOW_UNIQUE_PAL_TAG_START + 0,
         .icon = gMonIcon_AurorusShadow,
     },
     {
@@ -87,6 +113,8 @@
         .frontPic = gMonFrontPic_AzelfShadow,
         .backPic = gMonBackPic_AzelfShadow,
         .palette = gMonPalette_AzelfShadow,
+        .iconPalette = gMonIconPalette_AzelfShadow,
+        .iconPaletteTag = POKE_ICON_SHADOW_UNIQUE_PAL_TAG_START + 2,
         .icon = gMonIcon_AzelfShadow,
     },
     {
@@ -94,6 +122,8 @@
         .frontPic = gMonFrontPic_BaxcaliburShadow,
         .backPic = gMonBackPic_BaxcaliburShadow,
         .palette = gMonPalette_BaxcaliburShadow,
+        .iconPalette = gMonIconPalette_BaxcaliburShadow,
+        .iconPaletteTag = POKE_ICON_SHADOW_UNIQUE_PAL_TAG_START + 2,
         .icon = gMonIcon_BaxcaliburShadow,
     },
     {
@@ -101,6 +131,8 @@
         .frontPic = gMonFrontPic_BearticShadow,
         .backPic = gMonBackPic_BearticShadow,
         .palette = gMonPalette_BearticShadow,
+        .iconPalette = gMonIconPalette_BearticShadow,
+        .iconPaletteTag = POKE_ICON_SHADOW_UNIQUE_PAL_TAG_START + 0,
         .icon = gMonIcon_BearticShadow,
     },
     {
@@ -108,6 +140,8 @@
         .frontPic = gMonFrontPic_BeedrillShadow,
         .backPic = gMonBackPic_BeedrillShadow,
         .palette = gMonPalette_BeedrillShadow,
+        .iconPalette = gMonIconPalette_BeedrillShadow,
+        .iconPaletteTag = POKE_ICON_SHADOW_UNIQUE_PAL_TAG_START + 0,
         .icon = gMonIcon_BeedrillShadow,
     },
     {
@@ -115,6 +149,8 @@
         .frontPic = gMonFrontPic_BlacephalonShadow,
         .backPic = gMonBackPic_BlacephalonShadow,
         .palette = gMonPalette_BlacephalonShadow,
+        .iconPalette = gMonIconPalette_BlacephalonShadow,
+        .iconPaletteTag = POKE_ICON_SHADOW_UNIQUE_PAL_TAG_START + 2,
         .icon = gMonIcon_BlacephalonShadow,
     },
     {
@@ -122,6 +158,8 @@
         .frontPic = gMonFrontPic_BlastoiseShadow,
         .backPic = gMonBackPic_BlastoiseShadow,
         .palette = gMonPalette_BlastoiseShadow,
+        .iconPalette = gMonIconPalette_BlastoiseShadow,
+        .iconPaletteTag = POKE_ICON_SHADOW_UNIQUE_PAL_TAG_START + 1,
         .icon = gMonIcon_BlastoiseShadow,
     },
     {
@@ -129,6 +167,8 @@
         .frontPic = gMonFrontPic_BlazikenShadow,
         .backPic = gMonBackPic_BlazikenShadow,
         .palette = gMonPalette_BlazikenShadow,
+        .iconPalette = gMonIconPalette_BlazikenShadow,
+        .iconPaletteTag = POKE_ICON_SHADOW_UNIQUE_PAL_TAG_START + 2,
         .icon = gMonIcon_BlazikenShadow,
     },
     {
@@ -136,6 +176,8 @@
         .frontPic = gMonFrontPic_BlisseyShadow,
         .backPic = gMonBackPic_BlisseyShadow,
         .palette = gMonPalette_BlisseyShadow,
+        .iconPalette = gMonIconPalette_BlisseyShadow,
+        .iconPaletteTag = POKE_ICON_SHADOW_UNIQUE_PAL_TAG_START + 2,
         .icon = gMonIcon_BlisseyShadow,
     },
     {
@@ -143,6 +185,8 @@
         .frontPic = gMonFrontPic_BisharpShadow,
         .backPic = gMonBackPic_BisharpShadow,
         .palette = gMonPalette_BisharpShadow,
+        .iconPalette = gMonIconPalette_BisharpShadow,
+        .iconPaletteTag = POKE_ICON_SHADOW_UNIQUE_PAL_TAG_START + 2,
         .icon = gMonIcon_BisharpShadow,
     },
     {
@@ -150,6 +194,8 @@
         .frontPic = gMonFrontPic_BuzzwoleShadow,
         .backPic = gMonBackPic_BuzzwoleShadow,
         .palette = gMonPalette_BuzzwoleShadow,
+        .iconPalette = gMonIconPalette_BuzzwoleShadow,
+        .iconPaletteTag = POKE_ICON_SHADOW_UNIQUE_PAL_TAG_START + 2,
         .icon = gMonIcon_BuzzwoleShadow,
     },
     {
@@ -157,20 +203,44 @@
         .frontPic = gMonFrontPic_CalyrexShadow,
         .backPic = gMonBackPic_CalyrexShadow,
         .palette = gMonPalette_CalyrexShadow,
+        .iconPalette = gMonIconPalette_CalyrexShadow,
+        .iconPaletteTag = POKE_ICON_SHADOW_UNIQUE_PAL_TAG_START + 2,
         .icon = gMonIcon_CalyrexShadow,
+    },
+    {
+        .species = SPECIES_CALYREX_ICE,
+        .frontPic = gMonFrontPic_CalyrexIceShadow,
+        .backPic = gMonBackPic_CalyrexIceShadow,
+        .palette = gMonPalette_CalyrexIceShadow,
+        .iconPalette = gMonIconPalette_CalyrexIceShadow,
+        .iconPaletteTag = POKE_ICON_SHADOW_UNIQUE_PAL_TAG_START + 2,
+        .icon = gMonIcon_CalyrexIceShadow,
     },
     {
         .species = SPECIES_CAMERUPT,
         .frontPic = gMonFrontPic_CameruptShadow,
         .backPic = gMonBackPic_CameruptShadow,
         .palette = gMonPalette_CameruptShadow,
+        .iconPalette = gMonIconPalette_CameruptShadow,
+        .iconPaletteTag = POKE_ICON_SHADOW_UNIQUE_PAL_TAG_START + 2,
         .icon = gMonIcon_CameruptShadow,
+    },
+    {
+        .species = SPECIES_CELEBI,
+        .frontPic = gMonFrontPic_CelebiShadow,
+        .backPic = gMonBackPic_CelebiShadow,
+        .palette = gMonPalette_CelebiShadow,
+        .iconPalette = gMonIconPalette_CelebiShadow,
+        .iconPaletteTag = POKE_ICON_SHADOW_UNIQUE_PAL_TAG_START + 6,
+        .icon = gMonIcon_CelebiShadow,
     },
     {
         .species = SPECIES_CELESTEELA,
         .frontPic = gMonFrontPic_CelesteelaShadow,
         .backPic = gMonBackPic_CelesteelaShadow,
         .palette = gMonPalette_CelesteelaShadow,
+        .iconPalette = gMonIconPalette_CelesteelaShadow,
+        .iconPaletteTag = POKE_ICON_SHADOW_UNIQUE_PAL_TAG_START + 2,
         .icon = gMonIcon_CelesteelaShadow,
     },
     {
@@ -178,6 +248,8 @@
         .frontPic = gMonFrontPic_CentiskorchShadow,
         .backPic = gMonBackPic_CentiskorchShadow,
         .palette = gMonPalette_CentiskorchShadow,
+        .iconPalette = gMonIconPalette_CentiskorchShadow,
+        .iconPaletteTag = POKE_ICON_SHADOW_UNIQUE_PAL_TAG_START + 0,
         .icon = gMonIcon_CentiskorchShadow,
     },
     {
@@ -185,6 +257,8 @@
         .frontPic = gMonFrontPic_CeruledgeShadow,
         .backPic = gMonBackPic_CeruledgeShadow,
         .palette = gMonPalette_CeruledgeShadow,
+        .iconPalette = gMonIconPalette_CeruledgeShadow,
+        .iconPaletteTag = POKE_ICON_SHADOW_UNIQUE_PAL_TAG_START + 1,
         .icon = gMonIcon_CeruledgeShadow,
     },
     {
@@ -192,6 +266,8 @@
         .frontPic = gMonFrontPic_ChandelureShadow,
         .backPic = gMonBackPic_ChandelureShadow,
         .palette = gMonPalette_ChandelureShadow,
+        .iconPalette = gMonIconPalette_ChandelureShadow,
+        .iconPaletteTag = POKE_ICON_SHADOW_UNIQUE_PAL_TAG_START + 1,
         .icon = gMonIcon_ChandelureShadow,
     },
     {
@@ -199,6 +275,8 @@
         .frontPic = gMonFrontPic_CharizardShadow,
         .backPic = gMonBackPic_CharizardShadow,
         .palette = gMonPalette_CharizardShadow,
+        .iconPalette = gMonIconPalette_CharizardShadow,
+        .iconPaletteTag = POKE_ICON_SHADOW_UNIQUE_PAL_TAG_START + 7,
         .icon = gMonIcon_CharizardShadow,
     },
     {
@@ -206,6 +284,8 @@
         .frontPic = gMonFrontPic_ChesnaughtShadow,
         .backPic = gMonBackPic_ChesnaughtShadow,
         .palette = gMonPalette_ChesnaughtShadow,
+        .iconPalette = gMonIconPalette_ChesnaughtShadow,
+        .iconPaletteTag = POKE_ICON_SHADOW_UNIQUE_PAL_TAG_START + 8,
         .icon = gMonIcon_ChesnaughtShadow,
     },
     {
@@ -213,6 +293,8 @@
         .frontPic = gMonFrontPic_ChienPaoShadow,
         .backPic = gMonBackPic_ChienPaoShadow,
         .palette = gMonPalette_ChienPaoShadow,
+        .iconPalette = gMonIconPalette_ChienPaoShadow,
+        .iconPaletteTag = POKE_ICON_SHADOW_UNIQUE_PAL_TAG_START + 2,
         .icon = gMonIcon_ChienPaoShadow,
     },
     {
@@ -220,6 +302,8 @@
         .frontPic = gMonFrontPic_ChiYuShadow,
         .backPic = gMonBackPic_ChiYuShadow,
         .palette = gMonPalette_ChiYuShadow,
+        .iconPalette = gMonIconPalette_ChiYuShadow,
+        .iconPaletteTag = POKE_ICON_SHADOW_UNIQUE_PAL_TAG_START + 2,
         .icon = gMonIcon_ChiYuShadow,
     },
     {
@@ -227,6 +311,8 @@
         .frontPic = gMonFrontPic_ClawitzerShadow,
         .backPic = gMonBackPic_ClawitzerShadow,
         .palette = gMonPalette_ClawitzerShadow,
+        .iconPalette = gMonIconPalette_ClawitzerShadow,
+        .iconPaletteTag = POKE_ICON_SHADOW_UNIQUE_PAL_TAG_START + 2,
         .icon = gMonIcon_ClawitzerShadow,
     },
     {
@@ -234,6 +320,8 @@
         .frontPic = gMonFrontPic_ClodsireShadow,
         .backPic = gMonBackPic_ClodsireShadow,
         .palette = gMonPalette_ClodsireShadow,
+        .iconPalette = gMonIconPalette_ClodsireShadow,
+        .iconPaletteTag = POKE_ICON_SHADOW_UNIQUE_PAL_TAG_START + 2,
         .icon = gMonIcon_ClodsireShadow,
     },
     {
@@ -241,6 +329,8 @@
         .frontPic = gMonFrontPic_CobalionShadow,
         .backPic = gMonBackPic_CobalionShadow,
         .palette = gMonPalette_CobalionShadow,
+        .iconPalette = gMonIconPalette_CobalionShadow,
+        .iconPaletteTag = POKE_ICON_SHADOW_UNIQUE_PAL_TAG_START + 2,
         .icon = gMonIcon_CobalionShadow,
     },
     {
@@ -248,6 +338,8 @@
         .frontPic = gMonFrontPic_CopperajahShadow,
         .backPic = gMonBackPic_CopperajahShadow,
         .palette = gMonPalette_CopperajahShadow,
+        .iconPalette = gMonIconPalette_CopperajahShadow,
+        .iconPaletteTag = POKE_ICON_SHADOW_UNIQUE_PAL_TAG_START + 0,
         .icon = gMonIcon_CopperajahShadow,
     },
     {
@@ -255,6 +347,8 @@
         .frontPic = gMonFrontPic_CorviknightShadow,
         .backPic = gMonBackPic_CorviknightShadow,
         .palette = gMonPalette_CorviknightShadow,
+        .iconPalette = gMonIconPalette_CorviknightShadow,
+        .iconPaletteTag = POKE_ICON_SHADOW_UNIQUE_PAL_TAG_START + 2,
         .icon = gMonIcon_CorviknightShadow,
     },
     {
@@ -262,6 +356,8 @@
         .frontPic = gMonFrontPic_CresseliaShadow,
         .backPic = gMonBackPic_CresseliaShadow,
         .palette = gMonPalette_CresseliaShadow,
+        .iconPalette = gMonIconPalette_CresseliaShadow,
+        .iconPaletteTag = POKE_ICON_SHADOW_UNIQUE_PAL_TAG_START + 2,
         .icon = gMonIcon_CresseliaShadow,
     },
     {
@@ -269,6 +365,8 @@
         .frontPic = gMonFrontPic_CrobatShadow,
         .backPic = gMonBackPic_CrobatShadow,
         .palette = gMonPalette_CrobatShadow,
+        .iconPalette = gMonIconPalette_CrobatShadow,
+        .iconPaletteTag = POKE_ICON_SHADOW_UNIQUE_PAL_TAG_START + 1,
         .icon = gMonIcon_CrobatShadow,
     },
     {
@@ -276,6 +374,8 @@
         .frontPic = gMonFrontPic_DarkraiShadow,
         .backPic = gMonBackPic_DarkraiShadow,
         .palette = gMonPalette_DarkraiShadow,
+        .iconPalette = gMonIconPalette_DarkraiShadow,
+        .iconPaletteTag = POKE_ICON_SHADOW_UNIQUE_PAL_TAG_START + 2,
         .icon = gMonIcon_DarkraiShadow,
     },
     {
@@ -283,6 +383,8 @@
         .frontPic = gMonFrontPic_DecidueyeShadow,
         .backPic = gMonBackPic_DecidueyeShadow,
         .palette = gMonPalette_DecidueyeShadow,
+        .iconPalette = gMonIconPalette_DecidueyeShadow,
+        .iconPaletteTag = POKE_ICON_SHADOW_UNIQUE_PAL_TAG_START + 8,
         .icon = gMonIcon_DecidueyeShadow,
     },
     {
@@ -290,6 +392,8 @@
         .frontPic = gMonFrontPic_DeoxysShadow,
         .backPic = gMonBackPic_DeoxysShadow,
         .palette = gMonPalette_DeoxysShadow,
+        .iconPalette = gMonIconPalette_DeoxysShadow,
+        .iconPaletteTag = POKE_ICON_SHADOW_UNIQUE_PAL_TAG_START + 2,
         .icon = gMonIcon_DeoxysShadow,
     },
     {
@@ -297,6 +401,8 @@
         .frontPic = gMonFrontPic_DelphoxShadow,
         .backPic = gMonBackPic_DelphoxShadow,
         .palette = gMonPalette_DelphoxShadow,
+        .iconPalette = gMonIconPalette_DelphoxShadow,
+        .iconPaletteTag = POKE_ICON_SHADOW_UNIQUE_PAL_TAG_START + 2,
         .icon = gMonIcon_DelphoxShadow,
     },
     {
@@ -304,6 +410,8 @@
         .frontPic = gMonFrontPic_DialgaShadow,
         .backPic = gMonBackPic_DialgaShadow,
         .palette = gMonPalette_DialgaShadow,
+        .iconPalette = gMonIconPalette_DialgaShadow,
+        .iconPaletteTag = POKE_ICON_SHADOW_UNIQUE_PAL_TAG_START + 1,
         .icon = gMonIcon_DialgaShadow,
     },
     {
@@ -311,6 +419,8 @@
         .frontPic = gMonFrontPic_DiancieShadow,
         .backPic = gMonBackPic_DiancieShadow,
         .palette = gMonPalette_DiancieShadow,
+        .iconPalette = gMonIconPalette_DiancieShadow,
+        .iconPaletteTag = POKE_ICON_SHADOW_UNIQUE_PAL_TAG_START + 8,
         .icon = gMonIcon_DiancieShadow,
     },
     {
@@ -318,6 +428,8 @@
         .frontPic = gMonFrontPic_DonphanShadow,
         .backPic = gMonBackPic_DonphanShadow,
         .palette = gMonPalette_DonphanShadow,
+        .iconPalette = gMonIconPalette_DonphanShadow,
+        .iconPaletteTag = POKE_ICON_SHADOW_UNIQUE_PAL_TAG_START + 2,
         .icon = gMonIcon_DonphanShadow,
     },
     {
@@ -325,6 +437,8 @@
         .frontPic = gMonFrontPic_DragalgeShadow,
         .backPic = gMonBackPic_DragalgeShadow,
         .palette = gMonPalette_DragalgeShadow,
+        .iconPalette = gMonIconPalette_DragalgeShadow,
+        .iconPaletteTag = POKE_ICON_SHADOW_UNIQUE_PAL_TAG_START + 9,
         .icon = gMonIcon_DragalgeShadow,
     },
     {
@@ -332,6 +446,8 @@
         .frontPic = gMonFrontPic_DragoniteShadow,
         .backPic = gMonBackPic_DragoniteShadow,
         .palette = gMonPalette_DragoniteShadow,
+        .iconPalette = gMonIconPalette_DragoniteShadow,
+        .iconPaletteTag = POKE_ICON_SHADOW_UNIQUE_PAL_TAG_START + 1,
         .icon = gMonIcon_DragoniteShadow,
     },
     {
@@ -339,6 +455,8 @@
         .frontPic = gMonFrontPic_DragapultShadow,
         .backPic = gMonBackPic_DragapultShadow,
         .palette = gMonPalette_DragapultShadow,
+        .iconPalette = gMonIconPalette_DragapultShadow,
+        .iconPaletteTag = POKE_ICON_SHADOW_UNIQUE_PAL_TAG_START + 2,
         .icon = gMonIcon_DragapultShadow,
     },
     {
@@ -346,6 +464,8 @@
         .frontPic = gMonFrontPic_DrampaShadow,
         .backPic = gMonBackPic_DrampaShadow,
         .palette = gMonPalette_DrampaShadow,
+        .iconPalette = gMonIconPalette_DrampaShadow,
+        .iconPaletteTag = POKE_ICON_SHADOW_UNIQUE_PAL_TAG_START + 2,
         .icon = gMonIcon_DrampaShadow,
     },
     {
@@ -353,6 +473,8 @@
         .frontPic = gMonFrontPic_DusknoirShadow,
         .backPic = gMonBackPic_DusknoirShadow,
         .palette = gMonPalette_DusknoirShadow,
+        .iconPalette = gMonIconPalette_DusknoirShadow,
+        .iconPaletteTag = POKE_ICON_SHADOW_UNIQUE_PAL_TAG_START + 1,
         .icon = gMonIcon_DusknoirShadow,
     },
     {
@@ -360,6 +482,8 @@
         .frontPic = gMonFrontPic_EelektrossShadow,
         .backPic = gMonBackPic_EelektrossShadow,
         .palette = gMonPalette_EelektrossShadow,
+        .iconPalette = gMonIconPalette_EelektrossShadow,
+        .iconPaletteTag = POKE_ICON_SHADOW_UNIQUE_PAL_TAG_START + 2,
         .icon = gMonIcon_EelektrossShadow,
     },
     {
@@ -367,6 +491,8 @@
         .frontPic = gMonFrontPic_ElectivireShadow,
         .backPic = gMonBackPic_ElectivireShadow,
         .palette = gMonPalette_ElectivireShadow,
+        .iconPalette = gMonIconPalette_ElectivireShadow,
+        .iconPaletteTag = POKE_ICON_SHADOW_UNIQUE_PAL_TAG_START + 8,
         .icon = gMonIcon_ElectivireShadow,
     },
     {
@@ -374,6 +500,8 @@
         .frontPic = gMonFrontPic_EmboarShadow,
         .backPic = gMonBackPic_EmboarShadow,
         .palette = gMonPalette_EmboarShadow,
+        .iconPalette = gMonIconPalette_EmboarShadow,
+        .iconPaletteTag = POKE_ICON_SHADOW_UNIQUE_PAL_TAG_START + 2,
         .icon = gMonIcon_EmboarShadow,
     },
     {
@@ -381,6 +509,8 @@
         .frontPic = gMonFrontPic_EmpoleonShadow,
         .backPic = gMonBackPic_EmpoleonShadow,
         .palette = gMonPalette_EmpoleonShadow,
+        .iconPalette = gMonIconPalette_EmpoleonShadow,
+        .iconPaletteTag = POKE_ICON_SHADOW_UNIQUE_PAL_TAG_START + 2,
         .icon = gMonIcon_EmpoleonShadow,
     },
     {
@@ -388,6 +518,8 @@
         .frontPic = gMonFrontPic_EnamorusShadow,
         .backPic = gMonBackPic_EnamorusShadow,
         .palette = gMonPalette_EnamorusShadow,
+        .iconPalette = gMonIconPalette_EnamorusShadow,
+        .iconPaletteTag = POKE_ICON_SHADOW_UNIQUE_PAL_TAG_START + 8,
         .icon = gMonIcon_EnamorusShadow,
     },
     {
@@ -395,6 +527,8 @@
         .frontPic = gMonFrontPic_EnteiShadow,
         .backPic = gMonBackPic_EnteiShadow,
         .palette = gMonPalette_EnteiShadow,
+        .iconPalette = gMonIconPalette_EnteiShadow,
+        .iconPaletteTag = POKE_ICON_SHADOW_UNIQUE_PAL_TAG_START + 1,
         .icon = gMonIcon_EnteiShadow,
     },
     {
@@ -402,6 +536,8 @@
         .frontPic = gMonFrontPic_EternatusShadow,
         .backPic = gMonBackPic_EternatusShadow,
         .palette = gMonPalette_EternatusShadow,
+        .iconPalette = gMonIconPalette_EternatusShadow,
+        .iconPaletteTag = POKE_ICON_SHADOW_UNIQUE_PAL_TAG_START + 2,
         .icon = gMonIcon_EternatusShadow,
     },
     {
@@ -409,6 +545,8 @@
         .frontPic = gMonFrontPic_FalinksShadow,
         .backPic = gMonBackPic_FalinksShadow,
         .palette = gMonPalette_FalinksShadow,
+        .iconPalette = gMonIconPalette_FalinksShadow,
+        .iconPaletteTag = POKE_ICON_SHADOW_UNIQUE_PAL_TAG_START + 2,
         .icon = gMonIcon_FalinksShadow,
     },
     {
@@ -416,6 +554,8 @@
         .frontPic = gMonFrontPic_FeraligatrShadow,
         .backPic = gMonBackPic_FeraligatrShadow,
         .palette = gMonPalette_FeraligatrShadow,
+        .iconPalette = gMonIconPalette_FeraligatrShadow,
+        .iconPaletteTag = POKE_ICON_SHADOW_UNIQUE_PAL_TAG_START + 2,
         .icon = gMonIcon_FeraligatrShadow,
     },
     {
@@ -423,6 +563,8 @@
         .frontPic = gMonFrontPic_FlygonShadow,
         .backPic = gMonBackPic_FlygonShadow,
         .palette = gMonPalette_FlygonShadow,
+        .iconPalette = gMonIconPalette_FlygonShadow,
+        .iconPaletteTag = POKE_ICON_SHADOW_UNIQUE_PAL_TAG_START + 8,
         .icon = gMonIcon_FlygonShadow,
     },
     {
@@ -430,6 +572,8 @@
         .frontPic = gMonFrontPic_FlutterManeShadow,
         .backPic = gMonBackPic_FlutterManeShadow,
         .palette = gMonPalette_FlutterManeShadow,
+        .iconPalette = gMonIconPalette_FlutterManeShadow,
+        .iconPaletteTag = POKE_ICON_SHADOW_UNIQUE_PAL_TAG_START + 1,
         .icon = gMonIcon_FlutterManeShadow,
     },
     {
@@ -437,6 +581,8 @@
         .frontPic = gMonFrontPic_GalvantulaShadow,
         .backPic = gMonBackPic_GalvantulaShadow,
         .palette = gMonPalette_GalvantulaShadow,
+        .iconPalette = gMonIconPalette_GalvantulaShadow,
+        .iconPaletteTag = POKE_ICON_SHADOW_UNIQUE_PAL_TAG_START + 1,
         .icon = gMonIcon_GalvantulaShadow,
     },
     {
@@ -444,6 +590,8 @@
         .frontPic = gMonFrontPic_GarchompShadow,
         .backPic = gMonBackPic_GarchompShadow,
         .palette = gMonPalette_GarchompShadow,
+        .iconPalette = gMonIconPalette_GarchompShadow,
+        .iconPaletteTag = POKE_ICON_SHADOW_UNIQUE_PAL_TAG_START + 2,
         .icon = gMonIcon_GarchompShadow,
     },
     {
@@ -451,6 +599,8 @@
         .frontPic = gMonFrontPic_GenesectShadow,
         .backPic = gMonBackPic_GenesectShadow,
         .palette = gMonPalette_GenesectShadow,
+        .iconPalette = gMonIconPalette_GenesectShadow,
+        .iconPaletteTag = POKE_ICON_SHADOW_UNIQUE_PAL_TAG_START + 1,
         .icon = gMonIcon_GenesectShadow,
     },
     {
@@ -458,6 +608,8 @@
         .frontPic = gMonFrontPic_GholdengoShadow,
         .backPic = gMonBackPic_GholdengoShadow,
         .palette = gMonPalette_GholdengoShadow,
+        .iconPalette = gMonIconPalette_GholdengoShadow,
+        .iconPaletteTag = POKE_ICON_SHADOW_UNIQUE_PAL_TAG_START + 2,
         .icon = gMonIcon_GholdengoShadow,
     },
     {
@@ -465,6 +617,8 @@
         .frontPic = gMonFrontPic_GiratinaShadow,
         .backPic = gMonBackPic_GiratinaShadow,
         .palette = gMonPalette_GiratinaShadow,
+        .iconPalette = gMonIconPalette_GiratinaShadow,
+        .iconPaletteTag = POKE_ICON_SHADOW_UNIQUE_PAL_TAG_START + 2,
         .icon = gMonIcon_GiratinaShadow,
     },
     {
@@ -472,6 +626,8 @@
         .frontPic = gMonFrontPic_GolisopodShadow,
         .backPic = gMonBackPic_GolisopodShadow,
         .palette = gMonPalette_GolisopodShadow,
+        .iconPalette = gMonIconPalette_GolisopodShadow,
+        .iconPaletteTag = POKE_ICON_SHADOW_UNIQUE_PAL_TAG_START + 1,
         .icon = gMonIcon_GolisopodShadow,
     },
     {
@@ -479,6 +635,8 @@
         .frontPic = gMonFrontPic_GoodraShadow,
         .backPic = gMonBackPic_GoodraShadow,
         .palette = gMonPalette_GoodraShadow,
+        .iconPalette = gMonIconPalette_GoodraShadow,
+        .iconPaletteTag = POKE_ICON_SHADOW_UNIQUE_PAL_TAG_START + 0,
         .icon = gMonIcon_GoodraShadow,
     },
     {
@@ -486,6 +644,8 @@
         .frontPic = gMonFrontPic_GreatTuskShadow,
         .backPic = gMonBackPic_GreatTuskShadow,
         .palette = gMonPalette_GreatTuskShadow,
+        .iconPalette = gMonIconPalette_GreatTuskShadow,
+        .iconPaletteTag = POKE_ICON_SHADOW_UNIQUE_PAL_TAG_START + 2,
         .icon = gMonIcon_GreatTuskShadow,
     },
     {
@@ -493,6 +653,8 @@
         .frontPic = gMonFrontPic_GreninjaShadow,
         .backPic = gMonBackPic_GreninjaShadow,
         .palette = gMonPalette_GreninjaShadow,
+        .iconPalette = gMonIconPalette_GreninjaShadow,
+        .iconPaletteTag = POKE_ICON_SHADOW_UNIQUE_PAL_TAG_START + 2,
         .icon = gMonIcon_GreninjaShadow,
     },
     {
@@ -500,6 +662,8 @@
         .frontPic = gMonFrontPic_GrimmsnarlShadow,
         .backPic = gMonBackPic_GrimmsnarlShadow,
         .palette = gMonPalette_GrimmsnarlShadow,
+        .iconPalette = gMonIconPalette_GrimmsnarlShadow,
+        .iconPaletteTag = POKE_ICON_SHADOW_UNIQUE_PAL_TAG_START + 2,
         .icon = gMonIcon_GrimmsnarlShadow,
     },
     {
@@ -507,6 +671,8 @@
         .frontPic = gMonFrontPic_GroudonShadow,
         .backPic = gMonBackPic_GroudonShadow,
         .palette = gMonPalette_GroudonShadow,
+        .iconPalette = gMonIconPalette_GroudonShadow,
+        .iconPaletteTag = POKE_ICON_SHADOW_UNIQUE_PAL_TAG_START + 2,
         .icon = gMonIcon_GroudonShadow,
     },
     {
@@ -514,6 +680,8 @@
         .frontPic = gMonFrontPic_GuzzlordShadow,
         .backPic = gMonBackPic_GuzzlordShadow,
         .palette = gMonPalette_GuzzlordShadow,
+        .iconPalette = gMonIconPalette_GuzzlordShadow,
+        .iconPaletteTag = POKE_ICON_SHADOW_UNIQUE_PAL_TAG_START + 1,
         .icon = gMonIcon_GuzzlordShadow,
     },
     {
@@ -521,6 +689,8 @@
         .frontPic = gMonFrontPic_GyaradosShadow,
         .backPic = gMonBackPic_GyaradosShadow,
         .palette = gMonPalette_GyaradosShadow,
+        .iconPalette = gMonIconPalette_GyaradosShadow,
+        .iconPaletteTag = POKE_ICON_SHADOW_UNIQUE_PAL_TAG_START + 2,
         .icon = gMonIcon_GyaradosShadow,
     },
     {
@@ -528,6 +698,8 @@
         .frontPic = gMonFrontPic_HattereneShadow,
         .backPic = gMonBackPic_HattereneShadow,
         .palette = gMonPalette_HattereneShadow,
+        .iconPalette = gMonIconPalette_HattereneShadow,
+        .iconPaletteTag = POKE_ICON_SHADOW_UNIQUE_PAL_TAG_START + 2,
         .icon = gMonIcon_HattereneShadow,
     },
     {
@@ -535,6 +707,8 @@
         .frontPic = gMonFrontPic_HeatranShadow,
         .backPic = gMonBackPic_HeatranShadow,
         .palette = gMonPalette_HeatranShadow,
+        .iconPalette = gMonIconPalette_HeatranShadow,
+        .iconPaletteTag = POKE_ICON_SHADOW_UNIQUE_PAL_TAG_START + 2,
         .icon = gMonIcon_HeatranShadow,
     },
     {
@@ -542,6 +716,8 @@
         .frontPic = gMonFrontPic_HoOhShadow,
         .backPic = gMonBackPic_HoOhShadow,
         .palette = gMonPalette_HoOhShadow,
+        .iconPalette = gMonIconPalette_HoOhShadow,
+        .iconPaletteTag = POKE_ICON_SHADOW_UNIQUE_PAL_TAG_START + 8,
         .icon = gMonIcon_HoOhShadow,
     },
     {
@@ -549,13 +725,17 @@
         .frontPic = gMonFrontPic_HonchkrowShadow,
         .backPic = gMonBackPic_HonchkrowShadow,
         .palette = gMonPalette_HonchkrowShadow,
+        .iconPalette = gMonIconPalette_HonchkrowShadow,
+        .iconPaletteTag = POKE_ICON_SHADOW_UNIQUE_PAL_TAG_START + 0,
         .icon = gMonIcon_HonchkrowShadow,
     },
     {
         .species = SPECIES_HOOPA,
         .frontPic = gMonFrontPic_HoopaShadow,
         .backPic = gMonBackPic_HoopaShadow,
-        .palette = NULL,
+        .palette = gMonPalette_HoopaShadow,
+        .iconPalette = gMonIconPalette_HoopaShadow,
+        .iconPaletteTag = POKE_ICON_SHADOW_UNIQUE_PAL_TAG_START + 10,
         .icon = gMonIcon_HoopaShadow,
     },
     {
@@ -563,6 +743,8 @@
         .frontPic = gMonFrontPic_HoundoomShadow,
         .backPic = gMonBackPic_HoundoomShadow,
         .palette = gMonPalette_HoundoomShadow,
+        .iconPalette = gMonIconPalette_HoundoomShadow,
+        .iconPaletteTag = POKE_ICON_SHADOW_UNIQUE_PAL_TAG_START + 2,
         .icon = gMonIcon_HoundoomShadow,
     },
     {
@@ -570,6 +752,8 @@
         .frontPic = gMonFrontPic_HydreigonShadow,
         .backPic = gMonBackPic_HydreigonShadow,
         .palette = gMonPalette_HydreigonShadow,
+        .iconPalette = gMonIconPalette_HydreigonShadow,
+        .iconPaletteTag = POKE_ICON_SHADOW_UNIQUE_PAL_TAG_START + 1,
         .icon = gMonIcon_HydreigonShadow,
     },
     {
@@ -577,6 +761,8 @@
         .frontPic = gMonFrontPic_IncineroarShadow,
         .backPic = gMonBackPic_IncineroarShadow,
         .palette = gMonPalette_IncineroarShadow,
+        .iconPalette = gMonIconPalette_IncineroarShadow,
+        .iconPaletteTag = POKE_ICON_SHADOW_UNIQUE_PAL_TAG_START + 2,
         .icon = gMonIcon_IncineroarShadow,
     },
     {
@@ -584,6 +770,8 @@
         .frontPic = gMonFrontPic_InfernapeShadow,
         .backPic = gMonBackPic_InfernapeShadow,
         .palette = gMonPalette_InfernapeShadow,
+        .iconPalette = gMonIconPalette_InfernapeShadow,
+        .iconPaletteTag = POKE_ICON_SHADOW_UNIQUE_PAL_TAG_START + 2,
         .icon = gMonIcon_InfernapeShadow,
     },
     {
@@ -591,6 +779,8 @@
         .frontPic = gMonFrontPic_InteleonShadow,
         .backPic = gMonBackPic_InteleonShadow,
         .palette = gMonPalette_InteleonShadow,
+        .iconPalette = gMonIconPalette_InteleonShadow,
+        .iconPaletteTag = POKE_ICON_SHADOW_UNIQUE_PAL_TAG_START + 2,
         .icon = gMonIcon_InteleonShadow,
     },
     {
@@ -598,6 +788,8 @@
         .frontPic = gMonFrontPic_IronBundleShadow,
         .backPic = gMonBackPic_IronBundleShadow,
         .palette = gMonPalette_IronBundleShadow,
+        .iconPalette = gMonIconPalette_IronBundleShadow,
+        .iconPaletteTag = POKE_ICON_SHADOW_UNIQUE_PAL_TAG_START + 2,
         .icon = gMonIcon_IronBundleShadow,
     },
     {
@@ -605,6 +797,8 @@
         .frontPic = gMonFrontPic_IronCrownShadow,
         .backPic = gMonBackPic_IronCrownShadow,
         .palette = gMonPalette_IronCrownShadow,
+        .iconPalette = gMonIconPalette_IronCrownShadow,
+        .iconPaletteTag = POKE_ICON_SHADOW_UNIQUE_PAL_TAG_START + 4,
         .icon = gMonIcon_IronCrownShadow,
     },
     {
@@ -612,6 +806,8 @@
         .frontPic = gMonFrontPic_IronHandsShadow,
         .backPic = gMonBackPic_IronHandsShadow,
         .palette = gMonPalette_IronHandsShadow,
+        .iconPalette = gMonIconPalette_IronHandsShadow,
+        .iconPaletteTag = POKE_ICON_SHADOW_UNIQUE_PAL_TAG_START + 2,
         .icon = gMonIcon_IronHandsShadow,
     },
     {
@@ -619,6 +815,8 @@
         .frontPic = gMonFrontPic_IronTreadsShadow,
         .backPic = gMonBackPic_IronTreadsShadow,
         .palette = gMonPalette_IronTreadsShadow,
+        .iconPalette = gMonIconPalette_IronTreadsShadow,
+        .iconPaletteTag = POKE_ICON_SHADOW_UNIQUE_PAL_TAG_START + 8,
         .icon = gMonIcon_IronTreadsShadow,
     },
     {
@@ -626,6 +824,8 @@
         .frontPic = gMonFrontPic_JirachiShadow,
         .backPic = gMonBackPic_JirachiShadow,
         .palette = gMonPalette_JirachiShadow,
+        .iconPalette = gMonIconPalette_JirachiShadow,
+        .iconPaletteTag = POKE_ICON_SHADOW_UNIQUE_PAL_TAG_START + 2,
         .icon = gMonIcon_JirachiShadow,
     },
     {
@@ -633,6 +833,8 @@
         .frontPic = gMonFrontPic_KartanaShadow,
         .backPic = gMonBackPic_KartanaShadow,
         .palette = gMonPalette_KartanaShadow,
+        .iconPalette = gMonIconPalette_KartanaShadow,
+        .iconPaletteTag = POKE_ICON_SHADOW_UNIQUE_PAL_TAG_START + 2,
         .icon = gMonIcon_KartanaShadow,
     },
     {
@@ -640,6 +842,8 @@
         .frontPic = gMonFrontPic_KeldeoShadow,
         .backPic = gMonBackPic_KeldeoShadow,
         .palette = gMonPalette_KeldeoShadow,
+        .iconPalette = gMonIconPalette_KeldeoShadow,
+        .iconPaletteTag = POKE_ICON_SHADOW_UNIQUE_PAL_TAG_START + 2,
         .icon = gMonIcon_KeldeoShadow,
     },
     {
@@ -647,6 +851,8 @@
         .frontPic = gMonFrontPic_KingdraShadow,
         .backPic = gMonBackPic_KingdraShadow,
         .palette = gMonPalette_KingdraShadow,
+        .iconPalette = gMonIconPalette_KingdraShadow,
+        .iconPaletteTag = POKE_ICON_SHADOW_UNIQUE_PAL_TAG_START + 2,
         .icon = gMonIcon_KingdraShadow,
     },
     {
@@ -654,6 +860,8 @@
         .frontPic = gMonFrontPic_KommoOShadow,
         .backPic = gMonBackPic_KommoOShadow,
         .palette = gMonPalette_KommoOShadow,
+        .iconPalette = gMonIconPalette_KommoOShadow,
+        .iconPaletteTag = POKE_ICON_SHADOW_UNIQUE_PAL_TAG_START + 1,
         .icon = gMonIcon_KommoOShadow,
     },
     {
@@ -661,6 +869,8 @@
         .frontPic = gMonFrontPic_KoraidonShadow,
         .backPic = gMonBackPic_KoraidonShadow,
         .palette = gMonPalette_KoraidonShadow,
+        .iconPalette = gMonIconPalette_KoraidonShadow,
+        .iconPaletteTag = POKE_ICON_SHADOW_UNIQUE_PAL_TAG_START + 2,
         .icon = gMonIcon_KoraidonShadow,
     },
     {
@@ -668,6 +878,8 @@
         .frontPic = gMonFrontPic_KrookodileShadow,
         .backPic = gMonBackPic_KrookodileShadow,
         .palette = gMonPalette_KrookodileShadow,
+        .iconPalette = gMonIconPalette_KrookodileShadow,
+        .iconPaletteTag = POKE_ICON_SHADOW_UNIQUE_PAL_TAG_START + 2,
         .icon = gMonIcon_KrookodileShadow,
     },
     {
@@ -675,6 +887,8 @@
         .frontPic = gMonFrontPic_KyogreShadow,
         .backPic = gMonBackPic_KyogreShadow,
         .palette = gMonPalette_KyogreShadow,
+        .iconPalette = gMonIconPalette_KyogreShadow,
+        .iconPaletteTag = POKE_ICON_SHADOW_UNIQUE_PAL_TAG_START + 1,
         .icon = gMonIcon_KyogreShadow,
     },
     {
@@ -682,6 +896,8 @@
         .frontPic = gMonFrontPic_KyuremShadow,
         .backPic = gMonBackPic_KyuremShadow,
         .palette = gMonPalette_KyuremShadow,
+        .iconPalette = gMonIconPalette_KyuremShadow,
+        .iconPaletteTag = POKE_ICON_SHADOW_UNIQUE_PAL_TAG_START + 2,
         .icon = gMonIcon_KyuremShadow,
     },
     {
@@ -689,6 +905,8 @@
         .frontPic = gMonFrontPic_LandorusShadow,
         .backPic = gMonBackPic_LandorusShadow,
         .palette = gMonPalette_LandorusShadow,
+        .iconPalette = gMonIconPalette_LandorusShadow,
+        .iconPaletteTag = POKE_ICON_SHADOW_UNIQUE_PAL_TAG_START + 2,
         .icon = gMonIcon_LandorusShadow,
     },
     {
@@ -696,6 +914,8 @@
         .frontPic = gMonFrontPic_LatiasShadow,
         .backPic = gMonBackPic_LatiasShadow,
         .palette = gMonPalette_LatiasShadow,
+        .iconPalette = gMonIconPalette_LatiasShadow,
+        .iconPaletteTag = POKE_ICON_SHADOW_UNIQUE_PAL_TAG_START + 2,
         .icon = gMonIcon_LatiasShadow,
     },
     {
@@ -703,6 +923,8 @@
         .frontPic = gMonFrontPic_LatiosShadow,
         .backPic = gMonBackPic_LatiosShadow,
         .palette = gMonPalette_LatiosShadow,
+        .iconPalette = gMonIconPalette_LatiosShadow,
+        .iconPaletteTag = POKE_ICON_SHADOW_UNIQUE_PAL_TAG_START + 2,
         .icon = gMonIcon_LatiosShadow,
     },
     {
@@ -710,6 +932,8 @@
         .frontPic = gMonFrontPic_LucarioShadow,
         .backPic = gMonBackPic_LucarioShadow,
         .palette = gMonPalette_LucarioShadow,
+        .iconPalette = gMonIconPalette_LucarioShadow,
+        .iconPaletteTag = POKE_ICON_SHADOW_UNIQUE_PAL_TAG_START + 1,
         .icon = gMonIcon_LucarioShadow,
     },
     {
@@ -717,6 +941,8 @@
         .frontPic = gMonFrontPic_LunalaShadow,
         .backPic = gMonBackPic_LunalaShadow,
         .palette = gMonPalette_LunalaShadow,
+        .iconPalette = gMonIconPalette_LunalaShadow,
+        .iconPaletteTag = POKE_ICON_SHADOW_UNIQUE_PAL_TAG_START + 1,
         .icon = gMonIcon_LunalaShadow,
     },
     {
@@ -724,6 +950,8 @@
         .frontPic = gMonFrontPic_MagearnaShadow,
         .backPic = gMonBackPic_MagearnaShadow,
         .palette = gMonPalette_MagearnaShadow,
+        .iconPalette = gMonIconPalette_MagearnaShadow,
+        .iconPaletteTag = POKE_ICON_SHADOW_UNIQUE_PAL_TAG_START + 2,
         .icon = gMonIcon_MagearnaShadow,
     },
     {
@@ -731,6 +959,8 @@
         .frontPic = gMonFrontPic_MagnezoneShadow,
         .backPic = gMonBackPic_MagnezoneShadow,
         .palette = gMonPalette_MagnezoneShadow,
+        .iconPalette = gMonIconPalette_MagnezoneShadow,
+        .iconPaletteTag = POKE_ICON_SHADOW_UNIQUE_PAL_TAG_START + 2,
         .icon = gMonIcon_MagnezoneShadow,
     },
     {
@@ -738,6 +968,8 @@
         .frontPic = gMonFrontPic_MalamarShadow,
         .backPic = gMonBackPic_MalamarShadow,
         .palette = gMonPalette_MalamarShadow,
+        .iconPalette = gMonIconPalette_MalamarShadow,
+        .iconPaletteTag = POKE_ICON_SHADOW_UNIQUE_PAL_TAG_START + 1,
         .icon = gMonIcon_MalamarShadow,
     },
     {
@@ -745,6 +977,8 @@
         .frontPic = gMonFrontPic_ManaphyShadow,
         .backPic = gMonBackPic_ManaphyShadow,
         .palette = gMonPalette_ManaphyShadow,
+        .iconPalette = gMonIconPalette_ManaphyShadow,
+        .iconPaletteTag = POKE_ICON_SHADOW_UNIQUE_PAL_TAG_START + 2,
         .icon = gMonIcon_ManaphyShadow,
     },
     {
@@ -752,6 +986,8 @@
         .frontPic = gMonFrontPic_ManectricShadow,
         .backPic = gMonBackPic_ManectricShadow,
         .palette = gMonPalette_ManectricShadow,
+        .iconPalette = gMonIconPalette_ManectricShadow,
+        .iconPaletteTag = POKE_ICON_SHADOW_UNIQUE_PAL_TAG_START + 0,
         .icon = gMonIcon_ManectricShadow,
     },
     {
@@ -759,6 +995,8 @@
         .frontPic = gMonFrontPic_MarshadowShadow,
         .backPic = gMonBackPic_MarshadowShadow,
         .palette = gMonPalette_MarshadowShadow,
+        .iconPalette = gMonIconPalette_MarshadowShadow,
+        .iconPaletteTag = POKE_ICON_SHADOW_UNIQUE_PAL_TAG_START + 2,
         .icon = gMonIcon_MarshadowShadow,
     },
     {
@@ -766,6 +1004,8 @@
         .frontPic = gMonFrontPic_MeganiumShadow,
         .backPic = gMonBackPic_MeganiumShadow,
         .palette = gMonPalette_MeganiumShadow,
+        .iconPalette = gMonIconPalette_MeganiumShadow,
+        .iconPaletteTag = POKE_ICON_SHADOW_UNIQUE_PAL_TAG_START + 8,
         .icon = gMonIcon_MeganiumShadow,
     },
     {
@@ -773,6 +1013,8 @@
         .frontPic = gMonFrontPic_MelmetalShadow,
         .backPic = gMonBackPic_MelmetalShadow,
         .palette = gMonPalette_MelmetalShadow,
+        .iconPalette = gMonIconPalette_MelmetalShadow,
+        .iconPaletteTag = POKE_ICON_SHADOW_UNIQUE_PAL_TAG_START + 1,
         .icon = gMonIcon_MelmetalShadow,
     },
     {
@@ -780,6 +1022,8 @@
         .frontPic = gMonFrontPic_MeloettaShadow,
         .backPic = gMonBackPic_MeloettaShadow,
         .palette = gMonPalette_MeloettaShadow,
+        .iconPalette = gMonIconPalette_MeloettaShadow,
+        .iconPaletteTag = POKE_ICON_SHADOW_UNIQUE_PAL_TAG_START + 11,
         .icon = gMonIcon_MeloettaShadow,
     },
     {
@@ -787,6 +1031,8 @@
         .frontPic = gMonFrontPic_MetagrossShadow,
         .backPic = gMonBackPic_MetagrossShadow,
         .palette = gMonPalette_MetagrossShadow,
+        .iconPalette = gMonIconPalette_MetagrossShadow,
+        .iconPaletteTag = POKE_ICON_SHADOW_UNIQUE_PAL_TAG_START + 2,
         .icon = gMonIcon_MetagrossShadow,
     },
     {
@@ -794,6 +1040,8 @@
         .frontPic = gMonFrontPic_MespritShadow,
         .backPic = gMonBackPic_MespritShadow,
         .palette = gMonPalette_MespritShadow,
+        .iconPalette = gMonIconPalette_MespritShadow,
+        .iconPaletteTag = POKE_ICON_SHADOW_UNIQUE_PAL_TAG_START + 2,
         .icon = gMonIcon_MespritShadow,
     },
     {
@@ -801,6 +1049,8 @@
         .frontPic = gMonFrontPic_MeowthShadow,
         .backPic = gMonBackPic_MeowthShadow,
         .palette = gMonPalette_MeowthShadow,
+        .iconPalette = gMonIconPalette_MeowthShadow,
+        .iconPaletteTag = POKE_ICON_SHADOW_UNIQUE_PAL_TAG_START + 0,
         .icon = gMonIcon_MeowthShadow,
     },
     {
@@ -808,6 +1058,8 @@
         .frontPic = gMonFrontPic_MeowscaradaShadow,
         .backPic = gMonBackPic_MeowscaradaShadow,
         .palette = gMonPalette_MeowscaradaShadow,
+        .iconPalette = gMonIconPalette_MeowscaradaShadow,
+        .iconPaletteTag = POKE_ICON_SHADOW_UNIQUE_PAL_TAG_START + 8,
         .icon = gMonIcon_MeowscaradaShadow,
     },
     {
@@ -815,6 +1067,8 @@
         .frontPic = gMonFrontPic_MewShadow,
         .backPic = gMonBackPic_MewShadow,
         .palette = gMonPalette_MewShadow,
+        .iconPalette = gMonIconPalette_MewShadow,
+        .iconPaletteTag = POKE_ICON_SHADOW_UNIQUE_PAL_TAG_START + 2,
         .icon = gMonIcon_MewShadow,
     },
     {
@@ -822,6 +1076,8 @@
         .frontPic = gMonFrontPic_MewtwoShadow,
         .backPic = gMonBackPic_MewtwoShadow,
         .palette = gMonPalette_MewtwoShadow,
+        .iconPalette = gMonIconPalette_MewtwoShadow,
+        .iconPaletteTag = POKE_ICON_SHADOW_UNIQUE_PAL_TAG_START + 1,
         .icon = gMonIcon_MewtwoShadow,
     },
     {
@@ -829,6 +1085,8 @@
         .frontPic = gMonFrontPic_MiloticShadow,
         .backPic = gMonBackPic_MiloticShadow,
         .palette = gMonPalette_MiloticShadow,
+        .iconPalette = gMonIconPalette_MiloticShadow,
+        .iconPaletteTag = POKE_ICON_SHADOW_UNIQUE_PAL_TAG_START + 1,
         .icon = gMonIcon_MiloticShadow,
     },
     {
@@ -836,6 +1094,8 @@
         .frontPic = gMonFrontPic_MimikyuShadow,
         .backPic = gMonBackPic_MimikyuShadow,
         .palette = gMonPalette_MimikyuShadow,
+        .iconPalette = gMonIconPalette_MimikyuShadow,
+        .iconPaletteTag = POKE_ICON_SHADOW_UNIQUE_PAL_TAG_START + 0,
         .icon = gMonIcon_MimikyuShadow,
     },
     {
@@ -843,6 +1103,8 @@
         .frontPic = gMonFrontPic_MimikyuBustedShadow,
         .backPic = gMonBackPic_MimikyuBustedShadow,
         .palette = gMonPalette_MimikyuBustedShadow,
+        .iconPalette = gMonIconPalette_MimikyuBustedShadow,
+        .iconPaletteTag = POKE_ICON_SHADOW_UNIQUE_PAL_TAG_START + 12,
         .icon = gMonIcon_MimikyuBustedShadow,
     },
     {
@@ -850,6 +1112,8 @@
         .frontPic = gMonFrontPic_MiraidonShadow,
         .backPic = gMonBackPic_MiraidonShadow,
         .palette = gMonPalette_MiraidonShadow,
+        .iconPalette = gMonIconPalette_MiraidonShadow,
+        .iconPaletteTag = POKE_ICON_SHADOW_UNIQUE_PAL_TAG_START + 1,
         .icon = gMonIcon_MiraidonShadow,
     },
     {
@@ -857,6 +1121,8 @@
         .frontPic = gMonFrontPic_MoltresShadow,
         .backPic = gMonBackPic_MoltresShadow,
         .palette = gMonPalette_MoltresShadow,
+        .iconPalette = gMonIconPalette_MoltresShadow,
+        .iconPaletteTag = POKE_ICON_SHADOW_UNIQUE_PAL_TAG_START + 2,
         .icon = gMonIcon_MoltresShadow,
     },
     {
@@ -864,6 +1130,8 @@
         .frontPic = gMonFrontPic_NaganadelShadow,
         .backPic = gMonBackPic_NaganadelShadow,
         .palette = gMonPalette_NaganadelShadow,
+        .iconPalette = gMonIconPalette_NaganadelShadow,
+        .iconPaletteTag = POKE_ICON_SHADOW_UNIQUE_PAL_TAG_START + 2,
         .icon = gMonIcon_NaganadelShadow,
     },
     {
@@ -871,6 +1139,8 @@
         .frontPic = gMonFrontPic_NecrozmaShadow,
         .backPic = gMonBackPic_NecrozmaShadow,
         .palette = gMonPalette_NecrozmaShadow,
+        .iconPalette = gMonIconPalette_NecrozmaShadow,
+        .iconPaletteTag = POKE_ICON_SHADOW_UNIQUE_PAL_TAG_START + 8,
         .icon = gMonIcon_NecrozmaShadow,
     },
     {
@@ -878,6 +1148,8 @@
         .frontPic = gMonFrontPic_NidokingShadow,
         .backPic = gMonBackPic_NidokingShadow,
         .palette = gMonPalette_NidokingShadow,
+        .iconPalette = gMonIconPalette_NidokingShadow,
+        .iconPaletteTag = POKE_ICON_SHADOW_UNIQUE_PAL_TAG_START + 1,
         .icon = gMonIcon_NidokingShadow,
     },
     {
@@ -885,6 +1157,8 @@
         .frontPic = gMonFrontPic_NihilegoShadow,
         .backPic = gMonBackPic_NihilegoShadow,
         .palette = gMonPalette_NihilegoShadow,
+        .iconPalette = gMonIconPalette_NihilegoShadow,
+        .iconPaletteTag = POKE_ICON_SHADOW_UNIQUE_PAL_TAG_START + 1,
         .icon = gMonIcon_NihilegoShadow,
     },
     {
@@ -892,6 +1166,8 @@
         .frontPic = gMonFrontPic_ObstagoonShadow,
         .backPic = gMonBackPic_ObstagoonShadow,
         .palette = gMonPalette_ObstagoonShadow,
+        .iconPalette = gMonIconPalette_ObstagoonShadow,
+        .iconPaletteTag = POKE_ICON_SHADOW_UNIQUE_PAL_TAG_START + 2,
         .icon = gMonIcon_ObstagoonShadow,
     },
     {
@@ -899,6 +1175,8 @@
         .frontPic = gMonFrontPic_PalossandShadow,
         .backPic = gMonBackPic_PalossandShadow,
         .palette = gMonPalette_PalossandShadow,
+        .iconPalette = gMonIconPalette_PalossandShadow,
+        .iconPaletteTag = POKE_ICON_SHADOW_UNIQUE_PAL_TAG_START + 1,
         .icon = gMonIcon_PalossandShadow,
     },
     {
@@ -906,6 +1184,8 @@
         .frontPic = gMonFrontPic_PalkiaShadow,
         .backPic = gMonBackPic_PalkiaShadow,
         .palette = gMonPalette_PalkiaShadow,
+        .iconPalette = gMonIconPalette_PalkiaShadow,
+        .iconPaletteTag = POKE_ICON_SHADOW_UNIQUE_PAL_TAG_START + 1,
         .icon = gMonIcon_PalkiaShadow,
     },
     {
@@ -913,6 +1193,8 @@
         .frontPic = gMonFrontPic_PangoroShadow,
         .backPic = gMonBackPic_PangoroShadow,
         .palette = gMonPalette_PangoroShadow,
+        .iconPalette = gMonIconPalette_PangoroShadow,
+        .iconPaletteTag = POKE_ICON_SHADOW_UNIQUE_PAL_TAG_START + 0,
         .icon = gMonIcon_PangoroShadow,
     },
     {
@@ -920,6 +1202,8 @@
         .frontPic = gMonFrontPic_PecharuntShadow,
         .backPic = gMonBackPic_PecharuntShadow,
         .palette = gMonPalette_PecharuntShadow,
+        .iconPalette = gMonIconPalette_PecharuntShadow,
+        .iconPaletteTag = POKE_ICON_SHADOW_UNIQUE_PAL_TAG_START + 2,
         .icon = gMonIcon_PecharuntShadow,
     },
     {
@@ -927,6 +1211,8 @@
         .frontPic = gMonFrontPic_PheromosaShadow,
         .backPic = gMonBackPic_PheromosaShadow,
         .palette = gMonPalette_PheromosaShadow,
+        .iconPalette = gMonIconPalette_PheromosaShadow,
+        .iconPaletteTag = POKE_ICON_SHADOW_UNIQUE_PAL_TAG_START + 1,
         .icon = gMonIcon_PheromosaShadow,
     },
     {
@@ -934,6 +1220,8 @@
         .frontPic = gMonFrontPic_PrimarinaShadow,
         .backPic = gMonBackPic_PrimarinaShadow,
         .palette = gMonPalette_PrimarinaShadow,
+        .iconPalette = gMonIconPalette_PrimarinaShadow,
+        .iconPaletteTag = POKE_ICON_SHADOW_UNIQUE_PAL_TAG_START + 2,
         .icon = gMonIcon_PrimarinaShadow,
     },
     {
@@ -941,6 +1229,8 @@
         .frontPic = gMonFrontPic_QuaquavalShadow,
         .backPic = gMonBackPic_QuaquavalShadow,
         .palette = gMonPalette_QuaquavalShadow,
+        .iconPalette = gMonIconPalette_QuaquavalShadow,
+        .iconPaletteTag = POKE_ICON_SHADOW_UNIQUE_PAL_TAG_START + 2,
         .icon = gMonIcon_QuaquavalShadow,
     },
     {
@@ -948,6 +1238,8 @@
         .frontPic = gMonFrontPic_RaikouShadow,
         .backPic = gMonBackPic_RaikouShadow,
         .palette = gMonPalette_RaikouShadow,
+        .iconPalette = gMonIconPalette_RaikouShadow,
+        .iconPaletteTag = POKE_ICON_SHADOW_UNIQUE_PAL_TAG_START + 1,
         .icon = gMonIcon_RaikouShadow,
     },
     {
@@ -955,6 +1247,8 @@
         .frontPic = gMonFrontPic_RayquazaShadow,
         .backPic = gMonBackPic_RayquazaShadow,
         .palette = gMonPalette_RayquazaShadow,
+        .iconPalette = gMonIconPalette_RayquazaShadow,
+        .iconPaletteTag = POKE_ICON_SHADOW_UNIQUE_PAL_TAG_START + 8,
         .icon = gMonIcon_RayquazaShadow,
     },
     {
@@ -962,6 +1256,8 @@
         .frontPic = gMonFrontPic_RegiceShadow,
         .backPic = gMonBackPic_RegiceShadow,
         .palette = gMonPalette_RegiceShadow,
+        .iconPalette = gMonIconPalette_RegiceShadow,
+        .iconPaletteTag = POKE_ICON_SHADOW_UNIQUE_PAL_TAG_START + 2,
         .icon = gMonIcon_RegiceShadow,
     },
     {
@@ -969,6 +1265,8 @@
         .frontPic = gMonFrontPic_RegidragoShadow,
         .backPic = gMonBackPic_RegidragoShadow,
         .palette = gMonPalette_RegidragoShadow,
+        .iconPalette = gMonIconPalette_RegidragoShadow,
+        .iconPaletteTag = POKE_ICON_SHADOW_UNIQUE_PAL_TAG_START + 2,
         .icon = gMonIcon_RegidragoShadow,
     },
     {
@@ -976,6 +1274,8 @@
         .frontPic = gMonFrontPic_RegielekiShadow,
         .backPic = gMonBackPic_RegielekiShadow,
         .palette = gMonPalette_RegielekiShadow,
+        .iconPalette = gMonIconPalette_RegielekiShadow,
+        .iconPaletteTag = POKE_ICON_SHADOW_UNIQUE_PAL_TAG_START + 2,
         .icon = gMonIcon_RegielekiShadow,
     },
     {
@@ -983,6 +1283,8 @@
         .frontPic = gMonFrontPic_RegigigasShadow,
         .backPic = gMonBackPic_RegigigasShadow,
         .palette = gMonPalette_RegigigasShadow,
+        .iconPalette = gMonIconPalette_RegigigasShadow,
+        .iconPaletteTag = POKE_ICON_SHADOW_UNIQUE_PAL_TAG_START + 2,
         .icon = gMonIcon_RegigigasShadow,
     },
     {
@@ -990,6 +1292,8 @@
         .frontPic = gMonFrontPic_RegirockShadow,
         .backPic = gMonBackPic_RegirockShadow,
         .palette = gMonPalette_RegirockShadow,
+        .iconPalette = gMonIconPalette_RegirockShadow,
+        .iconPaletteTag = POKE_ICON_SHADOW_UNIQUE_PAL_TAG_START + 1,
         .icon = gMonIcon_RegirockShadow,
     },
     {
@@ -997,6 +1301,8 @@
         .frontPic = gMonFrontPic_RegisteelShadow,
         .backPic = gMonBackPic_RegisteelShadow,
         .palette = gMonPalette_RegisteelShadow,
+        .iconPalette = gMonIconPalette_RegisteelShadow,
+        .iconPaletteTag = POKE_ICON_SHADOW_UNIQUE_PAL_TAG_START + 1,
         .icon = gMonIcon_RegisteelShadow,
     },
     {
@@ -1004,6 +1310,8 @@
         .frontPic = gMonFrontPic_ReuniclusShadow,
         .backPic = gMonBackPic_ReuniclusShadow,
         .palette = gMonPalette_ReuniclusShadow,
+        .iconPalette = gMonIconPalette_ReuniclusShadow,
+        .iconPaletteTag = POKE_ICON_SHADOW_UNIQUE_PAL_TAG_START + 8,
         .icon = gMonIcon_ReuniclusShadow,
     },
     {
@@ -1011,6 +1319,8 @@
         .frontPic = gMonFrontPic_ReshiramShadow,
         .backPic = gMonBackPic_ReshiramShadow,
         .palette = gMonPalette_ReshiramShadow,
+        .iconPalette = gMonIconPalette_ReshiramShadow,
+        .iconPaletteTag = POKE_ICON_SHADOW_UNIQUE_PAL_TAG_START + 2,
         .icon = gMonIcon_ReshiramShadow,
     },
     {
@@ -1018,6 +1328,8 @@
         .frontPic = gMonFrontPic_RhyperiorShadow,
         .backPic = gMonBackPic_RhyperiorShadow,
         .palette = gMonPalette_RhyperiorShadow,
+        .iconPalette = gMonIconPalette_RhyperiorShadow,
+        .iconPaletteTag = POKE_ICON_SHADOW_UNIQUE_PAL_TAG_START + 2,
         .icon = gMonIcon_RhyperiorShadow,
     },
     {
@@ -1025,6 +1337,8 @@
         .frontPic = gMonFrontPic_RillaboomShadow,
         .backPic = gMonBackPic_RillaboomShadow,
         .palette = gMonPalette_RillaboomShadow,
+        .iconPalette = gMonIconPalette_RillaboomShadow,
+        .iconPaletteTag = POKE_ICON_SHADOW_UNIQUE_PAL_TAG_START + 8,
         .icon = gMonIcon_RillaboomShadow,
     },
     {
@@ -1032,6 +1346,8 @@
         .frontPic = gMonFrontPic_SalamenceShadow,
         .backPic = gMonBackPic_SalamenceShadow,
         .palette = gMonPalette_SalamenceShadow,
+        .iconPalette = gMonIconPalette_SalamenceShadow,
+        .iconPaletteTag = POKE_ICON_SHADOW_UNIQUE_PAL_TAG_START + 2,
         .icon = gMonIcon_SalamenceShadow,
     },
     {
@@ -1039,6 +1355,8 @@
         .frontPic = gMonFrontPic_SalazzleShadow,
         .backPic = gMonBackPic_SalazzleShadow,
         .palette = gMonPalette_SalazzleShadow,
+        .iconPalette = gMonIconPalette_SalazzleShadow,
+        .iconPaletteTag = POKE_ICON_SHADOW_UNIQUE_PAL_TAG_START + 0,
         .icon = gMonIcon_SalazzleShadow,
     },
     {
@@ -1046,6 +1364,8 @@
         .frontPic = gMonFrontPic_SamurottShadow,
         .backPic = gMonBackPic_SamurottShadow,
         .palette = gMonPalette_SamurottShadow,
+        .iconPalette = gMonIconPalette_SamurottShadow,
+        .iconPaletteTag = POKE_ICON_SHADOW_UNIQUE_PAL_TAG_START + 1,
         .icon = gMonIcon_SamurottShadow,
     },
     {
@@ -1053,6 +1373,8 @@
         .frontPic = gMonFrontPic_SceptileShadow,
         .backPic = gMonBackPic_SceptileShadow,
         .palette = gMonPalette_SceptileShadow,
+        .iconPalette = gMonIconPalette_SceptileShadow,
+        .iconPaletteTag = POKE_ICON_SHADOW_UNIQUE_PAL_TAG_START + 8,
         .icon = gMonIcon_SceptileShadow,
     },
     {
@@ -1060,6 +1382,8 @@
         .frontPic = gMonFrontPic_ScreamTailShadow,
         .backPic = gMonBackPic_ScreamTailShadow,
         .palette = gMonPalette_ScreamTailShadow,
+        .iconPalette = gMonIconPalette_ScreamTailShadow,
+        .iconPaletteTag = POKE_ICON_SHADOW_UNIQUE_PAL_TAG_START + 2,
         .icon = gMonIcon_ScreamTailShadow,
     },
     {
@@ -1067,6 +1391,8 @@
         .frontPic = gMonFrontPic_SerperiorShadow,
         .backPic = gMonBackPic_SerperiorShadow,
         .palette = gMonPalette_SerperiorShadow,
+        .iconPalette = gMonIconPalette_SerperiorShadow,
+        .iconPaletteTag = POKE_ICON_SHADOW_UNIQUE_PAL_TAG_START + 8,
         .icon = gMonIcon_SerperiorShadow,
     },
     {
@@ -1074,6 +1400,8 @@
         .frontPic = gMonFrontPic_LugiaShadow,
         .backPic = gMonBackPic_LugiaShadow,
         .palette = gMonPalette_LugiaShadow,
+        .iconPalette = gMonIconPalette_LugiaShadow,
+        .iconPaletteTag = POKE_ICON_SHADOW_UNIQUE_PAL_TAG_START + 2,
         .icon = gMonIcon_LugiaShadow,
     },
     {
@@ -1081,6 +1409,8 @@
         .frontPic = gMonFrontPic_SharpedoShadow,
         .backPic = gMonBackPic_SharpedoShadow,
         .palette = gMonPalette_SharpedoShadow,
+        .iconPalette = gMonIconPalette_SharpedoShadow,
+        .iconPaletteTag = POKE_ICON_SHADOW_UNIQUE_PAL_TAG_START + 2,
         .icon = gMonIcon_SharpedoShadow,
     },
     {
@@ -1088,6 +1418,8 @@
         .frontPic = gMonFrontPic_SilvallyShadow,
         .backPic = gMonBackPic_SilvallyShadow,
         .palette = gMonPalette_SilvallyShadow,
+        .iconPalette = gMonIconPalette_SilvallyShadow,
+        .iconPaletteTag = POKE_ICON_SHADOW_UNIQUE_PAL_TAG_START + 13,
         .icon = gMonIcon_SilvallyShadow,
     },
     {
@@ -1095,6 +1427,8 @@
         .frontPic = gMonFrontPic_SkarmoryShadow,
         .backPic = gMonBackPic_SkarmoryShadow,
         .palette = gMonPalette_SkarmoryShadow,
+        .iconPalette = gMonIconPalette_SkarmoryShadow,
+        .iconPaletteTag = POKE_ICON_SHADOW_UNIQUE_PAL_TAG_START + 0,
         .icon = gMonIcon_SkarmoryShadow,
     },
     {
@@ -1102,6 +1436,8 @@
         .frontPic = gMonFrontPic_SkeledirgeShadow,
         .backPic = gMonBackPic_SkeledirgeShadow,
         .palette = gMonPalette_SkeledirgeShadow,
+        .iconPalette = gMonIconPalette_SkeledirgeShadow,
+        .iconPaletteTag = POKE_ICON_SHADOW_UNIQUE_PAL_TAG_START + 2,
         .icon = gMonIcon_SkeledirgeShadow,
     },
     {
@@ -1109,6 +1445,8 @@
         .frontPic = gMonFrontPic_SnorlaxShadow,
         .backPic = gMonBackPic_SnorlaxShadow,
         .palette = gMonPalette_SnorlaxShadow,
+        .iconPalette = gMonIconPalette_SnorlaxShadow,
+        .iconPaletteTag = POKE_ICON_SHADOW_UNIQUE_PAL_TAG_START + 4,
         .icon = gMonIcon_SnorlaxShadow,
     },
     {
@@ -1116,6 +1454,8 @@
         .frontPic = gMonFrontPic_SolgaleoShadow,
         .backPic = gMonBackPic_SolgaleoShadow,
         .palette = gMonPalette_SolgaleoShadow,
+        .iconPalette = gMonIconPalette_SolgaleoShadow,
+        .iconPaletteTag = POKE_ICON_SHADOW_UNIQUE_PAL_TAG_START + 1,
         .icon = gMonIcon_SolgaleoShadow,
     },
     {
@@ -1123,6 +1463,8 @@
         .frontPic = gMonFrontPic_StakatakaShadow,
         .backPic = gMonBackPic_StakatakaShadow,
         .palette = gMonPalette_StakatakaShadow,
+        .iconPalette = gMonIconPalette_StakatakaShadow,
+        .iconPaletteTag = POKE_ICON_SHADOW_UNIQUE_PAL_TAG_START + 2,
         .icon = gMonIcon_StakatakaShadow,
     },
     {
@@ -1130,6 +1472,8 @@
         .frontPic = gMonFrontPic_SteelixShadow,
         .backPic = gMonBackPic_SteelixShadow,
         .palette = gMonPalette_SteelixShadow,
+        .iconPalette = gMonIconPalette_SteelixShadow,
+        .iconPaletteTag = POKE_ICON_SHADOW_UNIQUE_PAL_TAG_START + 2,
         .icon = gMonIcon_SteelixShadow,
     },
     {
@@ -1137,6 +1481,8 @@
         .frontPic = gMonFrontPic_SuicuneShadow,
         .backPic = gMonBackPic_SuicuneShadow,
         .palette = gMonPalette_SuicuneShadow,
+        .iconPalette = gMonIconPalette_SuicuneShadow,
+        .iconPaletteTag = POKE_ICON_SHADOW_UNIQUE_PAL_TAG_START + 1,
         .icon = gMonIcon_SuicuneShadow,
     },
     {
@@ -1144,6 +1490,8 @@
         .frontPic = gMonFrontPic_SwampertShadow,
         .backPic = gMonBackPic_SwampertShadow,
         .palette = gMonPalette_SwampertShadow,
+        .iconPalette = gMonIconPalette_SwampertShadow,
+        .iconPaletteTag = POKE_ICON_SHADOW_UNIQUE_PAL_TAG_START + 2,
         .icon = gMonIcon_SwampertShadow,
     },
     {
@@ -1151,6 +1499,8 @@
         .frontPic = gMonFrontPic_TapuBuluShadow,
         .backPic = gMonBackPic_TapuBuluShadow,
         .palette = gMonPalette_TapuBuluShadow,
+        .iconPalette = gMonIconPalette_TapuBuluShadow,
+        .iconPaletteTag = POKE_ICON_SHADOW_UNIQUE_PAL_TAG_START + 1,
         .icon = gMonIcon_TapuBuluShadow,
     },
     {
@@ -1158,6 +1508,8 @@
         .frontPic = gMonFrontPic_TapuFiniShadow,
         .backPic = gMonBackPic_TapuFiniShadow,
         .palette = gMonPalette_TapuFiniShadow,
+        .iconPalette = gMonIconPalette_TapuFiniShadow,
+        .iconPaletteTag = POKE_ICON_SHADOW_UNIQUE_PAL_TAG_START + 1,
         .icon = gMonIcon_TapuFiniShadow,
     },
     {
@@ -1165,6 +1517,8 @@
         .frontPic = gMonFrontPic_TapuKokoShadow,
         .backPic = gMonBackPic_TapuKokoShadow,
         .palette = gMonPalette_TapuKokoShadow,
+        .iconPalette = gMonIconPalette_TapuKokoShadow,
+        .iconPaletteTag = POKE_ICON_SHADOW_UNIQUE_PAL_TAG_START + 2,
         .icon = gMonIcon_TapuKokoShadow,
     },
     {
@@ -1172,6 +1526,8 @@
         .frontPic = gMonFrontPic_TapuLeleShadow,
         .backPic = gMonBackPic_TapuLeleShadow,
         .palette = gMonPalette_TapuLeleShadow,
+        .iconPalette = gMonIconPalette_TapuLeleShadow,
+        .iconPaletteTag = POKE_ICON_SHADOW_UNIQUE_PAL_TAG_START + 2,
         .icon = gMonIcon_TapuLeleShadow,
     },
     {
@@ -1179,6 +1535,8 @@
         .frontPic = gMonFrontPic_TalonflameShadow,
         .backPic = gMonBackPic_TalonflameShadow,
         .palette = gMonPalette_TalonflameShadow,
+        .iconPalette = gMonIconPalette_TalonflameShadow,
+        .iconPaletteTag = POKE_ICON_SHADOW_UNIQUE_PAL_TAG_START + 1,
         .icon = gMonIcon_TalonflameShadow,
     },
     {
@@ -1186,6 +1544,8 @@
         .frontPic = gMonFrontPic_TerapagosShadow,
         .backPic = gMonBackPic_TerapagosShadow,
         .palette = gMonPalette_TerapagosShadow,
+        .iconPalette = gMonIconPalette_TerapagosShadow,
+        .iconPaletteTag = POKE_ICON_SHADOW_UNIQUE_PAL_TAG_START + 2,
         .icon = gMonIcon_TerapagosShadow,
     },
     {
@@ -1193,6 +1553,8 @@
         .frontPic = gMonFrontPic_TerrakionShadow,
         .backPic = gMonBackPic_TerrakionShadow,
         .palette = gMonPalette_TerrakionShadow,
+        .iconPalette = gMonIconPalette_TerrakionShadow,
+        .iconPaletteTag = POKE_ICON_SHADOW_UNIQUE_PAL_TAG_START + 1,
         .icon = gMonIcon_TerrakionShadow,
     },
     {
@@ -1200,6 +1562,8 @@
         .frontPic = gMonFrontPic_ThundurusShadow,
         .backPic = gMonBackPic_ThundurusShadow,
         .palette = gMonPalette_ThundurusShadow,
+        .iconPalette = gMonIconPalette_ThundurusShadow,
+        .iconPaletteTag = POKE_ICON_SHADOW_UNIQUE_PAL_TAG_START + 2,
         .icon = gMonIcon_ThundurusShadow,
     },
     {
@@ -1207,6 +1571,8 @@
         .frontPic = gMonFrontPic_TingLuShadow,
         .backPic = gMonBackPic_TingLuShadow,
         .palette = gMonPalette_TingLuShadow,
+        .iconPalette = gMonIconPalette_TingLuShadow,
+        .iconPaletteTag = POKE_ICON_SHADOW_UNIQUE_PAL_TAG_START + 2,
         .icon = gMonIcon_TingLuShadow,
     },
     {
@@ -1214,6 +1580,8 @@
         .frontPic = gMonFrontPic_TornadusShadow,
         .backPic = gMonBackPic_TornadusShadow,
         .palette = gMonPalette_TornadusShadow,
+        .iconPalette = gMonIconPalette_TornadusShadow,
+        .iconPaletteTag = POKE_ICON_SHADOW_UNIQUE_PAL_TAG_START + 8,
         .icon = gMonIcon_TornadusShadow,
     },
     {
@@ -1221,6 +1589,8 @@
         .frontPic = gMonFrontPic_TorterraShadow,
         .backPic = gMonBackPic_TorterraShadow,
         .palette = gMonPalette_TorterraShadow,
+        .iconPalette = gMonIconPalette_TorterraShadow,
+        .iconPaletteTag = POKE_ICON_SHADOW_UNIQUE_PAL_TAG_START + 8,
         .icon = gMonIcon_TorterraShadow,
     },
     {
@@ -1228,6 +1598,8 @@
         .frontPic = gMonFrontPic_ToxapexShadow,
         .backPic = gMonBackPic_ToxapexShadow,
         .palette = gMonPalette_ToxapexShadow,
+        .iconPalette = gMonIconPalette_ToxapexShadow,
+        .iconPaletteTag = POKE_ICON_SHADOW_UNIQUE_PAL_TAG_START + 0,
         .icon = gMonIcon_ToxapexShadow,
     },
     {
@@ -1235,6 +1607,8 @@
         .frontPic = gMonFrontPic_TyphlosionShadow,
         .backPic = gMonBackPic_TyphlosionShadow,
         .palette = gMonPalette_TyphlosionShadow,
+        .iconPalette = gMonIconPalette_TyphlosionShadow,
+        .iconPaletteTag = POKE_ICON_SHADOW_UNIQUE_PAL_TAG_START + 4,
         .icon = gMonIcon_TyphlosionShadow,
     },
     {
@@ -1242,6 +1616,8 @@
         .frontPic = gMonFrontPic_TyranitarShadow,
         .backPic = gMonBackPic_TyranitarShadow,
         .palette = gMonPalette_TyranitarShadow,
+        .iconPalette = gMonIconPalette_TyranitarShadow,
+        .iconPaletteTag = POKE_ICON_SHADOW_UNIQUE_PAL_TAG_START + 11,
         .icon = gMonIcon_TyranitarShadow,
     },
     {
@@ -1249,6 +1625,8 @@
         .frontPic = gMonFrontPic_TyrantrumShadow,
         .backPic = gMonBackPic_TyrantrumShadow,
         .palette = gMonPalette_TyrantrumShadow,
+        .iconPalette = gMonIconPalette_TyrantrumShadow,
+        .iconPaletteTag = POKE_ICON_SHADOW_UNIQUE_PAL_TAG_START + 2,
         .icon = gMonIcon_TyrantrumShadow,
     },
     {
@@ -1256,6 +1634,8 @@
         .frontPic = gMonFrontPic_UxieShadow,
         .backPic = gMonBackPic_UxieShadow,
         .palette = gMonPalette_UxieShadow,
+        .iconPalette = gMonIconPalette_UxieShadow,
+        .iconPaletteTag = POKE_ICON_SHADOW_UNIQUE_PAL_TAG_START + 2,
         .icon = gMonIcon_UxieShadow,
     },
     {
@@ -1263,6 +1643,8 @@
         .frontPic = gMonFrontPic_VenusaurShadow,
         .backPic = gMonBackPic_VenusaurShadow,
         .palette = gMonPalette_VenusaurShadow,
+        .iconPalette = gMonIconPalette_VenusaurShadow,
+        .iconPaletteTag = POKE_ICON_SHADOW_UNIQUE_PAL_TAG_START + 0,
         .icon = gMonIcon_VenusaurShadow,
     },
     {
@@ -1270,6 +1652,8 @@
         .frontPic = gMonFrontPic_VictiniShadow,
         .backPic = gMonBackPic_VictiniShadow,
         .palette = gMonPalette_VictiniShadow,
+        .iconPalette = gMonIconPalette_VictiniShadow,
+        .iconPaletteTag = POKE_ICON_SHADOW_UNIQUE_PAL_TAG_START + 2,
         .icon = gMonIcon_VictiniShadow,
     },
     {
@@ -1277,6 +1661,8 @@
         .frontPic = gMonFrontPic_VikavoltShadow,
         .backPic = gMonBackPic_VikavoltShadow,
         .palette = gMonPalette_VikavoltShadow,
+        .iconPalette = gMonIconPalette_VikavoltShadow,
+        .iconPaletteTag = POKE_ICON_SHADOW_UNIQUE_PAL_TAG_START + 2,
         .icon = gMonIcon_VikavoltShadow,
     },
     {
@@ -1284,6 +1670,8 @@
         .frontPic = gMonFrontPic_VirizionShadow,
         .backPic = gMonBackPic_VirizionShadow,
         .palette = gMonPalette_VirizionShadow,
+        .iconPalette = gMonIconPalette_VirizionShadow,
+        .iconPaletteTag = POKE_ICON_SHADOW_UNIQUE_PAL_TAG_START + 8,
         .icon = gMonIcon_VirizionShadow,
     },
     {
@@ -1291,6 +1679,8 @@
         .frontPic = gMonFrontPic_VolcanionShadow,
         .backPic = gMonBackPic_VolcanionShadow,
         .palette = gMonPalette_VolcanionShadow,
+        .iconPalette = gMonIconPalette_VolcanionShadow,
+        .iconPaletteTag = POKE_ICON_SHADOW_UNIQUE_PAL_TAG_START + 2,
         .icon = gMonIcon_VolcanionShadow,
     },
     {
@@ -1298,6 +1688,8 @@
         .frontPic = gMonFrontPic_VolcaronaShadow,
         .backPic = gMonBackPic_VolcaronaShadow,
         .palette = gMonPalette_VolcaronaShadow,
+        .iconPalette = gMonIconPalette_VolcaronaShadow,
+        .iconPaletteTag = POKE_ICON_SHADOW_UNIQUE_PAL_TAG_START + 2,
         .icon = gMonIcon_VolcaronaShadow,
     },
     {
@@ -1305,6 +1697,8 @@
         .frontPic = gMonFrontPic_WalreinShadow,
         .backPic = gMonBackPic_WalreinShadow,
         .palette = gMonPalette_WalreinShadow,
+        .iconPalette = gMonIconPalette_WalreinShadow,
+        .iconPaletteTag = POKE_ICON_SHADOW_UNIQUE_PAL_TAG_START + 2,
         .icon = gMonIcon_WalreinShadow,
     },
     {
@@ -1312,6 +1706,8 @@
         .frontPic = gMonFrontPic_WeavileShadow,
         .backPic = gMonBackPic_WeavileShadow,
         .palette = gMonPalette_WeavileShadow,
+        .iconPalette = gMonIconPalette_WeavileShadow,
+        .iconPaletteTag = POKE_ICON_SHADOW_UNIQUE_PAL_TAG_START + 0,
         .icon = gMonIcon_WeavileShadow,
     },
     {
@@ -1319,6 +1715,8 @@
         .frontPic = gMonFrontPic_WoChienShadow,
         .backPic = gMonBackPic_WoChienShadow,
         .palette = gMonPalette_WoChienShadow,
+        .iconPalette = gMonIconPalette_WoChienShadow,
+        .iconPaletteTag = POKE_ICON_SHADOW_UNIQUE_PAL_TAG_START + 8,
         .icon = gMonIcon_WoChienShadow,
     },
     {
@@ -1326,6 +1724,8 @@
         .frontPic = gMonFrontPic_XerneasShadow,
         .backPic = gMonBackPic_XerneasShadow,
         .palette = gMonPalette_XerneasShadow,
+        .iconPalette = gMonIconPalette_XerneasShadow,
+        .iconPaletteTag = POKE_ICON_SHADOW_UNIQUE_PAL_TAG_START + 2,
         .icon = gMonIcon_XerneasShadow,
     },
     {
@@ -1333,6 +1733,8 @@
         .frontPic = gMonFrontPic_XurkitreeShadow,
         .backPic = gMonBackPic_XurkitreeShadow,
         .palette = gMonPalette_XurkitreeShadow,
+        .iconPalette = gMonIconPalette_XurkitreeShadow,
+        .iconPaletteTag = POKE_ICON_SHADOW_UNIQUE_PAL_TAG_START + 2,
         .icon = gMonIcon_XurkitreeShadow,
     },
     {
@@ -1340,6 +1742,8 @@
         .frontPic = gMonFrontPic_YveltalShadow,
         .backPic = gMonBackPic_YveltalShadow,
         .palette = gMonPalette_YveltalShadow,
+        .iconPalette = gMonIconPalette_YveltalShadow,
+        .iconPaletteTag = POKE_ICON_SHADOW_UNIQUE_PAL_TAG_START + 2,
         .icon = gMonIcon_YveltalShadow,
     },
     {
@@ -1347,6 +1751,8 @@
         .frontPic = gMonFrontPic_ZacianShadow,
         .backPic = gMonBackPic_ZacianShadow,
         .palette = gMonPalette_ZacianShadow,
+        .iconPalette = gMonIconPalette_ZacianShadow,
+        .iconPaletteTag = POKE_ICON_SHADOW_UNIQUE_PAL_TAG_START + 1,
         .icon = gMonIcon_ZacianShadow,
     },
     {
@@ -1354,6 +1760,8 @@
         .frontPic = gMonFrontPic_ZamazentaShadow,
         .backPic = gMonBackPic_ZamazentaShadow,
         .palette = gMonPalette_ZamazentaShadow,
+        .iconPalette = gMonIconPalette_ZamazentaShadow,
+        .iconPaletteTag = POKE_ICON_SHADOW_UNIQUE_PAL_TAG_START + 1,
         .icon = gMonIcon_ZamazentaShadow,
     },
     {
@@ -1361,6 +1769,8 @@
         .frontPic = gMonFrontPic_ZapdosShadow,
         .backPic = gMonBackPic_ZapdosShadow,
         .palette = gMonPalette_ZapdosShadow,
+        .iconPalette = gMonIconPalette_ZapdosShadow,
+        .iconPaletteTag = POKE_ICON_SHADOW_UNIQUE_PAL_TAG_START + 2,
         .icon = gMonIcon_ZapdosShadow,
     },
     {
@@ -1368,6 +1778,8 @@
         .frontPic = gMonFrontPic_ZarudeShadow,
         .backPic = gMonBackPic_ZarudeShadow,
         .palette = gMonPalette_ZarudeShadow,
+        .iconPalette = gMonIconPalette_ZarudeShadow,
+        .iconPaletteTag = POKE_ICON_SHADOW_UNIQUE_PAL_TAG_START + 8,
         .icon = gMonIcon_ZarudeShadow,
     },
     {
@@ -1375,6 +1787,8 @@
         .frontPic = gMonFrontPic_ZekromShadow,
         .backPic = gMonBackPic_ZekromShadow,
         .palette = gMonPalette_ZekromShadow,
+        .iconPalette = gMonIconPalette_ZekromShadow,
+        .iconPaletteTag = POKE_ICON_SHADOW_UNIQUE_PAL_TAG_START + 1,
         .icon = gMonIcon_ZekromShadow,
     },
     {
@@ -1382,6 +1796,8 @@
         .frontPic = gMonFrontPic_ZeraoraShadow,
         .backPic = gMonBackPic_ZeraoraShadow,
         .palette = gMonPalette_ZeraoraShadow,
+        .iconPalette = gMonIconPalette_ZeraoraShadow,
+        .iconPaletteTag = POKE_ICON_SHADOW_UNIQUE_PAL_TAG_START + 2,
         .icon = gMonIcon_ZeraoraShadow,
     },
     {
@@ -1389,5 +1805,16 @@
         .frontPic = gMonFrontPic_ZygardeShadow,
         .backPic = gMonBackPic_ZygardeShadow,
         .palette = gMonPalette_ZygardeShadow,
+        .iconPalette = gMonIconPalette_ZygardeShadow,
+        .iconPaletteTag = POKE_ICON_SHADOW_UNIQUE_PAL_TAG_START + 8,
         .icon = gMonIcon_ZygardeShadow,
+    },
+    {
+        .species = SPECIES_ZYGARDE_COMPLETE,
+        .frontPic = gMonFrontPic_ZygardeCompleteShadow,
+        .backPic = gMonBackPic_ZygardeCompleteShadow,
+        .palette = gMonPalette_ZygardeCompleteShadow,
+        .iconPalette = gMonIconPalette_ZygardeCompleteShadow,
+        .iconPaletteTag = POKE_ICON_SHADOW_UNIQUE_PAL_TAG_START + 8,
+        .icon = gMonIcon_ZygardeCompleteShadow,
     },

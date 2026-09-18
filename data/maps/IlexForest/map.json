@@ -136,7 +136,7 @@
       "movement_range_x": 0,
       "movement_range_y": 0,
       "trainer_type": "TRAINER_TYPE_NORMAL",
-      "trainer_sight_or_berry_tree_id": "5",
+      "trainer_sight_or_berry_tree_id": "1",
       "script": "IlexForest_EventScript_RocketGrunt_M2",
       "flag": "FLAG_HIDE_ILEX_JJ_GROUP"
     },
@@ -163,7 +163,7 @@
       "movement_type": "MOVEMENT_TYPE_FACE_UP",
       "movement_range_x": 0,
       "movement_range_y": 0,
-      "trainer_type": "TRAINER_TYPE_NONE",
+      "trainer_type": "TRAINER_TYPE_NORMAL",
       "trainer_sight_or_berry_tree_id": "4",
       "script": "IlexForest_EventScript_RocketGrunt_F3",
       "flag": "FLAG_HIDE_ILEX_JJ_GROUP"
@@ -289,6 +289,22 @@
       "elevation": 0,
       "player_facing_dir": "BG_EVENT_PLAYER_FACING_ANY",
       "script": "IlexForest_EventScript_Sign"
+    },
+    {
+      "type": "hidden_item",
+      "x": 38,
+      "y": 25,
+      "elevation": 0,
+      "item": "ITEM_TINY_MUSHROOM",
+      "flag": "FLAG_HIDDEN_ITEM_ILEX_FOREST_TINY_MUSHROOM"
+    },
+    {
+      "type": "hidden_item",
+      "x": 31,
+      "y": 35,
+      "elevation": 0,
+      "item": "ITEM_BIG_MUSHROOM",
+      "flag": "FLAG_HIDDEN_ITEM_ILEX_FOREST_BIG_MUSHROOM"
     }
   ]
 }

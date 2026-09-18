@@ -14,6 +14,7 @@
 #include "fake_rtc.h"
 #include "field_camera.h"
 #include "field_control_avatar.h"
+#include "field_door.h"
 #include "field_effect.h"
 #include "field_effect_helpers.h"
 #include "field_message_box.h"
@@ -128,6 +129,9 @@ static bool32 LoadMapInStepsLocal(u8 *, bool32);
 static bool32 LoadMapInStepsLink(u8 *);
 static bool32 ReturnToFieldLocal(u8 *);
 static bool32 ReturnToFieldLink(u8 *);
+static bool32 ShouldShowMapPopupForCurrentMap(void);
+static void TryShowMapNamePopupForCurrentMap(void);
+static bool32 IsPlayerApproachingDoorWarp(void);
 static void InitObjectEventsLink(void);
 static void InitObjectEventsLocal(void);
 static void InitOverworldGraphicsRegisters(void);
@@ -905,17 +909,7 @@ if (I_VS_SEEKER_CHARGING != 0)
     if (RoamingHunter_TryConsumeAlert() != 0)
         ScriptContext_SetupScript(RoamingHunter_AlertScript);
 
-    if (OW_HIDE_REPEAT_MAP_POPUP)
-    {
-        if (gMapHeader.regionMapSectionId != sLastMapSectionId)
-            ShowMapNamePopup();
-    }
-    else
-    {
-        if (gMapHeader.regionMapSectionId != MAPSEC_BATTLE_FRONTIER
-         || gMapHeader.regionMapSectionId != sLastMapSectionId)
-            ShowMapNamePopup();
-    }
+    TryShowMapNamePopupForCurrentMap();
 }
 
 static void LoadMapFromWarp(bool32 a1)
@@ -1751,6 +1745,41 @@ static void OverworldBasic(void)
     }
 }
 
+static u8 GetOverworldSpeedExtraIterations(void)
+{
+    if (JOY_HELD(R_BUTTON))
+        return 0;
+
+    switch (gSaveBlock2Ptr->optionsOverworldSpeed)
+    {
+    case OPTIONS_OVERWORLD_SPEED_4X:
+        return 3;
+    case OPTIONS_OVERWORLD_SPEED_3X:
+        return 2;
+    case OPTIONS_OVERWORLD_SPEED_2X:
+        return 1;
+    case OPTIONS_OVERWORLD_SPEED_1X:
+    default:
+        return 0;
+    }
+}
+
+static bool32 IsPlayerApproachingDoorWarp(void)
+{
+    s16 x;
+    s16 y;
+
+    // Door warps are entered while facing north. Keep both the approach and
+    // door tiles on real frames so the door task can finish opening before
+    // the player's movement callback advances through it.
+    PlayerGetDestCoords(&x, &y);
+    if (FieldIsWarpDoorAt(x, y))
+        return TRUE;
+
+    return GetPlayerFacingDirection() == DIR_NORTH
+        && FieldIsWarpDoorAt(x, y - 1);
+}
+
 // This CB2 is used when starting
 void CB2_OverworldBasic(void)
 {
@@ -1760,9 +1789,29 @@ void CB2_OverworldBasic(void)
 void CB2_Overworld(void)
 {
     bool32 fading = (gPaletteFade.active != 0);
+    u8 i;
+    u8 extraIterations;
+
     if (fading)
         SetVBlankCallback(NULL);
     OverworldBasic();
+
+    // Only advance visual movement here. Scripts, tasks, collision, input, and
+    // audio continue to run once per physical frame.
+    if (ArePlayerFieldControlsLocked()
+     || FieldIsDoorAnimationRunning()
+     || FuncIsActiveTask(Task_DoDoorWarp)
+     || IsPlayerApproachingDoorWarp())
+        extraIterations = 0;
+    else
+        extraIterations = GetOverworldSpeedExtraIterations();
+    for (i = 0; i < extraIterations; i++)
+    {
+        AnimateSprites();
+        CameraUpdate();
+        UpdateCameraPanning();
+    }
+
     if (fading)
     {
         SetFieldVBlankCallback();
@@ -2021,8 +2070,7 @@ void CB2_ReturnToFieldFadeFromBlack(void)
 
 static void FieldCB_FadeTryShowMapPopup(void)
 {
-    if (gMapHeader.showMapName == TRUE && SecretBaseMapPopupEnabled() == TRUE)
-        ShowMapNamePopup();
+    TryShowMapNamePopupForCurrentMap();
     FieldCB_WarpExitFadeFromBlack();
 }
 
@@ -2289,8 +2337,7 @@ static bool32 LoadMapInStepsLocal(u8 *state, bool32 a2)
         (*state)++;
         break;
     case 11:
-        if (gMapHeader.showMapName == TRUE && SecretBaseMapPopupEnabled() == TRUE)
-            ShowMapNamePopup();
+        TryShowMapNamePopupForCurrentMap();
         (*state)++;
         break;
     case 12:
@@ -2302,6 +2349,29 @@ static bool32 LoadMapInStepsLocal(u8 *state, bool32 a2)
     }
 
     return FALSE;
+}
+
+static bool32 ShouldShowMapPopupForCurrentMap(void)
+{
+    if (gMapHeader.showMapName != TRUE || SecretBaseMapPopupEnabled() != TRUE)
+        return FALSE;
+
+    if (OW_HIDE_REPEAT_MAP_POPUP)
+        return gMapHeader.regionMapSectionId != sLastMapSectionId;
+
+    return gMapHeader.regionMapSectionId != MAPSEC_BATTLE_FRONTIER
+        || gMapHeader.regionMapSectionId != sLastMapSectionId;
+}
+
+static void TryShowMapNamePopupForCurrentMap(void)
+{
+    bool8 hidePopup = FlagGet(FLAG_HIDE_MAP_NAME_POPUP);
+
+    if (!hidePopup && ShouldShowMapPopupForCurrentMap())
+        ShowMapNamePopup();
+
+    if (hidePopup)
+        FlagClear(FLAG_HIDE_MAP_NAME_POPUP);
 }
 
 static bool32 ReturnToFieldLocal(u8 *state)

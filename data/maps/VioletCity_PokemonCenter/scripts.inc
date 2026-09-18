@@ -13,6 +13,7 @@ VioletCity_PokemonCenter_Speaker_Beauty:
 
 VioletCity_PokemonCenter_OnTransition:
 	setrespawn HEAL_LOCATION_VIOLET_CITY
+	call CableClub_EventScript_HideOrShowMysteryGiftMan
 	end
 
 VioletCity_PokemonCenter_EventScript_GameboyKid::

@@ -5,10 +5,10 @@ Gate_RuinsOfAlph_Route36_Speaker_Officer:
 	.string "OFFICER$"
 
 Gate_RuinsOfAlph_Route36_Speaker_PokefanM:
-	.string "POKeFAN$"
+	.string "FRANK$"
 
 Gate_RuinsOfAlph_Route36_Speaker_Youngster:
-	.string "YOUNGSTER$"
+	.string "NICK$"
 
 Gate_RuinsOfAlph_Route36_EventScript_Officer::
 	lock

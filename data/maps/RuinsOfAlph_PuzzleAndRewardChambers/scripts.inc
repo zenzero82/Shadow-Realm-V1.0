@@ -364,6 +364,20 @@ RuinsOfAlph_PuzzleAndRewardChambers_EventScript_RewardKabuto::
 RuinsOfAlph_PuzzleAndRewardChambers_EventScript_CheckOmanyte::
 	lock
 	goto_if_set FLAG_OMANYTE_BROUGHT, RuinsOfAlph_PuzzleAndRewardChambers_EventScript_RewardGotten
+	goto RuinsOfAlph_PuzzleAndRewardChambers_EventScript_OmanyteHint
+RuinsOfAlph_PuzzleAndRewardChambers_EventScript_OmanyteHint::
+	msgbox RuinsOfAlph_PuzzleAndRewardChambers_Text_OmanyteHint, MSGBOX_DEFAULT
+RuinsOfAlph_PuzzleAndRewardChambers_EventScript_OmanyteScan::
+	msgbox RuinsOfAlph_PuzzleAndRewardChambers_Text_OmanyteScan, MSGBOX_DEFAULT
+	setvar VAR_0x8004, 0
+	specialvar VAR_RESULT, ScriptGetPartyMonSpecies
+	goto_if_eq VAR_RESULT, SPECIES_OMANYTE, RuinsOfAlph_PuzzleAndRewardChambers_EventScript_OmanyteConfirmed
+	msgbox RuinsOfAlph_PuzzleAndRewardChambers_Text_OmanyteDenied, MSGBOX_DEFAULT
+	release
+	end
+RuinsOfAlph_PuzzleAndRewardChambers_EventScript_OmanyteConfirmed::
+	msgbox RuinsOfAlph_PuzzleAndRewardChambers_Text_OmanyteConfirmed, MSGBOX_DEFAULT
+	closemessage
 	goto RuinsOfAlph_PuzzleAndRewardChambers_EventScript_RewardOmanyte
 RuinsOfAlph_PuzzleAndRewardChambers_EventScript_RewardOmanyte::
 	setvar VAR_0x8004, 1  @ vertical pan
@@ -506,6 +520,10 @@ RuinsOfAlph_PuzzleAndRewardChambers_Text_KabutoHint:
 	.string "It's UNOWN text...\p"
 	.string "ANCIENT GUARDIAN.$"
 
+RuinsOfAlph_PuzzleAndRewardChambers_Text_OmanyteHint:
+	.string "It's UNOWN text...\p"
+	.string "HELIX IN A MOMENT.$"
+
 RuinsOfAlph_PuzzleAndRewardChambers_Text_HoohHint:
 	.string "It's UNOWN text...\p"
 	.string "THE RAINBOWS GLORY.$"
@@ -550,6 +568,16 @@ RuinsOfAlph_PuzzleAndRewardChambers_Text_KabutoDenied:
 	.string "Guardian not found.$"
 
 RuinsOfAlph_PuzzleAndRewardChambers_Text_KabutoConfirmed:
+	.string "Guardian confirmed.$"
+
+RuinsOfAlph_PuzzleAndRewardChambers_Text_OmanyteScan:
+	.string "Scanning for the spiral\n"
+	.string "guardian...$"
+
+RuinsOfAlph_PuzzleAndRewardChambers_Text_OmanyteDenied:
+	.string "Guardian not found.$"
+
+RuinsOfAlph_PuzzleAndRewardChambers_Text_OmanyteConfirmed:
 	.string "Guardian confirmed.$"
 
 RuinsOfAlph_PuzzleAndRewardChambers_Text_Solved:

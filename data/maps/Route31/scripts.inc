@@ -14,15 +14,27 @@ Route31_Speaker_Boy:
 	.string "NOAH$"
 
 Route31_EventScript_Youngster::
-	faceplayer
 	setspeaker Route31_Speaker_Youngster
-	msgbox Route31_Text_Youngster, MSGBOX_NPC
+	trainerbattle_single TRAINER_ROUTE31_YOUNGSTER, Route31_Text_Youngster_Intro, Route31_Text_Youngster_Defeat, Route31_EventScript_Youngster_After
 	end
 
 Route31_EventScript_BugCatcher::
-	faceplayer
 	setspeaker Route31_Speaker_BugCatcher
-	msgbox Route31_Text_BugCatcher, MSGBOX_NPC
+	trainerbattle_single TRAINER_ROUTE31_BUG_CATCHER, Route31_Text_BugCatcher_Intro, Route31_Text_BugCatcher_Defeat, Route31_EventScript_BugCatcher_After
+	end
+
+Route31_EventScript_Youngster_After::
+	setspeaker Route31_Speaker_Youngster
+	msgbox Route31_Text_Youngster_After, MSGBOX_NPC
+	closemessage
+	release
+	end
+
+Route31_EventScript_BugCatcher_After::
+	setspeaker Route31_Speaker_BugCatcher
+	msgbox Route31_Text_BugCatcher_After, MSGBOX_NPC
+	closemessage
+	release
 	end
 
 Route31_EventScript_FatMan::
@@ -45,13 +57,28 @@ Route31_EventScript_SignDarkCave::
 	msgbox Route31_Text_SignDarkCave, MSGBOX_SIGN
 	end
 
-Route31_Text_Youngster:
+Route31_Text_Youngster_Intro:
+	.string "I came out to train before DARK\n"
+	.string "CAVE. Battle me first!$"
+
+Route31_Text_Youngster_Defeat:
+	.string "Guess I'll train a bit longer...$"
+
+Route31_Text_Youngster_After:
 	.string "DARK CAVE is scary without FLASH.\n"
 	.string "I'm staying outside for now.$"
 
-Route31_Text_BugCatcher:
+Route31_Text_BugCatcher_Intro:
 	.string "I saw some strange bugs near the\n"
-	.string "cave. They move fast.$"
+	.string "cave. They move fast!\p"
+	.string "Let's battle!$"
+
+Route31_Text_BugCatcher_Defeat:
+	.string "Too quick for my bugs...$"
+
+Route31_Text_BugCatcher_After:
+	.string "The bugs around here are stronger\n"
+	.string "than the ones on ROUTE 30.$"
 
 Route31_Text_FatMan:
 	.string "The breeze from VIOLET CITY is\n"

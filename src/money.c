@@ -220,7 +220,7 @@ void ChangeAmountInMoneyBox(int amount)
 
 u32 CalculateMoneyTextHorizontalPosition(u32 amount)
 {
-    return (CountDigits(amount) > 8) ? 34 : 26;
+    return (CountDigits(amount) > 8) ? 33 : 25;
 }
 
 void DrawMoneyBox(int amount, u8 x, u8 y)

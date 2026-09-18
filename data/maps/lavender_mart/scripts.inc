@@ -20,12 +20,16 @@ lavender_mart_EventScript_Juggler::
 	faceplayer
 	setspeaker lavender_mart_Speaker_Juggler
 	msgbox lavender_mart_Text_Juggler, MSGBOX_NPC
+	setvar VAR_0x8000, 4
+	call Lavender_Town_EventScript_RecordInteriorNPC
 	end
 
 lavender_mart_EventScript_FatMan::
 	faceplayer
 	setspeaker lavender_mart_Speaker_FatMan
 	msgbox lavender_mart_Text_FatMan, MSGBOX_NPC
+	setvar VAR_0x8000, 5
+	call Lavender_Town_EventScript_RecordInteriorNPC
 	end
 
 lavender_mart_Text_Clerk:

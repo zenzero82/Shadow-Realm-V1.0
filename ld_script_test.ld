@@ -9,6 +9,7 @@ MEMORY
     EWRAM (rwx) : ORIGIN = 0x2000000, LENGTH = 256K
     IWRAM (rwx) : ORIGIN = 0x3000000, LENGTH = 32K
     ROM    (rx) : ORIGIN = 0x8000000, LENGTH = 32M
+    ROMX   (rx) : ORIGIN = 0xA000000, LENGTH = 32M
 }
 
 SECTIONS {
@@ -98,14 +99,13 @@ SECTIONS {
     .rodata :
     ALIGN(4)
     {
-        src/*.o(.rodata*);
-        data/*.o(.rodata*);
+        *(EXCLUDE_FILE (src/graphics.o src/tilesets.o data/maps.o data/sound_data.o sound/songs/*.o) .rodata*)
+        *(EXCLUDE_FILE (src/graphics.o src/tilesets.o data/maps.o data/sound_data.o sound/songs/*.o) .rodata.*)
     } > ROM =0
 
     song_data :
     ALIGN(4)
     {
-        sound/songs/*.o(.rodata);
     } > ROM =0
 
     lib_rodata :
@@ -148,6 +148,53 @@ SECTIONS {
     {
         test/*.o(.dacs);
     } > ROM =0
+
+    __rom_lower_bank_end = .;
+    __rom_upper_bank_start = ORIGIN(ROMX);
+
+    upper_bank_rodata ORIGIN(ROMX) :
+    ALIGN(4)
+    {
+        data/sound_data.o(.rodata*)
+        sound/songs/*.o(.rodata)
+        src/graphics.o(.rodata*)
+        src/tilesets.o(.rodata*)
+        data/maps.o(.rodata*)
+    } > ROMX = 0
+
+    upper_bank_text :
+    ALIGN(4)
+    {
+        *(.upper.text)
+        *(.upper.text.*)
+        *(.text.upper)
+        *(.text.upper.*)
+    } > ROMX = 0
+
+    upper_bank_script_data :
+    ALIGN(4)
+    {
+        *(.upper.script_data)
+        *(.upper.script_data.*)
+        *(.script_data.upper)
+        *(.script_data.upper.*)
+    } > ROMX = 0
+
+    upper_bank_data :
+    ALIGN(4)
+    {
+        *(.upper.rodata)
+        *(.upper.rodata.*)
+        *(.rodata.upper)
+        *(.rodata.upper.*)
+        *(.upper.data)
+        *(.upper.data.*)
+        *(.data.upper)
+        *(.data.upper.*)
+    } > ROMX = 0
+
+    __rom_upper_bank_end = .;
+    __rom_end = .;
 
     /* DWARF debug sections.
        Symbols in the DWARF debugging sections are relative to the beginning

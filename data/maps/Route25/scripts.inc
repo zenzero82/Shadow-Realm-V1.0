@@ -166,6 +166,7 @@ Route25_EventScript_Eusine::
 	checkflag FLAG_HIDE_ROUTE_25_EUSINE
 	goto_if_eq Route25_EventScript_Eusine_Done
 	lockall
+	playbgm MUS_HG_EUSINE, FALSE
 	getplayerxy VAR_0x8004, VAR_0x8005
 	call Route25_EventScript_Eusine_ApproachPlayer
 	applymovement OBJ_EVENT_ID_PLAYER, Route25_Movement_Player_FaceRight
@@ -174,6 +175,7 @@ Route25_EventScript_Eusine::
 	msgbox Route25_Text_Eusine, MSGBOX_DEFAULT
 	closemessage
 	call Route25_EventScript_Eusine_Exit
+	fadedefaultbgm
 	setvar VAR_TEMP_0, 1
 	releaseall
 	end

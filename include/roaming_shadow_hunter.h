@@ -66,11 +66,17 @@ struct RoamingShadowHunterSave
 
 struct Pokemon;
 
-void RoamingHunter_OnShadowSnagFailed(u16 species, u8 level, u8 region, u16 shadowId);
+void RoamingHunter_OnShadowSnagFailed(struct Pokemon *mon, u8 region);
 u16 RoamingHunter_TryCreateNpcOnMap(void);
 u16 RoamingHunter_TryConsumeAlert(void);
 u16 RoamingHunter_StartBattle(void);
 u16 RoamingHunter_OnBattleWon(void);
+u16 RoamingHunter_DidPlayerWinBattle(void);
+u16 RoamingHunter_GetActiveTrainerId(void);
+u16 RoamingHunter_LoadIntroText(void);
+u16 RoamingHunter_LoadDefeatText(void);
+u16 RoamingHunter_LoadOutroText(void);
+u16 RoamingHunter_DespawnNpc(void);
 void RoamingHunter_TryOverrideTrainerParty(u16 trainerId, struct Pokemon *party);
 void RoamingHunter_OnMapTransition(void);
 void RoamingHunter_PrepareMapLoad(u8 mapGroup, u8 mapNum);

@@ -512,18 +512,23 @@
 #define MUS_ENCOUNTER_TEAM_GALACTIC     624  // mus_encounter_team_galactic.mid
 #define MUS_ENCOUNTER_TEAM_PLASMA       625  // mus_encounter_team_plasma.mid
 #define MUS_BATTLE_TEAM_SKULL           626  // mus_battle_team_skull.mid
-#define MUS_HEXAGONBROS                 627  // mus_hexagonbros.mid
-#define MUS_ELM_LAB                     628  // mus_elm_lab.mid
-#define MUS_HG_POKE_MART                629  // mus_hg_poke_mart.mid
-#define MUS_HG_ICE_PATH                 630  // mus_hg_ice_path.mid
-#define MUS_HG_VICTORY_ROAD             631  // mus_hg_victory_road.mid
-#define MUS_HG_GAME_CORNER              632  // mus_hg_game_corner.mid
-#define MUS_HG_DANCE_THEATER            633  // mus_hg_dance_theater.mid
-#define MUS_HG_POKEMON_LEAGUE           634  // mus_hg_pokemon_league.mid
-#define MUS_HG_NATIONAL_PARK            635  // mus_hg_national_park.mid
-#define MUS_HG_GYM                      636  // mus_hg_gym.mid
+#define MUS_SHOWDOWN_AETHER             627  // mus_showdown_aether.mid
+#define MUS_HEXAGONBROS                 628  // mus_hexagonbros.mid
+#define MUS_ELM_LAB                     629  // mus_elm_lab.mid
+#define MUS_HG_POKE_MART                630  // mus_hg_poke_mart.mid
+#define MUS_HG_ICE_PATH                 631  // mus_hg_ice_path.mid
+#define MUS_HG_VICTORY_ROAD             632  // mus_hg_victory_road.mid
+#define MUS_HG_GAME_CORNER              633  // mus_hg_game_corner.mid
+#define MUS_HG_DANCE_THEATER            634  // mus_hg_dance_theater.mid
+#define MUS_HG_POKEMON_LEAGUE           635  // mus_hg_pokemon_league.mid
+#define MUS_HG_NATIONAL_PARK            636  // mus_hg_national_park.mid
+#define MUS_HG_GYM                      637  // mus_hg_gym.mid
+#define MUS_HG_ROCKET_TAKEOVER          638  // mus_hg_rocket_takeover.mid
+#define MUS_THE_UNDER                   639  // mus_the_under.mid
+#define MUS_AGATE_VILLAGE               640  // mus_agate_village.mid
+#define MUS_HG_EUSINE                   641  // mus_hg_eusine.mid
 
-#define END_MUS                     MUS_HG_GYM
+#define END_MUS                     MUS_HG_EUSINE
 
 // These PH_* constants are phoneme sounds used by the "bard" NPC (see src/bard_music.c and src/mauville_old_man.c).
 // Each comes in a triplet of PH_*_BLEND, PH_*_HELD, and PH_*_SOLO, and the name of each triplet incorporates the English phonetic sound it represents.

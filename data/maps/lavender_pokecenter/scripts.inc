@@ -18,6 +18,7 @@ lavender_pokecenter_EventScript_Chansey::
 
 lavender_pokecenter_OnTransition:
 	setrespawn HEAL_LOCATION_LAVENDER_TOWN
+	call CableClub_EventScript_HideOrShowMysteryGiftMan
 	end
 
 lavender_pokecenter_EventScript_Bookshelf1::

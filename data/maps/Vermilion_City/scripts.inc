@@ -61,18 +61,19 @@ VermilionCity_Speaker_AquaGrunt:
 VermilionCity_Speaker_GymGuy:
 	.string "GUIDE$"
 
+VermilionCity_Speaker_Sailor:
+	.string "MATEO$"
+
+VermilionCity_Speaker_Woman:
+	.string "IRIS$"
+
 VermilionCity_EventScript_BattleGirl::
 	lock
 	faceplayer
 	setspeaker VermilionCity_Speaker_BattleGirl
-	goto_if_set FLAG_VERMILION_PORTINSIDE_BURNET_SCENE_DONE, VermilionCity_EventScript_BattleGirl_AfterPort
-	msgbox VermilionCity_Text_BattleGirl_BeforePort, MSGBOX_NPC
-	closemessage
-	release
-	end
-
-VermilionCity_EventScript_BattleGirl_AfterPort::
-	msgbox VermilionCity_Text_BattleGirl_AfterPort, MSGBOX_NPC
+	setflag FLAG_QUEST_VERMILION_NPC_BATTLE_GIRL
+	call QuestJournal_EventScript_CheckVermilionCityNPCs
+	msgbox VermilionCity_Text_BattleGirl, MSGBOX_NPC
 	closemessage
 	release
 	end
@@ -81,14 +82,9 @@ VermilionCity_EventScript_Boy::
 	lock
 	faceplayer
 	setspeaker VermilionCity_Speaker_Boy
-	goto_if_set FLAG_VERMILION_PORTINSIDE_BURNET_SCENE_DONE, VermilionCity_EventScript_Boy_AfterPort
-	msgbox VermilionCity_Text_Boy_BeforePort, MSGBOX_NPC
-	closemessage
-	release
-	end
-
-VermilionCity_EventScript_Boy_AfterPort::
-	msgbox VermilionCity_Text_Boy_AfterPort, MSGBOX_NPC
+	setflag FLAG_QUEST_VERMILION_NPC_BOY
+	call QuestJournal_EventScript_CheckVermilionCityNPCs
+	msgbox VermilionCity_Text_Boy, MSGBOX_NPC
 	closemessage
 	release
 	end
@@ -97,14 +93,9 @@ VermilionCity_EventScript_OldMan::
 	lock
 	faceplayer
 	setspeaker VermilionCity_Speaker_OldMan
-	goto_if_set FLAG_VERMILION_PORTINSIDE_BURNET_SCENE_DONE, VermilionCity_EventScript_OldMan_AfterPort
-	msgbox VermilionCity_Text_OldMan_BeforePort, MSGBOX_NPC
-	closemessage
-	release
-	end
-
-VermilionCity_EventScript_OldMan_AfterPort::
-	msgbox VermilionCity_Text_OldMan_AfterPort, MSGBOX_NPC
+	setflag FLAG_QUEST_VERMILION_NPC_OLD_MAN
+	call QuestJournal_EventScript_CheckVermilionCityNPCs
+	msgbox VermilionCity_Text_OldMan, MSGBOX_NPC
 	closemessage
 	release
 	end
@@ -113,7 +104,67 @@ VermilionCity_EventScript_GymGuy::
 	lock
 	faceplayer
 	setspeaker VermilionCity_Speaker_GymGuy
+	setflag FLAG_QUEST_VERMILION_NPC_GYM_GUY
+	call QuestJournal_EventScript_CheckVermilionCityNPCs
 	msgbox VermilionCity_Text_GymGuy, MSGBOX_NPC
+	closemessage
+	release
+	end
+
+VermilionCity_EventScript_Sailor::
+	lock
+	faceplayer
+	setspeaker VermilionCity_Speaker_Sailor
+	setflag FLAG_QUEST_VERMILION_NPC_SAILOR
+	call QuestJournal_EventScript_CheckVermilionCityNPCs
+	goto_if_set FLAG_VERMILION_CITY_SAILOR_GIFT_GIVEN, VermilionCity_EventScript_Sailor_Repeat
+	msgbox VermilionCity_Text_Sailor_GiveItem, MSGBOX_DEFAULT
+	closemessage
+	giveitem ITEM_PARALYZE_HEAL, 3
+	goto_if_eq VAR_RESULT, FALSE, VermilionCity_EventScript_Sailor_BagFull
+	setflag FLAG_VERMILION_CITY_SAILOR_GIFT_GIVEN
+	msgbox VermilionCity_Text_Sailor_AfterItem, MSGBOX_DEFAULT
+	closemessage
+	release
+	end
+
+VermilionCity_EventScript_Sailor_Repeat::
+	msgbox VermilionCity_Text_Sailor_Repeat, MSGBOX_DEFAULT
+	closemessage
+	release
+	end
+
+VermilionCity_EventScript_Sailor_BagFull::
+	msgbox VermilionCity_Text_Sailor_BagFull, MSGBOX_DEFAULT
+	closemessage
+	release
+	end
+
+VermilionCity_EventScript_Woman::
+	lock
+	faceplayer
+	setspeaker VermilionCity_Speaker_Woman
+	setflag FLAG_QUEST_VERMILION_NPC_WOMAN
+	call QuestJournal_EventScript_CheckVermilionCityNPCs
+	goto_if_set FLAG_VERMILION_CITY_WOMAN_GIFT_GIVEN, VermilionCity_EventScript_Woman_Repeat
+	msgbox VermilionCity_Text_Woman_GiveItem, MSGBOX_DEFAULT
+	closemessage
+	giveitem ITEM_GREAT_BALL, 3
+	goto_if_eq VAR_RESULT, FALSE, VermilionCity_EventScript_Woman_BagFull
+	setflag FLAG_VERMILION_CITY_WOMAN_GIFT_GIVEN
+	msgbox VermilionCity_Text_Woman_AfterItem, MSGBOX_DEFAULT
+	closemessage
+	release
+	end
+
+VermilionCity_EventScript_Woman_Repeat::
+	msgbox VermilionCity_Text_Woman_Repeat, MSGBOX_DEFAULT
+	closemessage
+	release
+	end
+
+VermilionCity_EventScript_Woman_BagFull::
+	msgbox VermilionCity_Text_Woman_BagFull, MSGBOX_DEFAULT
 	closemessage
 	release
 	end
@@ -367,7 +418,6 @@ VermilionCity_Movement_SurgeExit_Left:
 VermilionCity_Movement_RaichuExit_Left:
 	delay_8
 	walk_left
-	walk_left
 	walk_down
 	walk_down
 	walk_down
@@ -391,7 +441,6 @@ VermilionCity_Movement_SurgeExit_Middle:
 
 VermilionCity_Movement_RaichuExit_Middle:
 	delay_8
-	walk_left
 	walk_down
 	walk_down
 	walk_down
@@ -415,9 +464,8 @@ VermilionCity_Movement_SurgeExit_Right:
 	step_end
 
 VermilionCity_Movement_RaichuExit_Right:
-	walk_right
 	delay_8
-	walk_left
+	walk_right
 	walk_down
 	walk_down
 	walk_down
@@ -454,39 +502,64 @@ VermilionCity_Text_FanClubSign:
 VermilionCity_Text_DiglettsCaveSign:
 	.string "DIGLETT'S CAVE$"
 
-VermilionCity_Text_BattleGirl_BeforePort:
-	.string "Everyone near the port has been\n"
-	.string "talking about a strange professor\l"
-	.string "and a nervous girl.$"
+VermilionCity_Text_BattleGirl:
+	.string "The sea breeze makes for great\n"
+	.string "training.\p"
+	.string "If you can keep your footing on\n"
+	.string "VERMILION's streets, you can battle\l"
+	.string "just about anywhere.$"
 
-VermilionCity_Text_BattleGirl_AfterPort:
-	.string "The port finally feels calmer.\p"
-	.string "Now the only real problem is that\n"
-	.string "sleeping SNORLAX blocking the road.$"
+VermilionCity_Text_OldMan:
+	.string "VERMILION grew up around the harbor,\n"
+	.string "but folks still treat it like a real\l"
+	.string "neighborhood.\p"
+	.string "That sleeping SNORLAX is the only\n"
+	.string "thing spoiling the flow of traffic.$"
 
-VermilionCity_Text_OldMan_BeforePort:
-	.string "My POKéMON is preparing the land\n"
-	.string "for construction.\p"
-	.string "But between harbor rumors and that\n"
-	.string "blocked road, nobody wants to invest.$"
+VermilionCity_Text_Boy:
+	.string "ROUTE 6, ROUTE 11, DIGLETT'S CAVE,\n"
+	.string "and the harbor all meet here.\p"
+	.string "If you like seeing different kinds\n"
+	.string "of trainers, VERMILION is the best.$"
 
-VermilionCity_Text_OldMan_AfterPort:
-	.string "At least the harbor panic settled\n"
-	.string "down.\p"
-	.string "If that SNORLAX moved too, maybe my\n"
-	.string "project would finally start.$"
+VermilionCity_Text_Sailor_GiveItem:
+	.string "Travelers hit LT. SURGE's city and\n"
+	.string "forget how rough paralysis can be.\p"
+	.string "Take these PARALYZE HEALs before\n"
+	.string "your team gets locked up.$"
 
-VermilionCity_Text_Boy_BeforePort:
-	.string "There are eight GYMS in KANTO.\p"
-	.string "But right now everyone in VERMILION\n"
-	.string "only wants to talk about the port.$"
+VermilionCity_Text_Sailor_AfterItem:
+	.string "Around here, a little preparation is\n"
+	.string "worth more than a loud boast.$"
 
-VermilionCity_Text_Boy_AfterPort:
-	.string "That big building is VERMILION's\n"
-	.string "POKéMON GYM.\p"
-	.string "Maybe people will care about badges\n"
-	.string "again once the harbor excitement\l"
-	.string "wears off.$"
+VermilionCity_Text_Sailor_Repeat:
+	.string "Keep those PARALYZE HEALs handy.\p"
+	.string "Electric-types love catching bold\n"
+	.string "trainers off guard.$"
+
+VermilionCity_Text_Sailor_BagFull:
+	.string "Your BAG's packed tight.\p"
+	.string "Make some space and I'll hand over\n"
+	.string "those PARALYZE HEALs.$"
+
+VermilionCity_Text_Woman_GiveItem:
+	.string "I save a few GREAT BALLS for polite\n"
+	.string "young trainers.\p"
+	.string "The routes around VERMILION can get\n"
+	.string "rough, so take these with you.$"
+
+VermilionCity_Text_Woman_AfterItem:
+	.string "Between the harbor and the roads out\n"
+	.string "of town, a good BALL never goes to\l"
+	.string "waste here.$"
+
+VermilionCity_Text_Woman_Repeat:
+	.string "Use those GREAT BALLS when a wild\n"
+	.string "POKéMON refuses to sit still.$"
+
+VermilionCity_Text_Woman_BagFull:
+	.string "Your BAG doesn't have room for these\n"
+	.string "GREAT BALLS right now.$"
 
 VermilionCity_Text_SnorlaxSleeping:
 	.string "Looks like this POKeMON\n"
@@ -519,3 +592,39 @@ VermilionCity_Text_SurgeScene_PlayerWarning:
 	.string "challenge me if you dare.\p"
 	.string "I'm too hot headed right now and\n"
 	.string "I might not hold back.$"
+
+QuestJournal_EventScript_CheckVermilionCityNPCs::
+	checkflag FLAG_QUEST_VERMILION_NPCS_COMPLETED
+	goto_if_eq QuestJournal_EventScript_CheckVermilionCityNPCs_End
+	checkflag FLAG_QUEST_VERMILION_NPCS_STARTED
+	goto_if_eq QuestJournal_EventScript_CheckVermilionCityNPCs_BattleGirl
+	return
+QuestJournal_EventScript_CheckVermilionCityNPCs_BattleGirl:
+	checkflag FLAG_QUEST_VERMILION_NPC_BATTLE_GIRL
+	goto_if_eq QuestJournal_EventScript_CheckVermilionCityNPCs_Boy
+	return
+QuestJournal_EventScript_CheckVermilionCityNPCs_Boy:
+	checkflag FLAG_QUEST_VERMILION_NPC_BOY
+	goto_if_eq QuestJournal_EventScript_CheckVermilionCityNPCs_OldMan
+	return
+QuestJournal_EventScript_CheckVermilionCityNPCs_OldMan:
+	checkflag FLAG_QUEST_VERMILION_NPC_OLD_MAN
+	goto_if_eq QuestJournal_EventScript_CheckVermilionCityNPCs_GymGuy
+	return
+QuestJournal_EventScript_CheckVermilionCityNPCs_GymGuy:
+	checkflag FLAG_QUEST_VERMILION_NPC_GYM_GUY
+	goto_if_eq QuestJournal_EventScript_CheckVermilionCityNPCs_Sailor
+	return
+QuestJournal_EventScript_CheckVermilionCityNPCs_Sailor:
+	checkflag FLAG_QUEST_VERMILION_NPC_SAILOR
+	goto_if_eq QuestJournal_EventScript_CheckVermilionCityNPCs_Woman
+	return
+QuestJournal_EventScript_CheckVermilionCityNPCs_Woman:
+	checkflag FLAG_QUEST_VERMILION_NPC_WOMAN
+	goto_if_eq QuestJournal_EventScript_CheckVermilionCityNPCs_Done
+	return
+QuestJournal_EventScript_CheckVermilionCityNPCs_Done:
+	setflag FLAG_QUEST_VERMILION_NPCS_COMPLETED
+	call QuestJournal_EventScript_QuestCompleteAlert
+QuestJournal_EventScript_CheckVermilionCityNPCs_End:
+	return

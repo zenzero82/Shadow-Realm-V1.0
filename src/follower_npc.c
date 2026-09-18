@@ -67,6 +67,7 @@ static void Task_FollowerNPCHandleEscalator(u8 taskId);
 static void Task_FollowerNPCHandleEscalatorFinish(u8 taskId);
 static void CalculateFollowerNPCEscalatorTrajectoryUp(struct Task *task);
 static void CalculateFollowerNPCEscalatorTrajectoryDown(struct Task *task);
+static void SyncFollowerNPCPriorityToPlayer(void);
 
 extern const u8 EventScript_Follower_Nebby[];
 
@@ -974,11 +975,47 @@ void SetFollowerNPCSprite(u32 spriteIndex)
         follower->spriteId = newSpriteId;
         MoveObjectEventToMapCoords(follower, follower->currentCoords.x, follower->currentCoords.y);
         ObjectEventTurn(follower, follower->facingDirection);
+        SyncFollowerNPCPriorityToPlayer();
     }
     else
     {
         ClearFollowerNPCData();
     }
+}
+
+static void SyncFollowerNPCPriorityToPlayer(void)
+{
+    struct ObjectEvent *follower;
+    struct ObjectEvent *player;
+    struct Sprite *followerSprite;
+    struct Sprite *playerSprite;
+    u32 spriteIndex;
+
+    if (!PlayerHasFollowerNPC())
+        return;
+
+    follower = &gObjectEvents[GetFollowerNPCObjectId()];
+    player = &gObjectEvents[gPlayerAvatar.objectEventId];
+    spriteIndex = GetFollowerNPCData(FNPC_DATA_CURRENT_SPRITE);
+
+    if (!follower->active || follower->invisible)
+        return;
+
+    if (spriteIndex != FOLLOWER_NPC_SPRITE_INDEX_SURF
+     && spriteIndex != FOLLOWER_NPC_SPRITE_INDEX_UNDERWATER)
+    {
+        follower->fixedPriority = FALSE;
+        return;
+    }
+
+    followerSprite = &gSprites[follower->spriteId];
+    playerSprite = &gSprites[player->spriteId];
+
+    follower->fixedPriority = TRUE;
+    followerSprite->oam.priority = playerSprite->oam.priority;
+    followerSprite->subpriority = playerSprite->subpriority;
+    followerSprite->subspriteMode = playerSprite->subspriteMode;
+    followerSprite->subspriteTableNum = playerSprite->subspriteTableNum;
 }
 
 static void ChooseFirstThreeEligibleMons(void)
@@ -1033,6 +1070,8 @@ void NPCFollow(struct ObjectEvent *npc, u32 state, bool32 ignoreScriptActive)
         SetFollowerNPCData(FNPC_DATA_WARP_END, FNPC_WARP_REAPPEAR);
     }
 
+    SyncFollowerNPCPriorityToPlayer();
+
     // Restore post warp behavior after setobjectxy.
     if (GetFollowerNPCData(FNPC_DATA_COME_OUT_DOOR) == FNPC_DOOR_NO_POS_SET)
         SetFollowerNPCData(FNPC_DATA_COME_OUT_DOOR, FNPC_DOOR_NONE);
@@ -1077,6 +1116,8 @@ void NPCFollow(struct ObjectEvent *npc, u32 state, bool32 ignoreScriptActive)
         {
             TryUpdateFollowerNPCSpriteUnderwater();
         }
+
+        SyncFollowerNPCPriorityToPlayer();
     }
 
     dir = DetermineFollowerNPCDirection(player, follower);
@@ -1116,6 +1157,7 @@ void NPCFollow(struct ObjectEvent *npc, u32 state, bool32 ignoreScriptActive)
     ObjectEventClearHeldMovementIfActive(follower);
     ObjectEventSetHeldMovement(follower, newState);
     PlayerLogCoordinates(player);
+    SyncFollowerNPCPriorityToPlayer();
 
     switch (newState) 
     {

@@ -29948,6 +29948,7 @@ gBattleAnimStatus_Shadow::
 	delay 8
 	call ShadowAuraEffect
 	waitforvisualfinish
+	createvisualtask AnimTask_UnfadeObjPalettes, 2
 	createvisualtask AnimTask_RestoreAbilityPopupPalette, 2
 	end
 
@@ -29957,6 +29958,9 @@ gBattleAnimStatus_Reverse_Mode::
 	loopsewithpan SE_M_EMBER, SOUND_PAN_ATTACKER, 5, 2
 	createvisualtask AnimTask_ShakeMon2, 2, ANIM_ATTACKER, 1, 0, 10, 1
 	call ReverseAuraEffect
+	waitforvisualfinish
+	createvisualtask AnimTask_UnfadeObjPalettes, 2
+	createvisualtask AnimTask_RestoreAbilityPopupPalette, 2
 	end
 
 gBattleAnimStatus_Enter_Reverse_Mode::
@@ -29972,6 +29976,8 @@ gBattleAnimStatus_Enter_Reverse_Mode::
 	delay 8
 	call ReverseAuraEffect
 	waitforvisualfinish
+	createvisualtask AnimTask_UnfadeObjPalettes, 2
+	createvisualtask AnimTask_RestoreAbilityPopupPalette, 2
 	end
 
 gBattleAnimGeneral_Call_Reverse_Mode::
@@ -29989,6 +29995,8 @@ gBattleAnimGeneral_Call_Reverse_Mode::
 	call ShadowAuraEffect
 	createsprite gBlendThinRingExpandingSpriteTemplate, ANIM_ATTACKER, 16, 0, 0, 0, 1
 	waitforvisualfinish
+	createvisualtask AnimTask_UnfadeObjPalettes, 2
+	createvisualtask AnimTask_RestoreAbilityPopupPalette, 2
 	end
 
 gBattleAnimGeneral_StatsChange::

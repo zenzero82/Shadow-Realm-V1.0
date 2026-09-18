@@ -4,4 +4,5 @@ EcruteakCity_PokemonCenter_MapScripts::
 
 EcruteakCity_PokemonCenter_OnTransition:
 	setrespawn HEAL_LOCATION_ECRUTEAK_CITY
+	call CableClub_EventScript_HideOrShowMysteryGiftMan
 	end

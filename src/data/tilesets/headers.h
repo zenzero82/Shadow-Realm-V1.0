@@ -1800,6 +1800,17 @@ const struct Tileset gTileset_shadowrealm =
     .callback = NULL,
 };
 
+const struct Tileset gTileset_agate_village =
+{
+    .isCompressed = TRUE,
+    .isSecondary = FALSE,
+    .tiles = gTilesetTiles_agate_village,
+    .palettes = gTilesetPalettes_agate_village,
+    .metatiles = gMetatiles_agate_village,
+    .metatileAttributes = gMetatileAttributes_agate_village,
+    .callback = NULL,
+};
+
 const struct Tileset gTileset_wescave =
 {
     .isCompressed = TRUE,
@@ -1918,5 +1929,16 @@ const struct Tileset gTileset_DragonsDen_Shrine =
     .palettes = gTilesetPalettes_DragonsDen_Shrine,
     .metatiles = gMetatiles_DragonsDen_Shrine,
     .metatileAttributes = gMetatileAttributes_DragonsDen_Shrine,
+    .callback = NULL,
+};
+
+const struct Tileset gTileset_agate =
+{
+    .isCompressed = TRUE,
+    .isSecondary = TRUE,
+    .tiles = gTilesetTiles_agate,
+    .palettes = gTilesetPalettes_agate,
+    .metatiles = gMetatiles_agate,
+    .metatileAttributes = gMetatileAttributes_agate,
     .callback = NULL,
 };

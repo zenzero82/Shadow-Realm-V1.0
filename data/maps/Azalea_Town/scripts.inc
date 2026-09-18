@@ -52,7 +52,7 @@ AzaleaTown_EventScript_CityEnter_QuestStart:
 	call QuestJournal_EventScript_NewQuestAlert
 	releaseall
 AzaleaTown_EventScript_CityEnter_QuestSkip:
-	checkflag FLAG_KURTS_HOUSE_GOLD_SCENE_DONE
+	checkflag FLAG_AZALEA_BIRCH_CALL_AFTER_NEBBY_READY
 	goto_if_ne AzaleaTown_EventScript_CityEnter_End
 	checkflag FLAG_AZALEA_BIRCH_CALL_AFTER_GOLD_DONE
 	goto_if_eq AzaleaTown_EventScript_CityEnter_End

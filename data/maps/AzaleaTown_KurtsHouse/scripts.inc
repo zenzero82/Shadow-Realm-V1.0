@@ -25,7 +25,7 @@ AzaleaTown_KurtsHouse_OnLoad::
 	removeobject LOCALID_HOOPA_RING
 	end
 AzaleaTown_KurtsHouse_OnLoad_PostEmergence:
-	goto_if_set FLAG_KURTS_HOUSE_GOLD_SCENE_DONE, AzaleaTown_KurtsHouse_OnLoad_ShowGoldByKurt
+	goto_if_set FLAG_AZALEA_BIRCH_CALL_AFTER_NEBBY_READY, AzaleaTown_KurtsHouse_OnLoad_ShowGoldByKurt
 	showobjectat LOCALID_PLAYER, MAP_AZALEA_TOWN_KURTS_HOUSE
 	resetobjectsubpriority LOCALID_PLAYER, MAP_AZALEA_TOWN_KURTS_HOUSE
 	goto_if_set FLAG_KURTS_HOUSE_MARAUDER_SCENE_DONE, AzaleaTown_KurtsHouse_OnTransition_MarauderDone
@@ -48,7 +48,7 @@ AzaleaTown_KurtsHouse_OnTransition::
 	setflag FLAG_HIDE_KURTS_HOUSE_HOOPA_RING
 	setflag FLAG_HIDE_KURTS_HOUSE_GOLD
 	goto_if_set FLAG_KURTS_HOUSE_HOOPA_EMERGE, AzaleaTown_KurtsHouse_OnTransition_HidePlayer
-	goto_if_set FLAG_KURTS_HOUSE_GOLD_SCENE_DONE, AzaleaTown_KurtsHouse_OnTransition_ShowGoldByKurt
+	goto_if_set FLAG_AZALEA_BIRCH_CALL_AFTER_NEBBY_READY, AzaleaTown_KurtsHouse_OnTransition_ShowGoldByKurt
 	showobjectat LOCALID_PLAYER, MAP_AZALEA_TOWN_KURTS_HOUSE
 	resetobjectsubpriority LOCALID_PLAYER, MAP_AZALEA_TOWN_KURTS_HOUSE
 	goto_if_set FLAG_KURTS_HOUSE_MARAUDER_SCENE_DONE, AzaleaTown_KurtsHouse_OnTransition_MarauderDone
@@ -336,10 +336,22 @@ AzaleaTown_KurtsHouse_EventScript_GoldEntrance::
 	msgbox AzaleaTown_KurtsHouse_Text_Gold_RadioTower, MSGBOX_DEFAULT
 	setspeaker AzaleaTown_KurtsHouse_Speaker_Gold
 	msgbox AzaleaTown_KurtsHouse_Text_Gold_Whitney, MSGBOX_DEFAULT
+	checkitem ITEM_TIME_AMULET, 1
+	goto_if_eq AzaleaTown_KurtsHouse_EventScript_GoldEntrance_SkipTimeAmulet
+	setspeaker AzaleaTown_KurtsHouse_Speaker_Gold
+	msgbox AzaleaTown_KurtsHouse_Text_Gold_TimeAmulet, MSGBOX_DEFAULT
+	giveitem ITEM_TIME_AMULET
+	closemessage
+	playfanfare MUS_OBTAIN_ITEM
+	message AzaleaTown_KurtsHouse_Text_ReceivedTimeAmulet
+	waitfanfare
+AzaleaTown_KurtsHouse_EventScript_GoldEntrance_SkipTimeAmulet:
+	setflag FLAG_KURTS_HOUSE_GOLD_QUESTS_REVEALED
 	setflag FLAG_QUEST_WHITNEY_STARTED
 	setflag FLAG_QUEST_CIPHER_TAKEOVER_STARTED
 	call QuestJournal_EventScript_NewQuestsAlert
 	setflag FLAG_KURTS_HOUSE_GOLD_SCENE_DONE
+	setflag FLAG_AZALEA_BIRCH_CALL_AFTER_NEBBY_READY
 	applymovement LOCALID_GOLD, AzaleaTown_KurtsHouse_Movement_GoldWalkToKurt
 	waitmovement 0
 	setobjectxyperm LOCALID_GOLD, 15, 4
@@ -378,6 +390,18 @@ AzaleaTown_KurtsHouse_Text_Gold_Whitney:
 	.string "You should challenge WHITNEY at\n"
 	.string "GOLDENROD GYM first.\p"
 	.string "Taking on CIPHER won't be easy.$"
+
+AzaleaTown_KurtsHouse_Text_Gold_TimeAmulet:
+	.string "One more thing. Take this TIME\n"
+	.string "AMULET.\p"
+	.string "Birch told me he'll be setting me\n"
+	.string "up with a new one later anyway.\p"
+	.string "You need it more than I do right\n"
+	.string "now.$"
+
+AzaleaTown_KurtsHouse_Text_ReceivedTimeAmulet:
+	.string "{PLAYER} received the\n"
+	.string "TIME AMULET.$"
 
 AzaleaTown_KurtsHouse_Text_Gold_After:
 	.string "Head to GOLDENROD when you're\n"
@@ -438,9 +462,9 @@ AzaleaTown_KurtsHouse_Text_Kurt_DarkBalls:
 	.string "around KANTO, JOHTO, and HOENN soon.\p"
 	.string "I can also make more for you but they\n"
 	.string "require APRICORNs to create them.\p"
-	.string "There are many trees around Johto which\n"
-	.string "can't be found anywhere else that have\l"
-	.string "them.\p"
+	.string "There are many trees around Johto\n"
+	.string "which can't be found anywhere else\l"
+	.string "that have them.\p"
 	.string "Be sure to come back here if you find\n"
 	.string "APRICORNs along your journey.$"
 

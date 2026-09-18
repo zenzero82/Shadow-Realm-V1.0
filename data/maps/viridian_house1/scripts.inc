@@ -2,6 +2,12 @@ viridian_house1_MapScripts::
 	map_script MAP_SCRIPT_ON_TRANSITION, viridian_house1_OnTransition
 	.byte 0
 
+viridian_house1_Speaker_Engineer:
+	.string "Cole$"
+
+viridian_house1_Speaker_OldWoman:
+	.string "Mabel$"
+
 viridian_house1_OnTransition:
 	checkflag FLAG_QUEST_BACK_TO_HQ_STARTED
 	goto_if_eq VAR_RESULT, FALSE, viridian_house1_HideCivilians
@@ -15,6 +21,7 @@ viridian_house1_HideCivilians:
 viridian_house1_EventScript_Engineer::
 	lock
 	faceplayer
+	setspeaker viridian_house1_Speaker_Engineer
 	msgbox viridian_house1_Text_Engineer, MSGBOX_DEFAULT
 	release
 	end
@@ -22,6 +29,7 @@ viridian_house1_EventScript_Engineer::
 viridian_house1_EventScript_OldWoman::
 	lock
 	faceplayer
+	setspeaker viridian_house1_Speaker_OldWoman
 	msgbox viridian_house1_Text_OldWoman, MSGBOX_DEFAULT
 	release
 	end

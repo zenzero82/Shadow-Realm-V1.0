@@ -25,10 +25,14 @@ Route24_EventScript_UpdateWimpodVisibility:
 
 Route24_ShowWimpod:
 	clearflag FLAG_HIDE_ROUTE24_WIMPOD
+	addobject LOCALID_ROUTE24_WIMPOD
+	showobjectat LOCALID_ROUTE24_WIMPOD, MAP_ROUTE24
 	return
 
 Route24_HideWimpod:
 	setflag FLAG_HIDE_ROUTE24_WIMPOD
+	hideobjectat LOCALID_ROUTE24_WIMPOD, MAP_ROUTE24
+	removeobject LOCALID_ROUTE24_WIMPOD
 	return
 
 Route24_Speaker_Camper:
@@ -67,12 +71,14 @@ Route24_EventScript_Wimpod::
 Route24_EventScript_WimpodCaught::
 	setflag FLAG_ROUTE24_WIMPOD_DEFEATED
 	hideobjectat LOCALID_ROUTE24_WIMPOD, MAP_ROUTE24
+	removeobject LOCALID_ROUTE24_WIMPOD
 	release
 	end
 
 Route24_EventScript_WimpodDrivenOff::
 	setflag FLAG_DAILY_ROUTE24_WIMPOD_FLED
 	hideobjectat LOCALID_ROUTE24_WIMPOD, MAP_ROUTE24
+	removeobject LOCALID_ROUTE24_WIMPOD
 	release
 	end
 
@@ -91,6 +97,7 @@ Route24_EventScript_WimpodSpotted::
 	applymovement LOCALID_ROUTE24_WIMPOD, Route24_Movement_WimpodFlees
 	waitmovement 0
 	hideobjectat LOCALID_ROUTE24_WIMPOD, MAP_ROUTE24
+	removeobject LOCALID_ROUTE24_WIMPOD
 	setflag FLAG_DAILY_ROUTE24_WIMPOD_FLED
 Route24_EventScript_WimpodSpotted_End::
 	releaseall

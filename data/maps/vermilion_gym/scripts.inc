@@ -33,7 +33,7 @@ VermilionCity_Gym_Speaker_Surge:
 	.string "LT. SURGE$"
 
 VermilionCity_Gym_Speaker_GymGuy:
-	.string "GUIDE$"
+	.string "GYM GUY$"
 
 VermilionCity_Gym_Speaker_Juggler:
 	.string "LEO$"
@@ -236,6 +236,7 @@ VermilionCity_Gym_EventScript_Surge::
 	faceplayer
 	setspeaker VermilionCity_Gym_Speaker_Surge
 	goto_if_set FLAG_BADGE11_GET, VermilionCity_Gym_EventScript_Surge_Defeated
+	playbgm MUS_RG_ENCOUNTER_GYM_LEADER, FALSE
 	msgbox VermilionCity_Gym_Text_Surge_Intro, MSGBOX_DEFAULT
 	trainerbattle_no_intro TRAINER_SURGE, VermilionCity_Gym_Text_Surge_WinLoss
 	message VermilionCity_Gym_Text_Surge_ReceivedThunderBadge
@@ -329,7 +330,7 @@ VermilionCity_Gym_Text_GymStatue:
 
 VermilionCity_Gym_Text_GymStatuePlayerWon:
 	.string "WINNING TRAINERS:\n"
-	.string "RED, GARY, GOLD$"
+	.string "RED, BLUE, WES, {PLAYER}$"
 
 VermilionCity_Gym_Text_Surge_Intro:
 	.string "Hey, kid! I'm LT. SURGE, the\n"
@@ -348,7 +349,7 @@ VermilionCity_Gym_Text_Surge_After:
 	.string "With the THUNDERBADGE, your POKéMON\n"
 	.string "can push past the next power limit.\p"
 	.string "If it were levels, I'd say you could\n"
-	.string "go to level 30 now.$"
+	.string "go to level 40 now.$"
 
 VermilionCity_Gym_Text_GymGuy_Intro:
 	.string "Yo! CHAMP in the making!\p"

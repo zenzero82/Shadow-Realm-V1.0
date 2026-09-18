@@ -486,10 +486,12 @@
 #define OBJ_EVENT_GFX_MR_STONE               469
 #define OBJ_EVENT_GFX_FAIRY_GIRL             470
 #define OBJ_EVENT_GFX_DEVON_EMPLOYEE         471
+#define OBJ_EVENT_GFX_SNAGEM_AGREV           472
+#define OBJ_EVENT_GFX_ITEM_SHINE             473
 // NOTE: The maximum amount of object events has been expanded from 255 to 65535.
 // Since dynamic graphics ids still require at least 16 free values, the actual limit
 // is 65519, but even considering follower Pokémon, this should be more than enough :)
-#define NUM_OBJ_EVENT_GFX                                               472
+#define NUM_OBJ_EVENT_GFX                                               474
 
 
 // These are dynamic object gfx ids.
@@ -520,6 +522,7 @@
 #define OBJ_EVENT_MON_SHADOW        (1u << 15)
 // Palette tags should not use the shadow graphics bit (bit 15 conflicts with BLEND_IMMUNE_FLAG).
 #define OBJ_EVENT_MON_SHADOW_PAL    (1u << 11)
+#define OBJ_EVENT_MON_GIFT_AURA_PAL (1u << 10)
 #define OBJ_EVENT_MON_SPECIES_MASK  (~((7u << 12) | OBJ_EVENT_MON_SHADOW))
 
 // Used to call a specific species' follower graphics. Useful for static encounters.
@@ -931,6 +934,9 @@
 #define OBJ_EVENT_PAL_TAG_MAXIE                   0x1A1E
 #define OBJ_EVENT_PAL_TAG_COURTNEY                0x1A1F
 #define OBJ_EVENT_PAL_TAG_TABITHA                 0x1A20
+#define OBJ_EVENT_PAL_TAG_SNAGEM_AGREV            0x1A22
+#define OBJ_EVENT_PAL_TAG_MYSTERY_GIFT_MAN        0x1A23
+#define OBJ_EVENT_PAL_TAG_ITEM_SHINE              0x1A24
 
 #if OW_FOLLOWERS_POKEBALLS
 // Vanilla

@@ -628,6 +628,7 @@ gSongTable::
 	song mus_encounter_team_galactic, 0, 0
 	song mus_encounter_team_plasma, 0, 0
 	song mus_battle_team_skull, 0, 0
+	song mus_showdown_aether, 0, 0
 	song mus_hexagonbros, 0, 0
 	song mus_elm_lab, 0, 0
 	song mus_hg_poke_mart, 0, 0
@@ -638,6 +639,10 @@ gSongTable::
 	song mus_hg_pokemon_league, 0, 0
 	song mus_hg_national_park, 0, 0
 	song mus_hg_gym, 0, 0
+	song mus_hg_rocket_takeover, 0, 0
+	song mus_the_under, 0, 0
+	song mus_agate_village, 0, 0
+	song mus_hg_eusine, 0, 0
 
 
 	.align 2

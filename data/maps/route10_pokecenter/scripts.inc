@@ -49,6 +49,7 @@ route10_pokecenter_EventScript_Engineer4::
 
 route10_pokecenter_OnTransition:
 	setrespawn HEAL_LOCATION_ROUTE10
+	call CableClub_EventScript_HideOrShowMysteryGiftMan
 	end
 
 route10_pokecenter_EventScript_Bookshelf1::

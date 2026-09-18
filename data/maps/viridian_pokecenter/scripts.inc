@@ -1,6 +1,12 @@
 viridian_pokecenter_MapScripts::
 	map_script MAP_SCRIPT_ON_TRANSITION, viridian_pokecenter_OnTransition
 	.byte 0
+
+viridian_pokecenter_Speaker_BugCatcher:
+	.string "Finn$"
+
+viridian_pokecenter_Speaker_Lass:
+	.string "Chloe$"
 viridian_pokecenter_EventScript_Chansey::
 	lock
 	faceplayer
@@ -12,6 +18,7 @@ viridian_pokecenter_EventScript_Chansey::
 
 viridian_pokecenter_OnTransition:
 	setrespawn HEAL_LOCATION_VIRIDIAN_CITY
+	call CableClub_EventScript_HideOrShowMysteryGiftMan
 	checkflag FLAG_QUEST_BACK_TO_HQ_STARTED
 	goto_if_eq VAR_RESULT, FALSE, viridian_pokecenter_HideCivilians
 	clearflag FLAG_HIDE_VIRIDIAN_POST_ROCKET_NPCS
@@ -24,6 +31,7 @@ viridian_pokecenter_HideCivilians:
 viridian_pokecenter_EventScript_BugCatcher::
 	lock
 	faceplayer
+	setspeaker viridian_pokecenter_Speaker_BugCatcher
 	msgbox viridian_pokecenter_Text_BugCatcher, MSGBOX_DEFAULT
 	release
 	end
@@ -31,6 +39,7 @@ viridian_pokecenter_EventScript_BugCatcher::
 viridian_pokecenter_EventScript_Lass::
 	lock
 	faceplayer
+	setspeaker viridian_pokecenter_Speaker_Lass
 	msgbox viridian_pokecenter_Text_Lass, MSGBOX_DEFAULT
 	release
 	end

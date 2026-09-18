@@ -6,6 +6,8 @@ celadon_apartment1f_Speaker_OldWoman:
 
 celadon_apartment1f_EventScript_OldWoman::
 	faceplayer
+	setflag FLAG_QUEST_CELADON_NPC_APARTMENT_OLD_WOMAN
+	call CeladonCity_EventScript_CheckNPCQuestState
 	setspeaker celadon_apartment1f_Speaker_OldWoman
 	msgbox celadon_apartment1f_Text_OldWoman, MSGBOX_NPC
 	end

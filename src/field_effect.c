@@ -15,7 +15,6 @@
 #include "fldeff.h"
 #include "follower_npc.h"
 #include "gpu_regs.h"
-#include "heal_location.h"
 #include "main.h"
 #include "malloc.h"
 #include "mirage_tower.h"
@@ -39,7 +38,7 @@
 #include "constants/event_object_movement.h"
 #include "constants/field_effects.h"
 #include "constants/flags.h"
-#include "constants/heal_locations.h"
+#include "constants/layouts.h"
 #include "constants/metatile_behaviors.h"
 #include "constants/rgb.h"
 #include "constants/songs.h"
@@ -587,7 +586,7 @@ static const struct SpriteTemplate sSpriteTemplate_PokecenterMonitor =
 static const struct SpriteTemplate sSpriteTemplate_PokecenterMonitor_KantoJohto =
 {
     .tileTag = TAG_NONE,
-    .paletteTag = FLDEFF_PAL_TAG_GENERAL_0,
+    .paletteTag = FLDEFF_PAL_TAG_POKEBALL_GLOW,
     .oam = &sOam_32x16,
     .anims = sAnims_Flicker,
     .images = sPicTable_PokecenterMonitor_KantoJohto,
@@ -1337,12 +1336,20 @@ static void SpriteCB_PokeballGlow(struct Sprite *sprite)
 
 static bool8 ShouldUseKantoJohtoPokecenterMonitor(void)
 {
-    u32 healLocation = GetHealLocationIndexByMap(gSaveBlock1Ptr->location.mapGroup, gSaveBlock1Ptr->location.mapNum);
-    return (healLocation >= HEAL_LOCATION_PEWTER_CITY);
+    switch (gMapHeader.mapLayoutId)
+    {
+    case LAYOUT_PEWTER_POKECENTER:
+    case LAYOUT_VIRIDIAN_POKECENTER:
+    case LAYOUT_JOHTO_PCENTER:
+    case LAYOUT_MT_SILVER_POKEMON_CENTER:
+    case LAYOUT_INDIGOPLATEAU_POKECENTER:
+        return TRUE;
+    default:
+        return FALSE;
+    }
 }
 
-#define KANTO_JOHTO_MONITOR_X_OFFSET -4
-#define KANTO_JOHTO_MONITOR_Y_OFFSET 8
+#define KANTO_JOHTO_MONITOR_X_OFFSET 4
 
 static u8 CreatePokecenterMonitorSprite(s16 x, s16 y)
 {
@@ -1351,10 +1358,7 @@ static u8 CreatePokecenterMonitorSprite(s16 x, s16 y)
     bool8 useKantoJohto = ShouldUseKantoJohtoPokecenterMonitor();
 
     if (useKantoJohto)
-    {
         x += KANTO_JOHTO_MONITOR_X_OFFSET;
-        y += KANTO_JOHTO_MONITOR_Y_OFFSET;
-    }
 
     spriteId = CreateSpriteAtEnd(useKantoJohto ? &sSpriteTemplate_PokecenterMonitor_KantoJohto
                                                : &sSpriteTemplate_PokecenterMonitor,
@@ -1368,7 +1372,6 @@ static u8 CreatePokecenterMonitorSprite(s16 x, s16 y)
 }
 
 #undef KANTO_JOHTO_MONITOR_X_OFFSET
-#undef KANTO_JOHTO_MONITOR_Y_OFFSET
 
 static void SpriteCB_PokecenterMonitor(struct Sprite *sprite)
 {

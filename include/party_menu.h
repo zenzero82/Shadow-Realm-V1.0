@@ -3,6 +3,7 @@
 
 #include "main.h"
 #include "task.h"
+#include "constants/party_menu.h"
 
 // seems like the last two fields may have been left as all-purpose vars
 // and the second of the two just happens to only be used in one case
@@ -16,9 +17,11 @@ struct PartyMenu
     s8 slotId2;
     u8 action;
     u16 bagItem;
-    s16 data1;           // used variously as a move, counter, moveSlotId, or cursorPos
+    s16 data1;           // used variously as a move, counter, moveSlotId, cursorPos, or field-open marker
     s16 learnMoveState;  // data2, used only as a learn move state
 };
+
+#define DATA1_PARTY_MENU_FROM_FIELD -1
 
 extern struct PartyMenu gPartyMenu;
 extern bool8 gPartyMenuUseExitCallback;
@@ -48,6 +51,9 @@ void DisplayPartyMenuStdMessage(u32 stringId);
 bool8 FieldCallback_PrepareFadeInFromMenu(void);
 bool8 FieldCallback_PrepareFadeInForTeleport(void);
 void CB2_ReturnToPartyMenuFromFlyMap(void);
+#if SWSH_PARTY_MENU_PC_ACCESS
+void CB2_ReopenPartyMenuFromPC(void);
+#endif
 void LoadHeldItemIcons(void);
 void DrawHeldItemIconsForTrade(u8 *partyCounts, u8 *partySpriteIds, u8 whichParty);
 void LoadPartyMenuAilmentGfx(void);
@@ -65,6 +71,7 @@ void ItemUseCB_PPRecovery(u8 taskId, TaskFunc task);
 void ItemUseCB_PPUp(u8 taskId, TaskFunc task);
 void ItemUseCB_TimeFlute(u8 taskId, TaskFunc task);
 void ItemUseCB_RelicTablet(u8 taskId, TaskFunc task);
+void ItemUseCB_ShadowCologne(u8 taskId, TaskFunc task);
 u16 ItemIdToBattleMoveId(u16 item);
 bool8 MonKnowsMove(struct Pokemon *mon, u16 move);
 bool8 BoxMonKnowsMove(struct BoxPokemon *boxMon, u16 move);

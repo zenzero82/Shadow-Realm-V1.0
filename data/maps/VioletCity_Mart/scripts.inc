@@ -25,10 +25,12 @@ VioletCity_Mart_EventScript_Clerk::
 VioletCity_Mart_Pokemart:
 	.2byte ITEM_POKE_BALL
 	.2byte ITEM_POTION
+	.2byte ITEM_SUPER_POTION
 	.2byte ITEM_ANTIDOTE
 	.2byte ITEM_PARALYZE_HEAL
 	.2byte ITEM_AWAKENING
 	.2byte ITEM_REPEL
+	.2byte ITEM_SUPER_REPEL
 	pokemartlistend
 
 VioletCity_Mart_EventScript_OldWoman::

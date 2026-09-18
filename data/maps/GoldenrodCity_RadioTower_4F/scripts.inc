@@ -5,12 +5,16 @@ GoldenrodCity_RadioTower_4F_MapScripts::
 #define LOCALID_GOLDENROD_RADIO_4F_CIPHER_F6 1
 #define LOCALID_GOLDENROD_RADIO_4F_CIPHER_F7 2
 
-GoldenrodCity_RadioTower_4F_Speaker_CipherPeonF:
-	.string "CIPHER PEON$"
+GoldenrodCity_RadioTower_4F_Speaker_CipherPeonVera:
+	.string "PEON VERA$"
+
+GoldenrodCity_RadioTower_4F_Speaker_CipherPeonLynx:
+	.string "PEON LYNX$"
 
 GoldenrodCity_RadioTower_4F_OnTransition::
 	setflag FLAG_TEMP_HIDE_FOLLOWER
 	setvar VAR_TEMP_0, 0
+	setvar VAR_TEMP_1, 0
 	setflag FLAG_HIDE_GOLDENROD_RADIO_4F_CIPHER_F6
 	setflag FLAG_HIDE_GOLDENROD_RADIO_4F_CIPHER_F7
 	removeobject LOCALID_GOLDENROD_RADIO_4F_CIPHER_F6
@@ -22,8 +26,9 @@ GoldenrodCity_RadioTower_4F_EventScript_CipherF6Trigger1::
 	goto_if_eq GoldenrodCity_RadioTower_4F_EventScript_TriggerDone
 	lockall
 	setvar VAR_TEMP_0, 1
+	setvar VAR_TEMP_1, 0
 	setvar VAR_0x8004, 9
-	setvar VAR_0x8005, 6
+	setvar VAR_0x8005, 8
 	call GoldenrodCity_RadioTower_4F_EventScript_SpawnCipherF6Ambush
 	goto GoldenrodCity_RadioTower_4F_EventScript_CipherF6
 
@@ -32,8 +37,9 @@ GoldenrodCity_RadioTower_4F_EventScript_CipherF6Trigger2::
 	goto_if_eq GoldenrodCity_RadioTower_4F_EventScript_TriggerDone
 	lockall
 	setvar VAR_TEMP_0, 1
-	setvar VAR_0x8004, 9
-	setvar VAR_0x8005, 5
+	setvar VAR_TEMP_1, 1
+	setvar VAR_0x8004, 11
+	setvar VAR_0x8005, 6
 	call GoldenrodCity_RadioTower_4F_EventScript_SpawnCipherF6Ambush
 	goto GoldenrodCity_RadioTower_4F_EventScript_CipherF6
 
@@ -42,8 +48,9 @@ GoldenrodCity_RadioTower_4F_EventScript_CipherF6Trigger3::
 	goto_if_eq GoldenrodCity_RadioTower_4F_EventScript_TriggerDone
 	lockall
 	setvar VAR_TEMP_0, 1
-	setvar VAR_0x8004, 9
-	setvar VAR_0x8005, 4
+	setvar VAR_TEMP_1, 2
+	setvar VAR_0x8004, 11
+	setvar VAR_0x8005, 5
 	call GoldenrodCity_RadioTower_4F_EventScript_SpawnCipherF6Ambush
 	goto GoldenrodCity_RadioTower_4F_EventScript_CipherF6
 
@@ -52,6 +59,7 @@ GoldenrodCity_RadioTower_4F_EventScript_CipherF7Trigger1::
 	goto_if_eq GoldenrodCity_RadioTower_4F_EventScript_TriggerDone
 	lockall
 	setvar VAR_TEMP_0, 1
+	setvar VAR_TEMP_1, 0
 	setvar VAR_0x8004, 17
 	setvar VAR_0x8005, 5
 	call GoldenrodCity_RadioTower_4F_EventScript_SpawnCipherF7Ambush
@@ -62,6 +70,7 @@ GoldenrodCity_RadioTower_4F_EventScript_CipherF7Trigger2::
 	goto_if_eq GoldenrodCity_RadioTower_4F_EventScript_TriggerDone
 	lockall
 	setvar VAR_TEMP_0, 1
+	setvar VAR_TEMP_1, 1
 	setvar VAR_0x8004, 17
 	setvar VAR_0x8005, 6
 	call GoldenrodCity_RadioTower_4F_EventScript_SpawnCipherF7Ambush
@@ -72,6 +81,7 @@ GoldenrodCity_RadioTower_4F_EventScript_CipherF7Trigger3::
 	goto_if_eq GoldenrodCity_RadioTower_4F_EventScript_TriggerDone
 	lockall
 	setvar VAR_TEMP_0, 1
+	setvar VAR_TEMP_1, 2
 	setvar VAR_0x8004, 19
 	setvar VAR_0x8005, 8
 	call GoldenrodCity_RadioTower_4F_EventScript_SpawnCipherF7Ambush
@@ -106,20 +116,47 @@ GoldenrodCity_RadioTower_4F_EventScript_SpawnCipherF7Ambush::
 
 GoldenrodCity_RadioTower_4F_EventScript_CipherF6::
 	setvar VAR_LAST_TALKED, LOCALID_GOLDENROD_RADIO_4F_CIPHER_F6
-	setspeaker GoldenrodCity_RadioTower_4F_Speaker_CipherPeonF
+	switch VAR_TEMP_1
+	case 0, GoldenrodCity_RadioTower_4F_EventScript_CipherF6_FaceNorth
+	case 1, GoldenrodCity_RadioTower_4F_EventScript_CipherF6_FaceWest
+	case 2, GoldenrodCity_RadioTower_4F_EventScript_CipherF6_FaceWest
+	faceplayer
+	goto GoldenrodCity_RadioTower_4F_EventScript_CipherF6_FaceDone
+GoldenrodCity_RadioTower_4F_EventScript_CipherF6_FaceNorth:
+	turnobject LOCALID_GOLDENROD_RADIO_4F_CIPHER_F6, DIR_NORTH
+	goto GoldenrodCity_RadioTower_4F_EventScript_CipherF6_FaceDone
+GoldenrodCity_RadioTower_4F_EventScript_CipherF6_FaceWest:
+	turnobject LOCALID_GOLDENROD_RADIO_4F_CIPHER_F6, DIR_WEST
+GoldenrodCity_RadioTower_4F_EventScript_CipherF6_FaceDone:
+	setspeaker GoldenrodCity_RadioTower_4F_Speaker_CipherPeonVera
 	trainerbattle_single TRAINER_GOLDENROD_RADIO_CIPHER_F6, GoldenrodCity_RadioTower_4F_Text_CipherPeonF6_Intro, GoldenrodCity_RadioTower_4F_Text_CipherPeonF_Defeat, GoldenrodCity_RadioTower_4F_EventScript_CipherF6After
 	goto GoldenrodCity_RadioTower_4F_EventScript_CipherF6After
 
 GoldenrodCity_RadioTower_4F_EventScript_CipherF7::
 	setvar VAR_LAST_TALKED, LOCALID_GOLDENROD_RADIO_4F_CIPHER_F7
-	setspeaker GoldenrodCity_RadioTower_4F_Speaker_CipherPeonF
+	switch VAR_TEMP_1
+	case 0, GoldenrodCity_RadioTower_4F_EventScript_CipherF7_FaceSouth
+	case 1, GoldenrodCity_RadioTower_4F_EventScript_CipherF7_FaceEast
+	case 2, GoldenrodCity_RadioTower_4F_EventScript_CipherF7_FaceNorth
+	faceplayer
+	goto GoldenrodCity_RadioTower_4F_EventScript_CipherF7_FaceDone
+GoldenrodCity_RadioTower_4F_EventScript_CipherF7_FaceSouth:
+	turnobject LOCALID_GOLDENROD_RADIO_4F_CIPHER_F7, DIR_SOUTH
+	goto GoldenrodCity_RadioTower_4F_EventScript_CipherF7_FaceDone
+GoldenrodCity_RadioTower_4F_EventScript_CipherF7_FaceEast:
+	turnobject LOCALID_GOLDENROD_RADIO_4F_CIPHER_F7, DIR_EAST
+	goto GoldenrodCity_RadioTower_4F_EventScript_CipherF7_FaceDone
+GoldenrodCity_RadioTower_4F_EventScript_CipherF7_FaceNorth:
+	turnobject LOCALID_GOLDENROD_RADIO_4F_CIPHER_F7, DIR_NORTH
+GoldenrodCity_RadioTower_4F_EventScript_CipherF7_FaceDone:
+	setspeaker GoldenrodCity_RadioTower_4F_Speaker_CipherPeonLynx
 	trainerbattle_single TRAINER_GOLDENROD_RADIO_CIPHER_F7, GoldenrodCity_RadioTower_4F_Text_CipherPeonF7_Intro, GoldenrodCity_RadioTower_4F_Text_CipherPeonF_Defeat, GoldenrodCity_RadioTower_4F_EventScript_CipherF7After
 	goto GoldenrodCity_RadioTower_4F_EventScript_CipherF7After
 
 GoldenrodCity_RadioTower_4F_EventScript_CipherF6After::
 	settrainerflag TRAINER_GOLDENROD_RADIO_CIPHER_F6
 	setvar VAR_TEMP_0, 0
-	setspeaker GoldenrodCity_RadioTower_4F_Speaker_CipherPeonF
+	setspeaker GoldenrodCity_RadioTower_4F_Speaker_CipherPeonVera
 	msgbox GoldenrodCity_RadioTower_4F_Text_CipherPeonF6_After, MSGBOX_DEFAULT
 	releaseall
 	end
@@ -127,7 +164,7 @@ GoldenrodCity_RadioTower_4F_EventScript_CipherF6After::
 GoldenrodCity_RadioTower_4F_EventScript_CipherF7After::
 	settrainerflag TRAINER_GOLDENROD_RADIO_CIPHER_F7
 	setvar VAR_TEMP_0, 0
-	setspeaker GoldenrodCity_RadioTower_4F_Speaker_CipherPeonF
+	setspeaker GoldenrodCity_RadioTower_4F_Speaker_CipherPeonLynx
 	msgbox GoldenrodCity_RadioTower_4F_Text_CipherPeonF7_After, MSGBOX_DEFAULT
 	releaseall
 	end
@@ -137,14 +174,14 @@ GoldenrodCity_RadioTower_4F4_EventScript_Sign1::
 	end
 
 GoldenrodCity_RadioTower_4F4_EventScript_Sign1_Text:
-	.string "It's a sign.$"
+	.string "4F STUDIO 2$"
 
 GoldenrodCity_RadioTower_4F4_EventScript_Sign2::
 	msgbox GoldenrodCity_RadioTower_4F4_EventScript_Sign2_Text, MSGBOX_SIGN
 	end
 
 GoldenrodCity_RadioTower_4F4_EventScript_Sign2_Text:
-	.string "It's a sign.$"
+	.string "4F PRODUCTION$"
 
 GoldenrodCity_RadioTower_4F_Text_CipherPeonF6_Intro:
 	.string "CIPHER's grip tightens the closer\n"

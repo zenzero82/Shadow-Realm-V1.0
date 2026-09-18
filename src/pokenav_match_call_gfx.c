@@ -108,6 +108,7 @@ static u32 CancelMatchCallSelection(s32);
 static u32 DoMatchCallMessage(s32);
 static u32 DoTrainerCloseByMessage(s32);
 static u32 CloseMatchCallMessage(s32);
+static u32 RefreshMatchCallMessage(s32);
 static u32 ShowCheckPage(s32);
 static u32 ShowCheckPageUp(s32);
 static u32 ShowCheckPageDown(s32);
@@ -173,6 +174,7 @@ static const LoopedTask sMatchCallLoopTaskFuncs[] =
     [POKENAV_MC_FUNC_CALL_MSG]            = DoMatchCallMessage,
     [POKENAV_MC_FUNC_NEARBY_MSG]          = DoTrainerCloseByMessage,
     [POKENAV_MC_FUNC_EXIT_CALL]           = CloseMatchCallMessage,
+    [POKENAV_MC_FUNC_REFRESH_CALL]        = RefreshMatchCallMessage,
     [POKENAV_MC_FUNC_SHOW_CHECK_PAGE]     = ShowCheckPage,
     [POKENAV_MC_FUNC_CHECK_PAGE_UP]       = ShowCheckPageUp,
     [POKENAV_MC_FUNC_CHECK_PAGE_DOWN]     = ShowCheckPageDown,
@@ -718,6 +720,31 @@ static u32 CloseMatchCallMessage(s32 state)
     }
 
     return result;
+}
+
+static u32 RefreshMatchCallMessage(s32 state)
+{
+    struct Pokenav_MatchCallGfx *gfx = GetSubstructPtr(POKENAV_SUBSTRUCT_MATCH_CALL_OPEN);
+
+    switch (state)
+    {
+    case 0:
+        FillWindowPixelBuffer(gfx->msgBoxWindowId, PIXEL_FILL(1));
+        CopyWindowToVram(gfx->msgBoxWindowId, COPYWIN_GFX);
+        return LT_INC_AND_PAUSE;
+    case 1:
+        if (IsDma3ManagerBusyWithBgCopy2(gfx))
+            return LT_PAUSE;
+
+        PrintMatchCallMessage(gfx);
+        return LT_INC_AND_PAUSE;
+    case 2:
+        if (WaitForMatchCallMessageText(gfx))
+            return LT_PAUSE;
+        break;
+    }
+
+    return LT_FINISH;
 }
 
 static u32 ShowCheckPage(s32 state)

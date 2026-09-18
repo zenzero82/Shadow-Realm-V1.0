@@ -3,5 +3,6 @@ SafariZoneGate_PokemonCenter_MapScripts::
 	.byte 0
 
 SafariZoneGate_PokemonCenter_OnTransition::
+	call CableClub_EventScript_HideOrShowMysteryGiftMan
 	setflag FLAG_VISITED_SAFARI_ZONE_GATE_JOHTO
 	end

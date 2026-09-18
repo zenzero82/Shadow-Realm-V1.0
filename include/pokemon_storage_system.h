@@ -1,6 +1,8 @@
 #ifndef GUARD_POKEMON_STORAGE_SYSTEM_H
 #define GUARD_POKEMON_STORAGE_SYSTEM_H
 
+#include "constants/form_change_types.h"
+
 #define TOTAL_BOXES_COUNT       35
 #define IN_BOX_ROWS             5 // Number of rows, 6 Pokémon per row
 #define IN_BOX_COLUMNS          6 // Number of columns, 5 Pokémon per column
@@ -42,6 +44,7 @@ bool8 RepairBoxStorageChecksums(void);
 bool8 SaveBoxStorageToFlash(void);
 void ClearBoxStorageData(void);
 void MarkBoxStorageDirty(u8 boxId);
+void SanitizePokemonStorageMetadata(void);
 s16 CompactPartySlots(void);
 u8 StorageGetCurrentBox(void);
 u32 GetBoxMonDataAt(u8 boxId, u8 boxPosition, s32 request);
@@ -58,6 +61,9 @@ void CreateBoxMonAt(u8 boxId, u8 boxPosition, u16 species, u8 level, u8 fixedIV,
 void ZeroBoxMonAt(u8 boxId, u8 boxPosition);
 void BoxMonAtToMon(u8 boxId, u8 boxPosition, struct Pokemon *dst);
 struct BoxPokemon *GetBoxedMonPtr(u8 boxId, u8 boxPosition);
+void SetMonFormPSS(struct BoxPokemon *boxMon, enum FormChanges method);
+void SetMonFormPSS_ItemHold(struct BoxPokemon *boxMon);
+void UpdateSpeciesSpritePSS(struct BoxPokemon *boxMon);
 u8 *GetBoxNamePtr(u8 boxId);
 s16 AdvanceStorageMonIndex(struct BoxPokemon *boxMons, u8 currIndex, u8 maxIndex, u8 mode);
 bool8 CheckFreePokemonStorageSpace(void);

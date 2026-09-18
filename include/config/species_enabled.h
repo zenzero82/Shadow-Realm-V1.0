@@ -28,6 +28,7 @@
 #define P_ULTRA_BURST_FORMS              TRUE // Ultra Necrozma only.
 #define P_GIGANTAMAX_FORMS               TRUE
 #define P_TERA_FORMS                     TRUE
+#define P_GEN_9_MEGA_EVOLUTIONS          P_MEGA_EVOLUTIONS // Extra fan mega evolutions imported from the expansion fork.
 
 // Fusion forms
 #define P_FUSION_FORMS                   TRUE

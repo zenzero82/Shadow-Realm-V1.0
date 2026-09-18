@@ -2,6 +2,18 @@ viridian_contesthall_MapScripts::
 	map_script MAP_SCRIPT_ON_TRANSITION, viridian_contesthall_OnTransition
 	.byte 0
 
+viridian_contesthall_Speaker_Judge:
+	.string "Rowan$"
+
+viridian_contesthall_Speaker_Attendant:
+	.string "Mira$"
+
+viridian_contesthall_Speaker_Woman:
+	.string "Celia$"
+
+viridian_contesthall_Speaker_Beauty:
+	.string "Lana$"
+
 viridian_contesthall_OnTransition:
 	checkflag FLAG_QUEST_BACK_TO_HQ_STARTED
 	goto_if_eq VAR_RESULT, FALSE, viridian_contesthall_HideCivilians
@@ -15,6 +27,7 @@ viridian_contesthall_HideCivilians:
 viridian_contesthall_EventScript_Judge::
 	lock
 	faceplayer
+	setspeaker viridian_contesthall_Speaker_Judge
 	msgbox viridian_contesthall_Text_Judge, MSGBOX_DEFAULT
 	release
 	end
@@ -22,6 +35,7 @@ viridian_contesthall_EventScript_Judge::
 viridian_contesthall_EventScript_Attendant::
 	lock
 	faceplayer
+	setspeaker viridian_contesthall_Speaker_Attendant
 	msgbox viridian_contesthall_Text_Attendant, MSGBOX_DEFAULT
 	release
 	end
@@ -29,6 +43,7 @@ viridian_contesthall_EventScript_Attendant::
 viridian_contesthall_EventScript_Woman::
 	lock
 	faceplayer
+	setspeaker viridian_contesthall_Speaker_Woman
 	msgbox viridian_contesthall_Text_Woman, MSGBOX_DEFAULT
 	release
 	end
@@ -36,6 +51,7 @@ viridian_contesthall_EventScript_Woman::
 viridian_contesthall_EventScript_Beauty::
 	lock
 	faceplayer
+	setspeaker viridian_contesthall_Speaker_Beauty
 	msgbox viridian_contesthall_Text_Beauty, MSGBOX_DEFAULT
 	release
 	end

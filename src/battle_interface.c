@@ -48,6 +48,7 @@ EWRAM_DATA u8 gStatusSummaryBallsPalSlot = 0;
 void ShadowHud_Clear(u8 battler);
 void ShadowHud_SyncForBattler(u8 battler);
 void BattleHud_ApplyHealthboxPalette(u8 battler, bool8 isShadowNow);
+void BattleHud_RefreshHealthboxPalette(u8 battler, bool8 isShadowNow);
 static void MoveBattleBarGraphically(u8 battler, u8 whichBar);
 extern const struct SpritePalette gSpritePalettes_HealthBoxHealthBar[10];
 u32 IndexOfSpritePaletteTag(u16 tag);  // correct return type
@@ -816,7 +817,7 @@ static u8 LoadStatusSummaryPalette(const struct SpritePalette *palette, u8 prefe
 void ReserveStatusSummaryPalettes(void)
 {
     gStatusSummaryBarPalSlot = LoadStatusSummaryPalette(&sStatusSummaryBarSpritePal, 12);
-    gStatusSummaryBallsPalSlot = IndexOfSpritePaletteTag(TAG_HEALTHBAR_PAL);
+    gStatusSummaryBallsPalSlot = IndexOfSpritePaletteTag(TAG_STATUS_SUMMARY_BALLS_PAL);
     if (gStatusSummaryBallsPalSlot == 0xFF)
         gStatusSummaryBallsPalSlot = LoadStatusSummaryPalette(&sStatusSummaryBallsSpritePal, 13);
 }
@@ -889,53 +890,18 @@ static u8 GetHealthbarSpriteIdFromBattler(u8 battler)
 extern const struct SpritePalette gSpritePalettes_HealthBoxHealthBar[10];
 u32 IndexOfSpritePaletteTag(u16 tag); // from include/sprite.h
 
-static bool8 CanShareHealthboxPalette(u8 battler, bool8 isShadowNow)
-{
-    u8 partner;
-
-    if (!IsDoubleBattle())
-        return FALSE;
-
-    partner = BATTLE_PARTNER(battler);
-    if (!IsBattlerAlive(partner))
-        return FALSE;
-
-    if (IsBattlerReverseNow(battler) != IsBattlerReverseNow(partner))
-        return FALSE;
-
-    if (IsOnPlayerSide(battler))
-        return (GetMonData(GetBattlerMon(partner), MON_DATA_IS_SHADOW) == isShadowNow);
-
-    return (IsOpponentShadowNow(partner) == isShadowNow);
-}
-
-static bool8 CanShareHealthboxFramePalette(u8 battler, bool8 isShadowNow, bool8 isReverseNow)
-{
-    u8 partner;
-
-    if (!IsDoubleBattle())
-        return FALSE;
-
-    partner = BATTLE_PARTNER(battler);
-    if (!IsBattlerAlive(partner))
-        return FALSE;
-
-    if (IsBattlerReverseNow(partner) != isReverseNow)
-        return FALSE;
-
-    if (IsOnPlayerSide(battler))
-        return (GetMonData(GetBattlerMon(partner), MON_DATA_IS_SHADOW) == isShadowNow);
-
-    return (IsOpponentShadowNow(partner) == isShadowNow);
-}
-
 static u16 GetHealthboxPalTagForBattler(u8 battler, bool8 isShadowNow)
 {
-    if (IsDoubleBattle() && !isShadowNow)
-        return IsOnPlayerSide(battler) ? TAG_HEALTHBOX_PLAYER1_PAL : TAG_HEALTHBOX_OPPONENT1_PAL;
-
-    if (CanShareHealthboxPalette(battler, isShadowNow))
-        return IsOnPlayerSide(battler) ? TAG_HEALTHBOX_PLAYER1_PAL : TAG_HEALTHBOX_OPPONENT1_PAL;
+    if (IsDoubleBattle())
+    {
+        if (!isShadowNow)
+            return TAG_HEALTHBOX_PLAYER1_PAL;
+        if (!IsOnPlayerSide(battler))
+            return TAG_HEALTHBOX_OPPONENT1_PAL;
+        if (IsBattlerReverseNow(battler))
+            return TAG_HEALTHBOX_OPPONENT2_PAL;
+        return TAG_HEALTHBOX_PLAYER2_PAL;
+    }
 
     if (IsOnPlayerSide(battler))
     {
@@ -956,11 +922,16 @@ static u16 GetHealthboxFramePalTagForBattler(u8 battler, bool8 isShadowNow)
     if (gBattleTypeFlags & BATTLE_TYPE_SAFARI)
         return TAG_HEALTHBOX_FRAME_SAFARI_PAL;
 
-    if (IsDoubleBattle() && CanShareHealthboxFramePalette(battler, isShadowNow, IsBattlerReverseNow(battler)))
-        return IsOnPlayerSide(battler) ? TAG_HEALTHBOX_FRAME_PLAYER1_PAL : TAG_HEALTHBOX_FRAME_OPPONENT1_PAL;
-
-    if (CanShareHealthboxPalette(battler, isShadowNow))
-        return IsOnPlayerSide(battler) ? TAG_HEALTHBOX_FRAME_PLAYER1_PAL : TAG_HEALTHBOX_FRAME_OPPONENT1_PAL;
+    if (IsDoubleBattle())
+    {
+        if (!isShadowNow)
+            return TAG_HEALTHBOX_FRAME_PLAYER1_PAL;
+        if (!IsOnPlayerSide(battler))
+            return TAG_HEALTHBOX_FRAME_OPPONENT1_PAL;
+        if (IsBattlerReverseNow(battler))
+            return TAG_HEALTHBOX_FRAME_OPPONENT2_PAL;
+        return TAG_HEALTHBOX_FRAME_PLAYER2_PAL;
+    }
 
     if (IsOnPlayerSide(battler))
     {
@@ -1059,7 +1030,18 @@ static void BattleHud_ApplyHealthboxPaletteInternal(u8 battler, bool8 isShadowNo
                      : gBattleInterface_HealthboxFrameShadowOpponentPal;
 
         if (IsDoubleBattle())
-            frameSrc = isShadowNow ? sHealthboxFrameDoubleShadowPal : sHealthboxFrameDoublePal;
+        {
+            if (!isShadowNow)
+                frameSrc = sHealthboxFrameDoublePal;
+            else if (isReverseNow)
+                frameSrc = IsOnPlayerSide(battler)
+                         ? gBattleInterface_HealthboxFrameShadowReversePal
+                         : gBattleInterface_HealthboxFrameShadowOpponentReversePal;
+            else if (IsOnPlayerSide(battler))
+                frameSrc = sHealthboxFrameDoubleShadowPal;
+            else
+                frameSrc = gBattleInterface_HealthboxFrameShadowOpponentPal;
+        }
 
         struct SpritePalette framePalEntry = {.data = frameSrc, .tag = frameTag};
         u32 framePalIndex = IndexOfSpritePaletteTag(frameTag);
@@ -1101,6 +1083,27 @@ void BattleHud_ApplyHealthboxPalette(u8 battler, bool8 isShadowNow)
 void BattleHud_RefreshHealthboxPalette(u8 battler, bool8 isShadowNow)
 {
     BattleHud_ApplyHealthboxPaletteInternal(battler, isShadowNow, FALSE);
+}
+
+void BattleInterface_RefreshPersistentPalettes(void)
+{
+    u8 battler;
+
+    for (battler = 0; battler < gBattlersCount; battler++)
+    {
+        bool8 isShadowNow;
+
+        if (gHealthboxSpriteIds[battler] >= MAX_SPRITES
+         || !gSprites[gHealthboxSpriteIds[battler]].inUse)
+            continue;
+
+        if (IsOnPlayerSide(battler))
+            isShadowNow = GetMonData(GetBattlerMon(battler), MON_DATA_IS_SHADOW);
+        else
+            isShadowNow = IsOpponentShadowNow(battler);
+
+        BattleHud_RefreshHealthboxPalette(battler, isShadowNow);
+    }
 }
 
 
@@ -1413,7 +1416,24 @@ static void UpdateSpritePos(u8 spriteId, s16 x, s16 y)
 
 void DummyBattleInterfaceFunc(u8 healthboxSpriteId, bool8 isDoubleBattleBattlerOnly)
 {
+    u8 battler;
+    bool8 isShadowNow;
 
+    (void)isDoubleBattleBattlerOnly;
+
+    if (healthboxSpriteId >= MAX_SPRITES)
+        return;
+
+    battler = gSprites[healthboxSpriteId].hMain_Battler;
+    if (battler >= gBattlersCount)
+        return;
+
+    if (IsOnPlayerSide(battler))
+        isShadowNow = GetMonData(GetBattlerMon(battler), MON_DATA_IS_SHADOW);
+    else
+        isShadowNow = IsOpponentShadowNow(battler);
+
+    BattleHud_RefreshHealthboxPalette(battler, isShadowNow);
 }
 
 static void TryToggleHealboxVisibility(u32 priority, u32 healthboxLeftSpriteId, u32 healthboxRightSpriteId, u32 healthbarSpriteId)
@@ -2663,6 +2683,7 @@ void UpdateHealthboxAttribute(u8 healthboxSpriteId, struct Pokemon *mon, u8 elem
             UpdateNickInHealthbox(healthboxSpriteId, mon);
         if (elementId == HEALTHBOX_STATUS_ICON || elementId == HEALTHBOX_ALL)
             UpdateStatusIconInHealthbox(healthboxSpriteId);
+        BattleInterface_RestoreAbilityPopupPalette();
         if (elementId == HEALTHBOX_SAFARI_ALL_TEXT)
             UpdateSafariBallsTextOnHealthbox(healthboxSpriteId);
         if (elementId == HEALTHBOX_SAFARI_ALL_TEXT || elementId == HEALTHBOX_SAFARI_BALLS_TEXT)
@@ -2698,6 +2719,7 @@ void UpdateHealthboxAttribute(u8 healthboxSpriteId, struct Pokemon *mon, u8 elem
             UpdateNickInHealthbox(healthboxSpriteId, mon);
         if (elementId == HEALTHBOX_STATUS_ICON || elementId == HEALTHBOX_ALL)
             UpdateStatusIconInHealthbox(healthboxSpriteId);
+        BattleInterface_RestoreAbilityPopupPalette();
     }
 }
 
@@ -3128,7 +3150,7 @@ static void SafariTextIntoHealthboxObject(void *dest, u8 *windowTileData, u32 wi
 }
 
 #define ABILITY_POP_UP_TAG 0xD720
-#define ABILITY_POP_UP_PAL_SLOT 9
+#define ABILITY_POP_UP_PAL_SLOT 15
 
 // for sprite
 #define tOriginalX      data[0]
@@ -3620,7 +3642,17 @@ void BattleInterface_RestoreAbilityPopupPalette(void)
     u32 palIndex = IndexOfSpritePaletteTag(ABILITY_POP_UP_TAG);
 
     if (palIndex != 0xFF)
+    {
         LoadPalette(sAbilityPopUpPalette, OBJ_PLTT_ID(palIndex), PLTT_SIZE_4BPP);
+        if (gBattleStruct->ballSpriteIds[1] != MAX_SPRITES)
+            gSprites[gBattleStruct->ballSpriteIds[1]].oam.paletteNum = palIndex;
+#if B_LAST_USED_BALL_BUTTON == R_BUTTON
+        if (gBattleStruct->ballSpriteIds[2] != MAX_SPRITES)
+            gSprites[gBattleStruct->ballSpriteIds[2]].oam.paletteNum = palIndex;
+#endif
+        if (gBattleStruct->moveInfoSpriteId != MAX_SPRITES)
+            gSprites[gBattleStruct->moveInfoSpriteId].oam.paletteNum = palIndex;
+    }
 
     if (gBattleStruct->ballSpriteIds[0] != MAX_SPRITES)
     {
@@ -3631,6 +3663,15 @@ void BattleInterface_RestoreAbilityPopupPalette(void)
             LoadPalette(GetItemIconPalette(gBallToDisplay), OBJ_PLTT_ID(ballPalIndex), PLTT_SIZE_4BPP);
         gSprites[gBattleStruct->ballSpriteIds[0]].oam.paletteNum = IndexOfSpritePaletteTag(LAST_USED_BALL_ICON_TAG);
     }
+}
+
+void BattleInterface_FreeInactiveWindowPalettes(void)
+{
+    if (!IsAnyAbilityPopUpPaletteUserActive())
+        FreeSpritePaletteByTag(ABILITY_POP_UP_TAG);
+
+    if (gBattleStruct->ballSpriteIds[0] == MAX_SPRITES)
+        FreeSpritePaletteByTag(LAST_USED_BALL_ICON_TAG);
 }
 
 static void Task_FreeAbilityPopUpGfx(u8 taskId)
@@ -3649,7 +3690,7 @@ static void Task_FreeAbilityPopUpGfx(u8 taskId)
 #if B_LAST_USED_BALL_BUTTON == R_BUTTON
 #define LAST_BALL_CALL_WINDOW_TAG 0xD722
 #endif
-#define LAST_USED_BALL_PAL_SLOT 10
+#define LAST_USED_BALL_PAL_SLOT 15
 
 static const struct OamData sOamData_LastUsedBall =
 {
@@ -3991,7 +4032,47 @@ static void DestroyMoveInfoWinGfx(struct Sprite *sprite)
     FreeSpriteTilesByTag(MOVE_INFO_WINDOW_TAG);
     DestroySprite(sprite);
     gBattleStruct->moveInfoSpriteId = MAX_SPRITES;
-    if (IsDoubleBattle() && !IsAnyAbilityPopUpPaletteUserActive())
+}
+
+void BattleInterface_DiscardTransientWindows(void)
+{
+    if (gBattleStruct->ballSpriteIds[0] < MAX_SPRITES)
+    {
+        if (gSprites[gBattleStruct->ballSpriteIds[0]].inUse)
+            DestroyLastUsedBallGfx(&gSprites[gBattleStruct->ballSpriteIds[0]]);
+        else
+            gBattleStruct->ballSpriteIds[0] = MAX_SPRITES;
+    }
+
+    if (gBattleStruct->ballSpriteIds[1] < MAX_SPRITES)
+    {
+        if (gSprites[gBattleStruct->ballSpriteIds[1]].inUse)
+            DestroyLastUsedBallWinGfx(&gSprites[gBattleStruct->ballSpriteIds[1]]);
+        else
+            gBattleStruct->ballSpriteIds[1] = MAX_SPRITES;
+    }
+
+#if B_LAST_USED_BALL_BUTTON == R_BUTTON
+    if (gBattleStruct->ballSpriteIds[2] < MAX_SPRITES)
+    {
+        if (gSprites[gBattleStruct->ballSpriteIds[2]].inUse)
+            DestroyLastUsedBallCallWinGfx(&gSprites[gBattleStruct->ballSpriteIds[2]]);
+        else
+            gBattleStruct->ballSpriteIds[2] = MAX_SPRITES;
+    }
+#endif
+
+    if (gBattleStruct->moveInfoSpriteId < MAX_SPRITES)
+    {
+        if (gSprites[gBattleStruct->moveInfoSpriteId].inUse)
+            DestroyMoveInfoWinGfx(&gSprites[gBattleStruct->moveInfoSpriteId]);
+        else
+            gBattleStruct->moveInfoSpriteId = MAX_SPRITES;
+    }
+
+    gLastUsedBallMenuPresent = FALSE;
+    FreeSpritePaletteByTag(LAST_USED_BALL_ICON_TAG);
+    if (!IsAnyAbilityPopUpActive())
         FreeSpritePaletteByTag(ABILITY_POP_UP_TAG);
 }
 
@@ -4261,17 +4342,26 @@ void ArrowsChangeColorLastBallCycle(bool32 showArrows)
 
 #define CATEGORY_ICON_PAL_SLOT 12
 
-void CategoryIcons_LoadSpritesGfx(void)
+void ReserveCategoryIconPaletteSlot(void)
 {
-    LoadCompressedSpriteSheet(&gSpriteSheet_CategoryIcons);
-    if (CATEGORY_ICON_PAL_SLOT >= gReservedSpritePaletteCount)
+    u32 palIndex = IndexOfSpritePaletteTag(gSpritePal_CategoryIcons.tag);
+
+    if (palIndex == 0xFF && CATEGORY_ICON_PAL_SLOT >= gReservedSpritePaletteCount)
     {
         u16 slotTag = GetSpritePaletteTagByPaletteNum(CATEGORY_ICON_PAL_SLOT);
         if (slotTag == TAG_NONE || slotTag == gSpritePal_CategoryIcons.tag)
-        {
-            LoadSpritePaletteInSlot(&gSpritePal_CategoryIcons, CATEGORY_ICON_PAL_SLOT);
-            return;
-        }
+            palIndex = LoadSpritePaletteInSlot(&gSpritePal_CategoryIcons, CATEGORY_ICON_PAL_SLOT);
     }
-    LoadSpritePalette(&gSpritePal_CategoryIcons);
+
+    if (palIndex == 0xFF)
+        palIndex = LoadSpritePalette(&gSpritePal_CategoryIcons);
+
+    if (palIndex != 0xFF)
+        LoadPalette(gSpritePal_CategoryIcons.data, OBJ_PLTT_ID(palIndex), PLTT_SIZE_4BPP);
+}
+
+void CategoryIcons_LoadSpritesGfx(void)
+{
+    LoadCompressedSpriteSheet(&gSpriteSheet_CategoryIcons);
+    ReserveCategoryIconPaletteSlot();
 }

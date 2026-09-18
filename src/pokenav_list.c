@@ -11,6 +11,8 @@
 #define GFXTAG_ARROW 10
 #define PALTAG_ARROW 20
 
+typedef u8 ALIGNED(4) PokenavTilemapBuffer[BG_SCREEN_SIZE];
+
 struct PokenavListMenuWindow {
     u8 bg;
     u8 fillValue;
@@ -60,7 +62,7 @@ struct PokenavListSub
 struct PokenavList
 {
     struct PokenavListSub sub;
-    u8 tilemapBuffer[BG_SCREEN_SIZE];
+    PokenavTilemapBuffer tilemapBuffer;
     struct PokenavListWindowState windowState;
     s32 eraseIndex;
     u32 loopedTaskId;

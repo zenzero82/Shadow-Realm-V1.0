@@ -8,6 +8,8 @@ lavender_house3_EventScript_OldMan::
 	faceplayer
 	setspeaker lavender_house3_Speaker_OldMan
 	msgbox lavender_house3_Text_OldMan, MSGBOX_NPC
+	setvar VAR_0x8000, 3
+	call Lavender_Town_EventScript_RecordInteriorNPC
 	end
 
 lavender_house3_Text_OldMan:

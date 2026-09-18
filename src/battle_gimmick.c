@@ -26,28 +26,92 @@ static bool8 IsBattlerShadowNow(u32 battler)
     return gBattleMons[battler].isShadow;
 }
 
-static void EnsureIndicatorPaletteLoaded(u16 palTag)
+static void ReloadIndicatorPaletteData(u16 palTag, u32 palNum)
 {
-    if (palTag == TAG_NONE)
-        return;
-
-    if (IndexOfSpritePaletteTag(palTag) != 0xFF)
-        return;
-
     switch (palTag)
     {
     case TAG_MISC_INDICATOR_PAL:
-        LoadSpritePalette(&sSpritePalette_MiscIndicator);
+        LoadPalette(sSpritePalette_MiscIndicator.data, OBJ_PLTT_ID(palNum), PLTT_SIZE_4BPP);
         break;
     case TAG_MEGA_INDICATOR_PAL:
-        LoadSpritePalette(&sSpritePalette_MegaIndicator);
+        LoadPalette(sSpritePalette_MegaIndicator.data, OBJ_PLTT_ID(palNum), PLTT_SIZE_4BPP);
         break;
     case TAG_TERA_INDICATOR_PAL:
-        LoadSpritePalette(&sSpritePalette_TeraIndicator);
+        LoadPalette(sSpritePalette_TeraIndicator.data, OBJ_PLTT_ID(palNum), PLTT_SIZE_4BPP);
         break;
     default:
         break;
     }
+}
+
+static void EnsureIndicatorPaletteLoaded(u16 palTag)
+{
+    u32 palIndex;
+    u8 preferredSlot = 0xFF;
+
+    if (palTag == TAG_NONE)
+        return;
+
+    palIndex = IndexOfSpritePaletteTag(palTag);
+
+    if (palIndex != 0xFF)
+    {
+        ReloadIndicatorPaletteData(palTag, palIndex);
+        return;
+    }
+
+    switch (palTag)
+    {
+    case TAG_MISC_INDICATOR_PAL:
+        preferredSlot = 14;
+        break;
+    case TAG_MEGA_INDICATOR_PAL:
+    case TAG_TERA_INDICATOR_PAL:
+        preferredSlot = 15;
+        break;
+    }
+
+    if (preferredSlot != 0xFF && preferredSlot >= gReservedSpritePaletteCount)
+    {
+        u16 slotTag = GetSpritePaletteTagByPaletteNum(preferredSlot);
+
+        switch (palTag)
+        {
+        case TAG_MISC_INDICATOR_PAL:
+            if (slotTag == TAG_NONE || slotTag == palTag)
+                palIndex = LoadSpritePaletteInSlot(&sSpritePalette_MiscIndicator, preferredSlot);
+            break;
+        case TAG_MEGA_INDICATOR_PAL:
+            if (slotTag == TAG_NONE || slotTag == palTag)
+                palIndex = LoadSpritePaletteInSlot(&sSpritePalette_MegaIndicator, preferredSlot);
+            break;
+        case TAG_TERA_INDICATOR_PAL:
+            if (slotTag == TAG_NONE || slotTag == palTag)
+                palIndex = LoadSpritePaletteInSlot(&sSpritePalette_TeraIndicator, preferredSlot);
+            break;
+        }
+    }
+
+    switch (palTag)
+    {
+    case TAG_MISC_INDICATOR_PAL:
+        if (palIndex == 0xFF)
+            palIndex = LoadSpritePalette(&sSpritePalette_MiscIndicator);
+        break;
+    case TAG_MEGA_INDICATOR_PAL:
+        if (palIndex == 0xFF)
+            palIndex = LoadSpritePalette(&sSpritePalette_MegaIndicator);
+        break;
+    case TAG_TERA_INDICATOR_PAL:
+        if (palIndex == 0xFF)
+            palIndex = LoadSpritePalette(&sSpritePalette_TeraIndicator);
+        break;
+    default:
+        break;
+    }
+
+    if (palIndex != 0xFF)
+        ReloadIndicatorPaletteData(palTag, palIndex);
 }
 
 // Populates gBattleStruct->gimmick.usableGimmick for each battler.
@@ -299,16 +363,15 @@ static void SpriteCb_GimmickTrigger(struct Sprite *sprite)
 
 void LoadIndicatorSpritesGfx(void)
 {
-    LoadSpritePalette(&sSpritePalette_MiscIndicator);
-    LoadSpritePalette(&sSpritePalette_MegaIndicator);
-    LoadSpritePalette(&sSpritePalette_TeraIndicator);
 }
 
 static void SpriteCb_GimmickIndicator(struct Sprite *sprite)
 {
     u32 battler = sprite->tBattler;
+    s32 reverseOffset = 0;
 
-    s32 reverseOffset = gBattleMons[battler].isReverse ? -32 : 0;
+    if (gBattleMons[battler].isReverse)
+        reverseOffset = IsDoubleBattle() ? -29 : -32;
 
     sprite->x = gSprites[gHealthboxSpriteIds[battler]].x + sprite->tPosX + sprite->tLevelXDelta + reverseOffset;
     sprite->x2 = gSprites[gHealthboxSpriteIds[battler]].x2;
@@ -382,6 +445,7 @@ void UpdateIndicatorVisibilityAndType(u32 healthboxId, bool32 invisible)
             return;
         }
 
+        ReloadIndicatorPaletteData(palTag, palNum);
         sprite->oam.paletteNum = palNum;
         sprite->invisible = invisible;
 

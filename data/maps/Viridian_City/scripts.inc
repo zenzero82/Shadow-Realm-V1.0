@@ -8,13 +8,19 @@ Viridian_City_MapScripts::
 @ ==============================
 
 Viridian_Speaker_Gramps:
-    .string "Old Man Dexter$"
+    .string "Dexter$"
 
 Viridian_Speaker_Youngster:
-    .string "Youngster Milo$"
+    .string "Milo$"
 
 Viridian_Speaker_OldMan_Exile:
-    .string "Old Man Harlan$"
+    .string "Harlan$"
+
+Viridian_Speaker_Twin_Left:
+    .string "Ava$"
+
+Viridian_Speaker_Twin_Right:
+    .string "Ella$"
 
 Viridian_Speaker_Jessie:
     .string "Jessie$"
@@ -32,24 +38,24 @@ Viridian_Speaker_JJ_Unison:
     .string "Jessie&James$"
 
 Viridian_Speaker_GymGrunt:
-    .string "Grunt Slate$"
+    .string "Slate$"
 
 Viridian_Speaker_Grunt1:
-    .string "Grunt Vex$"
+    .string "Vex$"
 Viridian_Speaker_Grunt2:
-    .string "Grunt Rook$"
+    .string "Rook$"
 Viridian_Speaker_Grunt3:
-    .string "Grunt Sable$"
+    .string "Sable$"
 Viridian_Speaker_Grunt4:
-    .string "Grunt Kline$"
+    .string "Kline$"
 Viridian_Speaker_Grunt5:
-    .string "Grunt Mako$"
+    .string "Mako$"
 Viridian_Speaker_Grunt6:
-    .string "Grunt Cinder$"
+    .string "Cinder$"
 Viridian_Speaker_Grunt7:
-    .string "Grunt Warden$"
+    .string "Warden$"
 Viridian_Speaker_Grunt8:
-    .string "Grunt Hex$"
+    .string "Hex$"
 
 @ ==============================
 @ MAP ENTER
@@ -68,8 +74,11 @@ ViridianCity_EventScript_CityEnter::
     end
 
 ViridianCity_EventScript_UpdateCivilianState::
-    checkflag FLAG_QUEST_BACK_TO_HQ_STARTED
-    goto_if_eq VAR_RESULT, FALSE, ViridianCity_EventScript_HideCivilians
+    checkflag FLAG_ILEX_BIRCH_CALL_DONE
+    goto_if_eq ViridianCity_EventScript_ShowCivilians
+    goto ViridianCity_EventScript_HideCivilians
+
+ViridianCity_EventScript_ShowCivilians:
     clearflag FLAG_HIDE_VIRIDIAN_POST_ROCKET_NPCS
     return
 
@@ -153,6 +162,7 @@ ViridianCity_Text_ExileOldMan:
 ViridianCity_EventScript_PostRocketTwinLeft::
     lock
     faceplayer
+    setspeaker Viridian_Speaker_Twin_Left
     msgbox ViridianCity_Text_PostRocketTwinLeft, MSGBOX_DEFAULT
     release
     end
@@ -160,6 +170,7 @@ ViridianCity_EventScript_PostRocketTwinLeft::
 ViridianCity_EventScript_PostRocketTwinRight::
     lock
     faceplayer
+    setspeaker Viridian_Speaker_Twin_Right
     msgbox ViridianCity_Text_PostRocketTwinRight, MSGBOX_DEFAULT
     release
     end
@@ -732,9 +743,9 @@ ViridianCity_Text_Gonzap_Intro:
 
 ViridianCity_Text_Gonzap_Threat:
     .string "Remember this face.\p"
-    .string "When {COLOR PURPLE}Shadow Pokemon{COLOR DARK_GRAY}show up\n"
-    .string "in your League matches, you'll know who\l"
-    .string "gave the order.\p"
+    .string "When {COLOR BLUE}Shadow Pokemon{COLOR DARK_GRAY} show up\n"
+    .string "in your League matches, you'll know\l"
+    .string "who gave the order.\p"
     .string "Enjoy the calm while it lasts.$"
 
 ViridianCity_Text_Grunt1:
@@ -744,8 +755,8 @@ ViridianCity_Text_Grunt1:
     .string "Now Viridian belongs to TEAM ROCKET.$"
 
 ViridianCity_Text_Grunt2:
-    .string "Orders are simply this, nobody in or out\n"
-    .string "unless the boss says so.$"
+    .string "Orders are simply this, nobody in or\n"
+    .string "out unless the boss says so.$"
 
 ViridianCity_Text_Grunt3:
     .string "You are wondering where everyone went?\p"

@@ -106,6 +106,7 @@ struct NamingScreenData
     u8 textBuffer[0x10];
     u8 state;
     u8 windows[5];
+    u8 inputTargetSpriteId;
     u16 inputCharBaseXPos;
     u16 bg2vOffset;
     u8 bldAlphaTg;
@@ -170,6 +171,7 @@ static void NamingScreen_CreatePlayerIcon(void);
 static void NamingScreen_CreatePCIcon(void);
 static void NamingScreen_CreateMonIcon(void);
 static void NamingScreen_CreateRivalIcon(void);
+static void NamingScreen_DestroyInputTargetIcon(void);
 static bool8 HandleKeyboardEvent(void);
 static bool8 TriggerKeyboardChange(void);
 static u8 GetInputEvent(void);
@@ -222,9 +224,11 @@ static const struct SpritePalette sNamingScreenSpritePalette[];
 
 static const u8 *const sTransferredToPCMessages[] = {
     gText_MonSentToBoxInSomeonesPC,
-    gText_MonSentToBoxInBillsPC,
+    gText_MonSentToBoxInJinwoosPC,
+    gText_MonSentToBoxInLanettesPC,
     gText_MonSentToBoxSomeonesBoxFull,
-    gText_MonSentToBoxBillsBoxFull,
+    gText_MonSentToBoxJinwoosBoxFull,
+    gText_MonSentToBoxLanettesBoxFull,
 };
 
 void ResetBg0(void)
@@ -403,6 +407,7 @@ static void CB2_NamingScreen(void)
 static void NamingScreen_Init(void)
 {
     sNamingScreenData->state = 0;
+    sNamingScreenData->inputTargetSpriteId = MAX_SPRITES;
     sNamingScreenData->bg2vOffset = 0;
     sNamingScreenData->bldAlphaTg = 16;
     sNamingScreenData->template = sNamingScreenTemplates[sNamingScreenData->templateNum];
@@ -588,6 +593,7 @@ static bool8 MainState_WaitFadeOutAndExit(void)
 {
     if (!gPaletteFade.active)
     {
+        NamingScreen_DestroyInputTargetIcon();
         if (sNamingScreenData->templateNum == NAMING_SCREEN_PLAYER)
             SeedRngAndSetTrainerId();
         gKeyRepeatStartDelay = sNamingScreenData->keyRepeatStartDelayCopy;
@@ -616,7 +622,9 @@ static void NamingScreen_PkmnTransferToPCMsj(void)
         stringToDisplay = 2;
     }
 
-    if (FlagGet(FLAG_SYS_NOT_SOMEONES_PC))
+    if (FlagGet(FLAG_SYS_PC_LANETTE))
+        stringToDisplay += 2;
+    else if (FlagGet(FLAG_SYS_NOT_SOMEONES_PC))
         stringToDisplay++;
 
     StringExpandPlaceholders(gStringVar4, sTransferredToPCMessages[stringToDisplay]);
@@ -990,6 +998,7 @@ static void NamingScreen_CreatePlayerIcon(void)
 
     rivalGfxId = GetRivalAvatarGraphicsIdByStateIdAndGender(0, sNamingScreenData->monSpeciesOrPlayerGender);
     spriteId = CreateObjectGraphicsSprite(rivalGfxId, SpriteCallbackDummy, 0x28, 0x1A, 0);
+    sNamingScreenData->inputTargetSpriteId = spriteId;
     gSprites[spriteId].oam.priority = 3;
     StartSpriteAnim(&gSprites[spriteId], 4);
 }
@@ -999,6 +1008,7 @@ static void NamingScreen_CreatePCIcon(void)
     u8 spriteId;
 
     spriteId = CreateSprite(&gSpriteTemplate_PCIcon, 0x28, 0x1A, 0);
+    sNamingScreenData->inputTargetSpriteId = spriteId;
     SetSubspriteTables(&gSprites[spriteId], SubspriteTable_PcIcon);
     gSprites[spriteId].oam.priority = 3;
 }
@@ -1007,8 +1017,9 @@ static void NamingScreen_CreateMonIcon(void)
 {
     u8 spriteId;
 
-    LoadMonIconPalettes();
+    LoadMonIconPalettePersonality(sNamingScreenData->monSpeciesOrPlayerGender, sNamingScreenData->monPersonality);
     spriteId = CreateMonIcon(sNamingScreenData->monSpeciesOrPlayerGender, SpriteCallbackDummy, 0x28, 0x1A, 0, sNamingScreenData->monPersonality, FALSE, sNamingScreenData->monIsShadow);
+    sNamingScreenData->inputTargetSpriteId = spriteId;
     gSprites[spriteId].oam.priority = 3;
 }
 
@@ -1044,7 +1055,29 @@ static void NamingScreen_CreateRivalIcon(void)
     LoadSpriteSheet(&sheet);
     LoadSpritePalette(&palette);
     spriteId = CreateSprite(&template, 0x28, 0x1A, 0);
+    sNamingScreenData->inputTargetSpriteId = spriteId;
     gSprites[spriteId].oam.priority = 3;
+}
+
+static void NamingScreen_DestroyInputTargetIcon(void)
+{
+    if (sNamingScreenData->inputTargetSpriteId >= MAX_SPRITES)
+        return;
+
+    if (sNamingScreenData->template->iconFunction == 3)
+    {
+        FreeAndDestroyMonIconSprite(&gSprites[sNamingScreenData->inputTargetSpriteId]);
+        FreeMonIconPalettes();
+    }
+    else
+    {
+        DestroySprite(&gSprites[sNamingScreenData->inputTargetSpriteId]);
+
+        if (sNamingScreenData->template->iconFunction == 4)
+            FreeSpritePaletteByTag(255);
+    }
+
+    sNamingScreenData->inputTargetSpriteId = MAX_SPRITES;
 }
 
 static void NamingScreen_RedrawOptions(void)
@@ -1661,12 +1694,12 @@ static const struct NamingScreenTemplate sWaldaNamingScreenTemplate = {
 };
 
 static const struct NamingScreenTemplate sCodeNamingScreenTemplate = {
-    .copyExistingString = TRUE,
+    .copyExistingString = FALSE,
     .maxChars = CODE_NAME_LENGTH,
     .iconFunction = 0,
     .addGenderIcon = 0,
     .initialPage = KBPAGE_LETTERS_UPPER,
-    .title = gText_TellHimTheWords,
+    .title = gText_InputGiftCode,
     .titleSpa = NULL,
 };
 

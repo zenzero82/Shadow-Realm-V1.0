@@ -81,6 +81,7 @@ pewter_pokecenter_EventScript_BugCatcher::
 
 pewter_pokecenter_OnTransition:
 	setrespawn HEAL_LOCATION_PEWTER_CITY
+	call CableClub_EventScript_HideOrShowMysteryGiftMan
 	end
 
 pewter_pokecenter_Text_Beauty:

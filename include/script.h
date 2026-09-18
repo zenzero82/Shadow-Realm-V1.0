@@ -33,6 +33,7 @@ void ScriptReturn(struct ScriptContext *ctx);
 u16 ScriptReadHalfword(struct ScriptContext *ctx);
 u32 ScriptReadWord(struct ScriptContext *ctx);
 u32 ScriptPeekWord(struct ScriptContext *ctx);
+uintptr_t ScriptStripNativeTag(uintptr_t ptr);
 void LockPlayerFieldControls(void);
 void UnlockPlayerFieldControls(void);
 bool8 ArePlayerFieldControlsLocked(void);
@@ -126,6 +127,16 @@ static inline bool32 Script_IsAnalyzingEffects(void)
     return gScriptEffectContext != NULL;
 }
 
+enum
+{
+    SCRIPT_EFFECT_TAG = 1 << 1,
+};
+
+static inline bool32 Script_IsEffectInstrumentedPtr(uintptr_t ptr)
+{
+    return (ptr & SCRIPT_EFFECT_TAG) != 0;
+}
+
 #define RunScriptImmediatelyUntilEffect(effects, ptr, ctx) \
     ({ \
         _Static_assert((effects) & 0x80000000, "RunScriptImmediatelyUntilEffect requires an effects version"); \
@@ -156,22 +167,19 @@ static inline void Script_CheckEffectInstrumentedSpecial(u32 specialId)
 {
     typedef u16 (*SpecialFunc)(void);
     extern const SpecialFunc gSpecials[];
-    // In ROM mirror 1.
-    if (Script_IsAnalyzingEffects() && (((uintptr_t)gSpecials[specialId]) & 0xE000000) != 0xA000000)
+    if (Script_IsAnalyzingEffects() && !Script_IsEffectInstrumentedPtr((uintptr_t)gSpecials[specialId]))
         Script_GotoBreak_Internal();
 }
 
 static inline void Script_CheckEffectInstrumentedGotoNative(bool8 (*func)(void))
 {
-    // In ROM mirror 1.
-    if (Script_IsAnalyzingEffects() && (((uintptr_t)func) & 0xE000000) != 0xA000000)
+    if (Script_IsAnalyzingEffects() && !Script_IsEffectInstrumentedPtr((uintptr_t)func))
         Script_GotoBreak_Internal();
 }
 
 static inline void Script_CheckEffectInstrumentedCallNative(void (*func)(struct ScriptContext *))
 {
-    // In ROM mirror 1.
-    if (Script_IsAnalyzingEffects() && (((uintptr_t)func) & 0xE000000) != 0xA000000)
+    if (Script_IsAnalyzingEffects() && !Script_IsEffectInstrumentedPtr((uintptr_t)func))
         Script_GotoBreak_Internal();
 }
 

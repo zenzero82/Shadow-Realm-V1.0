@@ -43,6 +43,11 @@ extern void *const gNullScriptPtr;
 
 static bool8 TryStartGimmighoulSignpostScript(void);
 
+uintptr_t ScriptStripNativeTag(uintptr_t ptr)
+{
+    return ptr & ~(uintptr_t)SCRIPT_EFFECT_TAG;
+}
+
 void InitScriptContext(struct ScriptContext *ctx, void *cmdTable, void *cmdTableEnd)
 {
     s32 i;
@@ -109,6 +114,7 @@ bool8 RunScriptCommand(struct ScriptContext *ctx)
         {
             u8 cmdCode;
             ScrCmdFunc *func;
+            ScrCmdFunc cmdFunc;
 
             if (!ctx->scriptPtr)
             {
@@ -132,7 +138,8 @@ bool8 RunScriptCommand(struct ScriptContext *ctx)
                 return FALSE;
             }
 
-            if ((*func)(ctx) == TRUE)
+            cmdFunc = (ScrCmdFunc)ScriptStripNativeTag((uintptr_t)*func);
+            if (cmdFunc(ctx) == TRUE)
                 return TRUE;
         }
     }
@@ -574,8 +581,7 @@ struct ScriptEffectContext *gScriptEffectContext = NULL;
 
 static bool32 Script_IsEffectInstrumentedCommand(ScrCmdFunc func)
 {
-    // In ROM mirror 1.
-    return (((uintptr_t)func) & 0xE000000) == 0xA000000;
+    return Script_IsEffectInstrumentedPtr((uintptr_t)func);
 }
 
 /* 'setjmp' and 'longjmp' cause link errors, so we use
@@ -607,7 +613,7 @@ static bool32 RunScriptImmediatelyUntilEffect_InternalLoop(struct ScriptContext 
                 return TRUE;
 
             // Command which waits for a frame.
-            if ((*func)(ctx))
+            if (((ScrCmdFunc)ScriptStripNativeTag((uintptr_t)*func))(ctx))
             {
                 gScriptEffectContext->nextCmd = ctx->scriptPtr;
                 return TRUE;

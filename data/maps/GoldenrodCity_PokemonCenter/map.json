@@ -2,7 +2,7 @@
   "id": "MAP_GOLDENROD_CITY_POKEMON_CENTER",
   "name": "GoldenrodCity_PokemonCenter",
   "layout": "LAYOUT_JOHTO_PCENTER",
-  "music": "MUS_DUMMY",
+  "music": "MUS_RG_POKE_CENTER",
   "region_map_section": "MAPSEC_GOLDENROD_CITY",
   "requires_flash": false,
   "weather": "WEATHER_NONE",
@@ -24,7 +24,7 @@
       "movement_range_y": 0,
       "trainer_type": "TRAINER_TYPE_NONE",
       "trainer_sight_or_berry_tree_id": "0",
-      "script": "pewter_pokecenter_EventScript_Nurse",
+      "script": "GoldenrodCity_PokemonCenter_EventScript_Nurse",
       "flag": "0"
     },
     {
@@ -91,6 +91,19 @@
       "trainer_sight_or_berry_tree_id": "0",
       "script": "GoldenrodCity_PokemonCenter_EventScript_Leo",
       "flag": "0"
+    },
+    {
+      "graphics_id": "OBJ_EVENT_GFX_MYSTERY_GIFT_MAN",
+      "x": 10,
+      "y": 4,
+      "elevation": 0,
+      "movement_type": "MOVEMENT_TYPE_FACE_DOWN",
+      "movement_range_x": 0,
+      "movement_range_y": 0,
+      "trainer_type": "TRAINER_TYPE_NONE",
+      "trainer_sight_or_berry_tree_id": "0",
+      "script": "CableClub_EventScript_MysteryGiftMan",
+      "flag": "FLAG_HIDE_POKEMON_CENTER_1F_MYSTERY_GIFT_MAN"
     }
   ],
   "warp_events": [

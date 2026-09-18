@@ -47,10 +47,10 @@ void HardRefreshBattleSpriteLayer(void)
     gStatusSummaryBarPalSlot = 0xFF;
     gStatusSummaryBallsPalSlot = 0xFF;
     if (!IsDoubleBattle())
+    {
         ReserveOpponentBallThrowPaletteSlot();
-    ReserveLastUsedBallPaletteSlot();
-    ReserveAbilityPopupPaletteSlot();
-
+        ReserveLastUsedBallPaletteSlot();
+    }
     ClearSpritesHealthboxAnimData();
 
     state = 0;
@@ -135,9 +135,10 @@ static void CB2_ReshowBattleScreenAfterMenu(void)
         gStatusSummaryBarPalSlot = 0xFF;
         gStatusSummaryBallsPalSlot = 0xFF;
         if (!IsDoubleBattle())
+        {
             ReserveOpponentBallThrowPaletteSlot();
-        ReserveLastUsedBallPaletteSlot();
-        ReserveAbilityPopupPaletteSlot();
+            ReserveLastUsedBallPaletteSlot();
+        }
         break;
     case 5:
         ClearSpritesHealthboxAnimData();
@@ -323,6 +324,11 @@ static void CB2_ReshowBlankBattleScreenAfterMenu(void)
         gReservedSpritePaletteCount = MAX_BATTLERS_COUNT;
         gStatusSummaryBarPalSlot = 0xFF;
         gStatusSummaryBallsPalSlot = 0xFF;
+        if (!IsDoubleBattle())
+        {
+            ReserveOpponentBallThrowPaletteSlot();
+            ReserveLastUsedBallPaletteSlot();
+        }
         break;
     case 5:
         ClearSpritesHealthboxAnimData();

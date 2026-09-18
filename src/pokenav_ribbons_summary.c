@@ -41,6 +41,10 @@ enum
 #define MON_SPRITE_Y     104
 
 static const u8 gText_RibbonsF700[] = _("RIBBONS {DYNAMIC 0}");
+static const u8 sText_WorldRibbon[] = _("WORLD RIBBON");
+static const u8 sText_WorldRibbonDesc[] = _("A special WORLD RIBBON.");
+
+typedef u8 ALIGNED(4) PokenavTilemapBuffer[BG_SCREEN_SIZE];
 
 struct Pokenav_RibbonsSummaryList
 {
@@ -67,7 +71,7 @@ struct Pokenav_RibbonsSummaryMenu
     u16 monSpriteId;
     struct Sprite *bigRibbonSprite;
     u32 unused;
-    u8 tilemapBuffers[2][BG_SCREEN_SIZE];
+    PokenavTilemapBuffer tilemapBuffers[2];
 };
 
 // Used for the initial drawing of the ribbons
@@ -585,7 +589,11 @@ static u32 LoopedTask_OpenRibbonsSummaryMenu(s32 state)
             DecompressAndCopyTileDataToVram(1, sRibbonIconsSmall_Gfx, 0, 1, 0);
             SetBgTilemapBuffer(1, menu->tilemapBuffers[1]);
             FillBgTilemapBufferRect_Palette0(1, 0, 0, 0, 32, 20);
-            CopyPaletteIntoBufferUnfaded(sRibbonIcons1_Pal, BG_PLTT_ID(2), 5 * PLTT_SIZE_4BPP);
+            CopyPaletteIntoBufferUnfaded(sRibbonIcons1_Pal, BG_PLTT_ID(2), PLTT_SIZE_4BPP);
+            CopyPaletteIntoBufferUnfaded(sRibbonIcons2_Pal, BG_PLTT_ID(3), PLTT_SIZE_4BPP);
+            CopyPaletteIntoBufferUnfaded(sRibbonIcons3_Pal, BG_PLTT_ID(4), PLTT_SIZE_4BPP);
+            CopyPaletteIntoBufferUnfaded(sRibbonIcons4_Pal, BG_PLTT_ID(5), PLTT_SIZE_4BPP);
+            CopyPaletteIntoBufferUnfaded(sRibbonIcons5_Pal, BG_PLTT_ID(6), PLTT_SIZE_4BPP);
             CopyPaletteIntoBufferUnfaded(sMonInfo_Pal, BG_PLTT_ID(10), sizeof(sMonInfo_Pal));
             CopyBgTilemapBufferToVram(1);
             return LT_INC_AND_PAUSE;
@@ -820,6 +828,7 @@ static void PrintRibbonNameAndDescription(struct Pokenav_RibbonsSummaryMenu *men
 {
     s32 i;
     u32 ribbonId = GetRibbonId();
+    u32 giftRibbonId;
     u8 color[] = {TEXT_COLOR_RED, TEXT_COLOR_DARK_GRAY, TEXT_COLOR_LIGHT_GRAY};
 
     FillWindowPixelBuffer(menu->ribbonCountWindowId, PIXEL_FILL(4));
@@ -834,16 +843,24 @@ static void PrintRibbonNameAndDescription(struct Pokenav_RibbonsSummaryMenu *men
         // ribbonId here is one of the 'gift' ribbon slots, used to read
         // its actual value from giftRibbons to determine which specific
         // gift ribbon it is
-        ribbonId = gSaveBlock1Ptr->giftRibbons[ribbonId - FIRST_GIFT_RIBBON];
+        giftRibbonId = gSaveBlock1Ptr->giftRibbons[ribbonId - FIRST_GIFT_RIBBON];
+
+        if (ribbonId == WORLD_RIBBON && (giftRibbonId == 0 || giftRibbonId == WORLD_RIBBON))
+        {
+            AddTextPrinterParameterized3(menu->ribbonCountWindowId, FONT_NORMAL, 0, 1, color, TEXT_SKIP_DRAW, sText_WorldRibbon);
+            AddTextPrinterParameterized3(menu->ribbonCountWindowId, FONT_NORMAL, 0, 17, color, TEXT_SKIP_DRAW, sText_WorldRibbonDesc);
+            CopyWindowToVram(menu->ribbonCountWindowId, COPYWIN_GFX);
+            return;
+        }
 
         // If 0, this gift ribbon slot is unoccupied
-        if (ribbonId == 0)
+        if (giftRibbonId == 0)
             return;
 
         // Print gift ribbon name/description
-        ribbonId--;
+        giftRibbonId--;
         for (i = 0; i < 2; i++)
-            AddTextPrinterParameterized3(menu->ribbonCountWindowId, FONT_NORMAL, 0, (i * 16) + 1, color, TEXT_SKIP_DRAW, gGiftRibbonDescriptionPointers[ribbonId][i]);
+            AddTextPrinterParameterized3(menu->ribbonCountWindowId, FONT_NORMAL, 0, (i * 16) + 1, color, TEXT_SKIP_DRAW, gGiftRibbonDescriptionPointers[giftRibbonId][i]);
     }
 
     CopyWindowToVram(menu->ribbonCountWindowId, COPYWIN_GFX);

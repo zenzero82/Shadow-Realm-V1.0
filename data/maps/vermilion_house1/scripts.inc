@@ -8,21 +8,11 @@ vermilion_house1_EventScript_Fisherman::
 	lock
 	faceplayer
 	setspeaker vermilion_house1_Speaker_Fisherman
-	goto_if_set FLAG_VERMILION_PORTINSIDE_BURNET_SCENE_DONE, vermilion_house1_EventScript_Fisherman_After
-	msgbox vermilion_house1_Text_Fisherman_Before, MSGBOX_NPC
+	msgbox vermilion_house1_Text_Fisherman, MSGBOX_NPC
 	release
 	end
 
-vermilion_house1_EventScript_Fisherman_After::
-	msgbox vermilion_house1_Text_Fisherman_After, MSGBOX_NPC
-	release
-	end
-
-vermilion_house1_Text_Fisherman_Before:
-	.string "You can tell when the port is tense.\p"
-	.string "Even the sea outside sounds different.$"
-
-vermilion_house1_Text_Fisherman_After:
-	.string "The harbor's quieting down again.\p"
-	.string "Now everyone can go back to worrying\n"
-	.string "about that sleeping SNORLAX.$"
+vermilion_house1_Text_Fisherman:
+	.string "The sea air here is good for the soul.\p"
+	.string "If the docks get too noisy, I just sit\n"
+	.string "here and listen to the waves instead.$"

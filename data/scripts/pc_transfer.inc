@@ -16,9 +16,13 @@ Common_EventScript_NameReceivedBoxMon::
 Common_EventScript_TransferredToPC::
 	bufferboxname STR_VAR_1, VAR_PC_BOX_TO_SEND_MON
 	bufferspeciesname STR_VAR_2, VAR_TEMP_TRANSFERRED_SPECIES
-	call_if_unset FLAG_SYS_PC_LANETTE, EventScript_TransferredSomeonesPC
 	call_if_set FLAG_SYS_PC_LANETTE, EventScript_TransferredLanettesPC
+	call_if_unset FLAG_SYS_PC_LANETTE, EventScript_CheckTransferredJinwoosPC
 	return
+
+EventScript_CheckTransferredJinwoosPC::
+	goto_if_set FLAG_SYS_NOT_SOMEONES_PC, EventScript_TransferredJinwoosPC
+	goto EventScript_TransferredSomeonesPC
 
 EventScript_TransferredSomeonesPC::
 	specialvar VAR_RESULT, ShouldShowBoxWasFullMessage
@@ -30,6 +34,18 @@ EventScript_SomeonesPCBoxFull::
 	specialvar VAR_RESULT, GetPCBoxToSendMon
 	bufferboxname STR_VAR_3, VAR_RESULT
 	msgbox gText_PkmnTransferredSomeonesPCBoxFull, MSGBOX_DEFAULT
+	return
+
+EventScript_TransferredJinwoosPC::
+	specialvar VAR_RESULT, ShouldShowBoxWasFullMessage
+	goto_if_eq VAR_RESULT, TRUE, EventScript_JinwoosPCBoxFull
+	msgbox gText_PkmnTransferredJinwoosPC, MSGBOX_DEFAULT
+	return
+
+EventScript_JinwoosPCBoxFull::
+	specialvar VAR_RESULT, GetPCBoxToSendMon
+	bufferboxname STR_VAR_3, VAR_RESULT
+	msgbox gText_PkmnTransferredJinwoosPCBoxFull, MSGBOX_DEFAULT
 	return
 
 EventScript_TransferredLanettesPC::

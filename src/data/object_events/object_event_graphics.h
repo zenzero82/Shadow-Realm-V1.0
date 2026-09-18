@@ -437,6 +437,7 @@ const u32 gObjectEventPic_Juan[] = INCBIN_U32("graphics/object_events/pics/peopl
 const u32 gObjectEventPic_Scott[] = INCBIN_U32("graphics/object_events/pics/people/scott.4bpp");
 const u32 gObjectEventPic_Statue[] = INCBIN_U32("graphics/object_events/pics/misc/statue.4bpp");
 const u32 gObjectEventPic_MysteryEventDeliveryman[] = INCBIN_U32("graphics/object_events/pics/people/mystery_event_deliveryman.4bpp");
+const u16 gObjectEventPal_MysteryEventDeliveryman[] = INCBIN_U16("graphics/object_events/pics/people/mystery_event_deliveryman.gbapal");
 const u32 gObjectEventPic_UnionRoomAttendant[] = INCBIN_U32("graphics/object_events/pics/people/union_room_attendant.4bpp");
 const u32 gObjectEventPic_MovingBox[] = INCBIN_U32("graphics/object_events/pics/misc/moving_box.4bpp");
 const u16 gObjectEventPal_MovingBox[] = INCBIN_U16("graphics/object_events/palettes/moving_box.gbapal");
@@ -461,6 +462,7 @@ const u32 gObjectEventPic_Brandon[] = INCBIN_U32("graphics/object_events/pics/pe
 const u32 gObjectEventPic_PokeBall[] = INCBIN_U32("graphics/object_events/pics/misc/ball_poke.4bpp");
 const u32 gObjectEventPic_BallTm[] = INCBIN_U32("graphics/object_events/pics/misc/ball_tm.4bpp");
 const u32 gObjectEventPic_ZygardeCube[] = INCBIN_U32("graphics/object_events/pics/misc/zygarde_cube.4bpp");
+const u32 gObjectEventPic_ItemShine[] = INCBIN_U32("graphics/object_events/pics/misc/item_shine.4bpp");
 const u32 gObjectEventPic_LaprasSurf[] = INCBIN_U32("graphics/object_events/pics/misc/lapras_surf.4bpp");
 const u32 gObjectEventPic_TowerBeam[] = INCBIN_U32("graphics/object_events/pics/misc/tower_beam.4bpp");
 
@@ -477,6 +479,7 @@ const u16 gObjectEventPaletteEmoteIcons[] = INCBIN_U16("graphics/field_effects/p
 const u16 gObjectEventPaletteNeonLight[] = INCBIN_U16("graphics/object_events/palettes/neon_light.gbapal");
 const u16 gObjectEventPal_BallTm[] = INCBIN_U16("graphics/object_events/pics/misc/ball_tm.gbapal");
 const u16 gObjectEventPal_ZygardeCube[] = INCBIN_U16("graphics/object_events/pics/misc/zygarde_cube.gbapal");
+const u16 gObjectEventPal_ItemShine[] = INCBIN_U16("graphics/object_events/pics/misc/item_shine.gbapal");
 const u16 gObjectEventPal_LaprasSurf[] = INCBIN_U16("graphics/object_events/pics/misc/lapras_surf.gbapal");
 const u16 gObjectEventPal_TowerBeam[] = INCBIN_U16("graphics/object_events/pics/misc/tower_beam.gbapal");
 
@@ -1171,6 +1174,9 @@ const u16 gObjectEventPal_Nascour[] = INCBIN_U16("graphics/object_events/pics/xd
 
 const u32 gObjectEventPic_SnagemGrunt[] = INCBIN_U32("graphics/object_events/pics/xd/snagem_grunt.4bpp");
 const u16 gObjectEventPal_SnagemGrunt[] = INCBIN_U16("graphics/object_events/pics/xd/snagem_grunt.gbapal");
+
+const u32 gObjectEventPic_SnagemAgrev[] = INCBIN_U32("graphics/object_events/pics/xd/snagem_agrev.4bpp");
+const u16 gObjectEventPal_SnagemAgrev[] = INCBIN_U16("graphics/object_events/pics/xd/snagem_agrev.gbapal");
 
 const u32 gObjectEventPic_Venus[] = INCBIN_U32("graphics/object_events/pics/xd/venus.4bpp");
 const u16 gObjectEventPal_Venus[] = INCBIN_U16("graphics/object_events/pics/xd/venus.gbapal");

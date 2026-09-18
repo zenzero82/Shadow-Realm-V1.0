@@ -2,7 +2,7 @@ Gate_RuinsOfAlph_Route32_MapScripts::
 	.byte 0
 
 Gate_RuinsOfAlph_Route32_Speaker_Youngster:
-	.string "YOUNGSTER$"
+	.string "Bruno$"
 
 Gate_RuinsOfAlph_Route32_EventScript_Youngster::
 	lock

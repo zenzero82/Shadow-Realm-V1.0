@@ -1168,6 +1168,40 @@ static const union AnimCmd *const sAnimTable_ZygardeCube[] = {
     [ANIM_STD_GO_FASTEST_EAST] = sAnim_ZygardeCube_Frame2,
 };
 
+static const union AnimCmd sAnim_ItemShine[] =
+{
+    ANIMCMD_FRAME(0, 6),
+    ANIMCMD_FRAME(1, 6),
+    ANIMCMD_FRAME(2, 6),
+    ANIMCMD_FRAME(3, 6),
+    ANIMCMD_FRAME(2, 6),
+    ANIMCMD_FRAME(1, 6),
+    ANIMCMD_JUMP(0),
+};
+
+static const union AnimCmd *const sAnimTable_ItemShine[] = {
+    [ANIM_STD_FACE_SOUTH] = sAnim_ItemShine,
+    [ANIM_STD_FACE_NORTH] = sAnim_ItemShine,
+    [ANIM_STD_FACE_WEST] = sAnim_ItemShine,
+    [ANIM_STD_FACE_EAST] = sAnim_ItemShine,
+    [ANIM_STD_GO_SOUTH] = sAnim_ItemShine,
+    [ANIM_STD_GO_NORTH] = sAnim_ItemShine,
+    [ANIM_STD_GO_WEST] = sAnim_ItemShine,
+    [ANIM_STD_GO_EAST] = sAnim_ItemShine,
+    [ANIM_STD_GO_FAST_SOUTH] = sAnim_ItemShine,
+    [ANIM_STD_GO_FAST_NORTH] = sAnim_ItemShine,
+    [ANIM_STD_GO_FAST_WEST] = sAnim_ItemShine,
+    [ANIM_STD_GO_FAST_EAST] = sAnim_ItemShine,
+    [ANIM_STD_GO_FASTER_SOUTH] = sAnim_ItemShine,
+    [ANIM_STD_GO_FASTER_NORTH] = sAnim_ItemShine,
+    [ANIM_STD_GO_FASTER_WEST] = sAnim_ItemShine,
+    [ANIM_STD_GO_FASTER_EAST] = sAnim_ItemShine,
+    [ANIM_STD_GO_FASTEST_SOUTH] = sAnim_ItemShine,
+    [ANIM_STD_GO_FASTEST_NORTH] = sAnim_ItemShine,
+    [ANIM_STD_GO_FASTEST_WEST] = sAnim_ItemShine,
+    [ANIM_STD_GO_FASTEST_EAST] = sAnim_ItemShine,
+};
+
 static const union AnimCmd *const sAnimTable_HoopaRing[] = {
     [ANIM_STD_FACE_SOUTH] = sAnim_HoopaRingSpin,
     [ANIM_STD_FACE_NORTH] = sAnim_HoopaRingSpin,

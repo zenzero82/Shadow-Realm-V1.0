@@ -31,6 +31,7 @@
 #include "pokemon_summary_screen.h"
 #include "party_menu.h"
 #include "pokemon_storage_system.h"
+#include "swsh_storage_system.h"
 #include "field_move.h"
 #include "region_map.h"
 #include "save.h"
@@ -62,6 +63,904 @@
           hard and fast rules, but give a basic idea of where certain
           types of functions are likely located.
 */
+
+#if SWSH_STORAGE_SYSTEM
+
+#define BOX_CACHE_COUNT 3
+#define MAX_DEFAULT_STORAGE_WALLPAPER 3
+
+EWRAM_DATA static struct BoxPokemon sBoxCache[BOX_CACHE_COUNT][IN_BOX_COUNT];
+EWRAM_DATA static s8 sBoxCacheIds[BOX_CACHE_COUNT];
+EWRAM_DATA static bool8 sBoxCacheDirty[BOX_CACHE_COUNT];
+EWRAM_DATA static u8 sBoxCacheAge[BOX_CACHE_COUNT];
+EWRAM_DATA static u8 sBoxCacheAgeCounter = 0;
+EWRAM_DATA static struct SaveSector sBoxSaveBuffer = {0};
+
+STATIC_ASSERT(((TOTAL_BOXES_COUNT * IN_BOX_COUNT * sizeof(struct BoxPokemon) + SECTOR_DATA_SIZE - 1) / SECTOR_DATA_SIZE) <= NUM_BOX_STORAGE_SECTORS, BoxStorageSectorCount);
+
+static void BoxStorage_InitCacheInternal(void);
+static struct BoxPokemon *BoxStorage_GetBoxPtr(u8 boxId);
+static void BoxStorage_MarkBoxDirty(u8 boxId);
+static void BoxStorage_ClearAll(void);
+static void SetCurrentBox(u8 boxId);
+static void SetBoxWallpaper(u8 boxId, u8 wallpaperId);
+static void SetDefaultBoxName(u8 boxId);
+static bool8 IsBoxNameSafe(const u8 *boxName);
+
+void DrawTextWindowAndBufferTiles(const u8 *string, void *dst, u8 zero1, u8 zero2, s32 bytesToBuffer)
+{
+    s32 i, tileBytesToBuffer, remainingBytes;
+    u16 windowId;
+    u8 txtColor[3];
+    u8 *tileData1, *tileData2;
+    struct WindowTemplate winTemplate = {0};
+
+    winTemplate.width = 24;
+    winTemplate.height = 2;
+    windowId = AddWindow(&winTemplate);
+    FillWindowPixelBuffer(windowId, PIXEL_FILL(zero2));
+    tileData1 = (u8 *) GetWindowAttribute(windowId, WINDOW_TILE_DATA);
+    tileData2 = (winTemplate.width * TILE_SIZE_4BPP) + tileData1;
+
+    txtColor[0] = zero1 ? zero2 : TEXT_COLOR_TRANSPARENT;
+    txtColor[1] = TEXT_DYNAMIC_COLOR_6;
+    txtColor[2] = TEXT_DYNAMIC_COLOR_5;
+    AddTextPrinterParameterized4(windowId, FONT_NORMAL, 0, 1, 0, 0, txtColor, TEXT_SKIP_DRAW, string);
+
+    tileBytesToBuffer = min(bytesToBuffer, 6);
+    remainingBytes = bytesToBuffer - 6;
+    for (i = tileBytesToBuffer; i > 0; i--)
+    {
+        CpuCopy16(tileData1, dst, 0x80);
+        CpuCopy16(tileData2, dst + 0x80, 0x80);
+        tileData1 += 0x80;
+        tileData2 += 0x80;
+        dst += 0x100;
+    }
+    if (remainingBytes > 0)
+        CpuFill16((zero2 << 4) | zero2, dst, (u32)remainingBytes * 0x100);
+
+    RemoveWindow(windowId);
+}
+
+u8 CountMonsInBox(u8 boxId)
+{
+    u16 i, count;
+
+    for (i = 0, count = 0; i < IN_BOX_COUNT; i++)
+    {
+        if (GetBoxMonDataAt(boxId, i, MON_DATA_SPECIES) != SPECIES_NONE)
+            count++;
+    }
+
+    return count;
+}
+
+s16 GetFirstFreeBoxSpot(u8 boxId)
+{
+    u16 i;
+
+    for (i = 0; i < IN_BOX_COUNT; i++)
+    {
+        if (GetBoxMonDataAt(boxId, i, MON_DATA_SPECIES) == SPECIES_NONE)
+            return i;
+    }
+
+    return -1;
+}
+
+u32 CountPartyNonEggMons(void)
+{
+    u32 i, count;
+
+    for (i = 0, count = 0; i < PARTY_SIZE; i++)
+    {
+        if (GetMonData(&gPlayerParty[i], MON_DATA_SPECIES) != SPECIES_NONE
+            && !GetMonData(&gPlayerParty[i], MON_DATA_IS_EGG))
+            count++;
+    }
+
+    return count;
+}
+
+u8 CountPartyAliveNonEggMonsExcept(u8 slotToIgnore)
+{
+    u16 i, count;
+
+    for (i = 0, count = 0; i < PARTY_SIZE; i++)
+    {
+        if (i != slotToIgnore
+            && GetMonData(&gPlayerParty[i], MON_DATA_SPECIES) != SPECIES_NONE
+            && !GetMonData(&gPlayerParty[i], MON_DATA_IS_EGG)
+            && GetMonData(&gPlayerParty[i], MON_DATA_HP) != 0)
+            count++;
+    }
+
+    return count;
+}
+
+u16 CountPartyAliveNonEggMons_IgnoreVar0x8004Slot(void)
+{
+    return CountPartyAliveNonEggMonsExcept(gSpecialVar_0x8004);
+}
+
+u8 CountPartyMons(void)
+{
+    u16 i, count;
+
+    for (i = 0, count = 0; i < PARTY_SIZE; i++)
+    {
+        if (GetMonData(&gPlayerParty[i], MON_DATA_SPECIES) != SPECIES_NONE)
+            count++;
+    }
+
+    return count;
+}
+
+u8 *StringCopyAndFillWithSpaces(u8 *dst, const u8 *src, u16 n)
+{
+    u8 *str;
+
+    for (str = StringCopy(dst, src); str < dst + n; str++)
+        *str = CHAR_SPACE;
+
+    *str = EOS;
+    return str;
+}
+
+void ShowPokemonStorageSystemPC(void)
+{
+    ShowPokemonStorageSystemPC_SwSh();
+}
+
+void ShowPokemonStorageSystemMoveMonsFromParty(void)
+{
+    ShowPokemonPCFromParty_SwSh();
+}
+
+void EnterPokeStorage(u8 boxOption)
+{
+    if (boxOption == 0xFF)
+        ChooseMonFromStorage_SwSh();
+    else
+        EnterPokeStorage_SwShOption(boxOption);
+}
+
+void ResetPokemonStorageSystem(void)
+{
+    u16 boxId;
+
+    SetCurrentBox(0);
+    ClearBoxStorageData();
+    for (boxId = 0; boxId < TOTAL_BOXES_COUNT; boxId++)
+    {
+        SetDefaultBoxName(boxId);
+        SetBoxWallpaper(boxId, boxId % (MAX_DEFAULT_STORAGE_WALLPAPER + 1));
+    }
+
+    ResetWaldaWallpaper();
+}
+
+s16 CompactPartySlots(void)
+{
+    s16 retVal = -1;
+    u16 i, last;
+
+    for (i = 0, last = 0; i < PARTY_SIZE; i++)
+    {
+        u16 species = GetMonData(&gPlayerParty[i], MON_DATA_SPECIES);
+        if (species != SPECIES_NONE)
+        {
+            if (i != last)
+                gPlayerParty[last] = gPlayerParty[i];
+            last++;
+        }
+        else if (retVal == -1)
+        {
+            retVal = i;
+        }
+    }
+    for (; last < PARTY_SIZE; last++)
+        ZeroMonData(&gPlayerParty[last]);
+
+    return retVal;
+}
+
+void SetMonFormPSS(struct BoxPokemon *boxMon, enum FormChanges method)
+{
+    SetMonFormPSS_SwSh(boxMon, method);
+}
+
+void SetMonFormPSS_ItemHold(struct BoxPokemon *boxMon)
+{
+    SetMonFormPSS_ItemHold_SwSh(boxMon);
+}
+
+void UpdateSpeciesSpritePSS(struct BoxPokemon *boxMon)
+{
+    UpdateSpeciesSpritePSS_SwSh(boxMon);
+}
+
+static u16 BoxStorage_CalcChecksum(const void *data, u16 size)
+{
+    u16 i;
+    u32 checksum = 0;
+    const u32 *words = data;
+
+    for (i = 0; i < (size / 4); i++)
+        checksum += *words++;
+
+    return (checksum >> 16) + checksum;
+}
+
+static void BoxStorage_LoadSectorData(u16 storageSector)
+{
+    if (storageSector >= NUM_BOX_STORAGE_SECTORS)
+    {
+        CpuFill32(0, (u32 *)sBoxSaveBuffer.data, SECTOR_DATA_SIZE);
+        return;
+    }
+
+    ReadFlash(SECTOR_ID_BOX_STORAGE_START + storageSector, 0, sBoxSaveBuffer.data, SECTOR_SIZE);
+    if (sBoxSaveBuffer.signature != SECTOR_SIGNATURE
+        || sBoxSaveBuffer.id != storageSector
+        || sBoxSaveBuffer.checksum != BoxStorage_CalcChecksum(sBoxSaveBuffer.data, SECTOR_DATA_SIZE))
+        CpuFill32(0, (u32 *)sBoxSaveBuffer.data, SECTOR_DATA_SIZE);
+}
+
+static bool8 BoxStorage_WriteSector(u16 storageSector)
+{
+    if (storageSector >= NUM_BOX_STORAGE_SECTORS)
+        return FALSE;
+
+    CpuFill32(0, (u32 *)sBoxSaveBuffer.saveBlock3Chunk, SAVE_BLOCK_3_CHUNK_SIZE);
+    sBoxSaveBuffer.id = storageSector;
+    sBoxSaveBuffer.signature = SECTOR_SIGNATURE;
+    sBoxSaveBuffer.counter = gSaveCounter;
+    sBoxSaveBuffer.checksum = BoxStorage_CalcChecksum(sBoxSaveBuffer.data, SECTOR_DATA_SIZE);
+
+    return (ProgramFlashSectorAndVerify(SECTOR_ID_BOX_STORAGE_START + storageSector, sBoxSaveBuffer.data) == 0);
+}
+
+static void BoxStorage_ReadBytes(u32 offset, void *dst, u32 size)
+{
+    u8 *out = dst;
+
+    while (size > 0)
+    {
+        u16 sector = offset / SECTOR_DATA_SIZE;
+        u16 sectorOffset = offset % SECTOR_DATA_SIZE;
+        u16 chunk = min(size, SECTOR_DATA_SIZE - sectorOffset);
+
+        BoxStorage_LoadSectorData(sector);
+        CpuCopy16(&sBoxSaveBuffer.data[sectorOffset], out, chunk);
+
+        out += chunk;
+        offset += chunk;
+        size -= chunk;
+    }
+}
+
+static bool8 BoxStorage_WriteBytes(u32 offset, const void *src, u32 size)
+{
+    const u8 *in = src;
+
+    while (size > 0)
+    {
+        u16 sector = offset / SECTOR_DATA_SIZE;
+        u16 sectorOffset = offset % SECTOR_DATA_SIZE;
+        u16 chunk = min(size, SECTOR_DATA_SIZE - sectorOffset);
+
+        BoxStorage_LoadSectorData(sector);
+        CpuCopy16(in, &sBoxSaveBuffer.data[sectorOffset], chunk);
+
+        if (!BoxStorage_WriteSector(sector))
+            return FALSE;
+
+        in += chunk;
+        offset += chunk;
+        size -= chunk;
+    }
+
+    return TRUE;
+}
+
+static u32 BoxStorage_GetBoxOffset(u8 boxId)
+{
+    return (u32)boxId * IN_BOX_COUNT * sizeof(struct BoxPokemon);
+}
+
+static void BoxStorage_ReadBox(u8 boxId, struct BoxPokemon *box)
+{
+    BoxStorage_ReadBytes(BoxStorage_GetBoxOffset(boxId), box, IN_BOX_COUNT * sizeof(struct BoxPokemon));
+}
+
+static bool8 BoxStorage_RepairBoxMonChecksums(struct BoxPokemon *box)
+{
+    u8 i;
+    bool8 repaired = FALSE;
+
+    for (i = 0; i < IN_BOX_COUNT; i++)
+    {
+        if (RepairBoxMonChecksum(&box[i]))
+            repaired = TRUE;
+    }
+
+    return repaired;
+}
+
+static bool8 BoxStorage_WriteBox(u8 boxId, const struct BoxPokemon *box)
+{
+    return BoxStorage_WriteBytes(BoxStorage_GetBoxOffset(boxId), box, IN_BOX_COUNT * sizeof(struct BoxPokemon));
+}
+
+static void BoxStorage_InitCacheInternal(void)
+{
+    u8 i;
+
+    for (i = 0; i < BOX_CACHE_COUNT; i++)
+    {
+        sBoxCacheIds[i] = -1;
+        sBoxCacheDirty[i] = FALSE;
+        sBoxCacheAge[i] = 0;
+    }
+    sBoxCacheAgeCounter = 0;
+}
+
+static s32 BoxStorage_FindCacheIndex(u8 boxId)
+{
+    s32 i;
+
+    for (i = 0; i < BOX_CACHE_COUNT; i++)
+    {
+        if (sBoxCacheIds[i] == boxId)
+            return i;
+    }
+
+    return -1;
+}
+
+static s32 BoxStorage_FindLruIndex(void)
+{
+    s32 i;
+    s32 best = 0;
+
+    for (i = 1; i < BOX_CACHE_COUNT; i++)
+    {
+        if (sBoxCacheAge[i] < sBoxCacheAge[best])
+            best = i;
+    }
+
+    return best;
+}
+
+static s32 BoxStorage_LoadBoxIntoCache(u8 boxId)
+{
+    s32 i = BoxStorage_FindCacheIndex(boxId);
+
+    if (i >= 0)
+        return i;
+
+    for (i = 0; i < BOX_CACHE_COUNT; i++)
+    {
+        if (sBoxCacheIds[i] < 0)
+            break;
+    }
+
+    if (i >= BOX_CACHE_COUNT)
+        i = BoxStorage_FindLruIndex();
+
+    if (sBoxCacheIds[i] >= 0 && sBoxCacheDirty[i])
+        BoxStorage_WriteBox(sBoxCacheIds[i], sBoxCache[i]);
+
+    BoxStorage_ReadBox(boxId, sBoxCache[i]);
+    sBoxCacheIds[i] = boxId;
+    sBoxCacheDirty[i] = BoxStorage_RepairBoxMonChecksums(sBoxCache[i]);
+    sBoxCacheAge[i] = ++sBoxCacheAgeCounter;
+    return i;
+}
+
+static struct BoxPokemon *BoxStorage_GetBoxPtr(u8 boxId)
+{
+    s32 i = BoxStorage_LoadBoxIntoCache(boxId);
+
+    if (i < 0)
+        return NULL;
+
+    sBoxCacheAge[i] = ++sBoxCacheAgeCounter;
+    return sBoxCache[i];
+}
+
+static void BoxStorage_MarkBoxDirty(u8 boxId)
+{
+    s32 i = BoxStorage_LoadBoxIntoCache(boxId);
+
+    if (i >= 0)
+        sBoxCacheDirty[i] = TRUE;
+}
+
+static bool8 BoxStorage_FlushDirtyBoxes(void)
+{
+    u8 i;
+
+    for (i = 0; i < BOX_CACHE_COUNT; i++)
+    {
+        if (sBoxCacheIds[i] >= 0 && sBoxCacheDirty[i])
+        {
+            if (!BoxStorage_WriteBox(sBoxCacheIds[i], sBoxCache[i]))
+                return FALSE;
+            sBoxCacheDirty[i] = FALSE;
+        }
+    }
+
+    return TRUE;
+}
+
+static void BoxStorage_ClearAll(void)
+{
+    u16 i;
+
+    for (i = 0; i < NUM_BOX_STORAGE_SECTORS; i++)
+    {
+        CpuFill32(0, (u32 *)sBoxSaveBuffer.data, SECTOR_DATA_SIZE);
+        CpuFill32(0, (u32 *)sBoxSaveBuffer.saveBlock3Chunk, SAVE_BLOCK_3_CHUNK_SIZE);
+        sBoxSaveBuffer.id = i;
+        sBoxSaveBuffer.signature = SECTOR_SIGNATURE;
+        sBoxSaveBuffer.counter = gSaveCounter;
+        sBoxSaveBuffer.checksum = BoxStorage_CalcChecksum(sBoxSaveBuffer.data, SECTOR_DATA_SIZE);
+        ProgramFlashSectorAndVerify(SECTOR_ID_BOX_STORAGE_START + i, sBoxSaveBuffer.data);
+    }
+
+    BoxStorage_InitCacheInternal();
+}
+
+void InitBoxStorageCache(void)
+{
+    BoxStorage_InitCacheInternal();
+}
+
+bool8 RepairBoxStorageChecksums(void)
+{
+    u8 boxId;
+    bool8 repaired = FALSE;
+    struct BoxPokemon box[IN_BOX_COUNT];
+
+    for (boxId = 0; boxId < TOTAL_BOXES_COUNT; boxId++)
+    {
+        BoxStorage_ReadBox(boxId, box);
+        if (BoxStorage_RepairBoxMonChecksums(box))
+        {
+            BoxStorage_WriteBox(boxId, box);
+            repaired = TRUE;
+        }
+    }
+
+    return repaired;
+}
+
+bool8 SaveBoxStorageToFlash(void)
+{
+    return BoxStorage_FlushDirtyBoxes();
+}
+
+void ClearBoxStorageData(void)
+{
+    BoxStorage_ClearAll();
+}
+
+void MarkBoxStorageDirty(u8 boxId)
+{
+    if (boxId < TOTAL_BOXES_COUNT)
+        BoxStorage_MarkBoxDirty(boxId);
+}
+
+static void SetDefaultBoxName(u8 boxId)
+{
+    u8 *dest = StringCopy(GetBoxNamePtr(boxId), COMPOUND_STRING("BOX"));
+    ConvertIntToDecimalStringN(dest, boxId + 1, STR_CONV_MODE_LEFT_ALIGN, 2);
+}
+
+static bool8 IsBoxNameSafe(const u8 *boxName)
+{
+    u8 i;
+
+    if (boxName[0] == EOS)
+        return FALSE;
+
+    for (i = 0; i < BOX_NAME_LENGTH + 1; i++)
+    {
+        if (boxName[i] == EOS)
+            return TRUE;
+        if (boxName[i] >= EXT_CTRL_CODE_BEGIN)
+            return FALSE;
+    }
+
+    return FALSE;
+}
+
+void SanitizePokemonStorageMetadata(void)
+{
+    u8 boxId;
+
+    if (gPokemonStoragePtr->currentBox >= TOTAL_BOXES_COUNT)
+        gPokemonStoragePtr->currentBox = 0;
+
+    for (boxId = 0; boxId < TOTAL_BOXES_COUNT; boxId++)
+    {
+        if (!IsBoxNameSafe(gPokemonStoragePtr->boxNames[boxId]))
+            SetDefaultBoxName(boxId);
+        else
+            gPokemonStoragePtr->boxNames[boxId][BOX_NAME_LENGTH] = EOS;
+
+        if (gPokemonStoragePtr->boxWallpapers[boxId] > MAX_DEFAULT_STORAGE_WALLPAPER)
+            gPokemonStoragePtr->boxWallpapers[boxId] = boxId % (MAX_DEFAULT_STORAGE_WALLPAPER + 1);
+    }
+}
+
+u8 StorageGetCurrentBox(void)
+{
+    if (gPokemonStoragePtr->currentBox >= TOTAL_BOXES_COUNT)
+        gPokemonStoragePtr->currentBox = 0;
+
+    return gPokemonStoragePtr->currentBox;
+}
+
+static void SetCurrentBox(u8 boxId)
+{
+    if (boxId < TOTAL_BOXES_COUNT)
+        gPokemonStoragePtr->currentBox = boxId;
+}
+
+u32 GetBoxMonDataAt(u8 boxId, u8 boxPosition, s32 request)
+{
+    struct BoxPokemon *boxMon;
+
+    if (boxId < TOTAL_BOXES_COUNT && boxPosition < IN_BOX_COUNT)
+    {
+        boxMon = GetBoxedMonPtr(boxId, boxPosition);
+        if (boxMon != NULL)
+            return GetBoxMonData(boxMon, request);
+    }
+    return 0;
+}
+
+void SetBoxMonDataAt(u8 boxId, u8 boxPosition, s32 request, const void *value)
+{
+    if (boxId < TOTAL_BOXES_COUNT && boxPosition < IN_BOX_COUNT)
+    {
+        struct BoxPokemon *boxMon = GetBoxedMonPtr(boxId, boxPosition);
+        if (boxMon != NULL)
+        {
+            SetBoxMonData(boxMon, request, value);
+            BoxStorage_MarkBoxDirty(boxId);
+            FieldMove_MarkSurfBoxCacheDirty();
+        }
+    }
+}
+
+u32 GetCurrentBoxMonData(u8 boxPosition, s32 request)
+{
+    return GetBoxMonDataAt(gPokemonStoragePtr->currentBox, boxPosition, request);
+}
+
+void SetCurrentBoxMonData(u8 boxPosition, s32 request, const void *value)
+{
+    SetBoxMonDataAt(gPokemonStoragePtr->currentBox, boxPosition, request, value);
+}
+
+void GetBoxMonNickAt(u8 boxId, u8 boxPosition, u8 *dst)
+{
+    if (boxId < TOTAL_BOXES_COUNT && boxPosition < IN_BOX_COUNT)
+    {
+        struct BoxPokemon *boxMon = GetBoxedMonPtr(boxId, boxPosition);
+        if (boxMon != NULL)
+        {
+            GetBoxMonData(boxMon, MON_DATA_NICKNAME, dst);
+            return;
+        }
+    }
+    *dst = EOS;
+}
+
+u32 GetBoxMonLevelAt(u8 boxId, u8 boxPosition)
+{
+    if (boxId < TOTAL_BOXES_COUNT && boxPosition < IN_BOX_COUNT)
+    {
+        struct BoxPokemon *boxMon = GetBoxedMonPtr(boxId, boxPosition);
+        if (boxMon != NULL && GetBoxMonData(boxMon, MON_DATA_SANITY_HAS_SPECIES))
+            return GetLevelFromBoxMonExp(boxMon);
+    }
+    return 0;
+}
+
+void SetBoxMonNickAt(u8 boxId, u8 boxPosition, const u8 *nick)
+{
+    if (boxId < TOTAL_BOXES_COUNT && boxPosition < IN_BOX_COUNT)
+    {
+        struct BoxPokemon *boxMon = GetBoxedMonPtr(boxId, boxPosition);
+        if (boxMon != NULL)
+        {
+            SetBoxMonData(boxMon, MON_DATA_NICKNAME, nick);
+            BoxStorage_MarkBoxDirty(boxId);
+            FieldMove_MarkSurfBoxCacheDirty();
+        }
+    }
+}
+
+u32 GetAndCopyBoxMonDataAt(u8 boxId, u8 boxPosition, s32 request, void *dst)
+{
+    if (boxId < TOTAL_BOXES_COUNT && boxPosition < IN_BOX_COUNT)
+    {
+        struct BoxPokemon *boxMon = GetBoxedMonPtr(boxId, boxPosition);
+        if (boxMon != NULL)
+            return GetBoxMonData(boxMon, request, dst);
+    }
+    return 0;
+}
+
+void SetBoxMonAt(u8 boxId, u8 boxPosition, struct BoxPokemon *src)
+{
+    if (boxId < TOTAL_BOXES_COUNT && boxPosition < IN_BOX_COUNT)
+    {
+        struct BoxPokemon *boxMon = GetBoxedMonPtr(boxId, boxPosition);
+        if (boxMon != NULL)
+        {
+            *boxMon = *src;
+            BoxStorage_MarkBoxDirty(boxId);
+            FieldMove_MarkSurfBoxCacheDirty();
+        }
+    }
+}
+
+void CopyBoxMonAt(u8 boxId, u8 boxPosition, struct BoxPokemon *dst)
+{
+    if (boxId < TOTAL_BOXES_COUNT && boxPosition < IN_BOX_COUNT)
+    {
+        struct BoxPokemon *boxMon = GetBoxedMonPtr(boxId, boxPosition);
+        if (boxMon != NULL)
+            *dst = *boxMon;
+    }
+}
+
+void CreateBoxMonAt(u8 boxId, u8 boxPosition, u16 species, u8 level, u8 fixedIV, u8 hasFixedPersonality, u32 personality, u8 otIDType, u32 otID)
+{
+    if (boxId < TOTAL_BOXES_COUNT && boxPosition < IN_BOX_COUNT)
+    {
+        struct BoxPokemon *boxMon = GetBoxedMonPtr(boxId, boxPosition);
+
+        if (boxMon == NULL)
+            return;
+
+        CreateBoxMon(boxMon, species, level, fixedIV, hasFixedPersonality, personality, otIDType, otID);
+        BoxStorage_MarkBoxDirty(boxId);
+        FieldMove_MarkSurfBoxCacheDirty();
+    }
+}
+
+void ZeroBoxMonAt(u8 boxId, u8 boxPosition)
+{
+    if (boxId < TOTAL_BOXES_COUNT && boxPosition < IN_BOX_COUNT)
+    {
+        struct BoxPokemon *boxMon = GetBoxedMonPtr(boxId, boxPosition);
+        if (boxMon != NULL)
+        {
+            ZeroBoxMonData(boxMon);
+            BoxStorage_MarkBoxDirty(boxId);
+            FieldMove_MarkSurfBoxCacheDirty();
+        }
+    }
+}
+
+void BoxMonAtToMon(u8 boxId, u8 boxPosition, struct Pokemon *dst)
+{
+    if (boxId < TOTAL_BOXES_COUNT && boxPosition < IN_BOX_COUNT)
+    {
+        struct BoxPokemon *boxMon = GetBoxedMonPtr(boxId, boxPosition);
+        if (boxMon != NULL)
+            BoxMonToMon(boxMon, dst);
+    }
+}
+
+struct BoxPokemon *GetBoxedMonPtr(u8 boxId, u8 boxPosition)
+{
+    if (boxId < TOTAL_BOXES_COUNT && boxPosition < IN_BOX_COUNT)
+    {
+        struct BoxPokemon *box = BoxStorage_GetBoxPtr(boxId);
+        if (box != NULL)
+            return &box[boxPosition];
+    }
+    return NULL;
+}
+
+u8 *GetBoxNamePtr(u8 boxId)
+{
+    if (boxId < TOTAL_BOXES_COUNT)
+        return gPokemonStoragePtr->boxNames[boxId];
+    return NULL;
+}
+
+static void SetBoxWallpaper(u8 boxId, u8 wallpaperId)
+{
+    if (boxId < TOTAL_BOXES_COUNT)
+        gPokemonStoragePtr->boxWallpapers[boxId] = wallpaperId;
+}
+
+s16 AdvanceStorageMonIndex(struct BoxPokemon *boxMons, u8 currIndex, u8 maxIndex, u8 mode)
+{
+    s16 i;
+    s16 direction = -1;
+
+    if (mode == 0 || mode == 1)
+        direction = 1;
+
+    if (mode == 1 || mode == 3)
+    {
+        for (i = (s8)currIndex + direction; i >= 0 && i <= maxIndex; i += direction)
+        {
+            if (GetBoxMonData(&boxMons[i], MON_DATA_SPECIES) != SPECIES_NONE)
+                return i;
+        }
+    }
+    else
+    {
+        for (i = (s8)currIndex + direction; i >= 0 && i <= maxIndex; i += direction)
+        {
+            if (GetBoxMonData(&boxMons[i], MON_DATA_SPECIES) != SPECIES_NONE
+                && !GetBoxMonData(&boxMons[i], MON_DATA_IS_EGG))
+                return i;
+        }
+    }
+
+    return -1;
+}
+
+bool8 CheckFreePokemonStorageSpace(void)
+{
+    s32 i, j;
+
+    for (i = 0; i < TOTAL_BOXES_COUNT; i++)
+    {
+        for (j = 0; j < IN_BOX_COUNT; j++)
+        {
+            if (!GetBoxMonDataAt(i, j, MON_DATA_SANITY_HAS_SPECIES))
+                return TRUE;
+        }
+    }
+
+    return FALSE;
+}
+
+bool32 CheckBoxMonSanityAt(u32 boxId, u32 boxPosition)
+{
+    return boxId < TOTAL_BOXES_COUNT
+        && boxPosition < IN_BOX_COUNT
+        && GetBoxMonDataAt(boxId, boxPosition, MON_DATA_SANITY_HAS_SPECIES)
+        && !GetBoxMonDataAt(boxId, boxPosition, MON_DATA_SANITY_IS_EGG)
+        && !GetBoxMonDataAt(boxId, boxPosition, MON_DATA_SANITY_IS_BAD_EGG);
+}
+
+u32 CountStorageNonEggMons(void)
+{
+    s32 i, j;
+    u32 count = 0;
+
+    for (i = 0; i < TOTAL_BOXES_COUNT; i++)
+    {
+        for (j = 0; j < IN_BOX_COUNT; j++)
+        {
+            if (GetBoxMonDataAt(i, j, MON_DATA_SANITY_HAS_SPECIES)
+                && !GetBoxMonDataAt(i, j, MON_DATA_SANITY_IS_EGG))
+                count++;
+        }
+    }
+
+    return count;
+}
+
+u32 CountAllStorageMons(void)
+{
+    s32 i, j;
+    u32 count = 0;
+
+    for (i = 0; i < TOTAL_BOXES_COUNT; i++)
+    {
+        for (j = 0; j < IN_BOX_COUNT; j++)
+        {
+            if (GetBoxMonDataAt(i, j, MON_DATA_SANITY_HAS_SPECIES)
+                || GetBoxMonDataAt(i, j, MON_DATA_SANITY_IS_EGG))
+                count++;
+        }
+    }
+
+    return count;
+}
+
+bool32 AnyStorageMonWithMove(u16 move)
+{
+    u16 moves[] = {move, MOVES_COUNT};
+    s32 i, j;
+
+    for (i = 0; i < TOTAL_BOXES_COUNT; i++)
+    {
+        for (j = 0; j < IN_BOX_COUNT; j++)
+        {
+            if (GetBoxMonDataAt(i, j, MON_DATA_SANITY_HAS_SPECIES)
+                && !GetBoxMonDataAt(i, j, MON_DATA_SANITY_IS_EGG)
+                && GetAndCopyBoxMonDataAt(i, j, MON_DATA_KNOWN_MOVES, (u8 *)moves))
+                return TRUE;
+        }
+    }
+
+    return FALSE;
+}
+
+void ResetWaldaWallpaper(void)
+{
+    gSaveBlock1Ptr->waldaPhrase.iconId = 0;
+    gSaveBlock1Ptr->waldaPhrase.patternId = 0;
+    gSaveBlock1Ptr->waldaPhrase.patternUnlocked = FALSE;
+    gSaveBlock1Ptr->waldaPhrase.colors[0] = RGB(21, 25, 30);
+    gSaveBlock1Ptr->waldaPhrase.colors[1] = RGB(6, 12, 24);
+    gSaveBlock1Ptr->waldaPhrase.text[0] = EOS;
+}
+
+void SetWaldaWallpaperLockedOrUnlocked(bool32 unlocked)
+{
+    gSaveBlock1Ptr->waldaPhrase.patternUnlocked = unlocked;
+}
+
+bool32 IsWaldaWallpaperUnlocked(void)
+{
+    return gSaveBlock1Ptr->waldaPhrase.patternUnlocked;
+}
+
+u32 GetWaldaWallpaperPatternId(void)
+{
+    return gSaveBlock1Ptr->waldaPhrase.patternId;
+}
+
+void SetWaldaWallpaperPatternId(u8 id)
+{
+    gSaveBlock1Ptr->waldaPhrase.patternId = id;
+}
+
+u32 GetWaldaWallpaperIconId(void)
+{
+    return gSaveBlock1Ptr->waldaPhrase.iconId;
+}
+
+void SetWaldaWallpaperIconId(u8 id)
+{
+    gSaveBlock1Ptr->waldaPhrase.iconId = id;
+}
+
+u16 *GetWaldaWallpaperColorsPtr(void)
+{
+    return gSaveBlock1Ptr->waldaPhrase.colors;
+}
+
+void SetWaldaWallpaperColors(u16 color1, u16 color2)
+{
+    gSaveBlock1Ptr->waldaPhrase.colors[0] = color1;
+    gSaveBlock1Ptr->waldaPhrase.colors[1] = color2;
+}
+
+u8 *GetWaldaPhrasePtr(void)
+{
+    return gSaveBlock1Ptr->waldaPhrase.text;
+}
+
+void SetWaldaPhrase(const u8 *src)
+{
+    StringCopy(gSaveBlock1Ptr->waldaPhrase.text, src);
+}
+
+bool32 IsWaldaPhraseEmpty(void)
+{
+    return gSaveBlock1Ptr->waldaPhrase.text[0] == EOS;
+}
+
+#else
 
 // PC main menu options
 enum {
@@ -1954,6 +2853,12 @@ static void Task_PCMainMenu(u8 taskId)
 
 void ShowPokemonStorageSystemPC(void)
 {
+    if (SWSH_STORAGE_SYSTEM)
+    {
+        ShowPokemonStorageSystemPC_SwSh();
+        return;
+    }
+
     u8 taskId = CreateTask(Task_PCMainMenu, 80);
     gTasks[taskId].tState = 0;
     gTasks[taskId].tSelectedOption = 0;
@@ -1963,6 +2868,12 @@ void ShowPokemonStorageSystemPC(void)
 void ShowPokemonStorageSystemMoveMonsFromParty(void)
 {
     sExitToPartyMenu = TRUE;
+    if (SWSH_STORAGE_SYSTEM)
+    {
+        ShowPokemonPCFromParty_SwSh();
+        return;
+    }
+
     EnterPokeStorage(OPTION_MOVE_MONS);
 }
 
@@ -6362,28 +7273,31 @@ static struct Sprite *CreateMonIconSprite(u16 species, u32 personality, s16 x, s
 {
     u16 tileNum;
     u16 iconSpeciesKey;
+    u16 shadowPaletteTag = POKE_ICON_SHADOW_PAL_TAG;
+    u16 giftAuraPaletteTag = POKE_ICON_GIFT_AURA_PAL_TAG;
     u8 spriteId;
     struct SpriteTemplate template = sSpriteTemplate_MonIcon;
 
     u16 iconSpecies = GetIconSpecies(species, personality);
     const struct ShadowGraphicsOverride *shadow = GetShadowGraphicsOverride(iconSpecies);
     bool8 useShadowIcon = isShadow && shadow != NULL && shadow->icon != NULL;
-    bool8 hasShadowPalette = FALSE;
+    bool8 hasGiftAuraPalette = FALSE;
 #if P_GENDER_DIFFERENCES
     bool8 isFemaleIcon = gSpeciesInfo[iconSpecies].iconSpriteFemale != NULL && IsPersonalityFemale(iconSpecies, personality);
 #endif
 
     if (isShadow)
-        hasShadowPalette = TryLoadShadowMonIconPalette(iconSpecies);
+        LoadMonIconPaletteShadowPersonality(iconSpecies, personality, &shadowPaletteTag);
+    else if (IsGiftAuraPersonality(personality))
+        hasGiftAuraPalette = LoadMonIconPaletteGiftAuraPersonality(iconSpecies, personality, isShiny, &giftAuraPaletteTag);
 
-    if (useShadowIcon || hasShadowPalette)
+    if (isShadow)
     {
-        template.paletteTag = POKE_ICON_SHADOW_PAL_TAG;
-        u8 palIndex = IndexOfSpritePaletteTag(POKE_ICON_SHADOW_PAL_TAG);
-        if (palIndex == 0xFF)
-            LoadSpritePalette(&gMonIconPaletteTable[gMonIconShadowPaletteIndex]);
-        else
-            LoadSpritePaletteInSlot(&gMonIconPaletteTable[gMonIconShadowPaletteIndex], palIndex);
+        template.paletteTag = shadowPaletteTag;
+    }
+    else if (hasGiftAuraPalette)
+    {
+        template.paletteTag = giftAuraPaletteTag;
     }
     else
     {
@@ -8164,12 +9078,30 @@ static void ReshowDisplayMon(void)
 
 void SetMonFormPSS(struct BoxPokemon *boxMon, enum FormChanges method)
 {
+    if (SWSH_STORAGE_SYSTEM)
+    {
+        SetMonFormPSS_SwSh(boxMon, method);
+        return;
+    }
+
     u16 targetSpecies = GetFormChangeTargetSpeciesBoxMon(boxMon, method, 0);
     if (targetSpecies != GetBoxMonData(boxMon, MON_DATA_SPECIES, NULL))
     {
         SetBoxMonData(boxMon, MON_DATA_SPECIES, &targetSpecies);
         sRefreshDisplayMonGfx = TRUE;
     }
+}
+
+void SetMonFormPSS_ItemHold(struct BoxPokemon *boxMon)
+{
+    if (SWSH_STORAGE_SYSTEM)
+    {
+        SetMonFormPSS_ItemHold_SwSh(boxMon);
+        return;
+    }
+
+    SetMonFormPSS(boxMon, FORM_CHANGE_ITEM_HOLD);
+    UpdateSpeciesSpritePSS(boxMon);
 }
 
 static void SetDisplayMonData(void *pokemon, u8 mode)
@@ -12013,6 +12945,12 @@ static void TilemapUtil_Draw(u8 id)
 
 void UpdateSpeciesSpritePSS(struct BoxPokemon *boxMon)
 {
+    if (SWSH_STORAGE_SYSTEM)
+    {
+        UpdateSpeciesSpritePSS_SwSh(boxMon);
+        return;
+    }
+
     u16 species = GetBoxMonData(boxMon, MON_DATA_SPECIES);
     bool8 isShiny = GetBoxMonData(boxMon, MON_DATA_IS_SHINY);
     u32 pid = GetBoxMonData(boxMon, MON_DATA_PERSONALITY);
@@ -12044,3 +12982,5 @@ void UpdateSpeciesSpritePSS(struct BoxPokemon *boxMon)
     }
     sJustOpenedBag = FALSE;
 }
+
+#endif // SWSH_STORAGE_SYSTEM

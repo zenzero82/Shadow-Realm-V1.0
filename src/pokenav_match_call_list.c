@@ -24,6 +24,7 @@ struct Pokenav_MatchCallMenu
     u16 headerId;
     u16 numRegistered;
     u16 numSpecialTrainers;
+    bool8 momCallJustWithdrew;
     bool32 initFinished;
     u32 loopedTaskId;
     u32 (*callback)(struct Pokenav_MatchCallMenu *);
@@ -37,6 +38,7 @@ static u32 CB2_HandleCheckPageInput(struct Pokenav_MatchCallMenu *);
 static u32 CB2_HandleCallExitInput(struct Pokenav_MatchCallMenu *);
 static u32 LoopedTask_BuildMatchCallList(s32);
 static bool32 ShouldDoNearbyMessage(void);
+static bool32 IsGoldMomContactSelected(struct Pokenav_MatchCallMenu *state);
 
 static const u8 gText_CallCantBeMadeHere[] = _("A call can't be made from here.");
 
@@ -63,6 +65,7 @@ bool32 PokenavCallback_Init_MatchCall(void)
 
     state->callback = CB2_HandleMatchCallInput;
     state->headerId = 0;
+    state->momCallJustWithdrew = FALSE;
     state->initFinished = FALSE;
     state->loopedTaskId = CreateLoopedTask(LoopedTask_BuildMatchCallList, 1);
     return TRUE;
@@ -159,6 +162,7 @@ static u32 CB2_HandleMatchCallOptionsInput(struct Pokenav_MatchCallMenu *state)
             if (GetPokenavMode() == POKENAV_MODE_FORCE_CALL_READY)
                 SetPokenavMode(POKENAV_MODE_FORCE_CALL_EXIT);
 
+            state->momCallJustWithdrew = FALSE;
             state->callback = CB2_HandleCallExitInput;
             if (ShouldDoNearbyMessage())
                 return POKENAV_MC_FUNC_NEARBY_MSG;
@@ -199,13 +203,11 @@ static u32 CB2_HandleCallExitInput(struct Pokenav_MatchCallMenu *state)
 {
     if (JOY_NEW(A_BUTTON))
     {
-        int selection = PokenavList_GetSelectedIndex();
-        if (state->matchCallEntries[selection].headerId == MC_HEADER_MOM
-            && FlagGet(FLAG_ENABLE_GOLD_MOM_SAVINGS))
+        if (IsGoldMomContactSelected(state) && !state->momCallJustWithdrew && HasGoldMomSavings())
         {
-            u32 amount = WithdrawGoldMomSavings();
-            if (amount)
-                AddMoney(&gSaveBlock1Ptr->money, amount);
+            ConvertIntToDecimalStringN(gStringVar1, WithdrawGoldMomSavings(), STR_CONV_MODE_LEFT_ALIGN, MAX_MONEY_DIGITS);
+            state->momCallJustWithdrew = TRUE;
+            return POKENAV_MC_FUNC_REFRESH_CALL;
         }
 
         state->callback = CB2_HandleMatchCallInput;
@@ -367,8 +369,7 @@ int GetMatchCallTrainerPic(int index)
         return GetTrainerPicFromId(index);
     }
 
-    index = MatchCall_GetOverrideFacilityClass(headerId);
-    return gFacilityClassToPicIndex[index];
+    return MatchCall_GetOverrideTrainerPic(headerId);
 }
 
 const u8 *GetMatchCallMessageText(int index, bool8 *newRematchRequest)
@@ -377,6 +378,9 @@ const u8 *GetMatchCallMessageText(int index, bool8 *newRematchRequest)
     *newRematchRequest = FALSE;
     if (!Overworld_MapTypeAllowsTeleportAndFly(gMapHeader.mapType))
         return gText_CallCantBeMadeHere;
+
+    if (state->momCallJustWithdrew && IsGoldMomContactSelected(state))
+        return MatchCall_Text_MomWithdrawn;
 
     if (!state->matchCallEntries[index].isSpecialTrainer)
         *newRematchRequest = SelectMatchCallMessage(GetTrainerIdxByRematchIdx(state->matchCallEntries[index].headerId), gStringVar4);
@@ -515,29 +519,15 @@ static bool32 UNUSED HasRematchEntry(void)
 
 static bool32 ShouldDoNearbyMessage(void)
 {
-#if FREE_MATCH_CALL == FALSE
-    struct Pokenav_MatchCallMenu *state = GetSubstructPtr(POKENAV_SUBSTRUCT_MATCH_CALL_MAIN);
-    int selection = PokenavList_GetSelectedIndex();
-    if (!state->matchCallEntries[selection].isSpecialTrainer)
-    {
-        if (GetMatchCallMapSec(selection) == gMapHeader.regionMapSectionId)
-        {
-            if (!gSaveBlock1Ptr->trainerRematches[state->matchCallEntries[selection].headerId])
-                return TRUE;
-        }
-    }
-    else
-    {
-        if (state->matchCallEntries[selection].headerId == MC_HEADER_WATTSON)
-        {
-            if (GetMatchCallMapSec(selection) == gMapHeader.regionMapSectionId
-             && FlagGet(FLAG_BADGE05_GET) == TRUE)
-            {
-                if (!FlagGet(FLAG_WATTSON_REMATCH_AVAILABLE))
-                    return TRUE;
-            }
-        }
-    }
-#endif //FREE_MATCH_CALL
     return FALSE;
+}
+
+static bool32 IsGoldMomContactSelected(struct Pokenav_MatchCallMenu *state)
+{
+    int selection = PokenavList_GetSelectedIndex();
+
+    if (!state->matchCallEntries[selection].isSpecialTrainer)
+        return FALSE;
+
+    return state->matchCallEntries[selection].headerId == MC_HEADER_MOM;
 }

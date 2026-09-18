@@ -13,14 +13,26 @@ Cerulean_City_MapScripts::
 
 CeruleanCity_EventScript_CityEnter::
     call_if_set FLAG_SAFFRON_CITY_LOOKER_SCENE_DONE, CeruleanCity_EventScript_SetRoute5BlockadeCleared
+    call_if_set FLAG_HIDE_CERULEAN_ROUTE5_BLOCKADE, CeruleanCity_EventScript_CountUnavailablePolice
+    call_if_set FLAG_HIDE_CERULEAN_BIKESHOP_LOOKER, CeruleanCity_EventScript_CountUnavailableLooker
     setvar VAR_TEMP_1, 0
     setflag FLAG_VISITED_CERULEAN_CITY
     call_if_set FLAG_CERULEAN_POLICE_MOVED_26, CeruleanCity_EventScript_SetPolice26Moved
     call_if_set FLAG_CERULEAN_POLICE_MOVED_27, CeruleanCity_EventScript_SetPolice27Moved
+    call QuestJournal_EventScript_CheckCeruleanCityNPCs
     end
 
 CeruleanCity_EventScript_SetRoute5BlockadeCleared::
     setflag FLAG_HIDE_CERULEAN_ROUTE5_BLOCKADE
+    return
+
+CeruleanCity_EventScript_CountUnavailablePolice::
+    setflag FLAG_QUEST_CERULEAN_NPC_POLICEMAN1
+    setflag FLAG_QUEST_CERULEAN_NPC_POLICEMAN2
+    return
+
+CeruleanCity_EventScript_CountUnavailableLooker::
+    setflag FLAG_QUEST_CERULEAN_NPC_BIKESHOP_LOOKER
     return
 
 CeruleanCity_OnFrame:
@@ -36,6 +48,7 @@ CeruleanCity_EventScript_CityEnterQuest::
     lockall
     setflag FLAG_QUEST_CERULEAN_NPCS_STARTED
     call QuestJournal_EventScript_NewQuestAlert
+    call QuestJournal_EventScript_CheckCeruleanCityNPCs
     releaseall
 CeruleanCity_EventScript_CityEnterQuest_End:
     end
@@ -506,6 +519,8 @@ CeruleanCity_EventScript_Policeman1::
     setspeaker CeruleanCity_Speaker_Policeman1
     msgbox CeruleanCity_Text_PolicemanAllowPass, MSGBOX_NPC
     closemessage
+    setflag FLAG_QUEST_CERULEAN_NPC_POLICEMAN1
+    call QuestJournal_EventScript_CheckCeruleanCityNPCs
     checkflag FLAG_CERULEAN_POLICE_MOVED_27
     goto_if_set FLAG_CERULEAN_POLICE_MOVED_27, CeruleanCity_EventScript_Policeman1_End
     applymovement LOCALID_CERULEAN_POLICEMAN_2, CeruleanCity_Movement_Policeman2_MoveAside
@@ -513,8 +528,6 @@ CeruleanCity_EventScript_Policeman1::
     setobjectxyperm LOCALID_CERULEAN_POLICEMAN_2, 48, 20
     turnobject LOCALID_CERULEAN_POLICEMAN_2, DIR_NORTH
     setflag FLAG_CERULEAN_POLICE_MOVED_27
-    setflag FLAG_QUEST_CERULEAN_NPC_POLICEMAN1
-    call QuestJournal_EventScript_CheckCeruleanCityNPCs
     call QuestJournal_EventScript_CheckRoute9Guards
 CeruleanCity_EventScript_Policeman1_End::
     releaseall
@@ -535,6 +548,8 @@ CeruleanCity_EventScript_Policeman2::
     setspeaker CeruleanCity_Speaker_Policeman2
     msgbox CeruleanCity_Text_PolicemanAllowPass, MSGBOX_NPC
     closemessage
+    setflag FLAG_QUEST_CERULEAN_NPC_POLICEMAN2
+    call QuestJournal_EventScript_CheckCeruleanCityNPCs
     checkflag FLAG_CERULEAN_POLICE_MOVED_26
     goto_if_set FLAG_CERULEAN_POLICE_MOVED_26, CeruleanCity_EventScript_Policeman2_End
     applymovement LOCALID_CERULEAN_POLICEMAN_1, CeruleanCity_Movement_Policeman1_MoveAside
@@ -542,8 +557,6 @@ CeruleanCity_EventScript_Policeman2::
     setobjectxyperm LOCALID_CERULEAN_POLICEMAN_1, 48, 17
     turnobject LOCALID_CERULEAN_POLICEMAN_1, DIR_SOUTH
     setflag FLAG_CERULEAN_POLICE_MOVED_26
-    setflag FLAG_QUEST_CERULEAN_NPC_POLICEMAN2
-    call QuestJournal_EventScript_CheckCeruleanCityNPCs
     call QuestJournal_EventScript_CheckRoute9Guards
 CeruleanCity_EventScript_Policeman2_End::
     releaseall

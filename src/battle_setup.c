@@ -759,6 +759,13 @@ u8 GetTrainerBattleTransition(void)
     if (trainerClass == TRAINER_CLASS_TEAM_SKULL)
         return B_TRANSITION_SKULL;
 
+    if (trainerClass == TRAINER_CLASS_AETHER)
+        return B_TRANSITION_AETHER;
+
+    if (trainerClass == TRAINER_CLASS_TEAM_SNAGEM
+        || trainerClass == TRAINER_CLASS_SNAGEM_HEAD)
+        return B_TRANSITION_SNAGEM;
+
     switch (GetTrainerBattleType(trainerId))
     {
     case TRAINER_BATTLE_TYPE_SINGLES:

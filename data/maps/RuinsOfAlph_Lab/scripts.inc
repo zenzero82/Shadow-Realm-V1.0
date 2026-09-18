@@ -149,6 +149,22 @@ RuinsOfAlph_Lab_EventScript_AetherGruntM::
 	release
 	end
 
+RuinsOfAlph_Lab_EventScript_Sign0::
+	msgbox RuinsOfAlph_Lab_Text_SignMachine, MSGBOX_SIGN
+	end
+
+RuinsOfAlph_Lab_EventScript_Sign1::
+	msgbox RuinsOfAlph_Lab_Text_SignMachine, MSGBOX_SIGN
+	end
+
+RuinsOfAlph_Lab_EventScript_Sign2::
+	msgbox RuinsOfAlph_Lab_Text_SignCages, MSGBOX_SIGN
+	end
+
+RuinsOfAlph_Lab_EventScript_Sign3::
+	msgbox RuinsOfAlph_Lab_Text_SignJournal, MSGBOX_SIGN
+	end
+
 RuinsOfAlph_Lab_Movement_PlayerToFaba_FromLeft:
 	walk_right
 	walk_up
@@ -220,3 +236,22 @@ RuinsOfAlph_Lab_Text_AetherGruntF:
 RuinsOfAlph_Lab_Text_AetherGruntM:
 	.string "We're cataloging the ruins and\n"
 	.string "tracking ZYGARDE signals.$"
+
+RuinsOfAlph_Lab_Text_SignMachine:
+	.string "A large machine with a glowing\n"
+	.string "object.\p"
+	.string "It seems like something that the\n"
+	.string "ZYGARDE CUBE can be place into.$"
+
+RuinsOfAlph_Lab_Text_SignCages:
+	.string "It seems like there were some\n"
+	.string "POKéMON in these cages at some point.$"
+
+RuinsOfAlph_Lab_Text_SignJournal:
+	.string "There's a journal in here.\p"
+	.string "It says that the Aether Foundation\n"
+	.string "has begun its research on wild\l"
+	.string "POKéMON that have made their way\l"
+	.string "to the JOHTO region.\p"
+	.string "UB traces are also being picked\n"
+	.string "up.$"

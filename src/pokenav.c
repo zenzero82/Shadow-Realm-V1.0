@@ -1,4 +1,5 @@
 #include "global.h"
+#include "event_data.h"
 #include "malloc.h"
 #include "task.h"
 #include "main.h"
@@ -586,5 +587,5 @@ u32 GetSelectedConditionSearch(void)
 
 bool32 CanViewRibbonsMenu(void)
 {
-    return gPokenavResources->hasAnyRibbons;
+    return FlagGet(FLAG_RECEIVED_POKENAV) || gPokenavResources->hasAnyRibbons;
 }

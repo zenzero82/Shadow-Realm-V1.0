@@ -1,5 +1,25 @@
 Route2_MapScripts::
+	map_script MAP_SCRIPT_ON_LOAD, Route2_OnLoad
+	map_script MAP_SCRIPT_ON_TRANSITION, Route2_OnTransition
 	.byte 0
+
+Route2_OnLoad::
+	call Route2_EventScript_UpdateDiglettsCaveHiker
+	end
+
+Route2_OnTransition::
+	call Route2_EventScript_UpdateDiglettsCaveHiker
+	end
+
+Route2_EventScript_UpdateDiglettsCaveHiker::
+	checkflag FLAG_NEBBY_FOLLOWER_ACTIVE
+	goto_if_eq Route2_EventScript_HideDiglettsCaveHiker
+	clearflag FLAG_HIDE_ROUTE2_DIGLETTS_CAVE_HIKER
+	return
+
+Route2_EventScript_HideDiglettsCaveHiker::
+	setflag FLAG_HIDE_ROUTE2_DIGLETTS_CAVE_HIKER
+	return
 
 Route2_Speaker_Hiker:
 	.string "HIKER$"

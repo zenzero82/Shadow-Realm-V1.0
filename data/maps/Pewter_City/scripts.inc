@@ -123,8 +123,59 @@ PewterCity_EventScript_Fatman::
     lock
     faceplayer
     setspeaker PewterCity_Speaker_Hank
-    msgbox PewterCity_Text_Fatman, MSGBOX_DEFAULT
+    msgbox PewterCity_Text_Fatman_Intro, MSGBOX_NPC
+    setvar VAR_0x8004, SCROLL_MULTI_PEWTER_GUIDE
+    special ShowScrollableMultichoice
+    waitstate
+    switch VAR_RESULT
+    case 0, PewterCity_EventScript_Fatman_Dexnav
+    case 1, PewterCity_EventScript_Fatman_EvIv
+    case 2, PewterCity_EventScript_Fatman_PokeballSwap
+    case 3, PewterCity_EventScript_Fatman_QuestJournal
+    case 4, PewterCity_EventScript_Fatman_LevelCap
+    case 5, PewterCity_EventScript_Fatman_StorageSystem
+    case 6, PewterCity_EventScript_Fatman_PartyMenu
+    case MULTI_B_PRESSED, PewterCity_EventScript_Fatman_Cancel
+    end
+
+PewterCity_EventScript_Fatman_Dexnav::
+    setspeaker PewterCity_Speaker_Hank
+    msgbox PewterCity_Text_Fatman_Dexnav, MSGBOX_NPC
+    goto PewterCity_EventScript_Fatman_Finish
+
+PewterCity_EventScript_Fatman_EvIv::
+    setspeaker PewterCity_Speaker_Hank
+    msgbox PewterCity_Text_Fatman_EvIv, MSGBOX_NPC
+    goto PewterCity_EventScript_Fatman_Finish
+
+PewterCity_EventScript_Fatman_PokeballSwap::
+    setspeaker PewterCity_Speaker_Hank
+    msgbox PewterCity_Text_Fatman_PokeballSwap, MSGBOX_NPC
+    goto PewterCity_EventScript_Fatman_Finish
+
+PewterCity_EventScript_Fatman_QuestJournal::
+    setspeaker PewterCity_Speaker_Hank
+    msgbox PewterCity_Text_Fatman_QuestJournal, MSGBOX_NPC
+    goto PewterCity_EventScript_Fatman_Finish
+
+PewterCity_EventScript_Fatman_LevelCap::
+    setspeaker PewterCity_Speaker_Hank
+    msgbox PewterCity_Text_Fatman_LevelCap, MSGBOX_NPC
+    goto PewterCity_EventScript_Fatman_Finish
+
+PewterCity_EventScript_Fatman_StorageSystem::
+    setspeaker PewterCity_Speaker_Hank
+    msgbox PewterCity_Text_Fatman_StorageSystem, MSGBOX_NPC
+    goto PewterCity_EventScript_Fatman_Finish
+
+PewterCity_EventScript_Fatman_PartyMenu::
+    setspeaker PewterCity_Speaker_Hank
+    msgbox PewterCity_Text_Fatman_PartyMenu, MSGBOX_NPC
+    goto PewterCity_EventScript_Fatman_Finish
+
+PewterCity_EventScript_Fatman_Cancel::
     closemessage
+PewterCity_EventScript_Fatman_Finish:
     setflag FLAG_QUEST_PEWTER_NPC_FATMAN
     call QuestJournal_EventScript_CheckPewterCityNPCs
     release
@@ -185,9 +236,6 @@ PewterCity_EventScript_OldMan::
     goto_if_eq PewterCity_EventScript_OldMan_Done
     checkflag FLAG_QUEST_MT_MOON_COMPLETED
     goto_if_eq PewterCity_EventScript_OldMan_Done
-    checkflag FLAG_QUEST_BROCK_COMPLETED
-    goto_if_eq PewterCity_EventScript_OldMan_GiveQuest
-    goto PewterCity_EventScript_OldMan_Done
 PewterCity_EventScript_OldMan_GiveQuest:
     setflag FLAG_QUEST_MT_MOON_STARTED
     call QuestJournal_EventScript_NewQuestAlert
@@ -694,3 +742,73 @@ PewterCity_Text_Wes_HeadOut:
 @ -------------------------------
 @ EXTRA PEWTER NPCS CAN GO BELOW
 @ -------------------------------
+
+PewterCity_Text_Fatman_Intro:
+    .string "Pewter gets a lot of new trainers.\p"
+    .string "If one of this region's extra tools\n"
+    .string "has you puzzled, ask away.$"
+
+PewterCity_Text_Fatman_Dexnav:
+    .string "DEXNAV helps you search for wild\n"
+    .string "POKeMON nearby.\p"
+    .string "Press R on a route to open it, then\n"
+    .string "choose a target to start searching.$"
+
+PewterCity_Text_Fatman_EvIv:
+    .string "EVs and IVs shape your POKeMON's\n"
+    .string "stats.\p"
+    .string "Check the EV/IV page in the summary\n"
+    .string "screen for details.\p"
+    .string "If EV/IV Editor is ON, press A there\n"
+    .string "to adjust values.$"
+
+PewterCity_Text_Fatman_PokeballSwap:
+    .string "POKeBALL SWAP lets you change the\n"
+    .string "ball your POKeMON is stored in.\p"
+    .string "Open the bag menu and pick a new\n"
+    .string "ball to apply.$"
+
+PewterCity_Text_Fatman_QuestJournal:
+    .string "The QUEST JOURNAL tracks your active\n"
+    .string "objectives.\p"
+    .string "If the story branches or you forget\n"
+    .string "who needed help, check there first.$"
+
+PewterCity_Text_Fatman_LevelCap:
+    .string "This region uses a LEVEL CAP to keep\n"
+    .string "battles from getting out of hand.\p"
+    .string "LEVEL CAP OFF means there is no cap,\n"
+    .string "so your team can level as high as\l"
+    .string "you want.\p"
+    .string "LEVEL CAP NORMAL is softer.\n"
+    .string "Once you reach the current cap,\l"
+    .string "growth slows or gets limited until\l"
+    .string "you earn the next badge or clear\l"
+    .string "the next key fight.\p"
+    .string "LEVEL CAP HARD is strict.\n"
+    .string "At the cap, your POKeMON stop\l"
+    .string "gaining battle levels until you\l"
+    .string "raise the cap.\p"
+    .string "Win BADGES and major fights to push\n"
+    .string "that cap higher.$"
+
+PewterCity_Text_Fatman_StorageSystem:
+    .string "The new STORAGE SYSTEM has a bunch\n"
+    .string "of shortcuts.\p"
+    .string "Press START to toggle the info panel.\n"
+    .string "Press SELECT to cycle cursor modes:\l"
+    .string "normal, quick action, and multi-\l"
+    .string "select.\p"
+    .string "Use L and R to swap boxes.\n"
+    .string "Press L + R for storage options,\l"
+    .string "and press A on the box name for\l"
+    .string "JUMP, rename, wallpaper, and sorts.$"
+
+PewterCity_Text_Fatman_PartyMenu:
+    .string "The PARTY MENU got upgrades too.\p"
+    .string "In the field, press R to open your\n"
+    .string "PC boxes from the party screen.\p"
+    .string "AUTO HEAL uses healing items from\n"
+    .string "your bag on hurt teammates.\p"
+    .string "MAKE LEAD moves the chosen POKeMON\n"
+    .string "into the first slot fast.$"

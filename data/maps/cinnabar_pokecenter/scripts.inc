@@ -12,6 +12,7 @@ cinnabar_pokecenter_EventScript_Chansey::
 
 cinnabar_pokecenter_OnTransition:
 	setrespawn HEAL_LOCATION_CINNABAR_ISLAND
+	call CableClub_EventScript_HideOrShowMysteryGiftMan
 	end
 
 cinnabar_pokecenter_EventScript_Bookshelf1::

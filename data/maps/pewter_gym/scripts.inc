@@ -6,8 +6,6 @@ pewter_gym_MapScripts::
 PewterGym_EventScript_OnEnter::
     setflag FLAG_HIDE_PEWTER_GYM_BROCK_BALL
     setflag FLAG_HIDE_PEWTER_GYM_BROCK_CROAGUNK
-    goto_if_unset FLAG_BADGE09_GET, PewterGym_EventScript_OnEnter_End
-    call PewterCity_Gym_EventScript_SetGymTrainers
 PewterGym_EventScript_OnEnter_End::
     end
 
@@ -35,7 +33,7 @@ PewterGym_Speaker_GymGuy:
 
 PewterCity_Gym_EventScript_Jerry::
     setspeaker PewterGym_Speaker_Jerry
-    trainerbattle_single TRAINER_CAMPER_KANTO, PewterCity_Gym_Text_CamperJerry_Seen, PewterCity_Gym_Text_CamperJerry_Beaten, PewterCity_Gym_EventScript_Jerry_After
+    trainerbattle_single TRAINER_PEWTER_GYM_CAMPER_JERRY, PewterCity_Gym_Text_CamperJerry_Seen, PewterCity_Gym_Text_CamperJerry_Beaten, PewterCity_Gym_EventScript_Jerry_After
     end
 
 PewterCity_Gym_EventScript_Jerry_After::
@@ -51,6 +49,7 @@ PewterCity_Gym_EventScript_Brock::
     setspeaker PewterGym_Speaker_Brock
     goto_if_set FLAG_BADGE09_GET, PewterCity_Gym_EventScript_Brock_Defeated
 
+    playbgm MUS_RG_ENCOUNTER_GYM_LEADER, FALSE
     msgbox PewterCity_Gym_Text_Brock_Intro, MSGBOX_DEFAULT
     call PewterCity_Gym_EventScript_Brock_CroagunkIntro
     turnobject LOCALID_BROCK, DIR_SOUTH
@@ -82,7 +81,7 @@ PewterCity_Gym_EventScript_Brock_QuestDone:
     end
 
 PewterCity_Gym_EventScript_SetGymTrainers::
-    settrainerflag TRAINER_CAMPER_KANTO
+    settrainerflag TRAINER_PEWTER_GYM_CAMPER_JERRY
     return
 
 PewterCity_Gym_EventScript_Brock_CroagunkIntro::
@@ -218,16 +217,17 @@ PewterCity_Gym_Text_CamperJerry_Beaten:
     .string "I… I still can't keep up…$"
 
 PewterCity_Gym_Text_CamperJerry_AfterBattle:
-    .string "Hey, you! BROCK doesn't just test power.\n"
-    .string "He's watching for trainers who won't\l"
+    .string "Hey, you! BROCK doesn't just test\n"
+    .string "power.\p"
+    .string "He's watching for trainers who won't\n"
     .string "run when CIPHER or ROCKET show up.$"
 
 PewterCity_Gym_Text_Guide:
     .string "Yo! CHAMP in the making!\n"
     .string "KANTO's in a bad way right now.\p"
     .string "BROCK's still here holding the line.\n"
-    .string "If you can match his resolve, you'll be\l"
-    .string "a real contender.$"
+    .string "If you can match his resolve,\l"
+    .string "you'll be a real contender.$"
 
 PewterCity_Gym_Text_Guide_Win:
     .string "Yo! CHAMP in the making!\p"

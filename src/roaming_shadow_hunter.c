@@ -1,13 +1,19 @@
 #include "global.h"
 #include "roaming_shadow_hunter.h"
 #include "battle.h"
+#include "battle_main.h"
 #include "battle_setup.h"
+#include "data.h"
 #include "event_data.h"
+#include "event_object_movement.h"
 #include "pokeball.h"
 #include "pokemon.h"
 #include "random.h"
 #include "region_map.h"
 #include "shadow_monitor_species.h"
+#include "string_util.h"
+#include "constants/abilities.h"
+#include "constants/characters.h"
 #include "constants/pokemon.h"
 #include "constants/battle_setup.h"
 #include "constants/event_objects.h"
@@ -22,6 +28,13 @@
 #define ROAMING_HUNTER_LEGACY_MAGIC_0 'R'
 #define ROAMING_HUNTER_LEGACY_MAGIC_1 'S'
 #define ROAMING_HUNTER_LEGACY_MAGIC_2 'H'
+
+enum RoamingHunterTextPhase
+{
+    ROAMING_HUNTER_TEXT_INTRO,
+    ROAMING_HUNTER_TEXT_DEFEAT,
+    ROAMING_HUNTER_TEXT_OUTRO,
+};
 
 static bool8 PushMissedShadow(u8 region, u16 species, u8 level, u16 shadowId);
 
@@ -63,6 +76,109 @@ static const u8 sHunterSpawnPointCounts[ROAMING_SHADOW_HUNTER_REGION_COUNT] =
     ARRAY_COUNT(sHunterSpawnPoints_Kanto),
     ARRAY_COUNT(sHunterSpawnPoints_Johto),
     ARRAY_COUNT(sHunterSpawnPoints_Hoenn),
+};
+
+static const u8 sHunterText_Cassidy_Intro0[] = _("Well, well. You really thought I'd\nbeat you to this shadow prize?");
+static const u8 sHunterText_Cassidy_Intro1[] = _("Stand aside. That shadow POKéMON is\nfar too valuable for you.");
+static const u8 sHunterText_Cassidy_Defeat0[] = _("Unbelievable. You actually got in my way.");
+static const u8 sHunterText_Cassidy_Defeat1[] = _("Tch. This hunt was supposed to be easy.");
+static const u8 sHunterText_Cassidy_Outro0[] = _("Keep it warm for me. I'll be taking it later.");
+static const u8 sHunterText_Cassidy_Outro1[] = _("Enjoy your moment. I always come back for what's mine.");
+
+static const u8 sHunterText_Butch_Intro0[] = _("Outta the way! That shadow POKéMON is my score.");
+static const u8 sHunterText_Butch_Intro1[] = _("Heh! Found you before anyone else could. Bad luck for you.");
+static const u8 sHunterText_Butch_Defeat0[] = _("What?! No way! I had this one locked down!");
+static const u8 sHunterText_Butch_Defeat1[] = _("Gah! You smashed my whole setup!");
+static const u8 sHunterText_Butch_Outro0[] = _("Fine! I'll track that shadow down again myself!");
+static const u8 sHunterText_Butch_Outro1[] = _("This isn't over! I don't quit just because I lost once!");
+
+static const u8 sHunterText_Silver_Intro0[] = _("If you can't take control of a shadow POKéMON,\nyou shouldn't chase one.");
+static const u8 sHunterText_Silver_Intro1[] = _("I don't need your help. I just need you\nto stay out of my way.");
+static const u8 sHunterText_Silver_Defeat0[] = _("...So you're not weak after all.");
+static const u8 sHunterText_Silver_Defeat1[] = _("Hmph. Fine. You earned this one.");
+static const u8 sHunterText_Silver_Outro0[] = _("Don't lose it. A shadow POKéMON punishes hesitation.");
+static const u8 sHunterText_Silver_Outro1[] = _("Next time, be ready before I am.");
+
+static const u8 sHunterText_Resix_Intro0[] = _("The red trace burns hot. I follow fire to the source.");
+static const u8 sHunterText_Resix_Intro1[] = _("Resix sees the ember in every shadow. This one is mine.");
+static const u8 sHunterText_Resix_Defeat0[] = _("The flame... slipped through my hands.");
+static const u8 sHunterText_Resix_Defeat1[] = _("You smothered the trail.");
+static const u8 sHunterText_Resix_Outro0[] = _("Even cooled ash remembers its spark.");
+static const u8 sHunterText_Resix_Outro1[] = _("I'll follow that heat again.");
+
+static const u8 sHunterText_Blusix_Intro0[] = _("Quiet now. The blue current leads straight to that shadow.");
+static const u8 sHunterText_Blusix_Intro1[] = _("Blusix doesn't miss the cold shimmer around a shadow POKéMON.");
+static const u8 sHunterText_Blusix_Defeat0[] = _("So the tide turned against me.");
+static const u8 sHunterText_Blusix_Defeat1[] = _("The current broke...");
+static const u8 sHunterText_Blusix_Outro0[] = _("Water always circles back. So will I.");
+static const u8 sHunterText_Blusix_Outro1[] = _("That signal won't stay hidden forever.");
+
+static const u8 sHunterText_Greesix_Intro0[] = _("The green echo in this place is alive. I can feel it.");
+static const u8 sHunterText_Greesix_Intro1[] = _("A shadow POKéMON leaves a scar in the land. I follow scars.");
+static const u8 sHunterText_Greesix_Defeat0[] = _("The forest went silent...");
+static const u8 sHunterText_Greesix_Defeat1[] = _("You cut through the whole echo.");
+static const u8 sHunterText_Greesix_Outro0[] = _("Roots spread farther than you think.");
+static const u8 sHunterText_Greesix_Outro1[] = _("If that shadow stirs again, I'll hear it.");
+
+static const u8 sHunterText_Purpsix_Intro0[] = _("That violet pulse is thick here. Deliciously dark.");
+static const u8 sHunterText_Purpsix_Intro1[] = _("Purpsix follows the haze that shadow POKéMON leave behind.");
+static const u8 sHunterText_Purpsix_Defeat0[] = _("Mm... the haze parted too soon.");
+static const u8 sHunterText_Purpsix_Defeat1[] = _("You saw through the dark after all.");
+static const u8 sHunterText_Purpsix_Outro0[] = _("Shadow always gathers again.");
+static const u8 sHunterText_Purpsix_Outro1[] = _("When the haze thickens, I'll return.");
+
+static const u8 sHunterText_Browsix_Intro0[] = _("Stone, dust, ruins... perfect places for a shadow to hide.");
+static const u8 sHunterText_Browsix_Intro1[] = _("Browsix digs up every buried trail. This one ends here.");
+static const u8 sHunterText_Browsix_Defeat0[] = _("Buried... by my own mistake.");
+static const u8 sHunterText_Browsix_Defeat1[] = _("You cracked the whole trail wide open.");
+static const u8 sHunterText_Browsix_Outro0[] = _("Old stone keeps secrets. I'll pull this one out yet.");
+static const u8 sHunterText_Browsix_Outro1[] = _("That shadow isn't lost. Just hidden again.");
+
+static const u8 sHunterText_Yellosix_Intro0[] = _("There it is. A bright little flicker in all this dark.");
+static const u8 sHunterText_Yellosix_Intro1[] = _("Yellosix chases every spark until it burns out.");
+static const u8 sHunterText_Yellosix_Defeat0[] = _("The spark jumped away from me...");
+static const u8 sHunterText_Yellosix_Defeat1[] = _("You grounded me. Hah.");
+static const u8 sHunterText_Yellosix_Outro0[] = _("Lightning never strikes just once.");
+static const u8 sHunterText_Yellosix_Outro1[] = _("That flicker will shine again, and I'll be there.");
+static const u8 sHunterText_Fallback[] = "...";
+
+static const u8 *const sHunterIntroTexts[HUNTER_COUNT][2] =
+{
+    [HUNTER_CASSIDY] = {sHunterText_Cassidy_Intro0, sHunterText_Cassidy_Intro1},
+    [HUNTER_BUTCH]   = {sHunterText_Butch_Intro0,   sHunterText_Butch_Intro1},
+    [HUNTER_SILVER]  = {sHunterText_Silver_Intro0,  sHunterText_Silver_Intro1},
+    [HUNTER_HEX_1]   = {sHunterText_Resix_Intro0,   sHunterText_Resix_Intro1},
+    [HUNTER_HEX_2]   = {sHunterText_Blusix_Intro0,  sHunterText_Blusix_Intro1},
+    [HUNTER_HEX_3]   = {sHunterText_Greesix_Intro0, sHunterText_Greesix_Intro1},
+    [HUNTER_HEX_4]   = {sHunterText_Purpsix_Intro0, sHunterText_Purpsix_Intro1},
+    [HUNTER_HEX_5]   = {sHunterText_Browsix_Intro0, sHunterText_Browsix_Intro1},
+    [HUNTER_HEX_6]   = {sHunterText_Yellosix_Intro0, sHunterText_Yellosix_Intro1},
+};
+
+static const u8 *const sHunterDefeatTexts[HUNTER_COUNT][2] =
+{
+    [HUNTER_CASSIDY] = {sHunterText_Cassidy_Defeat0, sHunterText_Cassidy_Defeat1},
+    [HUNTER_BUTCH]   = {sHunterText_Butch_Defeat0,   sHunterText_Butch_Defeat1},
+    [HUNTER_SILVER]  = {sHunterText_Silver_Defeat0,  sHunterText_Silver_Defeat1},
+    [HUNTER_HEX_1]   = {sHunterText_Resix_Defeat0,   sHunterText_Resix_Defeat1},
+    [HUNTER_HEX_2]   = {sHunterText_Blusix_Defeat0,  sHunterText_Blusix_Defeat1},
+    [HUNTER_HEX_3]   = {sHunterText_Greesix_Defeat0, sHunterText_Greesix_Defeat1},
+    [HUNTER_HEX_4]   = {sHunterText_Purpsix_Defeat0, sHunterText_Purpsix_Defeat1},
+    [HUNTER_HEX_5]   = {sHunterText_Browsix_Defeat0, sHunterText_Browsix_Defeat1},
+    [HUNTER_HEX_6]   = {sHunterText_Yellosix_Defeat0, sHunterText_Yellosix_Defeat1},
+};
+
+static const u8 *const sHunterOutroTexts[HUNTER_COUNT][2] =
+{
+    [HUNTER_CASSIDY] = {sHunterText_Cassidy_Outro0, sHunterText_Cassidy_Outro1},
+    [HUNTER_BUTCH]   = {sHunterText_Butch_Outro0,   sHunterText_Butch_Outro1},
+    [HUNTER_SILVER]  = {sHunterText_Silver_Outro0,  sHunterText_Silver_Outro1},
+    [HUNTER_HEX_1]   = {sHunterText_Resix_Outro0,   sHunterText_Resix_Outro1},
+    [HUNTER_HEX_2]   = {sHunterText_Blusix_Outro0,  sHunterText_Blusix_Outro1},
+    [HUNTER_HEX_3]   = {sHunterText_Greesix_Outro0, sHunterText_Greesix_Outro1},
+    [HUNTER_HEX_4]   = {sHunterText_Purpsix_Outro0, sHunterText_Purpsix_Outro1},
+    [HUNTER_HEX_5]   = {sHunterText_Browsix_Outro0, sHunterText_Browsix_Outro1},
+    [HUNTER_HEX_6]   = {sHunterText_Yellosix_Outro0, sHunterText_Yellosix_Outro1},
 };
 
 static s8 RegionToIndex(u8 region)
@@ -214,6 +330,212 @@ static u16 GetHunterObjectGfx(u8 hunterId)
 static struct RoamingShadowHunterSave *GetRoamingHunterSave(void)
 {
     return &gSaveBlock1Ptr->roamingShadowHunter;
+}
+
+static const struct ActiveHunterState *GetActiveHunterForCurrentMap(void)
+{
+    u8 region = RegionMap_GetRegionFromMapGroup(gSaveBlock1Ptr->location.mapGroup);
+    const struct ActiveHunterState *active = RoamingHunter_GetActiveForRegion(region);
+
+    if (active == NULL || !active->active)
+        return NULL;
+    if (active->mapGroup != gSaveBlock1Ptr->location.mapGroup
+     || active->mapNum != gSaveBlock1Ptr->location.mapNum)
+        return NULL;
+    return active;
+}
+
+static const u8 *GetHunterTextForPhase(u8 hunterId, u8 phase)
+{
+    if (hunterId >= HUNTER_COUNT)
+        return NULL;
+
+    switch (phase)
+    {
+    case ROAMING_HUNTER_TEXT_INTRO:
+        return sHunterIntroTexts[hunterId][Random() % ARRAY_COUNT(sHunterIntroTexts[hunterId])];
+    case ROAMING_HUNTER_TEXT_DEFEAT:
+        return sHunterDefeatTexts[hunterId][Random() % ARRAY_COUNT(sHunterDefeatTexts[hunterId])];
+    case ROAMING_HUNTER_TEXT_OUTRO:
+        return sHunterOutroTexts[hunterId][Random() % ARRAY_COUNT(sHunterOutroTexts[hunterId])];
+    default:
+        return NULL;
+    }
+}
+
+static void LoadHunterTextForPhase(u8 phase)
+{
+    const struct ActiveHunterState *active = GetActiveHunterForCurrentMap();
+    const u8 *text = NULL;
+
+    gStringVar4[0] = EOS;
+    if (active != NULL)
+        text = GetHunterTextForPhase(active->hunterId, phase);
+    if (text == NULL)
+        text = sHunterText_Fallback;
+    StringCopy(gStringVar4, text);
+}
+
+static u32 Crc32B_RoamingHunter(const u8 *data, u32 size)
+{
+    s32 i;
+    s32 j;
+    u32 byte;
+    u32 crc = 0xFFFFFFFF;
+    u32 mask;
+
+    for (i = 0; i < size; ++i)
+    {
+        byte = data[i];
+        crc ^= byte;
+        for (j = 7; j >= 0; --j)
+        {
+            mask = -(crc & 1);
+            crc = (crc >> 1) ^ (0xEDB88320 & mask);
+        }
+    }
+
+    return ~crc;
+}
+
+static u32 GeneratePartyHash_RoamingHunter(const struct Trainer *trainer, u32 index)
+{
+    const u8 *buffer = (const u8 *)&trainer->party[index];
+    return Crc32B_RoamingHunter(buffer, sizeof(*trainer->party));
+}
+
+static const struct TrainerMon *FindTrainerShadowPartyEntry(u16 trainerId, u16 shadowId, u32 *partyIndex)
+{
+    const struct Trainer *trainer;
+    u32 i;
+
+    if (trainerId == TRAINER_NONE)
+        return NULL;
+
+    trainer = GetTrainerStructFromId(trainerId);
+    if (trainer == NULL || trainer->party == NULL)
+        return NULL;
+
+    for (i = 0; i < trainer->partySize; i++)
+    {
+        if (trainer->party[i].shadowID != shadowId)
+            continue;
+        if (partyIndex != NULL)
+            *partyIndex = i;
+        return &trainer->party[i];
+    }
+
+    return NULL;
+}
+
+static bool8 BuildRoamingHunterShadowMon(struct Pokemon *mon, u16 trainerId, u16 shadowId, u16 fallbackSpecies, u8 fallbackLevel)
+{
+    const struct Trainer *trainer;
+    const struct TrainerMon *partyEntry;
+    u32 partyIndex = 0;
+    u32 personalityValue;
+    u32 personalityHash;
+    u32 otIdType = OT_ID_PLAYER_ID;
+    u32 fixedOtId = 0;
+    u32 abilityNum = 0;
+    u8 ball = BALL_DARK;
+    u8 isShadow = TRUE;
+    u8 snagged = FALSE;
+    u8 levelBoost = 0;
+
+    trainer = GetTrainerStructFromId(trainerId);
+    partyEntry = FindTrainerShadowPartyEntry(trainerId, shadowId, &partyIndex);
+    if (trainer == NULL || partyEntry == NULL)
+    {
+        CreateMon(mon, fallbackSpecies, fallbackLevel, USE_RANDOM_IVS, 0, 0, OT_ID_PLAYER_ID, 0);
+        SetMonData(mon, MON_DATA_IS_SHADOW, &isShadow);
+        SetMonData(mon, MON_DATA_SNAGGED, &snagged);
+        SetMonData(mon, MON_DATA_POKEBALL, &ball);
+        SetMonData(mon, MON_DATA_SHADOW_ID, &shadowId);
+        SetMonHeartMax(mon, SHADOW_HEART_GAUGE_MAX);
+        SetMonHeartValue(mon, SHADOW_HEART_GAUGE_MAX);
+        abilityNum = 0;
+        SetMonData(mon, MON_DATA_ABILITY_NUM, &abilityNum);
+        abilityNum = Shdw_GetAggroForNature(GetNature(mon));
+        SetMonData(mon, MON_DATA_SHADOW_AGGRO, &abilityNum);
+        CalculateMonStats(mon, 0);
+        return FALSE;
+    }
+
+    if (trainer->battleType != TRAINER_BATTLE_TYPE_SINGLES)
+        personalityValue = 0x80;
+    else if (trainer->encounterMusic_gender & F_TRAINER_FEMALE)
+        personalityValue = 0x78;
+    else
+        personalityValue = 0x88;
+
+    personalityHash = GeneratePartyHash_RoamingHunter(trainer, partyIndex);
+    personalityValue += personalityHash << 8;
+    if (partyEntry->gender == TRAINER_MON_MALE)
+        personalityValue = (personalityValue & 0xFFFFFF00) | GeneratePersonalityForGender(MON_MALE, partyEntry->species);
+    else if (partyEntry->gender == TRAINER_MON_FEMALE)
+        personalityValue = (personalityValue & 0xFFFFFF00) | GeneratePersonalityForGender(MON_FEMALE, partyEntry->species);
+    else if (partyEntry->gender == TRAINER_MON_RANDOM_GENDER)
+        personalityValue = (personalityValue & 0xFFFFFF00) | GeneratePersonalityForGender((personalityHash & 1) ? MON_MALE : MON_FEMALE, partyEntry->species);
+
+    ModifyPersonalityForNature(&personalityValue, partyEntry->nature);
+    CreateMon(mon, partyEntry->species, partyEntry->lvl, 0, TRUE, personalityValue, otIdType, fixedOtId);
+    SetMonData(mon, MON_DATA_HELD_ITEM, &partyEntry->heldItem);
+    CustomTrainerPartyAssignMoves(mon, partyEntry);
+    SetMonData(mon, MON_DATA_IVS, &partyEntry->iv);
+    if (partyEntry->ev != NULL)
+    {
+        SetMonData(mon, MON_DATA_HP_EV, &(partyEntry->ev[0]));
+        SetMonData(mon, MON_DATA_ATK_EV, &(partyEntry->ev[1]));
+        SetMonData(mon, MON_DATA_DEF_EV, &(partyEntry->ev[2]));
+        SetMonData(mon, MON_DATA_SPATK_EV, &(partyEntry->ev[3]));
+        SetMonData(mon, MON_DATA_SPDEF_EV, &(partyEntry->ev[4]));
+        SetMonData(mon, MON_DATA_SPEED_EV, &(partyEntry->ev[5]));
+    }
+
+    if (partyEntry->ability != ABILITY_NONE)
+    {
+        const struct SpeciesInfo *speciesInfo = &gSpeciesInfo[partyEntry->species];
+        u32 maxAbilityNum = ARRAY_COUNT(speciesInfo->abilities);
+        for (abilityNum = 0; abilityNum < maxAbilityNum; ++abilityNum)
+        {
+            if (speciesInfo->abilities[abilityNum] == partyEntry->ability)
+                break;
+        }
+        if (abilityNum >= maxAbilityNum)
+            abilityNum = 0;
+    }
+    else if (B_TRAINER_MON_RANDOM_ABILITY)
+    {
+        const struct SpeciesInfo *speciesInfo = &gSpeciesInfo[partyEntry->species];
+        abilityNum = personalityHash % 3;
+        while (speciesInfo->abilities[abilityNum] == ABILITY_NONE)
+            abilityNum--;
+    }
+
+    SetMonData(mon, MON_DATA_ABILITY_NUM, &abilityNum);
+    SetMonData(mon, MON_DATA_FRIENDSHIP, &partyEntry->friendship);
+    if (partyEntry->ball != ITEM_NONE)
+    {
+        ball = ItemIdToBallId(partyEntry->ball);
+        SetMonData(mon, MON_DATA_POKEBALL, &ball);
+    }
+
+    SetMonData(mon, MON_DATA_IS_SHADOW, &isShadow);
+    SetMonData(mon, MON_DATA_SHADOW_ID, &partyEntry->shadowID);
+    if (partyEntry->shadowAggro != SHADOW_AGGRO_NONE)
+        abilityNum = partyEntry->shadowAggro;
+    else
+        abilityNum = Shdw_GetAggroForNature(GetNature(mon));
+    SetMonData(mon, MON_DATA_SHADOW_AGGRO, &abilityNum);
+    SetMonHeartValue(mon, partyEntry->heartGauge);
+    SetMonHeartMax(mon, partyEntry->heartGauge);
+    SetMonData(mon, MON_DATA_SNAGGED, &snagged);
+    ball = BALL_DARK;
+    SetMonData(mon, MON_DATA_POKEBALL, &ball);
+    levelBoost = partyEntry->boostLevel;
+    CalculateMonStats(mon, levelBoost);
+    return TRUE;
 }
 
 static u8 GetFallbackHunterLevel(void)
@@ -411,13 +733,22 @@ static void SpawnHunterForRegion(u8 region)
     FlagSet(FLAG_ROAMING_HUNTER_ALERT_PENDING);
 }
 
-void RoamingHunter_OnShadowSnagFailed(u16 species, u8 level, u8 region, u16 shadowId)
+void RoamingHunter_OnShadowSnagFailed(struct Pokemon *mon, u8 region)
 {
     struct RoamingShadowHunterSave *save;
     s8 regionIndex;
+    u16 species;
+    u8 level;
+    u16 shadowId;
 
     if (!RoamingHunter_IsUnlocked())
         return;
+    if (mon == NULL)
+        return;
+
+    species = GetMonData(mon, MON_DATA_SPECIES);
+    level = GetMonData(mon, MON_DATA_LEVEL);
+    shadowId = GetMonData(mon, MON_DATA_SHADOW_ID);
     if (species == SPECIES_NONE)
         return;
     if (level == 0)
@@ -631,11 +962,6 @@ void RoamingHunter_TryOverrideTrainerParty(u16 trainerId, struct Pokemon *party)
     u8 region;
     s8 regionIndex;
     struct ActiveHunterState *active;
-    u16 shadowId;
-    u8 isShadow = TRUE;
-    u8 snagged = FALSE;
-    u8 aggro;
-    u8 ball = BALL_DARK;
 
     if (hunterId == HUNTER_COUNT)
         return;
@@ -659,15 +985,54 @@ void RoamingHunter_TryOverrideTrainerParty(u16 trainerId, struct Pokemon *party)
             return;
     }
 
-    shadowId = active->shadowId;
-    CreateMon(&party[0], active->species, active->level, USE_RANDOM_IVS, 0, 0, OT_ID_PLAYER_ID, 0);
-    SetMonData(&party[0], MON_DATA_IS_SHADOW, &isShadow);
-    SetMonData(&party[0], MON_DATA_SNAGGED, &snagged);
-    SetMonData(&party[0], MON_DATA_POKEBALL, &ball);
-    SetMonData(&party[0], MON_DATA_SHADOW_ID, &shadowId); // TODO: derive a valid shadow ID if none is available.
-    SetMonHeartMax(&party[0], SHADOW_HEART_GAUGE_MAX);
-    SetMonHeartValue(&party[0], SHADOW_HEART_GAUGE_MAX);
-    aggro = Shdw_GetAggroForNature(GetNature(&party[0]));
-    SetMonData(&party[0], MON_DATA_SHADOW_AGGRO, &aggro);
-    CalculateMonStats(&party[0], 0);
+    BuildRoamingHunterShadowMon(
+        &party[0],
+        GetShadowMonitorTrainerId(active->shadowId),
+        active->shadowId,
+        active->species,
+        active->level
+    );
+}
+
+u16 RoamingHunter_DidPlayerWinBattle(void)
+{
+    gSpecialVar_Result = ((gBattleOutcome & B_OUTCOME_WON) != 0);
+    return gSpecialVar_Result;
+}
+
+u16 RoamingHunter_GetActiveTrainerId(void)
+{
+    const struct ActiveHunterState *active = GetActiveHunterForCurrentMap();
+
+    if (active == NULL)
+        gSpecialVar_Result = TRAINER_NONE;
+    else
+        gSpecialVar_Result = GetHunterTrainerId(active->hunterId);
+    return gSpecialVar_Result;
+}
+
+u16 RoamingHunter_LoadIntroText(void)
+{
+    LoadHunterTextForPhase(ROAMING_HUNTER_TEXT_INTRO);
+    return 1;
+}
+
+u16 RoamingHunter_LoadDefeatText(void)
+{
+    LoadHunterTextForPhase(ROAMING_HUNTER_TEXT_DEFEAT);
+    return 1;
+}
+
+u16 RoamingHunter_LoadOutroText(void)
+{
+    LoadHunterTextForPhase(ROAMING_HUNTER_TEXT_OUTRO);
+    return 1;
+}
+
+u16 RoamingHunter_DespawnNpc(void)
+{
+    FlagSet(FLAG_ROAMING_HUNTER_NPC_HIDE);
+    RemoveObjectEventByLocalIdAndMap(gSpecialVar_LastTalked, gSaveBlock1Ptr->location.mapNum, gSaveBlock1Ptr->location.mapGroup);
+    gSpecialVar_Result = 1;
+    return gSpecialVar_Result;
 }

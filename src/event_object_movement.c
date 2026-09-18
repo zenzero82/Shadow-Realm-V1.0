@@ -38,6 +38,13 @@
 #include "random.h"
 #include "region_map.h"
 #include "rtc.h"
+
+#define TEMP_HIDDEN_OBJ_EVENT_COORD (-0x4000)
+
+extern const u16 gOverworldPalette_RioluGiftAura[];
+extern const u16 gOverworldPalette_LucarioGiftAura[];
+extern const u16 gOverworldPalette_LucarioMegaGiftAura[];
+extern const u32 gObjectEventPic_RioluGiftAura[];
 #include "script.h"
 #include "sound.h"
 #include "sprite.h"
@@ -845,6 +852,7 @@ static const struct SpritePalette sObjectEventSpritePalettes[] = {
     {gObjectEventPal_Michael,                OBJ_EVENT_PAL_TAG_MICHAEL},
     {gObjectEventPal_Nascour,                OBJ_EVENT_PAL_TAG_NASCOUR},
     {gObjectEventPal_SnagemGrunt,            OBJ_EVENT_PAL_TAG_SNAGEM_GRUNT},
+    {gObjectEventPal_SnagemAgrev,            OBJ_EVENT_PAL_TAG_SNAGEM_AGREV},
     {gObjectEventPal_Venus,                  OBJ_EVENT_PAL_TAG_VENUS},
     {gObjectEventPal_Ash,                    OBJ_EVENT_PAL_TAG_ASH},
     {gObjectEventPal_Ironmask,               OBJ_EVENT_PAL_TAG_IRONMASK},
@@ -853,6 +861,7 @@ static const struct SpritePalette sObjectEventSpritePalettes[] = {
     {gObjectEventPal_Blusix,                 OBJ_EVENT_PAL_TAG_BLUSIX},
     {gObjectEventPal_Greesix,                OBJ_EVENT_PAL_TAG_GREESIX},
     {gObjectEventPal_Purpsix,                OBJ_EVENT_PAL_TAG_PURPSIX},
+    {gObjectEventPal_MysteryEventDeliveryman, OBJ_EVENT_PAL_TAG_MYSTERY_GIFT_MAN},
     {gObjectEventPal_Browsix,                OBJ_EVENT_PAL_TAG_BROWSIX},
     {gObjectEventPal_Yellosix,               OBJ_EVENT_PAL_TAG_YELLOSIX},
 
@@ -1881,8 +1890,20 @@ void RemoveObjectEventByLocalIdAndMap(u8 localId, u8 mapNum, u8 mapGroup)
     u8 objectEventId;
     if (!TryGetObjectEventIdByLocalIdAndMap(localId, mapNum, mapGroup, &objectEventId))
     {
-        FlagSet(GetObjectEventFlagIdByObjectEventId(objectEventId));
-        RemoveObjectEvent(&gObjectEvents[objectEventId]);
+        struct ObjectEvent *objectEvent = &gObjectEvents[objectEventId];
+        u16 flagId = GetObjectEventFlagIdByObjectEventId(objectEventId);
+
+        if (flagId == 0
+         && (objectEvent->graphicsId == OBJ_EVENT_GFX_CUTTABLE_TREE
+          || objectEvent->graphicsId == OBJ_EVENT_GFX_CUTTABLE_TREE_G1)
+         && mapNum == gSaveBlock1Ptr->location.mapNum
+         && mapGroup == gSaveBlock1Ptr->location.mapGroup)
+        {
+            SetObjEventTemplateCoords(localId, TEMP_HIDDEN_OBJ_EVENT_COORD, TEMP_HIDDEN_OBJ_EVENT_COORD);
+        }
+
+        FlagSet(flagId);
+        RemoveObjectEvent(objectEvent);
     }
 }
 
@@ -2349,6 +2370,12 @@ static const struct SpriteFrameImage *GetShadowOverworldPicTable(u32 species, bo
 }
 #endif
 
+#if OW_POKEMON_OBJECT_EVENTS
+static const struct SpriteFrameImage sGiftAuraPicTable_Riolu[] = {
+    overworld_ascending_frames(gObjectEventPic_RioluGiftAura, 4, 4),
+};
+#endif
+
 static const struct ObjectEventGraphicsInfo *GetShadowOverworldGraphicsInfo(u32 species, bool32 shiny, bool32 female, bool32 shadow, const struct ObjectEventGraphicsInfo *base)
 {
 #if OW_POKEMON_OBJECT_EVENTS
@@ -2384,6 +2411,44 @@ static const struct ObjectEventGraphicsInfo *GetShadowOverworldGraphicsInfo(u32 
     sShadowGfxInfo = *base;
     sShadowGfxInfo.images = shadowPicTable;
     return &sShadowGfxInfo;
+#else
+    return base;
+#endif
+}
+
+static const struct ObjectEventGraphicsInfo *GetGiftAuraFollowerGraphicsInfo(u32 species, bool32 shiny, bool32 female, bool32 shadow, const struct ObjectEventGraphicsInfo *base)
+{
+#if OW_POKEMON_OBJECT_EVENTS
+    static struct ObjectEventGraphicsInfo sGiftAuraFollowerGfxInfo;
+    struct Pokemon *followerMon;
+    const struct SpriteFrameImage *giftPicTable = NULL;
+
+    (void)female;
+
+    if (base == NULL || shiny || shadow)
+        return base;
+
+    followerMon = GetFirstLiveMon();
+    if (followerMon == NULL
+     || GetMonData(followerMon, MON_DATA_SPECIES, NULL) != species
+     || !IsGiftAuraPersonality(GetMonData(followerMon, MON_DATA_PERSONALITY, NULL)))
+        return base;
+
+    switch (species)
+    {
+    case SPECIES_RIOLU:
+        giftPicTable = sGiftAuraPicTable_Riolu;
+        break;
+    default:
+        break;
+    }
+
+    if (giftPicTable == NULL)
+        return base;
+
+    sGiftAuraFollowerGfxInfo = *base;
+    sGiftAuraFollowerGfxInfo.images = giftPicTable;
+    return &sGiftAuraFollowerGfxInfo;
 #else
     return base;
 #endif
@@ -2432,25 +2497,51 @@ static u32 LoadDynamicFollowerPalette(u32 species, bool32 shiny, bool32 female, 
     u32 paletteNum;
     u16 palTag = species + OBJ_EVENT_MON;
     const u16 *shadowPalette = NULL;
+    const u16 *giftAuraPalette = NULL;
+    struct Pokemon *followerMon = GetFirstLiveMon();
+
+    if (!shiny && !shadow
+        && followerMon != NULL
+        && GetMonData(followerMon, MON_DATA_SPECIES, NULL) == species
+        && IsGiftAuraPersonality(GetMonData(followerMon, MON_DATA_PERSONALITY, NULL)))
+    {
+        switch (species)
+        {
+        case SPECIES_RIOLU:
+            giftAuraPalette = gOverworldPalette_RioluGiftAura;
+            break;
+        case SPECIES_LUCARIO:
+            giftAuraPalette = gOverworldPalette_LucarioGiftAura;
+            break;
+        case SPECIES_LUCARIO_MEGA:
+            giftAuraPalette = gOverworldPalette_LucarioMegaGiftAura;
+            break;
+        }
+    }
+
     if (shiny)
         palTag += OBJ_EVENT_MON_SHINY;
     if (female)
         palTag += OBJ_EVENT_MON_FEMALE;
     if (shadow)
         palTag += OBJ_EVENT_MON_SHADOW_PAL;
+    if (giftAuraPalette != NULL)
+        palTag += OBJ_EVENT_MON_GIFT_AURA_PAL;
     // Use standalone palette, unless entry is OOB or NULL (fallback to front-sprite-based)
 #if OW_POKEMON_OBJECT_EVENTS == TRUE && OW_PKMN_OBJECTS_SHARE_PALETTES == FALSE
     shadowPalette = GetShadowOverworldPalette(species, shiny, female, shadow);
-    if (shadowPalette != NULL
+    if (giftAuraPalette != NULL
+    || shadowPalette != NULL
     || (shiny && gSpeciesInfo[species].overworldPalette)
     || (!shiny && gSpeciesInfo[species].overworldShinyPalette))
     {
         struct SpritePalette spritePalette;
-        // palette already loaded
-        if ((paletteNum = IndexOfSpritePaletteTag(palTag)) < 16)
-            return paletteNum;
         spritePalette.tag = palTag;
-        if (shadowPalette != NULL)
+        if (giftAuraPalette != NULL)
+        {
+            spritePalette.data = giftAuraPalette;
+        }
+        else if (shadowPalette != NULL)
         {
             spritePalette.data = shadowPalette;
         }
@@ -2472,6 +2563,28 @@ static u32 LoadDynamicFollowerPalette(u32 species, bool32 shiny, bool32 female, 
                 else
                     spritePalette.data = gSpeciesInfo[species].overworldPalette;
             }
+        }
+
+        if ((paletteNum = IndexOfSpritePaletteTag(palTag)) < 16)
+        {
+            struct SpritePalette loadedPalette;
+            u16 decompressedPalette[16];
+
+            loadedPalette.tag = spritePalette.tag;
+            if (IsLZ77Data(spritePalette.data, PLTT_SIZE_4BPP, PLTT_SIZE_4BPP))
+            {
+                LZ77UnCompWram((const u32 *)spritePalette.data, decompressedPalette);
+                loadedPalette.data = decompressedPalette;
+                LoadSpritePaletteInSlot(&loadedPalette, paletteNum);
+            }
+            else
+            {
+                loadedPalette.data = spritePalette.data;
+                LoadSpritePaletteInSlot(&loadedPalette, paletteNum);
+            }
+            if (gWeatherPtr->currWeather != WEATHER_FOG_HORIZONTAL)
+                UpdateSpritePaletteWithWeather(paletteNum, FALSE);
+            return paletteNum;
         }
 
         // Check if pal data must be decompressed
@@ -2512,6 +2625,7 @@ static u32 LoadDynamicFollowerPalette(u32 species, bool32 shiny, bool32 female, 
 static void FollowerSetGraphics(struct ObjectEvent *objEvent, u32 species, bool32 shiny, bool32 female, bool32 shadow)
 {
     const struct ObjectEventGraphicsInfo *graphicsInfo = SpeciesToGraphicsInfo(species, shiny, female, shadow);
+    graphicsInfo = GetGiftAuraFollowerGraphicsInfo(species, shiny, female, shadow, graphicsInfo);
     ObjectEventSetGraphics(objEvent, graphicsInfo);
     objEvent->graphicsId = GetGraphicsIdForMon(species, shiny, female, shadow);
     if (graphicsInfo->paletteTag == OBJ_EVENT_PAL_TAG_DYNAMIC) // Use palette from species palette table
@@ -2534,6 +2648,7 @@ static void RefreshFollowerGraphics(struct ObjectEvent *objEvent)
     bool32 female = OW_FEMALE(objEvent);
     bool32 shadow = OW_SHADOW(objEvent);
     const struct ObjectEventGraphicsInfo *graphicsInfo = SpeciesToGraphicsInfo(species, shiny, female, shadow);
+    graphicsInfo = GetGiftAuraFollowerGraphicsInfo(species, shiny, female, shadow, graphicsInfo);
     struct Sprite *sprite = &gSprites[objEvent->spriteId];
     u16 i = FindObjectEventPaletteIndexByTag(graphicsInfo->paletteTag);
 
@@ -4459,7 +4574,9 @@ bool8 ObjectEventIsTrainerAndCloseToPlayer(struct ObjectEvent *objectEvent)
     if (!TestPlayerAvatarFlags(PLAYER_AVATAR_FLAG_DASH))
         return FALSE;
 
-    if (objectEvent->trainerType != TRAINER_TYPE_NORMAL && objectEvent->trainerType != TRAINER_TYPE_BURIED)
+    if (objectEvent->trainerType != TRAINER_TYPE_NORMAL
+     && objectEvent->trainerType != TRAINER_TYPE_SEE_ALL_DIRECTIONS
+     && objectEvent->trainerType != TRAINER_TYPE_BURIED)
         return FALSE;
 
     PlayerGetDestCoords(&playerX, &playerY);

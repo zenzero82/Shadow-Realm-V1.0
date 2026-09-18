@@ -22,6 +22,8 @@
 #include "constants/songs.h"
 #include "constants/rgb.h"
 
+extern void BattleHud_RefreshHealthboxPalette(u8 battler, bool8 isShadowNow);
+
 // iwram
 COMMON_DATA u32 gMonShrinkDuration = 0;
 COMMON_DATA u16 gMonShrinkDelta = 0;
@@ -837,20 +839,20 @@ void AnimTask_LoadHealthboxPalsForLevelUp(u8 taskId)
 static void FreeHealthboxPalsForLevelUp(u8 battler)
 {
     u8 healthBoxSpriteId;
-    u8 spriteId1, spriteId2;
-    u8 paletteId1, paletteId2;
+    u8 spriteId2;
+    u8 paletteId2;
+    bool8 isShadowNow;
 
     healthBoxSpriteId = gHealthboxSpriteIds[battler];
-    spriteId1 = gSprites[healthBoxSpriteId].oam.affineParam;
     spriteId2 = gSprites[healthBoxSpriteId].data[5];
 
     FreeSpritePaletteByTag(TAG_HEALTHBOX_PALS_1);
     FreeSpritePaletteByTag(TAG_HEALTHBOX_PALS_2);
-    paletteId1 = IndexOfSpritePaletteTag(TAG_HEALTHBOX_PAL);
     paletteId2 = IndexOfSpritePaletteTag(TAG_HEALTHBAR_PAL);
-    gSprites[healthBoxSpriteId].oam.paletteNum = paletteId1;
-    gSprites[spriteId1].oam.paletteNum = paletteId1;
     gSprites[spriteId2].oam.paletteNum = paletteId2;
+
+    isShadowNow = IsBattlerShadow(battler);
+    BattleHud_RefreshHealthboxPalette(battler, isShadowNow);
 }
 
 void AnimTask_FreeHealthboxPalsForLevelUp(u8 taskId)
@@ -1542,6 +1544,7 @@ static void SpriteCB_Ball_Release(struct Sprite *sprite)
 
 static void SpriteCB_Ball_Capture(struct Sprite *sprite)
 {
+    gBattleSpritesDataPtr->animationData->captureSuccessAnimActive = TRUE;
     sprite->animPaused = TRUE;
     sprite->callback = SpriteCB_Ball_Capture_Step;
     sprite->data[3] = 0;
@@ -1567,6 +1570,7 @@ static void SpriteCB_Ball_Capture_Step(struct Sprite *sprite)
     }
     else if (sprite->sTimer == 95)
     {
+        gBattleSpritesDataPtr->animationData->captureSuccessAnimActive = FALSE;
         gDoingBattleAnim = FALSE;
         UpdateOamPriorityInAllHealthboxes(1, FALSE);
         m4aMPlayAllStop();
@@ -2486,7 +2490,7 @@ void TryShinyAnimation(u8 battler, struct Pokemon *mon)
     u8 taskCirc, taskDgnl;
     struct Pokemon* illusionMon;
 
-    isShiny = GetMonData(mon, MON_DATA_IS_SHINY);
+    isShiny = GetMonData(mon, MON_DATA_IS_SHINY) || ShouldPlayGiftAuraShinyAnimation(mon);
     gBattleSpritesDataPtr->healthBoxesData[battler].triedShinyMonAnim = TRUE;
     illusionMon = GetIllusionMonPtr(battler);
     if (illusionMon != NULL)

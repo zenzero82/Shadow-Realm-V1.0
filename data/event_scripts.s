@@ -2094,3 +2094,9 @@ EventScript_OverworldWildMon::
 	.include "data/maps/RuinsOfAlph_WordsRoom4/scripts.inc"
 
 	.include "data/maps/celadon_department_elevator/scripts.inc"
+
+	.include "data/maps/Route26_House1/scripts.inc"
+
+	.include "data/maps/Route26_House2/scripts.inc"
+
+	.include "data/maps/Agate_Village/scripts.inc"

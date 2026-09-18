@@ -151,6 +151,7 @@ IlexForest_EventScript_TryBirchCall::
 	pokenavcall IlexForest_Text_Birch_Call
 	waitmessage
 	closemessage
+	clearflag FLAG_QUEST_BACK_TO_HQ_COMPLETED
 	setflag FLAG_QUEST_BACK_TO_HQ_STARTED
 	call QuestJournal_EventScript_NewQuestAlert
 IlexForest_EventScript_TryBirchCall_Done::
@@ -435,22 +436,23 @@ IlexForest_Text_Birch_Call:
 	.string "WHAT?! you're saying CIPHER has\n"
 	.string "captured it??\p"
 	.string "This is not good. Not good at all.\n"
-	.string "We need to strategize. I'm going to\l"
-	.string "pull you back to the lab.\p"
+	.string "We need to strategize. I'm going\l"
+	.string "to pull you back to the lab.\p"
 	.string "... ...\p"
 	.string "Uh the machine is not working!\n"
 	.string "Could it be that CELEBI has been\l"
-	.string "somehow lending its power even when\l"
-	.string "it wasn't here??\p"
+	.string "somehow lending its power even\l"
+	.string "when it wasn't here??\p"
 	.string "This is so bad, {PLAYER} can you\n"
 	.string "please try to find another way\l"
 	.string "back to the lab?\p"
-	.string "I hate to send you back to New Bark\n"
-	.string "but perhaps you could take the long\l"
-	.string "road back. Or if you have a POKéMON\l"
-	.string "that can fly maybe the trip won't\l"
+	.string "I hate to send you back to\n"
+	.string "New Bark but perhaps you could\l"
+	.string "take the long road back.\p"
+	.string "Or if you have a POKéMON that\n"
+	.string "can fly maybe the trip won't\l"
 	.string "be so bad...\p"
-	.string "I don't know I'm scrambling right now.\p"
+	.string "I don't know I'm scrambling...\p"
 	.string "Please try to find a way back\n"
 	.string "as fast as you can.$"
 

@@ -2,6 +2,7 @@
 #include "graphics.h"
 #include "mail.h"
 #include "palette.h"
+#include "pokemon.h"
 #include "pokemon_sprite_visualizer.h"
 #include "pokemon_icon.h"
 #include "shadow_graphics.h"
@@ -21,9 +22,14 @@ extern const u8 gMonIcon_PikachuShadow[];
 #define SHINY_ICON_TONE_G 390
 #define SHINY_ICON_TONE_B 120
 
-static u16 sShadowIconPaletteBuffer[16];
 static u16 sShinyIconPaletteBuffers[MON_ICON_BASE_PALETTE_COUNT][16];
-bool8 TryLoadShadowMonIconPalette(u16 species);
+static u16 sGiftAuraIconPaletteBuffers[MON_ICON_BASE_PALETTE_COUNT][16];
+
+extern const u16 gMonPalette_RioluGiftAura[];
+extern const u16 gMonPalette_LucarioGiftAura[];
+extern const u16 gMonPalette_LucarioMegaGiftAura[];
+extern const u16 gMonIconPalette_RioluGiftAura[];
+extern const u8 gMonIcon_RioluGiftAura[];
 
 struct MonIconSpriteTemplate
 {
@@ -37,6 +43,8 @@ struct MonIconSpriteTemplate
 
 static u8 CreateMonIconSprite(struct MonIconSpriteTemplate *, s16, s16, u8);
 static void FreeAndDestroyMonIconSprite_(struct Sprite *sprite);
+static const u16 *GetGiftAuraIconPalette(u16 species, u32 personality, bool8 isShiny);
+static u16 GetDedicatedShadowIconPaletteTag(u16 species);
 
 const struct SpritePalette gMonIconPaletteTable[] __attribute__((used)) __attribute__((section(".rodata"))) =
 {
@@ -46,27 +54,83 @@ const struct SpritePalette gMonIconPaletteTable[] __attribute__((used)) __attrib
     { gMonIconPalettes[3], POKE_ICON_BASE_PAL_TAG + 3 },
     { gMonIconPalettes[4], POKE_ICON_BASE_PAL_TAG + 4 },
     { gMonIconPalettes[5], POKE_ICON_BASE_PAL_TAG + 5 },
-    { sShadowIconPaletteBuffer, POKE_ICON_SHADOW_PAL_TAG },
 };
-
-#define MON_ICON_SHADOW_PALETTE_INDEX (ARRAY_COUNT(gMonIconPaletteTable) - 1)
-
-const u8 gMonIconShadowPaletteIndex = MON_ICON_SHADOW_PALETTE_INDEX;
 
 // Ensure the table’s section is kept by referencing it from read-only data.
 const struct SpritePalette *const gMonIconPaletteTableRef __attribute__((used)) = gMonIconPaletteTable;
 
-bool8 TryLoadShadowMonIconPalette(u16 species)
+static u8 GetIconPaletteIndexForSpeciesAndPersonality(u16 species, u32 personality)
 {
-    const u16 *palette = GetShadowMonPalette(species);
-    if (palette != NULL)
-    {
-        memcpy(sShadowIconPaletteBuffer, palette, sizeof(sShadowIconPaletteBuffer));
-        return TRUE;
-    }
+    species = SanitizeSpeciesId(species);
+#if P_GENDER_DIFFERENCES
+    if (gSpeciesInfo[species].iconSpriteFemale != NULL && IsPersonalityFemale(species, personality))
+        return gSpeciesInfo[species].iconPalIndexFemale;
+#endif
+    return gSpeciesInfo[species].iconPalIndex;
+}
 
-    memcpy(sShadowIconPaletteBuffer, gMonIconPalette_Shadow, sizeof(sShadowIconPaletteBuffer));
-    return FALSE;
+bool8 LoadMonIconPaletteShadowPersonality(u16 species, u32 personality, u16 *paletteTag)
+{
+    const u16 *palette = GetShadowMonIconPalette(species, personality);
+    struct SpritePalette spritePalette;
+    u8 slot;
+    u8 palIndex = GetIconPaletteIndexForSpeciesAndPersonality(species, personality);
+    bool8 hasShadowPalette = (palette != NULL);
+    u16 tag = GetShadowMonIconPaletteTag(species, personality);
+
+    if (palIndex >= MON_ICON_BASE_PALETTE_COUNT)
+        palIndex = 0;
+
+    if (palette == NULL)
+        palette = gMonIconPalette_Shadow;
+
+    if (tag == TAG_NONE)
+        tag = GetDedicatedShadowIconPaletteTag(species);
+
+    if (tag == TAG_NONE)
+        tag = POKE_ICON_SHADOW_PAL_TAG + palIndex;
+
+    spritePalette.data = palette;
+    spritePalette.tag = tag;
+    slot = IndexOfSpritePaletteTag(tag);
+    if (slot == 0xFF)
+        LoadSpritePalette(&spritePalette);
+    else
+        LoadPalette(spritePalette.data, OBJ_PLTT_ID(slot), PLTT_SIZE_4BPP);
+
+    if (paletteTag != NULL)
+        *paletteTag = tag;
+    return hasShadowPalette;
+}
+
+bool8 LoadMonIconPaletteGiftAuraPersonality(u16 species, u32 personality, bool8 isShiny, u16 *paletteTag)
+{
+    const u16 *palette = GetGiftAuraIconPalette(species, personality, isShiny);
+    struct SpritePalette spritePalette;
+    u8 slot;
+    u8 palIndex = GetIconPaletteIndexForSpeciesAndPersonality(species, personality);
+    u16 tag;
+
+    if (palette == NULL)
+        return FALSE;
+
+    if (palIndex >= MON_ICON_BASE_PALETTE_COUNT)
+        palIndex = 0;
+
+    memcpy(sGiftAuraIconPaletteBuffers[palIndex], palette, sizeof(sGiftAuraIconPaletteBuffers[palIndex]));
+
+    tag = POKE_ICON_GIFT_AURA_PAL_TAG + palIndex;
+    spritePalette.data = sGiftAuraIconPaletteBuffers[palIndex];
+    spritePalette.tag = tag;
+    slot = IndexOfSpritePaletteTag(tag);
+    if (slot == 0xFF)
+        LoadSpritePalette(&spritePalette);
+    else
+        LoadSpritePaletteInSlot(&spritePalette, slot);
+
+    if (paletteTag != NULL)
+        *paletteTag = tag;
+    return TRUE;
 }
 
 void LoadMonIconPaletteShinyByIndex(u8 palIndex)
@@ -198,9 +262,11 @@ u8 CreateMonIcon(u16 species, void (*callback)(struct Sprite *), s16 x, s16 y, u
     u8 spriteId;
     u16 sanitizedSpecies = SanitizeSpeciesId(species);
     u16 iconSpecies = GetIconSpecies(species, personality);
+    u16 shadowPaletteTag = POKE_ICON_SHADOW_PAL_TAG;
+    u16 giftAuraPaletteTag = POKE_ICON_GIFT_AURA_PAL_TAG;
     const struct ShadowGraphicsOverride *shadow = GetShadowGraphicsOverride(iconSpecies);
     bool8 useShadowIcon = isShadow && shadow != NULL && shadow->icon != NULL;
-    bool8 hasShadowPalette = FALSE;
+    bool8 hasGiftAuraPalette = FALSE;
     struct MonIconSpriteTemplate iconTemplate =
     {
         .oam = &sMonIconOamData,
@@ -211,16 +277,17 @@ u8 CreateMonIcon(u16 species, void (*callback)(struct Sprite *), s16 x, s16 y, u
     };
 
     if (isShadow)
-        hasShadowPalette = TryLoadShadowMonIconPalette(iconSpecies);
+        LoadMonIconPaletteShadowPersonality(iconSpecies, personality, &shadowPaletteTag);
+    else if (IsGiftAuraPersonality(personality))
+        hasGiftAuraPalette = LoadMonIconPaletteGiftAuraPersonality(iconSpecies, personality, isShiny, &giftAuraPaletteTag);
 
-    if (useShadowIcon || hasShadowPalette)
+    if (isShadow)
     {
-        u8 palIndex = IndexOfSpritePaletteTag(POKE_ICON_SHADOW_PAL_TAG);
-        if (palIndex == 0xFF)
-            LoadSpritePalette(&gMonIconPaletteTable[gMonIconShadowPaletteIndex]);
-        else
-            LoadSpritePaletteInSlot(&gMonIconPaletteTable[gMonIconShadowPaletteIndex], palIndex);
-        iconTemplate.paletteTag = POKE_ICON_SHADOW_PAL_TAG;
+        iconTemplate.paletteTag = shadowPaletteTag;
+    }
+    else if (hasGiftAuraPalette)
+    {
+        iconTemplate.paletteTag = giftAuraPaletteTag;
     }
     else
     {
@@ -351,7 +418,16 @@ void FreeMonIconPalettes(void)
     for (i = 0; i < ARRAY_COUNT(gMonIconPaletteTable); i++)
         FreeSpritePaletteByTag(gMonIconPaletteTable[i].tag);
     for (i = 0; i < MON_ICON_BASE_PALETTE_COUNT; i++)
+        FreeSpritePaletteByTag(POKE_ICON_SHADOW_PAL_TAG + i);
+    for (i = 0; i < MON_ICON_BASE_PALETTE_COUNT; i++)
         FreeSpritePaletteByTag(POKE_ICON_SHINY_PAL_TAG + i);
+    for (i = 0; i < MON_ICON_BASE_PALETTE_COUNT; i++)
+        FreeSpritePaletteByTag(POKE_ICON_GIFT_AURA_PAL_TAG + i);
+    for (i = 0; i < POKE_ICON_SHADOW_UNIQUE_PAL_TAG_COUNT; i++)
+        FreeSpritePaletteByTag(POKE_ICON_SHADOW_UNIQUE_PAL_TAG_START + i);
+    FreeSpritePaletteByTag(POKE_ICON_SHADOW_MEOWTH_PAL_TAG);
+    FreeSpritePaletteByTag(POKE_ICON_SHADOW_MIMIKYU_PAL_TAG);
+    FreeSpritePaletteByTag(POKE_ICON_SHADOW_PANGORO_PAL_TAG);
 }
 
 // unused
@@ -366,9 +442,47 @@ void SafeFreeMonIconPalette(u16 species)
 void FreeMonIconPalette(u16 species)
 {
     u8 palIndex;
+    u16 dedicatedShadowTag = GetDedicatedShadowIconPaletteTag(species);
     palIndex = gSpeciesInfo[SanitizeSpeciesId(species)].iconPalIndex;
     FreeSpritePaletteByTag(gMonIconPaletteTable[palIndex].tag);
     FreeSpritePaletteByTag(POKE_ICON_SHINY_PAL_TAG + palIndex);
+    FreeSpritePaletteByTag(POKE_ICON_GIFT_AURA_PAL_TAG + palIndex);
+    if (dedicatedShadowTag != TAG_NONE)
+        FreeSpritePaletteByTag(dedicatedShadowTag);
+}
+
+static const u16 *GetGiftAuraIconPalette(u16 species, u32 personality, bool8 isShiny)
+{
+    if (isShiny || !IsGiftAuraPersonality(personality))
+        return NULL;
+
+    switch (SanitizeSpeciesId(species))
+    {
+    case SPECIES_RIOLU:
+        return gMonIconPalette_RioluGiftAura;
+    case SPECIES_LUCARIO:
+        return gMonPalette_LucarioGiftAura;
+    case SPECIES_LUCARIO_MEGA:
+        return gMonPalette_LucarioMegaGiftAura;
+    default:
+        return NULL;
+    }
+}
+
+static u16 GetDedicatedShadowIconPaletteTag(u16 species)
+{
+    switch (SanitizeSpeciesId(species))
+    {
+    case SPECIES_MEOWTH:
+        return POKE_ICON_SHADOW_MEOWTH_PAL_TAG;
+    case SPECIES_MIMIKYU:
+    case SPECIES_MIMIKYU_BUSTED:
+        return POKE_ICON_SHADOW_MIMIKYU_PAL_TAG;
+    case SPECIES_PANGORO:
+        return POKE_ICON_SHADOW_PANGORO_PAL_TAG;
+    default:
+        return TAG_NONE;
+    }
 }
 
 void SpriteCB_MonIcon(struct Sprite *sprite)
@@ -382,6 +496,9 @@ const u8 *GetMonIconTiles(u16 species, u32 personality)
 
     if (species > NUM_SPECIES)
         species = SPECIES_NONE;
+
+    if (species == SPECIES_RIOLU && IsGiftAuraPersonality(personality))
+        return gMonIcon_RioluGiftAura;
 
 #if P_GENDER_DIFFERENCES
     if (gSpeciesInfo[species].iconSpriteFemale != NULL && IsPersonalityFemale(species, personality))

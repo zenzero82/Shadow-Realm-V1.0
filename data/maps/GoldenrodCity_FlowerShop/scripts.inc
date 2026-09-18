@@ -40,7 +40,9 @@ GoldenrodCity_FlowerShop_Text_Lily:
 
 GoldenrodCity_FlowerShop_Text_Rose:
 	.string "I keep bright bouquets in the window.\n"
-	.string "CIPHER doesn't get to own the mood.$"
+	.string "If those black-uniformed creeps want\n"
+	.string "to scare people, they can glare at\n"
+	.string "the flowers first.$"
 
 GoldenrodCity_FlowerShop_Text_Poppy:
 	.string "My favorite flowers are the ones that\n"

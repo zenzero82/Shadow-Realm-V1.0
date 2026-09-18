@@ -1,3 +1,5 @@
+	.set SCRIPT_EFFECT_TAG, 2
+
 @ 'requests_effects' should be set to 1 if the command contains a call
 @ to 'Script_RequestEffects', which allows it to be analyzed with
 @ 'RunScriptImmediatelyUntilEffect'.
@@ -8,7 +10,7 @@
 	.if \requests_effects == 0
 	.4byte \value
 	.else
-	.4byte \value + ROM_SIZE
+	.4byte \value + SCRIPT_EFFECT_TAG
 	.endif
 	.else
 	enum \constant
@@ -253,6 +255,7 @@ gScriptCmdTable::
 	script_cmd_table_entry SCR_OP_DYNMULTIPUSH                  ScrCmd_dynmultipush,                requests_effects=1  @ 0xe4
 	script_cmd_table_entry SCR_OP_SETWILDSHADOWBATTLE           ScrCmd_setwildshadowbattle,         requests_effects=1  @ 0xe5
 	script_cmd_table_entry SCR_OP_SETSPEAKER                    ScrCmd_setspeaker,                  requests_effects=1  @ 0xe6
+	script_cmd_table_entry SCR_OP_COINMART                      ScrCmd_coinmart,                    requests_effects=1  @ 0xe7
 
 	.if ALLOCATE_SCRIPT_CMD_TABLE
 gScriptCmdTableEnd::

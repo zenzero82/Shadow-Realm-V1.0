@@ -1,13 +1,16 @@
 route10_powerplant_MapScripts::
+	map_script MAP_SCRIPT_ON_LOAD, route10_powerplant_EventScript_SyncPlasmaCleanup
 	map_script MAP_SCRIPT_ON_TRANSITION, route10_powerplant_EventScript_SyncPlasmaCleanup
 	.byte 0
 
 route10_powerplant_EventScript_SyncPlasmaCleanup::
-	checkflag FLAG_HIDE_ROUTE10_ZINZOLIN
+	checktrainerflag TRAINER_ZINZOLIN_POWER_PLANT
 	goto_if_eq route10_powerplant_EventScript_SyncPlasmaCleanup_Hide
+	setflag FLAG_ROUTE10_POWERPLANT_INVASION_ACTIVE
 	goto route10_powerplant_EventScript_SyncPlasmaCleanup_Show
 
 route10_powerplant_EventScript_SyncPlasmaCleanup_Hide::
+	clearflag FLAG_ROUTE10_POWERPLANT_INVASION_ACTIVE
 	setflag FLAG_HIDE_ROUTE10_POWERPLANT_PLASMA_1
 	setflag FLAG_HIDE_ROUTE10_POWERPLANT_PLASMA_2
 	hideobjectat LOCALID_ROUTE10_POWERPLANT_PLASMA_GRUNT_1, MAP_ROUTE10_POWERPLANT
@@ -20,6 +23,10 @@ route10_powerplant_EventScript_SyncPlasmaCleanup_Done::
 route10_powerplant_EventScript_SyncPlasmaCleanup_Show::
 	clearflag FLAG_HIDE_ROUTE10_POWERPLANT_PLASMA_1
 	clearflag FLAG_HIDE_ROUTE10_POWERPLANT_PLASMA_2
+	addobject LOCALID_ROUTE10_POWERPLANT_PLASMA_GRUNT_1
+	showobjectat LOCALID_ROUTE10_POWERPLANT_PLASMA_GRUNT_1, MAP_ROUTE10_POWERPLANT
+	addobject LOCALID_ROUTE10_POWERPLANT_PLASMA_GRUNT_2
+	showobjectat LOCALID_ROUTE10_POWERPLANT_PLASMA_GRUNT_2, MAP_ROUTE10_POWERPLANT
 	end
 
 route10_powerplant_EventScript_PlasmaGrunt1::
@@ -50,26 +57,43 @@ route10_powerplant_EventScript_PlasmaGrunt2_After::
 
 route10_powerplant_EventScript_Engineer1::
 	faceplayer
-	checkflag FLAG_HIDE_ROUTE10_ZINZOLIN
+	checkflag FLAG_ROUTE10_POWERPLANT_INVASION_ACTIVE
+	goto_if_eq route10_powerplant_EventScript_Engineer1_Before
+	checkflag FLAG_QUEST_THUNDERBIRD_COMPLETED
 	goto_if_eq route10_powerplant_EventScript_Engineer1_After
 	goto route10_powerplant_EventScript_Engineer1_Before
+route10_powerplant_EventScript_Engineer1_PreQuest:
+	setspeaker route10_powerplant_Speaker_Engineer
+	msgbox route10_powerplant_Text_Engineer1_PreQuest, MSGBOX_NPC
+	end
 route10_powerplant_EventScript_Engineer1_After:
 	setspeaker route10_powerplant_Speaker_Engineer
 	msgbox route10_powerplant_Text_Engineer1_After, MSGBOX_NPC
 	end
 route10_powerplant_EventScript_Engineer1_Before:
+	checkflag FLAG_ROUTE10_POWERPLANT_INVASION_ACTIVE
+	goto_if_eq route10_powerplant_EventScript_Engineer1_Before_ShowInvasion
+	goto route10_powerplant_EventScript_Engineer1_PreQuest
+route10_powerplant_EventScript_Engineer1_Before_ShowInvasion:
 	setspeaker route10_powerplant_Speaker_Engineer
 	msgbox route10_powerplant_Text_Engineer1, MSGBOX_NPC
 	end
 
 route10_powerplant_EventScript_Engineer2::
 	faceplayer
-	checkflag FLAG_HIDE_ROUTE10_ZINZOLIN
+	checkflag FLAG_ROUTE10_POWERPLANT_INVASION_ACTIVE
+	goto_if_eq route10_powerplant_EventScript_Engineer2_Before
+	checkflag FLAG_QUEST_THUNDERBIRD_COMPLETED
 	goto_if_eq route10_powerplant_EventScript_Engineer2_After
 	goto route10_powerplant_EventScript_Engineer2_Before
+route10_powerplant_EventScript_Engineer2_PreQuest:
+	setspeaker route10_powerplant_Speaker_Engineer
+	msgbox route10_powerplant_Text_Engineer2_PreQuest, MSGBOX_NPC
+	end
 route10_powerplant_EventScript_Engineer2_After:
 	setspeaker route10_powerplant_Speaker_Engineer
 	msgbox route10_powerplant_Text_Engineer2_After, MSGBOX_NPC
+	setflag FLAG_QUEST_MACHINE_PART_REVEALED
 	checkflag FLAG_QUEST_MACHINE_PART_STARTED
 	goto_if_eq route10_powerplant_EventScript_Engineer2_After_Done
 	setflag FLAG_QUEST_MACHINE_PART_STARTED
@@ -77,20 +101,34 @@ route10_powerplant_EventScript_Engineer2_After:
 route10_powerplant_EventScript_Engineer2_After_Done:
 	end
 route10_powerplant_EventScript_Engineer2_Before:
+	checkflag FLAG_ROUTE10_POWERPLANT_INVASION_ACTIVE
+	goto_if_eq route10_powerplant_EventScript_Engineer2_Before_ShowInvasion
+	goto route10_powerplant_EventScript_Engineer2_PreQuest
+route10_powerplant_EventScript_Engineer2_Before_ShowInvasion:
 	setspeaker route10_powerplant_Speaker_Engineer
 	msgbox route10_powerplant_Text_Engineer2, MSGBOX_NPC
 	end
 
 route10_powerplant_EventScript_Engineer3::
 	faceplayer
-	checkflag FLAG_HIDE_ROUTE10_ZINZOLIN
+	checkflag FLAG_ROUTE10_POWERPLANT_INVASION_ACTIVE
+	goto_if_eq route10_powerplant_EventScript_Engineer3_Before
+	checkflag FLAG_QUEST_THUNDERBIRD_COMPLETED
 	goto_if_eq route10_powerplant_EventScript_Engineer3_After
 	goto route10_powerplant_EventScript_Engineer3_Before
+route10_powerplant_EventScript_Engineer3_PreQuest:
+	setspeaker route10_powerplant_Speaker_Engineer
+	msgbox route10_powerplant_Text_Engineer3_PreQuest, MSGBOX_NPC
+	end
 route10_powerplant_EventScript_Engineer3_After:
 	setspeaker route10_powerplant_Speaker_Engineer
 	msgbox route10_powerplant_Text_Engineer3_After, MSGBOX_NPC
 	end
 route10_powerplant_EventScript_Engineer3_Before:
+	checkflag FLAG_ROUTE10_POWERPLANT_INVASION_ACTIVE
+	goto_if_eq route10_powerplant_EventScript_Engineer3_Before_ShowInvasion
+	goto route10_powerplant_EventScript_Engineer3_PreQuest
+route10_powerplant_EventScript_Engineer3_Before_ShowInvasion:
 	setspeaker route10_powerplant_Speaker_Engineer
 	msgbox route10_powerplant_Text_Engineer3, MSGBOX_NPC
 	end
@@ -134,14 +172,30 @@ route10_powerplant_Text_Engineer1:
 	.string "ZINZOLIN's crew is messing with\l"
 	.string "our equipment.$"
 
+route10_powerplant_Text_Engineer1_PreQuest:
+	.string "A few rough-looking ROCKET grunts\n"
+	.string "showed up earlier and started\l"
+	.string "surveying the plant.$"
+
 route10_powerplant_Text_Engineer2:
 	.string "They're trying to lure the\n"
 	.string "LEGENDARY ZAPDOS here.\l"
 	.string "This place won't survive it.$"
 
+route10_powerplant_Text_Engineer2_PreQuest:
+	.string "They didn't steal anything.\n"
+	.string "Just stared at our systems and\l"
+	.string "kept whispering to each other.$"
+
 route10_powerplant_Text_Engineer3:
 	.string "TEAM PLASMA took over the plant.\n"
 	.string "We can't stop them without help.$"
+
+route10_powerplant_Text_Engineer3_PreQuest:
+	.string "Before leaving, I heard one of\n"
+	.string "them mutter about a takeover.\p"
+	.string "Then the whole group just walked\n"
+	.string "out like they were planning ahead.$"
 
 route10_powerplant_Text_Engineer1_After:
 	.string "You drove TEAM PLASMA out!\n"

@@ -20,6 +20,8 @@ enum
     RIBBONS_MON_LIST_FUNC_OPEN_RIBBONS_SUMMARY
 };
 
+typedef u8 ALIGNED(4) PokenavTilemapBuffer[BG_SCREEN_SIZE];
+
 
 struct Pokenav_RibbonsMonList
 {
@@ -39,7 +41,7 @@ struct Pokenav_RibbonsMonMenu
     u32 loopedTaskId;
     u16 winid;
     bool32 fromSummary;
-    u8 buff[BG_SCREEN_SIZE];
+    PokenavTilemapBuffer buff;
 };
 
 static u32 HandleRibbonsMonListInput_WaitListInit(struct Pokenav_RibbonsMonList *);

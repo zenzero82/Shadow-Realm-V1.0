@@ -1,11 +1,84 @@
 GoldenrodCity_UndergroundStorage_MapScripts::
+	map_script MAP_SCRIPT_ON_LOAD, GoldenrodCity_UndergroundStorage_OnLoad
 	map_script MAP_SCRIPT_ON_TRANSITION, GoldenrodCity_UndergroundStorage_OnTransition
 	.byte 0
 
+#define LOCALID_GOLDENROD_UNDERGROUND_STORAGE_ROCKET 1
+
+GoldenrodCity_UndergroundStorage_Speaker_Rocket:
+	.string "ROCKET GRUNT$"
+
+GoldenrodCity_UndergroundStorage_OnLoad::
+	call GoldenrodCity_UndergroundStorage_EventScript_SyncRocketGrunt
+	end
+
 GoldenrodCity_UndergroundStorage_OnTransition::
 	goto_if_set FLAG_GOLDENROD_CIPHER_DISGUISE_ACTIVE, GoldenrodCity_UndergroundStorage_OnTransition_ApplyDisguise
+	call GoldenrodCity_UndergroundStorage_EventScript_SyncRocketGrunt
 	end
 
 GoldenrodCity_UndergroundStorage_OnTransition_ApplyDisguise:
 	special Special_ApplyCipherDisguise
+	call GoldenrodCity_UndergroundStorage_EventScript_SyncRocketGrunt
 	end
+
+GoldenrodCity_UndergroundStorage_EventScript_SyncRocketGrunt::
+	checktrainerflag TRAINER_GOLDENROD_UNDERGROUND_STORAGE_ROCKET
+	goto_if_eq GoldenrodCity_UndergroundStorage_EventScript_SyncRocketGrunt_Hide
+	clearflag FLAG_HIDE_GOLDENROD_UNDERGROUND_STORAGE_ROCKET
+	addobject LOCALID_GOLDENROD_UNDERGROUND_STORAGE_ROCKET
+	showobjectat LOCALID_GOLDENROD_UNDERGROUND_STORAGE_ROCKET, MAP_GOLDENROD_CITY_UNDERGROUND_STORAGE
+	return
+
+GoldenrodCity_UndergroundStorage_EventScript_SyncRocketGrunt_Hide:
+	setflag FLAG_HIDE_GOLDENROD_UNDERGROUND_STORAGE_ROCKET
+	hideobjectat LOCALID_GOLDENROD_UNDERGROUND_STORAGE_ROCKET, MAP_GOLDENROD_CITY_UNDERGROUND_STORAGE
+	removeobject LOCALID_GOLDENROD_UNDERGROUND_STORAGE_ROCKET
+	return
+
+GoldenrodCity_UndergroundStorage_EventScript_HideRocketGrunt::
+	setflag FLAG_HIDE_GOLDENROD_UNDERGROUND_STORAGE_ROCKET
+	hideobjectat LOCALID_GOLDENROD_UNDERGROUND_STORAGE_ROCKET, MAP_GOLDENROD_CITY_UNDERGROUND_STORAGE
+	removeobject LOCALID_GOLDENROD_UNDERGROUND_STORAGE_ROCKET
+	return
+
+GoldenrodCity_UndergroundStorage_EventScript_RocketGrunt::
+	lock
+	faceplayer
+	goto_if_set FLAG_BADGE19_GET, GoldenrodCity_UndergroundStorage_EventScript_RocketGrunt_Battle
+	setspeaker GoldenrodCity_UndergroundStorage_Speaker_Rocket
+	msgbox GoldenrodCity_UndergroundStorage_Text_RocketGrunt_BeforeWhitney, MSGBOX_DEFAULT
+	release
+	end
+
+GoldenrodCity_UndergroundStorage_EventScript_RocketGrunt_Battle::
+	setspeaker GoldenrodCity_UndergroundStorage_Speaker_Rocket
+	trainerbattle_single TRAINER_GOLDENROD_UNDERGROUND_STORAGE_ROCKET, GoldenrodCity_UndergroundStorage_Text_RocketGrunt_AfterWhitney, GoldenrodCity_UndergroundStorage_Text_RocketGrunt_Defeat, GoldenrodCity_UndergroundStorage_EventScript_RocketGrunt_After
+	end
+
+GoldenrodCity_UndergroundStorage_EventScript_RocketGrunt_After::
+	setspeaker GoldenrodCity_UndergroundStorage_Speaker_Rocket
+	msgbox GoldenrodCity_UndergroundStorage_Text_RocketGrunt_PostBattle, MSGBOX_DEFAULT
+	closemessage
+	fadescreenswapbuffers FADE_TO_BLACK
+	call GoldenrodCity_UndergroundStorage_EventScript_HideRocketGrunt
+	fadescreenswapbuffers FADE_FROM_BLACK
+	release
+	end
+
+GoldenrodCity_UndergroundStorage_Text_RocketGrunt_BeforeWhitney:
+	.string "Quit sticking your nose in ROCKET\n"
+	.string "affairs and get out of here.$"
+
+GoldenrodCity_UndergroundStorage_Text_RocketGrunt_AfterWhitney:
+	.string "You're on my last nerve, brat.\p"
+	.string "If you keep poking around down here,\n"
+	.string "I'll make sure you regret it!$"
+
+GoldenrodCity_UndergroundStorage_Text_RocketGrunt_Defeat:
+	.string "How are you this stubborn...?$"
+
+GoldenrodCity_UndergroundStorage_Text_RocketGrunt_PostBattle:
+	.string "Even if you manage to free the\n"
+	.string "captives, you will still fall to\n"
+	.string "Cipher!$"

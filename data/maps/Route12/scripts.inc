@@ -20,6 +20,7 @@ Route12_Speaker_Fisherman_5:
 	.string "GLENN$"
 
 Route12_EventScript_Fisherman_Bridge::
+	lock
 	faceplayer
 	goto_if_set FLAG_RECEIVED_OLD_ROD, Route12_EventScript_Fisherman_Bridge_AfterRod
 	setspeaker Route12_Speaker_Fisherman_Bridge
@@ -29,11 +30,13 @@ Route12_EventScript_Fisherman_Bridge::
 	setflag FLAG_RECEIVED_OLD_ROD
 	setspeaker Route12_Speaker_Fisherman_Bridge
 	msgbox Route12_Text_Fisherman_Bridge_GaveOldRod, MSGBOX_DEFAULT
+	release
 	end
 
 Route12_EventScript_Fisherman_Bridge_AfterRod::
 	setspeaker Route12_Speaker_Fisherman_Bridge
 	msgbox Route12_Text_Fisherman_Bridge_AfterRod, MSGBOX_NPC
+	release
 	end
 
 Route12_EventScript_Fisherman_1::

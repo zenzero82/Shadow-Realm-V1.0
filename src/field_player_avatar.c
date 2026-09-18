@@ -6,6 +6,7 @@
 #include "field_camera.h"
 #include "field_effect.h"
 #include "field_effect_helpers.h"
+#include "field_door.h"
 #include "field_screen_effect.h"
 #include "field_move.h"
 #include "field_player_avatar.h"
@@ -1378,7 +1379,7 @@ static void PlayCollisionSoundIfNotFacingWarp(u8 direction)
         {
             PlayerGetDestCoords(&x, &y);
             MoveCoords(direction, &x, &y);
-            if (MetatileBehavior_IsWarpDoor(MapGridGetMetatileBehaviorAt(x, y)))
+            if (FieldIsWarpDoorAt(x, y))
                 return;
         }
         PlaySE(SE_WALL_HIT);

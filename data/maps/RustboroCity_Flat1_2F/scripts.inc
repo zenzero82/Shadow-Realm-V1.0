@@ -75,24 +75,50 @@ RustboroCity_Flat1_2F_EventScript_WaldasMom::
 	msgbox RustboroCity_Flat1_2F_Text_ComingUpWithMealsIsHard, MSGBOX_NPC
 	end
 
+RustboroCity_Flat1_2F_EventScript_Walda::
+	faceplayer
+	setspeaker RustboroCity_Flat1_2F_Speaker_Walda
+	msgbox RustboroCity_Flat1_2F_Text_Walda, MSGBOX_NPC
+	end
+
+RustboroCity_Flat1_2F_EventScript_Boy::
+	faceplayer
+	setspeaker RustboroCity_Flat1_2F_Speaker_Theo
+	msgbox RustboroCity_Flat1_2F_Text_Boy, MSGBOX_NPC
+	end
+
 RustboroCity_Flat1_2F_Speaker_Pepper:
 	.string "Pepper$"
 
 RustboroCity_Flat1_2F_Speaker_Holly:
 	.string "Holly$"
 
+RustboroCity_Flat1_2F_Speaker_Walda:
+	.string "Walda$"
+
+RustboroCity_Flat1_2F_Speaker_Theo:
+	.string "Theo$"
+
 RustboroCity_Flat1_2F_EventScript_PokeDoll::
 	msgbox RustboroCity_Flat1_2F_Text_ItsAPokemonPlushDoll, MSGBOX_SIGN
 	end
 
 RustboroCity_Flat1_2F_Text_ComingUpWithMealsIsHard:
-	.string "Oh, it's so hard every day…\p"
-	.string "What's hard?\n"
-	.string "You need to ask?\p"
-	.string "It's trying to figure out what to\n"
-	.string "make for meals every day.\p"
-	.string "It really isn't easy coming up with\n"
-	.string "meals every day.$"
+	.string "Every day, I try to make meals that\n"
+	.string "keep everyone smiling.\p"
+	.string "In RUSTBORO, even dinner becomes\n"
+	.string "research if you think too hard.$"
+
+RustboroCity_Flat1_2F_Text_Walda:
+	.string "WALDA stares at you quietly.\p"
+	.string "Maybe the right funny phrase would\n"
+	.string "make her laugh.$"
+
+RustboroCity_Flat1_2F_Text_Boy:
+	.string "Dad says a single good idea can change\n"
+	.string "a whole room.\p"
+	.string "I think that's why DEVON people never\n"
+	.string "stop tinkering.$"
 
 RustboroCity_Flat1_2F_Text_HelloDoYouKnowFunnyPhrase:
 	.string "Oh, hello!\n"

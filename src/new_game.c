@@ -109,6 +109,8 @@ static void SetDefaultOptions(void)
     gSaveBlock2Ptr->optionsAutoSave = OPTIONS_AUTOSAVE_OFF;
     gSaveBlock2Ptr->optionsEvIvEditor = OPTIONS_EV_IV_EDITOR_OFF;
     gSaveBlock2Ptr->optionsAutoRun = OPTIONS_AUTO_RUN_ON;
+    gSaveBlock2Ptr->optionsOverworldSpeed = OPTIONS_OVERWORLD_SPEED_1X;
+    gSaveBlock2Ptr->optionsBattleSpeed = OPTIONS_BATTLE_SPEED_1X;
 }
 
 static void ClearPokedexFlags(void)
@@ -215,6 +217,7 @@ void NewGameInitData(void)
     ClearRankingHallRecords();
     InitMatchCallCounters();
     ClearMysteryGift();
+    ZenwoosBlessing_ApplyPendingNewGameCode();
     WipeTrainerNameRecords();
     ResetTrainerHillResults();
     ResetContestLinkResults();

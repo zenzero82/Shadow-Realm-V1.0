@@ -60,7 +60,7 @@
 #define TAG_MOVE_TYPE_PAL 0xD7F8
 #define TAG_MOVE_TYPE_ICON 0xD7FB
 #define MOVE_TYPE_ICON_SIZE 0x100
-#define MOVE_TYPE_PAL_SLOT 11
+#define MOVE_TYPE_PAL_SLOT 13
 
 static u8 sLoadedMoveTypeIcon;
 static u8 sMoveTypePaletteRefreshBattler;
@@ -75,6 +75,7 @@ static const struct SpritePalette sMoveTypeIconSpritePal =
 };
 
 static void DestroyMoveMenuIcons(void);
+static void FreeMoveMenuIconPalettes(void);
 void ReserveMoveTypeIconPaletteSlot(void);
 static void RefreshCategoryIconPalette(void);
 
@@ -139,7 +140,10 @@ static u8 GetMoveTypeIconPaletteNum(u32 type)
         return 0xFF;
     palNum = IndexOfSpritePaletteTag(TAG_MOVE_TYPE_PAL);
     if (palNum == 0xFF)
-        palNum = LoadSpritePalette(&sMoveTypeIconSpritePal);
+    {
+        ReserveMoveTypeIconPaletteSlot();
+        palNum = IndexOfSpritePaletteTag(TAG_MOVE_TYPE_PAL);
+    }
     if (palNum != 0xFF)
     {
         LoadPalette(gMoveTypes_Pal + (offset * 16), OBJ_PLTT_ID(palNum), PLTT_SIZE_4BPP);
@@ -202,8 +206,16 @@ static void DestroyMoveMenuIcons(void)
 
     if (IsDoubleBattle())
     {
-        FreeSpritePaletteByTag(TAG_MOVE_TYPE_PAL);
         FreeSpriteTilesByTag(gSpriteSheet_CategoryIcons.tag);
+        FreeMoveMenuIconPalettes();
+    }
+}
+
+static void FreeMoveMenuIconPalettes(void)
+{
+    if (IsDoubleBattle())
+    {
+        FreeSpritePaletteByTag(TAG_MOVE_TYPE_PAL);
         FreeSpritePaletteByTag(gSpritePal_CategoryIcons.tag);
     }
 }
@@ -212,10 +224,7 @@ void ReserveMoveTypeIconPaletteSlot(void)
 {
     u8 palNum = IndexOfSpritePaletteTag(TAG_MOVE_TYPE_PAL);
 
-    if (palNum != 0xFF)
-        return;
-
-    if (MOVE_TYPE_PAL_SLOT >= gReservedSpritePaletteCount)
+    if (palNum == 0xFF && MOVE_TYPE_PAL_SLOT >= gReservedSpritePaletteCount)
     {
         u16 slotTag = GetSpritePaletteTagByPaletteNum(MOVE_TYPE_PAL_SLOT);
 
@@ -224,7 +233,10 @@ void ReserveMoveTypeIconPaletteSlot(void)
     }
 
     if (palNum == 0xFF)
-        LoadSpritePalette(&sMoveTypeIconSpritePal);
+        palNum = LoadSpritePalette(&sMoveTypeIconSpritePal);
+
+    if (palNum != 0xFF)
+        LoadPalette(gMoveTypes_Pal, OBJ_PLTT_ID(palNum), PLTT_SIZE_4BPP);
 }
 
 static void RefreshCategoryIconPalette(void)
@@ -1043,11 +1055,13 @@ void HandleInputChooseMove(u32 battler)
     if (sMoveTypePaletteRefreshBattler == battler)
     {
         MoveSelectionDisplayMoveType(battler);
+        RefreshCategoryIconPalette();
         sMoveTypePaletteRefreshBattler = 0xFF;
     }
     if (sMoveTypePaletteRefreshFrames != 0)
     {
         MoveSelectionDisplayMoveType(battler);
+        RefreshCategoryIconPalette();
         sMoveTypePaletteRefreshFrames--;
     }
 
@@ -1783,10 +1797,13 @@ static void SwitchIn_TryShinyAnimShowHealthbox(u32 battler)
 {
     if (SwitchIn_TryShinyAnimUtil(battler))
     {
+        u32 partner = BATTLE_PARTNER(battler);
+
         if (GetBattlerCoordsIndex(battler) == BATTLE_COORDS_SINGLES)
             ShdwLoadHealthboxSprite();
-        ShdwLoadHealthboxPalette(battler);
         UpdateHealthboxAttribute(gHealthboxSpriteIds[battler], GetBattlerMon(battler), HEALTHBOX_ALL);
+        if (IsDoubleBattle() && IsBattlerAlive(partner) && gHealthboxSpriteIds[partner] < MAX_SPRITES)
+            UpdateHealthboxAttribute(gHealthboxSpriteIds[partner], GetBattlerMon(partner), HEALTHBOX_ALL);
         ShadowHud_Clear(battler);
         ShadowHud_SyncForBattler(battler);
         StartHealthboxSlideIn(battler);
@@ -2226,7 +2243,6 @@ static void MoveSelectionDisplayMoveType(u32 battler)
                 gSprites[gCategoryIconSpriteId].callback = SpriteCB_ShowMoveMenuIconNextFrame;
             }
         }
-        if (IsDoubleBattle())
         {
             u32 palIndex = IndexOfSpritePaletteTag(gSpritePal_CategoryIcons.tag);
 
@@ -2306,7 +2322,6 @@ static void MoveSelectionDisplayMoveDescription(u32 battler)
             gSprites[gCategoryIconSpriteId].callback = SpriteCB_ShowMoveMenuIconNextFrame;
         }
     }
-    if (IsDoubleBattle())
     {
         u32 palIndex = IndexOfSpritePaletteTag(gSpritePal_CategoryIcons.tag);
 
@@ -2447,7 +2462,7 @@ static void PrintLinkStandbyMsg(void)
 static void PlayerHandleLoadMonSprite(u32 battler)
 {
     BattleLoadMonSpriteGfx(GetBattlerMon(battler), battler);
-    gSprites[gBattlerSpriteIds[battler]].oam.paletteNum = battler;
+    gSprites[gBattlerSpriteIds[battler]].oam.paletteNum = GetBattlerPosition(battler);
     gBattlerControllerFuncs[battler] = CompleteOnBattlerSpritePosX_0;
 }
 
@@ -2575,6 +2590,8 @@ static void PlayerHandlePause(u32 battler)
 static void PlayerHandleMoveAnimation(u32 battler)
 {
     DestroyMoveMenuIcons();
+    FreeMoveMenuIconPalettes();
+    BattleInterface_FreeInactiveWindowPalettes();
     BtlController_HandleMoveAnimation(battler, TRUE);
 }
 
@@ -2624,6 +2641,12 @@ static void PlayerHandleChooseAction(u32 battler)
     s32 i;
 
     DestroyMoveMenuIcons();
+    if (IsDoubleBattle())
+    {
+        ReserveAbilityPopupPaletteSlot();
+        BattleInterface_RestoreAbilityPopupPalette();
+        ReserveLastUsedBallPaletteSlot();
+    }
     gBattlerControllerFuncs[battler] = HandleChooseActionAfterDma3;
     BattleTv_ClearExplosionFaintCause();
     if (gBattleTypeFlags & BATTLE_TYPE_TRAINER)
@@ -2701,6 +2724,13 @@ void HandleChooseMoveAfterDma3(u32 battler)
     {
         gBattle_BG0_X = 0;
         gBattle_BG0_Y = DISPLAY_HEIGHT * 2;
+        if (IsDoubleBattle())
+        {
+            ReserveAbilityPopupPaletteSlot();
+            BattleInterface_RestoreAbilityPopupPalette();
+            ReserveMoveTypeIconPaletteSlot();
+            ReserveCategoryIconPaletteSlot();
+        }
         if (B_SHOW_EFFECTIVENESS)
             MoveSelectionDisplayMoveEffectiveness(CheckTargetTypeEffectiveness(battler), battler);
         else
@@ -2739,9 +2769,12 @@ void PlayerHandleChooseMove(u32 battler)
         sMoveTypePaletteRefreshBattler = 0xFF;
         sMoveTypePaletteRefreshFrames = 0;
         if (IsDoubleBattle())
+        {
+            BattleInterface_DiscardTransientWindows();
             TryToAddMoveInfoWindow();
+        }
         ReserveMoveTypeIconPaletteSlot();
-        CategoryIcons_LoadSpritesGfx();
+        ReserveCategoryIconPaletteSlot();
         InitMoveSelectionsVarsAndStrings(battler);
         gBattleStruct->gimmick.playerSelect = FALSE;
         if (!IsDoubleBattle())
@@ -3109,7 +3142,8 @@ static void MoveSelectionDisplayMoveEffectiveness(u32 foeEffectiveness, u32 batt
     static const u8 superEffective4xText[] =  _("{COLOR LIGHT_GREEN}{SHADOW 13}{UP_ARROW_2}4x{COLOR 14}{SHADOW 13}");
     static const u8 notVeryEffectiveText[] =  _("{COLOR 1}{SHADOW 13}{DOWN_ARROW}.5x{COLOR 14}{SHADOW 13}");
     static const u8 normalEffectiveText[] =  _("1x");
-    static const u8 immuneIcon[] =  _("{COLOR RED}{SHADOW LIGHT_RED}X{COLOR DARK_GRAY}{SHADOW LIGHT_GRAY}");
+    // The battle window uses its own palette: indices 1 and 2 are red and dark red.
+    static const u8 immuneIcon[] =  _("{COLOR 1}{SHADOW 2}X{COLOR 14}{SHADOW 13}");
     struct ChooseMoveStruct *moveInfo = (struct ChooseMoveStruct *)(&gBattleResources->bufferA[battler][4]);
     u8 *txtPtr;
 

@@ -553,6 +553,7 @@ static void OpponentHandleTrainerSlideBack(u32 battler)
 
 static void OpponentHandleMoveAnimation(u32 battler)
 {
+    BattleInterface_FreeInactiveWindowPalettes();
     BtlController_HandleMoveAnimation(battler, FALSE);
 }
 

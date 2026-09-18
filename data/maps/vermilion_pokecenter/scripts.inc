@@ -26,6 +26,7 @@ vermilion_pokecenter_EventScript_Chansey::
 
 vermilion_pokecenter_OnTransition:
 	setrespawn HEAL_LOCATION_VERMILION_CITY
+	call CableClub_EventScript_HideOrShowMysteryGiftMan
 	end
 
 vermilion_pokecenter_EventScript_Fisherman::
@@ -67,7 +68,7 @@ vermilion_pokecenter_Text_Bookshelf1:
 	.string "A brochure for the S.S. ANNE.$"
 
 vermilion_pokecenter_Text_Bookshelf2:
-	.string "VERMILION PORT schedules.$"
+	.string "A map of the KANTO ferry routes.$"
 
 vermilion_pokecenter_Text_Fisherman:
 	.string "I was hoping to head through the cave,\n"
@@ -76,10 +77,10 @@ vermilion_pokecenter_Text_Fisherman:
 
 vermilion_pokecenter_Text_Cook:
 	.string "The nurses hear every rumor in town.\p"
-	.string "Today it's the harbor. Tomorrow it\n"
-	.string "will be LT. SURGE again.$"
+	.string "Around here it is usually LT. SURGE,\n"
+	.string "the S.S. ANNE, or both.$"
 
 vermilion_pokecenter_Text_BugCatcher:
 	.string "I wanted to visit DIGLETT'S CAVE,\n"
-	.string "but between the SNORLAX and the port\l"
-	.string "commotion, I'm staying put.$"
+	.string "but the SNORLAX on the road is making\l"
+	.string "me stay put.$"

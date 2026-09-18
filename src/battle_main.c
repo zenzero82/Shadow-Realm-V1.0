@@ -96,6 +96,11 @@ static void CB2_HandleStartBattle(void);
 static void TryCorrectShedinjaLanguage(struct Pokemon *mon);
 static u8 CreateNPCTrainerParty(struct Pokemon *party, u16 trainerNum, bool8 firstTrainer);
 static void BattleMainCB1(void);
+static void RunBattleSoftwareTick(void);
+static void AdvanceBattleFrameRng(void);
+static bool32 CanRunExtraBattleTick(void);
+static bool32 InBattleChoosingMoves(void);
+static u32 GetBattleSpeedScale(void);
 static void CB2_EndLinkBattle(void);
 static void EndLinkBattleInSteps(void);
 static void CB2_InitAskRecordBattle(void);
@@ -597,7 +602,6 @@ static void CB2_InitBattleInternal(void)
     {
         ReserveOpponentBallThrowPaletteSlot();
         ReserveLastUsedBallPaletteSlot();
-        ReserveAbilityPopupPaletteSlot();
     }
     SetVBlankCallback(VBlankCB_Battle);
     SetUpBattleVarsAndBirchZigzagoon();
@@ -1800,11 +1804,37 @@ static void CB2_HandleStartMultiBattle(void)
 
 void BattleMainCB2(void)
 {
-    AnimateSprites();
-    BuildOamBuffer();
-    RunTextPrinters();
-    UpdatePaletteFade();
-    RunTasks();
+    u32 speedScale;
+    u32 tick;
+
+    speedScale = GetBattleSpeedScale();
+
+    if (!CanRunExtraBattleTick())
+        speedScale = 1;
+
+    // callback1 has already run once in CallCallbacks. Each pass here finishes
+    // one logical battle tick; only the real VBlank uploads the final state.
+    for (tick = 0; tick < speedScale; tick++)
+    {
+        RunBattleSoftwareTick();
+
+        if (!gMain.inBattle
+         || gMain.callback1 != BattleMainCB1
+         || gMain.callback2 != BattleMainCB2)
+            return;
+
+        AdvanceBattleFrameRng();
+
+        if (tick + 1 >= speedScale || !CanRunExtraBattleTick())
+            break;
+
+        BattleMainCB1();
+
+        if (!gMain.inBattle
+         || gMain.callback1 != BattleMainCB1
+         || gMain.callback2 != BattleMainCB2)
+            return;
+    }
 
     if (JOY_HELD(B_BUTTON) && gBattleTypeFlags & BATTLE_TYPE_RECORDED && RecordedBattle_CanStopPlayback())
     {
@@ -1814,6 +1844,74 @@ void BattleMainCB2(void)
         BeginNormalPaletteFade(PALETTES_ALL, 0, 0, 16, RGB_BLACK);
         SetMainCallback2(CB2_QuitRecordedBattle);
     }
+}
+
+static void RunBattleSoftwareTick(void)
+{
+    AnimateSprites();
+    BuildOamBuffer();
+    RunTextPrinters();
+    UpdatePaletteFade();
+    RunTasks();
+}
+
+static u32 GetBattleSpeedScale(void)
+{
+    if (JOY_HELD(L_BUTTON))
+        return 1;
+
+    switch (gSaveBlock2Ptr->optionsBattleSpeed)
+    {
+    case OPTIONS_BATTLE_SPEED_3X:
+        return 3;
+    case OPTIONS_BATTLE_SPEED_2X:
+        return 2;
+    case OPTIONS_BATTLE_SPEED_1X:
+    default:
+        return 1;
+    }
+}
+
+static void AdvanceBattleFrameRng(void)
+{
+    // Ordinary battles previously advanced this RNG twice per physical frame,
+    // once in each VBlank handler. Keep that cadence per logical battle tick.
+    if (!gTestRunnerEnabled
+     && !(gBattleTypeFlags & (BATTLE_TYPE_LINK | BATTLE_TYPE_FRONTIER | BATTLE_TYPE_RECORDED)))
+    {
+        AdvanceRandom();
+        AdvanceRandom();
+    }
+}
+
+static bool32 CanRunExtraBattleTick(void)
+{
+    if (gBattleTypeFlags & BATTLE_TYPE_LINK)
+        return FALSE;
+
+    if (!gMain.inBattle
+     || gMain.callback1 != BattleMainCB1
+     || gMain.callback2 != BattleMainCB2)
+        return FALSE;
+
+    // Never accelerate command selection; one physical input sample must only
+    // be consumed by one logical menu frame.
+    if (InBattleChoosingMoves())
+        return FALSE;
+
+    // Palette changes need a VBlank transfer between logical updates.
+    if (gPaletteFade.active || IsPaletteFadeTransferPending())
+        return FALSE;
+
+    // Capture effects intentionally synchronize animation states with audio.
+    if (gBattleSpritesDataPtr != NULL
+     && gBattleSpritesDataPtr->animationData != NULL
+     && gBattleSpritesDataPtr->animationData->captureSuccessAnimActive)
+        return FALSE;
+    if (gBattleResults.caughtMonSpecies != SPECIES_NONE)
+        return FALSE;
+
+    return TRUE;
 }
 
 static void FreeRestoreBattleData(void)
@@ -2142,10 +2240,6 @@ void CreateTrainerPartyForPlayer(void)
 
 void VBlankCB_Battle(void)
 {
-    // Change gRngSeed every vblank unless the battle could be recorded.
-    if (!(gBattleTypeFlags & (BATTLE_TYPE_LINK | BATTLE_TYPE_FRONTIER | BATTLE_TYPE_RECORDED)))
-        AdvanceRandom();
-
     SetGpuReg(REG_OFFSET_BG0HOFS, gBattle_BG0_X);
     SetGpuReg(REG_OFFSET_BG0VOFS, gBattle_BG0_Y);
     SetGpuReg(REG_OFFSET_BG1HOFS, gBattle_BG1_X);
@@ -3070,6 +3164,11 @@ void BeginBattleIntro(void)
     gBattleCommunication[1] = 0;
     gBattleStruct->introState = 0;
     gBattleMainFunc = DoBattleIntro;
+}
+
+static bool32 InBattleChoosingMoves(void)
+{
+    return gBattleMainFunc == HandleTurnActionSelectionState;
 }
 
 static void BattleMainCB1(void)
@@ -5950,6 +6049,9 @@ u32 TrySetAteType(u32 move, u32 battlerAtk, u32 attackerAbility)
         break;
     case ABILITY_GALVANIZE:
         ateType = TYPE_ELECTRIC;
+        break;
+    case ABILITY_DRAGONIZE:
+        ateType = TYPE_DRAGON;
         break;
     default:
         ateType = TYPE_NONE;

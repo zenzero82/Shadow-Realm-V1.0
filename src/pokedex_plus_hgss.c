@@ -297,12 +297,6 @@ static EWRAM_DATA struct PokedexView *sPokedexView = NULL;
 static EWRAM_DATA u16 sLastSelectedPokemon = 0;
 static EWRAM_DATA u8 sPokeBallRotation = 0;
 static EWRAM_DATA struct PokedexListItem *sPokedexListItem = NULL;
-static EWRAM_DATA struct Pokemon sPokedexPartyBackup[PARTY_SIZE];
-static EWRAM_DATA u8 sPokedexPartyBackupCount;
-static EWRAM_DATA bool8 sPokedexPartyBackupValid;
-static EWRAM_DATA bool8 sRegionalDexSpeciesBuilt[REGIONS_COUNT] = {FALSE};
-static EWRAM_DATA bool8 sRegionalDexSpeciesAllBuilt = FALSE;
-static EWRAM_DATA bool8 sRegionalDexSpecies[REGIONS_COUNT][NUM_SPECIES] = {FALSE};
 //Pokedex Plus HGSS_Ui
 #define MOVES_COUNT_TOTAL (EGG_MOVES_ARRAY_COUNT + MAX_LEVEL_UP_MOVES + NUM_TECHNICAL_MACHINES + NUM_HIDDEN_MACHINES)
 EWRAM_DATA static u16 sStatsMoves[MOVES_COUNT_TOTAL] = {0};
@@ -521,8 +515,6 @@ static void LoadPlayArrowPalette(bool8);
 static void Task_LoadSizeScreen(u8);
 static void Task_HandleSizeScreenInput(u8);
 static void Task_SwitchScreensFromSizeScreen(u8);
-static void SavePartyBeforeOpeningPokedex(void);
-static void RestorePartyIfPokedexInitChangedIt(void);
 static void LoadScreenSelectBarMain(u16);
 static void HighlightScreenSelectBarItem(u8, u16);
 static void Task_HandleCaughtMonPageInput(u8);
@@ -556,9 +548,6 @@ static void PrintSearchParameterText(u8);
 static u8 GetSearchModeSelection(u8 taskId, u8 option);
 static void SetDefaultSearchModeAndOrder(u8);
 static void PrintInfoScreenText(const u8 *str, u8 left, u8 top);
-static u8 GetPokedexRegionalDexRegion(void);
-static void BuildRegionalEncounterSpecies(u8 region);
-static void GetRegionalEncounterPokedexCounts(u8 region, u16 *seenCount, u16 *caughtCount);
 static const struct CompressedSpriteSheet *GetCurrentInterfaceSpriteSheet(void);
 static bool8 IsDexNumInMode(u16 dexNum, u8 dexMode);
 static void CreateSearchParameterScrollArrows(u8);
@@ -1855,10 +1844,7 @@ static const u8 sSearchMovementMap_ShiftHoennDex[SEARCH_COUNT][4] =
 
 static const struct SearchOptionText sDexModeOptions[] =
 {
-    [DEX_MODE_HOENN]    = {gText_DexHoennDescription, gText_DexHoennTitle},
-    [DEX_MODE_NATIONAL] = {gText_DexNatDescription,   gText_DexNatTitle},
-    [DEX_MODE_KANTO]    = {sText_DexKantoDescription, sText_DexKantoTitle},
-    [DEX_MODE_JOHTO]    = {sText_DexJohtoDescription, sText_DexJohtoTitle},
+    {gText_DexNatDescription, gText_DexNatTitle},
     {},
 };
 
@@ -1928,7 +1914,7 @@ static const struct SearchOptionText sDexSearchTypeOptions[] =
     {},
 };
 
-static const u8 sPokedexModes[] = {DEX_MODE_KANTO, DEX_MODE_JOHTO, DEX_MODE_HOENN, DEX_MODE_NATIONAL};
+static const u8 sPokedexModes[] = {DEX_MODE_NATIONAL};
 static const u8 sOrderOptions[] =
 {
     ORDER_NUMERICAL,
@@ -2042,7 +2028,6 @@ void CB2_OpenPokedexPlusHGSS(void)
     {
     case 0:
     default:
-        SavePartyBeforeOpeningPokedex();
         SetVBlankCallback(NULL);
         ResetOtherVideoRegisters(0);
         DmaFillLarge16(3, 0, (u8 *)VRAM, VRAM_SIZE, 0x1000);
@@ -2064,20 +2049,19 @@ void CB2_OpenPokedexPlusHGSS(void)
         sPokedexView = AllocZeroed(sizeof(struct PokedexView));
         ResetPokedexView(sPokedexView);
         CreateTask(Task_OpenPokedexMainPage, 0);
-        sPokedexView->dexMode = gSaveBlock2Ptr->pokedex.mode;
-        if (!IsNationalPokedexEnabled())
-            sPokedexView->dexMode = DEX_MODE_HOENN;
+        sPokedexView->dexMode = DEX_MODE_NATIONAL;
+        sPokedexView->dexModeBackup = DEX_MODE_NATIONAL;
         sPokedexView->dexOrder = gSaveBlock2Ptr->pokedex.order;
+        sPokedexView->dexOrderBackup = gSaveBlock2Ptr->pokedex.order;
         sPokedexView->selectedPokemon = sLastSelectedPokemon;
         sPokedexView->pokeBallRotation = sPokeBallRotation;
         sPokedexView->selectedScreen = AREA_SCREEN;
-        sPokedexView->regionalDexRegion = GetPokedexRegionalDexRegion();
-        GetRegionalEncounterPokedexCounts(sPokedexView->regionalDexRegion, &sPokedexView->seenCount, &sPokedexView->ownCount);
+        sPokedexView->seenCount = GetNationalPokedexCount(FLAG_GET_SEEN);
+        sPokedexView->ownCount = GetNationalPokedexCount(FLAG_GET_CAUGHT);
         sPokedexView->initialVOffset = 8;
         gMain.state++;
         break;
     case 3:
-        RestorePartyIfPokedexInitChangedIt();
         EnableInterrupts(1);
         SetVBlankCallback(VBlankCB_Pokedex);
         SetMainCallback2(CB2_Pokedex);
@@ -2086,29 +2070,6 @@ void CB2_OpenPokedexPlusHGSS(void)
         break;
     }
 }
-
-static void SavePartyBeforeOpeningPokedex(void)
-{
-    memcpy(sPokedexPartyBackup, gPlayerParty, sizeof(sPokedexPartyBackup));
-    sPokedexPartyBackupCount = gPlayerPartyCount;
-    sPokedexPartyBackupValid = TRUE;
-}
-
-static void RestorePartyIfPokedexInitChangedIt(void)
-{
-    if (!sPokedexPartyBackupValid)
-        return;
-
-    if (memcmp(sPokedexPartyBackup, gPlayerParty, sizeof(sPokedexPartyBackup)) != 0
-     || sPokedexPartyBackupCount != gPlayerPartyCount)
-    {
-        memcpy(gPlayerParty, sPokedexPartyBackup, sizeof(sPokedexPartyBackup));
-        gPlayerPartyCount = sPokedexPartyBackupCount;
-    }
-
-    sPokedexPartyBackupValid = FALSE;
-}
-
 static void ResetPokedexView(struct PokedexView *pokedexView)
 {
     u16 i;
@@ -2125,8 +2086,8 @@ static void ResetPokedexView(struct PokedexView *pokedexView)
     pokedexView->pokemonListCount = 0;
     pokedexView->selectedPokemon = 0;
     pokedexView->selectedPokemonBackup = 0;
-    pokedexView->dexMode = DEX_MODE_HOENN;
-    pokedexView->dexModeBackup = DEX_MODE_HOENN;
+    pokedexView->dexMode = DEX_MODE_NATIONAL;
+    pokedexView->dexModeBackup = DEX_MODE_NATIONAL;
     pokedexView->dexOrder = ORDER_NUMERICAL;
     pokedexView->dexOrderBackup = ORDER_NUMERICAL;
     pokedexView->seenCount = 0;
@@ -2159,104 +2120,6 @@ static void ResetPokedexView(struct PokedexView *pokedexView)
     for (i = 0; i < ARRAY_COUNT(pokedexView->unkArr3); i++)
         pokedexView->unkArr3[i] = 0;
     pokedexView->originalSearchSelectionNum = 0;
-}
-
-static void MarkWildInfoSpeciesSeen(const struct WildPokemonInfo *wildInfo, bool8 *speciesAvailable, u16 count)
-{
-    u16 i;
-
-    if (wildInfo == NULL || wildInfo->wildPokemon == NULL)
-        return;
-
-    for (i = 0; i < count; i++)
-    {
-        u16 species = wildInfo->wildPokemon[i].species;
-
-        if (species > SPECIES_NONE && species < NUM_SPECIES)
-            speciesAvailable[species] = TRUE;
-    }
-}
-
-static u8 GetPokedexRegionalDexRegion(void)
-{
-    if (gMapHeader.regionMapSectionId != MAPSEC_NONE && gMapHeader.regionMapSectionId != MAPSEC_DYNAMIC)
-        return RegionMap_GetRegionFromMapSecId(gMapHeader.regionMapSectionId);
-
-    return RegionMap_GetRegionFromMapGroup(gSaveBlock1Ptr->location.mapGroup);
-}
-
-static void BuildRegionalEncounterSpecies(u8 region)
-{
-    u32 i;
-    u32 timeOfDay;
-
-    if (region >= REGIONS_COUNT)
-        return;
-
-    if (sRegionalDexSpeciesAllBuilt || sRegionalDexSpeciesBuilt[region])
-        return;
-
-    for (i = 0; gWildMonHeaders[i].mapGroup != MAP_GROUP(MAP_UNDEFINED); i++)
-    {
-        const struct MapHeader *mapHeader = Overworld_GetMapHeaderByGroupAndId(gWildMonHeaders[i].mapGroup, gWildMonHeaders[i].mapNum);
-        u8 mapRegion;
-
-        if (mapHeader == NULL)
-            continue;
-
-        if (mapHeader->regionMapSectionId != MAPSEC_NONE && mapHeader->regionMapSectionId != MAPSEC_DYNAMIC)
-            mapRegion = RegionMap_GetRegionFromMapSecId(mapHeader->regionMapSectionId);
-        else
-            mapRegion = RegionMap_GetRegionFromMapGroup(gWildMonHeaders[i].mapGroup);
-
-        if (mapRegion >= REGIONS_COUNT)
-            continue;
-
-        for (timeOfDay = 0; timeOfDay < TIMES_OF_DAY_COUNT; timeOfDay++)
-        {
-            const struct WildEncounterTypes *encounterTypes = &gWildMonHeaders[i].encounterTypes[timeOfDay];
-
-            MarkWildInfoSpeciesSeen(encounterTypes->landMonsInfo, sRegionalDexSpecies[mapRegion], LAND_WILD_COUNT);
-            MarkWildInfoSpeciesSeen(encounterTypes->waterMonsInfo, sRegionalDexSpecies[mapRegion], WATER_WILD_COUNT);
-            MarkWildInfoSpeciesSeen(encounterTypes->rockSmashMonsInfo, sRegionalDexSpecies[mapRegion], ROCK_WILD_COUNT);
-            MarkWildInfoSpeciesSeen(encounterTypes->fishingMonsInfo, sRegionalDexSpecies[mapRegion], FISH_WILD_COUNT);
-            MarkWildInfoSpeciesSeen(encounterTypes->hiddenMonsInfo, sRegionalDexSpecies[mapRegion], HIDDEN_WILD_COUNT);
-        }
-    }
-
-    for (i = 0; i < REGIONS_COUNT; i++)
-        sRegionalDexSpeciesBuilt[i] = TRUE;
-    sRegionalDexSpeciesAllBuilt = TRUE;
-}
-
-static void GetRegionalEncounterPokedexCounts(u8 region, u16 *seenCount, u16 *caughtCount)
-{
-    u16 species;
-
-    *seenCount = 0;
-    *caughtCount = 0;
-
-    if (region >= REGIONS_COUNT)
-        return;
-
-    BuildRegionalEncounterSpecies(region);
-
-    for (species = SPECIES_NONE + 1; species < NUM_SPECIES; species++)
-    {
-        u16 dexNum;
-
-        if (!sRegionalDexSpecies[region][species])
-            continue;
-
-        dexNum = SpeciesToNationalPokedexNum(species);
-        if (dexNum == 0)
-            continue;
-
-        if (GetSetPokedexFlag(dexNum, FLAG_GET_SEEN))
-            (*seenCount)++;
-        if (GetSetPokedexFlag(dexNum, FLAG_GET_CAUGHT))
-            (*caughtCount)++;
-    }
 }
 
 static const struct CompressedSpriteSheet *GetCurrentInterfaceSpriteSheet(void)
@@ -2477,9 +2340,7 @@ static void Task_ClosePokedex(u8 taskId)
 {
     if (!gPaletteFade.active)
     {
-        gSaveBlock2Ptr->pokedex.mode = sPokedexView->dexMode;
-        if (!IsNationalPokedexEnabled())
-            gSaveBlock2Ptr->pokedex.mode = DEX_MODE_HOENN;
+        gSaveBlock2Ptr->pokedex.mode = DEX_MODE_NATIONAL;
         gSaveBlock2Ptr->pokedex.order = sPokedexView->dexOrder;
         ClearMonSprites();
         FreeWindowAndBgBuffers();
@@ -2496,8 +2357,6 @@ static void LoadPokedexBgPalette(bool8 isSearchResults)
     {
         if (isSearchResults == TRUE)
             LoadPalette(sPokedexPlusHGSS_SearchResults_Pal + 1, BG_PLTT_ID(0) + 1, PLTT_SIZEOF(6 * 16 - 1));
-        else if (!IsNationalPokedexEnabled())
-            LoadPalette(sPokedexPlusHGSS_Default_Pal + 1, BG_PLTT_ID(0) + 1, PLTT_SIZEOF(6 * 16 - 1));
         else
             LoadPalette(sPokedexPlusHGSS_National_Pal + 1, BG_PLTT_ID(0) + 1, PLTT_SIZEOF(6 * 16 - 1));
         LoadPalette(GetOverworldTextboxPalettePtr(), 0xF0, 32);
@@ -2506,8 +2365,6 @@ static void LoadPokedexBgPalette(bool8 isSearchResults)
     {
         if (isSearchResults == TRUE)
             LoadPalette(sPokedexPlusHGSS_SearchResults_dark_Pal + 1, BG_PLTT_ID(0) + 1, PLTT_SIZEOF(6 * 16 - 1));
-        else if (!IsNationalPokedexEnabled())
-            LoadPalette(sPokedexPlusHGSS_Default_dark_Pal + 1, BG_PLTT_ID(0) + 1, PLTT_SIZEOF(6 * 16 - 1));
         else
             LoadPalette(sPokedexPlusHGSS_National_dark_Pal + 1, BG_PLTT_ID(0) + 1, PLTT_SIZEOF(6 * 16 - 1));
         LoadPalette(GetOverworldTextboxPalettePtr(), 0xF0, 32);
@@ -2647,6 +2504,7 @@ static void CreatePokedexList(u8 dexMode, u8 order)
     #define temp_dexStart vars[3]
     s16 i;
 
+    dexMode = DEX_MODE_NATIONAL;
     sPokedexView->pokemonListCount = 0;
 
     switch (dexMode)
@@ -3344,18 +3202,11 @@ static void CreateInterfaceSprites(u8 page)
     }
     else if (page == PAGE_MAIN)
     {
-        u16 seenOwnedCount;
         u8 counterXDist  = 6;
         u8 counterX1s    = LIST_RIGHT_SIDE_TEXT_X + LIST_RIGHT_SIDE_TEXT_X_OFFSET + 16 - (sPokedexView->seenCount > 999 ? 0 : 1);
         u8 counterX10s   = counterX1s - counterXDist;
         u8 counterX100s  = counterX10s - counterXDist;
         u8 counterX1000s = counterX100s - counterXDist;
-
-        // Seen
-        CreateSprite(&sSeenOwnTextSpriteTemplate, LIST_RIGHT_SIDE_TEXT_X, 45 - LIST_RIGHT_SIDE_TEXT_Y_OFFSET + 6, 1);
-        // Own
-        spriteId = CreateSprite(&sSeenOwnTextSpriteTemplate, LIST_RIGHT_SIDE_TEXT_X, 55 - LIST_RIGHT_SIDE_TEXT_Y_OFFSET + 7, 1);
-        StartSpriteAnim(&gSprites[spriteId], 1);
 
         // National text
         spriteId = CreateSprite(&sHoennNationalTextSpriteTemplate, LIST_RIGHT_SIDE_TEXT_X, 73 - LIST_RIGHT_SIDE_TEXT_Y_OFFSET - 6, 1);
@@ -3365,54 +3216,6 @@ static void CreateInterfaceSprites(u8 page)
         // National own
         spriteId = CreateSprite(&sSeenOwnTextSpriteTemplate, LIST_RIGHT_SIDE_TEXT_X, 88 - LIST_RIGHT_SIDE_TEXT_Y_OFFSET + 6, 1);
         StartSpriteAnim(&gSprites[spriteId], 1);
-
-        // Hoenn seen value - 100s
-        seenOwnedCount = sPokedexView->seenCount;
-        drawNextDigit = FALSE;
-        spriteId = CreateSprite(&sNationalDexSeenOwnNumberSpriteTemplate, counterX100s, 45 - LIST_RIGHT_SIDE_TEXT_Y_OFFSET, 1);
-        digitNum = seenOwnedCount / 100;
-        StartSpriteAnim(&gSprites[spriteId], digitNum);
-        if (digitNum != 0)
-            drawNextDigit = TRUE;
-        else
-            gSprites[spriteId].invisible = TRUE;
-
-        // Hoenn seen value - 10s
-        spriteId = CreateSprite(&sNationalDexSeenOwnNumberSpriteTemplate, counterX10s, 45 - LIST_RIGHT_SIDE_TEXT_Y_OFFSET, 1);
-        digitNum = (seenOwnedCount % 100) / 10;
-        if (digitNum != 0 || drawNextDigit)
-            StartSpriteAnim(&gSprites[spriteId], digitNum);
-        else
-            gSprites[spriteId].invisible = TRUE;
-
-        // Hoenn seen value - 1s
-        spriteId = CreateSprite(&sNationalDexSeenOwnNumberSpriteTemplate, counterX1s, 45 - LIST_RIGHT_SIDE_TEXT_Y_OFFSET, 1);
-        digitNum = (seenOwnedCount % 100) % 10;
-        StartSpriteAnim(&gSprites[spriteId], digitNum);
-
-        seenOwnedCount = sPokedexView->ownCount;
-        // Hoenn owned value - 100s
-        drawNextDigit = FALSE;
-        spriteId = CreateSprite(&sNationalDexSeenOwnNumberSpriteTemplate, counterX100s, 55 - LIST_RIGHT_SIDE_TEXT_Y_OFFSET, 1);
-        digitNum = seenOwnedCount / 100;
-        StartSpriteAnim(&gSprites[spriteId], digitNum);
-        if (digitNum != 0)
-            drawNextDigit = TRUE;
-        else
-            gSprites[spriteId].invisible = TRUE;
-
-        // Hoenn owned value - 10s
-        spriteId = CreateSprite(&sNationalDexSeenOwnNumberSpriteTemplate, counterX10s, 55 - LIST_RIGHT_SIDE_TEXT_Y_OFFSET, 1);
-        digitNum = (seenOwnedCount % 100) / 10;
-        if (digitNum != 0 || drawNextDigit)
-            StartSpriteAnim(&gSprites[spriteId], digitNum);
-        else
-            gSprites[spriteId].invisible = TRUE;
-
-        // Hoenn owned value - 1s
-        spriteId = CreateSprite(&sNationalDexSeenOwnNumberSpriteTemplate, counterX1s, 55 - LIST_RIGHT_SIDE_TEXT_Y_OFFSET, 1);
-        digitNum = (seenOwnedCount % 100) % 10;
-        StartSpriteAnim(&gSprites[spriteId], digitNum);
 
         //****************************
         // National seen value - 1000s
@@ -8759,7 +8562,7 @@ static u8 GetSearchModeSelection(u8 taskId, u8 option)
     default:
         return 0;
     case SEARCH_MODE:
-        return sPokedexModes[id];
+        return DEX_MODE_NATIONAL;
     case SEARCH_ORDER:
         return sOrderOptions[id];
     case SEARCH_NAME:
@@ -8782,23 +8585,7 @@ static void SetDefaultSearchModeAndOrder(u8 taskId)
 {
     u16 selected;
 
-    switch (sPokedexView->dexModeBackup)
-    {
-    case DEX_MODE_KANTO:
-        selected = 0;
-        break;
-    case DEX_MODE_JOHTO:
-        selected = 1;
-        break;
-    default:
-    case DEX_MODE_HOENN:
-        selected = 2;
-        break;
-    case DEX_MODE_NATIONAL:
-        selected = 3;
-        break;
-    }
-    gTasks[taskId].tCursorPos_Mode = selected;
+    gTasks[taskId].tCursorPos_Mode = 0;
 
     switch (sPokedexView->dexOrderBackup)
     {

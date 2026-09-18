@@ -1,2 +1,7 @@
 MtSilver_PokemonCenter_MapScripts::
+	map_script MAP_SCRIPT_ON_TRANSITION, MtSilver_PokemonCenter_OnTransition
 	.byte 0
+
+MtSilver_PokemonCenter_OnTransition:
+	call CableClub_EventScript_HideOrShowMysteryGiftMan
+	end

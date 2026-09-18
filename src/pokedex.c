@@ -137,9 +137,6 @@ static EWRAM_DATA struct PokedexListItem *sPokedexListItem = NULL;
 static EWRAM_DATA struct SpriteTemplate sShadowHeartBarTemplate;
 static EWRAM_DATA u8 sShadowHeartBarSpriteIds[SHADOW_HEART_BAR_SPRITES];
 static EWRAM_DATA bool8 sShadowHeartBarSpritesActive;
-static EWRAM_DATA struct Pokemon sPokedexPartyBackup[PARTY_SIZE];
-static EWRAM_DATA u8 sPokedexPartyBackupCount;
-static EWRAM_DATA bool8 sPokedexPartyBackupValid;
 
 // This is written to, but never read.
 COMMON_DATA u8 gUnusedPokedexU8 = 0;
@@ -256,9 +253,6 @@ static void HighlightScreenSelectBarItem(u8, u16);
 static void HighlightSubmenuScreenSelectBarItem(u8, u16);
 static void ShadowMonitor_ClearScreenSelectBar(u16 *tilemap, u16 size);
 static void ShadowMonitor_PrintTrackerTab(void);
-static void SavePartyBeforeOpeningPokedex(void);
-static void RestorePartyIfPokedexInitChangedIt(void);
-
 static EWRAM_DATA u8 sShadowMonitorTrackerWindowId;
 static void Task_DisplayCaughtMonDexPage(u8);
 static void Task_HandleCaughtMonPageInput(u8);
@@ -1612,28 +1606,6 @@ static void VBlankCB_Pokedex(void)
     TransferPlttBuffer();
 }
 
-static void SavePartyBeforeOpeningPokedex(void)
-{
-    memcpy(sPokedexPartyBackup, gPlayerParty, sizeof(sPokedexPartyBackup));
-    sPokedexPartyBackupCount = gPlayerPartyCount;
-    sPokedexPartyBackupValid = TRUE;
-}
-
-static void RestorePartyIfPokedexInitChangedIt(void)
-{
-    if (!sPokedexPartyBackupValid)
-        return;
-
-    if (memcmp(sPokedexPartyBackup, gPlayerParty, sizeof(sPokedexPartyBackup)) != 0
-     || sPokedexPartyBackupCount != gPlayerPartyCount)
-    {
-        memcpy(gPlayerParty, sPokedexPartyBackup, sizeof(sPokedexPartyBackup));
-        gPlayerPartyCount = sPokedexPartyBackupCount;
-    }
-
-    sPokedexPartyBackupValid = FALSE;
-}
-
 static void ResetPokedexView(struct PokedexView *pokedexView)
 {
     u16 i;
@@ -1691,7 +1663,6 @@ static void CB2_OpenPokedexInternal(void)
     {
     case 0:
     default:
-        SavePartyBeforeOpeningPokedex();
         SetVBlankCallback(NULL);
         ResetOtherVideoRegisters(0);
         DmaFillLarge16(3, 0, (u8 *)VRAM, VRAM_SIZE, 0x1000);
@@ -1726,7 +1697,6 @@ static void CB2_OpenPokedexInternal(void)
         gMain.state++;
         break;
     case 3:
-        RestorePartyIfPokedexInitChangedIt();
         EnableInterrupts(1);
         SetVBlankCallback(VBlankCB_Pokedex);
         SetMainCallback2(CB2_Pokedex);

@@ -14,6 +14,11 @@ Lavender_Town_OnFrame:
 
 Lavender_Town_EventScript_CityEnterQuest::
 	setvar VAR_TEMP_1, 1
+	setvar VAR_0x8000, 0xFFFF
+	specialvar VAR_RESULT, LavenderNPCQuest_RecordInteriorNPC
+	goto_if_eq VAR_RESULT, TRUE, Lavender_Town_EventScript_CityEnterQuest_CheckStarted
+	clearflag FLAG_QUEST_LAVENDER_NPCS_COMPLETED
+Lavender_Town_EventScript_CityEnterQuest_CheckStarted:
 	checkflag FLAG_QUEST_LAVENDER_NPCS_STARTED
 	goto_if_eq Lavender_Town_EventScript_CityEnterQuest_End
 	checkflag FLAG_QUEST_LAVENDER_NPCS_COMPLETED
@@ -111,25 +116,53 @@ Lavender_Town_EventScript_LittleBoy::
 	faceplayer
 	setspeaker Lavender_Town_Speaker_LittleBoy
 	msgbox Lavender_Town_Text_LittleBoy, MSGBOX_NPC
+	setflag FLAG_QUEST_LAVENDER_NPC_LITTLE_BOY
+	call Lavender_Town_EventScript_CheckNPCQuest
 	end
 
 Lavender_Town_EventScript_BaldingMan::
 	faceplayer
 	setspeaker Lavender_Town_Speaker_BaldingMan
 	msgbox Lavender_Town_Text_BaldingMan, MSGBOX_NPC
+	setflag FLAG_QUEST_LAVENDER_NPC_BALDING_MAN
+	call Lavender_Town_EventScript_CheckNPCQuest
 	end
 
 Lavender_Town_EventScript_BattleGirl::
 	faceplayer
 	setspeaker Lavender_Town_Speaker_BattleGirl
 	msgbox Lavender_Town_Text_BattleGirl, MSGBOX_NPC
+	setflag FLAG_QUEST_LAVENDER_NPC_BATTLE_GIRL
+	call Lavender_Town_EventScript_CheckNPCQuest
 	end
 
 Lavender_Town_EventScript_OldMan::
 	faceplayer
 	setspeaker Lavender_Town_Speaker_OldMan
 	msgbox Lavender_Town_Text_OldMan, MSGBOX_NPC
+	setflag FLAG_QUEST_LAVENDER_NPC_OLD_MAN
+	call Lavender_Town_EventScript_CheckNPCQuest
 	end
+
+Lavender_Town_EventScript_CheckNPCQuest::
+	goto_if_set FLAG_QUEST_LAVENDER_NPCS_COMPLETED, Lavender_Town_EventScript_CheckNPCQuest_End
+	goto_if_unset FLAG_QUEST_LAVENDER_NPCS_STARTED, Lavender_Town_EventScript_CheckNPCQuest_End
+	goto_if_unset FLAG_QUEST_LAVENDER_NPC_LITTLE_BOY, Lavender_Town_EventScript_CheckNPCQuest_End
+	goto_if_unset FLAG_QUEST_LAVENDER_NPC_BALDING_MAN, Lavender_Town_EventScript_CheckNPCQuest_End
+	goto_if_unset FLAG_QUEST_LAVENDER_NPC_BATTLE_GIRL, Lavender_Town_EventScript_CheckNPCQuest_End
+	goto_if_unset FLAG_QUEST_LAVENDER_NPC_OLD_MAN, Lavender_Town_EventScript_CheckNPCQuest_End
+	setvar VAR_0x8000, 0xFFFF
+	specialvar VAR_RESULT, LavenderNPCQuest_RecordInteriorNPC
+	goto_if_eq VAR_RESULT, FALSE, Lavender_Town_EventScript_CheckNPCQuest_End
+	setflag FLAG_QUEST_LAVENDER_NPCS_COMPLETED
+	call QuestJournal_EventScript_QuestCompleteAlert
+Lavender_Town_EventScript_CheckNPCQuest_End:
+	return
+
+Lavender_Town_EventScript_RecordInteriorNPC::
+	special LavenderNPCQuest_RecordInteriorNPC
+	call Lavender_Town_EventScript_CheckNPCQuest
+	return
 
 @ =========================================================
 @ MOVEMENTS

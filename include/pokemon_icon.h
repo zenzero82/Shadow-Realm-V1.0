@@ -2,7 +2,6 @@
 #define GUARD_POKEMON_ICON_H
 
 extern const struct SpritePalette gMonIconPaletteTable[];
-extern const u8 gMonIconShadowPaletteIndex;
 
 struct Pokemon;
 
@@ -12,7 +11,8 @@ void TryLoadAllMonIconPalettesAtOffset(u16 offset);
 u8 GetValidMonIconPalIndex(u16 species);
 const u8 *GetMonIconPtr(u16 species, u32 personality);
 const u16 *GetValidMonIconPalettePtr(u16 species);
-bool8 TryLoadShadowMonIconPalette(u16 species);
+bool8 LoadMonIconPaletteShadowPersonality(u16 species, u32 personality, u16 *paletteTag);
+bool8 LoadMonIconPaletteGiftAuraPersonality(u16 species, u32 personality, bool8 isShiny, u16 *paletteTag);
 u16 GetIconSpecies(u16 species, u32 personality);
 u16 GetUnownLetterByPersonality(u32 personality);
 u16 GetIconSpeciesNoPersonality(u16 species);

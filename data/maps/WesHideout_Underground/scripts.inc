@@ -59,6 +59,7 @@ WesHideout_Underground_EventScript_InitMapState::
 	setvar VAR_TEMP_3, 1
 	setvar VAR_TEMP_6, 0
 	setvar VAR_TEMP_7, 1
+	call WesHideout_Underground_EventScript_RepairBackToHQQuest
 
 	checkflag FLAG_WES_HIDEOUT_NEBBY_SCENE_DONE
 	goto_if_eq WesHideout_Underground_EventScript_InitMapState_NebbyDone
@@ -85,7 +86,6 @@ WesHideout_Underground_EventScript_InitMapState_PostBirch:
 	hideobjectat LOCALID_MEGANIUM, MAP_WES_HIDEOUT_UNDERGROUND
 	checkflag FLAG_QUEST_BACK_TO_HQ_COMPLETED
 	goto_if_eq WesHideout_Underground_EventScript_InitMapState_Done
-	setvar VAR_TEMP_3, 0
 	setvar VAR_TEMP_7, 0
 	goto WesHideout_Underground_EventScript_InitMapState_Done
 
@@ -104,6 +104,28 @@ WesHideout_Underground_EventScript_InitMapState_NormalRowanDone:
 	setvar VAR_TEMP_1, 0
 
 WesHideout_Underground_EventScript_InitMapState_Done:
+	return
+
+WesHideout_Underground_EventScript_RepairBackToHQQuest::
+	checkflag FLAG_ILEX_BIRCH_CALL_DONE
+	goto_if_ne WesHideout_Underground_EventScript_RepairBackToHQQuest_Done
+	checkflag FLAG_QUEST_BACK_TO_HQ_STARTED
+	goto_if_eq WesHideout_Underground_EventScript_RepairBackToHQQuest_Done
+	checkflag FLAG_QUEST_BACK_TO_HQ_COMPLETED
+	goto_if_eq WesHideout_Underground_EventScript_RepairBackToHQQuest_CheckPostBirchProof
+	setflag FLAG_QUEST_BACK_TO_HQ_STARTED
+	goto WesHideout_Underground_EventScript_RepairBackToHQQuest_Done
+
+WesHideout_Underground_EventScript_RepairBackToHQQuest_CheckPostBirchProof:
+	checkflag FLAG_WES_HIDEOUT_LEGENDARY_QUESTS_REVEALED
+	goto_if_eq WesHideout_Underground_EventScript_RepairBackToHQQuest_EnsureStarted
+	clearflag FLAG_QUEST_BACK_TO_HQ_COMPLETED
+	setflag FLAG_QUEST_BACK_TO_HQ_STARTED
+	goto WesHideout_Underground_EventScript_RepairBackToHQQuest_Done
+
+WesHideout_Underground_EventScript_RepairBackToHQQuest_EnsureStarted:
+	setflag FLAG_QUEST_BACK_TO_HQ_STARTED
+WesHideout_Underground_EventScript_RepairBackToHQQuest_Done:
 	return
 
 WesHideout_Underground_EventScript_SetPostBirchLayout::
@@ -184,35 +206,7 @@ WesHideout_Underground_EventScript_HidePostBirchObjects::
 
 WesHideout_Underground_OnFrame::
 	map_script_2 VAR_TEMP_2, 0, WesHideout_Underground_EventScript_LyraScene
-	map_script_2 VAR_TEMP_3, 0, WesHideout_Underground_EventScript_CheckBackToHQQuestOnStep
 	.2byte 0
-
-WesHideout_Underground_EventScript_CheckBackToHQQuestOnStep::
-	checkflag FLAG_QUEST_BACK_TO_HQ_STARTED
-	goto_if_eq WesHideout_Underground_EventScript_CheckBackToHQQuestOnStep_Done
-	checkflag FLAG_QUEST_BACK_TO_HQ_COMPLETED
-	goto_if_eq WesHideout_Underground_EventScript_CheckBackToHQQuestOnStep_Done
-	special StorePlayerCoordsInVars
-	compare VAR_TEMP_6, 0
-	goto_if_eq WesHideout_Underground_EventScript_CheckBackToHQQuestOnStep_InitCoords
-	compare VAR_0x8004, VAR_TEMP_4
-	goto_if_eq WesHideout_Underground_EventScript_CheckBackToHQQuestOnStep_CheckY
-	goto WesHideout_Underground_EventScript_CheckBackToHQQuestOnStep_Complete
-WesHideout_Underground_EventScript_CheckBackToHQQuestOnStep_CheckY::
-	compare VAR_0x8005, VAR_TEMP_5
-	goto_if_eq WesHideout_Underground_EventScript_CheckBackToHQQuestOnStep_Done
-	goto WesHideout_Underground_EventScript_CheckBackToHQQuestOnStep_Complete
-WesHideout_Underground_EventScript_CheckBackToHQQuestOnStep_InitCoords::
-	copyvar VAR_TEMP_4, VAR_0x8004
-	copyvar VAR_TEMP_5, VAR_0x8005
-	setvar VAR_TEMP_6, 1
-	return
-WesHideout_Underground_EventScript_CheckBackToHQQuestOnStep_Complete::
-	setflag FLAG_QUEST_BACK_TO_HQ_COMPLETED
-	call QuestJournal_EventScript_QuestCompleteAlert
-	setvar VAR_TEMP_3, 1
-WesHideout_Underground_EventScript_CheckBackToHQQuestOnStep_Done::
-	return
 
 @ =========================================================
 @ SPEAKER DEFINITIONS (Namebox)
@@ -370,6 +364,7 @@ WesHideout_Underground_EventScript_Birch_PostBirch_GiveLegendaries:
 	setspeaker WesHideout_Underground_Speaker_Birch
 	msgbox WesHideout_Underground_Text_Birch_Legendaries_Part1, MSGBOX_NPC
 	closemessage
+	setflag FLAG_WES_HIDEOUT_LEGENDARY_QUESTS_REVEALED
 	clearflag FLAG_QUEST_THUNDERBIRD_COMPLETED
 	clearflag FLAG_QUEST_ICEBIRD_COMPLETED
 	clearflag FLAG_QUEST_FIREBIRD_COMPLETED
@@ -380,6 +375,11 @@ WesHideout_Underground_EventScript_Birch_PostBirch_GiveLegendaries:
 	setflag FLAG_QUEST_FIREBIRD_STARTED
 	setflag FLAG_QUEST_PHOENIX_STARTED
 	setflag FLAG_QUEST_SHINING_BEAST_STARTED
+	setflag FLAG_ROUTE10_POWERPLANT_INVASION_ACTIVE
+	clearflag FLAG_HIDE_ROUTE10_ZINZOLIN
+	clearflag FLAG_HIDE_ROUTE10_POWERPLANT_PLASMA_1
+	clearflag FLAG_HIDE_ROUTE10_POWERPLANT_PLASMA_2
+	clearflag FLAG_HIDE_ROUTE10_POWERPLANT_PLASMA_3
 	call WesHideout_Underground_EventScript_CompleteBackToHQQuest
 	call QuestJournal_EventScript_NewQuestsAlert
 	setspeaker WesHideout_Underground_Speaker_Birch
@@ -388,6 +388,24 @@ WesHideout_Underground_EventScript_Birch_PostBirch_GiveLegendaries:
 	return
 
 WesHideout_Underground_EventScript_Birch_PostBirch_LegendaryGiven::
+	setflag FLAG_WES_HIDEOUT_LEGENDARY_QUESTS_REVEALED
+	checkflag FLAG_QUEST_THUNDERBIRD_COMPLETED
+	goto_if_eq WesHideout_Underground_EventScript_Birch_PostBirch_LegendaryGiven_ReconcileDone
+	clearflag FLAG_QUEST_ICEBIRD_COMPLETED
+	clearflag FLAG_QUEST_FIREBIRD_COMPLETED
+	clearflag FLAG_QUEST_PHOENIX_COMPLETED
+	clearflag FLAG_QUEST_SHINING_BEAST_COMPLETED
+	setflag FLAG_QUEST_THUNDERBIRD_STARTED
+	setflag FLAG_QUEST_ICEBIRD_STARTED
+	setflag FLAG_QUEST_FIREBIRD_STARTED
+	setflag FLAG_QUEST_PHOENIX_STARTED
+	setflag FLAG_QUEST_SHINING_BEAST_STARTED
+	setflag FLAG_ROUTE10_POWERPLANT_INVASION_ACTIVE
+	clearflag FLAG_HIDE_ROUTE10_ZINZOLIN
+	clearflag FLAG_HIDE_ROUTE10_POWERPLANT_PLASMA_1
+	clearflag FLAG_HIDE_ROUTE10_POWERPLANT_PLASMA_2
+	clearflag FLAG_HIDE_ROUTE10_POWERPLANT_PLASMA_3
+WesHideout_Underground_EventScript_Birch_PostBirch_LegendaryGiven_ReconcileDone:
 	call WesHideout_Underground_EventScript_CompleteBackToHQQuest
 	setspeaker WesHideout_Underground_Speaker_Birch
 	msgbox WesHideout_Underground_Text_Birch_Legendaries_After, MSGBOX_NPC
@@ -1389,7 +1407,7 @@ WesHideout_Underground_Text_Birch_Intro:
 	.string "Can you do me a favor and track it\n"
 	.string "down? MICHAEL said CELEBI was used\p"
 	.string "in WES's timeline to help purify\n"
-	.string "{COLOR PURPLE}Shadow POKéMON{COLOR DARK_GRAY}.\p"
+	.string "{COLOR BLUE}Shadow POKéMON{COLOR DARK_GRAY}.\p"
 	.string "It has been helping us since we\n"
 	.string "learned of the problem.\p"
 	.string "While researching POKéMON habitats,\n"
@@ -1478,14 +1496,14 @@ WesHideout_Underground_Text_Elm_Intro:
 	.string "I'm a little overwhelmed these days.\p"
 	.string "I specialize in breeding POKéMON\n"
 	.string "eggs, but I'm not much use here.\p"
-	.string "{COLOR PURPLE}Shadow POKéMON{COLOR DARK_GRAY} can't seem to breed,\n"
+	.string "{COLOR BLUE}Shadow POKéMON{COLOR DARK_GRAY} can't seem to breed,\n"
 	.string "but we need to conduct more research.\p"
 	.string "PROF. OAK was so close to solving\n"
-	.string "the {COLOR PURPLE}Shadow POKéMON{COLOR DARK_GRAY} origins\l"
+	.string "the {COLOR BLUE}Shadow POKéMON{COLOR DARK_GRAY} origins\l"
 	.string "and then BOOM, gone.\p"
 	.string "There's a professor named KRANE\n"
 	.string "in MICHAEL's timeline.\p"
-	.string "He knew a lot about {COLOR PURPLE}Shadow POKéMON{COLOR DARK_GRAY}\n"
+	.string "He knew a lot about {COLOR BLUE}Shadow POKéMON{COLOR DARK_GRAY}\n"
 	.string "and even built a system to purify.\p"
 	.string "It can open the closed heart of\n"
 	.string "even legendary POKéMON!\p"
@@ -1495,10 +1513,10 @@ WesHideout_Underground_Text_Elm_Intro:
 	.string "We planned to pull him in after\n"
 	.string "you, but the device failed.\p"
 	.string "The KRANE of this timeline never\n"
-	.string "met {COLOR PURPLE}Shadow POKéMON{COLOR DARK_GRAY}, so he's useless.\p"
+	.string "met {COLOR BLUE}Shadow POKéMON{COLOR DARK_GRAY}, so he's useless.\p"
 	.string "Taking POKéMON from trainers is bad,\n"
 	.string "but closing their hearts is worse!\p"
-	.string "We must capture every {COLOR PURPLE}Shadow POKéMON{COLOR DARK_GRAY}\n"
+	.string "We must capture every {COLOR BLUE}Shadow POKéMON{COLOR DARK_GRAY}\n"
 	.string "CIPHER created.\p"
 	.string "We must restore their hearts.\p"
 	.string "ETHAN and LYRA are hunting trainers\n"
@@ -1522,7 +1540,7 @@ WesHideout_Underground_Text_Elm_PostBirch:
 	.string "Without the TIME MACHINE, every\n"
 	.string "observation matters.\p"
 	.string "Please report anything you learn\n"
-	.string "about {COLOR PURPLE}Shadow POKéMON{COLOR DARK_GRAY}.$"
+	.string "about {COLOR BLUE}Shadow POKéMON{COLOR DARK_GRAY}.$"
 
 WesHideout_Underground_Text_Kukui_Intro:
 	.string "Alola! Good to finally meet you,\n"
@@ -1534,7 +1552,7 @@ WesHideout_Underground_Text_Kukui_Intro:
 	.string "Luckily I know all about them.\n"
 	.string "We'll roll out Z CRYSTALS soon.\p"
 	.string "They'll help us take down CIPHER.\p"
-	.string "I've researched {COLOR PURPLE}Shadow POKéMON{COLOR DARK_GRAY},\n"
+	.string "I've researched {COLOR BLUE}Shadow POKéMON{COLOR DARK_GRAY},\n"
 	.string "and their movepools are bizarre.\p"
 	.string "If you can snag some, bring me one.\p"
 	.string "Oh, nobody explained snagging yet?\n"
@@ -1549,13 +1567,13 @@ WesHideout_Underground_Text_Kukui_After:
 WesHideout_Underground_Text_Kukui_PostBirch:
 	.string "Alola! The TIME MACHINE is down,\n"
 	.string "so we adapt and outplay CIPHER.\p"
-	.string "{COLOR PURPLE}Shadow POKéMON{COLOR DARK_GRAY} have strange moves.\n"
+	.string "{COLOR BLUE}Shadow POKéMON{COLOR DARK_GRAY} have strange moves.\n"
 	.string "I'm studying how those get warped.\p"
 	.string "If you snag any, I'd love to take\n"
 	.string "a look and help you out.$"
 
 WesHideout_Underground_Text_Kukui_AskShadow:
-	.string "Alola! Do you have a {COLOR PURPLE}Shadow POKéMON{COLOR DARK_GRAY}\n"
+	.string "Alola! Do you have a {COLOR BLUE}Shadow POKéMON{COLOR DARK_GRAY}\n"
 	.string "you want to show me?$"
 
 WesHideout_Underground_Text_Kukui_NotMeowth:
@@ -1585,7 +1603,7 @@ WesHideout_Underground_Text_Kukui_Meowth_Returned:
 
 WesHideout_Underground_Text_Sycamore_After:
 	.string "Use the SHADOW MONITOR to track\n"
-	.string "{COLOR PURPLE}Shadow POKéMON{COLOR DARK_GRAY} you snag.\p"
+	.string "{COLOR BLUE}Shadow POKéMON{COLOR DARK_GRAY} you snag.\p"
 	.string "Bring me data when you can.\n"
 	.string "It will help us refine it.$"
 
@@ -1661,7 +1679,7 @@ WesHideout_Underground_Text_Rowan_Intro_2:
 
 WesHideout_Underground_Text_Rowan_Intro_3:
 	.string "We've made progress on a way to\n"
-	.string "restore {COLOR PURPLE}Shadow POKéMON{COLOR DARK_GRAY} hearts.\p"
+	.string "restore {COLOR BLUE}Shadow POKéMON{COLOR DARK_GRAY} hearts.\p"
 	.string "According to MICHAEL, they've begun\n"
 	.string "something called the XD conversion.\p"
 	.string "Whatever that means, he's panicked.\p"
@@ -1701,7 +1719,7 @@ WesHideout_Underground_Text_Juniper_Intro:
 	.string "Hey there, you finally joined us.\n"
 	.string "I'm PROF. JUNIPER.\p"
 	.string "I study POKéMON origins.\p"
-	.string "I'm here to study {COLOR PURPLE}Shadow POKéMON{COLOR DARK_GRAY}.\p"
+	.string "I'm here to study {COLOR BLUE}Shadow POKéMON{COLOR DARK_GRAY}.\p"
 	.string "CIPHER is corrupting POKéMON hearts,\n"
 	.string "but how did this start?\p"
 	.string "We believe a deeper force is behind\n"
@@ -1768,19 +1786,19 @@ WesHideout_Underground_Text_MagSycamore_Player7:
 	.string "With help from WES, MICHAEL, ETHAN,\n"
 	.string "and LYRA, we built a SHADOW MONITOR.\p"
 	.string "It's ready now.\p"
-	.string "It will track {COLOR PURPLE}Shadow POKéMON{COLOR DARK_GRAY}.\p"
+	.string "It will track {COLOR BLUE}Shadow POKéMON{COLOR DARK_GRAY}.\p"
 	.string "It will also track the trainers who\n"
 	.string "have them.$"
 
 WesHideout_Underground_Text_MagSycamore_Player8:
 	.string "As we gather more data and intel,\n"
 	.string "we can keep adding to the monitor.\p"
-	.string "We'll snag every {COLOR PURPLE}Shadow POKéMON{COLOR DARK_GRAY}.\p"
+	.string "We'll snag every {COLOR BLUE}Shadow POKéMON{COLOR DARK_GRAY}.\p"
 	.string "With everyone helping, CIPHER falls.$"
 
 WesHideout_Underground_Text_Sycamore_ShadowMonitor_Given:
 	.string "Here, take the SHADOW MONITOR.\p"
-	.string "It will help you track {COLOR PURPLE}Shadow POKéMON{COLOR DARK_GRAY}\n"
+	.string "It will help you track {COLOR BLUE}Shadow POKéMON{COLOR DARK_GRAY}\n"
 	.string "and the trainers who hold them.$"
 
 WesHideout_Underground_Text_MagSycamore_Player9:

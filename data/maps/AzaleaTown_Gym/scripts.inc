@@ -591,6 +591,7 @@ AzaleaTown_Gym_EventScript_Bugsy::
 	faceplayer
 	setspeaker AzaleaTown_Gym_Speaker_Bugsy
 	goto_if_set FLAG_DEFEATED_AZALEA_TOWN_GYM, AzaleaTown_Gym_EventScript_Bugsy_Defeated
+	playbgm MUS_RG_ENCOUNTER_GYM_LEADER, FALSE
 	msgbox AzaleaTown_Gym_Text_BugsyIntro, MSGBOX_DEFAULT
 	setspeaker AzaleaTown_Gym_Speaker_Bugsy
 	trainerbattle_no_intro TRAINER_BUGSY_1, AzaleaTown_Gym_Text_BugsyBeaten

@@ -79,6 +79,21 @@
 #include "battle_util.h"
 #include "naming_screen.h"
 
+#define LAVENDER_INTERIOR_NPC_COUNT 12
+
+bool32 LavenderNPCQuest_RecordInteriorNPC(void)
+{
+    u16 progress = VarGet(VAR_LAVENDER_NPC_QUEST_PROGRESS);
+
+    if (gSpecialVar_0x8000 < LAVENDER_INTERIOR_NPC_COUNT)
+    {
+        progress |= 1 << gSpecialVar_0x8000;
+        VarSet(VAR_LAVENDER_NPC_QUEST_PROGRESS, progress);
+    }
+
+    return progress == (1 << LAVENDER_INTERIOR_NPC_COUNT) - 1;
+}
+
 #define TAG_ITEM_ICON 5500
 
 #define GFXTAG_MULTICHOICE_SCROLL_ARROWS 2000
@@ -2410,38 +2425,38 @@ static const u8 *const sDeptStoreFloorNames[] =
 static const u16 sElevatorWindowTiles_Ascending[ELEVATOR_WINDOW_HEIGHT][ELEVATOR_LIGHT_STAGES] =
 {
     {
-        METATILE_BattleFrontier_Elevator_Top0,
-        METATILE_BattleFrontier_Elevator_Top1,
-        METATILE_BattleFrontier_Elevator_Top2
+        0x268,
+        0x269,
+        0x26A
     },
     {
-        METATILE_BattleFrontier_Elevator_Mid0,
-        METATILE_BattleFrontier_Elevator_Mid1,
-        METATILE_BattleFrontier_Elevator_Mid2
+        0x270,
+        0x271,
+        0x272
     },
     {
-        METATILE_BattleFrontier_Elevator_Bottom0,
-        METATILE_BattleFrontier_Elevator_Bottom1,
-        METATILE_BattleFrontier_Elevator_Bottom2
+        0x278,
+        0x279,
+        0x27A
     },
 };
 
 static const u16 sElevatorWindowTiles_Descending[ELEVATOR_WINDOW_HEIGHT][ELEVATOR_LIGHT_STAGES] =
 {
     {
-        METATILE_BattleFrontier_Elevator_Top0,
-        METATILE_BattleFrontier_Elevator_Top2,
-        METATILE_BattleFrontier_Elevator_Top1
+        0x268,
+        0x26A,
+        0x269
     },
     {
-        METATILE_BattleFrontier_Elevator_Mid0,
-        METATILE_BattleFrontier_Elevator_Mid2,
-        METATILE_BattleFrontier_Elevator_Mid1
+        0x270,
+        0x272,
+        0x271
     },
     {
-        METATILE_BattleFrontier_Elevator_Bottom0,
-        METATILE_BattleFrontier_Elevator_Bottom2,
-        METATILE_BattleFrontier_Elevator_Bottom1
+        0x278,
+        0x27A,
+        0x279
     },
 };
 
@@ -3192,13 +3207,13 @@ void ShowScrollableMultichoice(void)
         task->tKeepOpenAfterSelect = FALSE;
         task->tTaskId = taskId;
         break;
-    case SCROLL_MULTI_ROUTE2_GUIDE:
-        task->tMaxItemsOnScreen = 3;
-        task->tNumItems = 3;
+    case SCROLL_MULTI_PEWTER_GUIDE:
+        task->tMaxItemsOnScreen = MAX_SCROLL_MULTI_ON_SCREEN;
+        task->tNumItems = 7;
         task->tLeft = 1;
         task->tTop = 1;
-        task->tWidth = 12;
-        task->tHeight = 6;
+        task->tWidth = 14;
+        task->tHeight = 12;
         task->tKeepOpenAfterSelect = FALSE;
         task->tTaskId = taskId;
         break;
@@ -3363,11 +3378,15 @@ static const u8 *const sScrollableMultichoiceOptions[][MAX_SCROLL_MULTI_LENGTH] 
         gText_WhenInDanger,
         gText_Exit
     },
-    [SCROLL_MULTI_ROUTE2_GUIDE] =
+    [SCROLL_MULTI_PEWTER_GUIDE] =
     {
         COMPOUND_STRING("Dexnav"),
         COMPOUND_STRING("EV/IV"),
-        COMPOUND_STRING("Pokeball Swap")
+        COMPOUND_STRING("Pokeball Swap"),
+        COMPOUND_STRING("Quest Journal"),
+        COMPOUND_STRING("Level Cap"),
+        COMPOUND_STRING("Storage System"),
+        COMPOUND_STRING("Party Menu")
     }
 };
 

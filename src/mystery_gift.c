@@ -9,9 +9,19 @@
 #include "string_util.h"
 #include "new_game.h"
 #include "mystery_gift.h"
+#include "pokeball.h"
+#include "pokemon.h"
+#include "save.h"
+#include "constants/flags.h"
+#include "constants/pokemon.h"
+#include "constants/species.h"
 #include "constants/mystery_gift.h"
 
 static EWRAM_DATA bool32 sStatsEnabled = FALSE;
+static EWRAM_DATA bool8 sZenwoosBlessingPendingNewGameCrimsonAura = FALSE;
+static EWRAM_DATA bool8 sZenwoosBlessingGiftRedeemedThisVisit = FALSE;
+
+static const u8 sZenwoosBlessingCodeCrimsonAura[] = _("CRIMSON AURA");
 
 #if FREE_MYSTERY_GIFT == FALSE
 static void ClearSavedWonderNewsMetadata(void);
@@ -750,3 +760,96 @@ static void IncrementCardStatForNewTrainer(u32 stat, u32 trainerId, u32 *trainer
         IncrementCardStat(stat);
 }
 #endif //FREE_MYSTERY_GIFT
+
+u8 ZenwoosBlessing_TryUseCode(const u8 *code, bool32 hasSaveFile)
+{
+    u8 upperCode[CODE_NAME_LENGTH + 1];
+
+    StringCopyUppercase(upperCode, code);
+    if (StringCompare(upperCode, sZenwoosBlessingCodeCrimsonAura) != 0)
+        return ZENWOOS_BLESSING_CODE_INVALID;
+
+    if (hasSaveFile)
+    {
+        if (FlagGet(FLAG_ZENWOOS_BLESSING_CRIMSON_AURA_USED))
+            return ZENWOOS_BLESSING_CODE_ALREADY_USED;
+    }
+    else if (sZenwoosBlessingPendingNewGameCrimsonAura)
+    {
+        return ZENWOOS_BLESSING_CODE_ALREADY_USED;
+    }
+
+    if (hasSaveFile)
+    {
+        FlagSet(FLAG_ZENWOOS_BLESSING_CRIMSON_AURA_USED);
+        FlagSet(FLAG_ZENWOOS_BLESSING_CRIMSON_AURA_PENDING);
+    }
+    else
+    {
+        sZenwoosBlessingPendingNewGameCrimsonAura = TRUE;
+    }
+
+    return ZENWOOS_BLESSING_CODE_SUCCESS;
+}
+
+void ZenwoosBlessing_ApplyPendingNewGameCode(void)
+{
+    if (!sZenwoosBlessingPendingNewGameCrimsonAura)
+        return;
+
+    FlagSet(FLAG_ZENWOOS_BLESSING_CRIMSON_AURA_USED);
+    FlagSet(FLAG_ZENWOOS_BLESSING_CRIMSON_AURA_PENDING);
+    sZenwoosBlessingPendingNewGameCrimsonAura = FALSE;
+}
+
+bool32 ZenwoosBlessing_HasPendingGift(void)
+{
+    return FlagGet(FLAG_ZENWOOS_BLESSING_CRIMSON_AURA_PENDING);
+}
+
+u8 ZenwoosBlessing_TryDeliverGift(void)
+{
+    struct Pokemon mon;
+    u32 personality;
+    u32 ivs = MAX_IV_MASK
+            | (MAX_IV_MASK << 5)
+            | (MAX_IV_MASK << 10)
+            | (MAX_IV_MASK << 15)
+            | (MAX_IV_MASK << 20)
+            | (MAX_IV_MASK << 25);
+    u8 result;
+
+    if (!ZenwoosBlessing_HasPendingGift())
+        return MON_CANT_GIVE;
+
+    personality = CreateGiftAuraPersonality(NATURE_ADAMANT, GetTrainerId(gSaveBlock2Ptr->playerTrainerId));
+    CreateMonWithIVsPersonality(&mon, SPECIES_RIOLU, 5, ivs, personality);
+    {
+        u8 ball = BALL_CHERISH;
+        u8 ribbon = TRUE;
+        SetMonData(&mon, MON_DATA_POKEBALL, &ball);
+        SetMonData(&mon, MON_DATA_WORLD_RIBBON, &ribbon);
+        gSaveBlock1Ptr->giftRibbons[WORLD_RIBBON - FIRST_GIFT_RIBBON] = WORLD_RIBBON;
+    }
+    result = GiveMonToPlayer(&mon);
+
+    if (result != MON_CANT_GIVE)
+    {
+        FlagSet(FLAG_ZENWOOS_BLESSING_CRIMSON_AURA_USED);
+        FlagClear(FLAG_ZENWOOS_BLESSING_CRIMSON_AURA_PENDING);
+        sZenwoosBlessingGiftRedeemedThisVisit = TRUE;
+        TrySavingData(SAVE_NORMAL);
+    }
+
+    return result;
+}
+
+bool32 ZenwoosBlessing_WasGiftRedeemedThisVisit(void)
+{
+    return sZenwoosBlessingGiftRedeemedThisVisit;
+}
+
+void ZenwoosBlessing_ClearGiftRedeemedThisVisit(void)
+{
+    sZenwoosBlessingGiftRedeemedThisVisit = FALSE;
+}

@@ -47,6 +47,7 @@
 #include "constants/region_map_sections.h"
 
 #define LAST_TVSHOW_IDX (TV_SHOWS_COUNT - 1)
+#define METATILE_KANTO_JOHTO_TV_ON 0x061
 
 #define rbernoulli(num, den) BernoulliTrial(0xFFFF * (num) / (den))
 
@@ -87,7 +88,7 @@ static EWRAM_DATA u8 sTVSecretBaseSecretsRandomValues[3] = {};
 static void ClearPokeNews(void);
 static u8 GetTVGroupByShowId(u8);
 static u8 FindFirstActiveTVShowThatIsNotAMassOutbreak(void);
-static void SetTVMetatilesOnMap(int, int, u16);
+static void SetTVMetatilesOnMap(int, int, u16, bool8);
 static u8 FindAnyPokeNewsOnTheAir(void);
 static void TakeGabbyAndTyOffTheAir(void);
 static bool8 BernoulliTrial(u16 ratio);
@@ -828,7 +829,7 @@ void UpdateTVScreensOnMap(int width, int height)
     switch (CheckForPlayersHouseNews())
     {
     case PLAYERS_HOUSE_TV_LATI:
-        SetTVMetatilesOnMap(width, height, METATILE_Building_TV_On);
+        SetTVMetatilesOnMap(width, height, METATILE_Building_TV_On, TRUE);
         break;
     case PLAYERS_HOUSE_TV_MOVIE:
         // Don't flash TV for movie text in player's house
@@ -839,18 +840,18 @@ void UpdateTVScreensOnMap(int width, int height)
          && gSaveBlock1Ptr->location.mapNum == MAP_NUM(MAP_LILYCOVE_CITY_COVE_LILY_MOTEL_1F))
         {
             // NPC in Lilycove Hotel is always watching TV
-            SetTVMetatilesOnMap(width, height, METATILE_Building_TV_On);
+            SetTVMetatilesOnMap(width, height, METATILE_Building_TV_On, TRUE);
         }
         else if (FlagGet(FLAG_SYS_TV_START) && (FindAnyTVShowOnTheAir() != 0xFF || FindAnyPokeNewsOnTheAir() != 0xFF || IsGabbyAndTyShowOnTheAir()))
         {
             FlagClear(FLAG_SYS_TV_WATCH);
-            SetTVMetatilesOnMap(width, height, METATILE_Building_TV_On);
+            SetTVMetatilesOnMap(width, height, METATILE_Building_TV_On, TRUE);
         }
         break;
     }
 }
 
-static void SetTVMetatilesOnMap(int width, int height, u16 metatileId)
+static void SetTVMetatilesOnMap(int width, int height, u16 metatileId, bool8 includeKantoJohtoTvs)
 {
     int x;
     int y;
@@ -861,19 +862,22 @@ static void SetTVMetatilesOnMap(int width, int height, u16 metatileId)
         {
             if (MapGridGetMetatileBehaviorAt(x, y) == MB_TELEVISION)
                 MapGridSetMetatileIdAt(x, y, metatileId | MAPGRID_COLLISION_MASK);
+            else if (includeKantoJohtoTvs
+                  && MapGridGetMetatileBehaviorAt(x, y) == MB_TELEVISION_KANTO_JOHTO)
+                MapGridSetMetatileIdAt(x, y, METATILE_KANTO_JOHTO_TV_ON | MAPGRID_COLLISION_MASK);
         }
     }
 }
 
 void TurnOffTVScreen(void)
 {
-    SetTVMetatilesOnMap(gBackupMapLayout.width, gBackupMapLayout.height, METATILE_Building_TV_Off);
+    SetTVMetatilesOnMap(gBackupMapLayout.width, gBackupMapLayout.height, METATILE_Building_TV_Off, FALSE);
     DrawWholeMapView();
 }
 
 void TurnOnTVScreen(void)
 {
-    SetTVMetatilesOnMap(gBackupMapLayout.width, gBackupMapLayout.height, METATILE_Building_TV_On);
+    SetTVMetatilesOnMap(gBackupMapLayout.width, gBackupMapLayout.height, METATILE_Building_TV_On, TRUE);
     DrawWholeMapView();
 }
 

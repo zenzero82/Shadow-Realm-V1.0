@@ -24,6 +24,13 @@ struct MysteryGiftLinkGameData
     u8 romHeaderSoftwareVersion;
 };
 
+enum ZenwoosBlessingCodeResult
+{
+    ZENWOOS_BLESSING_CODE_INVALID,
+    ZENWOOS_BLESSING_CODE_SUCCESS,
+    ZENWOOS_BLESSING_CODE_ALREADY_USED,
+};
+
 void ClearMysteryGift(void);
 struct WonderNews *GetSavedWonderNews(void);
 struct WonderCard *GetSavedWonderCard(void);
@@ -53,5 +60,11 @@ u16 MysteryGift_GetCardStat(u32 stat);
 void MysteryGift_DisableStats(void);
 bool32 MysteryGift_TryEnableStatsByFlagId(u16 flagId);
 void MysteryGift_TryIncrementStat(u32 stat, u32 trainerId);
+u8 ZenwoosBlessing_TryUseCode(const u8 *code, bool32 hasSaveFile);
+void ZenwoosBlessing_ApplyPendingNewGameCode(void);
+bool32 ZenwoosBlessing_HasPendingGift(void);
+u8 ZenwoosBlessing_TryDeliverGift(void);
+bool32 ZenwoosBlessing_WasGiftRedeemedThisVisit(void);
+void ZenwoosBlessing_ClearGiftRedeemedThisVisit(void);
 
 #endif //GUARD_MYSTERY_GIFT_H

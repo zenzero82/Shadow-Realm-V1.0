@@ -16,6 +16,11 @@ pewter_house2_EventScript_OldMan::
 	end
 
 pewter_house2_Text_OldMan:
-	.string "ROUTE 3 is rough for new trainers.\p"
-	.string "Pack a few POTIONS before you head\n"
-	.string "toward MT. MOON.$"
+	.string "My daughter Tess is obsessed with\n"
+	.string "those GIMMIGHOUL COINS.\p"
+	.string "If she spots even one glittering on a\n"
+	.string "signpost, she'll talk about it for\l"
+	.string "hours.\p"
+	.string "Can't blame her, though.\n"
+	.string "Anything that strange is worth\l"
+	.string "paying attention to.$"

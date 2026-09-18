@@ -1,7 +1,7 @@
 {
   "id": "MAP_CELADON_DEPARTMENT_ELEVATOR",
   "name": "celadon_department_elevator",
-  "layout": "LAYOUT_CELADON_DEPARTMENT_ELEVATOR",
+  "layout": "LAYOUT_GOLDENROD_CITY_DEPARTMENT_STORE_ELEVATOR",
   "music": "MUS_HG_CELADON",
   "region_map_section": "MAPSEC_CELADON_CITY",
   "requires_flash": false,

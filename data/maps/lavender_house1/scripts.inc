@@ -11,12 +11,16 @@ lavender_house1_EventScript_Woman::
 	faceplayer
 	setspeaker lavender_house1_Speaker_Woman
 	msgbox lavender_house1_Text_Woman, MSGBOX_NPC
+	setvar VAR_0x8000, 0
+	call Lavender_Town_EventScript_RecordInteriorNPC
 	end
 
 lavender_house1_EventScript_Boy::
 	faceplayer
 	setspeaker lavender_house1_Speaker_Boy
 	msgbox lavender_house1_Text_Boy, MSGBOX_NPC
+	setvar VAR_0x8000, 1
+	call Lavender_Town_EventScript_RecordInteriorNPC
 	end
 
 lavender_house1_Text_Woman:

@@ -27,7 +27,9 @@ Blissey
 Bisharp
 Buzzwole
 Calyrex 
+Calyrex Ice
 Camerupt
+Celebi
 Celesteela
 Centiskorch
 Ceruledge
@@ -204,14 +206,17 @@ Zapdos
 Zarude
 Zekrom
 Zeraora
-Zygarde """
+Zygarde
+Zygarde Complete """
 
 graphics_dir = BASE_DIR / "graphics" / "pokemon"
 
 
 SPECIAL_SHADOW_NAMES = {"great_tusks": "great_tusk", "mespirit": "mesprit"}
 SPECIAL_SHADOW_DIRECTORIES = {
+    "calyrex_ice": [graphics_dir / "calyrex" / "shadow"],
     "mimikyu_busted": [graphics_dir / "mimikyu" / "busted" / "shadow"],
+    "zygarde_complete": [graphics_dir / "zygarde" / "shadow"],
 }
 SPECIAL_SHADOW_NO_OVERWORLD = {"mimikyu_busted"}
 
@@ -379,6 +384,10 @@ for raw_name, slug, species_constant in species_data:
         if (path / candidate).exists():
             palette_file = candidate
             break
+    if palette_file is None:
+        wildcard_palette = next(iter(sorted(path.glob("*_shadow.pal"))), None)
+        if wildcard_palette is not None:
+            palette_file = wildcard_palette.name
     palette_path = path / palette_file if palette_file else None
     has_palette = palette_file is not None
     overworld_palette_file = None
@@ -400,6 +409,7 @@ for raw_name, slug, species_constant in species_data:
         back_file = find_graphics_file(path, ("back",))
     if icon_file is None:
         icon_file = find_graphics_file(path, ("icon",), exts=(".4bpp", ".4bpp.lz"))
+    icon_palette_file = find_graphics_file(path, ("icon",), exts=(".gbapal", ".pal"))
     if overworld_file is None:
         overworld_file = find_graphics_file(path, ("overworld",), exts=(".4bpp", ".4bpp.lz"))
     overworld_png = find_graphics_png(path, ("overworld",))
@@ -423,6 +433,7 @@ for raw_name, slug, species_constant in species_data:
     female_front_file = find_graphics_file(path, ("anim_frontf", "frontf"))
     female_back_file = find_graphics_file(path, ("backf",))
     female_icon_file = find_graphics_file(path, ("iconf",), exts=(".4bpp", ".4bpp.lz"))
+    female_icon_palette_file = find_graphics_file(path, ("iconf",), exts=(".gbapal", ".pal"))
     female_overworld_file = find_graphics_file(path, ("overworldf",), exts=(".4bpp", ".4bpp.lz"))
     def_exists = f"gMonFrontPic_{camel}Shadow" in content
     species_entries.append(
@@ -447,50 +458,93 @@ for raw_name, slug, species_constant in species_data:
             "female_back_file": female_back_file,
             "has_female_icon": bool(female_icon_file),
             "female_icon_file": female_icon_file,
+            "icon_palette_file": icon_palette_file,
+            "has_icon_palette": bool(icon_palette_file),
+            "female_icon_palette_file": female_icon_palette_file,
+            "has_female_icon_palette": bool(female_icon_palette_file),
             "has_female_overworld": bool(female_overworld_file),
             "female_overworld_file": female_overworld_file,
             "definition_exists": def_exists,
         }
     )
 
+def icon_palette_key(palette_path):
+    return palette_path.read_bytes()[:32]
+
+icon_palette_indices = {}
+for entry in species_entries:
+    if entry["has_icon_palette"]:
+        key = icon_palette_key(entry["icon_palette_file"])
+        if key not in icon_palette_indices:
+            icon_palette_indices[key] = len(icon_palette_indices)
+        entry["icon_palette_tag"] = (
+            f"POKE_ICON_SHADOW_UNIQUE_PAL_TAG_START + {icon_palette_indices[key]}"
+        )
+    else:
+        entry["icon_palette_tag"] = "TAG_NONE"
+
+    if entry["has_female_icon_palette"]:
+        key = icon_palette_key(entry["female_icon_palette_file"])
+        if key not in icon_palette_indices:
+            icon_palette_indices[key] = len(icon_palette_indices)
+        entry["female_icon_palette_tag"] = (
+            f"POKE_ICON_SHADOW_UNIQUE_PAL_TAG_START + {icon_palette_indices[key]}"
+        )
+    else:
+        entry["female_icon_palette_tag"] = "TAG_NONE"
+
+if len(icon_palette_indices) > 64:
+    raise SystemExit(
+        f"Too many unique shadow icon palettes: {len(icon_palette_indices)} > 64"
+    )
+
 def generate_shadow_forms_inc(entries):
     lines = []
     for entry in entries:
-        if entry["definition_exists"]:
-            continue
-        front_path = entry["front_file"].as_posix()
-        back_path = entry["back_file"].as_posix()
         camel = entry["camel"]
-        lines.append(
-            f"const u32 gMonFrontPic_{camel}Shadow[] = INCBIN_U32(\"{front_path}\");"
-        )
-        lines.append(
-            f"const u32 gMonBackPic_{camel}Shadow[] = INCBIN_U32(\"{back_path}\");"
-        )
-        if entry["has_palette"]:
-            pal_path = entry["palette_path"]
+        if not entry["definition_exists"]:
+            front_path = entry["front_file"].as_posix()
+            back_path = entry["back_file"].as_posix()
             lines.append(
-                f"const u16 gMonPalette_{camel}Shadow[] = INCBIN_U16(\"{pal_path.as_posix()}\");"
+                f"const u32 gMonFrontPic_{camel}Shadow[] = INCBIN_U32(\"{front_path}\");"
             )
-        lines.append(
-            f"const u8 gMonIcon_{camel}Shadow[] = INCBIN_U8(\"{entry['icon_file'].as_posix()}\");"
-        )
-        if entry["has_female_icon"]:
+            lines.append(
+                f"const u32 gMonBackPic_{camel}Shadow[] = INCBIN_U32(\"{back_path}\");"
+            )
+            if entry["has_palette"]:
+                pal_path = entry["palette_path"]
+                lines.append(
+                    f"const u16 gMonPalette_{camel}Shadow[] = INCBIN_U16(\"{pal_path.as_posix()}\");"
+                )
+            lines.append(
+                f"const u8 gMonIcon_{camel}Shadow[] = INCBIN_U8(\"{entry['icon_file'].as_posix()}\");"
+            )
+            if entry["has_female_icon"]:
+                lines.append("#if P_GENDER_DIFFERENCES && P_CUSTOM_GENDER_DIFF_ICONS")
+                lines.append(
+                    f"const u8 gMonIcon_{camel}FShadow[] = INCBIN_U8(\"{entry['female_icon_file'].as_posix()}\");"
+                )
+                lines.append("#endif")
+            if entry["has_female_forms"]:
+                lines.append("#if P_GENDER_DIFFERENCES")
+                lines.append(
+                    f"const u32 gMonFrontPic_{camel}FShadow[] = INCBIN_U32(\"{entry['female_front_file'].as_posix()}\");"
+                )
+                lines.append(
+                    f"const u32 gMonBackPic_{camel}FShadow[] = INCBIN_U32(\"{entry['female_back_file'].as_posix()}\");"
+                )
+                lines.append("#endif")
+        if entry["has_icon_palette"]:
+            lines.append(
+                f"const u16 gMonIconPalette_{camel}Shadow[] = INCBIN_U16(\"{entry['icon_palette_file'].as_posix()}\");"
+            )
+        if entry["has_female_icon_palette"]:
             lines.append("#if P_GENDER_DIFFERENCES && P_CUSTOM_GENDER_DIFF_ICONS")
             lines.append(
-                f"const u8 gMonIcon_{camel}FShadow[] = INCBIN_U8(\"{entry['female_icon_file'].as_posix()}\");"
+                f"const u16 gMonIconPalette_{camel}FShadow[] = INCBIN_U16(\"{entry['female_icon_palette_file'].as_posix()}\");"
             )
             lines.append("#endif")
-        if entry["has_female_forms"]:
-            lines.append("#if P_GENDER_DIFFERENCES")
-            lines.append(
-                f"const u32 gMonFrontPic_{camel}FShadow[] = INCBIN_U32(\"{entry['female_front_file'].as_posix()}\");"
-            )
-            lines.append(
-                f"const u32 gMonBackPic_{camel}FShadow[] = INCBIN_U32(\"{entry['female_back_file'].as_posix()}\");"
-            )
-            lines.append("#endif")
-        if entry["overworld_file"]:
+        if not entry["definition_exists"] and entry["overworld_file"]:
             lines.append("#if OW_POKEMON_OBJECT_EVENTS")
             lines.append(
                 f"const u32 gObjectEventPic_{camel}Shadow[] = INCBIN_COMP(\"{entry['overworld_file'].as_posix()}\");"
@@ -502,7 +556,7 @@ def generate_shadow_forms_inc(entries):
                 )
                 lines.append("#endif")
             lines.append("#endif")
-        if entry["has_overworld_palette"]:
+        if not entry["definition_exists"] and entry["has_overworld_palette"]:
             lines.append("#if OW_POKEMON_OBJECT_EVENTS && OW_PKMN_OBJECTS_SHARE_PALETTES == FALSE")
             lines.append(
                 f"const u16 gOverworldPalette_{camel}Shadow[] = INCBIN_U16(\"{entry['overworld_palette_path'].as_posix()}\");"
@@ -534,6 +588,12 @@ for entry in species_entries:
     if entry["has_overworld_palette"]:
         header_lines.append("#if OW_POKEMON_OBJECT_EVENTS && OW_PKMN_OBJECTS_SHARE_PALETTES == FALSE")
         header_lines.append(f"extern const u16 gOverworldPalette_{camel}Shadow[];")
+        header_lines.append("#endif")
+    if entry["has_icon_palette"]:
+        header_lines.append(f"extern const u16 gMonIconPalette_{camel}Shadow[];")
+    if entry["has_female_icon_palette"]:
+        header_lines.append("#if P_GENDER_DIFFERENCES && P_CUSTOM_GENDER_DIFF_ICONS")
+        header_lines.append(f"extern const u16 gMonIconPalette_{camel}FShadow[];")
         header_lines.append("#endif")
     header_lines.append(f"extern const u8 gMonIcon_{camel}Shadow[];")
     if entry["has_female_icon"]:
@@ -571,7 +631,21 @@ for entry in species_entries:
         table_lines.append(f"        .palette = gMonPalette_{camel}Shadow,")
     else:
         table_lines.append("        .palette = NULL,")
+    if entry["has_icon_palette"]:
+        table_lines.append(f"        .iconPalette = gMonIconPalette_{camel}Shadow,")
+    else:
+        table_lines.append("        .iconPalette = NULL,")
+    table_lines.append(f"        .iconPaletteTag = {entry['icon_palette_tag']},")
     table_lines.append(f"        .icon = gMonIcon_{camel}Shadow,")
+    if entry["has_female_icon_palette"]:
+        table_lines.append("#if P_GENDER_DIFFERENCES && P_CUSTOM_GENDER_DIFF_ICONS")
+        table_lines.append(
+            f"        .iconPaletteFemale = gMonIconPalette_{camel}FShadow,"
+        )
+        table_lines.append(
+            f"        .iconPaletteTagFemale = {entry['female_icon_palette_tag']},"
+        )
+        table_lines.append("#endif")
     if entry["has_female_icon"]:
         table_lines.append("#if P_GENDER_DIFFERENCES && P_CUSTOM_GENDER_DIFF_ICONS")
         table_lines.append(

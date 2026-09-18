@@ -6,6 +6,7 @@ Celadon_City_MapScripts::
 Celadon_City_OnTransition::
 	setvar VAR_TEMP_1, 0
 	setflag FLAG_VISITED_CELADON_CITY
+	call CeladonCity_EventScript_CheckNPCQuestState
 	call_if_set FLAG_CELADON_GLADION_EXITED, CeladonCity_EventScript_GladionScene_RemoveObjects
 	call_if_set FLAG_CELADON_GLADION_SCENE_DONE, CeladonCity_EventScript_GladionScene_RemoveObjects
 	call_if_set FLAG_CELADON_LILLIE_JOINED, CeladonCity_EventScript_GladionScene_RemoveObjects
@@ -409,14 +410,40 @@ CeladonCity_EventScript_Poliwrath::
 	release
 	end
 
+CeladonCity_EventScript_CheckNPCQuestState::
+	goto_if_unset FLAG_QUEST_CELADON_NPCS_STARTED, CeladonCity_EventScript_CheckNPCQuestState_End
+	clearflag FLAG_QUEST_CELADON_NPCS_COMPLETED
+	goto_if_unset FLAG_QUEST_CELADON_NPC_FATMAN, CeladonCity_EventScript_CheckNPCQuestState_End
+	goto_if_unset FLAG_QUEST_CELADON_NPC_OLD_MAN1, CeladonCity_EventScript_CheckNPCQuestState_End
+	goto_if_unset FLAG_QUEST_CELADON_NPC_OLD_MAN2, CeladonCity_EventScript_CheckNPCQuestState_End
+	goto_if_unset FLAG_QUEST_CELADON_NPC_BOY, CeladonCity_EventScript_CheckNPCQuestState_End
+	goto_if_unset FLAG_QUEST_CELADON_NPC_LITTLE_BOY, CeladonCity_EventScript_CheckNPCQuestState_End
+	goto_if_unset FLAG_QUEST_CELADON_NPC_LASS, CeladonCity_EventScript_CheckNPCQuestState_End
+	goto_if_unset FLAG_QUEST_CELADON_NPC_BATTLE_GIRL, CeladonCity_EventScript_CheckNPCQuestState_End
+	goto_if_unset FLAG_QUEST_CELADON_NPC_BALDING_MAN, CeladonCity_EventScript_CheckNPCQuestState_End
+	goto_if_unset FLAG_QUEST_CELADON_NPC_TWIN, CeladonCity_EventScript_CheckNPCQuestState_End
+	goto_if_unset FLAG_QUEST_CELADON_NPC_POKECENTER_GENTLEMAN, CeladonCity_EventScript_CheckNPCQuestState_End
+	goto_if_unset FLAG_QUEST_CELADON_NPC_POKECENTER_BATTLE_GIRL, CeladonCity_EventScript_CheckNPCQuestState_End
+	goto_if_unset FLAG_QUEST_CELADON_NPC_HOUSE2_GENTLEMAN, CeladonCity_EventScript_CheckNPCQuestState_End
+	goto_if_unset FLAG_QUEST_CELADON_NPC_APARTMENT_OLD_WOMAN, CeladonCity_EventScript_CheckNPCQuestState_End
+	goto_if_unset FLAG_QUEST_CELADON_NPC_APARTMENTROOF_FATMAN, CeladonCity_EventScript_CheckNPCQuestState_End
+	goto_if_unset FLAG_QUEST_CELADON_NPC_ROOFHOUSE_BLACKBELT, CeladonCity_EventScript_CheckNPCQuestState_End
+	setflag FLAG_QUEST_CELADON_NPCS_COMPLETED
+CeladonCity_EventScript_CheckNPCQuestState_End:
+	return
+
 CeladonCity_EventScript_FatMan::
 	faceplayer
+	setflag FLAG_QUEST_CELADON_NPC_FATMAN
+	call CeladonCity_EventScript_CheckNPCQuestState
 	setspeaker CeladonCity_Speaker_FatMan
 	msgbox CeladonCity_Text_FatMan, MSGBOX_NPC
 	end
 
 CeladonCity_EventScript_OldMan1::
 	faceplayer
+	setflag FLAG_QUEST_CELADON_NPC_OLD_MAN1
+	call CeladonCity_EventScript_CheckNPCQuestState
 	setspeaker CeladonCity_Speaker_OldMan
 	checkitem ITEM_COIN_CASE
 	goto_if_eq VAR_RESULT, TRUE, CeladonCity_EventScript_OldMan1_After
@@ -445,42 +472,56 @@ CeladonCity_EventScript_OldMan1_After::
 
 CeladonCity_EventScript_OldMan2::
 	faceplayer
+	setflag FLAG_QUEST_CELADON_NPC_OLD_MAN2
+	call CeladonCity_EventScript_CheckNPCQuestState
 	setspeaker CeladonCity_Speaker_OldMan
 	msgbox CeladonCity_Text_OldMan2, MSGBOX_NPC
 	end
 
 CeladonCity_EventScript_Boy::
 	faceplayer
+	setflag FLAG_QUEST_CELADON_NPC_BOY
+	call CeladonCity_EventScript_CheckNPCQuestState
 	setspeaker CeladonCity_Speaker_Boy
 	msgbox CeladonCity_Text_Boy, MSGBOX_NPC
 	end
 
 CeladonCity_EventScript_LittleBoy::
 	faceplayer
+	setflag FLAG_QUEST_CELADON_NPC_LITTLE_BOY
+	call CeladonCity_EventScript_CheckNPCQuestState
 	setspeaker CeladonCity_Speaker_LittleBoy
 	msgbox CeladonCity_Text_LittleBoy, MSGBOX_NPC
 	end
 
 CeladonCity_EventScript_Lass::
 	faceplayer
+	setflag FLAG_QUEST_CELADON_NPC_LASS
+	call CeladonCity_EventScript_CheckNPCQuestState
 	setspeaker CeladonCity_Speaker_Lass
 	msgbox CeladonCity_Text_Lass, MSGBOX_NPC
 	end
 
 CeladonCity_EventScript_BattleGirl::
 	faceplayer
+	setflag FLAG_QUEST_CELADON_NPC_BATTLE_GIRL
+	call CeladonCity_EventScript_CheckNPCQuestState
 	setspeaker CeladonCity_Speaker_BattleGirl
 	msgbox CeladonCity_Text_BattleGirl, MSGBOX_NPC
 	end
 
 CeladonCity_EventScript_BaldingMan::
 	faceplayer
+	setflag FLAG_QUEST_CELADON_NPC_BALDING_MAN
+	call CeladonCity_EventScript_CheckNPCQuestState
 	setspeaker CeladonCity_Speaker_BaldingMan
 	msgbox CeladonCity_Text_BaldingMan, MSGBOX_NPC
 	end
 
 CeladonCity_EventScript_Twin::
 	faceplayer
+	setflag FLAG_QUEST_CELADON_NPC_TWIN
+	call CeladonCity_EventScript_CheckNPCQuestState
 	setspeaker CeladonCity_Speaker_Twin
 	msgbox CeladonCity_Text_Twin, MSGBOX_NPC
 	end
@@ -543,7 +584,7 @@ CeladonCity_Text_GameCornerSign:
 CeladonCity_Text_TrainerTips:
 	.string "TRAINER TIPS\p"
 	.string "GUARD SPEC. protects POKéMON\n"
-	.string "against SPECIAL attacks such as\n"
+	.string "against SPECIAL attacks such as\l"
 	.string "fire and water.\p"
 	.string "Get your items at CELADON DEPT.\n"
 	.string "STORE!$"

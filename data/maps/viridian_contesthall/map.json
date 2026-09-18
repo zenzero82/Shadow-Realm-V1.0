@@ -25,7 +25,7 @@
       "trainer_type": "TRAINER_TYPE_NONE",
       "trainer_sight_or_berry_tree_id": "0",
       "script": "viridian_contesthall_EventScript_Judge",
-      "flag": "FLAG_HIDE_VIRIDIAN_POST_ROCKET_NPCS"
+      "flag": "0"
     },
     {
       "graphics_id": "OBJ_EVENT_GFX_ATTENDANT_F_GEN2",
@@ -38,7 +38,7 @@
       "trainer_type": "TRAINER_TYPE_NONE",
       "trainer_sight_or_berry_tree_id": "0",
       "script": "viridian_contesthall_EventScript_Attendant",
-      "flag": "FLAG_HIDE_VIRIDIAN_POST_ROCKET_NPCS"
+      "flag": "0"
     },
     {
       "graphics_id": "OBJ_EVENT_GFX_WOMAN_6_GEN2",
@@ -51,7 +51,7 @@
       "trainer_type": "TRAINER_TYPE_NONE",
       "trainer_sight_or_berry_tree_id": "0",
       "script": "viridian_contesthall_EventScript_Woman",
-      "flag": "FLAG_HIDE_VIRIDIAN_POST_ROCKET_NPCS"
+      "flag": "0"
     },
     {
       "graphics_id": "OBJ_EVENT_GFX_BEAUTY2_GEN1",
@@ -64,7 +64,7 @@
       "trainer_type": "TRAINER_TYPE_NONE",
       "trainer_sight_or_berry_tree_id": "0",
       "script": "viridian_contesthall_EventScript_Beauty",
-      "flag": "FLAG_HIDE_VIRIDIAN_POST_ROCKET_NPCS"
+      "flag": "0"
     }
   ],
   "warp_events": [

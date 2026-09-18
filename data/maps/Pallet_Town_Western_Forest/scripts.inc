@@ -366,19 +366,19 @@ TestText:
     .string "Yo wassup!$"
 
 ShadowMonitor_Text_Given:
-    .string "Here's the {COLOR PURPLE}Shadow Monitor{COLOR DARK_GRAY}\n"
+    .string "Here's the {COLOR BLUE}Shadow Monitor{COLOR DARK_GRAY}\n"
     .string "I found.\p"
     .string "It keeps track of every\n"
-    .string "{COLOR PURPLE}Shadow Pokemon{COLOR DARK_GRAY} you snag.$"
+    .string "{COLOR BLUE}Shadow Pokemon{COLOR DARK_GRAY} you snag.$"
 
 ShadowMonitor_Text_AlreadyHave:
     .string "You already grabbed the\n"
-    .string "{COLOR PURPLE}Shadow Monitor{COLOR DARK_GRAY}.\p"
+    .string "{COLOR BLUE}Shadow Monitor{COLOR DARK_GRAY}.\p"
     .string "Thanks for checking!$"
 
 SnagMachine_Text_Given:
     .string "The Snag Machine is yours now.\p"
-    .string "It logs every {COLOR PURPLE}Shadow\n"
+    .string "It logs every {COLOR BLUE}Shadow\n"
     .string "Pokemon{COLOR DARK_GRAY} you capture.$"
 
 SnagMachine_Text_AlreadyHave:

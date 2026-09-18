@@ -11,13 +11,7 @@ vermilion_house2_EventScript_Woman::
 	lock
 	faceplayer
 	setspeaker vermilion_house2_Speaker_Woman
-	goto_if_set FLAG_VERMILION_PORTINSIDE_BURNET_SCENE_DONE, vermilion_house2_EventScript_Woman_After
-	msgbox vermilion_house2_Text_Woman_Before, MSGBOX_NPC
-	release
-	end
-
-vermilion_house2_EventScript_Woman_After::
-	msgbox vermilion_house2_Text_Woman_After, MSGBOX_NPC
+	msgbox vermilion_house2_Text_Woman, MSGBOX_NPC
 	release
 	end
 
@@ -25,29 +19,16 @@ vermilion_house2_EventScript_Boy::
 	lock
 	faceplayer
 	setspeaker vermilion_house2_Speaker_Boy
-	goto_if_set FLAG_VERMILION_PORTINSIDE_BURNET_SCENE_DONE, vermilion_house2_EventScript_Boy_After
-	msgbox vermilion_house2_Text_Boy_Before, MSGBOX_NPC
+	msgbox vermilion_house2_Text_Boy, MSGBOX_NPC
 	release
 	end
 
-vermilion_house2_EventScript_Boy_After::
-	msgbox vermilion_house2_Text_Boy_After, MSGBOX_NPC
-	release
-	end
+vermilion_house2_Text_Woman:
+	.string "My son dreams about the S.S. ANNE\n"
+	.string "every single day.\p"
+	.string "One voyage and he'd probably decide\n"
+	.string "to live on a ship forever.$"
 
-vermilion_house2_Text_Woman_Before:
-	.string "My son keeps peeking toward the docks.\p"
-	.string "Something about the harbor has the\n"
-	.string "whole city unsettled.$"
-
-vermilion_house2_Text_Woman_After:
-	.string "Whatever happened at the port,\n"
-	.string "I'm relieved it ended peacefully.$"
-
-vermilion_house2_Text_Boy_Before:
-	.string "I saw a pretty girl near the ship,\n"
-	.string "but she looked really scared.$"
-
-vermilion_house2_Text_Boy_After:
-	.string "Mom says not to pry, but I still want\n"
-	.string "to know what happened at the port.$"
+vermilion_house2_Text_Boy:
+	.string "Someday I'm going to ride the\n"
+	.string "S.S. ANNE and see every region.$"

@@ -51,6 +51,7 @@ void DisplayDadsAdviceCannotUseItemMessage(u8 taskId, bool8 isUsingRegisteredKey
 void ItemUseOutOfBattle_PokeFlute(u8 taskId);
 void ItemUseOutOfBattle_TimeFlute(u8 taskId);
 void ItemUseOutOfBattle_RelicTablet(u8 taskId);
+void ItemUseOutOfBattle_CologneCase(u8 taskId);
 void ItemUseOutOfBattle_TownMap(u8 taskId);
 void ItemUseOutOfBattle_ShadowMonitor(u8 taskId);
 void ItemUseOutOfBattle_QuestJournal(u8 taskId);

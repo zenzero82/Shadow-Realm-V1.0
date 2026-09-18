@@ -7847,7 +7847,9 @@ bool32 IsBattlerProtected(u32 battlerAtk, u32 battlerDef, u32 move)
     {
         if (IsZMove(move) || IsMaxMove(move))
             return FALSE; // Z-Moves and Max Moves bypass protection (except Max Guard).
-        if (IsMoveMakingContact(move, battlerAtk) && GetBattlerAbility(battlerAtk) == ABILITY_UNSEEN_FIST)
+        if (IsMoveMakingContact(move, battlerAtk)
+         && (GetBattlerAbility(battlerAtk) == ABILITY_UNSEEN_FIST
+          || GetBattlerAbility(battlerAtk) == ABILITY_PIERCING_DRILL))
             return FALSE;
     }
 
@@ -8582,6 +8584,10 @@ static inline u32 CalcMoveBasePowerAfterModifiers(struct DamageCalculationData *
         break;
     case ABILITY_AERILATE:
         if (moveType == TYPE_FLYING && gBattleStruct->ateBoost[battlerAtk])
+            modifier = uq4_12_multiply(modifier, UQ_4_12(GetGenConfig(GEN_CONFIG_ATE_MULTIPLIER) >= GEN_7 ? 1.2 : 1.3));
+        break;
+    case ABILITY_DRAGONIZE:
+        if (moveType == TYPE_DRAGON && gBattleStruct->ateBoost[battlerAtk])
             modifier = uq4_12_multiply(modifier, UQ_4_12(GetGenConfig(GEN_CONFIG_ATE_MULTIPLIER) >= GEN_7 ? 1.2 : 1.3));
         break;
     case ABILITY_NORMALIZE:

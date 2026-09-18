@@ -7,7 +7,12 @@
 #include "gym_leader_rematch.h"
 #include "match_call.h"
 #include "money.h"
+#include "overworld.h"
+#include "pokedex.h"
+#include "pokemon.h"
 #include "pokenav.h"
+#include "region_map.h"
+#include "roaming_shadow_hunter.h"
 #include "strings.h"
 #include "constants/region_map_sections.h"
 #include "constants/trainers.h"
@@ -104,7 +109,7 @@ typedef union {
 
 struct MatchCallCheckPageOverride {
     u16 idx;
-    u16 facilityClass;
+    u16 trainerPic;
     u32 flag;
     const u8 *flavorTexts[CHECK_PAGE_ENTRY_COUNT];
 };
@@ -158,6 +163,13 @@ static void MatchCall_GetNameAndDesc_Rival(match_call_t, const u8 **, const u8 *
 static void MatchCall_BufferCallMessageText(const match_call_text_data_t *, u8 *);
 static void MatchCall_BufferCallMessageTextByRematchTeam(const match_call_text_data_t *, u16, u8 *);
 static void MatchCall_GetNameAndDescByRematchIdx(u32, const u8 **, const u8 **);
+static void MatchCall_GetMessage_ProfessorBirch(u8 *dest);
+static void MatchCall_GetMessage_ProfessorRowan(u8 *dest);
+static void MatchCall_GetMessage_Wes(u8 *dest);
+static void MatchCall_BufferRowanDexRecommendation(u8 *dest);
+static u16 MatchCall_CountSnaggedShadowMons(void);
+static u16 MatchCall_CountSeenShadowMons(void);
+static const struct MatchCallCheckPageOverride *MatchCall_GetCheckPageOverride(u32 idx);
 
 // .rodata
 
@@ -217,6 +229,489 @@ static const struct MatchCallBirch sProfBirchMatchCallHeader =
     .flag = FLAG_ENABLE_PROF_BIRCH_MATCH_CALL,
     .desc = COMPOUND_STRING("{PKMN} PROF."),
     .name = COMPOUND_STRING("PROF. BIRCH")
+};
+
+static const match_call_text_data_t sBrockTextScripts[] = {
+    { COMPOUND_STRING("BROCK: Tough battles are won by trainers\nwho stay steady from the first hit.$"), 0xFFFF, 0xFFFF },
+    { NULL, 0xFFFF, 0xFFFF }
+};
+
+static const match_call_text_data_t sMistyTextScripts[] = {
+    { COMPOUND_STRING("MISTY: Keep your team moving.\nA battle gets messy when you go stiff.$"), 0xFFFF, 0xFFFF },
+    { NULL, 0xFFFF, 0xFFFF }
+};
+
+static const match_call_text_data_t sSurgeTextScripts[] = {
+    { COMPOUND_STRING("LT. SURGE: Hit hard, hit fast,\nand never give the other side room to breathe!$"), 0xFFFF, 0xFFFF },
+    { NULL, 0xFFFF, 0xFFFF }
+};
+
+static const match_call_text_data_t sErikaTextScripts[] = {
+    { COMPOUND_STRING("ERIKA: Patience matters.\nA calm trainer notices what reckless ones miss.$"), 0xFFFF, 0xFFFF },
+    { NULL, 0xFFFF, 0xFFFF }
+};
+
+static const match_call_text_data_t sSabrinaTextScripts[] = {
+    { COMPOUND_STRING("SABRINA: Read the pace of the battle.\nIntent becomes obvious to a focused mind.$"), 0xFFFF, 0xFFFF },
+    { NULL, 0xFFFF, 0xFFFF }
+};
+
+static const match_call_text_data_t sKogaTextScripts[] = {
+    { COMPOUND_STRING("KOGA: Leave nothing obvious.\nThe best move is often the one your foe ignores.$"), 0xFFFF, 0xFFFF },
+    { NULL, 0xFFFF, 0xFFFF }
+};
+
+static const match_call_text_data_t sBlaineTextScripts[] = {
+    { COMPOUND_STRING("BLAINE: Keep that fire burning!\nPressure wins fights when you control the heat.$"), 0xFFFF, 0xFFFF },
+    { NULL, 0xFFFF, 0xFFFF }
+};
+
+static const match_call_text_data_t sBlueTextScripts[] = {
+    { COMPOUND_STRING("BLUE: If you're calling me,\nyou'd better still be training like it matters.$"), 0xFFFF, 0xFFFF },
+    { NULL, 0xFFFF, 0xFFFF }
+};
+
+static const match_call_text_data_t sFalknerTextScripts[] = {
+    { COMPOUND_STRING("FALKNER: Positioning decides everything.\nA clean angle can win before the clash starts.$"), 0xFFFF, 0xFFFF },
+    { NULL, 0xFFFF, 0xFFFF }
+};
+
+static const match_call_text_data_t sBugsyTextScripts[] = {
+    { COMPOUND_STRING("BUGSY: Tiny details matter!\nA smart trainer learns patterns other people skip.$"), 0xFFFF, 0xFFFF },
+    { NULL, 0xFFFF, 0xFFFF }
+};
+
+static const match_call_text_data_t sWhitneyTextScripts[] = {
+    { COMPOUND_STRING("WHITNEY: Cute doesn't mean soft!\nIf your team has confidence, lean into it.$"), 0xFFFF, 0xFFFF },
+    { NULL, 0xFFFF, 0xFFFF }
+};
+
+static const match_call_text_data_t sMortyTextScripts[] = {
+    { COMPOUND_STRING("MORTY: Don't rush every turn.\nSometimes a battle opens up if you wait and watch.$"), 0xFFFF, 0xFFFF },
+    { NULL, 0xFFFF, 0xFFFF }
+};
+
+static const match_call_text_data_t sChuckTextScripts[] = {
+    { COMPOUND_STRING("CHUCK: Train with intent!\nIf your team can keep swinging, you'll break through.$"), 0xFFFF, 0xFFFF },
+    { NULL, 0xFFFF, 0xFFFF }
+};
+
+static const match_call_text_data_t sJasmineTextScripts[] = {
+    { COMPOUND_STRING("JASMINE: Reliability matters.\nA sturdy team gives you time to make the right call.$"), 0xFFFF, 0xFFFF },
+    { NULL, 0xFFFF, 0xFFFF }
+};
+
+static const match_call_text_data_t sPryceTextScripts[] = {
+    { COMPOUND_STRING("PRYCE: Experience wins battles.\nStudy old routes again and you'll see new answers.$"), 0xFFFF, 0xFFFF },
+    { NULL, 0xFFFF, 0xFFFF }
+};
+
+static const match_call_text_data_t sClairTextScripts[] = {
+    { COMPOUND_STRING("CLAIR: Hold yourself to a higher standard.\nStrong trainers do not settle for sloppy wins.$"), 0xFFFF, 0xFFFF },
+    { NULL, 0xFFFF, 0xFFFF }
+};
+
+static const struct MatchCallStructNPC sBrockMatchCallHeader =
+{
+    .type = MC_TYPE_NPC,
+    .mapSec = MAPSEC_PEWTER_CITY,
+    .flag = FLAG_BADGE09_GET,
+    .desc = COMPOUND_STRING("PEWTER GYM"),
+    .name = COMPOUND_STRING("BROCK"),
+    .textData = sBrockTextScripts,
+};
+
+static const struct MatchCallStructNPC sMistyMatchCallHeader =
+{
+    .type = MC_TYPE_NPC,
+    .mapSec = MAPSEC_CERULEAN_CITY,
+    .flag = FLAG_BADGE10_GET,
+    .desc = COMPOUND_STRING("CERULEAN GYM"),
+    .name = COMPOUND_STRING("MISTY"),
+    .textData = sMistyTextScripts,
+};
+
+static const struct MatchCallStructNPC sSurgeMatchCallHeader =
+{
+    .type = MC_TYPE_NPC,
+    .mapSec = MAPSEC_VERMILION_CITY,
+    .flag = FLAG_BADGE11_GET,
+    .desc = COMPOUND_STRING("VERMILION GYM"),
+    .name = COMPOUND_STRING("LT. SURGE"),
+    .textData = sSurgeTextScripts,
+};
+
+static const struct MatchCallStructNPC sErikaMatchCallHeader =
+{
+    .type = MC_TYPE_NPC,
+    .mapSec = MAPSEC_CELADON_CITY,
+    .flag = FLAG_BADGE12_GET,
+    .desc = COMPOUND_STRING("CELADON GYM"),
+    .name = COMPOUND_STRING("ERIKA"),
+    .textData = sErikaTextScripts,
+};
+
+static const struct MatchCallStructNPC sSabrinaMatchCallHeader =
+{
+    .type = MC_TYPE_NPC,
+    .mapSec = MAPSEC_SAFFRON_CITY,
+    .flag = FLAG_BADGE13_GET,
+    .desc = COMPOUND_STRING("SAFFRON GYM"),
+    .name = COMPOUND_STRING("SABRINA"),
+    .textData = sSabrinaTextScripts,
+};
+
+static const struct MatchCallStructNPC sKogaMatchCallHeader =
+{
+    .type = MC_TYPE_NPC,
+    .mapSec = MAPSEC_FUCHSIA_CITY,
+    .flag = FLAG_BADGE14_GET,
+    .desc = COMPOUND_STRING("FUCHSIA GYM"),
+    .name = COMPOUND_STRING("KOGA"),
+    .textData = sKogaTextScripts,
+};
+
+static const struct MatchCallStructNPC sBlaineMatchCallHeader =
+{
+    .type = MC_TYPE_NPC,
+    .mapSec = MAPSEC_CINNABAR_ISLAND,
+    .flag = FLAG_BADGE15_GET,
+    .desc = COMPOUND_STRING("CINNABAR GYM"),
+    .name = COMPOUND_STRING("BLAINE"),
+    .textData = sBlaineTextScripts,
+};
+
+static const struct MatchCallStructNPC sBlueMatchCallHeader =
+{
+    .type = MC_TYPE_NPC,
+    .mapSec = MAPSEC_VIRIDIAN_CITY,
+    .flag = FLAG_BADGE16_GET,
+    .desc = COMPOUND_STRING("VIRIDIAN GYM"),
+    .name = COMPOUND_STRING("BLUE"),
+    .textData = sBlueTextScripts,
+};
+
+static const struct MatchCallStructNPC sFalknerMatchCallHeader =
+{
+    .type = MC_TYPE_NPC,
+    .mapSec = MAPSEC_VIOLET_CITY,
+    .flag = FLAG_BADGE17_GET,
+    .desc = COMPOUND_STRING("VIOLET GYM"),
+    .name = COMPOUND_STRING("FALKNER"),
+    .textData = sFalknerTextScripts,
+};
+
+static const struct MatchCallStructNPC sBugsyMatchCallHeader =
+{
+    .type = MC_TYPE_NPC,
+    .mapSec = MAPSEC_AZALEA_TOWN,
+    .flag = FLAG_BADGE18_GET,
+    .desc = COMPOUND_STRING("AZALEA GYM"),
+    .name = COMPOUND_STRING("BUGSY"),
+    .textData = sBugsyTextScripts,
+};
+
+static const struct MatchCallStructNPC sWhitneyMatchCallHeader =
+{
+    .type = MC_TYPE_NPC,
+    .mapSec = MAPSEC_GOLDENROD_CITY,
+    .flag = FLAG_BADGE19_GET,
+    .desc = COMPOUND_STRING("GOLDENROD GYM"),
+    .name = COMPOUND_STRING("WHITNEY"),
+    .textData = sWhitneyTextScripts,
+};
+
+static const struct MatchCallStructNPC sMortyMatchCallHeader =
+{
+    .type = MC_TYPE_NPC,
+    .mapSec = MAPSEC_ECRUTEAK_CITY,
+    .flag = FLAG_BADGE20_GET,
+    .desc = COMPOUND_STRING("ECRUTEAK GYM"),
+    .name = COMPOUND_STRING("MORTY"),
+    .textData = sMortyTextScripts,
+};
+
+static const struct MatchCallStructNPC sChuckMatchCallHeader =
+{
+    .type = MC_TYPE_NPC,
+    .mapSec = MAPSEC_CIANWOOD_CITY,
+    .flag = FLAG_BADGE21_GET,
+    .desc = COMPOUND_STRING("CIANWOOD GYM"),
+    .name = COMPOUND_STRING("CHUCK"),
+    .textData = sChuckTextScripts,
+};
+
+static const struct MatchCallStructNPC sJasmineMatchCallHeader =
+{
+    .type = MC_TYPE_NPC,
+    .mapSec = MAPSEC_OLIVINE_CITY,
+    .flag = FLAG_BADGE22_GET,
+    .desc = COMPOUND_STRING("OLIVINE GYM"),
+    .name = COMPOUND_STRING("JASMINE"),
+    .textData = sJasmineTextScripts,
+};
+
+static const struct MatchCallStructNPC sPryceMatchCallHeader =
+{
+    .type = MC_TYPE_NPC,
+    .mapSec = MAPSEC_MAHOGANY_TOWN,
+    .flag = FLAG_BADGE23_GET,
+    .desc = COMPOUND_STRING("MAHOGANY GYM"),
+    .name = COMPOUND_STRING("PRYCE"),
+    .textData = sPryceTextScripts,
+};
+
+static const struct MatchCallStructNPC sClairMatchCallHeader =
+{
+    .type = MC_TYPE_NPC,
+    .mapSec = MAPSEC_BLACKTHORN_CITY,
+    .flag = FLAG_BADGE24_GET,
+    .desc = COMPOUND_STRING("BLACKTHORN GYM"),
+    .name = COMPOUND_STRING("CLAIR"),
+    .textData = sClairTextScripts,
+};
+
+static const struct MatchCallStructNPC sWesMatchCallHeader =
+{
+    .type = MC_TYPE_NPC,
+    .mapSec = MAPSEC_NONE,
+    .flag = FLAG_RECEIVED_SHADOW_MONITOR,
+    .desc = COMPOUND_STRING("SNAG MASTER"),
+    .name = COMPOUND_STRING("WES"),
+    .textData = NULL,
+};
+
+static const struct MatchCallStructNPC sProfessorBirchContactHeader =
+{
+    .type = MC_TYPE_NPC,
+    .mapSec = MAPSEC_NONE,
+    .flag = FLAG_WES_HIDEOUT_TALKED_BIRCH,
+    .desc = COMPOUND_STRING("{PKMN} PROF."),
+    .name = COMPOUND_STRING("PROF. BIRCH"),
+    .textData = NULL,
+};
+
+static const struct MatchCallStructNPC sProfessorRowanContactHeader =
+{
+    .type = MC_TYPE_NPC,
+    .mapSec = MAPSEC_NONE,
+    .flag = FLAG_WES_HIDEOUT_TALKED_ROWAN,
+    .desc = COMPOUND_STRING("{PKMN} PROF."),
+    .name = COMPOUND_STRING("PROF. ROWAN"),
+    .textData = NULL,
+};
+
+static const struct MatchCallCheckPageOverride sMatchCallCheckPageOverrides[] =
+{
+    {
+        .idx = MC_HEADER_BROCK,
+        .trainerPic = TRAINER_PIC_BROCK_KANTO,
+        .flag = FLAG_BADGE09_GET,
+        .flavorTexts = {
+            [CHECK_PAGE_STRATEGY] = COMPOUND_STRING("Steady pressure."),
+            [CHECK_PAGE_POKEMON]  = COMPOUND_STRING("Rock-type core."),
+            [CHECK_PAGE_INTRO_1]  = COMPOUND_STRING("Pewter's leader keeps"),
+            [CHECK_PAGE_INTRO_2]  = COMPOUND_STRING("his team grounded."),
+        },
+    },
+    {
+        .idx = MC_HEADER_MISTY,
+        .trainerPic = TRAINER_PIC_MISTY,
+        .flag = FLAG_BADGE10_GET,
+        .flavorTexts = {
+            [CHECK_PAGE_STRATEGY] = COMPOUND_STRING("Fast repositioning."),
+            [CHECK_PAGE_POKEMON]  = COMPOUND_STRING("Water-type core."),
+            [CHECK_PAGE_INTRO_1]  = COMPOUND_STRING("Cerulean's leader hates"),
+            [CHECK_PAGE_INTRO_2]  = COMPOUND_STRING("stiff, predictable play."),
+        },
+    },
+    {
+        .idx = MC_HEADER_SURGE,
+        .trainerPic = TRAINER_PIC_SURGE,
+        .flag = FLAG_BADGE11_GET,
+        .flavorTexts = {
+            [CHECK_PAGE_STRATEGY] = COMPOUND_STRING("Relentless offense."),
+            [CHECK_PAGE_POKEMON]  = COMPOUND_STRING("Electric-type core."),
+            [CHECK_PAGE_INTRO_1]  = COMPOUND_STRING("The Lightning American"),
+            [CHECK_PAGE_INTRO_2]  = COMPOUND_STRING("likes fast KOs."),
+        },
+    },
+    {
+        .idx = MC_HEADER_ERIKA,
+        .trainerPic = TRAINER_PIC_ERIKA,
+        .flag = FLAG_BADGE12_GET,
+        .flavorTexts = {
+            [CHECK_PAGE_STRATEGY] = COMPOUND_STRING("Measured control."),
+            [CHECK_PAGE_POKEMON]  = COMPOUND_STRING("Grass-type core."),
+            [CHECK_PAGE_INTRO_1]  = COMPOUND_STRING("Celadon's leader wins"),
+            [CHECK_PAGE_INTRO_2]  = COMPOUND_STRING("by staying composed."),
+        },
+    },
+    {
+        .idx = MC_HEADER_SABRINA,
+        .trainerPic = TRAINER_PIC_SABRINA,
+        .flag = FLAG_BADGE13_GET,
+        .flavorTexts = {
+            [CHECK_PAGE_STRATEGY] = COMPOUND_STRING("Reads battle tempo."),
+            [CHECK_PAGE_POKEMON]  = COMPOUND_STRING("Psychic-type core."),
+            [CHECK_PAGE_INTRO_1]  = COMPOUND_STRING("Saffron's leader punishes"),
+            [CHECK_PAGE_INTRO_2]  = COMPOUND_STRING("obvious patterns."),
+        },
+    },
+    {
+        .idx = MC_HEADER_KOGA,
+        .trainerPic = TRAINER_PIC_ELITE_FOUR_KOGA,
+        .flag = FLAG_BADGE14_GET,
+        .flavorTexts = {
+            [CHECK_PAGE_STRATEGY] = COMPOUND_STRING("Hidden setup lines."),
+            [CHECK_PAGE_POKEMON]  = COMPOUND_STRING("Poison-type core."),
+            [CHECK_PAGE_INTRO_1]  = COMPOUND_STRING("Fuchsia's leader values"),
+            [CHECK_PAGE_INTRO_2]  = COMPOUND_STRING("tricks over noise."),
+        },
+    },
+    {
+        .idx = MC_HEADER_BLAINE,
+        .trainerPic = TRAINER_PIC_BLAINE,
+        .flag = FLAG_BADGE15_GET,
+        .flavorTexts = {
+            [CHECK_PAGE_STRATEGY] = COMPOUND_STRING("Heat and pressure."),
+            [CHECK_PAGE_POKEMON]  = COMPOUND_STRING("Fire-type core."),
+            [CHECK_PAGE_INTRO_1]  = COMPOUND_STRING("Cinnabar's quiz master"),
+            [CHECK_PAGE_INTRO_2]  = COMPOUND_STRING("likes hot streaks."),
+        },
+    },
+    {
+        .idx = MC_HEADER_BLUE,
+        .trainerPic = TRAINER_PIC_LEADER_BLUE,
+        .flag = FLAG_BADGE16_GET,
+        .flavorTexts = {
+            [CHECK_PAGE_STRATEGY] = COMPOUND_STRING("Adaptive offense."),
+            [CHECK_PAGE_POKEMON]  = COMPOUND_STRING("Mixed team."),
+            [CHECK_PAGE_INTRO_1]  = COMPOUND_STRING("Viridian's leader expects"),
+            [CHECK_PAGE_INTRO_2]  = COMPOUND_STRING("sharp play at all times."),
+        },
+    },
+    {
+        .idx = MC_HEADER_FALKNER,
+        .trainerPic = TRAINER_PIC_LEADER_FALKNER,
+        .flag = FLAG_BADGE17_GET,
+        .flavorTexts = {
+            [CHECK_PAGE_STRATEGY] = COMPOUND_STRING("Wins on angles."),
+            [CHECK_PAGE_POKEMON]  = COMPOUND_STRING("Flying-type core."),
+            [CHECK_PAGE_INTRO_1]  = COMPOUND_STRING("Violet's leader values"),
+            [CHECK_PAGE_INTRO_2]  = COMPOUND_STRING("clean positioning."),
+        },
+    },
+    {
+        .idx = MC_HEADER_BUGSY,
+        .trainerPic = TRAINER_PIC_LEADER_BUGSY,
+        .flag = FLAG_BADGE18_GET,
+        .flavorTexts = {
+            [CHECK_PAGE_STRATEGY] = COMPOUND_STRING("Pattern study."),
+            [CHECK_PAGE_POKEMON]  = COMPOUND_STRING("Bug-type core."),
+            [CHECK_PAGE_INTRO_1]  = COMPOUND_STRING("Azalea's leader spots"),
+            [CHECK_PAGE_INTRO_2]  = COMPOUND_STRING("small battle details."),
+        },
+    },
+    {
+        .idx = MC_HEADER_WHITNEY,
+        .trainerPic = TRAINER_PIC_LEADER_WHITNEY,
+        .flag = FLAG_BADGE19_GET,
+        .flavorTexts = {
+            [CHECK_PAGE_STRATEGY] = COMPOUND_STRING("Confidence first."),
+            [CHECK_PAGE_POKEMON]  = COMPOUND_STRING("Normal-type core."),
+            [CHECK_PAGE_INTRO_1]  = COMPOUND_STRING("Goldenrod's leader hits"),
+            [CHECK_PAGE_INTRO_2]  = COMPOUND_STRING("hard through momentum."),
+        },
+    },
+    {
+        .idx = MC_HEADER_MORTY,
+        .trainerPic = TRAINER_PIC_LEADER_MORTY,
+        .flag = FLAG_BADGE20_GET,
+        .flavorTexts = {
+            [CHECK_PAGE_STRATEGY] = COMPOUND_STRING("Patient reads."),
+            [CHECK_PAGE_POKEMON]  = COMPOUND_STRING("Ghost-type core."),
+            [CHECK_PAGE_INTRO_1]  = COMPOUND_STRING("Ecruteak's leader waits"),
+            [CHECK_PAGE_INTRO_2]  = COMPOUND_STRING("for openings to show."),
+        },
+    },
+    {
+        .idx = MC_HEADER_CHUCK,
+        .trainerPic = TRAINER_PIC_LEADER_CHUCK,
+        .flag = FLAG_BADGE21_GET,
+        .flavorTexts = {
+            [CHECK_PAGE_STRATEGY] = COMPOUND_STRING("Break through walls."),
+            [CHECK_PAGE_POKEMON]  = COMPOUND_STRING("Fighting-type core."),
+            [CHECK_PAGE_INTRO_1]  = COMPOUND_STRING("Cianwood's leader values"),
+            [CHECK_PAGE_INTRO_2]  = COMPOUND_STRING("stamina and force."),
+        },
+    },
+    {
+        .idx = MC_HEADER_JASMINE,
+        .trainerPic = TRAINER_PIC_LEADER_JASMINE,
+        .flag = FLAG_BADGE22_GET,
+        .flavorTexts = {
+            [CHECK_PAGE_STRATEGY] = COMPOUND_STRING("Reliable defense."),
+            [CHECK_PAGE_POKEMON]  = COMPOUND_STRING("Steel-type core."),
+            [CHECK_PAGE_INTRO_1]  = COMPOUND_STRING("Olivine's leader trusts"),
+            [CHECK_PAGE_INTRO_2]  = COMPOUND_STRING("steady teams."),
+        },
+    },
+    {
+        .idx = MC_HEADER_PRYCE,
+        .trainerPic = TRAINER_PIC_LEADER_PRYCE,
+        .flag = FLAG_BADGE23_GET,
+        .flavorTexts = {
+            [CHECK_PAGE_STRATEGY] = COMPOUND_STRING("Experience first."),
+            [CHECK_PAGE_POKEMON]  = COMPOUND_STRING("Ice-type core."),
+            [CHECK_PAGE_INTRO_1]  = COMPOUND_STRING("Mahogany's elder wins"),
+            [CHECK_PAGE_INTRO_2]  = COMPOUND_STRING("through field wisdom."),
+        },
+    },
+    {
+        .idx = MC_HEADER_CLAIR,
+        .trainerPic = TRAINER_PIC_LEADER_CLAIR,
+        .flag = FLAG_BADGE24_GET,
+        .flavorTexts = {
+            [CHECK_PAGE_STRATEGY] = COMPOUND_STRING("High standards."),
+            [CHECK_PAGE_POKEMON]  = COMPOUND_STRING("Dragon-type core."),
+            [CHECK_PAGE_INTRO_1]  = COMPOUND_STRING("Blackthorn's leader hates"),
+            [CHECK_PAGE_INTRO_2]  = COMPOUND_STRING("sloppy victories."),
+        },
+    },
+    {
+        .idx = MC_HEADER_WES,
+        .trainerPic = TRAINER_PIC_WES,
+        .flag = FLAG_RECEIVED_SHADOW_MONITOR,
+        .flavorTexts = {
+            [CHECK_PAGE_STRATEGY] = COMPOUND_STRING("Snag first, survive."),
+            [CHECK_PAGE_POKEMON]  = COMPOUND_STRING("Anti-shadow team."),
+            [CHECK_PAGE_INTRO_1]  = COMPOUND_STRING("Wes tracks rescued"),
+            [CHECK_PAGE_INTRO_2]  = COMPOUND_STRING("shadow Pokemon."),
+        },
+    },
+    {
+        .idx = MC_HEADER_PROF_BIRCH,
+        .trainerPic = TRAINER_PIC_PROF_BIRCHFP,
+        .flag = FLAG_WES_HIDEOUT_TALKED_BIRCH,
+        .flavorTexts = {
+            [CHECK_PAGE_STRATEGY] = COMPOUND_STRING("Field research."),
+            [CHECK_PAGE_POKEMON]  = COMPOUND_STRING("Regional ecology."),
+            [CHECK_PAGE_INTRO_1]  = COMPOUND_STRING("Birch studies strange"),
+            [CHECK_PAGE_INTRO_2]  = COMPOUND_STRING("activity in the wild."),
+        },
+    },
+    {
+        .idx = MC_HEADER_PROF_ROWAN,
+        .trainerPic = TRAINER_PIC_PROF_ROWAN,
+        .flag = FLAG_WES_HIDEOUT_TALKED_ROWAN,
+        .flavorTexts = {
+            [CHECK_PAGE_STRATEGY] = COMPOUND_STRING("Track the data."),
+            [CHECK_PAGE_POKEMON]  = COMPOUND_STRING("Dex analysis."),
+            [CHECK_PAGE_INTRO_1]  = COMPOUND_STRING("Rowan monitors hunters"),
+            [CHECK_PAGE_INTRO_2]  = COMPOUND_STRING("and Dex progress."),
+        },
+    },
 };
 
 static const match_call_text_data_t sMomTextScripts[] = {
@@ -584,27 +1079,26 @@ static const struct MatchCallStructTrainer sWallaceMatchCallHeader =
 };
 
 static const match_call_t sMatchCallHeaders[] = {
-    [MC_HEADER_MR_STONE]   = {.npc    = &sMrStoneMatchCallHeader},
-    [MC_HEADER_PROF_BIRCH] = {.birch  = &sProfBirchMatchCallHeader},
-    [MC_HEADER_BRENDAN]    = {.rival  = &sBrendanMatchCallHeader},
-    [MC_HEADER_MAY]        = {.rival  = &sMayMatchCallHeader},
-    [MC_HEADER_WALLY]      = {.wally  = &sWallyMatchCallHeader},
-    [MC_HEADER_NORMAN]     = {.leader = &sNormanMatchCallHeader},
-    [MC_HEADER_MOM]        = {.npc    = &sMomMatchCallHeader},
-    [MC_HEADER_STEVEN]     = {.npc    = &sStevenMatchCallHeader},
-    [MC_HEADER_SCOTT]      = {.npc    = &sScottMatchCallHeader},
-    [MC_HEADER_ROXANNE]    = {.leader = &sRoxanneMatchCallHeader},
-    [MC_HEADER_BRAWLY]     = {.leader = &sBrawlyMatchCallHeader},
-    [MC_HEADER_WATTSON]    = {.leader = &sWattsonMatchCallHeader},
-    [MC_HEADER_FLANNERY]   = {.leader = &sFlanneryMatchCallHeader},
-    [MC_HEADER_WINONA]     = {.leader = &sWinonaMatchCallHeader},
-    [MC_HEADER_TATE_LIZA]  = {.leader = &sTateLizaMatchCallHeader},
-    [MC_HEADER_JUAN]       = {.leader = &sJuanMatchCallHeader},
-    [MC_HEADER_SIDNEY]     = {.leader = &sSidneyMatchCallHeader},
-    [MC_HEADER_PHOEBE]     = {.leader = &sPhoebeMatchCallHeader},
-    [MC_HEADER_GLACIA]     = {.leader = &sGlaciaMatchCallHeader},
-    [MC_HEADER_DRAKE]      = {.leader = &sDrakeMatchCallHeader},
-    [MC_HEADER_WALLACE]    = {.leader = &sWallaceMatchCallHeader}
+    [MC_HEADER_BROCK]      = {.npc = &sBrockMatchCallHeader},
+    [MC_HEADER_MISTY]      = {.npc = &sMistyMatchCallHeader},
+    [MC_HEADER_SURGE]      = {.npc = &sSurgeMatchCallHeader},
+    [MC_HEADER_ERIKA]      = {.npc = &sErikaMatchCallHeader},
+    [MC_HEADER_SABRINA]    = {.npc = &sSabrinaMatchCallHeader},
+    [MC_HEADER_KOGA]       = {.npc = &sKogaMatchCallHeader},
+    [MC_HEADER_BLAINE]     = {.npc = &sBlaineMatchCallHeader},
+    [MC_HEADER_BLUE]       = {.npc = &sBlueMatchCallHeader},
+    [MC_HEADER_FALKNER]    = {.npc = &sFalknerMatchCallHeader},
+    [MC_HEADER_BUGSY]      = {.npc = &sBugsyMatchCallHeader},
+    [MC_HEADER_WHITNEY]    = {.npc = &sWhitneyMatchCallHeader},
+    [MC_HEADER_MORTY]      = {.npc = &sMortyMatchCallHeader},
+    [MC_HEADER_CHUCK]      = {.npc = &sChuckMatchCallHeader},
+    [MC_HEADER_JASMINE]    = {.npc = &sJasmineMatchCallHeader},
+    [MC_HEADER_PRYCE]      = {.npc = &sPryceMatchCallHeader},
+    [MC_HEADER_CLAIR]      = {.npc = &sClairMatchCallHeader},
+    [MC_HEADER_WES]        = {.npc = &sWesMatchCallHeader},
+    [MC_HEADER_PROF_BIRCH] = {.npc = &sProfessorBirchContactHeader},
+    [MC_HEADER_PROF_ROWAN] = {.npc = &sProfessorRowanContactHeader},
+    [MC_HEADER_MOM]        = {.npc = &sMomMatchCallHeader},
 };
 
 static bool32 (*const sMatchCallGetEnabledFuncs[])(match_call_t) = {
@@ -663,56 +1157,6 @@ static void (*const sMatchCall_GetNameAndDescFunctions[])(match_call_t, const u8
     MatchCall_GetNameAndDesc_Birch
 };
 
-static const u8 gText_MatchCallSteven_Strategy[] = _("Attack the weak points!");
-static const u8 gText_MatchCallSteven_Pokemon[] = _("Ultimate STEEL POKéMON.");
-
-static const u8 gText_MatchCallBrendan_Strategy[] = _("Battle with knowledge!");
-static const u8 gText_MatchCallBrendan_Pokemon[] = _("I will use various POKéMON.");
-static const u8 gText_MatchCallBrendan_Intro1[] = _("I'll be a better POKéMON");
-static const u8 gText_MatchCallBrendan_Intro2[] = _("prof than my father is!");
-
-static const u8 gText_MatchCallMay_Strategy[] = _("I'm not so good at battles.");
-static const u8 gText_MatchCallMay_Pokemon[] = _("I'll use any POKéMON!");
-static const u8 gText_MatchCallMay_Intro1[] = _("My POKéMON and I help");
-static const u8 gText_MatchCallMay_Intro2[] = _("my father's research.");
-
-static const struct MatchCallCheckPageOverride sCheckPageOverrides[] = {
-    {
-        .idx = MC_HEADER_STEVEN,
-        .facilityClass = FACILITY_CLASS_STEVEN,
-        .flag = 0xFFFF,
-        .flavorTexts = {
-            [CHECK_PAGE_STRATEGY] = gText_MatchCallSteven_Strategy,
-            [CHECK_PAGE_POKEMON]  = gText_MatchCallSteven_Pokemon,
-            [CHECK_PAGE_INTRO_1]  = COMPOUND_STRING("I'd climb even waterfalls"),
-            [CHECK_PAGE_INTRO_2]  = COMPOUND_STRING("to find a rare stone!")
-        }
-    },
-    {
-        .idx = MC_HEADER_STEVEN,
-        .facilityClass = FACILITY_CLASS_STEVEN,
-        .flag = FLAG_DEFEATED_MOSSDEEP_GYM,
-        .flavorTexts = {
-            [CHECK_PAGE_STRATEGY] = gText_MatchCallSteven_Strategy,
-            [CHECK_PAGE_POKEMON]  = gText_MatchCallSteven_Pokemon,
-            [CHECK_PAGE_INTRO_1]  = COMPOUND_STRING("I'm the strongest and most"),
-            [CHECK_PAGE_INTRO_2]  = COMPOUND_STRING("energetic after all!")
-        }
-    },
-    {
-        .idx = MC_HEADER_BRENDAN,
-        .facilityClass = FACILITY_CLASS_BRENDAN,
-        .flag = 0xFFFF,
-        .flavorTexts = MCFLAVOR(Brendan)
-    },
-    {
-        .idx = MC_HEADER_MAY,
-        .facilityClass = FACILITY_CLASS_MAY,
-        .flag = 0xFFFF,
-        .flavorTexts = MCFLAVOR(May)
-    }
-};
-
 // .text
 
 static u32 MatchCallGetFunctionIndex(match_call_t matchCall)
@@ -765,6 +1209,8 @@ bool32 MatchCall_GetEnabled(u32 idx)
 
 static bool32 MatchCall_GetEnabled_NPC(match_call_t matchCall)
 {
+    if (!FlagGet(FLAG_RECEIVED_POKENAV))
+        return FALSE;
     if (matchCall.npc->flag == 0xFFFF)
         return TRUE;
     return FlagGet(matchCall.npc->flag);
@@ -772,6 +1218,8 @@ static bool32 MatchCall_GetEnabled_NPC(match_call_t matchCall)
 
 static bool32 MatchCall_GetEnabled_Trainer(match_call_t matchCall)
 {
+    if (!FlagGet(FLAG_RECEIVED_POKENAV))
+        return FALSE;
     if (matchCall.trainer->flag == 0xFFFF)
         return TRUE;
     return FlagGet(matchCall.trainer->flag);
@@ -779,6 +1227,8 @@ static bool32 MatchCall_GetEnabled_Trainer(match_call_t matchCall)
 
 static bool32 MatchCall_GetEnabled_Wally(match_call_t matchCall)
 {
+    if (!FlagGet(FLAG_RECEIVED_POKENAV))
+        return FALSE;
     if (matchCall.wally->flag == 0xFFFF)
         return TRUE;
     return FlagGet(matchCall.wally->flag);
@@ -788,6 +1238,8 @@ static bool32 MatchCall_GetEnabled_Rival(match_call_t matchCall)
 {
     if (matchCall.rival->playerGender != gSaveBlock2Ptr->playerGender)
         return FALSE;
+    if (!FlagGet(FLAG_RECEIVED_POKENAV))
+        return FALSE;
     if (matchCall.rival->flag == 0xFFFF)
         return TRUE;
     return FlagGet(matchCall.rival->flag);
@@ -795,6 +1247,8 @@ static bool32 MatchCall_GetEnabled_Rival(match_call_t matchCall)
 
 static bool32 MatchCall_GetEnabled_Birch(match_call_t matchCall)
 {
+    if (!FlagGet(FLAG_RECEIVED_POKENAV))
+        return FALSE;
     return FlagGet(matchCall.birch->flag);
 }
 
@@ -898,18 +1352,20 @@ bool32 MatchCall_HasCheckPage(u32 idx)
         return FALSE;
     matchCall = sMatchCallHeaders[idx];
     i = MatchCallGetFunctionIndex(matchCall);
-    if (sMatchCall_HasCheckPageFunctions[i](matchCall))
-        return TRUE;
-    for (i = 0; i < ARRAY_COUNT(sCheckPageOverrides); i++)
-    {
-        if (sCheckPageOverrides[i].idx == idx)
-            return TRUE;
-    }
-    return FALSE;
+    return sMatchCall_HasCheckPageFunctions[i](matchCall);
 }
 
 static bool32 MatchCall_HasCheckPage_NPC(match_call_t matchCall)
 {
+    u32 i;
+
+    for (i = 0; i < ARRAY_COUNT(sMatchCallCheckPageOverrides); i++)
+    {
+        if (sMatchCallHeaders[sMatchCallCheckPageOverrides[i].idx].npc == matchCall.npc
+         && (sMatchCallCheckPageOverrides[i].flag == 0xFFFF || FlagGet(sMatchCallCheckPageOverrides[i].flag)))
+            return TRUE;
+    }
+
     return FALSE;
 }
 
@@ -987,6 +1443,24 @@ static void MatchCall_GetMessage_NPC(match_call_t matchCall, u8 *dest)
     if (matchCall.npc->flag == FLAG_ENABLE_MOM_MATCH_CALL)
         ConvertIntToDecimalStringN(gStringVar1, GetGoldMomSavings(), STR_CONV_MODE_LEFT_ALIGN, MAX_MONEY_DIGITS);
 
+    if (matchCall.npc->flag == FLAG_WES_HIDEOUT_TALKED_BIRCH)
+    {
+        MatchCall_GetMessage_ProfessorBirch(dest);
+        return;
+    }
+
+    if (matchCall.npc->flag == FLAG_WES_HIDEOUT_TALKED_ROWAN)
+    {
+        MatchCall_GetMessage_ProfessorRowan(dest);
+        return;
+    }
+
+    if (matchCall.npc->flag == FLAG_RECEIVED_SHADOW_MONITOR)
+    {
+        MatchCall_GetMessage_Wes(dest);
+        return;
+    }
+
     MatchCall_BufferCallMessageText(matchCall.npc->textData, dest);
 }
 
@@ -1012,6 +1486,131 @@ static void MatchCall_GetMessage_Rival(match_call_t matchCall, u8 *dest)
 static void MatchCall_GetMessage_Birch(match_call_t matchCall, u8 *dest)
 {
     BufferPokedexRatingForMatchCall(dest);
+}
+
+static void MatchCall_GetMessage_ProfessorBirch(u8 *dest)
+{
+    static const u8 sBirchIntroText[] = _("BIRCH: That POKENAV should\nkeep us in touch.\pCall if anything strange\nturns up in the field.$");
+    static const u8 sBirchBriefingText[] = _("BIRCH: We're nearly ready\non our end.\pCheck in with the other\nprofessors next.$");
+    static const u8 sBirchMonitorText[] = _("BIRCH: Watch the SHADOW\nMONITOR for changes.\pFresh field data helps\nmore than guesswork.$");
+    static const u8 sBirchNebbyText[] = _("BIRCH: Nebby's readings\nchanged everything.\pWe're learning how these\nportals behave.$");
+    static const u8 sBirchReturnText[] = _("BIRCH: Swing back through\nHQ when you can.\pWe're lining up the next\nmove underground.$");
+    static const u8 sBirchLegendaryText[] = _("BIRCH: Keep logging those\nlegendary sightings.\pTheir habitat shifts are\ntoo important to miss.$");
+
+    if (FlagGet(FLAG_WES_HIDEOUT_LEGENDARY_QUESTS_REVEALED))
+        StringExpandPlaceholders(dest, sBirchLegendaryText);
+    else if (FlagGet(FLAG_QUEST_BACK_TO_HQ_STARTED))
+        StringExpandPlaceholders(dest, sBirchReturnText);
+    else if (FlagGet(FLAG_WES_HIDEOUT_NEBBY_SCENE_DONE))
+        StringExpandPlaceholders(dest, sBirchNebbyText);
+    else if (FlagGet(FLAG_RECEIVED_SHADOW_MONITOR))
+        StringExpandPlaceholders(dest, sBirchMonitorText);
+    else if (FlagGet(FLAG_WES_HIDEOUT_TEAM_BRIEFED))
+        StringExpandPlaceholders(dest, sBirchBriefingText);
+    else
+        StringExpandPlaceholders(dest, sBirchIntroText);
+}
+
+static void MatchCall_GetMessage_ProfessorRowan(u8 *dest)
+{
+    static const u8 sRowanHunterText[] = _("ROWAN: Your tracker is\nspiking near {STR_VAR_1}.\pA shadow hunter is active\nthere right now.$");
+    static const u8 sRowanUnknownAreaText[] = _("that area");
+
+    u8 region = RegionMap_GetRegionFromMapGroup(gSaveBlock1Ptr->location.mapGroup);
+    const struct ActiveHunterState *active = RoamingHunter_GetActiveForRegion(region);
+
+    if (active != NULL && active->active)
+    {
+        const struct MapHeader *mapHeader = Overworld_GetMapHeaderByGroupAndId(active->mapGroup, active->mapNum);
+
+        if (mapHeader != NULL)
+            GetMapNameGeneric(gStringVar1, mapHeader->regionMapSectionId);
+        else
+            StringCopy(gStringVar1, sRowanUnknownAreaText);
+
+        StringExpandPlaceholders(dest, sRowanHunterText);
+        return;
+    }
+
+    MatchCall_BufferRowanDexRecommendation(dest);
+}
+
+static void MatchCall_GetMessage_Wes(u8 *dest)
+{
+    static const u8 sWesIntroText[] = _("WES: The monitor shows\n{STR_VAR_1} logged and {STR_VAR_2} snagged.\pGood start. Keep taking\nshadows away from CIPHER.$");
+    static const u8 sWesMidText[] = _("WES: {STR_VAR_2} successful\nsnags so far.\pStay sharp and don't pass\non clean snag chances.$");
+    static const u8 sWesLateText[] = _("WES: {STR_VAR_2} shadow\nPokemon rescued.\pThat's real pressure on\nCIPHER. Keep moving.$");
+    static const u8 sWesPurifiedText[] = _("WES: {STR_VAR_2} snagged and\nsome are purified.\pThat's how we win this,\none heart at a time.$");
+
+    u16 seen = MatchCall_CountSeenShadowMons();
+    u16 snagged = MatchCall_CountSnaggedShadowMons();
+    ConvertIntToDecimalStringN(gStringVar1, seen, STR_CONV_MODE_LEFT_ALIGN, 3);
+    ConvertIntToDecimalStringN(gStringVar2, snagged, STR_CONV_MODE_LEFT_ALIGN, 3);
+
+    if (snagged >= 40)
+        StringExpandPlaceholders(dest, sWesPurifiedText);
+    else if (snagged >= 20)
+        StringExpandPlaceholders(dest, sWesLateText);
+    else if (snagged >= 5)
+        StringExpandPlaceholders(dest, sWesMidText);
+    else
+        StringExpandPlaceholders(dest, sWesIntroText);
+}
+
+static void MatchCall_BufferRowanDexRecommendation(u8 *dest)
+{
+    static const u8 sRowanDexIntro[] = _("ROWAN: Your Dex stands at\n{STR_VAR_1} seen and {STR_VAR_2} caught.\p");
+    static const u8 sRowanDexEarly[] = _("Broaden your fieldwork.\nRevisit early routes,\ncaves, and side paths.$");
+    static const u8 sRowanDexMidSeen[] = _("You're seeing enough,\nbut not catching enough.\nStop passing entries by.$");
+    static const u8 sRowanDexMidCaught[] = _("Good progress.\nCheck fishing, surf,\nand time-based slots.$");
+    static const u8 sRowanDexLate[] = _("Strong catalog.\nHunt evolutions, trades,\nand odd encounter methods.$");
+
+    u16 seen = GetNationalPokedexCount(FLAG_GET_SEEN);
+    u16 caught = GetNationalPokedexCount(FLAG_GET_CAUGHT);
+    u8 *str;
+
+    ConvertIntToDecimalStringN(gStringVar1, seen, STR_CONV_MODE_LEFT_ALIGN, 4);
+    ConvertIntToDecimalStringN(gStringVar2, caught, STR_CONV_MODE_LEFT_ALIGN, 4);
+    str = StringExpandPlaceholders(dest, sRowanDexIntro);
+
+    if (caught < 25)
+        StringCopy(str, sRowanDexEarly);
+    else if (seen > caught + 40)
+        StringCopy(str, sRowanDexMidSeen);
+    else if (caught < 120)
+        StringCopy(str, sRowanDexMidCaught);
+    else
+        StringCopy(str, sRowanDexLate);
+}
+
+static u16 MatchCall_CountSnaggedShadowMons(void)
+{
+    u16 count = 0;
+    u16 shadowId;
+
+    for (shadowId = 1; shadowId <= MAX_SHADOW_MON_IDS; shadowId++)
+    {
+        u8 state = Shdw_GetState(shadowId);
+
+        if (state == SHDW_STATE_SNAGGED || state == SHDW_STATE_PURIFIED)
+            count++;
+    }
+
+    return count;
+}
+
+static u16 MatchCall_CountSeenShadowMons(void)
+{
+    u16 count = 0;
+    u16 shadowId;
+
+    for (shadowId = 1; shadowId <= MAX_SHADOW_MON_IDS; shadowId++)
+    {
+        if (Shdw_GetState(shadowId) != SHDW_STATE_NEVER_SEEN)
+            count++;
+    }
+
+    return count;
 }
 
 static void MatchCall_BufferCallMessageText(const match_call_text_data_t *textData, u8 *dest)
@@ -1126,31 +1725,28 @@ static void MatchCall_GetNameAndDescByRematchIdx(u32 idx, const u8 **desc, const
 
 const u8 *MatchCall_GetOverrideFlavorText(u32 idx, u32 offset)
 {
-    u32 i;
+    const struct MatchCallCheckPageOverride *override = MatchCall_GetCheckPageOverride(idx);
 
-    for (i = 0; i < ARRAY_COUNT(sCheckPageOverrides); i++)
-    {
-        if (sCheckPageOverrides[i].idx == idx)
-        {
-            for (; i + 1 < ARRAY_COUNT(sCheckPageOverrides) &&
-                sCheckPageOverrides[i + 1].idx == idx &&
-                FlagGet(sCheckPageOverrides[i + 1].flag); i++);
-            return sCheckPageOverrides[i].flavorTexts[offset];
-        }
-    }
-    return NULL;
+    if (override == NULL || offset >= CHECK_PAGE_ENTRY_COUNT)
+        return NULL;
+
+    return override->flavorTexts[offset];
 }
 
 int MatchCall_GetOverrideFacilityClass(u32 idx)
 {
-    u32 i;
-
-    for (i = 0; i < ARRAY_COUNT(sCheckPageOverrides); i++)
-    {
-        if (sCheckPageOverrides[i].idx == idx)
-            return sCheckPageOverrides[i].facilityClass;
-    }
+    (void)idx;
     return -1;
+}
+
+int MatchCall_GetOverrideTrainerPic(u32 idx)
+{
+    const struct MatchCallCheckPageOverride *override = MatchCall_GetCheckPageOverride(idx);
+
+    if (override == NULL)
+        return -1;
+
+    return override->trainerPic;
 }
 
 bool32 MatchCall_HasRematchId(u32 idx)
@@ -1171,4 +1767,18 @@ void SetMatchCallRegisteredFlag(void)
     int index = GetRematchIdxByTrainerIdx(gSpecialVar_0x8004);
     if (index >= 0)
         FlagSet(TRAINER_REGISTERED_FLAGS_START + index);
+}
+
+static const struct MatchCallCheckPageOverride *MatchCall_GetCheckPageOverride(u32 idx)
+{
+    u32 i;
+
+    for (i = 0; i < ARRAY_COUNT(sMatchCallCheckPageOverrides); i++)
+    {
+        if (sMatchCallCheckPageOverrides[i].idx == idx
+         && (sMatchCallCheckPageOverrides[i].flag == 0xFFFF || FlagGet(sMatchCallCheckPageOverrides[i].flag)))
+            return &sMatchCallCheckPageOverrides[i];
+    }
+
+    return NULL;
 }

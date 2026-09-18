@@ -142,6 +142,22 @@ const struct SpritePalette gSpritePalettes_HealthBoxHealthBar[10] =
     /* 9 */ {gBattleInterface_ShadowMenuOpponentPal, TAG_HEALTHBOX_OPPONENT2_PAL},
 };
 
+static const u16 sHealthboxFrameDoublePal_Local[16] =
+{
+    0x0000, 0x2108, 0x14A5, 0x14A5,
+    0x14A5, 0x14A5, 0x14A5, 0x14A5,
+    0x14A5, 0x039F, 0x4A7F, 0x6318,
+    0x4E73, 0x03E0, 0x001F, 0x7E4D,
+};
+
+static const u16 sHealthboxFrameDoubleShadowPal_Local[16] =
+{
+    0x0000, 0x2108, 0x14A5, 0x7D52,
+    0x7D52, 0x7D52, 0x14A5, 0x14A5,
+    0x14A5, 0x039F, 0x4A7F, 0x6318,
+    0x4E73, 0x03E0, 0x001F, 0x7E4D,
+};
+
 const struct CompressedSpriteSheet gSpriteSheet_EnemyShadow =
 {
     .data = gEnemyMonShadow_Gfx, .size = 0x80, .tag = TAG_SHADOW_TILE
@@ -182,60 +198,18 @@ const struct SpriteTemplate gSpriteTemplate_EnemyShadow =
     .callback = SpriteCallbackDummy,
 };
 
-static bool8 IsBattlerShadowMon(u8 battlerId)
-{
-    struct Pokemon *mon;
-
-    if (GetBattlerSide(battlerId) != B_SIDE_PLAYER)
-        mon = &gEnemyParty[gBattlerPartyIndexes[battlerId]];
-    else
-        mon = &gPlayerParty[gBattlerPartyIndexes[battlerId]];
-
-    return GetMonData(mon, MON_DATA_IS_SHADOW);
-}
-
-static bool8 IsBattlerReverseNowLocal(u8 battler)
-{
-    if (!IsOnPlayerSide(battler))
-        return FALSE;
-
-    if (gBattleMons[battler].species != SPECIES_NONE)
-        return gBattleMons[battler].isReverse;
-
-    if (gBattlerPartyIndexes[battler] < PARTY_SIZE)
-        return GetMonData(GetBattlerMon(battler), MON_DATA_REVERSE_MODE);
-
-    return gBattleMons[battler].isReverse;
-}
-
-static bool8 CanShareHealthboxPalette(u8 battlerId, bool8 isShadow, bool8 isReverse)
-{
-    u8 partner;
-
-    if (!IsDoubleBattle())
-        return FALSE;
-
-    partner = BATTLE_PARTNER(battlerId);
-    if (!IsBattlerAlive(partner))
-        return FALSE;
-
-    if (IsBattlerReverseNowLocal(partner) != isReverse)
-        return FALSE;
-
-    return (IsBattlerShadowMon(partner) == isShadow);
-}
-
 static u16 GetHealthboxPalTagForBattler(u8 battlerId, bool8 isShadow, bool8 isReverse)
 {
-    if (IsDoubleBattle() && !isShadow)
-        return (GetBattlerSide(battlerId) == B_SIDE_PLAYER)
-             ? TAG_HEALTHBOX_PLAYER1_PAL
-             : TAG_HEALTHBOX_OPPONENT1_PAL;
-
-    if (CanShareHealthboxPalette(battlerId, isShadow, isReverse))
-        return (GetBattlerSide(battlerId) == B_SIDE_PLAYER)
-             ? TAG_HEALTHBOX_PLAYER1_PAL
-             : TAG_HEALTHBOX_OPPONENT1_PAL;
+    if (IsDoubleBattle())
+    {
+        if (!isShadow)
+            return TAG_HEALTHBOX_PLAYER1_PAL;
+        if (GetBattlerSide(battlerId) == B_SIDE_OPPONENT)
+            return TAG_HEALTHBOX_OPPONENT1_PAL;
+        if (isReverse)
+            return TAG_HEALTHBOX_OPPONENT2_PAL;
+        return TAG_HEALTHBOX_PLAYER2_PAL;
+    }
 
     if (GetBattlerSide(battlerId) == B_SIDE_PLAYER)
     {
@@ -251,32 +225,21 @@ static u16 GetHealthboxPalTagForBattler(u8 battlerId, bool8 isShadow, bool8 isRe
     }
 }
 
-static bool8 CanShareHealthboxFramePalette(u8 battlerId, bool8 isShadow, bool8 isReverse)
-{
-    u8 partner;
-
-    if (!IsDoubleBattle())
-        return FALSE;
-
-    partner = BATTLE_PARTNER(battlerId);
-    if (!IsBattlerAlive(partner))
-        return FALSE;
-
-    if (IsBattlerReverseNowLocal(partner) != isReverse)
-        return FALSE;
-
-    return (IsBattlerShadowMon(partner) == isShadow);
-}
-
 static u16 GetHealthboxFramePalTagForBattler(u8 battlerId, bool8 isShadow, bool8 isReverse)
 {
     if (gBattleTypeFlags & BATTLE_TYPE_SAFARI)
         return TAG_HEALTHBOX_FRAME_SAFARI_PAL;
 
-    if (IsDoubleBattle() && CanShareHealthboxFramePalette(battlerId, isShadow, isReverse))
-        return (GetBattlerSide(battlerId) == B_SIDE_PLAYER)
-             ? TAG_HEALTHBOX_FRAME_PLAYER1_PAL
-             : TAG_HEALTHBOX_FRAME_OPPONENT1_PAL;
+    if (IsDoubleBattle())
+    {
+        if (!isShadow)
+            return TAG_HEALTHBOX_FRAME_PLAYER1_PAL;
+        if (GetBattlerSide(battlerId) == B_SIDE_OPPONENT)
+            return TAG_HEALTHBOX_FRAME_OPPONENT1_PAL;
+        if (isReverse)
+            return TAG_HEALTHBOX_FRAME_OPPONENT2_PAL;
+        return TAG_HEALTHBOX_FRAME_PLAYER2_PAL;
+    }
 
     if (GetBattlerSide(battlerId) == B_SIDE_PLAYER)
     {
@@ -307,9 +270,18 @@ void ShdwLoadHealthboxPalette(u8 battlerId)
         mon = &gPlayerParty[gBattlerPartyIndexes[battlerId]];
 
     isShadow = GetMonData(mon, MON_DATA_IS_SHADOW);
-    palNum = (GetBattlerSide(battlerId) == B_SIDE_PLAYER)
-          ? (isShadow ? 6 : 2)
-          : (isShadow ? 8 : 4);
+    if (GetBattlerSide(battlerId) == B_SIDE_PLAYER)
+    {
+        const bool8 isLeft = (GetBattlerAtPosition(B_POSITION_PLAYER_LEFT) == battlerId);
+        palNum = isLeft ? (isShadow ? 6 : 2)
+                        : (isShadow ? 7 : 3);
+    }
+    else
+    {
+        const bool8 isLeft = (GetBattlerAtPosition(B_POSITION_OPPONENT_LEFT) == battlerId);
+        palNum = isLeft ? (isShadow ? 8 : 4)
+                        : (isShadow ? 9 : 5);
+    }
 
     if (gBattleMons[battlerId].species != SPECIES_NONE)
         isReverse = gBattleMons[battlerId].isReverse;
@@ -336,9 +308,16 @@ void ShdwLoadHealthboxPalette(u8 battlerId)
                 .data = palData,
                 .tag = palTag,
             };
+            u32 palIndex = IndexOfSpritePaletteTag(healthboxPal.tag);
 
-            FreeSpritePaletteByTag(healthboxPal.tag);
-            LoadSpritePalette(&healthboxPal);
+            if (palIndex == 0xFF)
+                palIndex = LoadSpritePalette(&healthboxPal);
+
+            if (palIndex != 0xFF)
+            {
+                FillPalette(RGB_BLACK, OBJ_PLTT_ID(palIndex), PLTT_SIZE_4BPP);
+                LoadPalette(healthboxPal.data, OBJ_PLTT_ID(palIndex), PLTT_SIZE_4BPP);
+            }
         }
     }
     {
@@ -360,10 +339,34 @@ void ShdwLoadHealthboxPalette(u8 battlerId)
                          ? gBattleInterface_HealthboxFrameShadowOpponentReversePal
                          : gBattleInterface_HealthboxFrameShadowOpponentPal;
 
+        if (IsDoubleBattle())
+        {
+            if (!isShadow)
+                framePalData = sHealthboxFrameDoublePal_Local;
+            else if (isReverse)
+                framePalData = (GetBattlerSide(battlerId) == B_SIDE_PLAYER)
+                             ? gBattleInterface_HealthboxFrameShadowReversePal
+                             : gBattleInterface_HealthboxFrameShadowOpponentReversePal;
+            else if (GetBattlerSide(battlerId) == B_SIDE_PLAYER)
+                framePalData = sHealthboxFrameDoubleShadowPal_Local;
+            else
+                framePalData = gBattleInterface_HealthboxFrameShadowOpponentPal;
+        }
+
         framePal.data = framePalData;
 
-        FreeSpritePaletteByTag(framePal.tag);
-        LoadSpritePalette(&framePal);
+        {
+            u32 palIndex = IndexOfSpritePaletteTag(framePal.tag);
+
+            if (palIndex == 0xFF)
+                palIndex = LoadSpritePalette(&framePal);
+
+            if (palIndex != 0xFF)
+            {
+                FillPalette(RGB_BLACK, OBJ_PLTT_ID(palIndex), PLTT_SIZE_4BPP);
+                LoadPalette(framePal.data, OBJ_PLTT_ID(palIndex), PLTT_SIZE_4BPP);
+            }
+        }
     }
 
     if (GetMonData(mon, MON_DATA_STATUS))
@@ -912,7 +915,7 @@ void BattleLoadMonSpriteGfx(struct Pokemon *mon, u32 battler)
                              species, personalityValue,
                              isShadow);
 
-    paletteOffset = OBJ_PLTT_ID(battler);
+    paletteOffset = OBJ_PLTT_ID(position);
 
     if (gBattleSpritesDataPtr->battlerData[battler].transformSpecies == SPECIES_NONE)
         paletteData = GetMonSpritePalFromSpeciesAndPersonality_ShadowAware(species, isShiny, personalityValue, isShadow);
@@ -920,7 +923,7 @@ void BattleLoadMonSpriteGfx(struct Pokemon *mon, u32 battler)
         paletteData = GetMonSpritePalFromSpeciesAndPersonality(species, isShiny, personalityValue);
 
     LoadPalette(paletteData, paletteOffset, PLTT_SIZE_4BPP);
-    LoadPalette(paletteData, BG_PLTT_ID(8) + BG_PLTT_ID(battler), PLTT_SIZE_4BPP);
+    LoadPalette(paletteData, BG_PLTT_ID(8) + BG_PLTT_ID(position), PLTT_SIZE_4BPP);
 
     // transform's pink color
     if (gBattleSpritesDataPtr->battlerData[battler].transformSpecies != SPECIES_NONE)
@@ -972,7 +975,7 @@ void DecompressTrainerBackPic(u16 backPicId, u8 battler)
     DecompressPicFromTable(&gTrainerBacksprites[backPicId].backPic,
                            gMonSpritesGfxPtr->spritesGfx[position]);
     LoadPalette(gTrainerBacksprites[backPicId].palette.data,
-                          OBJ_PLTT_ID(battler), PLTT_SIZE_4BPP);
+                          OBJ_PLTT_ID(position), PLTT_SIZE_4BPP);
 }
 
 void FreeTrainerFrontPicPalette(u16 frontPicId)
@@ -990,7 +993,13 @@ bool8 BattleLoadAllHealthBoxesGfx(u8 state)
         {
             if (!IsDoubleBattle())
                 LoadSpritePalette(&gSpritePalettes_HealthBoxHealthBar[0]);
-            LoadSpritePalette(&gSpritePalettes_HealthBoxHealthBar[1]);
+            if (IndexOfSpritePaletteTag(gSpritePalettes_HealthBoxHealthBar[1].tag) == 0xFF)
+                LoadSpritePalette(&gSpritePalettes_HealthBoxHealthBar[1]);
+            else
+            {
+                u32 palIndex = IndexOfSpritePaletteTag(gSpritePalettes_HealthBoxHealthBar[1].tag);
+                LoadPalette(gSpritePalettes_HealthBoxHealthBar[1].data, OBJ_PLTT_ID(palIndex), PLTT_SIZE_4BPP);
+            }
             // Indicator palettes are loaded on demand when the indicator becomes visible.
         }
         else if (!IsDoubleBattle())
@@ -1499,6 +1508,28 @@ void CreateEnemyShadowSprite(u32 battler)
     }
 }
 
+static u32 EnsureEnemyShadowPaletteLoaded(void)
+{
+    u32 palIndex = IndexOfSpritePaletteTag(TAG_SHADOW_PAL);
+    static const u16 sEnemyShadowPaletteData[] =
+    {
+        [6] = RGB(10, 13, 12),
+    };
+    static const struct SpritePalette sEnemyShadowPalette =
+    {
+        .data = sEnemyShadowPaletteData,
+        .tag = TAG_SHADOW_PAL,
+    };
+
+    if (palIndex == 0xFF)
+        palIndex = LoadSpritePalette(&sEnemyShadowPalette);
+
+    if (palIndex != 0xFF)
+        LoadPalette(sEnemyShadowPalette.data, OBJ_PLTT_ID(palIndex), PLTT_SIZE_4BPP);
+
+    return palIndex;
+}
+
 void LoadAndCreateEnemyShadowSprites(void)
 {
     u8 battler;
@@ -1598,6 +1629,7 @@ void SetBattlerShadowSpriteCallback(u8 battler, u16 species)
     // Ensure we never write invalid sprite entries
     u8 idP = gBattleSpritesDataPtr->healthBoxesData[battler].shadowSpriteIdPrimary;
     u8 idS = gBattleSpritesDataPtr->healthBoxesData[battler].shadowSpriteIdSecondary;
+    u32 palIndex;
 
     // Use the live battler species (send-out/resume safe); override if transformed
     species = gBattleMons[battler].species;
@@ -1615,6 +1647,13 @@ void SetBattlerShadowSpriteCallback(u8 battler, u16 species)
 
     if (idP >= MAX_SPRITES || idS >= MAX_SPRITES)
         return;
+
+    palIndex = EnsureEnemyShadowPaletteLoaded();
+    if (palIndex != 0xFF)
+    {
+        gSprites[idP].oam.paletteNum = (u8)palIndex;
+        gSprites[idS].oam.paletteNum = (u8)palIndex;
+    }
 
     if (gSpeciesInfo[SanitizeSpeciesId(species)].suppressEnemyShadow == FALSE)
     {
@@ -1636,11 +1675,26 @@ void SetBattlerShadowSpriteCallback(u8 battler, u16 species)
     if (idP >= MAX_SPRITES)
         return;
 
+    palIndex = EnsureEnemyShadowPaletteLoaded();
+    if (palIndex != 0xFF)
+        gSprites[idP].oam.paletteNum = (u8)palIndex;
+
     if (gSpeciesInfo[SanitizeSpeciesId(species)].enemyMonElevation != 0)
         gSprites[idP].callback = SpriteCB_EnemyShadow;
     else
         gSprites[idP].callback = SpriteCB_SetInvisible;
 #endif
+}
+
+void RefreshEnemyShadowPalettes(void)
+{
+    u8 battler;
+
+    for (battler = 0; battler < gBattlersCount; battler++)
+    {
+        if (!IsOnPlayerSide(battler))
+            SetBattlerShadowSpriteCallback(battler, gBattleMons[battler].species);
+    }
 }
 
 

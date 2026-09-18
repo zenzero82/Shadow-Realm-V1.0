@@ -1,2 +1,44 @@
 GoldenrodCity_DepartmentStoreBasement_MapScripts::
+	map_script MAP_SCRIPT_ON_LOAD, GoldenrodCity_DepartmentStoreBasement_OnLoad
+	map_script MAP_SCRIPT_ON_TRANSITION, GoldenrodCity_DepartmentStoreBasement_OnTransition
 	.byte 0
+
+#define LOCALID_GOLDENROD_DEPT_STORE_BASEMENT_ROCKET 1
+
+GoldenrodCity_DepartmentStoreBasement_Speaker_Rocket:
+	.string "ROCKET GRUNT$"
+
+GoldenrodCity_DepartmentStoreBasement_OnLoad::
+	call GoldenrodCity_DepartmentStoreBasement_EventScript_SyncRocket
+	end
+
+GoldenrodCity_DepartmentStoreBasement_OnTransition::
+	call GoldenrodCity_DepartmentStoreBasement_EventScript_SyncRocket
+	end
+
+GoldenrodCity_DepartmentStoreBasement_EventScript_SyncRocket::
+	goto_if_set FLAG_BADGE19_GET, GoldenrodCity_DepartmentStoreBasement_EventScript_ShowRocket
+	setflag FLAG_HIDE_GOLDENROD_DEPT_STORE_BASEMENT_ROCKET
+	hideobjectat LOCALID_GOLDENROD_DEPT_STORE_BASEMENT_ROCKET, MAP_GOLDENROD_CITY_DEPARTMENT_STORE_BASEMENT
+	removeobject LOCALID_GOLDENROD_DEPT_STORE_BASEMENT_ROCKET
+	return
+
+GoldenrodCity_DepartmentStoreBasement_EventScript_ShowRocket:
+	clearflag FLAG_HIDE_GOLDENROD_DEPT_STORE_BASEMENT_ROCKET
+	addobject LOCALID_GOLDENROD_DEPT_STORE_BASEMENT_ROCKET
+	showobjectat LOCALID_GOLDENROD_DEPT_STORE_BASEMENT_ROCKET, MAP_GOLDENROD_CITY_DEPARTMENT_STORE_BASEMENT
+	return
+
+GoldenrodCity_DepartmentStoreBasement_EventScript_Rocket::
+	lock
+	faceplayer
+	setspeaker GoldenrodCity_DepartmentStoreBasement_Speaker_Rocket
+	msgbox GoldenrodCity_DepartmentStoreBasement_Text_Rocket, MSGBOX_DEFAULT
+	release
+	end
+
+GoldenrodCity_DepartmentStoreBasement_Text_Rocket:
+	.string "ROCKET is moving supplies through\n"
+	.string "this basement.\p"
+	.string "If you know what's good for you,\n"
+	.string "you'll stay upstairs.$"

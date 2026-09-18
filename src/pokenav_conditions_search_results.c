@@ -24,6 +24,8 @@ enum
 
 static const u8 gText_NumberIndex[] = _("No. {DYNAMIC 0}");
 
+typedef u8 ALIGNED(4) PokenavTilemapBuffer[BG_SCREEN_SIZE];
+
 struct Pokenav_SearchResults
 {
     u32 (*callback)(struct Pokenav_SearchResults *);
@@ -43,7 +45,7 @@ struct Pokenav_SearchResultsGfx
     u32 loopedTaskId;
     u16 winid;
     bool32 fromGraph;
-    u8 buff[BG_SCREEN_SIZE];
+    PokenavTilemapBuffer buff;
 }; // size: 0x810
 
 static u32 HandleConditionSearchInput_WaitSetup(struct Pokenav_SearchResults *);

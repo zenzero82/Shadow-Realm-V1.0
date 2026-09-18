@@ -1038,7 +1038,9 @@
     "SafariZoneGate_PokemonCenter",
     "SafariZoneGate_SafariZoneEntrance",
     "Route27_House",
-    "MtSilver_PokemonCenter"
+    "MtSilver_PokemonCenter",
+    "Route26_House1",
+    "Route26_House2"
   ],
   "gMapGroup_JohtoDungeons": [
     "DarkCave_SouthSide",
@@ -1128,7 +1130,8 @@
     "Greevil_Lair",
     "Evice_Lair",
     "Cyrus_Lair",
-    "Nightmare_Realm"
+    "Nightmare_Realm",
+    "Agate_Village"
   ],
   "gMapGroup_SafariZones": [
     "SafariZone_Entrance",

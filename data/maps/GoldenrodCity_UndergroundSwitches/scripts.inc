@@ -1,32 +1,1228 @@
 GoldenrodCity_UndergroundSwitches_MapScripts::
+	map_script MAP_SCRIPT_ON_LOAD, GoldenrodCity_UndergroundSwitches_OnLoad
 	map_script MAP_SCRIPT_ON_TRANSITION, GoldenrodCity_UndergroundSwitches_OnTransition
 	.byte 0
 
-GoldenrodCity_UndergroundSwitches_OnTransition::
-	goto_if_set FLAG_GOLDENROD_CIPHER_DISGUISE_ACTIVE, GoldenrodCity_UndergroundSwitches_OnTransition_ApplyDisguise
+#define LOCALID_GOLDENROD_UNDERGROUND_SWITCHES_ATTENDANT_F  1
+#define LOCALID_GOLDENROD_UNDERGROUND_SWITCHES_ATTENDANT_M  2
+#define LOCALID_GOLDENROD_UNDERGROUND_SWITCHES_BOY          3
+#define LOCALID_GOLDENROD_UNDERGROUND_SWITCHES_LASS         4
+#define LOCALID_GOLDENROD_UNDERGROUND_SWITCHES_BEAUTY       5
+#define LOCALID_GOLDENROD_UNDERGROUND_SWITCHES_SCIENTIST    6
+#define LOCALID_GOLDENROD_UNDERGROUND_SWITCHES_SUPER_NERD   7
+#define LOCALID_GOLDENROD_UNDERGROUND_SWITCHES_WORKER_F     8
+#define LOCALID_GOLDENROD_UNDERGROUND_SWITCHES_FAT_MAN      9
+#define LOCALID_GOLDENROD_UNDERGROUND_SWITCHES_ROCKET_LEFT  10
+#define LOCALID_GOLDENROD_UNDERGROUND_SWITCHES_ROCKET_RIGHT 11
+#define LOCALID_GOLDENROD_UNDERGROUND_SWITCHES_BURGLAR      12
+#define LOCALID_GOLDENROD_UNDERGROUND_SWITCHES_DIRECTOR     13
+#define LOCALID_GOLDENROD_UNDERGROUND_SWITCHES_RADIO_HOST   14
+
+GoldenrodCity_UndergroundSwitches_Speaker_RocketGrunt:
+	.string "ROCKET GRUNT$"
+
+GoldenrodCity_UndergroundSwitches_Speaker_Burglar:
+	.string "BURGLAR$"
+
+GoldenrodCity_UndergroundSwitches_Speaker_Aiko:
+	.string "AIKO$"
+
+GoldenrodCity_UndergroundSwitches_Speaker_Brent:
+	.string "BRENT$"
+
+GoldenrodCity_UndergroundSwitches_Speaker_Toby:
+	.string "TOBY$"
+
+GoldenrodCity_UndergroundSwitches_Speaker_Nina:
+	.string "NINA$"
+
+GoldenrodCity_UndergroundSwitches_Speaker_Lana:
+	.string "LANA$"
+
+GoldenrodCity_UndergroundSwitches_Speaker_Cole:
+	.string "COLE$"
+
+GoldenrodCity_UndergroundSwitches_Speaker_Hugo:
+	.string "HUGO$"
+
+GoldenrodCity_UndergroundSwitches_Speaker_Fern:
+	.string "FERN$"
+
+GoldenrodCity_UndergroundSwitches_Speaker_Gus:
+	.string "GUS$"
+
+GoldenrodCity_UndergroundSwitches_Speaker_Director:
+	.string "DIRECTOR$"
+
+GoldenrodCity_UndergroundSwitches_Speaker_RadioHost:
+	.string "RADIO HOST$"
+
+GoldenrodCity_UndergroundSwitches_OnLoad::
+	call GoldenrodCity_UndergroundSwitches_EventScript_SyncSwitchWalls
+	call GoldenrodCity_UndergroundSwitches_EventScript_SyncState
+	call GoldenrodCity_UndergroundSwitches_EventScript_SyncDefeatedTrainers
 	end
+
+GoldenrodCity_UndergroundSwitches_OnTransition::
+	call GoldenrodCity_UndergroundSwitches_EventScript_SyncSwitchWalls
+	call GoldenrodCity_UndergroundSwitches_EventScript_SyncState
+	call GoldenrodCity_UndergroundSwitches_EventScript_SyncDefeatedTrainers
+	end
+
+GoldenrodCity_UndergroundSwitches_EventScript_SyncSwitchWalls::
+	goto_if_set FLAG_GOLDENROD_SWITCHES_COMPLETED, GoldenrodCity_UndergroundSwitches_EventScript_SyncSwitchWalls_ClearTheWay
+	clearflag FLAG_GOLDENROD_SWITCH_1
+	clearflag FLAG_GOLDENROD_SWITCH_2
+	clearflag FLAG_GOLDENROD_SWITCH_3
+	clearflag FLAG_GOLDENROD_SWITCH_ORDER
+	return
+
+GoldenrodCity_UndergroundSwitches_EventScript_SyncSwitchWalls_ClearTheWay::
+	call GoldenrodCity_UndergroundSwitches_EventScript_CreateWall1
+	call GoldenrodCity_UndergroundSwitches_EventScript_RemoveWall2
+	call GoldenrodCity_UndergroundSwitches_EventScript_RemoveWall3
+	call GoldenrodCity_UndergroundSwitches_EventScript_CreateWall4
+	call GoldenrodCity_UndergroundSwitches_EventScript_RemoveWall5
+	call GoldenrodCity_UndergroundSwitches_EventScript_RemoveWall6
+	return
+
+GoldenrodCity_UndergroundSwitches_EventScript_SyncState::
+	setvar VAR_TEMP_0, 1
+	clearflag FLAG_HIDE_GOLDENROD_SWITCH_CAPTIVES
+	clearflag FLAG_HIDE_GOLDENROD_SWITCH_DIRECTOR_GROUP
+	checkitem ITEM_TUNNEL_KEY
+	goto_if_eq TRUE, GoldenrodCity_UndergroundSwitches_EventScript_SyncState_CheckProgress
+	clearflag FLAG_GOLDENROD_SWITCH_DIRECTOR_FREED
+	clearflag FLAG_QUEST_GOLDENROD_NPCS_COMPLETED
+GoldenrodCity_UndergroundSwitches_EventScript_SyncState_CheckProgress:
+	goto_if_set FLAG_GOLDENROD_CIPHER_DISGUISE_ACTIVE, GoldenrodCity_UndergroundSwitches_OnTransition_ApplyDisguise
+	goto_if_set FLAG_QUEST_GOLDENROD_NPCS_COMPLETED, GoldenrodCity_UndergroundSwitches_EventScript_SyncState_Completed
+	goto_if_set FLAG_GOLDENROD_SWITCH_DIRECTOR_FREED, GoldenrodCity_UndergroundSwitches_EventScript_SyncState_Completed
+	goto_if_set FLAG_GOLDENROD_SWITCH_CAPTIVES_FREED, GoldenrodCity_UndergroundSwitches_EventScript_SyncState_DirectorOnly
+	goto_if_set FLAG_QUEST_GOLDENROD_NPCS_STARTED, GoldenrodCity_UndergroundSwitches_EventScript_SyncState_EnableRescue
+	return
 
 GoldenrodCity_UndergroundSwitches_OnTransition_ApplyDisguise:
 	special Special_ApplyCipherDisguise
-	end
+	checkitem ITEM_TUNNEL_KEY
+	goto_if_eq TRUE, GoldenrodCity_UndergroundSwitches_OnTransition_ApplyDisguise_CheckProgress
+	clearflag FLAG_GOLDENROD_SWITCH_DIRECTOR_FREED
+	clearflag FLAG_QUEST_GOLDENROD_NPCS_COMPLETED
+GoldenrodCity_UndergroundSwitches_OnTransition_ApplyDisguise_CheckProgress:
+	goto_if_set FLAG_QUEST_GOLDENROD_NPCS_COMPLETED, GoldenrodCity_UndergroundSwitches_EventScript_SyncState_Completed
+	goto_if_set FLAG_GOLDENROD_SWITCH_DIRECTOR_FREED, GoldenrodCity_UndergroundSwitches_EventScript_SyncState_Completed
+	goto_if_set FLAG_GOLDENROD_SWITCH_CAPTIVES_FREED, GoldenrodCity_UndergroundSwitches_EventScript_SyncState_DirectorOnly
+	goto_if_set FLAG_QUEST_GOLDENROD_NPCS_STARTED, GoldenrodCity_UndergroundSwitches_EventScript_SyncState_EnableRescue
+	return
+
+GoldenrodCity_UndergroundSwitches_EventScript_SyncState_EnableRescue:
+	setvar VAR_TEMP_0, 0
+	return
+
+GoldenrodCity_UndergroundSwitches_EventScript_SyncState_DirectorOnly:
+	setflag FLAG_HIDE_GOLDENROD_SWITCH_CAPTIVES
+	call GoldenrodCity_UndergroundSwitches_EventScript_RemoveCaptives
+	setvar VAR_TEMP_0, 0
+	return
+
+GoldenrodCity_UndergroundSwitches_EventScript_SyncState_Completed:
+	setflag FLAG_HIDE_GOLDENROD_SWITCH_CAPTIVES
+	setflag FLAG_HIDE_GOLDENROD_SWITCH_DIRECTOR_GROUP
+	call GoldenrodCity_UndergroundSwitches_EventScript_RemoveCaptives
+	hideobjectat LOCALID_GOLDENROD_UNDERGROUND_SWITCHES_DIRECTOR, MAP_GOLDENROD_CITY_UNDERGROUND_SWITCHES
+	removeobject LOCALID_GOLDENROD_UNDERGROUND_SWITCHES_DIRECTOR
+	hideobjectat LOCALID_GOLDENROD_UNDERGROUND_SWITCHES_RADIO_HOST, MAP_GOLDENROD_CITY_UNDERGROUND_SWITCHES
+	removeobject LOCALID_GOLDENROD_UNDERGROUND_SWITCHES_RADIO_HOST
+	return
+
+GoldenrodCity_UndergroundSwitches_EventScript_SyncDefeatedTrainers::
+	checktrainerflag TRAINER_GOLDENROD_UNDERGROUND_SWITCHES_ROCKET_1
+	call_if_eq GoldenrodCity_UndergroundSwitches_EventScript_HideRocketLeft
+	goto_if_ne GoldenrodCity_UndergroundSwitches_EventScript_SyncDefeatedTrainers_ClearRocketLeft
+GoldenrodCity_UndergroundSwitches_EventScript_SyncDefeatedTrainers_AfterRocketLeft:
+	checktrainerflag TRAINER_GOLDENROD_UNDERGROUND_SWITCHES_ROCKET_2
+	call_if_eq GoldenrodCity_UndergroundSwitches_EventScript_HideRocketRight
+	goto_if_ne GoldenrodCity_UndergroundSwitches_EventScript_SyncDefeatedTrainers_ClearRocketRight
+GoldenrodCity_UndergroundSwitches_EventScript_SyncDefeatedTrainers_AfterRocketRight:
+	checktrainerflag TRAINER_GOLDENROD_UNDERGROUND_SWITCHES_BURGLAR
+	call_if_eq GoldenrodCity_UndergroundSwitches_EventScript_HideBurglar
+	goto_if_ne GoldenrodCity_UndergroundSwitches_EventScript_SyncDefeatedTrainers_ClearBurglar
+	return
+
+GoldenrodCity_UndergroundSwitches_EventScript_SyncDefeatedTrainers_ClearRocketLeft:
+	clearflag FLAG_HIDE_GOLDENROD_SWITCH_ROCKET_LEFT
+	addobject LOCALID_GOLDENROD_UNDERGROUND_SWITCHES_ROCKET_LEFT
+	showobjectat LOCALID_GOLDENROD_UNDERGROUND_SWITCHES_ROCKET_LEFT, MAP_GOLDENROD_CITY_UNDERGROUND_SWITCHES
+	goto GoldenrodCity_UndergroundSwitches_EventScript_SyncDefeatedTrainers_AfterRocketLeft
+
+GoldenrodCity_UndergroundSwitches_EventScript_SyncDefeatedTrainers_ClearRocketRight:
+	clearflag FLAG_HIDE_GOLDENROD_SWITCH_ROCKET_RIGHT
+	addobject LOCALID_GOLDENROD_UNDERGROUND_SWITCHES_ROCKET_RIGHT
+	showobjectat LOCALID_GOLDENROD_UNDERGROUND_SWITCHES_ROCKET_RIGHT, MAP_GOLDENROD_CITY_UNDERGROUND_SWITCHES
+	goto GoldenrodCity_UndergroundSwitches_EventScript_SyncDefeatedTrainers_AfterRocketRight
+
+GoldenrodCity_UndergroundSwitches_EventScript_SyncDefeatedTrainers_ClearBurglar:
+	clearflag FLAG_HIDE_GOLDENROD_SWITCH_BURGLAR
+	return
+
+GoldenrodCity_UndergroundSwitches_EventScript_HideRocketLeft::
+	setflag FLAG_HIDE_GOLDENROD_SWITCH_ROCKET_LEFT
+	hideobjectat LOCALID_GOLDENROD_UNDERGROUND_SWITCHES_ROCKET_LEFT, MAP_GOLDENROD_CITY_UNDERGROUND_SWITCHES
+	removeobject LOCALID_GOLDENROD_UNDERGROUND_SWITCHES_ROCKET_LEFT
+	return
+
+GoldenrodCity_UndergroundSwitches_EventScript_HideRocketRight::
+	setflag FLAG_HIDE_GOLDENROD_SWITCH_ROCKET_RIGHT
+	hideobjectat LOCALID_GOLDENROD_UNDERGROUND_SWITCHES_ROCKET_RIGHT, MAP_GOLDENROD_CITY_UNDERGROUND_SWITCHES
+	removeobject LOCALID_GOLDENROD_UNDERGROUND_SWITCHES_ROCKET_RIGHT
+	return
+
+GoldenrodCity_UndergroundSwitches_EventScript_HideBurglar::
+	setflag FLAG_HIDE_GOLDENROD_SWITCH_BURGLAR
+	hideobjectat LOCALID_GOLDENROD_UNDERGROUND_SWITCHES_BURGLAR, MAP_GOLDENROD_CITY_UNDERGROUND_SWITCHES
+	removeobject LOCALID_GOLDENROD_UNDERGROUND_SWITCHES_BURGLAR
+	return
 
 GoldenrodCity_UndergroundSwitches_EventScript_Panel1::
-	msgbox GoldenrodCity_UndergroundSwitches_EventScript_Panel1_Text, MSGBOX_SIGN
+	lock
+	goto_if_unset FLAG_GOLDENROD_SWITCH_1, GoldenrodCity_UndergroundSwitches_EventScript_Panel1Activate
+	clearflag FLAG_GOLDENROD_SWITCH_1
+	playse SE_BANG
+	msgbox GoldenrodCity_UndergroundSwitches_Text_Switch1Off, MSGBOX_DEFAULT
+	closemessage
+	call GoldenrodCity_UndergroundSwitches_EventScript_CreateWall1
+	call GoldenrodCity_UndergroundSwitches_EventScript_CreateWall2
+	call GoldenrodCity_UndergroundSwitches_EventScript_CreateWall3
+	call GoldenrodCity_UndergroundSwitches_EventScript_CreateWall4
+	call GoldenrodCity_UndergroundSwitches_EventScript_CreateWall5
+	call GoldenrodCity_UndergroundSwitches_EventScript_CreateWall6
+	special DrawWholeMapView
+	waitse
+	release
 	end
 
-GoldenrodCity_UndergroundSwitches_EventScript_Panel1_Text:
-	.string "A control panel.$"
+GoldenrodCity_UndergroundSwitches_EventScript_Panel1Activate::
+	setflag FLAG_GOLDENROD_SWITCH_1
+	goto_if_set FLAG_GOLDENROD_SWITCH_ORDER, GoldenrodCity_UndergroundSwitches_EventScript_Panel1ActivateCorrect
+	clearflag FLAG_GOLDENROD_SWITCH_ORDER
+	playse SE_BANG
+	msgbox GoldenrodCity_UndergroundSwitches_Text_Switch1, MSGBOX_DEFAULT
+	closemessage
+	call GoldenrodCity_UndergroundSwitches_EventScript_RemoveWall1
+	call GoldenrodCity_UndergroundSwitches_EventScript_RemoveWall2
+	call GoldenrodCity_UndergroundSwitches_EventScript_RemoveWall3
+	call GoldenrodCity_UndergroundSwitches_EventScript_CreateWall4
+	call GoldenrodCity_UndergroundSwitches_EventScript_CreateWall5
+	call GoldenrodCity_UndergroundSwitches_EventScript_CreateWall6
+	special DrawWholeMapView
+	waitse
+	release
+	end
+
+GoldenrodCity_UndergroundSwitches_EventScript_Panel1ActivateCorrect::
+	playse SE_CLICK
+	setflag FLAG_GOLDENROD_SWITCHES_COMPLETED
+	msgbox GoldenrodCity_UndergroundSwitches_Text_Switch1, MSGBOX_DEFAULT
+	closemessage
+	call GoldenrodCity_UndergroundSwitches_EventScript_CreateWall1
+	call GoldenrodCity_UndergroundSwitches_EventScript_RemoveWall2
+	call GoldenrodCity_UndergroundSwitches_EventScript_RemoveWall3
+	call GoldenrodCity_UndergroundSwitches_EventScript_CreateWall4
+	call GoldenrodCity_UndergroundSwitches_EventScript_RemoveWall5
+	call GoldenrodCity_UndergroundSwitches_EventScript_RemoveWall6
+	special DrawWholeMapView
+	waitse
+	release
+	end
 
 GoldenrodCity_UndergroundSwitches_EventScript_Panel2::
-	msgbox GoldenrodCity_UndergroundSwitches_EventScript_Panel2_Text, MSGBOX_SIGN
+	lock
+	goto_if_unset FLAG_GOLDENROD_SWITCH_2, GoldenrodCity_UndergroundSwitches_EventScript_Panel2Activate
+	clearflag FLAG_GOLDENROD_SWITCH_2
+	clearflag FLAG_GOLDENROD_SWITCH_ORDER
+	playse SE_BANG
+	msgbox GoldenrodCity_UndergroundSwitches_Text_Switch2Off, MSGBOX_DEFAULT
+	closemessage
+	call GoldenrodCity_UndergroundSwitches_EventScript_CreateWall1
+	call GoldenrodCity_UndergroundSwitches_EventScript_CreateWall2
+	call GoldenrodCity_UndergroundSwitches_EventScript_CreateWall3
+	call GoldenrodCity_UndergroundSwitches_EventScript_CreateWall4
+	call GoldenrodCity_UndergroundSwitches_EventScript_CreateWall5
+	call GoldenrodCity_UndergroundSwitches_EventScript_CreateWall6
+	special DrawWholeMapView
+	waitse
+	release
 	end
 
-GoldenrodCity_UndergroundSwitches_EventScript_Panel2_Text:
-	.string "A control panel.$"
+GoldenrodCity_UndergroundSwitches_EventScript_Panel2Activate::
+	setflag FLAG_GOLDENROD_SWITCH_2
+	goto_if_set FLAG_GOLDENROD_SWITCH_1, GoldenrodCity_UndergroundSwitches_EventScript_Panel2ActivateWrong
+	goto_if_set FLAG_GOLDENROD_SWITCH_3, GoldenrodCity_UndergroundSwitches_EventScript_Panel2ActivateCorrect
+	playse SE_BANG
+	msgbox GoldenrodCity_UndergroundSwitches_Text_Switch2, MSGBOX_DEFAULT
+	closemessage
+	call GoldenrodCity_UndergroundSwitches_EventScript_RemoveWall1
+	call GoldenrodCity_UndergroundSwitches_EventScript_RemoveWall2
+	call GoldenrodCity_UndergroundSwitches_EventScript_RemoveWall3
+	call GoldenrodCity_UndergroundSwitches_EventScript_CreateWall4
+	call GoldenrodCity_UndergroundSwitches_EventScript_CreateWall5
+	call GoldenrodCity_UndergroundSwitches_EventScript_CreateWall6
+	special DrawWholeMapView
+	waitse
+	release
+	end
+
+GoldenrodCity_UndergroundSwitches_EventScript_Panel2ActivateWrong::
+	clearflag FLAG_GOLDENROD_SWITCH_ORDER
+	playse SE_BANG
+	msgbox GoldenrodCity_UndergroundSwitches_Text_Switch2, MSGBOX_DEFAULT
+	closemessage
+	call GoldenrodCity_UndergroundSwitches_EventScript_RemoveWall1
+	call GoldenrodCity_UndergroundSwitches_EventScript_RemoveWall2
+	call GoldenrodCity_UndergroundSwitches_EventScript_RemoveWall3
+	call GoldenrodCity_UndergroundSwitches_EventScript_CreateWall4
+	call GoldenrodCity_UndergroundSwitches_EventScript_CreateWall5
+	call GoldenrodCity_UndergroundSwitches_EventScript_CreateWall6
+	special DrawWholeMapView
+	waitse
+	release
+	end
+
+GoldenrodCity_UndergroundSwitches_EventScript_Panel2ActivateCorrect::
+	setflag FLAG_GOLDENROD_SWITCH_ORDER
+	playse SE_CLICK
+	msgbox GoldenrodCity_UndergroundSwitches_Text_Switch2, MSGBOX_DEFAULT
+	closemessage
+	call GoldenrodCity_UndergroundSwitches_EventScript_CreateWall1
+	call GoldenrodCity_UndergroundSwitches_EventScript_RemoveWall2
+	call GoldenrodCity_UndergroundSwitches_EventScript_RemoveWall3
+	call GoldenrodCity_UndergroundSwitches_EventScript_CreateWall4
+	call GoldenrodCity_UndergroundSwitches_EventScript_CreateWall5
+	call GoldenrodCity_UndergroundSwitches_EventScript_CreateWall6
+	special DrawWholeMapView
+	waitse
+	release
+	end
 
 GoldenrodCity_UndergroundSwitches_EventScript_Panel3::
-	msgbox GoldenrodCity_UndergroundSwitches_EventScript_Panel3_Text, MSGBOX_SIGN
+	lock
+	goto_if_unset FLAG_GOLDENROD_SWITCH_3, GoldenrodCity_UndergroundSwitches_EventScript_Panel3Activate
+	clearflag FLAG_GOLDENROD_SWITCH_3
+	clearflag FLAG_GOLDENROD_SWITCH_ORDER
+	playse SE_BANG
+	msgbox GoldenrodCity_UndergroundSwitches_Text_Switch3Off, MSGBOX_DEFAULT
+	closemessage
+	call GoldenrodCity_UndergroundSwitches_EventScript_CreateWall1
+	call GoldenrodCity_UndergroundSwitches_EventScript_CreateWall2
+	call GoldenrodCity_UndergroundSwitches_EventScript_CreateWall3
+	call GoldenrodCity_UndergroundSwitches_EventScript_CreateWall4
+	call GoldenrodCity_UndergroundSwitches_EventScript_CreateWall5
+	call GoldenrodCity_UndergroundSwitches_EventScript_CreateWall6
+	special DrawWholeMapView
+	waitse
+	release
 	end
 
-GoldenrodCity_UndergroundSwitches_EventScript_Panel3_Text:
-	.string "A control panel.$"
+GoldenrodCity_UndergroundSwitches_EventScript_Panel3Activate::
+	setflag FLAG_GOLDENROD_SWITCH_3
+	clearflag FLAG_GOLDENROD_SWITCH_ORDER
+	playse SE_CLICK
+	msgbox GoldenrodCity_UndergroundSwitches_Text_Switch3, MSGBOX_DEFAULT
+	closemessage
+	call GoldenrodCity_UndergroundSwitches_EventScript_RemoveWall1
+	call GoldenrodCity_UndergroundSwitches_EventScript_RemoveWall4
+	call GoldenrodCity_UndergroundSwitches_EventScript_CreateWall2
+	call GoldenrodCity_UndergroundSwitches_EventScript_CreateWall3
+	call GoldenrodCity_UndergroundSwitches_EventScript_CreateWall5
+	call GoldenrodCity_UndergroundSwitches_EventScript_CreateWall6
+	special DrawWholeMapView
+	waitse
+	release
+	end
+
+GoldenrodCity_UndergroundSwitches_EventScript_CreateWall1::
+	setmetatile 5, 7, 0x319, FALSE
+	setmetatile 6, 7, 0x31A, FALSE
+	setmetatile 7, 7, 0x31B, FALSE
+	setmetatile 5, 8, 0x321, FALSE
+	setmetatile 6, 8, 0x322, FALSE
+	setmetatile 7, 8, 0x323, FALSE
+	return
+
+GoldenrodCity_UndergroundSwitches_EventScript_CreateWall2::
+	setmetatile 14, 7, 0x319, FALSE
+	setmetatile 15, 7, 0x31A, FALSE
+	setmetatile 16, 7, 0x31B, FALSE
+	setmetatile 14, 8, 0x321, FALSE
+	setmetatile 15, 8, 0x322, FALSE
+	setmetatile 16, 8, 0x323, FALSE
+	return
+
+GoldenrodCity_UndergroundSwitches_EventScript_CreateWall3::
+	setmetatile 23, 7, 0x319, FALSE
+	setmetatile 24, 7, 0x31A, FALSE
+	setmetatile 25, 7, 0x31B, FALSE
+	setmetatile 23, 8, 0x321, FALSE
+	setmetatile 24, 8, 0x322, FALSE
+	setmetatile 25, 8, 0x323, FALSE
+	return
+
+GoldenrodCity_UndergroundSwitches_EventScript_CreateWall4::
+	setmetatile 5, 11, 0x319, FALSE
+	setmetatile 6, 11, 0x31A, FALSE
+	setmetatile 7, 11, 0x31B, FALSE
+	setmetatile 5, 12, 0x321, FALSE
+	setmetatile 6, 12, 0x322, FALSE
+	setmetatile 7, 12, 0x323, FALSE
+	return
+
+GoldenrodCity_UndergroundSwitches_EventScript_CreateWall5::
+	setmetatile 14, 11, 0x319, FALSE
+	setmetatile 15, 11, 0x31A, FALSE
+	setmetatile 16, 11, 0x31B, FALSE
+	setmetatile 14, 12, 0x321, FALSE
+	setmetatile 15, 12, 0x322, FALSE
+	setmetatile 16, 12, 0x323, FALSE
+	return
+
+GoldenrodCity_UndergroundSwitches_EventScript_CreateWall6::
+	setmetatile 23, 11, 0x319, FALSE
+	setmetatile 24, 11, 0x31A, FALSE
+	setmetatile 25, 11, 0x31B, FALSE
+	setmetatile 23, 12, 0x321, FALSE
+	setmetatile 24, 12, 0x322, FALSE
+	setmetatile 25, 12, 0x323, FALSE
+	return
+
+GoldenrodCity_UndergroundSwitches_EventScript_RemoveWall1::
+	setmetatile 5, 7, 0x20E, TRUE
+	setmetatile 6, 7, 0x201, FALSE
+	setmetatile 7, 7, 0x20D, TRUE
+	setmetatile 5, 8, 0x216, TRUE
+	setmetatile 6, 8, 0x201, FALSE
+	setmetatile 7, 8, 0x215, TRUE
+	return
+
+GoldenrodCity_UndergroundSwitches_EventScript_RemoveWall2::
+	setmetatile 14, 7, 0x20E, TRUE
+	setmetatile 15, 7, 0x201, FALSE
+	setmetatile 16, 7, 0x20D, TRUE
+	setmetatile 14, 8, 0x216, TRUE
+	setmetatile 15, 8, 0x201, FALSE
+	setmetatile 16, 8, 0x215, TRUE
+	return
+
+GoldenrodCity_UndergroundSwitches_EventScript_RemoveWall3::
+	setmetatile 23, 7, 0x20E, TRUE
+	setmetatile 24, 7, 0x201, FALSE
+	setmetatile 25, 7, 0x20D, TRUE
+	setmetatile 23, 8, 0x216, TRUE
+	setmetatile 24, 8, 0x201, FALSE
+	setmetatile 25, 8, 0x215, TRUE
+	return
+
+GoldenrodCity_UndergroundSwitches_EventScript_RemoveWall4::
+	setmetatile 5, 11, 0x20E, TRUE
+	setmetatile 6, 11, 0x201, FALSE
+	setmetatile 7, 11, 0x20D, TRUE
+	setmetatile 5, 12, 0x216, TRUE
+	setmetatile 6, 12, 0x201, FALSE
+	setmetatile 7, 12, 0x215, TRUE
+	return
+
+GoldenrodCity_UndergroundSwitches_EventScript_RemoveWall5::
+	setmetatile 14, 11, 0x20E, TRUE
+	setmetatile 15, 11, 0x201, FALSE
+	setmetatile 16, 11, 0x20D, TRUE
+	setmetatile 14, 12, 0x216, TRUE
+	setmetatile 15, 12, 0x201, FALSE
+	setmetatile 16, 12, 0x215, TRUE
+	return
+
+GoldenrodCity_UndergroundSwitches_EventScript_RemoveWall6::
+	setmetatile 23, 11, 0x20E, TRUE
+	setmetatile 24, 11, 0x201, FALSE
+	setmetatile 25, 11, 0x20D, TRUE
+	setmetatile 23, 12, 0x216, TRUE
+	setmetatile 24, 12, 0x201, FALSE
+	setmetatile 25, 12, 0x215, TRUE
+	return
+
+GoldenrodCity_UndergroundSwitches_EventScript_RocketLeft::
+	setspeaker GoldenrodCity_UndergroundSwitches_Speaker_RocketGrunt
+	trainerbattle_single TRAINER_GOLDENROD_UNDERGROUND_SWITCHES_ROCKET_1, GoldenrodCity_UndergroundSwitches_Text_RocketLeft_Intro, GoldenrodCity_UndergroundSwitches_Text_RocketLeft_Defeat, GoldenrodCity_UndergroundSwitches_EventScript_RocketLeft_After
+	end
+
+GoldenrodCity_UndergroundSwitches_EventScript_RocketLeft_After::
+	setspeaker GoldenrodCity_UndergroundSwitches_Speaker_RocketGrunt
+	msgbox GoldenrodCity_UndergroundSwitches_Text_RocketLeft_After, MSGBOX_NPC
+	closemessage
+	fadescreenswapbuffers FADE_TO_BLACK
+	call GoldenrodCity_UndergroundSwitches_EventScript_HideRocketLeft
+	fadescreenswapbuffers FADE_FROM_BLACK
+	release
+	end
+
+GoldenrodCity_UndergroundSwitches_EventScript_RocketRight::
+	setspeaker GoldenrodCity_UndergroundSwitches_Speaker_RocketGrunt
+	trainerbattle_single TRAINER_GOLDENROD_UNDERGROUND_SWITCHES_ROCKET_2, GoldenrodCity_UndergroundSwitches_Text_RocketRight_Intro, GoldenrodCity_UndergroundSwitches_Text_RocketRight_Defeat, GoldenrodCity_UndergroundSwitches_EventScript_RocketRight_After
+	end
+
+GoldenrodCity_UndergroundSwitches_EventScript_RocketRight_After::
+	setspeaker GoldenrodCity_UndergroundSwitches_Speaker_RocketGrunt
+	msgbox GoldenrodCity_UndergroundSwitches_Text_RocketRight_After, MSGBOX_NPC
+	closemessage
+	fadescreenswapbuffers FADE_TO_BLACK
+	call GoldenrodCity_UndergroundSwitches_EventScript_HideRocketRight
+	fadescreenswapbuffers FADE_FROM_BLACK
+	release
+	end
+
+GoldenrodCity_UndergroundSwitches_EventScript_Burglar::
+	setspeaker GoldenrodCity_UndergroundSwitches_Speaker_Burglar
+	trainerbattle_single TRAINER_GOLDENROD_UNDERGROUND_SWITCHES_BURGLAR, GoldenrodCity_UndergroundSwitches_Text_Burglar_Intro, GoldenrodCity_UndergroundSwitches_Text_Burglar_Defeat, GoldenrodCity_UndergroundSwitches_EventScript_Burglar_After
+	end
+
+GoldenrodCity_UndergroundSwitches_EventScript_Burglar_After::
+	setspeaker GoldenrodCity_UndergroundSwitches_Speaker_Burglar
+	msgbox GoldenrodCity_UndergroundSwitches_Text_Burglar_After, MSGBOX_NPC
+	closemessage
+	fadescreenswapbuffers FADE_TO_BLACK
+	call GoldenrodCity_UndergroundSwitches_EventScript_HideBurglar
+	fadescreenswapbuffers FADE_FROM_BLACK
+	release
+	end
+
+GoldenrodCity_UndergroundSwitches_EventScript_Director::
+	goto_if_set FLAG_GOLDENROD_SWITCH_DIRECTOR_FREED, GoldenrodCity_UndergroundSwitches_EventScript_Director_Idle
+	goto_if_unset FLAG_GOLDENROD_SWITCH_CAPTIVES_FREED, GoldenrodCity_UndergroundSwitches_EventScript_Director_WaitForCaptives
+	goto GoldenrodCity_UndergroundSwitches_EventScript_DirectorRescue
+
+GoldenrodCity_UndergroundSwitches_EventScript_Director_Idle:
+	lock
+	faceplayer
+	setspeaker GoldenrodCity_UndergroundSwitches_Speaker_Director
+	msgbox GoldenrodCity_UndergroundSwitches_Text_Director_Idle, MSGBOX_DEFAULT
+	release
+	end
+
+GoldenrodCity_UndergroundSwitches_EventScript_Director_WaitForCaptives:
+	lock
+	faceplayer
+	setspeaker GoldenrodCity_UndergroundSwitches_Speaker_Director
+	msgbox GoldenrodCity_UndergroundSwitches_Text_Director_WaitForCaptives, MSGBOX_DEFAULT
+	release
+	end
+
+GoldenrodCity_UndergroundSwitches_EventScript_RadioHost::
+	goto_if_set FLAG_GOLDENROD_SWITCH_DIRECTOR_FREED, GoldenrodCity_UndergroundSwitches_EventScript_RadioHost_Idle
+	goto_if_unset FLAG_GOLDENROD_SWITCH_CAPTIVES_FREED, GoldenrodCity_UndergroundSwitches_EventScript_RadioHost_WaitForCaptives
+	goto GoldenrodCity_UndergroundSwitches_EventScript_DirectorRescue
+
+GoldenrodCity_UndergroundSwitches_EventScript_RadioHost_Idle:
+	lock
+	faceplayer
+	setspeaker GoldenrodCity_UndergroundSwitches_Speaker_RadioHost
+	msgbox GoldenrodCity_UndergroundSwitches_Text_RadioHost_Idle, MSGBOX_DEFAULT
+	release
+	end
+
+GoldenrodCity_UndergroundSwitches_EventScript_RadioHost_WaitForCaptives:
+	lock
+	faceplayer
+	setspeaker GoldenrodCity_UndergroundSwitches_Speaker_RadioHost
+	msgbox GoldenrodCity_UndergroundSwitches_Text_RadioHost_WaitForCaptives, MSGBOX_DEFAULT
+	release
+	end
+
+GoldenrodCity_UndergroundSwitches_EventScript_RescueCaptives::
+	goto_if_unset FLAG_QUEST_GOLDENROD_NPCS_STARTED, GoldenrodCity_UndergroundSwitches_EventScript_RescueCaptives_End
+	goto_if_set FLAG_GOLDENROD_SWITCH_CAPTIVES_FREED, GoldenrodCity_UndergroundSwitches_EventScript_RescueCaptives_End
+	goto_if_set FLAG_QUEST_GOLDENROD_NPCS_COMPLETED, GoldenrodCity_UndergroundSwitches_EventScript_RescueCaptives_End
+	lockall
+	setvar VAR_TEMP_0, 1
+	setflag FLAG_HIDE_GOLDENROD_SWITCH_CAPTIVES
+	getplayerxy VAR_0x8004, VAR_0x8005
+	copyvar VAR_TEMP_1, VAR_0x8004
+	switch VAR_0x8004
+	case 5, GoldenrodCity_UndergroundSwitches_EventScript_RescueCaptives_MovePlayerLeft
+	case 6, GoldenrodCity_UndergroundSwitches_EventScript_RescueCaptives_MovePlayerCenter
+	case 7, GoldenrodCity_UndergroundSwitches_EventScript_RescueCaptives_MovePlayerRight
+	goto GoldenrodCity_UndergroundSwitches_EventScript_RescueCaptives_MovePlayerCenter
+
+GoldenrodCity_UndergroundSwitches_EventScript_RescueCaptives_MovePlayerLeft:
+	applymovement LOCALID_PLAYER, GoldenrodCity_UndergroundSwitches_Movement_PlayerCenterFromLeft
+	goto GoldenrodCity_UndergroundSwitches_EventScript_RescueCaptives_MovePlayerDone
+
+GoldenrodCity_UndergroundSwitches_EventScript_RescueCaptives_MovePlayerCenter:
+	applymovement LOCALID_PLAYER, GoldenrodCity_UndergroundSwitches_Movement_PlayerCenterFromCenter
+	goto GoldenrodCity_UndergroundSwitches_EventScript_RescueCaptives_MovePlayerDone
+
+GoldenrodCity_UndergroundSwitches_EventScript_RescueCaptives_MovePlayerRight:
+	applymovement LOCALID_PLAYER, GoldenrodCity_UndergroundSwitches_Movement_PlayerCenterFromRight
+
+GoldenrodCity_UndergroundSwitches_EventScript_RescueCaptives_MovePlayerDone:
+	waitmovement 0
+	call GoldenrodCity_UndergroundSwitches_EventScript_FreeCaptive9
+	call GoldenrodCity_UndergroundSwitches_EventScript_FreeCaptive4
+	call GoldenrodCity_UndergroundSwitches_EventScript_FreeCaptive3
+	call GoldenrodCity_UndergroundSwitches_EventScript_FreeCaptive5
+	call GoldenrodCity_UndergroundSwitches_EventScript_FreeCaptive2
+	call GoldenrodCity_UndergroundSwitches_EventScript_FreeCaptive6
+	call GoldenrodCity_UndergroundSwitches_EventScript_FreeCaptive1
+	call GoldenrodCity_UndergroundSwitches_EventScript_FreeCaptive7
+	call GoldenrodCity_UndergroundSwitches_EventScript_FreeCaptive8
+	setflag FLAG_GOLDENROD_SWITCH_CAPTIVES_FREED
+	setvar VAR_TEMP_0, 0
+	releaseall
+	end
+
+GoldenrodCity_UndergroundSwitches_EventScript_RescueCaptives_End:
+	end
+
+GoldenrodCity_UndergroundSwitches_EventScript_DirectorRescue::
+	goto_if_set FLAG_GOLDENROD_SWITCH_DIRECTOR_FREED, GoldenrodCity_UndergroundSwitches_EventScript_DirectorRescue_End
+	lockall
+	setflag FLAG_HIDE_GOLDENROD_SWITCH_DIRECTOR_GROUP
+	turnobject LOCALID_GOLDENROD_UNDERGROUND_SWITCHES_DIRECTOR, DIR_SOUTH
+	turnobject LOCALID_GOLDENROD_UNDERGROUND_SWITCHES_RADIO_HOST, DIR_SOUTH
+	turnobject LOCALID_PLAYER, DIR_NORTH
+	applymovement LOCALID_GOLDENROD_UNDERGROUND_SWITCHES_DIRECTOR, GoldenrodCity_UndergroundSwitches_Movement_DoubleExclaim
+	applymovement LOCALID_GOLDENROD_UNDERGROUND_SWITCHES_RADIO_HOST, GoldenrodCity_UndergroundSwitches_Movement_DoubleExclaim
+	waitmovement 0
+	setspeaker GoldenrodCity_UndergroundSwitches_Speaker_Director
+	msgbox GoldenrodCity_UndergroundSwitches_Text_Director_Thanks, MSGBOX_DEFAULT
+	setspeaker GoldenrodCity_UndergroundSwitches_Speaker_RadioHost
+	msgbox GoldenrodCity_UndergroundSwitches_Text_RadioHost_Thanks, MSGBOX_DEFAULT
+	setspeaker GoldenrodCity_UndergroundSwitches_Speaker_Director
+	msgbox GoldenrodCity_UndergroundSwitches_Text_Director_Key, MSGBOX_DEFAULT
+	checkitem ITEM_TUNNEL_KEY
+	goto_if_eq TRUE, GoldenrodCity_UndergroundSwitches_EventScript_DirectorRescue_ChooseExit
+	giveitem ITEM_TUNNEL_KEY
+	goto_if_eq VAR_RESULT, FALSE, Common_EventScript_ShowBagIsFull
+	msgbox GoldenrodCity_UndergroundSwitches_Text_ReceivedTunnelKey, MSGBOX_DEFAULT
+GoldenrodCity_UndergroundSwitches_EventScript_DirectorRescue_ChooseExit:
+	applymovement LOCALID_GOLDENROD_UNDERGROUND_SWITCHES_DIRECTOR, GoldenrodCity_UndergroundSwitches_Movement_DirectorExitLeft
+	applymovement LOCALID_GOLDENROD_UNDERGROUND_SWITCHES_RADIO_HOST, GoldenrodCity_UndergroundSwitches_Movement_RadioHostExitLeft
+
+GoldenrodCity_UndergroundSwitches_EventScript_DirectorRescue_ExitDone:
+	waitmovement 0
+	setflag FLAG_HIDE_GOLDENROD_SWITCH_DIRECTOR_GROUP
+	hideobjectat LOCALID_GOLDENROD_UNDERGROUND_SWITCHES_DIRECTOR, MAP_GOLDENROD_CITY_UNDERGROUND_SWITCHES
+	removeobject LOCALID_GOLDENROD_UNDERGROUND_SWITCHES_DIRECTOR
+	hideobjectat LOCALID_GOLDENROD_UNDERGROUND_SWITCHES_RADIO_HOST, MAP_GOLDENROD_CITY_UNDERGROUND_SWITCHES
+	removeobject LOCALID_GOLDENROD_UNDERGROUND_SWITCHES_RADIO_HOST
+	setflag FLAG_GOLDENROD_SWITCH_DIRECTOR_FREED
+	setflag FLAG_QUEST_GOLDENROD_NPCS_COMPLETED
+	call QuestJournal_EventScript_QuestCompleteAlert
+	releaseall
+	end
+
+GoldenrodCity_UndergroundSwitches_EventScript_DirectorRescue_End:
+	end
+
+GoldenrodCity_UndergroundSwitches_EventScript_FreeCaptive1::
+	applymovement LOCALID_GOLDENROD_UNDERGROUND_SWITCHES_ATTENDANT_F, GoldenrodCity_UndergroundSwitches_Movement_Captive1_ApproachCenter
+	waitmovement 0
+	goto GoldenrodCity_UndergroundSwitches_EventScript_FreeCaptive_Common1
+
+GoldenrodCity_UndergroundSwitches_EventScript_FreeCaptive2::
+	applymovement LOCALID_GOLDENROD_UNDERGROUND_SWITCHES_ATTENDANT_M, GoldenrodCity_UndergroundSwitches_Movement_Captive2_ApproachCenter
+	waitmovement 0
+	goto GoldenrodCity_UndergroundSwitches_EventScript_FreeCaptive_Common2
+
+GoldenrodCity_UndergroundSwitches_EventScript_FreeCaptive3::
+	applymovement LOCALID_GOLDENROD_UNDERGROUND_SWITCHES_BOY, GoldenrodCity_UndergroundSwitches_Movement_Captive3_ApproachCenter
+	waitmovement 0
+	goto GoldenrodCity_UndergroundSwitches_EventScript_FreeCaptive_Common3
+
+GoldenrodCity_UndergroundSwitches_EventScript_FreeCaptive4::
+	applymovement LOCALID_GOLDENROD_UNDERGROUND_SWITCHES_LASS, GoldenrodCity_UndergroundSwitches_Movement_Captive4_ApproachCenter
+	waitmovement 0
+	goto GoldenrodCity_UndergroundSwitches_EventScript_FreeCaptive_Common4
+
+GoldenrodCity_UndergroundSwitches_EventScript_FreeCaptive5::
+	applymovement LOCALID_GOLDENROD_UNDERGROUND_SWITCHES_BEAUTY, GoldenrodCity_UndergroundSwitches_Movement_Captive5_ApproachCenter
+	waitmovement 0
+	goto GoldenrodCity_UndergroundSwitches_EventScript_FreeCaptive_Common5
+
+GoldenrodCity_UndergroundSwitches_EventScript_FreeCaptive6::
+	applymovement LOCALID_GOLDENROD_UNDERGROUND_SWITCHES_SCIENTIST, GoldenrodCity_UndergroundSwitches_Movement_Captive6_ApproachCenter
+	waitmovement 0
+	goto GoldenrodCity_UndergroundSwitches_EventScript_FreeCaptive_Common6
+
+GoldenrodCity_UndergroundSwitches_EventScript_FreeCaptive7::
+	applymovement LOCALID_GOLDENROD_UNDERGROUND_SWITCHES_SUPER_NERD, GoldenrodCity_UndergroundSwitches_Movement_Captive7_ApproachCenter
+	waitmovement 0
+	goto GoldenrodCity_UndergroundSwitches_EventScript_FreeCaptive_Common7
+
+GoldenrodCity_UndergroundSwitches_EventScript_FreeCaptive8::
+	applymovement LOCALID_GOLDENROD_UNDERGROUND_SWITCHES_WORKER_F, GoldenrodCity_UndergroundSwitches_Movement_Captive8_ApproachCenter
+	waitmovement 0
+	goto GoldenrodCity_UndergroundSwitches_EventScript_FreeCaptive_Common8
+
+GoldenrodCity_UndergroundSwitches_EventScript_FreeCaptive9::
+	applymovement LOCALID_GOLDENROD_UNDERGROUND_SWITCHES_FAT_MAN, GoldenrodCity_UndergroundSwitches_Movement_Captive9_ApproachCenter
+	waitmovement 0
+	goto GoldenrodCity_UndergroundSwitches_EventScript_FreeCaptive_Common9
+
+GoldenrodCity_UndergroundSwitches_EventScript_FreeCaptive_Common1:
+	turnobject LOCALID_PLAYER, DIR_EAST
+	turnobject LOCALID_GOLDENROD_UNDERGROUND_SWITCHES_ATTENDANT_F, DIR_WEST
+	setspeaker GoldenrodCity_UndergroundSwitches_Speaker_Aiko
+	msgbox GoldenrodCity_UndergroundSwitches_Text_AikoThanks, MSGBOX_DEFAULT
+	applymovement LOCALID_GOLDENROD_UNDERGROUND_SWITCHES_ATTENDANT_F, GoldenrodCity_UndergroundSwitches_Movement_CaptiveExitCenter
+	waitmovement 0
+	hideobjectat LOCALID_GOLDENROD_UNDERGROUND_SWITCHES_ATTENDANT_F, MAP_GOLDENROD_CITY_UNDERGROUND_SWITCHES
+	removeobject LOCALID_GOLDENROD_UNDERGROUND_SWITCHES_ATTENDANT_F
+	return
+
+GoldenrodCity_UndergroundSwitches_EventScript_FreeCaptive_Common2:
+	turnobject LOCALID_PLAYER, DIR_EAST
+	turnobject LOCALID_GOLDENROD_UNDERGROUND_SWITCHES_ATTENDANT_M, DIR_WEST
+	setspeaker GoldenrodCity_UndergroundSwitches_Speaker_Brent
+	msgbox GoldenrodCity_UndergroundSwitches_Text_BrentThanks, MSGBOX_DEFAULT
+	applymovement LOCALID_GOLDENROD_UNDERGROUND_SWITCHES_ATTENDANT_M, GoldenrodCity_UndergroundSwitches_Movement_CaptiveExitCenter
+	waitmovement 0
+	hideobjectat LOCALID_GOLDENROD_UNDERGROUND_SWITCHES_ATTENDANT_M, MAP_GOLDENROD_CITY_UNDERGROUND_SWITCHES
+	removeobject LOCALID_GOLDENROD_UNDERGROUND_SWITCHES_ATTENDANT_M
+	return
+
+GoldenrodCity_UndergroundSwitches_EventScript_FreeCaptive_Common3:
+	turnobject LOCALID_PLAYER, DIR_EAST
+	turnobject LOCALID_GOLDENROD_UNDERGROUND_SWITCHES_BOY, DIR_WEST
+	setspeaker GoldenrodCity_UndergroundSwitches_Speaker_Toby
+	msgbox GoldenrodCity_UndergroundSwitches_Text_TobyThanks, MSGBOX_DEFAULT
+	applymovement LOCALID_GOLDENROD_UNDERGROUND_SWITCHES_BOY, GoldenrodCity_UndergroundSwitches_Movement_CaptiveExitCenter
+	waitmovement 0
+	hideobjectat LOCALID_GOLDENROD_UNDERGROUND_SWITCHES_BOY, MAP_GOLDENROD_CITY_UNDERGROUND_SWITCHES
+	removeobject LOCALID_GOLDENROD_UNDERGROUND_SWITCHES_BOY
+	return
+
+GoldenrodCity_UndergroundSwitches_EventScript_FreeCaptive_Common4:
+	turnobject LOCALID_PLAYER, DIR_EAST
+	turnobject LOCALID_GOLDENROD_UNDERGROUND_SWITCHES_LASS, DIR_WEST
+	setspeaker GoldenrodCity_UndergroundSwitches_Speaker_Nina
+	msgbox GoldenrodCity_UndergroundSwitches_Text_NinaThanks, MSGBOX_DEFAULT
+	applymovement LOCALID_GOLDENROD_UNDERGROUND_SWITCHES_LASS, GoldenrodCity_UndergroundSwitches_Movement_CaptiveExitCenter
+	waitmovement 0
+	hideobjectat LOCALID_GOLDENROD_UNDERGROUND_SWITCHES_LASS, MAP_GOLDENROD_CITY_UNDERGROUND_SWITCHES
+	removeobject LOCALID_GOLDENROD_UNDERGROUND_SWITCHES_LASS
+	return
+
+GoldenrodCity_UndergroundSwitches_EventScript_FreeCaptive_Common5:
+	turnobject LOCALID_PLAYER, DIR_EAST
+	turnobject LOCALID_GOLDENROD_UNDERGROUND_SWITCHES_BEAUTY, DIR_WEST
+	setspeaker GoldenrodCity_UndergroundSwitches_Speaker_Lana
+	msgbox GoldenrodCity_UndergroundSwitches_Text_LanaThanks, MSGBOX_DEFAULT
+	applymovement LOCALID_GOLDENROD_UNDERGROUND_SWITCHES_BEAUTY, GoldenrodCity_UndergroundSwitches_Movement_CaptiveExitCenter
+	waitmovement 0
+	hideobjectat LOCALID_GOLDENROD_UNDERGROUND_SWITCHES_BEAUTY, MAP_GOLDENROD_CITY_UNDERGROUND_SWITCHES
+	removeobject LOCALID_GOLDENROD_UNDERGROUND_SWITCHES_BEAUTY
+	return
+
+GoldenrodCity_UndergroundSwitches_EventScript_FreeCaptive_Common6:
+	turnobject LOCALID_PLAYER, DIR_EAST
+	turnobject LOCALID_GOLDENROD_UNDERGROUND_SWITCHES_SCIENTIST, DIR_WEST
+	setspeaker GoldenrodCity_UndergroundSwitches_Speaker_Cole
+	msgbox GoldenrodCity_UndergroundSwitches_Text_ColeThanks, MSGBOX_DEFAULT
+	applymovement LOCALID_GOLDENROD_UNDERGROUND_SWITCHES_SCIENTIST, GoldenrodCity_UndergroundSwitches_Movement_CaptiveExitCenter
+	waitmovement 0
+	hideobjectat LOCALID_GOLDENROD_UNDERGROUND_SWITCHES_SCIENTIST, MAP_GOLDENROD_CITY_UNDERGROUND_SWITCHES
+	removeobject LOCALID_GOLDENROD_UNDERGROUND_SWITCHES_SCIENTIST
+	return
+
+GoldenrodCity_UndergroundSwitches_EventScript_FreeCaptive_Common7:
+	turnobject LOCALID_PLAYER, DIR_EAST
+	turnobject LOCALID_GOLDENROD_UNDERGROUND_SWITCHES_SUPER_NERD, DIR_WEST
+	setspeaker GoldenrodCity_UndergroundSwitches_Speaker_Hugo
+	msgbox GoldenrodCity_UndergroundSwitches_Text_HugoThanks, MSGBOX_DEFAULT
+	applymovement LOCALID_GOLDENROD_UNDERGROUND_SWITCHES_SUPER_NERD, GoldenrodCity_UndergroundSwitches_Movement_CaptiveExitCenter
+	waitmovement 0
+	hideobjectat LOCALID_GOLDENROD_UNDERGROUND_SWITCHES_SUPER_NERD, MAP_GOLDENROD_CITY_UNDERGROUND_SWITCHES
+	removeobject LOCALID_GOLDENROD_UNDERGROUND_SWITCHES_SUPER_NERD
+	return
+
+GoldenrodCity_UndergroundSwitches_EventScript_FreeCaptive_Common8:
+	turnobject LOCALID_PLAYER, DIR_EAST
+	turnobject LOCALID_GOLDENROD_UNDERGROUND_SWITCHES_WORKER_F, DIR_WEST
+	setspeaker GoldenrodCity_UndergroundSwitches_Speaker_Fern
+	msgbox GoldenrodCity_UndergroundSwitches_Text_FernThanks, MSGBOX_DEFAULT
+	applymovement LOCALID_GOLDENROD_UNDERGROUND_SWITCHES_WORKER_F, GoldenrodCity_UndergroundSwitches_Movement_CaptiveExitCenter
+	waitmovement 0
+	hideobjectat LOCALID_GOLDENROD_UNDERGROUND_SWITCHES_WORKER_F, MAP_GOLDENROD_CITY_UNDERGROUND_SWITCHES
+	removeobject LOCALID_GOLDENROD_UNDERGROUND_SWITCHES_WORKER_F
+	return
+
+GoldenrodCity_UndergroundSwitches_EventScript_FreeCaptive_Common9:
+	turnobject LOCALID_PLAYER, DIR_EAST
+	turnobject LOCALID_GOLDENROD_UNDERGROUND_SWITCHES_FAT_MAN, DIR_WEST
+	setspeaker GoldenrodCity_UndergroundSwitches_Speaker_Gus
+	msgbox GoldenrodCity_UndergroundSwitches_Text_GusThanks, MSGBOX_DEFAULT
+	applymovement LOCALID_GOLDENROD_UNDERGROUND_SWITCHES_FAT_MAN, GoldenrodCity_UndergroundSwitches_Movement_CaptiveExitCenter
+	waitmovement 0
+	hideobjectat LOCALID_GOLDENROD_UNDERGROUND_SWITCHES_FAT_MAN, MAP_GOLDENROD_CITY_UNDERGROUND_SWITCHES
+	removeobject LOCALID_GOLDENROD_UNDERGROUND_SWITCHES_FAT_MAN
+	return
+
+GoldenrodCity_UndergroundSwitches_EventScript_RemoveCaptives::
+	hideobjectat LOCALID_GOLDENROD_UNDERGROUND_SWITCHES_ATTENDANT_F, MAP_GOLDENROD_CITY_UNDERGROUND_SWITCHES
+	removeobject LOCALID_GOLDENROD_UNDERGROUND_SWITCHES_ATTENDANT_F
+	hideobjectat LOCALID_GOLDENROD_UNDERGROUND_SWITCHES_ATTENDANT_M, MAP_GOLDENROD_CITY_UNDERGROUND_SWITCHES
+	removeobject LOCALID_GOLDENROD_UNDERGROUND_SWITCHES_ATTENDANT_M
+	hideobjectat LOCALID_GOLDENROD_UNDERGROUND_SWITCHES_BOY, MAP_GOLDENROD_CITY_UNDERGROUND_SWITCHES
+	removeobject LOCALID_GOLDENROD_UNDERGROUND_SWITCHES_BOY
+	hideobjectat LOCALID_GOLDENROD_UNDERGROUND_SWITCHES_LASS, MAP_GOLDENROD_CITY_UNDERGROUND_SWITCHES
+	removeobject LOCALID_GOLDENROD_UNDERGROUND_SWITCHES_LASS
+	hideobjectat LOCALID_GOLDENROD_UNDERGROUND_SWITCHES_BEAUTY, MAP_GOLDENROD_CITY_UNDERGROUND_SWITCHES
+	removeobject LOCALID_GOLDENROD_UNDERGROUND_SWITCHES_BEAUTY
+	hideobjectat LOCALID_GOLDENROD_UNDERGROUND_SWITCHES_SCIENTIST, MAP_GOLDENROD_CITY_UNDERGROUND_SWITCHES
+	removeobject LOCALID_GOLDENROD_UNDERGROUND_SWITCHES_SCIENTIST
+	hideobjectat LOCALID_GOLDENROD_UNDERGROUND_SWITCHES_SUPER_NERD, MAP_GOLDENROD_CITY_UNDERGROUND_SWITCHES
+	removeobject LOCALID_GOLDENROD_UNDERGROUND_SWITCHES_SUPER_NERD
+	hideobjectat LOCALID_GOLDENROD_UNDERGROUND_SWITCHES_WORKER_F, MAP_GOLDENROD_CITY_UNDERGROUND_SWITCHES
+	removeobject LOCALID_GOLDENROD_UNDERGROUND_SWITCHES_WORKER_F
+	hideobjectat LOCALID_GOLDENROD_UNDERGROUND_SWITCHES_FAT_MAN, MAP_GOLDENROD_CITY_UNDERGROUND_SWITCHES
+	removeobject LOCALID_GOLDENROD_UNDERGROUND_SWITCHES_FAT_MAN
+	return
+
+GoldenrodCity_UndergroundSwitches_Text_RocketLeft_Intro:
+	.string "Hold it, twerp.\p"
+	.string "These switches run half the routes\n"
+	.string "under Goldenrod, and TEAM ROCKET\l"
+	.string "doesn't need nosy kids poking around.$"
+
+GoldenrodCity_UndergroundSwitches_Text_RocketLeft_Defeat:
+	.string "You're making this takeover messy...$"
+
+GoldenrodCity_UndergroundSwitches_Text_RocketLeft_After:
+	.string "We're supposed to keep this place\n"
+	.string "quiet until the bosses finish with\l"
+	.string "the RADIO TOWER.\p"
+	.string "And if Lud spots trouble in the\n"
+	.string "tunnel, we're all hearing about it.$"
+
+GoldenrodCity_UndergroundSwitches_Text_RocketRight_Intro:
+	.string "Whitney lost and now every brat in the\n"
+	.string "city thinks they're brave.\p"
+	.string "Too bad for you, because this part of\n"
+	.string "the underground belongs to ROCKET.$"
+
+GoldenrodCity_UndergroundSwitches_Text_RocketRight_Defeat:
+	.string "You busted right through us...$"
+
+GoldenrodCity_UndergroundSwitches_Text_RocketRight_After:
+	.string "Cipher's crawling all over the place,\n"
+	.string "and we're stuck handling switch duty.\p"
+	.string "If you want to wander deeper in, don't\n"
+	.string "expect anyone down there to be nicer.$"
+
+GoldenrodCity_UndergroundSwitches_Text_Burglar_Intro:
+	.string "Heh! With the city in panic, this is a\n"
+	.string "perfect time to collect anything not\l"
+	.string "nailed down.\p"
+	.string "Stay out of my haul, kid!$"
+
+GoldenrodCity_UndergroundSwitches_Text_Burglar_Defeat:
+	.string "No! My easy score!$"
+
+GoldenrodCity_UndergroundSwitches_Text_Burglar_After:
+	.string "I was told the tunnel crowd was too\n"
+	.string "busy with CIPHER to notice me.\p"
+	.string "Guess I should've robbed somewhere\n"
+	.string "less crowded.$"
+
+GoldenrodCity_UndergroundSwitches_Text_AikoThanks:
+	.string "Thank you! We heard shouting up above\n"
+	.string "and thought nobody was coming for us.$"
+
+GoldenrodCity_UndergroundSwitches_Text_BrentThanks:
+	.string "You really broke through all that?\n"
+	.string "Goldenrod still has some fight left.$"
+
+GoldenrodCity_UndergroundSwitches_Text_TobyThanks:
+	.string "I'm getting out of here before those\n"
+	.string "uniformed creeps come back!$"
+
+GoldenrodCity_UndergroundSwitches_Text_NinaThanks:
+	.string "Those thugs kept talking about a big\n"
+	.string "broadcast like it was the end of the\l"
+	.string "world.$"
+
+GoldenrodCity_UndergroundSwitches_Text_LanaThanks:
+	.string "I knew CIPHER was trouble the second\n"
+	.string "they dragged us down here.$"
+
+GoldenrodCity_UndergroundSwitches_Text_ColeThanks:
+	.string "Whoever's coordinating this knows\n"
+	.string "exactly how to lock a city down.$"
+
+GoldenrodCity_UndergroundSwitches_Text_HugoThanks:
+	.string "I am never ignoring a weird radio\n"
+	.string "announcement again after this.$"
+
+GoldenrodCity_UndergroundSwitches_Text_FernThanks:
+	.string "Thanks for the rescue. The whole city\n"
+	.string "felt wrong the second CIPHER marched\l"
+	.string "in.$"
+
+GoldenrodCity_UndergroundSwitches_Text_GusThanks:
+	.string "You pulled us out just in time, kid.\n"
+	.string "Those creeps were moving everyone like\l"
+	.string "cargo.$"
+
+GoldenrodCity_UndergroundSwitches_Text_Director_Idle:
+	.string "We're staying out of sight for now.\n"
+	.string "CIPHER still has people all over the\l"
+	.string "tunnels.$"
+
+GoldenrodCity_UndergroundSwitches_Text_RadioHost_Idle:
+	.string "I need to get my voice back before I\n"
+	.string "go on air again.$"
+
+GoldenrodCity_UndergroundSwitches_Text_Director_WaitForCaptives:
+	.string "Please check on the others first.\p"
+	.string "Once everyone here is safe, come back\n"
+	.string "and talk to us.$"
+
+GoldenrodCity_UndergroundSwitches_Text_RadioHost_WaitForCaptives:
+	.string "There are still people trapped in these\n"
+	.string "tunnels.\p"
+	.string "Free them, then come back for us.$"
+
+GoldenrodCity_UndergroundSwitches_Text_Director_Thanks:
+	.string "You freed all of us... Thank you.\p"
+	.string "CIPHER didn't just raid the tower,\n"
+	.string "they replaced us with frightening\l"
+	.string "precision.\p"
+	.string "The woman leading them was very\n"
+	.string "strong.\p" 
+	.string "One look from her and even the\n"
+	.string "grunts stopped talking.$"
+
+GoldenrodCity_UndergroundSwitches_Text_RadioHost_Thanks:
+	.string "They forced us off the air and started\n"
+	.string "talking like the whole world was\l"
+	.string "already theirs.\p"
+	.string "If that strong woman is still up in\n"
+	.string "the RADIO TOWER, please be careful.$"
+
+GoldenrodCity_UndergroundSwitches_Text_Director_Key:
+	.string "Take this TUNNEL KEY.\p"
+	.string "It can open the tunnel entrance doors,\n"
+	.string "so you won't be trapped down here the\l"
+	.string "way we were.$"
+
+GoldenrodCity_UndergroundSwitches_Text_ReceivedTunnelKey:
+	.string "{PLAYER} received the\n"
+	.string "TUNNEL KEY.$"
+
+GoldenrodCity_UndergroundSwitches_Text_Switch1:
+	.string "SWITCH 1 activated.$"
+
+GoldenrodCity_UndergroundSwitches_Text_Switch2:
+	.string "SWITCH 2 activated.$"
+
+GoldenrodCity_UndergroundSwitches_Text_Switch3:
+	.string "SWITCH 3 activated.$"
+
+GoldenrodCity_UndergroundSwitches_Text_Switch1Off:
+	.string "SWITCH 1 deactivated.$"
+
+GoldenrodCity_UndergroundSwitches_Text_Switch2Off:
+	.string "SWITCH 2 deactivated.$"
+
+GoldenrodCity_UndergroundSwitches_Text_Switch3Off:
+	.string "SWITCH 3 deactivated.$"
+
+GoldenrodCity_UndergroundSwitches_Movement_PlayerCenterFromLeft:
+	walk_right
+	walk_up
+	walk_up
+	walk_left
+	step_end
+
+GoldenrodCity_UndergroundSwitches_Movement_PlayerCenterFromCenter:
+	walk_up
+	walk_up
+	walk_left
+	step_end
+
+GoldenrodCity_UndergroundSwitches_Movement_PlayerCenterFromRight:
+	walk_left
+	walk_up
+	walk_up
+	walk_left
+	step_end
+
+GoldenrodCity_UndergroundSwitches_Movement_PlayerDirectorFrom28:
+	walk_right
+	step_end
+
+GoldenrodCity_UndergroundSwitches_Movement_PlayerDirectorFrom29:
+	step_end
+
+GoldenrodCity_UndergroundSwitches_Movement_PlayerDirectorFrom30:
+	walk_left
+	step_end
+
+GoldenrodCity_UndergroundSwitches_Movement_PlayerDirectorFrom31:
+	walk_left
+	walk_left
+	step_end
+
+GoldenrodCity_UndergroundSwitches_Movement_Captive1_Approach:
+	walk_right
+	walk_right
+	walk_right
+	walk_right
+	walk_up
+	walk_up
+	step_end
+
+GoldenrodCity_UndergroundSwitches_Movement_Captive1_ApproachCenter:
+	walk_right
+	walk_right
+	walk_right
+	walk_right
+	walk_up
+	walk_up
+	walk_up
+	step_end
+
+GoldenrodCity_UndergroundSwitches_Movement_Captive2_Approach:
+	walk_right
+	walk_right
+	walk_right
+	walk_up
+	walk_up
+	step_end
+
+GoldenrodCity_UndergroundSwitches_Movement_Captive2_ApproachCenter:
+	walk_right
+	walk_right
+	walk_right
+	walk_up
+	walk_up
+	walk_up
+	step_end
+
+GoldenrodCity_UndergroundSwitches_Movement_Captive3_Approach:
+	walk_right
+	walk_right
+	walk_up
+	walk_up
+	step_end
+
+GoldenrodCity_UndergroundSwitches_Movement_Captive3_ApproachCenter:
+	walk_right
+	walk_right
+	walk_up
+	walk_up
+	walk_up
+	step_end
+
+GoldenrodCity_UndergroundSwitches_Movement_Captive4_Approach:
+	walk_left
+	walk_up
+	walk_up
+	step_end
+
+GoldenrodCity_UndergroundSwitches_Movement_Captive4_ApproachCenter:
+	walk_left
+	walk_left
+	walk_up
+	walk_up
+	walk_up
+	step_end
+
+GoldenrodCity_UndergroundSwitches_Movement_Captive5_Approach:
+	walk_left
+	walk_left
+	walk_up
+	walk_up
+	step_end
+
+GoldenrodCity_UndergroundSwitches_Movement_Captive5_ApproachCenter:
+	walk_left
+	walk_left
+	walk_left
+	walk_up
+	walk_up
+	walk_up
+	step_end
+
+GoldenrodCity_UndergroundSwitches_Movement_Captive6_Approach:
+	walk_left
+	walk_left
+	walk_left
+	walk_up
+	walk_up
+	step_end
+
+GoldenrodCity_UndergroundSwitches_Movement_Captive6_ApproachCenter:
+	walk_left
+	walk_left
+	walk_left
+	walk_left
+	walk_up
+	walk_up
+	walk_up
+	step_end
+
+GoldenrodCity_UndergroundSwitches_Movement_Captive7_Approach:
+	walk_left
+	walk_left
+	walk_left
+	walk_left
+	walk_up
+	walk_up
+	step_end
+
+GoldenrodCity_UndergroundSwitches_Movement_Captive7_ApproachCenter:
+	walk_left
+	walk_left
+	walk_left
+	walk_left
+	walk_left
+	walk_up
+	walk_up
+	walk_up
+	step_end
+
+GoldenrodCity_UndergroundSwitches_Movement_Captive8_Approach:
+	walk_right
+	walk_right
+	walk_right
+	walk_right
+	walk_right
+	walk_up
+	walk_up
+	step_end
+
+GoldenrodCity_UndergroundSwitches_Movement_Captive8_ApproachCenter:
+	walk_right
+	walk_right
+	walk_right
+	walk_right
+	walk_right
+	walk_up
+	walk_up
+	walk_up
+	step_end
+
+GoldenrodCity_UndergroundSwitches_Movement_Captive9_Approach:
+	walk_right
+	walk_up
+	walk_up
+	step_end
+
+GoldenrodCity_UndergroundSwitches_Movement_Captive9_ApproachCenter:
+	walk_right
+	walk_up
+	walk_up
+	walk_up
+	step_end
+
+GoldenrodCity_UndergroundSwitches_Movement_CaptiveExitLeft:
+	walk_up
+	walk_up
+	walk_up
+	walk_up
+	walk_up
+	walk_up
+	walk_up
+	walk_up
+	step_end
+
+GoldenrodCity_UndergroundSwitches_Movement_CaptiveExitRight:
+	walk_up
+	walk_up
+	walk_up
+	walk_up
+	walk_up
+	walk_up
+	walk_up
+	walk_up
+	step_end
+
+GoldenrodCity_UndergroundSwitches_Movement_CaptiveExitCenter:
+	walk_up
+	walk_up
+	walk_up
+	walk_up
+	walk_up
+	walk_up
+	walk_up
+	walk_up
+	step_end
+
+GoldenrodCity_UndergroundSwitches_Movement_DoubleExclaim:
+	emote_exclamation_mark
+	delay_16
+	step_end
+
+GoldenrodCity_UndergroundSwitches_Movement_DirectorExitLeft:
+	walk_left
+	walk_down
+	walk_down
+	walk_down
+	walk_left
+	walk_left
+	walk_left
+	walk_left
+	walk_up
+	walk_up
+	walk_up
+	walk_up
+	walk_up
+	walk_up
+	walk_up
+	walk_up
+	step_end
+
+GoldenrodCity_UndergroundSwitches_Movement_RadioHostExitLeft:
+	walk_left
+	walk_left
+	walk_down
+	walk_down
+	walk_down
+	walk_left
+	walk_left
+	walk_left
+	walk_left
+	walk_up
+	walk_up
+	walk_up
+	walk_up
+	walk_up
+	walk_up
+	walk_up
+	walk_up
+	walk_up
+	step_end
+
+GoldenrodCity_UndergroundSwitches_Movement_DirectorExitRight:
+	walk_left
+	walk_left
+	walk_down
+	walk_down
+	walk_down
+	walk_down
+	walk_down
+	walk_left
+	walk_left
+	step_end
+
+GoldenrodCity_UndergroundSwitches_Movement_RadioHostExitRight:
+	walk_down
+	walk_left
+	walk_down
+	walk_down
+	walk_down
+	walk_down
+	walk_down
+	walk_left
+	walk_left
+	walk_left
+	step_end

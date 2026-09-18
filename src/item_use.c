@@ -20,6 +20,7 @@
 #include "field_weather.h"
 #include "fldeff.h"
 #include "follower_npc.h"
+#include "international_string_util.h"
 #include "constants/event_objects.h"
 #include "item.h"
 #include "item_menu.h"
@@ -44,6 +45,8 @@
 #include "string_util.h"
 #include "task.h"
 #include "text.h"
+#include "text_window.h"
+#include "window.h"
 #include "vs_seeker.h"
 #include "constants/event_bg.h"
 #include "constants/event_objects.h"
@@ -88,6 +91,8 @@ static void PromptUseExpShare(u8 taskId);
 static void ToggleExpShareOn(u8 taskId);
 static void ToggleExpShareOff(u8 taskId);
 static void CloseExpSharePrompt(u8 taskId);
+static void Task_OpenCologneCaseMenu(u8 taskId);
+static void Task_HandleCologneCaseMenu(u8 taskId);
 static void SetDistanceOfClosestHiddenItem(u8, s16, s16);
 static void CB2_OpenPokeblockFromBag(void);
 static void ItemUseOnFieldCB_Honey(u8 taskId);
@@ -113,7 +118,6 @@ static const u8 sText_PokeFluteAwakenedMon[] = _("The POKé FLUTE awakened sleep
 static const u8 sText_OddKeystone_Quiet[] = _("{COLOR LIGHT_GRAY}... ... ...\pThe keystone is silent.{PAUSE_UNTIL_PRESS}");
 static const u8 sText_OddKeystone_Celadon[] = _("{COLOR LIGHT_GRAY}...a rooftop...\p{COLOR LIGHT_GRAY}A girl touched by the night sky\nwaits above CELADON...{PAUSE_UNTIL_PRESS}");
 static const u8 sText_OddKeystone_Goldenrod[] = _("{COLOR LIGHT_GRAY}...higher still...\p{COLOR LIGHT_GRAY}Past GOLDENROD'S lights, a whispering\nHex Maniac waits on the roof...{PAUSE_UNTIL_PRESS}");
-
 // EWRAM variables
 EWRAM_DATA static void(*sItemUseOnFieldCB)(u8 taskId) = NULL;
 
@@ -147,6 +151,24 @@ static const u8 sPhotoCameraLocalIds[PHOTO_CAMERA_MAX_MON] =
     LOCALID_PHOTO_CAMERA_MON_6,
 };
 
+static const struct WindowTemplate sCologneCaseWindowTemplate =
+{
+    .bg = 1,
+    .tilemapLeft = 15,
+    .tilemapTop = 9,
+    .width = 14,
+    .height = 8,
+    .paletteNum = 11,
+    .baseBlock = 0x21D,
+};
+
+static const u16 sCologneCaseItems[] =
+{
+    ITEM_JOY_SCENT,
+    ITEM_EXCITE_SCENT,
+    ITEM_VIVID_SCENT,
+};
+
 static u8 sPhotoCameraObjectIds[PHOTO_CAMERA_MAX_MON];
 static bool8 sPhotoCameraFollowerHidden;
 static u8 sPhotoCameraFollowerObjId;
@@ -171,6 +193,30 @@ static const struct YesNoFuncTable sUseExpShareYesNoOffFuncTable =
 };
 
 #define tEnigmaBerryType data[4]
+#define tCologneCursorPos data[5]
+
+static void ShowCologneCaseMessage(u8 taskId, const u8 *str, TaskFunc callback)
+{
+    u8 windowId = gBagMenu->windowIds[ITEMWIN_MESSAGE];
+
+    DisplayMessageAndContinueTaskWithColorsAndFill(taskId, windowId, 10, 13, FONT_NORMAL, GetPlayerTextSpeedDelay(), str, callback,
+                                                   TEXT_COLOR_WHITE, TEXT_COLOR_DARK_GRAY, TEXT_COLOR_TRANSPARENT, 10);
+    ScheduleBgCopyTilemapToVram(1);
+}
+
+static void PrintCologneCaseOption(u8 windowId, u8 row, u16 itemId)
+{
+    u16 quantity = CountTotalItemQuantityInBag(itemId);
+    u8 y = 17 + row * 16;
+
+    CopyItemName(itemId, gStringVar1);
+    ConvertIntToDecimalStringN(gStringVar2, quantity, STR_CONV_MODE_LEFT_ALIGN, 3);
+    StringExpandPlaceholders(gStringVar3, gText_xVar1);
+    AddTextPrinterParameterized(windowId, FONT_NORMAL, gStringVar1, 8, y, TEXT_SKIP_DRAW, NULL);
+    AddTextPrinterParameterized(windowId, FONT_NORMAL, gStringVar3,
+                                GetStringRightAlignXOffset(FONT_NORMAL, gStringVar3, 104),
+                                y, TEXT_SKIP_DRAW, NULL);
+}
 static void SetUpItemUseCallback(u8 taskId)
 {
     u8 type;
@@ -1196,6 +1242,80 @@ void ItemUseOutOfBattle_RelicTablet(u8 taskId)
     SetUpItemUseCallback(taskId);
 }
 
+void ItemUseOutOfBattle_CologneCase(u8 taskId)
+{
+    if (!CheckBagHasItem(ITEM_JOY_SCENT, 1)
+     && !CheckBagHasItem(ITEM_EXCITE_SCENT, 1)
+     && !CheckBagHasItem(ITEM_VIVID_SCENT, 1))
+    {
+        DisplayItemMessage(taskId, FONT_NORMAL, gText_CologneCaseEmpty, CloseItemMessage);
+        return;
+    }
+
+    Task_OpenCologneCaseMenu(taskId);
+}
+
+static void Task_OpenCologneCaseMenu(u8 taskId)
+{
+    u8 windowId = gBagMenu->windowIds[ITEMWIN_MESSAGE];
+
+    if (windowId == WINDOW_NONE)
+        windowId = gBagMenu->windowIds[ITEMWIN_MESSAGE] = AddWindow(&sCologneCaseWindowTemplate);
+
+    PutWindowTilemap(windowId);
+    DrawStdFrameWithCustomTileAndPalette(windowId, FALSE, 1, 14);
+    FillWindowPixelBuffer(windowId, PIXEL_FILL(1));
+
+    AddTextPrinterParameterized(windowId, FONT_NORMAL, gText_ChooseAScent,
+                                GetStringCenterAlignXOffset(FONT_NORMAL, gText_ChooseAScent, 112),
+                                1, TEXT_SKIP_DRAW, NULL);
+
+    PrintCologneCaseOption(windowId, 0, ITEM_JOY_SCENT);
+    PrintCologneCaseOption(windowId, 1, ITEM_EXCITE_SCENT);
+    PrintCologneCaseOption(windowId, 2, ITEM_VIVID_SCENT);
+
+    InitMenuNormal(windowId, FONT_NORMAL, 1, 17, 16, ARRAY_COUNT(sCologneCaseItems), gTasks[taskId].tCologneCursorPos);
+    CopyWindowToVram(windowId, COPYWIN_FULL);
+    ScheduleBgCopyTilemapToVram(1);
+    gTasks[taskId].func = Task_HandleCologneCaseMenu;
+}
+
+static void Task_HandleCologneCaseMenu(u8 taskId)
+{
+    s8 input;
+    u16 itemId;
+
+    if (gPaletteFade.active)
+        return;
+
+    input = Menu_ProcessInputNoWrapClearOnChoose();
+    switch (input)
+    {
+    case MENU_NOTHING_CHOSEN:
+        break;
+    case MENU_B_PRESSED:
+        PlaySE(SE_SELECT);
+        CloseItemMessage(taskId);
+        break;
+    default:
+        itemId = sCologneCaseItems[input];
+        gTasks[taskId].tCologneCursorPos = input;
+        if (!CheckBagHasItem(itemId, 1))
+        {
+            PlaySE(SE_FAILURE);
+            ShowCologneCaseMessage(taskId, gText_NoScentsLeft, Task_OpenCologneCaseMenu);
+            break;
+        }
+
+        PlaySE(SE_SELECT);
+        gSpecialVar_ItemId = itemId;
+        gItemUseCB = ItemUseCB_ShadowCologne;
+        CloseItemMessage(taskId);
+        SetUpItemUseCallback(taskId);
+        break;
+    }
+}
+
 static u32 GetBallThrowableState(void)
 {
     if (IsBattlerAlive(GetBattlerAtPosition(B_POSITION_OPPONENT_LEFT))
@@ -1617,8 +1737,10 @@ static const u8 *OddKeystone_GetHintText(void)
     bool8 goldenrodDone = FlagGet(TRAINER_FLAGS_START + TRAINER_GOLDENROD_ODD_KEYSTONE);
     u16 mapSec = GetCurrentRegionMapSectionId();
 
-    if (!FlagGet(FLAG_QUEST_ODD_KEYSTONE_STARTED) || FlagGet(FLAG_QUEST_ODD_KEYSTONE_COMPLETED))
+    if (!FlagGet(FLAG_QUEST_ODD_KEYSTONE_STARTED))
         return sText_OddKeystone_Quiet;
+
+    FlagClear(FLAG_QUEST_ODD_KEYSTONE_COMPLETED);
 
     if (!celadonDone && mapSec == MAPSEC_CELADON_CITY)
         return sText_OddKeystone_Celadon;
