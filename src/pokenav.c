@@ -547,7 +547,11 @@ void SetPokenavVBlankCallback(void)
 
 void *AllocSubstruct(u32 index, u32 size)
 {
-    gPokenavResources->substructPtrs[index] = Alloc(size);
+    // PokéNav screens are repeatedly allocated from the same heap region. A
+    // number of their callbacks are read before every field has necessarily
+    // been overwritten, so stale screen state can otherwise leak into the
+    // next tab that is opened.
+    gPokenavResources->substructPtrs[index] = AllocZeroed(size);
     return gPokenavResources->substructPtrs[index];
 }
 
@@ -587,5 +591,5 @@ u32 GetSelectedConditionSearch(void)
 
 bool32 CanViewRibbonsMenu(void)
 {
-    return FlagGet(FLAG_RECEIVED_POKENAV) || gPokenavResources->hasAnyRibbons;
+    return gPokenavResources->hasAnyRibbons;
 }

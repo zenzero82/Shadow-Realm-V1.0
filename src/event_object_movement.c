@@ -48,6 +48,7 @@ extern const u32 gObjectEventPic_RioluGiftAura[];
 #include "script.h"
 #include "sound.h"
 #include "sprite.h"
+#include "surf_ow.h"
 #include "task.h"
 #include "trainer_see.h"
 #include "trainer_hill.h"
@@ -2090,7 +2091,12 @@ static u8 TrySetupObjectEventSprite(const struct ObjectEventTemplate *objectEven
     sprite = &gSprites[spriteId];
     // Use palette from species palette table
     if (spriteTemplate->paletteTag == OBJ_EVENT_PAL_TAG_DYNAMIC)
-        sprite->oam.paletteNum = LoadDynamicFollowerPalette(OW_SPECIES(objectEvent), OW_SHINY(objectEvent), OW_FEMALE(objectEvent), OW_SHADOW(objectEvent));
+    {
+        if (objectEvent->graphicsId & OBJ_EVENT_MON_SURF)
+            sprite->oam.paletteNum = SurfOw_LoadSpeciesPalette(OW_SPECIES(objectEvent), OW_SHINY(objectEvent), objectEvent->graphicsId);
+        else
+            sprite->oam.paletteNum = LoadDynamicFollowerPalette(OW_SPECIES(objectEvent), OW_SHINY(objectEvent), OW_FEMALE(objectEvent), OW_SHADOW(objectEvent));
+    }
     if (OW_GFX_COMPRESS && sprite->usingSheet)
         sprite->sheetSpan = GetSpanPerImage(sprite->oam.shape, sprite->oam.size);
     GetMapCoordsFromSpritePos(objectEvent->currentCoords.x + cameraX, objectEvent->currentCoords.y + cameraY, &sprite->x, &sprite->y);
@@ -2210,7 +2216,17 @@ static u32 LoadDynamicFollowerPaletteFromGraphicsId(u16 graphicsId, struct Sprit
     bool32 shiny = graphicsId & OBJ_EVENT_MON_SHINY;
     bool32 female = graphicsId & OBJ_EVENT_MON_FEMALE;
     bool32 shadow = graphicsId & OBJ_EVENT_MON_SHADOW;
-    u8 paletteNum = LoadDynamicFollowerPalette(species, shiny, female, shadow);
+    u8 paletteNum;
+
+    if (graphicsId & OBJ_EVENT_MON_SURF)
+    {
+        paletteNum = SurfOw_LoadSpeciesPalette(species, shiny, graphicsId);
+        if (template != NULL && paletteNum != 0xFF)
+            template->paletteTag = GetSpritePaletteTagByPaletteNum(paletteNum);
+        return paletteNum;
+    }
+
+    paletteNum = LoadDynamicFollowerPalette(species, shiny, female, shadow);
     if (template)
     {
         template->paletteTag = species + OBJ_EVENT_MON;
@@ -2725,6 +2741,10 @@ static bool8 GetMonInfo(struct Pokemon *mon, u32 *species, bool32 *shiny, bool32
     {
     case SPECIES_UNOWN:
         *species = GetUnownSpecies(mon);
+        break;
+    case SPECIES_GIMMIGHOUL_CHEST:
+        // Gimmighoul leaves its chest and uses Roaming Form while following the player.
+        *species = SPECIES_GIMMIGHOUL_ROAMING;
         break;
     default:
         *species = GetOverworldWeatherSpecies(*species);
@@ -3454,7 +3474,12 @@ static void SpawnObjectEventOnReturnToField(u8 objectEventId, s16 x, s16 y)
 
     if (spriteTemplate.paletteTag == OBJ_EVENT_PAL_TAG_DYNAMIC)
     {
-        u32 paletteNum = LoadDynamicFollowerPalette(OW_SPECIES(objectEvent), OW_SHINY(objectEvent), OW_FEMALE(objectEvent), OW_SHADOW(objectEvent));
+        u32 paletteNum;
+
+        if (objectEvent->graphicsId & OBJ_EVENT_MON_SURF)
+            paletteNum = SurfOw_LoadSpeciesPalette(OW_SPECIES(objectEvent), OW_SHINY(objectEvent), objectEvent->graphicsId);
+        else
+            paletteNum = LoadDynamicFollowerPalette(OW_SPECIES(objectEvent), OW_SHINY(objectEvent), OW_FEMALE(objectEvent), OW_SHADOW(objectEvent));
         spriteTemplate.paletteTag = GetSpritePaletteTagByPaletteNum(paletteNum);
     }
     else if (spriteTemplate.paletteTag != TAG_NONE)
@@ -3703,7 +3728,16 @@ const struct ObjectEventGraphicsInfo *GetObjectEventGraphicsInfo(u16 graphicsId)
         return gMauvilleOldManGraphicsInfoPointers[GetCurrentMauvilleOldMan()];
 
     if (graphicsId & OBJ_EVENT_MON)
+    {
+        if (graphicsId & OBJ_EVENT_MON_SURF)
+        {
+            const struct ObjectEventGraphicsInfo *graphicsInfo = SurfOw_GetSpeciesGraphicsInfo(graphicsId & OBJ_EVENT_MON_SPECIES_MASK);
+
+            if (graphicsInfo != NULL)
+                return graphicsInfo;
+        }
         return SpeciesToGraphicsInfo(graphicsId & OBJ_EVENT_MON_SPECIES_MASK, graphicsId & OBJ_EVENT_MON_SHINY, graphicsId & OBJ_EVENT_MON_FEMALE, graphicsId & OBJ_EVENT_MON_SHADOW);
+    }
 
     if (graphicsId >= NUM_OBJ_EVENT_GFX)
         graphicsId = OBJ_EVENT_GFX_NINJA_BOY;
@@ -10496,6 +10530,7 @@ static void GetGroundEffectFlags_HotSprings(struct ObjectEvent *objEvent, u32 *f
 {
     bool8 inWaterEncounter = objEvent->localId >= OBJ_EVENT_ID_OVERWORLD_WILD_BASE
                           && objEvent->localId < OBJ_EVENT_ID_OVERWORLD_WILD_BASE + OBJ_EVENT_ID_OVERWORLD_WILD_COUNT
+                          && !(objEvent->graphicsId & OBJ_EVENT_MON_SURF)
                           && MetatileBehavior_IsSurfableAndNotWaterfall(objEvent->currentMetatileBehavior)
                           && MetatileBehavior_IsSurfableAndNotWaterfall(objEvent->previousMetatileBehavior);
 

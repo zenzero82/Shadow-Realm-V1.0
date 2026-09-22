@@ -397,8 +397,21 @@ void DoWhiteOut(void)
             SetLastHealLocationWarp(HEAL_LOCATION_PALLET_TOWN);
         FlagSet(FLAG_SYS_DEFAULT_HEAL_SET);
     }
-    SetWarpDestinationToLastHealLocation();
+    if (Overworld_IsFlyLockedByRoute34IlexStory()
+     && ((gSaveBlock1Ptr->location.mapGroup == MAP_GROUP(MAP_ROUTE34)
+       && gSaveBlock1Ptr->location.mapNum == MAP_NUM(MAP_ROUTE34))
+      || (gSaveBlock1Ptr->location.mapGroup == MAP_GROUP(MAP_ILEX_FOREST)
+       && gSaveBlock1Ptr->location.mapNum == MAP_NUM(MAP_ILEX_FOREST))))
+        SetWarpDestination(MAP_GROUP(MAP_ROUTE34), MAP_NUM(MAP_ROUTE34), WARP_ID_NONE, 36, 55);
+    else
+        SetWarpDestinationToLastHealLocation();
     WarpIntoMap();
+}
+
+bool8 Overworld_IsFlyLockedByRoute34IlexStory(void)
+{
+    return FlagGet(FLAG_BIRCH_TIME_AMULET_CALL_DONE)
+        && !FlagGet(FLAG_ILEX_BIRCH_CALL_DONE);
 }
 
 void Overworld_ResetStateAfterFly(void)

@@ -38,7 +38,7 @@ RustboroCity_Gym_EventScript_Roxanne_Defeated::
 	end
 
 RustboroCity_Gym_EventScript_GiveRockTomb::
-	giveitem ITEM_TM_ROCK_TOMB
+	giveitem ITEM_TM_EARTHQUAKE
 	goto_if_eq VAR_RESULT, FALSE, Common_EventScript_ShowBagIsFull
 	setflag FLAG_RECEIVED_TM_ROCK_TOMB
 	msgbox RustboroCity_Gym_Text_ExplainRockTomb, MSGBOX_DEFAULT
@@ -276,10 +276,10 @@ RustboroCity_Gym_Text_StoneBadgeInfoTakeThis:
 	.string "Please take this with you, too.$"
 
 RustboroCity_Gym_Text_ExplainRockTomb:
-	.string "That TECHNICAL MACHINE, TM39,\n"
-	.string "contains ROCK TOMB.\p"
-	.string "It not only inflicts damage by dropping\n"
-	.string "rocks, it also lowers SPEED.\p"
+	.string "That TECHNICAL MACHINE, TM149,\n"
+	.string "contains EARTHQUAKE.\p"
+	.string "It shakes the ground with a powerful\n"
+	.string "attack that strikes every nearby foe.\p"
 	.string "If you use a TM, it instantly teaches\n"
 	.string "the move to a POKéMON.\p"
 	.string "Remember, a TM can be used only once,\n"

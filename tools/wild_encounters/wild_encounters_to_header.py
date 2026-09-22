@@ -392,7 +392,10 @@ def PrintWildMonHeadersContent():
                         PrintEncounterHeaders(TabStr(2) + "},")
                 PrintEncounterHeaders(tabStr + "},")
 
-                if labelCount + 1 == headerStructTable[group][label]["encounterTotalCount"]:
+                # encounterTotalCount counts each time-of-day entry, while labelCount
+                # counts the combined per-map headers. Use the actual number of
+                # combined headers so every generated table gets its terminator.
+                if labelCount + 1 == len(headerStructTable[group]) - 1:
                     PrintEncounterHeaders(tabStr + "{")
                     PrintEncounterHeaders(f"{TabStr(2)}.mapGroup = {GetMapGroupEnum(MAP_UNDEFINED)},")
                     PrintEncounterHeaders(f"{TabStr(2)}.mapNum = {GetMapGroupEnum(MAP_UNDEFINED, labelCount + 1)},")

@@ -237,16 +237,16 @@ New_Bark_Town_EventScript_Resix_ToPlayer_Done:
 
 	applymovement LOCALID_RESIX, New_Bark_Town_Mov_Resix_Exit
 	waitmovement 0
-	hideobjectat LOCALID_BLUSIX, MAP_NEW_BARK_TOWN
-	hideobjectat LOCALID_GREESIX, MAP_NEW_BARK_TOWN
-	hideobjectat LOCALID_YELLOSIX, MAP_NEW_BARK_TOWN
-	hideobjectat LOCALID_BROWSIX, MAP_NEW_BARK_TOWN
-	hideobjectat LOCALID_RESIX, MAP_NEW_BARK_TOWN
+	setflag FLAG_HEXAGON_BROS_SCENE_DONE
+	removeobject LOCALID_BLUSIX
+	removeobject LOCALID_GREESIX
+	removeobject LOCALID_YELLOSIX
+	removeobject LOCALID_BROWSIX
+	removeobject LOCALID_RESIX
 
 	special StorePlayerCoordsInVars
 	special RemoveCameraObject
 	special SetCameraFocusCoordsFromVars
-	setflag FLAG_HEXAGON_BROS_SCENE_DONE
 	setflag FLAG_QUEST_NEW_BARK_NPC_HEXAGON_BROS
 	fadenewbgm MUS_HG_NEW_BARK
 	releaseall
@@ -858,4 +858,3 @@ NewBarkTown_Text_PlayersHouse:
 
 NewBarkTown_Text_ElmsHouse:
 	.string "PROF.ELM's House$"
-

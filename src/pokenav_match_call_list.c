@@ -86,6 +86,17 @@ static u32 CB2_HandleMatchCallInput(struct Pokenav_MatchCallMenu *state)
 {
     int selection;
 
+    if (state->numRegistered == 0)
+    {
+        if (JOY_NEW(B_BUTTON) && GetPokenavMode() != POKENAV_MODE_FORCE_CALL_READY)
+        {
+            state->callback = GetExitMatchCallMenuId;
+            return POKENAV_MC_FUNC_EXIT;
+        }
+
+        return POKENAV_MC_FUNC_NONE;
+    }
+
     if (JOY_REPEAT(DPAD_UP))
         return POKENAV_MC_FUNC_UP;
     if (JOY_REPEAT(DPAD_DOWN))

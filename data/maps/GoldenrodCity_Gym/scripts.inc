@@ -52,6 +52,7 @@ GoldenrodCity_Gym_EventScript_Whitney::
 	message GoldenrodCity_Gym_Text_ReceivedPlainBadge
 	waitmessage
 	call Common_EventScript_PlayGymBadgeFanfare
+	giveitem ITEM_TM_HYPER_VOICE
 	setflag FLAG_BADGE19_GET
 	setflag FLAG_QUEST_WHITNEY_COMPLETED
 	addvar VAR_NUM_BADGES, 1

@@ -660,6 +660,7 @@ static const u8 sText_doneText[] = _("{STR_VAR_1}'s ability became\n{STR_VAR_2}!
 static const u8 sText_BasePointsResetToZero[] = _("{STR_VAR_1}'s base points\nwere all reset to zero!{PAUSE_UNTIL_PRESS}");
 static const u8 sText_CannotSendMonToBoxHM[] = _("Cannot send that mon to the box,\nbecause it knows a HM move.{PAUSE_UNTIL_PRESS}");
 static const u8 sText_CannotSendMonToBoxPartner[] = _("Cannot send a mon that doesn't\nbelong to you to the box.{PAUSE_UNTIL_PRESS}");
+static const u8 sText_FlyLockedByRoute34IlexStory[] = _("I should go check out ILEX\nFOREST before heading anywhere.");
 
 #define tItemCount          data[5]
 #define tMaxItemQuantity    data[6]
@@ -5104,6 +5105,15 @@ static void CursorCb_FieldMove(u8 taskId)
             case FIELD_MOVE_FLASH:
                 DisplayCantUseFlashMessage();
                 break;
+            case FIELD_MOVE_FLY:
+                if (Overworld_IsFlyLockedByRoute34IlexStory())
+                    DisplayPartyMenuMessage(sText_FlyLockedByRoute34IlexStory, TRUE);
+                else
+                {
+                    StringExpandPlaceholders(gStringVar4, sActionStringTable[FieldMove_GetPartyMsgID(fieldMove)]);
+                    DisplayPartyMenuMessage(gStringVar4, TRUE);
+                }
+                break;
             default:
                 StringExpandPlaceholders(gStringVar4, sActionStringTable[FieldMove_GetPartyMsgID(fieldMove)]);
                 DisplayPartyMenuMessage(gStringVar4, TRUE);
@@ -5272,6 +5282,9 @@ static void DisplayCantUseSurfMessage(void)
 
 bool32 SetUpFieldMove_Fly(void)
 {
+    if (Overworld_IsFlyLockedByRoute34IlexStory())
+        return FALSE;
+
     if (!CheckFollowerNPCFlag(FOLLOWER_NPC_FLAG_CAN_LEAVE_ROUTE))
         return FALSE;
 
@@ -7044,12 +7057,12 @@ static bool8 AutoHealUseHpItems(struct Pokemon *mon, u8 partyIndex)
 static bool8 AutoHealTryStatusItems(struct Pokemon *mon, u8 partyIndex, u8 category)
 {
     u16 i;
-    struct BagPocket *pocket = &gBagPockets[POCKET_ITEMS - 1];
+    struct BagPocket *pocket = &gBagPockets[POCKET_MEDICINE - 1];
 
     for (i = 0; i < pocket->capacity; i++)
     {
-        u16 item = BagGetItemIdByPocketPosition(POCKET_ITEMS, i);
-        u16 quantity = BagGetQuantityByPocketPosition(POCKET_ITEMS, i);
+        u16 item = BagGetItemIdByPocketPosition(POCKET_MEDICINE, i);
+        u16 quantity = BagGetQuantityByPocketPosition(POCKET_MEDICINE, i);
         const u8 *effect;
         u32 statusCure;
         u8 itemCategory;
@@ -7091,12 +7104,12 @@ static u16 AutoHealFindBestHpItem(struct Pokemon *mon)
     u16 bestItem = ITEM_NONE;
     u32 bestHeal = 0xFFFFFFFF;
     u16 hp = GetMonData(mon, MON_DATA_HP);
-    struct BagPocket *pocket = &gBagPockets[POCKET_ITEMS - 1];
+    struct BagPocket *pocket = &gBagPockets[POCKET_MEDICINE - 1];
 
     for (i = 0; i < pocket->capacity; i++)
     {
-        u16 item = BagGetItemIdByPocketPosition(POCKET_ITEMS, i);
-        u16 quantity = BagGetQuantityByPocketPosition(POCKET_ITEMS, i);
+        u16 item = BagGetItemIdByPocketPosition(POCKET_MEDICINE, i);
+        u16 quantity = BagGetQuantityByPocketPosition(POCKET_MEDICINE, i);
         const u8 *effect;
         u32 healAmount;
 

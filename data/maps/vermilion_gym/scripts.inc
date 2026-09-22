@@ -242,6 +242,7 @@ VermilionCity_Gym_EventScript_Surge::
 	message VermilionCity_Gym_Text_Surge_ReceivedThunderBadge
 	waitmessage
 	call Common_EventScript_PlayGymBadgeFanfare
+	giveitem ITEM_TM_EERIE_IMPULSE
 	setspeaker VermilionCity_Gym_Speaker_Surge
 	msgbox VermilionCity_Gym_Text_Surge_After, MSGBOX_DEFAULT
 	setflag FLAG_BADGE11_GET

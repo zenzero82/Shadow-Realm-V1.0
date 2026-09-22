@@ -29,6 +29,7 @@ cerulean_gym_EventScript_Misty::
 	message cerulean_gym_Text_Misty_ReceivedCascadeBadge
 	waitmessage
 	call Common_EventScript_PlayGymBadgeFanfare
+	giveitem ITEM_TM_WATERFALL
 
 	setspeaker cerulean_gym_Speaker_Misty
 	msgbox cerulean_gym_Text_Misty_After, MSGBOX_DEFAULT

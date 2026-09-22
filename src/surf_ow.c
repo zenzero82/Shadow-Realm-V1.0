@@ -2,10 +2,13 @@
 #include "surf_ow.h"
 #include "field_effect_helpers.h"
 #include "field_move.h"
+#include "field_weather.h"
 #include "event_object_movement.h"
 #include "sprite.h"
+#include "constants/event_object_movement.h"
 #include "constants/event_objects.h"
 #include "constants/species.h"
+#include "constants/weather.h"
 
 struct SurfOwState
 {
@@ -24,6 +27,54 @@ static EWRAM_DATA struct SurfOwState sSurfOwState = {0};
 static void UpdateSurfMonOverlay(struct Sprite *sprite);
 
 #include "data/graphics/surf_ow.h"
+
+static const union AnimCmd *const sSurfObjectEventAnimTable[ANIM_STD_COUNT] =
+{
+    [ANIM_STD_FACE_SOUTH]       = gSurfablePokemonAnim_FaceSouth,
+    [ANIM_STD_FACE_NORTH]       = gSurfablePokemonAnim_FaceNorth,
+    [ANIM_STD_FACE_WEST]        = gSurfablePokemonAnim_FaceWest,
+    [ANIM_STD_FACE_EAST]        = gSurfablePokemonAnim_FaceEast,
+    [ANIM_STD_GO_SOUTH]         = gSurfablePokemonAnim_FaceSouth,
+    [ANIM_STD_GO_NORTH]         = gSurfablePokemonAnim_FaceNorth,
+    [ANIM_STD_GO_WEST]          = gSurfablePokemonAnim_FaceWest,
+    [ANIM_STD_GO_EAST]          = gSurfablePokemonAnim_FaceEast,
+    [ANIM_STD_GO_FAST_SOUTH]    = gSurfablePokemonAnim_FaceSouth,
+    [ANIM_STD_GO_FAST_NORTH]    = gSurfablePokemonAnim_FaceNorth,
+    [ANIM_STD_GO_FAST_WEST]     = gSurfablePokemonAnim_FaceWest,
+    [ANIM_STD_GO_FAST_EAST]     = gSurfablePokemonAnim_FaceEast,
+    [ANIM_STD_GO_FASTER_SOUTH]  = gSurfablePokemonAnim_FaceSouth,
+    [ANIM_STD_GO_FASTER_NORTH]  = gSurfablePokemonAnim_FaceNorth,
+    [ANIM_STD_GO_FASTER_WEST]   = gSurfablePokemonAnim_FaceWest,
+    [ANIM_STD_GO_FASTER_EAST]   = gSurfablePokemonAnim_FaceEast,
+    [ANIM_STD_GO_FASTEST_SOUTH] = gSurfablePokemonAnim_FaceSouth,
+    [ANIM_STD_GO_FASTEST_NORTH] = gSurfablePokemonAnim_FaceNorth,
+    [ANIM_STD_GO_FASTEST_WEST]  = gSurfablePokemonAnim_FaceWest,
+    [ANIM_STD_GO_FASTEST_EAST]  = gSurfablePokemonAnim_FaceEast,
+};
+
+static const union AnimCmd *const sSurfObjectEventNoFlipAnimTable[ANIM_STD_COUNT] =
+{
+    [ANIM_STD_FACE_SOUTH]       = gSurfablePokemonAnim_FaceSouth,
+    [ANIM_STD_FACE_NORTH]       = gSurfablePokemonAnim_FaceNorth,
+    [ANIM_STD_FACE_WEST]        = gSurfablePokemonAnim_FaceWest,
+    [ANIM_STD_FACE_EAST]        = gSurfablePokemonAnim_NoFlipFaceEast,
+    [ANIM_STD_GO_SOUTH]         = gSurfablePokemonAnim_FaceSouth,
+    [ANIM_STD_GO_NORTH]         = gSurfablePokemonAnim_FaceNorth,
+    [ANIM_STD_GO_WEST]          = gSurfablePokemonAnim_FaceWest,
+    [ANIM_STD_GO_EAST]          = gSurfablePokemonAnim_NoFlipFaceEast,
+    [ANIM_STD_GO_FAST_SOUTH]    = gSurfablePokemonAnim_FaceSouth,
+    [ANIM_STD_GO_FAST_NORTH]    = gSurfablePokemonAnim_FaceNorth,
+    [ANIM_STD_GO_FAST_WEST]     = gSurfablePokemonAnim_FaceWest,
+    [ANIM_STD_GO_FAST_EAST]     = gSurfablePokemonAnim_NoFlipFaceEast,
+    [ANIM_STD_GO_FASTER_SOUTH]  = gSurfablePokemonAnim_FaceSouth,
+    [ANIM_STD_GO_FASTER_NORTH]  = gSurfablePokemonAnim_FaceNorth,
+    [ANIM_STD_GO_FASTER_WEST]   = gSurfablePokemonAnim_FaceWest,
+    [ANIM_STD_GO_FASTER_EAST]   = gSurfablePokemonAnim_NoFlipFaceEast,
+    [ANIM_STD_GO_FASTEST_SOUTH] = gSurfablePokemonAnim_FaceSouth,
+    [ANIM_STD_GO_FASTEST_NORTH] = gSurfablePokemonAnim_FaceNorth,
+    [ANIM_STD_GO_FASTEST_WEST]  = gSurfablePokemonAnim_FaceWest,
+    [ANIM_STD_GO_FASTEST_EAST]  = gSurfablePokemonAnim_NoFlipFaceEast,
+};
 
 static EWRAM_DATA struct SpriteFrameImage sShinySurfFrames[SURFABLE_POKEMON_MAX_FRAME_COUNT] = {0};
 static EWRAM_DATA struct SpriteFrameImage sShinySurfOverlayFrames[SURFABLE_POKEMON_MAX_FRAME_COUNT] = {0};
@@ -68,6 +119,59 @@ bool8 SurfOw_IsSpeciesEligible(u16 species)
     return SurfOw_HasSpeciesEntry(species);
 }
 
+const struct ObjectEventGraphicsInfo *SurfOw_GetSpeciesGraphicsInfo(u16 species)
+{
+    static struct ObjectEventGraphicsInfo sGraphicsInfo;
+    const struct SpriteTemplate *template;
+    u16 entryIndex = SurfOw_GetEntryIndex(species);
+    bool8 isLarge;
+
+    if (entryIndex == SURF_OW_INVALID_INDEX)
+        return NULL;
+
+    template = &gSurfablePokemonOverworldSprites[entryIndex];
+    isLarge = template->oam == &gObjectEventBaseOam_64x64;
+    sGraphicsInfo.tileTag = TAG_NONE;
+    sGraphicsInfo.paletteTag = OBJ_EVENT_PAL_TAG_DYNAMIC;
+    sGraphicsInfo.reflectionPaletteTag = OBJ_EVENT_PAL_TAG_NONE;
+    sGraphicsInfo.size = template->images[0].size;
+    sGraphicsInfo.width = isLarge ? 64 : 32;
+    sGraphicsInfo.height = isLarge ? 64 : 32;
+    sGraphicsInfo.paletteSlot = PALSLOT_NPC_1;
+    sGraphicsInfo.shadowSize = SHADOW_SIZE_NONE;
+    sGraphicsInfo.inanimate = FALSE;
+    sGraphicsInfo.compressed = FALSE;
+    sGraphicsInfo.tracks = TRACKS_NONE;
+    sGraphicsInfo.oam = template->oam;
+    sGraphicsInfo.subspriteTables = isLarge ? sOamTables_64x64 : sOamTables_32x32;
+    sGraphicsInfo.anims = template->anims == gSurfablePokemonNoFlipAnimTable
+                       ? sSurfObjectEventNoFlipAnimTable
+                       : sSurfObjectEventAnimTable;
+    sGraphicsInfo.images = template->images;
+    sGraphicsInfo.affineAnims = template->affineAnims;
+    return &sGraphicsInfo;
+}
+
+u8 SurfOw_LoadSpeciesPalette(u16 species, bool8 shiny, u16 paletteTag)
+{
+    struct SpritePalette palette;
+    u16 entryIndex = SurfOw_GetEntryIndex(species);
+    u8 paletteNum;
+
+    if (entryIndex == SURF_OW_INVALID_INDEX)
+        return 0xFF;
+
+    palette = shiny ? sSurfablePokemonShinyPalettes[entryIndex]
+                    : sSurfablePokemonPalettes[entryIndex];
+    palette.tag = paletteTag;
+    paletteNum = IndexOfSpritePaletteTag(paletteTag);
+    if (paletteNum == 0xFF)
+        paletteNum = LoadSpritePalette(&palette);
+    if (paletteNum != 0xFF && gWeatherPtr->currWeather != WEATHER_FOG_HORIZONTAL)
+        UpdateSpritePaletteWithWeather(paletteNum, FALSE);
+    return paletteNum;
+}
+
 bool8 SurfOw_CacheCurrentFromFieldMoveMonInfo(u8 objEventId)
 {
     const struct FieldMoveMonInfo *info = GetFieldMoveMonInfo();
@@ -108,12 +212,6 @@ bool8 SurfOw_CurrentIsShiny(void)
 bool8 SurfOw_IsCurrentActiveForObjectEvent(u8 objEventId)
 {
     return sSurfOwState.active && sSurfOwState.objEventId == objEventId;
-}
-
-bool8 SurfOw_ShouldOverridePlayerPriority(u8 objEventId)
-{
-    (void)objEventId;
-    return FALSE;
 }
 
 static const struct SpritePalette *SurfOw_GetCurrentPalette(void)
@@ -253,6 +351,8 @@ void SurfOw_DestroySprites(u8 baseSpriteId)
 static void UpdateSurfMonOverlay(struct Sprite *sprite)
 {
     u8 baseSpriteId = sprite->data[0];
+    u8 objEventId;
+    struct Sprite *playerSprite;
 
     if (baseSpriteId >= MAX_SPRITES || !gSprites[baseSpriteId].inUse)
     {
@@ -260,12 +360,23 @@ static void UpdateSurfMonOverlay(struct Sprite *sprite)
         return;
     }
 
+    objEventId = gSprites[baseSpriteId].data[2];
+    if (objEventId >= OBJECT_EVENTS_COUNT || !gObjectEvents[objEventId].active)
+    {
+        DestroySprite(sprite);
+        return;
+    }
+
+    playerSprite = &gSprites[gObjectEvents[objEventId].spriteId];
+
     sprite->x = gSprites[baseSpriteId].x;
     sprite->y = gSprites[baseSpriteId].y;
     sprite->x2 = gSprites[baseSpriteId].x2;
     sprite->y2 = gSprites[baseSpriteId].y2;
-    sprite->oam.priority = gSprites[baseSpriteId].oam.priority;
-    sprite->subpriority = (gSprites[baseSpriteId].subpriority == 0) ? 0 : gSprites[baseSpriteId].subpriority - 1;
+    // HGSS surf sheets split the mount into a full-body layer behind the
+    // rider and a small foreground layer in front of them.
+    sprite->oam.priority = playerSprite->oam.priority;
+    sprite->subpriority = (playerSprite->subpriority == 0) ? 0 : playerSprite->subpriority - 1;
     sprite->subspriteMode = gSprites[baseSpriteId].subspriteMode;
     sprite->subspriteTableNum = gSprites[baseSpriteId].subspriteTableNum;
     sprite->invisible = gSprites[baseSpriteId].invisible;

@@ -121,7 +121,7 @@ static void BuildAreaGlowTilemap(void);
 static void SetAreaHasMon(u16, u16);
 static void SetSpecialMapHasMon(u16, u16);
 static u16 GetRegionMapSectionId(u8, u8);
-static bool8 MapHasSpecies(const struct WildEncounterTypes *, u16);
+static bool8 MapHasSpecies(const struct WildPokemonHeader *, u16);
 static bool8 MonListHasSpecies(const struct WildPokemonInfo *, u16, u16);
 static void DoAreaGlow(void);
 static void Task_ShowPokedexAreaScreen(u8 taskId);
@@ -398,21 +398,21 @@ static void FindMapsWithMon(u16 species)
     // Add regular species to the area map
     for (i = 0; gWildMonHeaders[i].mapGroup != MAP_GROUP(MAP_UNDEFINED); i++)
     {
-        if (MapHasSpecies(&gWildMonHeaders[i].encounterTypes[gAreaTimeOfDay], species))
-        {
-            u8 mapGroup = gWildMonHeaders[i].mapGroup;
-            u8 mapNum = gWildMonHeaders[i].mapNum;
-            const struct MapHeader *mapHeader;
+        const struct WildPokemonHeader *wildHeader = &gWildMonHeaders[i];
+        u8 mapGroup = wildHeader->mapGroup;
+        u8 mapNum = wildHeader->mapNum;
+        const struct MapHeader *mapHeader;
 
-            if (RegionMap_GetRegionFromMapGroup(mapGroup) != sPokedexAreaScreen->region)
-                continue;
+        if (RegionMap_GetRegionFromMapGroup(mapGroup) != sPokedexAreaScreen->region)
+            continue;
+        if (!MapHasSpecies(wildHeader, species))
+            continue;
 
-            mapHeader = Overworld_GetMapHeaderByGroupAndId(mapGroup, mapNum);
-            if (IsOverworldAreaMapType(mapHeader->mapType))
-                SetAreaHasMon(mapGroup, mapNum);
-            else
-                SetSpecialMapHasMon(mapGroup, mapNum);
-        }
+        mapHeader = Overworld_GetMapHeaderByGroupAndId(mapGroup, mapNum);
+        if (IsOverworldAreaMapType(mapHeader->mapType))
+            SetAreaHasMon(mapGroup, mapNum);
+        else
+            SetSpecialMapHasMon(mapGroup, mapNum);
     }
 
     // Add roamers to the area map
@@ -421,24 +421,35 @@ static void FindMapsWithMon(u16 species)
         roamer = &gSaveBlock1Ptr->roamer[i];
         if (species == roamer->species && roamer->active)
         {
+            u8 mapGroup;
+            u8 mapNum;
+
             // This is a roamer's species, show where this roamer is currently
-            struct OverworldArea *roamerLocation = &sPokedexAreaScreen->overworldAreasWithMons[sPokedexAreaScreen->numOverworldAreas];
-            GetRoamerLocation(i, &roamerLocation->mapGroup, &roamerLocation->mapNum);
-            if (RegionMap_GetRegionFromMapGroup(roamerLocation->mapGroup) != sPokedexAreaScreen->region)
+            GetRoamerLocation(i, &mapGroup, &mapNum);
+            if (RegionMap_GetRegionFromMapGroup(mapGroup) != sPokedexAreaScreen->region)
                 continue;
-            roamerLocation->regionMapSectionId = Overworld_GetMapHeaderByGroupAndId(roamerLocation->mapGroup, roamerLocation->mapNum)->regionMapSectionId;
-            sPokedexAreaScreen->numOverworldAreas++;
+            SetAreaHasMon(mapGroup, mapNum);
         }
     }
 }
 
 static void SetAreaHasMon(u16 mapGroup, u16 mapNum)
 {
+    u16 i;
+    u16 regionMapSectionId = CorrectSpecialMapSecId(Overworld_GetMapHeaderByGroupAndId(mapGroup, mapNum)->regionMapSectionId);
+
+    // Multiple encounter maps can share one displayed route section.
+    for (i = 0; i < sPokedexAreaScreen->numOverworldAreas; i++)
+    {
+        if (sPokedexAreaScreen->overworldAreasWithMons[i].regionMapSectionId == regionMapSectionId)
+            return;
+    }
+
     if (sPokedexAreaScreen->numOverworldAreas < MAX_AREA_HIGHLIGHTS)
     {
         sPokedexAreaScreen->overworldAreasWithMons[sPokedexAreaScreen->numOverworldAreas].mapGroup = mapGroup;
         sPokedexAreaScreen->overworldAreasWithMons[sPokedexAreaScreen->numOverworldAreas].mapNum = mapNum;
-        sPokedexAreaScreen->overworldAreasWithMons[sPokedexAreaScreen->numOverworldAreas].regionMapSectionId = CorrectSpecialMapSecId(Overworld_GetMapHeaderByGroupAndId(mapGroup, mapNum)->regionMapSectionId);
+        sPokedexAreaScreen->overworldAreasWithMons[sPokedexAreaScreen->numOverworldAreas].regionMapSectionId = regionMapSectionId;
         sPokedexAreaScreen->numOverworldAreas++;
     }
 }
@@ -488,13 +499,13 @@ static u16 GetRegionMapSectionId(u8 mapGroup, u8 mapNum)
     return Overworld_GetMapHeaderByGroupAndId(mapGroup, mapNum)->regionMapSectionId;
 }
 
-static bool8 MapHasSpecies(const struct WildEncounterTypes *info, u16 species)
+static bool8 MapHasSpecies(const struct WildPokemonHeader *header, u16 species)
 {
-    u32 headerId = GetCurrentMapWildMonHeaderId();
-    u8 currentMapGroup = gWildMonHeaders[headerId].mapGroup;
-    u8 currentMapNum = gWildMonHeaders[headerId].mapNum;
+    const struct WildEncounterTypes *info = &header->encounterTypes[gAreaTimeOfDay];
+
     // If this is a header for Altering Cave, skip it if it's not the current Altering Cave encounter set
-    if (GetRegionMapSectionId(currentMapGroup, currentMapNum) == MAPSEC_ALTERING_CAVE)
+    if (header->mapGroup == MAP_GROUP(MAP_ALTERING_CAVE)
+     && header->mapNum == MAP_NUM(MAP_ALTERING_CAVE))
     {
         sPokedexAreaScreen->alteringCaveCounter++;
         if (sPokedexAreaScreen->alteringCaveCounter != sPokedexAreaScreen->alteringCaveId + 1)
@@ -540,19 +551,23 @@ static void BuildAreaGlowTilemap(void)
     for (i = 0; i < ARRAY_COUNT(sPokedexAreaScreen->areaGlowTilemap); i++)
         sPokedexAreaScreen->areaGlowTilemap[i] = 0;
 
-    // For each area with this species, scan the region map layout and find any locations that have a matching mapsec.
-    // Add a "full glow" indicator for these matching spaces.
-    for (i = 0; i < sPokedexAreaScreen->numOverworldAreas; i++)
+    // Scan the region map once and mark tiles belonging to any matching map section.
+    j = 0;
+    for (y = 0; y < AREA_SCREEN_HEIGHT; y++)
     {
-        j = 0;
-        for (y = 0; y < AREA_SCREEN_HEIGHT; y++)
+        for (x = 0; x < AREA_SCREEN_WIDTH; x++)
         {
-            for (x = 0; x < AREA_SCREEN_WIDTH; x++)
+            u16 regionMapSectionId = GetRegionMapSecIdAt(x, y);
+
+            for (i = 0; i < sPokedexAreaScreen->numOverworldAreas; i++)
             {
-                if (GetRegionMapSecIdAt(x, y) == sPokedexAreaScreen->overworldAreasWithMons[i].regionMapSectionId)
+                if (regionMapSectionId == sPokedexAreaScreen->overworldAreasWithMons[i].regionMapSectionId)
+                {
                     sPokedexAreaScreen->areaGlowTilemap[j] = GLOW_FULL;
-                j++;
+                    break;
+                }
             }
+            j++;
         }
     }
 

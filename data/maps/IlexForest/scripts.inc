@@ -198,8 +198,6 @@ IlexForest_EventScript_RocketGrunt_M3::
 	end
 
 IlexForest_EventScript_RocketGrunt_F3::
-	lock
-	faceplayer
 	setspeaker IlexForest_Speaker_RocketF3
 	trainerbattle_single TRAINER_ILEX_ROCKET_GRUNT_F3, IlexForest_Text_Rocket_Intro, IlexForest_Text_Rocket_Defeat, IlexForest_EventScript_RocketF3_After
 	end
@@ -401,8 +399,9 @@ IlexForest_Text_Charon_Intro:
 	.string "The forest protector is now ours.\p"
 	.string "Once the SAGES finish with the\n"
 	.string "Birds then there will be none who\l"
-	.string "can stop us. That MEOWTH of yours\l"
-	.string "looks real good, how much for it?\p"
+	.string "can stop us.\p"
+	.string "That MEOWTH of yours looks\n"
+	.string "real good, how much for it?\p"
 	.string "Hahaha$"
 
 IlexForest_Text_James_Response:

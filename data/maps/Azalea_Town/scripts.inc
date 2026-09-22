@@ -117,6 +117,67 @@ AzaleaTown_EventScript_AzaleaSign_Text:
 	.string "Where People and POKéMON Live in\l"
 	.string "Happy Harmony.$"
 
+AzaleaTown_EventScript_LevelBallCache::
+	lockall
+	goto_if_set FLAG_ITEM_AZALEA_TOWN_LEVEL_BALL, AzaleaTown_EventScript_ItemCacheEmpty
+	checkitemspace ITEM_LEVEL_BALL
+	goto_if_eq VAR_RESULT, FALSE, AzaleaTown_EventScript_ItemCacheBagFull
+	giveitem ITEM_LEVEL_BALL
+	setflag FLAG_ITEM_AZALEA_TOWN_LEVEL_BALL
+	releaseall
+	end
+
+AzaleaTown_EventScript_ApricornCache::
+	lockall
+	goto_if_set FLAG_ITEM_AZALEA_TOWN_APRICORN_SET, AzaleaTown_EventScript_ItemCacheEmpty
+	additem ITEM_RED_APRICORN
+	goto_if_eq VAR_RESULT, FALSE, AzaleaTown_EventScript_ApricornCache_BagFull
+	additem ITEM_BLUE_APRICORN
+	goto_if_eq VAR_RESULT, FALSE, AzaleaTown_EventScript_ApricornCache_UndoRed
+	additem ITEM_YELLOW_APRICORN
+	goto_if_eq VAR_RESULT, FALSE, AzaleaTown_EventScript_ApricornCache_UndoBlue
+	additem ITEM_GREEN_APRICORN
+	goto_if_eq VAR_RESULT, FALSE, AzaleaTown_EventScript_ApricornCache_UndoYellow
+	additem ITEM_PINK_APRICORN
+	goto_if_eq VAR_RESULT, FALSE, AzaleaTown_EventScript_ApricornCache_UndoGreen
+	additem ITEM_WHITE_APRICORN
+	goto_if_eq VAR_RESULT, FALSE, AzaleaTown_EventScript_ApricornCache_UndoPink
+	additem ITEM_BLACK_APRICORN
+	goto_if_eq VAR_RESULT, FALSE, AzaleaTown_EventScript_ApricornCache_UndoWhite
+	setflag FLAG_ITEM_AZALEA_TOWN_APRICORN_SET
+	playfanfare MUS_OBTAIN_ITEM
+	msgbox AzaleaTown_Text_FoundApricornSet, MSGBOX_DEFAULT
+	waitfanfare
+	releaseall
+	end
+
+AzaleaTown_EventScript_ApricornCache_UndoWhite:
+	removeitem ITEM_WHITE_APRICORN
+AzaleaTown_EventScript_ApricornCache_UndoPink:
+	removeitem ITEM_PINK_APRICORN
+AzaleaTown_EventScript_ApricornCache_UndoGreen:
+	removeitem ITEM_GREEN_APRICORN
+AzaleaTown_EventScript_ApricornCache_UndoYellow:
+	removeitem ITEM_YELLOW_APRICORN
+AzaleaTown_EventScript_ApricornCache_UndoBlue:
+	removeitem ITEM_BLUE_APRICORN
+AzaleaTown_EventScript_ApricornCache_UndoRed:
+	removeitem ITEM_RED_APRICORN
+AzaleaTown_EventScript_ApricornCache_BagFull:
+	msgbox AzaleaTown_Text_NoRoomForApricornSet, MSGBOX_DEFAULT
+	releaseall
+	end
+
+AzaleaTown_EventScript_ItemCacheEmpty:
+	msgbox AzaleaTown_Text_ItemCacheEmpty, MSGBOX_DEFAULT
+	releaseall
+	end
+
+AzaleaTown_EventScript_ItemCacheBagFull:
+	msgbox AzaleaTown_Text_ItemCacheBagFull, MSGBOX_DEFAULT
+	releaseall
+	end
+
 AzaleaTown_EventScript_Youngster::
 	faceplayer
 	setspeaker Azalea_Town_Speaker_Youngster
@@ -247,6 +308,21 @@ AzaleaTown_Text_Birch_CallAfterGold:
 	.string "care of that first and maybe we\l"
 	.string "can revisit this situation.\p"
 	.string "Be safe, {PLAYER}!$"
+
+AzaleaTown_Text_FoundApricornSet:
+	.string "You found an APRICORN SET!\p"
+	.string "One of each color was put in your\n"
+	.string "ITEMS POCKET.$"
+
+AzaleaTown_Text_NoRoomForApricornSet:
+	.string "There's no room for all seven\n"
+	.string "APRICORNS in your BAG.$"
+
+AzaleaTown_Text_ItemCacheEmpty:
+	.string "There's nothing else hidden here.$"
+
+AzaleaTown_Text_ItemCacheBagFull:
+	.string "There's no room in your BAG.$"
 
 AzaleaTown_Text_Sign:
 	.string "AZALEA TOWN\n"

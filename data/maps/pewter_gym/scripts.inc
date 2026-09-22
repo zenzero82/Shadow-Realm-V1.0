@@ -60,6 +60,7 @@ PewterCity_Gym_EventScript_Brock::
     message PewterCity_Gym_Text_ReceivedBoulderBadge
     waitmessage
     call Common_EventScript_PlayGymBadgeFanfare
+    giveitem ITEM_TM_ROCK_BLAST
 
     setspeaker PewterGym_Speaker_Brock
     msgbox PewterCity_Gym_Text_Brock_FightDone, MSGBOX_DEFAULT

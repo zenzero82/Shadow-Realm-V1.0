@@ -29,6 +29,8 @@
 #define PALTAG_CURSOR 12
 #define PALTAG_TRAINER_PIC 13
 
+typedef u8 ALIGNED(4) PokenavTilemapBuffer[BG_SCREEN_SIZE];
+
 struct Pokenav_MatchCallGfx
 {
     bool32 (*isTaskActiveCB)(void);
@@ -45,9 +47,9 @@ struct Pokenav_MatchCallGfx
     u16 trainerPicPalOffset;
     struct Sprite *optionsCursorSprite;
     struct Sprite *trainerPicSprite;
-    u8 bgTilemapBuffer1[BG_SCREEN_SIZE];
-    u8 unusedTilemapBuffer[BG_SCREEN_SIZE];
-    u8 bgTilemapBuffer2[BG_SCREEN_SIZE];
+    PokenavTilemapBuffer bgTilemapBuffer1;
+    PokenavTilemapBuffer unusedTilemapBuffer;
+    PokenavTilemapBuffer bgTilemapBuffer2;
     u8 *trainerPicGfxPtr;
     u8 trainerPicGfx[TRAINER_PIC_SIZE];
     u8 trainerPicPal[0x20];
@@ -129,6 +131,7 @@ static const u8 gText_NumberRegistered[] = _("No. registered");
 static const u8 gText_NumberOfBattles[] = _("No. of battles");
 static const u8 gText_TrainerCloseBy[] = _("That TRAINER is close by.\nTalk to the TRAINER in person!");
 static const u8 gText_Unknown[] = _("UNKNOWN");
+static const u8 sText_NoContacts[] = _("NO CONTACTS");
 
 static const struct BgTemplate sMatchCallBgTemplates[3] =
 {
@@ -922,8 +925,11 @@ static void CreateMatchCallList(void)
 
 static void DestroyMatchCallList(void)
 {
+    u8 taskId = FindTaskIdByFunc(Task_FlashPokeballIcons);
+
     DestroyPokenavList();
-    DestroyTask(FindTaskIdByFunc(Task_FlashPokeballIcons));
+    if (taskId != TASK_NONE)
+        DestroyTask(taskId);
 }
 
 #define tSinIdx data[0]
@@ -1053,6 +1059,16 @@ static void PrintMatchCallLocation(struct Pokenav_MatchCallGfx *gfx, int delta)
 {
     u8 mapName[32];
     int x;
+
+    if (GetNumberRegistered() == 0)
+    {
+        x = GetStringCenterAlignXOffset(FONT_NARROW, sText_NoContacts, 88);
+        FillWindowPixelBuffer(gfx->locWindowId, PIXEL_FILL(1));
+        AddTextPrinterParameterized(gfx->locWindowId, FONT_NARROW, sText_NoContacts, x, 1, TEXT_SKIP_DRAW, NULL);
+        CopyWindowToVram(gfx->locWindowId, COPYWIN_GFX);
+        return;
+    }
+
     int index = PokenavList_GetSelectedIndex() + delta;
     int mapSec = GetMatchCallMapSec(index);
     if (mapSec != MAPSEC_NONE)

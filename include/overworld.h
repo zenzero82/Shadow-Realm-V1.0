@@ -67,6 +67,7 @@ extern struct TimeBlendSettings gTimeBlend;
 extern const struct UCoords32 gDirectionToVectors[];
 
 void DoWhiteOut(void);
+bool8 Overworld_IsFlyLockedByRoute34IlexStory(void);
 void Overworld_ResetStateAfterFly(void);
 void Overworld_ResetStateAfterTeleport(void);
 void Overworld_ResetStateAfterDigEscRope(void);

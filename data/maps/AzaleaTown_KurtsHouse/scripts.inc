@@ -168,6 +168,7 @@ AzaleaTown_KurtsHouse_EventScript_MarauderScene::
 	goto_if_set FLAG_KURTS_HOUSE_MARAUDER_SCENE_DONE, AzaleaTown_KurtsHouse_EventScript_MarauderScene_Done
 	lockall
 	setvar VAR_TEMP_0, 1
+	fadenewbgm MUS_CIPHER_ENCOUNTER
 
 	setspeaker AzaleaTown_KurtsHouse_Speaker_IronMask
 	msgbox AzaleaTown_KurtsHouse_Text_Marauder_Demand1, MSGBOX_NPC

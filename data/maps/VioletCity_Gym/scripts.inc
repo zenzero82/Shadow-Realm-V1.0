@@ -72,6 +72,7 @@ VioletCity_Gym_EventScript_Falkner::
 	message VioletCity_Gym_Text_ReceivedZephyrBadge
 	waitmessage
 	call Common_EventScript_PlayGymBadgeFanfare
+	giveitem ITEM_TM_AIR_CUTTER
 	msgbox VioletCity_Gym_Text_Falkner_After, MSGBOX_DEFAULT
 	setflag FLAG_BADGE17_GET
 	addvar VAR_NUM_BADGES, 1

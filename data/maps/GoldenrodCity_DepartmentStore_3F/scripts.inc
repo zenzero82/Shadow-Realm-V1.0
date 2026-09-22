@@ -58,7 +58,9 @@ GoldenrodCity_DepartmentStore_3F_Text_Vin:
 
 	.align 2
 GoldenrodDeptStore3_Pokemart:
-	.2byte ITEM_TM_PSYCHIC
-	.2byte ITEM_TM_SHADOW_BALL
-	.2byte ITEM_TM_TAUNT
+	.2byte ITEM_TM_REST
+	.2byte ITEM_TM_SWORDS_DANCE
+	.2byte ITEM_TM_SUBSTITUTE
+	.2byte ITEM_TM_TAILWIND
+	.2byte ITEM_TM_CALM_MIND
 	pokemartlistend

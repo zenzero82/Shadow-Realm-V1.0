@@ -12,7 +12,7 @@
 #define CUSTOM_FLAGS_COUNT       0x200
 #define CUSTOM_FLAGS_END         (CUSTOM_FLAGS_START + CUSTOM_FLAGS_COUNT - 1)
 #define CUSTOM_FLAG_BYTES        (CUSTOM_FLAGS_COUNT / 8)
-#define CUSTOM_FLAGS_ALLOCATED   107
+#define CUSTOM_FLAGS_ALLOCATED   110
 
 // Temporary Flags
 // These temporary flags are are cleared every time a map is loaded. They are used
@@ -1369,8 +1369,8 @@
 
 
 #define FLAG_ITEM_VIRIDIAN_FOREST_POTION                            0x497
-#define FLAG_ITEM_VIRIDIAN_FOREST_EXP_SHARE                         0x498
-#define FLAG_ITEM_VIRIDIAN_FOREST_TIME_FLUTE                        0x499
+#define FLAG_ITEM_VIRIDIAN_FOREST_GREAT_BALL                        0x498
+#define FLAG_ITEM_VIRIDIAN_FOREST_TM_POUNCE                         0x499
 #define FLAG_ITEM_VIRIDIAN_FOREST_PARALYZE_HEAL                     0x49A
 #define FLAG_ITEM_VIRIDIAN_FOREST_POKE_BALL                         0x49B
 #define FLAG_ITEM_VIRIDIAN_FOREST_ANTIDOTE                          0x49C
@@ -1874,6 +1874,9 @@
 #define FLAG_UNUSED_0x5BC                                           0x5BC // Unused Flag
 #define FLAG_WES_HIDEOUT_LEGENDARY_QUESTS_REVEALED                  FLAG_UNUSED_0x5BC
 #define FLAG_CUSTOM_RETIRED_WES_HIDEOUT_LAYOUT_STATE                (CUSTOM_FLAGS_START + 0x06A)
+#define FLAG_ITEM_AZALEA_TOWN_APRICORN_SET                           (CUSTOM_FLAGS_START + 0x06B)
+#define FLAG_ITEM_AZALEA_TOWN_LEVEL_BALL                             (CUSTOM_FLAGS_START + 0x06C)
+#define FLAG_ITEM_SLOWPOKE_WELL_B2F_TM_WATER_PULSE                   (CUSTOM_FLAGS_START + 0x06D)
 #define FLAG_HIDE_ROUTE10_POWERPLANT_ROCKET_GRUNT                   FLAG_TEMP_6 // Recomputed whenever Route 10 loads
 #define FLAG_UNUSED_0x5BD                                           0x5BD // Unused Flag
 #define FLAG_HIDE_ROUTE12_CUTTREE_1                                 FLAG_UNUSED_0x5BD
@@ -1920,6 +1923,23 @@
 #define FLAG_QUEST_VERMILION_NPC_WOMAN                              0x5F0
 #define FLAG_VERMILION_CITY_SAILOR_GIFT_GIVEN                       0x5F1
 #define FLAG_VERMILION_CITY_WOMAN_GIFT_GIVEN                        0x5F2
+#define FLAG_ITEM_ROUTE_1_POKE_BALL                                 0x5F3
+#define FLAG_HIDDEN_ITEM_ROUTE_1_ANTIDOTE                           0x5F4
+#define FLAG_HIDDEN_ITEM_VIRIDIAN_CITY_ETHER                        0x5F5
+#define FLAG_HIDDEN_ITEM_ROUTE_2_AWAKENING                          0x5F6
+#define FLAG_HIDDEN_ITEM_ROUTE_2_TINY_MUSHROOM                      0x5F7
+#define FLAG_HIDDEN_ITEM_VIRIDIAN_FOREST_ETHER                      0x5F8
+#define FLAG_ITEM_VIRIDIAN_FOREST_BEEDRILLITE                       0x5F9
+#define FLAG_ITEM_MT_MOON_B2F_TM_SWIFT                              0x5FA
+#define FLAG_ITEM_ROUTE_5_TM_THIEF                                  0x5FB
+#define FLAG_ITEM_ROUTE_9_TM_LOW_SWEEP                              0x5FC
+#define FLAG_ITEM_ROCK_TUNNEL_1F_TM_METAL_CLAW                      0x5FD
+#define FLAG_ITEM_ROUTE_32_TM_SLEEP_TALK                            0x5FE
+#define FLAG_ITEM_ROUTE_34_TM_FACADE                                0x5FF
+#define FLAG_ITEM_ILEX_FOREST_TM_TRAILBLAZE                         0x600
+#define FLAG_ITEM_ROUTE_26_NORTH_TM_AERIAL_ACE                      0x601
+#define FLAG_ITEM_ROUTE_10_TM_VOLT_SWITCH                           0x602
+#define FLAG_ITEM_LAVENDER_RADIOSTATION_TM_HEX                      0x603
 #define FLAG_QUEST_MORE_TO_COME_STARTED                                  (CUSTOM_FLAGS_START + 0x066)
 #define FLAG_QUEST_MORE_TO_COME_COMPLETED                                (CUSTOM_FLAGS_START + 0x067)
 

@@ -451,6 +451,14 @@
       "elevation": 0,
       "player_facing_dir": "BG_EVENT_PLAYER_FACING_ANY",
       "script": "LilycoveCity_EventScript_ContestHallSign"
+    },
+    {
+      "type": "hidden_item",
+      "x": 7,
+      "y": 28,
+      "elevation": 0,
+      "item": "ITEM_ETHER",
+      "flag": "FLAG_HIDDEN_ITEM_VIRIDIAN_CITY_ETHER"
     }
   ]
 }

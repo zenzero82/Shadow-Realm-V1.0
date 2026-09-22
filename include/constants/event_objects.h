@@ -520,10 +520,13 @@
 #define OBJ_EVENT_MON_SHINY         (1u << 13)
 #define OBJ_EVENT_MON_FEMALE        (1u << 12)
 #define OBJ_EVENT_MON_SHADOW        (1u << 15)
+// Marks water encounter objects that use the species' dedicated surf sheet.
+// This shares bit 11 with OBJ_EVENT_MON_SHADOW_PAL, which is only used in palette tags.
+#define OBJ_EVENT_MON_SURF          (1u << 11)
 // Palette tags should not use the shadow graphics bit (bit 15 conflicts with BLEND_IMMUNE_FLAG).
 #define OBJ_EVENT_MON_SHADOW_PAL    (1u << 11)
 #define OBJ_EVENT_MON_GIFT_AURA_PAL (1u << 10)
-#define OBJ_EVENT_MON_SPECIES_MASK  (~((7u << 12) | OBJ_EVENT_MON_SHADOW))
+#define OBJ_EVENT_MON_SPECIES_MASK  (~((7u << 12) | OBJ_EVENT_MON_SHADOW | OBJ_EVENT_MON_SURF))
 
 // Used to call a specific species' follower graphics. Useful for static encounters.
 #define OBJ_EVENT_GFX_SPECIES(name)                         (SPECIES_##name + OBJ_EVENT_MON)

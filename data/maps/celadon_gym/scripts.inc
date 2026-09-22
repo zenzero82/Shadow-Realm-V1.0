@@ -54,6 +54,7 @@ celadon_gym_EventScript_Erika::
 	message celadon_gym_Text_ReceivedRainbowBadge
 	waitmessage
 	call Common_EventScript_PlayGymBadgeFanfare
+	giveitem ITEM_TM_BULLET_SEED
 	setspeaker celadon_gym_Speaker_Erika
 	msgbox celadon_gym_Text_Erika_After, MSGBOX_DEFAULT
 	setflag FLAG_BADGE12_GET

@@ -9,6 +9,7 @@
 #include "fieldmap.h"
 #include "metatile_behavior.h"
 #include "random.h"
+#include "surf_ow.h"
 #include "dexnav.h"
 #include "wild_encounter.h"
 #include "constants/event_object_movement.h"
@@ -312,7 +313,7 @@ static bool8 OverworldWildEncounters_FindSpawnCoords(s16 *xOut, s16 *yOut, u8 *e
     return FALSE;
 }
 
-static bool8 OverworldWildEncounters_Spawn(u8 slot, u16 species, u8 level, s16 x, s16 y, u8 elevation)
+static bool8 OverworldWildEncounters_Spawn(u8 slot, u16 species, u8 level, s16 x, s16 y, u8 elevation, bool8 isWaterTile)
 {
     struct ObjectEventTemplate objectEventTemplate = {0};
 
@@ -321,6 +322,8 @@ static bool8 OverworldWildEncounters_Spawn(u8 slot, u16 species, u8 level, s16 x
 
     objectEventTemplate.localId = OBJ_EVENT_ID_OVERWORLD_WILD_BASE + slot;
     objectEventTemplate.graphicsId = species + OBJ_EVENT_MON;
+    if (isWaterTile && SurfOw_HasSpeciesEntry(species))
+        objectEventTemplate.graphicsId |= OBJ_EVENT_MON_SURF;
     objectEventTemplate.kind = OBJ_KIND_NORMAL;
     objectEventTemplate.x = x - MAP_OFFSET;
     objectEventTemplate.y = y - MAP_OFFSET;
@@ -445,7 +448,7 @@ void OverworldWildEncounters_TrySpawn(void)
                 return;
         }
 
-        OverworldWildEncounters_Spawn(slot, species, level, x, y, elevation);
+        OverworldWildEncounters_Spawn(slot, species, level, x, y, elevation, isWaterTile);
     }
 }
 
@@ -492,10 +495,10 @@ void OverworldWildEncounters_OnReturnToField(void)
 bool8 OverworldWildEncounters_SpawnDexNavMon(u16 species, u8 level, u8 potential, u8 abilityNum, u16 item, const u16 *moves,
                                              s16 x, s16 y, u8 elevation, u8 *outLocalId)
 {
-    bool8 unusedIsWaterTile;
+    bool8 isWaterTile;
     u8 slot;
 
-    if (!OverworldWildEncounters_IsSpawnTileValid(x, y, elevation, TRUE, TRUE, &unusedIsWaterTile))
+    if (!OverworldWildEncounters_IsSpawnTileValid(x, y, elevation, TRUE, TRUE, &isWaterTile))
         return FALSE;
 
     if (!OverworldWildEncounters_FindAvailableSlot(&slot))
@@ -504,7 +507,7 @@ bool8 OverworldWildEncounters_SpawnDexNavMon(u16 species, u8 level, u8 potential
         OverworldWildEncounters_ClearSlot(slot);
     }
 
-    if (!OverworldWildEncounters_Spawn(slot, species, level, x, y, elevation))
+    if (!OverworldWildEncounters_Spawn(slot, species, level, x, y, elevation, isWaterTile))
         return FALSE;
 
     sOverworldWildIsDexNav[slot] = TRUE;

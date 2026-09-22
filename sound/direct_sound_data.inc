@@ -387,6 +387,7 @@ DirectSoundWaveData_unknown_17::
 	.incbin "sound/direct_sound_samples/unknown_17.bin"
 
 .include "sound/direct_sound_data_bw.inc"
+.include "sound/direct_sound_data_colosseum.inc"
 
 .if P_CRIES_ENABLED == TRUE
 .if P_FAMILY_BULBASAUR == TRUE

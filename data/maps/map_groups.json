@@ -882,7 +882,8 @@
     "route25_billshouse",
     "ReceptionGate",
     "route15_gate",
-    "route10_pokecenter"
+    "route10_pokecenter",
+    "viridian_contesthall2"
   ],
   "gMapGroup_KantoDungeons": [
     "MtMoon_Cave",
@@ -903,7 +904,9 @@
     "VictoryRoadKanto_B1F",
     "VictoryRoadKanto_B2F",
     "WesHideout_Entrance",
-    "WesHideout_Underground"
+    "WesHideout_Underground",
+    "MtMoon_B1F",
+    "MtMoon_B2F"
   ],
   "gMapGroup_IndoorNewBark": [
     "NewBarkTown_Lab",

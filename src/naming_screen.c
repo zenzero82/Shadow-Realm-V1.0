@@ -69,7 +69,6 @@ enum
     MAIN_STATE_START_PAGE_SWAP,
     MAIN_STATE_WAIT_PAGE_SWAP,
     MAIN_STATE_6,
-    MAIN_STATE_UPDATE_SENT_TO_PC_MESSAGE,
     MAIN_STATE_BEGIN_FADE_OUT,
     MAIN_STATE_WAIT_FADE_OUT_AND_EXIT,
 };
@@ -140,8 +139,6 @@ static bool8 MainState_MoveToOKButton(void);
 static bool8 MainState_PokemonStore(void);
 static bool8 MainState_BeginFadeOut(void);
 static bool8 MainState_WaitFadeOutAndExit(void);
-static void NamingScreen_PkmnTransferToPCMsj(void);
-static bool8 MainState_ExitOfPokemonStore(void);
 static bool8 MainState_StartPageSwap(void);
 static bool8 MainState_WaitPageSwap(void);
 static void StartPageSwapAnim(void);
@@ -513,9 +510,6 @@ static void Task_NamingScreen(u8 taskId)
     case MAIN_STATE_6:
         MainState_PokemonStore();
         break;
-    case MAIN_STATE_UPDATE_SENT_TO_PC_MESSAGE:
-        MainState_ExitOfPokemonStore();
-        break;
     case MAIN_STATE_BEGIN_FADE_OUT:
         MainState_BeginFadeOut();
         break;
@@ -568,18 +562,8 @@ static bool8 MainState_PokemonStore(void)
     CopyStringToDestBuffer();
     SetInputState(INPUT_STATE_DISABLED);
     sub_809EA64(0);
-    if (sNamingScreenData->templateNum == NAMING_SCREEN_CAUGHT_MON
-        && CalculatePlayerPartyCount() >= 6)
-    {
-        NamingScreen_PkmnTransferToPCMsj();
-        sNamingScreenData->state = MAIN_STATE_UPDATE_SENT_TO_PC_MESSAGE;
-        return FALSE;
-    }
-    else
-    {
-        sNamingScreenData->state = MAIN_STATE_BEGIN_FADE_OUT;
-        return TRUE;
-    }
+    sNamingScreenData->state = MAIN_STATE_BEGIN_FADE_OUT;
+    return TRUE;
 }
 
 static bool8 MainState_BeginFadeOut(void)
@@ -602,44 +586,6 @@ static bool8 MainState_WaitFadeOutAndExit(void)
         FreeAllWindowBuffers();
         FREE_AND_SET_NULL(sNamingScreenData);
     }
-    return FALSE;
-}
-
-static void NamingScreen_PkmnTransferToPCMsj(void)
-{
-    u8 stringToDisplay = 0;
-
-    if (!IsDestinationBoxFull())
-    {
-        StringCopy(gStringVar1, GetBoxNamePtr(VarGet(VAR_PC_BOX_TO_SEND_MON)));
-        StringCopy(gStringVar2, sNamingScreenData->destBuffer);
-    }
-    else
-    {
-        StringCopy(gStringVar1, GetBoxNamePtr(VarGet(VAR_PC_BOX_TO_SEND_MON)));
-        StringCopy(gStringVar2, sNamingScreenData->destBuffer);
-        StringCopy(gStringVar3, GetBoxNamePtr(GetPCBoxToSendMon()));
-        stringToDisplay = 2;
-    }
-
-    if (FlagGet(FLAG_SYS_PC_LANETTE))
-        stringToDisplay += 2;
-    else if (FlagGet(FLAG_SYS_NOT_SOMEONES_PC))
-        stringToDisplay++;
-
-    StringExpandPlaceholders(gStringVar4, sTransferredToPCMessages[stringToDisplay]);
-    NamingScreen_DrawDialogueFrame();
-    AddTextPrinterParameterized2(0, 2, gStringVar4, GetPlayerTextSpeedDelay(), NULL, TEXT_COLOR_DARK_GRAY, TEXT_COLOR_WHITE, TEXT_COLOR_LIGHT_GRAY);
-    CopyWindowToVram(0, COPYWIN_BOTH);
-}
-
-static bool8 MainState_ExitOfPokemonStore(void)
-{
-    RunTextPrinters();
-
-    if (!IsTextPrinterActive(0) && (JOY_NEW(A_BUTTON)))
-        sNamingScreenData->state = MAIN_STATE_BEGIN_FADE_OUT;
-
     return FALSE;
 }
 

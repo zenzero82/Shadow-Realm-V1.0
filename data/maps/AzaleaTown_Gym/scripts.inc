@@ -606,7 +606,7 @@ AzaleaTown_Gym_EventScript_Bugsy::
 	addvar VAR_NUM_BADGES, 1
 	setvar VAR_0x8008, 18
 	call Common_EventScript_SetGymTrainers
-	giveitem ITEM_TM09
+	giveitem ITEM_TM_X_SCISSOR
 	setspeaker AzaleaTown_Gym_Speaker_Bugsy
 	msgbox AzaleaTown_Gym_Text_FuryCutterSpeech, MSGBOX_DEFAULT
 	setvar VAR_AZALEA_TOWN_STATE, 5
@@ -754,7 +754,7 @@ AzaleaTown_Gym_Text_GymStatuePlayerWon:
 
 AzaleaTown_Gym_Text_BugsyIntro:
 	.string "I'm BUGSY!\p"
-	.string "After the all the strange things\n"
+	.string "With all the strange things\n"
 	.string "going on, I started studying how\l"
 	.string "bug POKéMON react to pressure.\p"
 	.string "If you want the HIVEBADGE,\n"
@@ -778,12 +778,9 @@ AzaleaTown_Gym_Text_HiveBadgeSpeech:
 	.string "Here, take this too.$"
 
 AzaleaTown_Gym_Text_FuryCutterSpeech:
-	.string "TM09 contains BULLET SEED.\p"
-	.string "It shoots a torrent of seeds\n"
-	.string "between 2 and 5 times every turn.\p"
-	.string "So even though the power is 25, it\n"
-	.string "is really between 50 and 125 power!\p"
-	.string "Isn't that great?\n"
+	.string "TM105 contains X-SCISSOR.\p"
+	.string "Its crossed slashing attack is a\n"
+	.string "reliable tool for BUG-type POKéMON.\p"
 	.string "I discovered it!\p"
 	.string "One more thing before you go.\n"
 	.string "Can you check out Slowpoke Well\l"
@@ -809,8 +806,8 @@ AzaleaTown_Gym_Text_BugsyRematchDefeat:
 	.string "My research must not be complete...$"
 
 AzaleaTown_Gym_Text_BugCatcherBennySeen:
-	.string "Those grunts in the WELL?\n"
-	.string "They don't scare me!$"
+	.string "Bug POKéMON may be small,\n"
+	.string "but they don't scare easily!$"
 
 AzaleaTown_Gym_Text_BugCatcherBennyBeaten:
 	.string "Guess I need more than bravado!$"
@@ -873,8 +870,7 @@ AzaleaTown_Gym_Text_TwinsAmyMay2After:
 AzaleaTown_Gym_Text_GymGuide:
 	.string "Yo, challenger!\p"
 	.string "BUGSY's young, but he's sharp.\n"
-	.string "After the WELL incident, he\l"
-	.string "trained for shadow trouble.\p"
+	.string "He trains with purpose every day.\p"
 	.string "BUG POKéMON strike fast and hard.\n"
 	.string "Bring answers for SCIZOR.\p"
 	.string "Good luck!$"

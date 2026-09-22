@@ -1,6 +1,11 @@
 CherrygroveCity_PokemonCenter_MapScripts::
+	map_script MAP_SCRIPT_ON_LOAD, CherrygroveCity_PokemonCenter_OnLoad
 	map_script MAP_SCRIPT_ON_TRANSITION, CherrygroveCity_PokemonCenter_OnTransition
 	.byte 0
+
+CherrygroveCity_PokemonCenter_OnLoad:
+	call CableClub_EventScript_HideOrShowMysteryGiftMan
+	end
 
 CherrygroveCity_PokemonCenter_OnTransition:
 	setrespawn HEAL_LOCATION_CHERRYGROVE_CITY

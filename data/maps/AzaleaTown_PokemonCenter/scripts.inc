@@ -41,8 +41,8 @@ AzaleaTown_PokemonCenter_EventScript_Woman::
 	end
 
 AzaleaTown_PokemonCenter_Text_Fisherman:
-	.string "I was headed for the WELL, but I'm\n"
-	.string "taking a breather first.$"
+	.string "I've been fishing all morning.\n"
+	.string "Time for a breather.$"
 
 AzaleaTown_PokemonCenter_Text_Gentleman:
 	.string "A steady rest keeps your team ready\n"

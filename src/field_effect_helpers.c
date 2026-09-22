@@ -1046,7 +1046,8 @@ static const u16 *GetMapMetatileTilesAt(s16 x, s16 y, u16 *layerType)
 static bool8 IsOverworldWildWaterObjectEvent(const struct ObjectEvent *objectEvent)
 {
     return objectEvent->localId >= OBJ_EVENT_ID_OVERWORLD_WILD_BASE
-        && objectEvent->localId < OBJ_EVENT_ID_OVERWORLD_WILD_BASE + OBJ_EVENT_ID_OVERWORLD_WILD_COUNT;
+        && objectEvent->localId < OBJ_EVENT_ID_OVERWORLD_WILD_BASE + OBJ_EVENT_ID_OVERWORLD_WILD_COUNT
+        && !(objectEvent->graphicsId & OBJ_EVENT_MON_SURF);
 }
 
 static bool8 IsOpenWaterOverlayTile(s16 x, s16 y)
@@ -1405,31 +1406,11 @@ void UpdateSurfBlobFieldEffect(struct Sprite *sprite)
     SynchroniseSurfPosition(playerObj, sprite);
     UpdateBobbingEffect(playerObj, playerSprite, sprite);
     sprite->oam.priority = playerSprite->oam.priority;
-    sprite->subpriority = playerSprite->subpriority;
+    // The full surf Pokemon belongs behind the player. Its separately
+    // authored overlay is placed in front by UpdateSurfMonOverlay.
+    sprite->subpriority = (playerSprite->subpriority == 0xFF) ? 0xFF : playerSprite->subpriority + 1;
     sprite->subspriteMode = playerSprite->subspriteMode;
     sprite->subspriteTableNum = playerSprite->subspriteTableNum;
-    if (SurfOw_ShouldOverridePlayerPriority(sprite->sPlayerObjId))
-    {
-        u8 direction = playerObj->movementDirection;
-        bool8 facingSouth = (direction == DIR_SOUTH || direction == DIR_SOUTHWEST || direction == DIR_SOUTHEAST);
-        u8 priority = playerSprite->oam.priority;
-
-        if (facingSouth)
-        {
-            if (priority > 0)
-                priority--;
-        }
-        else
-        {
-            if (priority < 3)
-                priority++;
-        }
-
-        sprite->oam.priority = priority;
-        sprite->subpriority = playerSprite->subpriority;
-        sprite->subspriteMode = playerSprite->subspriteMode;
-        sprite->subspriteTableNum = playerSprite->subspriteTableNum;
-    }
 }
 
 static void SynchroniseSurfAnim(struct ObjectEvent *playerObj, struct Sprite *sprite)

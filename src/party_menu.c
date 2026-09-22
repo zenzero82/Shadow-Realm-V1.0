@@ -5188,12 +5188,12 @@ static bool8 AutoHealUseHpItems(struct Pokemon *mon, u8 partyIndex)
 static bool8 AutoHealTryStatusItems(struct Pokemon *mon, u8 partyIndex, u8 category)
 {
     u16 i;
-    struct BagPocket *pocket = &gBagPockets[POCKET_ITEMS - 1];
+    struct BagPocket *pocket = &gBagPockets[POCKET_MEDICINE - 1];
 
     for (i = 0; i < pocket->capacity; i++)
     {
-        u16 item = BagGetItemIdByPocketPosition(POCKET_ITEMS, i);
-        u16 quantity = BagGetQuantityByPocketPosition(POCKET_ITEMS, i);
+        u16 item = BagGetItemIdByPocketPosition(POCKET_MEDICINE, i);
+        u16 quantity = BagGetQuantityByPocketPosition(POCKET_MEDICINE, i);
         const u8 *effect;
         u32 statusCure;
         u8 itemCategory;
@@ -5235,12 +5235,12 @@ static u16 AutoHealFindBestHpItem(struct Pokemon *mon)
     u16 bestItem = ITEM_NONE;
     u32 bestHeal = 0xFFFFFFFF;
     u16 hp = GetMonData(mon, MON_DATA_HP);
-    struct BagPocket *pocket = &gBagPockets[POCKET_ITEMS - 1];
+    struct BagPocket *pocket = &gBagPockets[POCKET_MEDICINE - 1];
 
     for (i = 0; i < pocket->capacity; i++)
     {
-        u16 item = BagGetItemIdByPocketPosition(POCKET_ITEMS, i);
-        u16 quantity = BagGetQuantityByPocketPosition(POCKET_ITEMS, i);
+        u16 item = BagGetItemIdByPocketPosition(POCKET_MEDICINE, i);
+        u16 quantity = BagGetQuantityByPocketPosition(POCKET_MEDICINE, i);
         const u8 *effect;
         u32 healAmount;
 

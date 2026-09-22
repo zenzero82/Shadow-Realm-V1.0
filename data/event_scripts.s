@@ -2100,3 +2100,9 @@ EventScript_OverworldWildMon::
 	.include "data/maps/Route26_House2/scripts.inc"
 
 	.include "data/maps/Agate_Village/scripts.inc"
+
+	.include "data/maps/viridian_contesthall2/scripts.inc"
+
+	.include "data/maps/MtMoon_B1F/scripts.inc"
+
+	.include "data/maps/MtMoon_B2F/scripts.inc"

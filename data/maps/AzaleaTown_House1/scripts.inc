@@ -28,5 +28,5 @@ AzaleaTown_House1_Text_BlackBelt:
 	.string "Quiet towns still need guardians.$"
 
 AzaleaTown_House1_Text_LittleBoy:
-	.string "I heard the WELL is safe again.\n"
-	.string "Maybe I can visit someday.$"
+	.string "I want to explore every corner of\n"
+	.string "town when I'm older.$"

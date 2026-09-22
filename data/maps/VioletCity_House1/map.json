@@ -2,7 +2,7 @@
   "id": "MAP_VIOLET_CITY_HOUSE1",
   "name": "VioletCity_House1",
   "layout": "LAYOUT_JOHTO_HOUSE1",
-  "music": "MUS_DUMMY",
+  "music": "MUS_HG_VIOLET",
   "region_map_section": "MAPSEC_VIOLET_CITY",
   "requires_flash": false,
   "weather": "WEATHER_NONE",
@@ -50,14 +50,6 @@
     {
       "type": "sign",
       "x": 1,
-      "y": 1,
-      "elevation": 0,
-      "player_facing_dir": "BG_EVENT_PLAYER_FACING_ANY",
-      "script": "EventScript_BookShelf"
-    },
-    {
-      "type": "sign",
-      "x": 2,
       "y": 1,
       "elevation": 0,
       "player_facing_dir": "BG_EVENT_PLAYER_FACING_ANY",

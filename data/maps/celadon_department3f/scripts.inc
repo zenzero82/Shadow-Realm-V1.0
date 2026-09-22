@@ -22,14 +22,11 @@ celadon_department3f_EventScript_Directory::
 
 	.align 2
 celadon_department3f_Pokemart:
-	.2byte ITEM_TM_BRICK_BREAK
-	.2byte ITEM_TM_CALM_MIND
-	.2byte ITEM_TM_FLAMETHROWER
-	.2byte ITEM_TM_ICE_BEAM
-	.2byte ITEM_TM_LIGHT_SCREEN
 	.2byte ITEM_TM_PROTECT
-	.2byte ITEM_TM_ROCK_TOMB
-	.2byte ITEM_TM_THUNDERBOLT
+	.2byte ITEM_TM_DIG
+	.2byte ITEM_TM_U_TURN
+	.2byte ITEM_TM_POISON_JAB
+	.2byte ITEM_TM_ROCK_SLIDE
 	pokemartlistend
 
 celadon_department3f_Text_Directory:
